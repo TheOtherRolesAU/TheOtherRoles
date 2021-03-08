@@ -35,10 +35,16 @@ Even more roles are coming soon :)
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
+**Changes in v1.1:**
+- Morphling: The color of pet now also morphs. The skin animation now starts at the right point.
+- The game over screen now shows if the Jester/Child/Lovers won.
+- A bug was removed where the Jester won together with the crewmates.
+- A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
+
 # Installation 
-**Note: No private server is required, you can play on the official servers.**  
 1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -47,6 +53,19 @@ Even more roles are coming soon :)
 Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
 ![Install](https://i.imgur.com/pvBAyZN.png)
+
+# Credits & Resources
+[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used\
+[BepInEx](https://github.com/BepInEx) - Used to hook game functions\
+[Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**\
+[CooldownButton](https://github.com/DorCoMaNdO/Reactor-Essentials/blob/master/Essentials/UI/CooldownButton.cs) - Code for the cooldown button comes from **DorCoMaNdO**\
+[Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
+[Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
+[ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
+[Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
+[TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
+[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling and Camouflager role come from **Ottomated**
 
 # Roles
 
@@ -269,8 +288,10 @@ The Mayor leades the crewmates by having a vote that counts twice.
 ### **Team: Crewmates**
 The Spy gets more information than others from the admin table and vitals. \
 **Admin table:** The spy can see the colors of the players on the table.\
-**Vitals**: The spy can see how long dead players have been dead for.
-
+**Vitals**: The spy can see how long dead players have been dead for.\
+\
+**NOTE:**
+- Even if the Morphling morphes or the Camouflager camouflages, the Spy sees the right colors on the admin table.
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
@@ -284,7 +305,8 @@ The Shifter belongs to no team and has no tasks.\
 The Shifter always loses the game, however they can exchange roles with other players.\
 Swapping roles with a crewmate or a custom crewmate role (or the Jester) gives them their role and their tasks, the other player becomes the new Shifter.\
 Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide.\
-The **special interactions** with the Shifter are noted in the chapters of the respective roles.
+The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
+\
 **NOTE:**
 - If the Shifter takes over a role, his new cooldowns will start at the maximum cooldown of the ability
 - One time use abilities (e.g. shielding a player or engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
@@ -325,14 +347,9 @@ and can't fix lights and comms.
 | Swapper Spawn Chance | -
 -----------------------
 
+# Source code
+It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
+You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are base on theirs. And yes it is in a zip file... I will change that.
+
 # Bugs, suggestions and requests
 If you found any bugs, have an idea for an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)
-
-# Credits & Resources
-[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used\
-[BepInEx](https://github.com/BepInEx) - Used to hook game functions\
-[Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options.\
-[Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Lovers role.\
-[ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Engineer, Medic, Jester and Sheriff role.\
-[TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Detective and Time Master roles.\
-[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Inspiration for Swapper and Shifter roles.
