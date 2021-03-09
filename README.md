@@ -35,8 +35,14 @@ Even more roles are coming soon :)
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| **2021.3.5s** | v1.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.3/TheOtherRoles.zip)
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
+
+**Changes in v1.3:**
+- Adds support for the Among Us version **2021.3.5s**
+- Fixes a bug where a an edge case caused all players to start the game with the camouflaged look
+- There might be a few bugs, since I focused on getting the update out fast. A new version resolving the bugs will be published tomorrow.
 
 **Changes in v1.1:**
 - Morphling: The color of pet now also morphs. The skin animation now starts at the right point.
