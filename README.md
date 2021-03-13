@@ -28,7 +28,7 @@ Even more roles are coming soon :)
 - [Mayor](#mayor)
 - [Spy](#spy)
 - [Shifter](#shifter)
-- [Time Master](#time%20master)
+- [Time Master](#time-master)
 - [Swapper](#swapper)
 
 
@@ -43,7 +43,7 @@ Even more roles are coming soon :)
 \
 **Changes in v1.4:**
 - Fixing a Camoflager/Morphling animation bug
-- Fixing a bug where the Swapper could swap votes even if he was dead
+- Fixing a bug where the Swapper could swap votes even if they was dead
 - The custom cooldown buttons now render the cooldown progress (the grey overlay) in the right way (v1.3 introduced the bug)
 - Players in vents are not targetable anymore by the role actions, the button does not activate (e.g. Seer revealing, Morphling sample). Exception: Impostor killing an Engineer in a vent
 
@@ -88,7 +88,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 The Mafia are a group of three Impostors.\
 The Godfather works like a normal Impostor.\
 The Mafioso is an impostor who cannot kill nor sabotage until the Godfather is dead.\
-The Janitor is an impostor who cannot kill nor sabotage, but he can hide dead bodies instead.\
+The Janitor is an impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
 \
 **NOTE**
 - There have to be 3 impostors activated for the mafia to spawn.
@@ -102,13 +102,13 @@ The Janitor is an impostor who cannot kill nor sabotage, but he can hide dead bo
 
 ## Morphling
 ### **Team: Impostors**
-The Morphling is an impostor which can additionally scan the appearance of a player. After an arbitrary time he can take on that appearance for 10s.
+The Morphling is an impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
 \
 **NOTE**
-- He shrinks to the size of the child when he copies its look.
+- They shrink to the size of the child when they copies its look.
 - The color of the footprints does **not** change.
-- The Seer still sees the Morphlings role if he revealed it.
-- The other impostor still sees that he is an impostor (the name remains red).
+- The Seer still sees the Morphlings role if they revealed it.
+- The other impostor still sees that they is an impostor (the name remains red).
 
 ### Game Options
 | Name | Description |
@@ -126,7 +126,7 @@ are hidden and all players have the same color.
 **NOTE**
 - The Child and Morphling when copying the child remain small.
 - The color of the footprints does **not** change.
-- The Seer still sees all the roles he revealed.
+- The Seer still sees all the roles they revealed.
 
 ### Game Options
 | Name | Description |
@@ -160,7 +160,7 @@ If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win"
 ## Sheriff
 ### **Team: Crewmates**
 The Sheriff has the ability to kill impostors.
-If he tries to kill a crewmate, he dies instead.
+If they try to kill a crewmate, they die instead.
 
 **NOTE**
 - For now the Shifter won't die to the Sheriff (an option will be added in the next version).
@@ -176,7 +176,7 @@ If he tries to kill a crewmate, he dies instead.
 
 ## Jester
 ### **Team: Neutral**
-The Jester does not have any tasks. He wins the game as a solo, if he gets voted out during a meeting.
+The Jester does not have any tasks. They win the game as a solo, if they get voted out during a meeting.
 
 ### Game Options
 | Name | Description |
@@ -186,18 +186,18 @@ The Jester does not have any tasks. He wins the game as a solo, if he gets voted
 
 ## Seer
 ### **Team: Crewmates**
-The Seer has the ability to find out about people's intentions. The information is only visible to himself.\
-Depending on the selected option he either directly sees the role of the player (appended to his name) or if the player is 
+The Seer has the ability to find out about people's intentions. The information is only visible to them.\
+Depending on the selected option they either directly see the role of the player (appended to their name) or if the player is 
 a good (name text changes to yellow) or a bad (name text changes to a darker color) player.\
-Depending on the selected option the player will get a blue flash on his screen if he is being revealed by the Seer.
+Depending on the selected option the player will get a blue flash on their screen if they are being revealed by the Seer.
 \
 **NOTE**
 - **Good players:** Crewmates with all their special roles\
 - **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover) and the neutral roles (Jester, Shifter)
 - **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
 - If the role of a revealed player changes during the game (because of e.g. the Shifter), the information of the Seers also adapts.
-- When the Camouflager camouflages all players or the Morphling copies the appearance of another player, the Seer still sees the information he gained earlier (i.e. he still sees that the player is the Morphling even if his appearance is different).
-- If the Shifter exchanges the role with the Seer the information gained by the Seer will be transfered to the new Seer (i.e. the new Seer sees what the old one revealed and the old one "loses" the information he gained).
+- When the Camouflager camouflages all players or the Morphling copies the appearance of another player, the Seer still sees the information they gained earlier (i.e. they still see that the player is the Morphling even if their appearance is different).
+- If the Shifter exchanges the role with the Seer, the information gained by the Seer will be transfered to the new Seer (i.e. the new Seer sees what the old one revealed and the old one "loses" the information they gained).
 
 ### Game Options
 | Name | Description | Options |
@@ -214,7 +214,7 @@ The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
 The Engineer can use vents.
 \
 **NOTE**
-- The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill him there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
+- The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
 
 ### Game Options
 | Name | Description |
@@ -227,7 +227,7 @@ The Engineer can use vents.
 The Detective can see footprints that other players leave behind.
 \
 **NOTE**
-- Even when the Morphling changes his appearance or the Camouflager camouflages everyone, the
+- Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the
 Detective still sees the right (original) colors.
 
 ### Game Options
@@ -269,16 +269,16 @@ a crewmate win by killing a child (changes will come to prevent this behaviour).
 ### **Team: Crewmates**
 The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
 The shielded player can still be voted out and might also be an impostor.\
-If set in the options, the shielded player will get a red flash on his screen if someone (Impostor, Sheriff, ...) tried to murder him.
-If the Medic dies, the shield disappears with him.\
+If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
+If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded crewmate and won't perform a kill if they try to kill a shielded impostor.\
 The Medic's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
 **NOTE**
 - **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
 - **Darker Colors:** Red, blue, green, grey, purple, brown
-- If the shielded player is a Lover and the other Lover dies, he nevertheless kills himself.
-- If the Shifter has a shield or his target has a Shield, the shielded player switches.
+- If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
+- If the Shifter has a shield or their target has a Shield, the shielded player switches.
 
 
 ### Game Options
@@ -325,7 +325,7 @@ Swapping roles with an impostor or a custom impostor role fails and the Shifter 
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
 \
 **NOTE:**
-- If the Shifter takes over a role, his new cooldowns will start at the maximum cooldown of the ability
+- If the Shifter takes over a role, their new cooldowns will start at the maximum cooldown of the ability
 - One time use abilities (e.g. shielding a player or engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
 can only use them, if the player they exchanged roles with have not used them before)
 
@@ -355,7 +355,7 @@ Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
 ### **Team: Crewmates**
 During meetings the Swapper can exchange votes that two people get (i.e. all votes
 that player A got will be given to player B and vice versa).\
-Because of the Swappers strength in meetings, he can't start emergency meetings
+Because of the Swappers strength in meetings, they can't start emergency meetings
 and can't fix lights and comms.
 
 ### Game Options
