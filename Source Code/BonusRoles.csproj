@@ -4,7 +4,7 @@
         <Version>1.0.0</Version>
         <Mappings>NuclearPowered/Mappings:0.2.0</Mappings>
 
-        <Description>BonusRoles</Description>
+        <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
     </PropertyGroup>
 
@@ -40,6 +40,7 @@
         <EmbeddedResource Include="Resources\MorphButton.png"/>
         <EmbeddedResource Include="Resources\SampleButton.png"/>
         <EmbeddedResource Include="Resources\CamoButton.png"/>
+        <EmbeddedResource Include="Resources\SpyButton.png"/>
         <EmbeddedResource Include="Resources\Footprint.png"/>
         <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
         <EmbeddedResource Include="Resources\SwapperCheck.png"/>

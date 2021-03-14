@@ -19,7 +19,7 @@ namespace BonusRoles
     [HarmonyPatch]
     public static class BonusRoles
     {
-        public static System.Random rnd = new System.Random();
+        public static System.Random rnd = new System.Random((int)DateTime.Now.Ticks);
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
@@ -297,11 +297,12 @@ namespace BonusRoles
     public static class Seer {
         public static PlayerControl seer;
         public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
-        public static List<PlayerControl> revealedPlayers = new List<PlayerControl>();
+        public static Dictionary<PlayerControl, PlayerControl> revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
 
         public static float cooldown = float.MaxValue;
         public static int kindOfInfo = 0;
         public static int playersWithNotification = 0;
+        public static float chanceOfSeeingRight = 100;
 
         public static PlayerControl currentTarget;
         
@@ -314,10 +315,11 @@ namespace BonusRoles
 
         public static void clearAndReload() {
             seer = null;
-            revealedPlayers = new List<PlayerControl>();
+            revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
             cooldown = BonusRolesPlugin.seerCooldown.GetValue();
             kindOfInfo = BonusRolesPlugin.seerKindOfInfo.GetValue();
             playersWithNotification = BonusRolesPlugin.seerPlayersWithNotification.GetValue();
+            chanceOfSeeingRight = BonusRolesPlugin.seerChanceOfSeeingRight.GetValue();
         }
     }
 
@@ -383,23 +385,54 @@ namespace BonusRoles
         private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
+        public static float cooldown = float.MaxValue;
+        public static float duration = 10f;
+
+        public static float spyTimer = 0f;
+
         public static Sprite getAdminTableIconSprite() {
             if (adminTableIcon) return adminTableIcon;
             adminTableIcon = Helpers.loadSpriteFromResources("BonusRoles.Resources.AdminTableIcon.png", 350f);
             return adminTableIcon;
         }
 
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("BonusRoles.Resources.SpyButton.png", 100f);
+            return buttonSprite;
+        }
+
         public static void clearAndReload() {
             spy = null;
+            spyTimer = 0f;
+            cooldown = BonusRolesPlugin.spyCooldown.GetValue();
+            duration = BonusRolesPlugin.spySpyingDuration.GetValue();
         }
     }
 
     public static class Child {
         public static PlayerControl child;
         public static Color color = Color.white;
+        
+        public static float growingUpDuration = float.MaxValue;
+        public static DateTime timeOfGrowthStart = DateTime.UtcNow;
 
         public static void clearAndReload() {
             child = null;
+            growingUpDuration = BonusRolesPlugin.childGrowingUpDuration.GetValue();
+            timeOfGrowthStart = DateTime.UtcNow;
+        }
+
+        public static float growingProgress() {
+            if (timeOfGrowthStart == null) return 0f;
+
+            float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
+            return Mathf.Clamp(timeSinceStart/(growingUpDuration*1000), 0f, 1f);
+        }
+
+        public static bool isGrownUp() {
+            return growingProgress() == 1f;
         }
     }
 }

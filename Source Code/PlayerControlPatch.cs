@@ -18,7 +18,8 @@ namespace BonusRoles {
                 if (localPlayerPositions.Count > 0) {
                     // Set position
                     var next = localPlayerPositions[0];
-                    PlayerControl.LocalPlayer.transform.position = next.Item1;
+                    if (!PlayerControl.LocalPlayer.inVent)
+                        PlayerControl.LocalPlayer.transform.position = next.Item1;
                     localPlayerPositions.RemoveAt(0);
                     if (localPlayerPositions.Count > 0) localPlayerPositions.RemoveAt(0); // Skip every second position to rewinde in half the time
                 
@@ -95,7 +96,7 @@ namespace BonusRoles {
         static void seerSetTarget() {
             if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
             Seer.currentTarget = setAnyRoleTarget();
-            if (Seer.currentTarget != null && Seer.revealedPlayers.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
+            if (Seer.currentTarget != null && Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
 
         }
 
@@ -140,14 +141,16 @@ namespace BonusRoles {
     class PerformKillPatch
     {
         public static bool Prefix(KillButtonManager __instance) {
-            // Block imposter shielded kill
-		    if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
-                if (Medic.shielded != null && Medic.shielded == __instance.CurrentTarget) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.shieldedMurderAttempt();
-                    return false;
-                }
+            // Block impostor shielded kill
+            if (Medic.shielded != null && Medic.shielded == __instance.CurrentTarget) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.shieldedMurderAttempt();
+                return false;
+            }
+            // Block impostor not fully grown child kill
+            else if (Child.child != null && __instance.CurrentTarget == Child.child && !Child.isGrownUp()) {
+                return false;
             }
             return true;
         }
@@ -251,13 +254,6 @@ namespace BonusRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
-            }
-
-            // Child died
-            if (Child.child != null && PAIBDFDMIGK == Child.child) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildDied, Hazel.SendOption.None, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.childDied();
             }
         }
     }

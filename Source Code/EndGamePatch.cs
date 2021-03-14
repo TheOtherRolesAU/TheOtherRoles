@@ -17,7 +17,7 @@ namespace BonusRoles {
         LoversTeamWin,
         LoversSoloWin,
         JesterWin,
-        ChildWin
+        ChildDied
     }
 
     static class AdditionalTempData {
@@ -58,10 +58,11 @@ namespace BonusRoles {
 
             // Child win condition (should be implemented using a proper GameOverReason in the future)
             if (Child.child != null && Child.child.Data.IsImpostor) {
-                AdditionalTempData.winCondition = WinCondition.ChildWin;
+                AdditionalTempData.winCondition = WinCondition.ChildDied;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 WinningPlayerData wpd = new WinningPlayerData(Child.child.Data);
-                wpd.IsImpostor = false; 
+                wpd.IsImpostor = false;
+                wpd.IsYou = false;
                 TempData.winners.Add(wpd);
             }
 
@@ -105,8 +106,8 @@ namespace BonusRoles {
             TextRenderer textRenderer = bonusText.GetComponent<TextRenderer>();
             textRenderer.Text = "";
 
-            if (AdditionalTempData.winCondition == WinCondition.ChildWin) {
-                textRenderer.Text = "Child Wins";
+            if (AdditionalTempData.winCondition == WinCondition.ChildDied) {
+                textRenderer.Text = "Child Died";
                 textRenderer.Color = Child.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.JesterWin) {

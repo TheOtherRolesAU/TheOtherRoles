@@ -7,6 +7,8 @@ using UnityEngine;
 using static BonusRoles.BonusRoles;
 using Reactor.Extensions;
 using System.Collections.Generic;
+using System.Linq;
+using UnhollowerBaseLib;
 
 namespace BonusRoles
 {
@@ -22,6 +24,7 @@ namespace BonusRoles
         private static CustomButton seerRevealButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
+        private static CustomButton spyButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -33,6 +36,9 @@ namespace BonusRoles
             seerRevealButton.MaxTimer = Seer.cooldown;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
+            spyButton.MaxTimer = Spy.cooldown;
+
+            spyButton.EffectDuration = Spy.duration;
         }
 
         public static void Postfix(HudManager __instance)
@@ -64,7 +70,7 @@ namespace BonusRoles
                         }
                     }
                 },
-                () => { return Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     bool sabotageActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
@@ -72,7 +78,7 @@ namespace BonusRoles
                             sabotageActive = true;
                     return sabotageActive && !Engineer.usedRepair && PlayerControl.LocalPlayer.CanMove;
                 },
-                false,
+                () => {},
                 Engineer.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -105,9 +111,9 @@ namespace BonusRoles
                         }
                     }
                 },
-                () => { return Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer;},
                 Janitor.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -138,9 +144,9 @@ namespace BonusRoles
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer; 
                     Sheriff.currentTarget = null;
                 },
-                () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
                 Vector3.zero,
                 __instance
@@ -154,9 +160,9 @@ namespace BonusRoles
                     RPCProcedure.timeMasterRewindTime();
                     timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;
                 },
-                () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => { timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;},
                 TimeMaster.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -172,9 +178,9 @@ namespace BonusRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
                 },
-                () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                false,
+                () => {},
                 Medic.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -192,9 +198,9 @@ namespace BonusRoles
                     
                     RPCProcedure.shifterShift(Shifter.currentTarget.PlayerId);
                 },
-                () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return Shifter.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => { shifterShiftButton.Timer = shifterShiftButton.MaxTimer; },
                 Shifter.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -205,15 +211,26 @@ namespace BonusRoles
                 () => {
                     seerRevealButton.Timer = seerRevealButton.MaxTimer;
 
+                    PlayerControl targetOrMistake = Seer.currentTarget;
+                    if (rnd.Next(1, 101) > Seer.chanceOfSeeingRight) {
+                        var players = PlayerControl.AllPlayerControls.ToArray().ToList();
+                        players.RemoveAll(p => p != null && (p.PlayerId == Seer.seer.PlayerId || p.PlayerId == Seer.currentTarget.PlayerId));
+                        int index = rnd.Next(0, players.Count);
+
+                        if (players.Count != 0 && players[index] != null)
+                            targetOrMistake = players[index];
+                    }
+
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SeerReveal, Hazel.SendOption.None, -1);
                     writer.Write(Seer.currentTarget.PlayerId);
+                    writer.Write(targetOrMistake.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     
-                    RPCProcedure.seerReveal(Seer.currentTarget.PlayerId);
+                    RPCProcedure.seerReveal(Seer.currentTarget.PlayerId, targetOrMistake.PlayerId);
                 },
-                () => { return Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return Seer.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                false,
+                () => {},
                 Seer.getButtonSprite(),
                 Vector3.zero,
                 __instance
@@ -235,9 +252,15 @@ namespace BonusRoles
                         morphlingButton.HasEffect = false; // Block effect on this click
                     }
                 },
-                () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return (Morphling.currentTarget || Morphling.sampledTarget) && PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => { 
+                    morphlingButton.Timer = morphlingButton.MaxTimer;
+                    morphlingButton.Sprite = Morphling.getSampleSprite();
+                    morphlingButton.isEffectActive = false;
+                    morphlingButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                    Morphling.sampledTarget = null;
+                },
                 Morphling.getSampleSprite(),
                 new Vector3(0f, 1.3f, 0f),
                 __instance,
@@ -256,15 +279,41 @@ namespace BonusRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.camouflagerCamouflage();
                 },
-                () => { return Camouflager.camouflager != null && Camouflager.camouflager == PlayerControl.LocalPlayer && __instance.UseButton.isActiveAndEnabled && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Camouflager.camouflager != null && Camouflager.camouflager == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
-                true,
+                () => {
+                    camouflagerButton.Timer = camouflagerButton.MaxTimer;
+                    camouflagerButton.isEffectActive = false;
+                    camouflagerButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
                 Camouflager.getButtonSprite(),
                 new Vector3(0f, 1.3f, 0f),
                 __instance,
                 true,
                 10f,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
+            );
+
+            // Spy button
+            spyButton = new CustomButton(
+                () => {
+                    Spy.spyTimer = Spy.duration;
+                },
+                () => { return Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    spyButton.Timer = spyButton.MaxTimer;
+                    spyButton.isEffectActive = false;
+                    spyButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Spy.getButtonSprite(),
+                Vector3.zero,
+                __instance,
+                true,
+                0f,
+                () => {
+                    spyButton.Timer = spyButton.MaxTimer;
+                }
             );
         }
     }

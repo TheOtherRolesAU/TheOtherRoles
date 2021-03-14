@@ -278,7 +278,7 @@ namespace BonusRoles
                 }
 
                 // Child win condition
-                if (Child.child != null && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Child.child.PlayerId) {
+                if (Child.child != null && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildDied, Hazel.SendOption.None, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.childDied();

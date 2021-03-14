@@ -13,7 +13,7 @@ namespace BonusRoles
 {
 
     [HarmonyPatch(typeof(Vent), "CanUse")]
-    public static class VentPatch
+    public static class VentCanUsePatch
     {
         public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
@@ -44,6 +44,17 @@ namespace BonusRoles
             }
             __result = num;
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Vent), "Use")]
+    public static class VentUsePatch {
+        public static void Prefix(Vent __instance) {
+            bool flag;
+            bool flag2;
+            __instance.CanUse(PlayerControl.LocalPlayer.Data, out flag, out flag2);
+            if (flag && !PlayerControl.LocalPlayer.inVent)
+                localVentEnterTimePoint = DateTime.UtcNow;
         }
     }
 
@@ -115,7 +126,7 @@ namespace BonusRoles
     class VitalsMinigamePatch {
         static void Postfix(VitalsMinigame __instance) {
             // Spy show time since death
-            if (Spy.spy == null || Spy.spy != PlayerControl.LocalPlayer) return;
+            bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0;
             for (int k = 0; k < __instance.vitals.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.vitals[k];
@@ -125,7 +136,11 @@ namespace BonusRoles
                     DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == playerInfo?.PlayerId)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
-                        vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
+
+                        if (showSpyInfo)
+                            vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
+                        else
+                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.Instance.GetString(Palette.ShortColorNames[(int)playerInfo.ColorId], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}
@@ -139,9 +154,7 @@ namespace BonusRoles
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
-                // Spy save colors for each room on the admin panel
-                if (Spy.spy == null || Spy.spy != PlayerControl.LocalPlayer) return true;
-
+                // Save colors for the Spy
                 __instance.timer += Time.deltaTime;
                 if (__instance.timer < 0.1f)
                 {
@@ -221,10 +234,11 @@ namespace BonusRoles
 
         [HarmonyPatch(typeof(CounterArea), nameof(CounterArea.UpdateCount))]
         class CounterAreaUpdateCountPatch {
+            private static Sprite defaultIcon;
+
             static void Postfix(CounterArea __instance) {
                 // Spy display saved colors on the admin panel
-                if (Spy.spy == null || Spy.spy != PlayerControl.LocalPlayer) return;
-
+                bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
 
@@ -232,9 +246,15 @@ namespace BonusRoles
                         PoolableBehavior icon = __instance.myIcons[i];
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-                        if (renderer != null && colors.Count > i && Spy.getAdminTableIconSprite() != null) {
-                            renderer.sprite = Spy.getAdminTableIconSprite();
-                            renderer.color = colors[i];
+                        if (renderer != null) {
+                            if (defaultIcon == null) defaultIcon = renderer.sprite;
+                            if (showSpyInfo && colors.Count > i && Spy.getAdminTableIconSprite() != null) {
+                                renderer.sprite = Spy.getAdminTableIconSprite();
+                                renderer.color = colors[i];
+                            } else {
+                                renderer.sprite = defaultIcon;
+                                renderer.color = Color.white;
+                            }
                         } 
                     }
                 }

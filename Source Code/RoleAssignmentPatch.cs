@@ -29,9 +29,9 @@ namespace BonusRoles
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
-            List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList();
+            List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             crewmates.RemoveAll(x => x.Data.IsImpostor);
-            List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
+            List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
             // Special roles impostors can be converted to
@@ -41,12 +41,6 @@ namespace BonusRoles
                 setRoleToRandomPlayer((byte)RoleId.Mafioso, impostors);
             }
 
-            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.morphlingSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Morphling, impostors);
-
-            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.camouflagerSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Camouflager, impostors);
-            
             // Special roles that involve crewmates and impostors
             if (rnd.Next(1, 101) <= BonusRolesPlugin.loversSpawnChance.GetValue())
             {
@@ -59,6 +53,13 @@ namespace BonusRoles
                 }
             }
 
+            // Special roles impostors can be converted to
+            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.morphlingSpawnChance.GetValue()))
+                setRoleToRandomPlayer((byte)RoleId.Morphling, impostors);
+
+            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.camouflagerSpawnChance.GetValue()))
+                setRoleToRandomPlayer((byte)RoleId.Camouflager, impostors);
+            
             // Special roles crewmates can be converted to
             if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.jesterSpawnChance.GetValue()))
                 setRoleToRandomPlayer((byte)RoleId.Jester, crewmates);

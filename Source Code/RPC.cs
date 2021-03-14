@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace BonusRoles
 {
@@ -179,10 +180,10 @@ namespace BonusRoles
         }
 
         public static void janitorClean(byte playerId) {
-            DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
-                    Object.Destroy(array[i].gameObject);
+                    UnityEngine.Object.Destroy(array[i].gameObject);
             }
         }
 
@@ -198,7 +199,27 @@ namespace BonusRoles
         }
 
         public static void timeMasterRewindTime() {
+            if (TimeMaster.timeMaster == null) return;
+
+            PlayerControl lp = PlayerControl.LocalPlayer;
+            if (lp?.Data != null && !lp.Data.IsDead && lp.inVent) {
+                if ((float)(DateTime.UtcNow -localVentEnterTimePoint).TotalMilliseconds < 1000 * TimeMaster.rewindTime) {
+                    foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                        bool canUse;
+                        bool couldUse;
+                        vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+                        if (canUse) {
+                            PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
+			                vent.SetButtons(false);
+                        }
+                    }
+                }
+            }
+
+            if (PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+
             TimeMaster.isRewinding = true;
+
             if (MapBehaviour.Instance)
                 MapBehaviour.Instance.Close();
             if (Minigame.Instance)
@@ -313,15 +334,17 @@ namespace BonusRoles
             }
         }
 
-        public static void seerReveal(byte playerId) {
+        public static void seerReveal(byte targetId, byte targetOrMistakeId) {
             if (Seer.seer == null) return;
+            
+            PlayerControl target = Helpers.playerById(targetId);
+            PlayerControl targetOrMistake = Helpers.playerById(targetOrMistakeId);
 
-            PlayerControl player = Helpers.playerById(playerId);
-            if (player != null && !Seer.revealedPlayers.Any(p => p.Data.PlayerId == playerId)) {
-                Seer.revealedPlayers.Add(player);
+            if (target != null && targetOrMistake != null && !Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == targetId)) {
+                Seer.revealedPlayers.Add(target, targetOrMistake);
 
-                if (PlayerControl.LocalPlayer == player && HudManager.Instance?.FullScreen != null) {
-                    SeerInfo si = SeerInfo.getSeerInfoForPlayer(player);
+                if (PlayerControl.LocalPlayer == target && HudManager.Instance?.FullScreen != null) {
+                    SeerInfo si = SeerInfo.getSeerInfoForPlayer(target); // Use SeerInfo for target here, because we need the isGood of the targets role
                     bool showNotification = false;
                     if (Seer.playersWithNotification == 0 ) showNotification = true;
                     else if (Seer.playersWithNotification == 1 && si.isGood) showNotification = true;
@@ -442,7 +465,9 @@ namespace BonusRoles
                     RPCProcedure.swapperSwap(playerId1, playerId2);
                     break;
                 case (byte)CustomRPC.SeerReveal:
-                    RPCProcedure.seerReveal(HFPCBBHJIPJ.ReadByte());
+                    byte targetId = HFPCBBHJIPJ.ReadByte();
+                    byte targetOrMistakeId = HFPCBBHJIPJ.ReadByte();
+                    RPCProcedure.seerReveal(targetId, targetOrMistakeId);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
                     RPCProcedure.morphlingMorph(HFPCBBHJIPJ.ReadByte());

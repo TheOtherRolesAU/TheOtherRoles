@@ -26,9 +26,9 @@ namespace BonusRoles
 
         // Role spawn chances
         public static CustomNumberOption mafiaSpawnChance = CustomOption.AddNumber("Mafia Spawn Chance", 100, 0, 100, 10);
+        public static CustomNumberOption loversSpawnChance = CustomOption.AddNumber("Lovers Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption morphlingSpawnChance = CustomOption.AddNumber("Morphling Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption camouflagerSpawnChance = CustomOption.AddNumber("Camouflager Spawn Chance", 100, 0, 100, 10);
-        public static CustomNumberOption loversSpawnChance = CustomOption.AddNumber("Lovers Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption jesterSpawnChance = CustomOption.AddNumber("Jester Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption mayorSpawnChance = CustomOption.AddNumber("Mayor Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption engineerSpawnChance = CustomOption.AddNumber("Engineer Spawn Chance", 100, 0, 100, 10);
@@ -63,61 +63,23 @@ namespace BonusRoles
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("Shielded Player Sees Murder Attempt", false);
         public static CustomNumberOption shifterCooldown = CustomOption.AddNumber("Shifter Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption seerCooldown = CustomOption.AddNumber("Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
+        public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber("Seer Chance Of Seeing Right", 100, 0, 100, 5);
         public static CustomStringOption seerKindOfInfo = CustomOption.AddString("Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
-        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"}); 
+        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
+        public static CustomNumberOption spyCooldown = CustomOption.AddNumber("Spy Cooldown", 30f, 10f, 120f, 5f);
+        public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber("Spy Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("Child Growing Up Duration", 400f, 100f, 1500f, 100f);
 
-        public static ConfigEntry<string> Ip { get; set; }
-        public static ConfigEntry<ushort> Port { get; set; }
-        public static ConfigEntry<string> Name { get; private set; }
+        public static ConfigEntry<bool> DebugMode { get; private set; }
+
+
 
         public override void Load()
         {
-            Ip = Config.Bind("Custom", "Ipv4 or Hostname", "127.0.0.1");
-            Port = Config.Bind("Custom", "Port", (ushort)22023);
-            Name = Config.Bind("Custom", "Custom", "Custom");
-
-            var defaultRegions = ServerManager.DefaultRegions.ToList();
-            var ip = Ip.Value;
-            if (Uri.CheckHostName(Ip.Value).ToString() == "Dns")
-            {
-                try
-                {
-                    foreach (IPAddress address in Dns.GetHostAddresses(Ip.Value))
-                    {
-                        if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                            ip = address.ToString(); break;
-                        }
-                    }
-                }
-                catch { }
-            }
-
-            var port = Port.Value;
-            defaultRegions.Insert(0, new StaticRegionInfo(
-                Name.Value, (StringNames)3000, ip, new[]
-                {
-                    new ServerInfo($"CustomServer", ip, Port.Value)
-                }).Duplicate()
-            ) ;
-            ServerManager.DefaultRegions = defaultRegions.ToArray();
+            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
 
             CustomOption.ShamelessPlug = false;
             Harmony.PatchAll();
-        }
-    }
-
-    // Patch server name
-    [HarmonyPatch(typeof(LanguageUnit),"HOGGPANBLGP")]
-    public class ServerNamePatch {
-        public static bool Prefix(StringNames LENBLADGELB, string NNLLKLDPBAI, Il2CppReferenceArray<Il2CppSystem.Object> DKBJCINDDCD, ref string __result)
-        {
-            if (LENBLADGELB == (StringNames)3000)
-            {
-                __result = BonusRolesPlugin.Name.Value;
-                return false;
-            }         
-            return true;
         }
     }
 
@@ -130,4 +92,52 @@ namespace BonusRoles
             __result = false;
         }
     }
+
+    // Debugging tools
+    [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
+    public static class DebugManager
+    {
+        private static readonly System.Random random = new System.Random((int)DateTime.Now.Ticks);
+        private static List<PlayerControl> bots = new List<PlayerControl>();
+
+        public static void Postfix(KeyboardJoystick __instance)
+        {
+            if (!BonusRolesPlugin.DebugMode.Value) return;
+
+            // Spawn dummys
+            if (Input.GetKeyDown(KeyCode.F)) {
+                var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
+                var i = playerControl.PlayerId = (byte) GameData.Instance.GetAvailableId();
+
+                bots.Add(playerControl);
+                GameData.Instance.AddPlayer(playerControl);
+                AmongUsClient.Instance.Spawn(playerControl, -2, SpawnFlags.None);
+                
+                playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+                playerControl.GetComponent<DummyBehaviour>().enabled = true;
+                playerControl.NetTransform.enabled = false;
+                playerControl.SetName(RandomString(10));
+                playerControl.SetColor((byte) random.Next(Palette.PlayerColors.Length));
+                playerControl.SetHat((uint) random.Next(HatManager.Instance.AllHats.Count),playerControl.Data.ColorId);
+                playerControl.SetPet((uint) random.Next(HatManager.Instance.AllPets.Count));
+                playerControl.SetSkin((uint) random.Next(HatManager.Instance.AllSkins.Count));
+                GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
+            }
+
+            // Terminate round
+            if(Input.GetKeyDown(KeyCode.L)) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.forceEnd();
+            }
+        }
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+    }
+
 }

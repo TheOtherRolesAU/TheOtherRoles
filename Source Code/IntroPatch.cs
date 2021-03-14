@@ -164,7 +164,7 @@ namespace BonusRoles
             {
                 __instance.__this.Title.Text = "Child";
                 __instance.__this.Title.Color = Child.color;
-                __instance.__this.ImpostorText.Text = "No one will harm you";
+                __instance.__this.ImpostorText.Text = "No one will harm you until you grow up";
                 __instance.__this.BackgroundBar.material.color = Child.color;
             }
         }

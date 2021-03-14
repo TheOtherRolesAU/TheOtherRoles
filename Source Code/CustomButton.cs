@@ -13,25 +13,25 @@ public class CustomButton
     public Vector3 PositionOffset;
     public float MaxTimer = float.MaxValue;
     public float Timer = 0f;
-    public bool ResetTimeAfterMeeting;
     private Action OnClick;
+    private Action OnMeetingEnds;
     private Func<bool> HasButton;
     private Func<bool> CouldUse;
     private Action OnEffectEnds;
     public bool HasEffect;
-    private bool isEffectActive = false;
-    private float EffectDuration;
+    public bool isEffectActive = false;
+    public float EffectDuration;
     public Sprite Sprite;
     private HudManager hudManager;
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, bool ResetTimeAfterMeeting, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds)
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds)
     {
         this.hudManager = hudManager;
         this.OnClick = OnClick;
         this.HasButton = HasButton;
         this.CouldUse = CouldUse;
         this.PositionOffset = PositionOffset;
-        this.ResetTimeAfterMeeting = ResetTimeAfterMeeting;
+        this.OnMeetingEnds = OnMeetingEnds;
         this.HasEffect = HasEffect;
         this.EffectDuration = EffectDuration;
         this.OnEffectEnds = OnEffectEnds;
@@ -60,13 +60,13 @@ public class CustomButton
         setActive(false);
     }
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, bool ResetTimeAfterMeeting, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager)
-    : this(OnClick, HasButton, CouldUse, ResetTimeAfterMeeting, Sprite, PositionOffset, hudManager, false, 0f, () => {}) { }
-
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager)
+    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}) { }
 
     public static void HudUpdate()
     {
         buttons.RemoveAll(item => item.killButtonManager == null);
+
         if (MeetingHud.Instance || ExileController.Instance) return;
     
         for (int i = 0; i < buttons.Count; i++)
@@ -88,10 +88,8 @@ public class CustomButton
         {
             try
             {
-                if (buttons[i].ResetTimeAfterMeeting) {
-                    buttons[i].Timer = buttons[i].MaxTimer;
-                    buttons[i].Update();
-                }
+                buttons[i].OnMeetingEnds();
+                buttons[i].Update();
             }
             catch (NullReferenceException)
             {
@@ -131,7 +129,7 @@ public class CustomButton
             setActive(false);
             return;
         }
-        setActive(true);
+        setActive(hudManager.UseButton.isActiveAndEnabled);
 
         killButtonManager.renderer.sprite = Sprite;
 

@@ -191,22 +191,27 @@ namespace BonusRoles
             if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
 
             // Update revealed players
-            foreach (PlayerControl p in Seer.revealedPlayers) {
+            foreach (KeyValuePair<PlayerControl, PlayerControl> entry in Seer.revealedPlayers) {
+                PlayerControl target = entry.Key;
+                PlayerControl targetOrMistake = entry.Value;
+
+                if (target == null || targetOrMistake == null) continue;
+
                 // Update color and name regarding settings and given info
-                string result = p.Data.PlayerName;
-                SeerInfo si = SeerInfo.getSeerInfoForPlayer(p);
+                string result = target.Data.PlayerName;
+                SeerInfo si = SeerInfo.getSeerInfoForPlayer(targetOrMistake);
                 if (Seer.kindOfInfo == 0)
-                    result = p.Data.PlayerName + " (" + si.roleName + ")";
+                    result = target.Data.PlayerName + " (" + si.roleName + ")";
                 else if (Seer.kindOfInfo == 1) {
                     si.color = si.isGood ? new Color(250f / 255f, 217f / 255f, 52f / 255f, 1) : new Color (51f / 255f, 61f / 255f, 54f / 255f, 1); 
                 }
 
                 // Set color and name
-                p.nameText.Color = si.color;
-                p.nameText.Text = result;
+                target.nameText.Color = si.color;
+                target.nameText.Text = result;
                 if (MeetingHud.Instance != null) {
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                        if (p.PlayerId == player.TargetPlayerId) {
+                        if (target.PlayerId == player.TargetPlayerId) {
                             player.NameText.Text = result;
                             player.NameText.Color = si.color;
                             break;
@@ -214,6 +219,10 @@ namespace BonusRoles
                     }
                 }
             }
+        }
+
+        static void spyUpdate() {
+            Spy.spyTimer -= Time.deltaTime;
         }
 
         static void camouflageAndMorphActions() {
@@ -292,14 +301,33 @@ namespace BonusRoles
             }
         }
 
-        public static void updatePlayerSizes() {
+        public static void childUpdate() {
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
 
-                if (Child.child != null && Child.child == p)
-                    p.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
-                else if (Morphling.morphling != null && Morphling.morphling == p && Morphling.morphTarget != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
-                    p.transform.localScale = new Vector3(0.35f, 0.35f, 1f);
+                if (Child.child == null) {
+                    p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+                    return;
+                }                 
+                
+                float growingProgress = Child.growingProgress();
+                float scale = growingProgress * 0.35f + 0.35f;
+                string suffix = "";
+                if (growingProgress != 1f)
+                    suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
+
+                if (Child.child == p) {
+                    p.transform.localScale = new Vector3(scale, scale, 1f);
+                    p.nameText.Text += suffix;
+                    if (MeetingHud.Instance != null)
+                        foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                            if (player.NameText != null && p.PlayerId == player.TargetPlayerId)
+                                player.NameText.Text += suffix;
+                }
+                else if (Morphling.morphling != null && Morphling.morphling == p && Morphling.morphTarget != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f) {
+                    p.transform.localScale = new Vector3(scale, scale, 1f);
+                    p.nameText.Text += suffix;
+                }
                 else
                     p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             }
@@ -326,9 +354,11 @@ namespace BonusRoles
             shifterClearTasks();
             // Seer update
             seerUpdate();
+            // Spy update();
+            spyUpdate();
 
             camouflageAndMorphActions();
-            updatePlayerSizes();
+            childUpdate();
         }
     }
 }
