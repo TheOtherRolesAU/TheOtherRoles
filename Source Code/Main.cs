@@ -74,8 +74,25 @@ namespace BonusRoles
 
 
 
+                public bool IsCommsActive { get; private set; }
+        private IEnumerator LastCoroutine { get; set; }
+        public float AnimationDuration { get; set; }
+        public Color32 DistortionBackColor { get; set; }
+        public Color32 DistortionBodyColor { get; set; }
+
         public override void Load()
         {
+            var duration = new ConfigDefinition("Distortion", "Duration");
+            var back = new ConfigDefinition("Distortion", "Back");
+            var body = new ConfigDefinition("Distortion", "Body");
+
+            Config.Bind(duration, 2.0f);
+            Config.Bind(back, "7F7F7FFF");
+            Config.Bind(body, "7F7F7FFF");
+
+            AnimationDuration = (float)Config[duration].BoxedValue;
+            DistortionBackColor = Helpers.ColorFromHex((string)Config[back].BoxedValue);
+            DistortionBodyColor = Helpers.ColorFromHex((string)Config[body].BoxedValue);
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
 
             CustomOption.ShamelessPlug = false;
