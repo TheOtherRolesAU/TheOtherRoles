@@ -77,7 +77,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
 # Custom Servers
-We highly recommend you to play on custom servers rather than on the official ones. A guide on how to set up a server will be added soon. In order to make your client able to connect to a custom server we recommend using [Unify](https://github.com/moltenmods/unify). Just add
+We recommend you to play on custom servers rather than on the official ones. A guide on how to set up a server will be added soon. In order to make your client able to connect to a custom server we recommend using [Unify](https://github.com/moltenmods/unify). Just add
 the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 
 # Credits & Resources
@@ -387,6 +387,10 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 -----------------------
+
+# Donate
+If you really want to support me, I am really happy about every donation 🥰\
+<a href='https://ko-fi.com/eisbison' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
