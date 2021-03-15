@@ -57,6 +57,7 @@ namespace BonusRoles
         public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("Time Master Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("Rewind Time", 3f, 1f, 10f, 1f);
         public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("Revive During Rewind", false);
+        public static CustomStringOption ColorBlindComms = CustomOption.AddString("ColorBlind Comms", new string[] { "Enabled", "Disabled" });
         public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber("Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
         public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber("Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
