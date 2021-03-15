@@ -316,5 +316,36 @@ namespace BonusRoles
                 }
             );
         }
+         [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+        public static class HudManagerStartPatch2
+        {
+            public static void Postfix(HudManager __instance)
+            {
+                CustomRolesPlugin plugin = PluginSingleton<CustomRolesPlugin>.Instance;
+
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.Nested_0.NotJoined || AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.Nested_0.Ended)
+                {
+                    plugin.DeactivateComms();
+                    return;
+                }
+                string ColorBlindComms = CustomRolesPlugin.ColorBlindComms.GetText();
+                bool commsActive = false;
+                if (ColorBlindComms == "Enabled")
+                {
+                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    {
+                        if (task.TaskType == TaskTypes.FixComms)
+                        {
+                            commsActive = true;
+                            break;
+                        }
+                    }
+                    if (commsActive)
+                        plugin.ActivateComms();
+                    else
+                        plugin.DeactivateComms();
+                }
+            }
+        }
     }
 }
