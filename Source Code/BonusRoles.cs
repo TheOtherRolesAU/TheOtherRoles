@@ -123,6 +123,7 @@ namespace BonusRoles
 
             public static float cooldown = float.MaxValue;
             public static bool jesterCanDieToSheriff = false;
+            public static bool SheriffKillCrew = false;
 
             public static PlayerControl currentTarget;
 
@@ -131,6 +132,7 @@ namespace BonusRoles
                 currentTarget = null;
                 cooldown = BonusRolesPlugin.sheriffCooldown.GetValue();
                 jesterCanDieToSheriff = BonusRolesPlugin.jesterCanDieToSheriff.GetValue();
+                SheriffKillCrew = BonusRolesPlugin.SheriffKillCrew.GetValue();
             }
         }
 

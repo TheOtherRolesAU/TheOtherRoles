@@ -47,9 +47,11 @@ namespace BonusRoles
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("Janitor Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber("Morphling Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber("Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomToggleOption loversBothDie = CustomOption.AddToggle("Both Lovers Die", true); 
+        public static CustomToggleOption loversBothDie = CustomOption.AddToggle("Both Lovers Die", true);
+        public static CustomNumberOption impLoverChance = CustomOption.AddNumber("Implover Chance", 33, 0, 100, 10);
         public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber("Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("Jester Can Die To Sheriff", false); 
+        public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("Jester Can Die To Sheriff", false);
+        public static CustomToggleOption SheriffKillCrew = CustomOption.AddToggle("Sheriff Can Kill Crew", false);
         public static CustomNumberOption lighterVision = CustomOption.AddNumber("Lighter Vision", 2f, 0.25f, 5f, 0.25f);
         public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle("Anonymous Footprints", false); 
         public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber("Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);

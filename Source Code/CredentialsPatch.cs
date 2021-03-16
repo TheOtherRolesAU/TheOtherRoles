@@ -13,9 +13,9 @@ namespace BonusRoles
         static void Postfix(VersionShower __instance) {
             string spacer = new String('\n', 15);
             if (__instance.text.Text.Contains(spacer))
-                __instance.text.Text += "\n[FFFFFFFF]- Loaded [FCCE03FF]TheOtherRoles[FFFFFFFF] v1.5\n  by [FCCE03FF]Eisbison";
+                __instance.text.Text += "\n[FFFFFFFF]- Loaded [FCCE03FF]Men[FFFFFFFF] \n  by [FCCE03FF]Men";
             else
-                __instance.text.Text += spacer + "[FFFFFFFF]- Loaded [FCCE03FF]TheOtherRoles[FFFFFFFF] v1.5\n  by [FCCE03FF]Eisbison";
+                __instance.text.Text += spacer + "[FFFFFFFF]- Loaded [FCCE03FF]Men[FFFFFFFF] \n  by [FCCE03FF]Men";
         }
     }
 
@@ -24,8 +24,7 @@ namespace BonusRoles
     {
         static void Postfix(VersionShower __instance)
         {
-            __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[FFFFFFFF]";
-            __instance.text.Text += "\nModded by [FCCE03FF]Eisbison";
+            __instance.text.Text += "\n[FCCE03FF]Men[FFFFFFFF]";
         }
     }
 }

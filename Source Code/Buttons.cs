@@ -131,7 +131,7 @@ namespace BonusRoles
                     }
 
                     byte targetId = 0;
-                    if (Sheriff.currentTarget.Data.IsImpostor || (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget))
+                    if (Sheriff.currentTarget.Data.IsImpostor || (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget) || (Sheriff.SheriffKillCrew && !Sheriff.currentTarget.Data.IsImpostor))
                         targetId = Sheriff.currentTarget.PlayerId;
                     else
                         targetId = PlayerControl.LocalPlayer.PlayerId;
@@ -140,9 +140,19 @@ namespace BonusRoles
                     killWriter.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                     RPCProcedure.sheriffKill(targetId);
+                    if(Sheriff.SheriffKillCrew && !Sheriff.currentTarget.Data.IsImpostor)
+                    {
+                        MessageWriter killWriter2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.None, -1);
 
-                    sheriffKillButton.Timer = sheriffKillButton.MaxTimer; 
+                        targetId = PlayerControl.LocalPlayer.PlayerId;
+                        killWriter2.Write(targetId);
+                        AmongUsClient.Instance.FinishRpcImmediately(killWriter2);
+
+                        RPCProcedure.sheriffKill(targetId);
+                    }
+                    sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
                     Sheriff.currentTarget = null;
+                    
                 },
                 () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },

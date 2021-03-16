@@ -44,7 +44,7 @@ namespace BonusRoles
             // Special roles that involve crewmates and impostors
             if (rnd.Next(1, 101) <= BonusRolesPlugin.loversSpawnChance.GetValue())
             {
-                if (impostors.Count > 0 && crewmates.Count > 0 && rnd.Next(1, 101) <= 33) {
+                if (impostors.Count > 0 && crewmates.Count > 0 && rnd.Next(1, 101) <= BonusRolesPlugin.impLoverChance.GetValue()) {
                     setRoleToRandomPlayer((byte)RoleId.Lover1, impostors); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates); 
                 } else if (crewmates.Count >= 2) {
