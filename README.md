@@ -43,7 +43,7 @@ Even more roles are coming soon :)
 \
 **Changes in v1.4:**
 - Fixing a Camoflager/Morphling animation bug
-- Fixing a bug where the Swapper could swap votes even if they was dead
+- Fixing a bug where the Swapper could swap votes even if they are dead
 - The custom cooldown buttons now render the cooldown progress (the grey overlay) in the right way (v1.3 introduced the bug)
 - Players in vents are not targetable anymore by the role actions, the button does not activate (e.g. Seer revealing, Morphling sample). Exception: Impostor killing an Engineer in a vent
 
@@ -108,7 +108,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 - They shrink to the size of the child when they copies its look.
 - The color of the footprints does **not** change.
 - The Seer still sees the Morphlings role if they revealed it.
-- The other impostor still sees that they is an impostor (the name remains red).
+- The other impostor still sees that they are an impostor (the name remains red).
 
 ### Game Options
 | Name | Description |
