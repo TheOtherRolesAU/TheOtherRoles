@@ -157,5 +157,74 @@ namespace BonusRoles
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
+    public void ActivateComms()
+        {
+            if (IsCommsActive) return;
+            if (LastCoroutine != null)
+                Coroutines.Stop(LastCoroutine);
+            IsCommsActive = true;
+            Coroutines.Start(LastCoroutine = CoDistortColor(true));
+        }
+        public void DeactivateComms()
+        {
+            if (!IsCommsActive) return;
+            if (LastCoroutine != null)
+                Coroutines.Stop(LastCoroutine);
+            IsCommsActive = false;
+            Coroutines.Start(LastCoroutine = CoDistortColor(false));
+        }
+        public IEnumerator CoDistortColor(bool fadeOff)
+        {
+            for (float t = 0f; ;)
+            {
+                float alpha = t / AnimationDuration;
+                if (fadeOff) alpha = 1 - alpha;
+                alpha = Mathf.Clamp(alpha, 0f, 1f);
+
+                DeadBody[] allDeadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+                foreach (var deadBody in allDeadBodies)
+                {
+                    var material = deadBody.gameObject.GetComponent<Renderer>().material;
+
+                    //the keyword allows other mods to programmatically detect if a material needs not to be disturbed
+                    if (fadeOff)
+                        material.EnableKeyword("Distorted");
+                    else
+                        material.DisableKeyword("Distorted");
+
+                    int colorId = GameData.Instance.GetPlayerById(deadBody.ParentId).ACBLKMFEPKC;
+
+                    material.SetColor("_BackColor", Color32.Lerp(DistortionBackColor, Palette.ShadowColors[colorId], alpha));
+                    material.SetColor("_BodyColor", Color32.Lerp(DistortionBodyColor, Palette.PlayerColors[colorId], alpha));
+                }
+
+
+                foreach (var pl in PlayerControl.AllPlayerControls)
+                {
+                    if (fadeOff)
+                        pl.myRend.material.EnableKeyword("Distorted");
+                    else
+                        pl.myRend.material.DisableKeyword("Distorted");
+
+                    pl.nameText.Text = Helpers.GlitchedText(pl.gameObject.name, alpha);
+                    pl.myRend.material.SetColor("_BackColor", Color32.Lerp(DistortionBackColor, Palette.ShadowColors[pl.Data.ACBLKMFEPKC], alpha));
+                    pl.myRend.material.SetColor("_BodyColor", Color32.Lerp(DistortionBodyColor, Palette.PlayerColors[pl.Data.ACBLKMFEPKC], alpha));
+
+                    //pets, skins and hats will be made transparent, some of them might be null.
+                    var spritesList = new[]
+                    {
+                            pl.CurrentPet?.rend,
+                            pl.CurrentPet?.shadowRend,
+                            pl.MyPhysics?.Skin?.layer,
+                            pl.HatRenderer?.BackLayer,
+                            pl.HatRenderer?.FrontLayer
+                    };
+                    spritesList.DoIf(v => v != null, v => v.color = Helpers.ChangeAlphaTo(v.color, alpha));
+                }
+                yield return new WaitForEndOfFrame();
+                if (t < AnimationDuration) t += Time.deltaTime;
+            }
+        }
+    }
 
 }
