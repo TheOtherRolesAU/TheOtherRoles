@@ -11,10 +11,15 @@ namespace BonusRoles
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetInfected))]
     class SetInfectedPatch
     {
+        private static T removeRandomElement<T>(List<T> list) {
+            int index = rnd.Next(0, list.Count);
+            T element = list[index];
+            list.RemoveAt(index);
+            return element;
+        }
+
         private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
-            var index = rnd.Next(0, playerList.Count);
-            byte playerId = playerList[index].PlayerId;
-            playerList.RemoveAt(index);
+            byte playerId = removeRandomElement(playerList).PlayerId;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.None, -1);
             writer.Write(roleId);
@@ -54,39 +59,53 @@ namespace BonusRoles
             }
 
             // Special roles impostors can be converted to
-            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.morphlingSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Morphling, impostors);
+            List<RoleId> specialImpostorRoles = new List<RoleId>();
 
-            if (impostors.Count >= 1 && (rnd.Next(1, 101) <= BonusRolesPlugin.camouflagerSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Camouflager, impostors);
-            
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.morphlingSpawnChance.GetValue())
+                specialImpostorRoles.Add(RoleId.Morphling);
+
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.camouflagerSpawnChance.GetValue())
+                specialImpostorRoles.Add(RoleId.Camouflager);
+
+            while (impostors.Count > 0 && specialImpostorRoles.Count > 0)
+            {
+                setRoleToRandomPlayer((byte)removeRandomElement(specialImpostorRoles), impostors);
+            }
+
             // Special roles crewmates can be converted to
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.jesterSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Jester, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.mayorSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Mayor, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.engineerSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Engineer, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.sheriffSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Sheriff, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.lighterSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Lighter, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.detectiveSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Detective, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.timeMasterSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.TimeMaster, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.medicSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Medic, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.shifterSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Shifter, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.swapperSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Swapper, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.seerSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Seer, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.spySpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Spy, crewmates);
-            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.childSpawnChance.GetValue()))
-                setRoleToRandomPlayer((byte)RoleId.Child, crewmates);
+            List<RoleId> specialCrewmateRoles = new List<RoleId>();
+
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.jesterSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Jester);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.mayorSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Mayor);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.engineerSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Engineer);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.sheriffSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Sheriff);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.lighterSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Lighter);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.detectiveSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Detective);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.timeMasterSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.TimeMaster);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.medicSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Medic);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.shifterSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Shifter);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.swapperSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Swapper);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.seerSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Seer);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.spySpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Spy);
+            if (rnd.Next(1, 101) <= BonusRolesPlugin.childSpawnChance.GetValue())
+                specialCrewmateRoles.Add(RoleId.Child);
+
+            while (crewmates.Count > 0 && specialCrewmateRoles.Count > 0)
+            {
+                setRoleToRandomPlayer((byte)removeRandomElement(specialCrewmateRoles), crewmates);
+            }
         }
     }
 }
