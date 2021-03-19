@@ -35,11 +35,18 @@ Even more roles are coming soon :)
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
 | 2021.3.5s | v1.4 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.4/TheOtherRoles.zip)
 | 2021.3.5s | v1.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.3/TheOtherRoles.zip)
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
+
+\
+**Changes in v1.6:**
+- This update is a small hotfix, fixing the bug where some people were unable to join lobbies.
+- The child can't be voted out anymore before it turns 18, hence games can't end anymore because the child died. 
+- Footprints are no longer visible to the Detective, if players are inside vents.
 
 \
 **Changes in v1.5:**
@@ -51,7 +58,7 @@ Even more roles are coming soon :)
 
 **Changes in v1.4:**
 - Fixing a Camoflager/Morphling animation bug
-- Fixing a bug where the Swapper could swap votes even if they was dead
+- Fixing a bug where the Swapper could swap votes even if they are dead
 - The custom cooldown buttons now render the cooldown progress (the grey overlay) in the right way (v1.3 introduced the bug)
 - Players in vents are not targetable anymore by the role actions, the button does not activate (e.g. Seer revealing, Morphling sample). Exception: Impostor killing an Engineer in a vent
 
@@ -67,7 +74,7 @@ Even more roles are coming soon :)
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -120,7 +127,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 - They shrink to the size of the child when they copies its look.
 - The color of the footprints does **not** change.
 - The Seer still sees the Morphlings role if they revealed it.
-- The other impostor still sees that they is an impostor (the name remains red).
+- The other impostor still sees that they are an impostor (the name remains red).
 
 ### Game Options
 | Name | Description |
@@ -387,10 +394,6 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 -----------------------
-
-# Donate
-If you really want to support me, I am really happy about every donation 🥰\
-<a href='https://ko-fi.com/eisbison' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
