@@ -7,9 +7,11 @@ using System.Collections;
 using Reactor.Unstrip;
 using UnhollowerBaseLib;
 using UnityEngine;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
+using HarmonyLib;
+using Hazel;
 
-namespace BonusRoles {
+namespace TheOtherRoles {
     public static class Helpers {
 
         public static Sprite LoadSpriteFromEmbeddedResources(string resource, float PixelPerUnit) {
@@ -107,6 +109,25 @@ namespace BonusRoles {
             if (renderer != null) renderer.enabled = false;
         }
 
+
+        public static bool handleMurderAttempt(PlayerControl target, bool notifyOthers = true) {
+            // Block impostor shielded kill
+            if (Medic.shielded != null && Medic.shielded == target) {
+                if (notifyOthers) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                }
+                RPCProcedure.shieldedMurderAttempt();
+
+                return false;
+            }
+            // Block impostor not fully grown child kill
+            else if (Child.child != null && target == Child.child && !Child.isGrownUp()) {
+                return false;
+            }
+            return true;
+        }
+
         public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
         {
             Vector3 temp = default(Vector3);
@@ -186,6 +207,11 @@ namespace BonusRoles {
                 c = Camouflager.color;
                 g = false;
             }
+            else if (Vampire.vampire != null && p == Vampire.vampire) {
+                r = "Vampire";
+                c = Vampire.color;
+                g = false;
+            }
             else if (Detective.detective != null && p == Detective.detective) {
                 r = "Detective";
                 c = Detective.color;
@@ -228,6 +254,19 @@ namespace BonusRoles {
             else if (Child.child != null && p == Child.child) { 
                 r = "Child";
                 c = Child.color;
+            }
+            else if (BountyHunter.bountyHunter != null && p == BountyHunter.bountyHunter) {
+                r = "Bounty Hunter";
+                c = BountyHunter.color;
+                g = false;
+            }
+            else if (Tracker.tracker != null && p == Tracker.tracker) {
+                r = "Tracker";
+                c = Tracker.color;
+            }
+            else if (Snitch.snitch != null && p == Snitch.snitch) {
+                r = "Snitch";
+                c = Snitch.color;
             }
             else if (p.Data.IsImpostor) { // Just Impostor
                 r = "Impostor";

@@ -1,10 +1,10 @@
 using HarmonyLib;
 using System;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(IntroCutscene.CoBegin__d), nameof(IntroCutscene.CoBegin__d.MoveNext))]
     class IntroPatch
@@ -88,6 +88,14 @@ namespace BonusRoles
                 __instance.__this.ImpostorText.Text = "Camouflage and kill the crewmates";
                 __instance.__this.BackgroundBar.material.color = Camouflager.color;
             }
+            else if (PlayerControl.LocalPlayer == Vampire.vampire)
+            {
+                __instance.__this.ImpostorText.gameObject.SetActive(true);
+                __instance.__this.Title.Text = "Vampire";
+                __instance.__this.Title.Color = Vampire.color;
+                __instance.__this.ImpostorText.Text = "Kill the crewmates with your bites";
+                __instance.__this.BackgroundBar.material.color = Vampire.color;
+            }
             else if (PlayerControl.LocalPlayer == Sheriff.sheriff)
             {
                 __instance.__this.Title.Text = "Sheriff";
@@ -166,6 +174,27 @@ namespace BonusRoles
                 __instance.__this.Title.Color = Child.color;
                 __instance.__this.ImpostorText.Text = "No one will harm you until you grow up";
                 __instance.__this.BackgroundBar.material.color = Child.color;
+            }
+            else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter)
+            {
+                __instance.__this.Title.Text = "Bounty Hunter";
+                __instance.__this.Title.Color = BountyHunter.color;
+                __instance.__this.ImpostorText.Text = "Hunt [ED653BFF]" + BountyHunter.target?.Data?.PlayerName + "[FFFFFFFF] down";
+                __instance.__this.BackgroundBar.material.color = BountyHunter.color;
+            }
+            else if (PlayerControl.LocalPlayer == Tracker.tracker)
+            {
+                __instance.__this.Title.Text = "Tracker";
+                __instance.__this.Title.Color = Tracker.color;
+                __instance.__this.ImpostorText.Text = "Track the [FF1919FF]Impostors[FFFFFFFF] down";
+                __instance.__this.BackgroundBar.material.color = Tracker.color;
+            }
+            else if (PlayerControl.LocalPlayer == Snitch.snitch)
+            {
+                __instance.__this.Title.Text = "Snitch";
+                __instance.__this.Title.Color = Snitch.color;
+                __instance.__this.ImpostorText.Text = "Finish your tasks to find the [FF1919FF]Impostors[FFFFFFFF]";
+                __instance.__this.BackgroundBar.material.color = Snitch.color;
             }
         }
     }

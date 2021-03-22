@@ -1,7 +1,7 @@
   
 using HarmonyLib;
-using static BonusRoles.BonusRoles;
-using static BonusRoles.GameHistory;
+using static TheOtherRoles.TheOtherRoles;
+using static TheOtherRoles.GameHistory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +11,14 @@ using UnhollowerBaseLib;
 using System;
 using System.Text;
 
-namespace BonusRoles {
+namespace TheOtherRoles {
     enum WinCondition {
         Default,
         LoversTeamWin,
         LoversSoloWin,
         JesterWin,
-        ChildDied
+        BountyHunterWin,
+        JesterAndBountyHunterWin
     }
 
     static class AdditionalTempData {
@@ -55,24 +56,26 @@ namespace BonusRoles {
                 if (jesterWinner != null) TempData.winners.Remove(jesterWinner);
             }
 
-
-            // Child win condition (should be implemented using a proper GameOverReason in the future)
-            if (Child.child != null && Child.child.Data.IsImpostor) {
-                AdditionalTempData.winCondition = WinCondition.ChildDied;
+            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
+            bool jesterWin = Jester.jester != null && Jester.jester.Data.IsImpostor;
+            bool bountyHunterWin = BountyHunter.bountyHunter != null && BountyHunter.bountyHunter.Data.IsImpostor;
+            if (jesterWin || bountyHunterWin) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Child.child.Data);
-                wpd.IsImpostor = false;
-                wpd.IsYou = false;
-                TempData.winners.Add(wpd);
-            }
-
-            // Jester win condition (should be implemented using a proper GameOverReason in the future)
-            else if (Jester.jester != null && Jester.jester.Data.IsImpostor) {
-                AdditionalTempData.winCondition = WinCondition.JesterWin;
-                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Jester.jester.Data);
-                wpd.IsImpostor = false; 
-                TempData.winners.Add(wpd);
+                if (jesterWin) {
+                    WinningPlayerData wpd = new WinningPlayerData(Jester.jester.Data);
+                    wpd.IsImpostor = false; 
+                    TempData.winners.Add(wpd);
+                    AdditionalTempData.winCondition = WinCondition.JesterWin;
+                }
+                if (bountyHunterWin) {
+                    WinningPlayerData wpd = new WinningPlayerData(BountyHunter.bountyHunter.Data);
+                    wpd.IsImpostor = false; 
+                    TempData.winners.Add(wpd);
+                    if (AdditionalTempData.winCondition == WinCondition.JesterWin)
+                        AdditionalTempData.winCondition = WinCondition.JesterAndBountyHunterWin;
+                    else
+                        AdditionalTempData.winCondition = WinCondition.BountyHunterWin;  
+                }
             }
 
             // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
@@ -106,13 +109,17 @@ namespace BonusRoles {
             TextRenderer textRenderer = bonusText.GetComponent<TextRenderer>();
             textRenderer.Text = "";
 
-            if (AdditionalTempData.winCondition == WinCondition.ChildDied) {
-                textRenderer.Text = "Child Died";
-                textRenderer.Color = Child.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
+            if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
                 textRenderer.Text = "Jester Wins";
                 textRenderer.Color = Jester.color;
+            }
+            else if (AdditionalTempData.winCondition == WinCondition.BountyHunterWin) {
+                textRenderer.Text = "Bounty Hunter Wins";
+                textRenderer.Color = BountyHunter.color;
+            }
+            else if (AdditionalTempData.winCondition == WinCondition.JesterAndBountyHunterWin) {
+                textRenderer.Text = "[AD653BFF]Bounty Hunter[FFFFFFFF] and [FF54A7FF]Jester[FFFFFFFF] Win";
+                textRenderer.Color = Color.white;
             }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 if (AdditionalTempData.localIsLover) {

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System;
 using UnityEngine;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 
-namespace BonusRoles{
+namespace TheOtherRoles{
     public class DeadPlayer
     {
         public PlayerControl player;

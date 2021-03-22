@@ -1,8 +1,8 @@
   
 using HarmonyLib;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 
-namespace BonusRoles {
+namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
     public class ShipStatusPatch {

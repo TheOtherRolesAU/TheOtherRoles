@@ -23,8 +23,9 @@ public class CustomButton
     public float EffectDuration;
     public Sprite Sprite;
     private HudManager hudManager;
+    private bool mirror;
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds)
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
     {
         this.hudManager = hudManager;
         this.OnClick = OnClick;
@@ -36,6 +37,7 @@ public class CustomButton
         this.EffectDuration = EffectDuration;
         this.OnEffectEnds = OnEffectEnds;
         this.Sprite = Sprite;
+        this.mirror = mirror;
         Timer = 16.2f;
         buttons.Add(this);
         killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
@@ -60,8 +62,8 @@ public class CustomButton
         setActive(false);
     }
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager)
-    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}) { }
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool mirror = false)
+    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror) { }
 
     public static void HudUpdate()
     {
@@ -132,15 +134,12 @@ public class CustomButton
         setActive(hudManager.UseButton.isActiveAndEnabled);
 
         killButtonManager.renderer.sprite = Sprite;
-
-        if (killButtonManager.transform.position == hudManager.KillButton.transform.position)
-        {
-            Vector3 vector = killButtonManager.transform.localPosition;
-            vector += new Vector3(PositionOffset.x, PositionOffset.y);
-            killButtonManager.transform.localPosition = vector;
+        if (hudManager.UseButton != null) {
+            Vector3 pos = hudManager.UseButton.transform.localPosition;
+            if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
+            killButtonManager.transform.localPosition = pos + PositionOffset;
+            if (hudManager.KillButton != null) hudManager.KillButton.transform.localPosition = hudManager.UseButton.transform.localPosition - new Vector3(1.3f, 0, 0); // Align the kill button (because it's on another position depending on the screen resolution)
         }
-
-
         if (CouldUse()) {
             killButtonManager.renderer.color = Palette.EnabledColor;
             killButtonManager.renderer.material.SetFloat("_Desat", 0f);

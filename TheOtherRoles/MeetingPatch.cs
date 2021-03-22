@@ -3,13 +3,13 @@ using Hazel;
 using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 using System.Collections;
 using System;
 using System.Text;
 using UnityEngine;
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(MeetingHud), "CalculateVotes")]
     class MeetingCalculateVotesPatch {
@@ -258,6 +258,17 @@ namespace BonusRoles
         }
     }
 
+    [HarmonyPatch(typeof(ExileController), "Begin")]
+    class ExileBeginPatch {
+        public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
+            // Prevent growing Child exile
+            if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
+                IHDMFDEEDEL = null;
+            }
+        }
+    }
+
+
     [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
     class MeetingExiledEndPatch
     {
@@ -268,20 +279,15 @@ namespace BonusRoles
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
 
-                // Jester win condition
-                if (Jester.jester != null && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Jester.jester.PlayerId)
-                {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterWin, Hazel.SendOption.None, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                    RPCProcedure.jesterWin();
-                }
-
-                // Child win condition
-                if (Child.child != null && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildDied, Hazel.SendOption.None, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.childDied();
+                // Jester and Bounty Hunter win condition
+                if (ExileController.Instance.exiled != null) {
+                    byte exiledId = ExileController.Instance.exiled.PlayerId;
+                    if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.None, -1);
+                        writer.Write(exiledId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.jesterBountyHunterWin(exiledId);
+                    }
                 }
             }
         }
@@ -327,6 +333,12 @@ namespace BonusRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
                     else if(Child.child != null && ExileController.Instance.exiled.Object.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Child.";
+                    else if(BountyHunter.bountyHunter != null && ExileController.Instance.exiled.Object.PlayerId == BountyHunter.bountyHunter.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Bounty Hunter.";
+                    else if(Tracker.tracker != null && ExileController.Instance.exiled.Object.PlayerId == Tracker.tracker.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Tracker.";
+                    else if(Snitch.snitch != null && ExileController.Instance.exiled.Object.PlayerId == Snitch.snitch.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Snitch.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }
@@ -346,6 +358,8 @@ namespace BonusRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
                     else if(Lovers.lover2 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover2.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
+                    else if(Vampire.vampire != null && ExileController.Instance.exiled.Object.PlayerId == Vampire.vampire.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Vamipre.";
                 }
 
                 // Hide number of remaining impostors on Jester win

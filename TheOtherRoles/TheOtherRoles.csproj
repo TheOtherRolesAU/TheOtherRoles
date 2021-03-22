@@ -5,7 +5,7 @@
         <Mappings>NuclearPowered/Mappings:0.2.0</Mappings>
 
         <Description>TheOtherRoles</Description>
-        <Authors>Eisbison</Authors>
+        <Authors>Eibison</Authors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">
@@ -41,6 +41,12 @@
         <EmbeddedResource Include="Resources\SampleButton.png"/>
         <EmbeddedResource Include="Resources\CamoButton.png"/>
         <EmbeddedResource Include="Resources\SpyButton.png"/>
+        <EmbeddedResource Include="Resources\TrackerButton.png"/>
+        <EmbeddedResource Include="Resources\VampireButton.png"/>
+        <EmbeddedResource Include="Resources\GarlicButton.png"/>
+        <EmbeddedResource Include="Resources\Arrow.png"/>
+        <EmbeddedResource Include="Resources\Garlic.png"/>
+        <EmbeddedResource Include="Resources\GarlicBackground.png"/>
         <EmbeddedResource Include="Resources\Footprint.png"/>
         <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
         <EmbeddedResource Include="Resources\SwapperCheck.png"/>

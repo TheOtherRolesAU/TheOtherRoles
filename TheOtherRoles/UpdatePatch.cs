@@ -3,12 +3,12 @@ using System;
 using System.IO;
 using System.Net.Http;
 using UnityEngine;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 using Reactor.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
@@ -89,9 +89,17 @@ namespace BonusRoles
                 setPlayerNameColor(Seer.seer, Seer.color);  
             else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Spy.spy, Spy.color);
+            else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
+                setPlayerNameColor(BountyHunter.target, BountyHunter.color);
+            }
+            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Tracker.tracker, Tracker.color);
+            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Snitch.snitch, Snitch.color);
 
             // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Godfather, Janitor and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
         }
 
         static void setMafiaNameTags() {
@@ -333,6 +341,61 @@ namespace BonusRoles
             }
         }
 
+        public static void bountyHunterUpdate() {
+            if (BountyHunter.bountyHunter == null || BountyHunter.target == null) return;
+
+            if (BountyHunter.notifyBounty && PlayerControl.LocalPlayer == BountyHunter.target) {
+                string suffix = "[AD653BFF] (Bounty)[FFFFFFFF]";
+                PlayerControl.LocalPlayer.nameText.Text += suffix;
+                if (MeetingHud.Instance != null)
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                        if (player.NameText != null && PlayerControl.LocalPlayer.PlayerId == player.TargetPlayerId)
+                            player.NameText.Text += suffix;
+            }
+        }
+
+        static void vampireDeactivateKillButton(HudManager __instance) {
+            if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer) {
+                __instance.KillButton.gameObject.SetActive(false);
+                __instance.KillButton.renderer.enabled = false;
+                __instance.KillButton.isActive = false;
+                __instance.KillButton.enabled = false;
+            }
+        }
+
+        static void snitchUpdate() {
+            if (Snitch.snitch == null) return;
+
+            foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
+            if (Snitch.snitch.Data.IsDead) return;
+
+            int numberOfTasks = 0;
+            foreach (PlayerTask t in Snitch.snitch.myTasks) {
+                if (t.TaskType != TaskTypes.FixComms && t.TaskType != TaskTypes.FixLights && t.TaskType != TaskTypes.ResetReactor && t.TaskType != TaskTypes.ResetSeismic && t.TaskType != TaskTypes.RestoreOxy)
+                    if (!t.IsComplete) numberOfTasks++;
+            }
+
+            if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
+                if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
+                if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
+                    Snitch.localArrows[0].arrow.SetActive(true);
+                    Snitch.localArrows[0].Update(Snitch.snitch.transform.position);
+                }
+            } else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0) { 
+                int arrowIndex = 0;
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    if (p.Data.IsImpostor && !p.Data.IsDead) {
+                        if (arrowIndex >= Snitch.localArrows.Count) Snitch.localArrows.Add(new Arrow(Color.blue));
+                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
+                            Snitch.localArrows[arrowIndex].arrow.SetActive(true);
+                            Snitch.localArrows[arrowIndex].Update(p.transform.position);
+                        }
+                        arrowIndex++;
+                    }
+                }
+            }
+        }
+
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -356,9 +419,16 @@ namespace BonusRoles
             seerUpdate();
             // Spy update();
             spyUpdate();
-
+            // Camouflager and Morphling
             camouflageAndMorphActions();
+            // Child
             childUpdate();
+            // Bounty Hunter
+            bountyHunterUpdate();
+            // Vampire
+            vampireDeactivateKillButton(__instance);
+            // Snitch
+            snitchUpdate();
         }
     }
 }
