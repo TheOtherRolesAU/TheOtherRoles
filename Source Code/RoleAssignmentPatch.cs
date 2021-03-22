@@ -61,6 +61,8 @@ namespace BonusRoles
                 setRoleToRandomPlayer((byte)RoleId.Camouflager, impostors);
             
             // Special roles crewmates can be converted to
+            if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.jackalSpawnChance.GetValue()))
+                setRoleToRandomPlayer((byte)RoleId.Jackal, crewmates);
             if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.jesterSpawnChance.GetValue()))
                 setRoleToRandomPlayer((byte)RoleId.Jester, crewmates);
             if (crewmates.Count > 0 && (rnd.Next(1, 101) <= BonusRolesPlugin.mayorSpawnChance.GetValue()))

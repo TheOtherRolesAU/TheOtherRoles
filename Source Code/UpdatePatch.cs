@@ -89,6 +89,20 @@ namespace BonusRoles
                 setPlayerNameColor(Seer.seer, Seer.color);  
             else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Spy.spy, Spy.color);
+            else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
+                // Jackal can see his sidekick
+                setPlayerNameColor(Jackal.jackal, Jackal.color);
+                if (Sidekick.sidekick != null) {
+                    setPlayerNameColor(Sidekick.sidekick, Jackal.color);
+                }
+            }
+            else if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
+                // Jackal can see the jackal
+                setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
+                if (Jackal.jackal != null) {
+                    setPlayerNameColor(Jackal.jackal, Jackal.color);
+                }
+            }
 
             // Crewmate roles with no changes: Child
             // Impostor roles with no changes: Morphling, Camouflager, Godfather, Janitor and Mafioso
@@ -139,6 +153,48 @@ namespace BonusRoles
                 Medic.shielded = null;
             }
         }
+
+        static void jackalClearTasks() {
+            if (Jackal.jackal == null) return;
+
+            // Jackal has no tasks
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask task in Jackal.jackal.myTasks) {
+                if (task.TaskType != TaskTypes.FixComms && 
+                    task.TaskType != TaskTypes.FixLights && 
+                    task.TaskType != TaskTypes.ResetReactor && 
+                    task.TaskType != TaskTypes.ResetSeismic && 
+                    task.TaskType != TaskTypes.RestoreOxy
+                    && task.gameObject.GetComponent<ImportantTextTask>() == null) {
+                    toRemove.Add(task);
+                }
+            }   
+            foreach (PlayerTask task in toRemove) {
+                Jackal.jackal.RemoveTask(task);
+            }
+        }
+
+        static void sidekickClearTasks() {
+            if (Sidekick.sidekick == null) return;
+
+            // Sidekick has no tasks
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask task in Sidekick.sidekick.myTasks) {
+                if (task.TaskType != TaskTypes.FixComms && 
+                    task.TaskType != TaskTypes.FixLights && 
+                    task.TaskType != TaskTypes.ResetReactor && 
+                    task.TaskType != TaskTypes.ResetSeismic && 
+                    task.TaskType != TaskTypes.RestoreOxy
+                    && task.gameObject.GetComponent<ImportantTextTask>() == null) {
+                    toRemove.Add(task);
+                }
+            }
+                    
+            foreach (PlayerTask task in toRemove) {
+                Sidekick.sidekick.RemoveTask(task);
+            }
+        }
+
 
         static void jesterClearTasks() {
             if (Jester.jester == null) return;
@@ -346,6 +402,10 @@ namespace BonusRoles
             setMafiaNameTags();
             // Jester
             jesterClearTasks();
+            // Jackal
+            jackalClearTasks();
+            // Sidekick
+            sidekickClearTasks();
             // Mafioso
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor

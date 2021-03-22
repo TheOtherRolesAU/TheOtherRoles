@@ -20,7 +20,7 @@ namespace BonusRoles
     public static class BonusRoles
     {
         public static System.Random rnd = new System.Random((int)DateTime.Now.Ticks);
-
+        
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
             Mayor.clearAndReload();
@@ -41,6 +41,8 @@ namespace BonusRoles
             Camouflager.clearAndReload();
             Spy.clearAndReload();
             Child.clearAndReload();
+            Jackal.clearAndReload();
+            Sidekick.clearAndReload();
         }
 
         public static class Jester {
@@ -434,5 +436,68 @@ namespace BonusRoles
         public static bool isGrownUp() {
             return growingProgress() == 1f;
         }
+    }
+        
+    public static class Jackal {
+        public static PlayerControl jackal;
+        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+
+        public static PlayerControl currentTarget;
+        public static List<PlayerControl> formerJackals = new List<PlayerControl>();
+        
+        public static float cooldown = float.MaxValue;
+        public static float createSidekickCooldown = float.MaxValue;
+        public static bool canUseVents = true;
+        public static bool canCreateSidekick = true;
+        public static Sprite buttonSprite;
+        public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
+
+        public static Sprite getSidekickButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("BonusRoles.Resources.SidekickButton.png", 100f);
+            return buttonSprite;
+        }
+
+        public static void removeCurrentJackal() {
+            formerJackals.Add(jackal);
+            jackal = null;
+            currentTarget = null;
+            cooldown = BonusRolesPlugin.jackalKillCooldown.GetValue();
+            createSidekickCooldown = BonusRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+        }
+
+        public static void clearAndReload() {
+            jackal = null;
+            currentTarget = null;
+            cooldown = BonusRolesPlugin.jackalKillCooldown.GetValue();
+            createSidekickCooldown = BonusRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+            canUseVents = BonusRolesPlugin.jackalCanUseVents.GetValue();
+            canCreateSidekick = BonusRolesPlugin.jackalCanCreateSidekick.GetValue();
+            jackalPromotedFromSidekickCanCreateSidekick = BonusRolesPlugin.jackalPromotedFromSidekickCanCreateSidekick.GetValue();
+            formerJackals.Clear();
+        }
+        
+    }
+
+    public static class Sidekick {
+        public static PlayerControl sidekick;
+        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+
+        public static PlayerControl currentTarget;
+
+        public static float cooldown = float.MaxValue;
+        public static bool canUseVents = true;
+        public static bool canKill = true;
+        public static bool promotesToJackal = true;
+
+        public static void clearAndReload() {
+            sidekick = null;
+            currentTarget = null;
+            cooldown = BonusRolesPlugin.jackalKillCooldown.GetValue();
+            canUseVents = BonusRolesPlugin.sidekickCanUseVents.GetValue();
+            canKill = BonusRolesPlugin.sidekickCanKill.GetValue();
+            promotesToJackal = BonusRolesPlugin.sidekickPromotesToJackal.GetValue();
+        }
+        
     }
 }

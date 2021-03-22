@@ -32,6 +32,8 @@ namespace BonusRoles
         Camouflager = 17,
         Spy = 18,
         Child = 19,
+        Jackal = 20,
+        Sidekick = 21
     }
 
     enum CustomRPC
@@ -60,6 +62,12 @@ namespace BonusRoles
         CamouflagerCamouflage = 93,
         ChildDied = 94,
         LoverSuicide = 95,
+
+        JackalWin = 96,
+        JackalKill = 97,
+        SidekickKill = 98,
+        JackalCreatesSidekick = 99,
+        SidekickPromotes = 100
     }
 
     public static class RPCProcedure {
@@ -148,11 +156,36 @@ namespace BonusRoles
                     case RoleId.Child:
                         Child.child = player;
                         break;
+                    case RoleId.Jackal:
+                        Jackal.jackal = player;
+                        break;
+                    case RoleId.Sidekick:
+                        Sidekick.sidekick = player;
+                        break;
                     }
                 }
         }
 
         // Role functionality
+
+        public static void jackalWin() {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player == Jackal.jackal || player == Sidekick.sidekick){
+                    player.Data.IsImpostor = true;
+                } 
+                else {
+                    if(Jackal.formerJackals.Contains(player)) {
+                        player.Data.IsImpostor = true;
+                    } else {
+                        player.RemoveInfected();
+                        player.Die(DeathReason.Exile);
+                        player.Data.IsDead = true;
+                        player.Data.IsImpostor = false;
+                    }
+                } 
+            }
+        }
 
         public static void jesterWin() {
             Jester.jester.Revive();
@@ -400,7 +433,107 @@ namespace BonusRoles
             } else if (Lovers.lover2 != null && !Lovers.lover2.Data.IsDead && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
-        }     
+        }
+
+        public static void jackalKill(byte targetId) {
+            BonusRolesPlugin.Logger.LogMessage("RPC: jackal kills");
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == targetId)
+                {
+                    Jackal.jackal.MurderPlayer(player);
+                    return;
+                }
+            }
+        }
+
+        public static void sidekickKill(byte targetId) {
+            BonusRolesPlugin.Logger.LogMessage("RPC: sidekick kills");
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == targetId)
+                {
+                    Sidekick.sidekick.MurderPlayer(player);
+                    return;
+                }
+            }
+        }
+
+        public static void jackalCreatesSidekick(byte targetId) {
+            BonusRolesPlugin.Logger.LogMessage("RPC: jackal creates a sidekick");
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == targetId)
+                {
+                    Sidekick.sidekick = player;
+                    player.RemoveInfected();
+
+                    // Crewmate roles
+                    if(player == Jester.jester) Jester.clearAndReload();
+                    if(player == Mayor.mayor) Mayor.clearAndReload();
+                    if(player == Engineer.engineer) Engineer.clearAndReload();
+                    if(player == Sheriff.sheriff) Sheriff.clearAndReload();
+                    if(player == Lighter.lighter) Lighter.clearAndReload();
+                    if(player == Detective.detective) Detective.clearAndReload();
+                    if(player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
+                    if(player == Medic.medic) Medic.clearAndReload();
+                    if(player == Shifter.shifter) Shifter.clearAndReload();
+                    if(player == Seer.seer) Seer.clearAndReload();
+                    if(player == Spy.spy) Spy.clearAndReload();
+                    if(player == Child.child) Child.clearAndReload();
+
+                    // Impostor roles
+                    if(player == Morphling.morphling) Morphling.clearAndReload();
+                    if(player == Camouflager.camouflager) Camouflager.clearAndReload();
+                    if(player == Godfather.godfather) Godfather.clearAndReload();
+                    if(player == Mafioso.mafioso) Mafioso.clearAndReload();
+                    if(player == Janitor.janitor) Janitor.clearAndReload();
+
+                    // The Sidekick stays a part of the lover couple!       
+                    if (PlayerControl.LocalPlayer == null) return;
+                    if (PlayerControl.LocalPlayer == player) {
+                        var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                        task.transform.SetParent(player.transform, false);
+                        task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+                        player.myTasks.Insert(0, task);
+                    }
+
+                    return;
+                }
+            }
+        }
+
+        public static void sidekickPromotes() {
+            BonusRolesPlugin.Logger.LogMessage("RPC: sidekick promotes to jackal");
+            var player = Sidekick.sidekick;
+            Jackal.removeCurrentJackal();
+            Jackal.jackal = player;
+            if (Jackal.jackalPromotedFromSidekickCanCreateSidekick == false) {
+                Jackal.canCreateSidekick = false;
+            }
+            Sidekick.clearAndReload();
+         
+            if (PlayerControl.LocalPlayer == null) return;
+            if (PlayerControl.LocalPlayer == player) {
+
+                var toRemove = new List<PlayerTask>();
+                foreach (PlayerTask task in player.myTasks) {
+                    if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy) {
+                        toRemove.Add(task);
+                    }
+                }
+                foreach (PlayerTask task in toRemove) {
+                    player.RemoveTask(task);
+                }
+
+                var textTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                textTask.transform.SetParent(player.transform, false);
+                textTask.Text = "[00B4EBFF]Role: Jackal\nKill everyone and get yourself a sidekick[]";
+                player.myTasks.Insert(0, textTask);
+            }
+            return;
+        }
+
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -480,6 +613,21 @@ namespace BonusRoles
                     break;
                 case (byte)CustomRPC.LoverSuicide:
                     RPCProcedure.loverSuicide(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.JackalWin:
+                    RPCProcedure.jackalWin();
+                    break;
+                case (byte)CustomRPC.JackalKill:
+                    RPCProcedure.jackalKill(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SidekickKill:
+                    RPCProcedure.sidekickKill(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.JackalCreatesSidekick:
+                    RPCProcedure.jackalCreatesSidekick(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SidekickPromotes:
+                    RPCProcedure.sidekickPromotes();
                     break;
             }
         }

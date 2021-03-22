@@ -229,6 +229,16 @@ namespace BonusRoles {
                 r = "Child";
                 c = Child.color;
             }
+            else if (Jackal.jackal != null && p == Jackal.jackal) {
+                r = "Jackal";
+                c = Jackal.color;
+                g = false;
+            }
+            else if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
+                r = "Sidekick";
+                c = Sidekick.color;
+                g = false;
+            }
             else if (p.Data.IsImpostor) { // Just Impostor
                 r = "Impostor";
                 c = Palette.ImpostorRed;
@@ -238,6 +248,7 @@ namespace BonusRoles {
                 r = "Crewmate";
                 c = Color.white;
             }
+             
 
             SeerInfo result = new SeerInfo();
             result.roleName = r;

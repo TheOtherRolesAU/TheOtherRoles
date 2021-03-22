@@ -44,9 +44,13 @@
         <EmbeddedResource Include="Resources\Footprint.png"/>
         <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
         <EmbeddedResource Include="Resources\SwapperCheck.png"/>
+        <EmbeddedResource Include="Resources\SidekickButton.png"/>
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Reobfuscate">
         <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
+    </Target>
+    <Target Name="DeobfuscatedLib" AfterTargets="Build" >
+        <Message Text="Deobfuscated: $(Deobfuscated)" Importance="high"/>
     </Target>
 </Project>

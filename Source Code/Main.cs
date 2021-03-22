@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
+using BepInEx.Logging;
 using HarmonyLib;
 using Hazel;
 using Reactor;
@@ -24,6 +25,9 @@ namespace BonusRoles
         public const string Id = "me.eisbison.bonusroles";
         public Harmony Harmony { get; } = new Harmony(Id);
 
+        public static BonusRolesPlugin Instance { get { return PluginSingleton<BonusRolesPlugin>.Instance; } }
+        internal static ManualLogSource Logger { get { return Instance.Log; } }
+
         // Role spawn chances
         public static CustomNumberOption mafiaSpawnChance = CustomOption.AddNumber("Mafia Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption loversSpawnChance = CustomOption.AddNumber("Lovers Spawn Chance", 100, 0, 100, 10);
@@ -42,6 +46,7 @@ namespace BonusRoles
         public static CustomNumberOption seerSpawnChance = CustomOption.AddNumber("Seer Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption spySpawnChance = CustomOption.AddNumber("Spy Spawn Chance", 100, 0, 100, 10);
         public static CustomNumberOption childSpawnChance = CustomOption.AddNumber("Child Spawn Chance", 100, 0, 100, 10);
+        public static CustomNumberOption jackalSpawnChance = CustomOption.AddNumber("Jackal Spawn Chance", 100, 0, 100, 10);
 
         // Role settings
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("Janitor Cooldown", 30f, 10f, 60f, 2.5f);
@@ -70,14 +75,20 @@ namespace BonusRoles
         public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber("Spy Duration", 10f, 2.5f, 60f, 2.5f);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("Child Growing Up Duration", 400f, 100f, 1500f, 100f);
 
+        public static CustomNumberOption jackalKillCooldown = CustomOption.AddNumber("Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption jackalCreateSidekickCooldown = CustomOption.AddNumber("Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption jackalCanUseVents = CustomOption.AddToggle("Jackal can use vents", true);
+        public static CustomToggleOption jackalCanCreateSidekick = CustomOption.AddToggle("Jackal can create a sidekick", false);
+        public static CustomToggleOption sidekickPromotesToJackal = CustomOption.AddToggle("Sidekick gets promoted to Jackal on Jackal death", false);
+        public static CustomToggleOption sidekickCanKill = CustomOption.AddToggle("Sidekick can kill", false);
+        public static CustomToggleOption sidekickCanUseVents = CustomOption.AddToggle("Sidekick can use vents", true);
+        public static CustomToggleOption jackalPromotedFromSidekickCanCreateSidekick = CustomOption.AddToggle("Jackals promoted from sidekick can create a sidekick", true);
+
         public static ConfigEntry<bool> DebugMode { get; private set; }
-
-
 
         public override void Load()
         {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
-
             CustomOption.ShamelessPlug = false;
             Harmony.PatchAll();
         }

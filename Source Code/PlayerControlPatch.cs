@@ -71,6 +71,47 @@ namespace BonusRoles {
             }
             return result;
         }
+        
+        static PlayerControl setJackalTeamTarget() {
+            PlayerControl result = null;
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
+            if (!ShipStatus.Instance) return result;
+
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead)
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if (@object && !@object.inVent)
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            // Sidekick cannot target the jackal, Jackal cannot target the Sidekick
+                            if( (PlayerControl.LocalPlayer == Sidekick.sidekick && @object != Jackal.jackal) || (PlayerControl.LocalPlayer == Jackal.jackal && @object != Sidekick.sidekick) ) {
+                                result = @object;
+                                num = magnitude;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        static void jackalSetTarget() {
+            if (Jackal.jackal == null || Jackal.jackal != PlayerControl.LocalPlayer) return;
+            Jackal.currentTarget = setJackalTeamTarget();
+        }
+
+        static void sidekickSetTarget() {
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            Sidekick.currentTarget = setJackalTeamTarget();
+        }
 
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
@@ -133,6 +174,10 @@ namespace BonusRoles {
                 seerSetTarget();
                 // Detective
                 detectiveSetFootPrints();
+                // Jackal
+                jackalSetTarget();
+                // Sidekick
+                sidekickSetTarget();
             } 
         }
     }
@@ -217,6 +262,18 @@ namespace BonusRoles {
             // __state denotes if the player performing the murder needs to be reset to crewmate
             __state = false;
 
+            // Allow Jackal to kill all by assigning the impostor role
+            if (Jackal.jackal != null && __instance == Jackal.jackal) {
+                __instance.Data.IsImpostor = true;
+                __state = true;
+            }
+
+            // Allow Sidekick to kill all by assigning the impostor role
+            if (Sidekick.sidekick != null && __instance == Sidekick.sidekick) {
+                __instance.Data.IsImpostor = true;
+                __state = true;
+            }
+
             // Allow Sheriff to kill "as crewmate" by assigning the impostor role
             if (Sheriff.sheriff != null && __instance == Sheriff.sheriff) {
                 __instance.Data.IsImpostor = true;
@@ -255,10 +312,15 @@ namespace BonusRoles {
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
             }
+            
+            // Sidekick promotion trigger on exile
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && PAIBDFDMIGK == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
+            }
         }
     }
-
-
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
@@ -280,6 +342,27 @@ namespace BonusRoles {
                 }
             }
 
+            // Sidekick promotion trigger on exile
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
+            }
+
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
+    public static class Role
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (PlayerControl.LocalPlayer == null) return;
+            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+            task.transform.SetParent(__instance.transform, false);
+            if (__instance == Jackal.jackal) task.Text = "[00B4EBFF]Role: Jackal\nKill everyone and get yourself a sidekick[]";
+            if (__instance == Sidekick.sidekick) task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+            __instance.myTasks.Insert(0, task);
         }
     }
 }
