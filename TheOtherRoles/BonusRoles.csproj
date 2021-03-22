@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Version>1.0.0</Version>
+        <Mappings>NuclearPowered/Mappings:0.2.0</Mappings>
+
+        <Description>TheOtherRoles</Description>
+        <Authors>Eisbison</Authors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">
+        <GameVersion>2021.3.5s</GameVersion>
+        <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GamePlatform)' == 'Itch'">
+        <GameVersion>2021.3.5i</GameVersion>
+        <DefineConstants>$(DefineConstants);ITCH</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Reactor-$(GameVersion).dll" />
+
+        <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Essentials">
+        <HintPath>$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\RepairButton.png"/>
+        <EmbeddedResource Include="Resources\CleanButton.png"/>
+        <EmbeddedResource Include="Resources\RewindButton.png"/>
+        <EmbeddedResource Include="Resources\ShieldButton.png"/>
+        <EmbeddedResource Include="Resources\ShiftButton.png"/>
+        <EmbeddedResource Include="Resources\SeerButton.png"/>
+        <EmbeddedResource Include="Resources\MorphButton.png"/>
+        <EmbeddedResource Include="Resources\SampleButton.png"/>
+        <EmbeddedResource Include="Resources\CamoButton.png"/>
+        <EmbeddedResource Include="Resources\SpyButton.png"/>
+        <EmbeddedResource Include="Resources\Footprint.png"/>
+        <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
+        <EmbeddedResource Include="Resources\SwapperCheck.png"/>
+    </ItemGroup>
+
+    <Target Name="Copy" AfterTargets="Reobfuscate">
+        <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
+    </Target>
+</Project>
