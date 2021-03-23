@@ -59,8 +59,6 @@ namespace TheOtherRoles {
             // Remove Jackal and Sidekick from winners (on Jackal win he will be added again, see below)
             if (Jackal.jackal != null || Sidekick.sidekick != null) {
                 List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
-                WinningPlayerData jackalWinner = null;
-                WinningPlayerData sidekickWinner = null;
                 foreach (WinningPlayerData winner in TempData.winners) {
                     if (winner.Name == Jackal.jackal?.Data?.PlayerName) winnersToRemove.Add(winner);
                     if (winner.Name == Sidekick.sidekick?.Data?.PlayerName) winnersToRemove.Add(winner);
@@ -71,8 +69,9 @@ namespace TheOtherRoles {
                     }
                 }
                 
-                if (jackalWinner != null) TempData.winners.Remove(jackalWinner);
-                if (sidekickWinner != null) TempData.winners.Remove(sidekickWinner);
+                foreach (var winner in winnersToRemove) {
+                    TempData.winners.Remove(winner);
+                }
             }
 
             // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
@@ -255,12 +254,16 @@ namespace TheOtherRoles {
                 }
             }
             var numTeamJackalAlive = 0;
-            if (Jackal.jackal?.Data?.IsDead == false) numTeamJackalAlive++;
-            if (Sidekick.sidekick?.Data?.IsDead == false) numTeamJackalAlive++;
-            if (numTeamJackalAlive > 0 && numImpostorsAlive > 0 && numNonImpostorAlive + numImpostorsAlive > numTeamJackalAlive ) {
+            if (Jackal.jackal != null && Jackal.jackal.Data.IsDead == false) numTeamJackalAlive++;
+            if (Sidekick.sidekick != null && Sidekick.sidekick.Data.IsDead == false) numTeamJackalAlive++;
+            if (numTeamJackalAlive > 0 && numImpostorsAlive > 0) {
                 // There is still a jackal/sidekick and an impostor alive
                 return false;
             } 
+            else if (numImpostorsAlive <= 0 && numTeamJackalAlive > 0 && (numNonImpostorAlive - numTeamJackalAlive) > numTeamJackalAlive) {
+                // No Impostors alive but still more crewmates than jackal
+                return false;
+            }
             else if ((numNonImpostorAlive - numTeamJackalAlive) <= numTeamJackalAlive) {
                 // No Impostors alive and Team Jackal is at least half of the members alive. Jackal Win
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
