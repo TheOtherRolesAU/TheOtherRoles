@@ -30,17 +30,25 @@ Even more roles are coming soon :)
 - [Shifter](#shifter)
 - [Time Master](#time-master)
 - [Swapper](#swapper)
+- [Jackal](#jackal)
+- [Sidekick](#sidekick)
 
 
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8 | [Download]???
+| 2021.3.5s | v1.7 | [Download]???
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
 | 2021.3.5s | v1.4 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.4/TheOtherRoles.zip)
 | 2021.3.5s | v1.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.3/TheOtherRoles.zip)
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
+
+\
+**Changes in v1.8:**
+- Added the Jackal and Sidekick roles
 
 \
 **Changes in v1.6:**
@@ -394,6 +402,44 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 -----------------------
+
+
+## Jackal
+### **Team: Jackal**
+Jackal get selected from the crewmates but is in it's own team and has the purpose of eliminating all other players
+Depending on the options he can use vents and even get himself a Sidekick to support him against the others.
+
+The create Sidekick action may only be used once per game per Jackal.
+A Jackal may be killed by a Sheriff.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal Spawn Chance | - |
+| Jackal/Sidekick Kill Cooldown | Kill cooldown |
+| Jackal Create Sidekick Cooldown | Cooldown before a sidekick can be created |
+| Jackal can use vents | Yes/No |
+| Jackal can create a sidekick | Yes/No |
+| Jackals promoted from sidekick can create a sidekick | Yes/No (to prevent the jackal team from growing) |
+-----------------------
+
+## Sidekick
+### **Team: Jackal**
+Gets assigned to a player during the game by the Create Sidekick Action of the Jackal and joins the Jackal in his quest to eliminate all other players.
+Upon the death of the Jackal he might get promoted to Jackal himself, and potentially even assign a sidekick of his own.
+
+A player that is assigned as sidekick loses his previous role (if he had one) except the lover role.
+A Sidekick may be killed by a Sheriff.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
+| Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
+| Sidekick can kill | Yes/No |
+| Sidekick can use vents | Yes/No |
+-----------------------
+
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
