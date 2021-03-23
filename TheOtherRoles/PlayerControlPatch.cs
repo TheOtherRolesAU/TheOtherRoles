@@ -44,7 +44,7 @@ namespace TheOtherRoles {
             }
         }
 
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false) {
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
@@ -133,6 +133,20 @@ namespace TheOtherRoles {
             Vampire.currentTarget = target;
         }
 
+        static void jackalSetTarget() {
+            if (Jackal.jackal == null || Jackal.jackal != PlayerControl.LocalPlayer) return;
+            var untargetablePlayers = new List<PlayerControl>();
+            if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
+            Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+        }
+
+        static void sidekickSetTarget() {
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            var untargetablePlayers = new List<PlayerControl>();
+            if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
+            Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+        }
+
         static void engineerUpdate() {
             if (PlayerControl.LocalPlayer.Data.IsImpostor && Engineer.engineer != null) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
@@ -208,6 +222,10 @@ namespace TheOtherRoles {
                 engineerUpdate();
                 // Tracker
                 trackerUpdate();
+                // Jackal
+                jackalSetTarget();
+                // Sidekick
+                sidekickSetTarget();
             } 
         }
     }
@@ -322,6 +340,13 @@ namespace TheOtherRoles {
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
             }
+            
+            // Sidekick promotion trigger on murder
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && PAIBDFDMIGK == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
+            }
         }
     }
 
@@ -346,6 +371,29 @@ namespace TheOtherRoles {
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
             }
+            
+            // Sidekick promotion trigger on exile
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
+            }
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
+    public static class Role
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (PlayerControl.LocalPlayer == null) return;
+            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+            task.transform.SetParent(__instance.transform, false);
+            var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a sidekick" : "";
+            if (__instance == Jackal.jackal) task.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
+            if (__instance == Sidekick.sidekick) task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+            __instance.myTasks.Insert(0, task);
         }
     }
 }

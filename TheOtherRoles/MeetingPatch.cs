@@ -339,6 +339,10 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Tracker.";
                     else if(Snitch.snitch != null && ExileController.Instance.exiled.Object.PlayerId == Snitch.snitch.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Snitch.";
+                    else if(Jackal.jackal != null && ExileController.Instance.exiled.Object.PlayerId == Jackal.jackal.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Jackal.";
+                    else if(Sidekick.sidekick != null && ExileController.Instance.exiled.Object.PlayerId == Sidekick.sidekick.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }

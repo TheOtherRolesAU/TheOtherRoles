@@ -18,7 +18,8 @@ namespace TheOtherRoles {
         LoversSoloWin,
         JesterWin,
         BountyHunterWin,
-        JesterAndBountyHunterWin
+        JesterAndBountyHunterWin,
+        JackalWin
     }
 
     static class AdditionalTempData {
@@ -54,6 +55,24 @@ namespace TheOtherRoles {
                     if (winner.Name == Jester.jester.Data.PlayerName) jesterWinner = winner;
                 
                 if (jesterWinner != null) TempData.winners.Remove(jesterWinner);
+            }
+            // Remove Jackal and Sidekick from winners (on Jackal win he will be added again, see below)
+            if (Jackal.jackal != null || Sidekick.sidekick != null) {
+                List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
+                WinningPlayerData jackalWinner = null;
+                WinningPlayerData sidekickWinner = null;
+                foreach (WinningPlayerData winner in TempData.winners) {
+                    if (winner.Name == Jackal.jackal?.Data?.PlayerName) winnersToRemove.Add(winner);
+                    if (winner.Name == Sidekick.sidekick?.Data?.PlayerName) winnersToRemove.Add(winner);
+                    foreach(var player in Jackal.formerJackals) {
+                        if (winner.Name == player.Data.PlayerName) {
+                            winnersToRemove.Add(winner);
+                        }
+                    }
+                }
+                
+                if (jackalWinner != null) TempData.winners.Remove(jackalWinner);
+                if (sidekickWinner != null) TempData.winners.Remove(sidekickWinner);
             }
 
             // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
@@ -93,6 +112,27 @@ namespace TheOtherRoles {
                     TempData.winners.Add(new WinningPlayerData(Lovers.lover2.Data));
                 }
             }
+            
+            // Jackal win condition (should be implemented using a proper GameOverReason in the future)
+            else if ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead)) {
+                // Jackal wins if nobody except jackal is alive
+                AdditionalTempData.winCondition = WinCondition.JackalWin;
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Jackal.jackal.Data);
+                wpd.IsImpostor = false; 
+                TempData.winners.Add(wpd);
+                // If there is a sidekick. The sidekick also wins
+                if (Sidekick.sidekick != null) {
+                    WinningPlayerData wpdSidekick = new WinningPlayerData(Sidekick.sidekick.Data);
+                    wpdSidekick.IsImpostor = false; 
+                    TempData.winners.Add(wpdSidekick);
+                }
+                foreach(var player in Jackal.formerJackals) {
+                    WinningPlayerData wpdFormerJackal = new WinningPlayerData(player.Data);
+                    wpdFormerJackal.IsImpostor = false; 
+                    TempData.winners.Add(wpdFormerJackal);
+                }
+            }
 
             // Reset Bonus Roles Settings
             clearAndReloadRoles();
@@ -128,10 +168,15 @@ namespace TheOtherRoles {
                 textRenderer.Text = "Lovers And Crewmates Win";
                 textRenderer.Color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
-            } else if (AdditionalTempData.winCondition == WinCondition.LoversSoloWin) {
+            } 
+            else if (AdditionalTempData.winCondition == WinCondition.LoversSoloWin) {
                 textRenderer.Text = "Lovers Win";
                 textRenderer.Color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
+            }
+            else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
+                textRenderer.Text = "Jackal Wins";
+                textRenderer.Color = Jackal.color;
             }
             
             AdditionalTempData.clear();
@@ -184,9 +229,9 @@ namespace TheOtherRoles {
                     reactorSystemType.Countdown = 10000f;
                 }
             }
-            int num = 0;
-            int num2 = 0;
-            int num3 = 0;
+            int numNonImpostorAlive = 0;
+            int numImpostorsAlive = 0;
+            int numImpostorsDeadOrAlive = 0;
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
                 GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
@@ -194,22 +239,42 @@ namespace TheOtherRoles {
                 {
                     if (playerInfo.IsImpostor)
                     {
-                        num3++;
+                        numImpostorsDeadOrAlive++;
                     }
                     if (!playerInfo.IsDead)
                     {
                         if (playerInfo.IsImpostor)
                         {
-                            num2++;
+                            numImpostorsAlive++;
                         }
                         else
                         {
-                            num++;
+                            numNonImpostorAlive++;
                         }
                     }
                 }
             }
-            if (num2 <= 0 && (!DestroyableSingleton<TutorialManager>.InstanceExists || num3 > 0))
+            var numTeamJackalAlive = 0;
+            if (Jackal.jackal?.Data?.IsDead == false) numTeamJackalAlive++;
+            if (Sidekick.sidekick?.Data?.IsDead == false) numTeamJackalAlive++;
+            if (numTeamJackalAlive > 0 && numImpostorsAlive > 0 && numNonImpostorAlive + numImpostorsAlive > numTeamJackalAlive ) {
+                // There is still a jackal/sidekick and an impostor alive
+                return false;
+            } 
+            else if ((numNonImpostorAlive - numTeamJackalAlive) <= numTeamJackalAlive) {
+                // No Impostors alive and Team Jackal is at least half of the members alive. Jackal Win
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                    return false;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return false;
+            }
+
+            if (numImpostorsAlive <= 0 && (!DestroyableSingleton<TutorialManager>.InstanceExists || numImpostorsDeadOrAlive > 0))
             {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
@@ -223,7 +288,7 @@ namespace TheOtherRoles {
             }
             else
             {
-                if (num > num2)
+                if (numNonImpostorAlive > numImpostorsAlive)
                 {
                     bool localCompletedAllTasks = true;
                     foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks) {
@@ -244,14 +309,14 @@ namespace TheOtherRoles {
                         DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                         __instance.Begin();
                     }
-                    if (num + num2 == 3 && Lovers.existingAndAlive()) { // 3 players with 2 lovers is always a lover win (either shared with crewmates or solo for lovers, marked as impostor win)
+                    if (numNonImpostorAlive + numImpostorsAlive == 3 && Lovers.existingAndAlive()) { // 3 players with 2 lovers is always a lover win (either shared with crewmates or solo for lovers, marked as impostor win)
                         __instance.enabled = false;
                         ShipStatus.RpcEndGame(Lovers.existingWithImpLover() ? GameOverReason.ImpostorByKill : GameOverReason.HumansByVote, false); // should be implemented using a proper GameOverReason in the future
                         return false;
                     }
                     return false;
                 }
-                if (num == num2 && Lovers.existingAndAlive() && Lovers.existingWithImpLover()) { // 3 vs 3 or 2 vs 2 is not win if both lovers are alive and one is an impostor
+                if (numNonImpostorAlive == numImpostorsAlive && Lovers.existingAndAlive() && Lovers.existingWithImpLover()) { // 3 vs 3 or 2 vs 2 is not win if both lovers are alive and one is an impostor
                     return false;
                 }
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)

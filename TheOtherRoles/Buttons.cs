@@ -28,6 +28,9 @@ namespace TheOtherRoles
         private static CustomButton trackerButton;
         private static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
+        private static CustomButton jackalKillButton;
+        private static CustomButton sidekickKillButton;
+        private static CustomButton jackalSidekickButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -46,6 +49,10 @@ namespace TheOtherRoles
 
             spyButton.EffectDuration = Spy.duration;
             vampireKillButton.EffectDuration= Vampire.delay;
+
+            jackalKillButton.MaxTimer = Jackal.cooldown;
+            sidekickKillButton.MaxTimer = Sidekick.cooldown;
+            jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
         }
 
         public static void Postfix(HudManager __instance)
@@ -133,16 +140,19 @@ namespace TheOtherRoles
                         MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
                         RPCProcedure.shieldedMurderAttempt();
-                        
                         return;    
                     }
 
                     byte targetId = 0;
-                    if (Sheriff.currentTarget.Data.IsImpostor || (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget))
+                    if (Sheriff.currentTarget.Data.IsImpostor || 
+                        Sheriff.currentTarget == Jackal.jackal || 
+                        Sheriff.currentTarget == Sidekick.sidekick || 
+                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget)) {
                         targetId = Sheriff.currentTarget.PlayerId;
-                    else
+                    }
+                    else {
                         targetId = PlayerControl.LocalPlayer.PlayerId;
-
+                    }
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.None, -1);
                     killWriter.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
@@ -402,6 +412,75 @@ namespace TheOtherRoles
                 Vector3.zero,
                 __instance,
                 true
+            );
+
+            
+            // Jackal Sidekick Button
+            jackalSidekickButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalCreatesSidekick, Hazel.SendOption.None, -1);
+                    writer.Write(Jackal.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.jackalCreatesSidekick(Jackal.currentTarget.PlayerId);
+                },
+                () => { return Jackal.canCreateSidekick && Sidekick.sidekick == null && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Sidekick.sidekick == null && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
+                () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
+                Jackal.getSidekickButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance
+            );
+
+            // Jackal Kill
+            jackalKillButton = new CustomButton(
+                () => {
+                    if (Medic.shielded != null && Medic.shielded == Jackal.currentTarget) {
+                        MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
+                        RPCProcedure.shieldedMurderAttempt();
+                        return;    
+                    }
+                    byte targetId = Jackal.currentTarget.PlayerId;
+                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalKill, Hazel.SendOption.None, -1);
+                    killWriter.Write(targetId);
+                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                    RPCProcedure.jackalKill(targetId);
+                    jackalKillButton.Timer = jackalKillButton.MaxTimer; 
+                    Jackal.currentTarget = null;
+                },
+                () => { return Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
+                __instance.KillButton.renderer.sprite,
+                new Vector3(-1.3f, 0, 0),
+                __instance
+            );
+            
+            // Sidekick Kill
+            sidekickKillButton = new CustomButton(
+                () => {
+                    if (Medic.shielded != null && Medic.shielded == Sidekick.currentTarget) {
+                        MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
+                        RPCProcedure.shieldedMurderAttempt();
+                        return;    
+                    }
+
+                    byte targetId = Sidekick.currentTarget.PlayerId;
+                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickKill, Hazel.SendOption.None, -1);
+                    killWriter.Write(targetId);
+                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                    RPCProcedure.sidekickKill(targetId);
+
+                    sidekickKillButton.Timer = sidekickKillButton.MaxTimer; 
+                    Sidekick.currentTarget = null;
+                },
+                () => { return Sidekick.canKill && Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
+                __instance.KillButton.renderer.sprite,
+                new Vector3(-1.3f, 0, 0),
+                __instance
             );
         }
     }

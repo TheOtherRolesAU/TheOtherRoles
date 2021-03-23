@@ -21,6 +21,10 @@ namespace TheOtherRoles
                 var shifterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 shifterTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = shifterTeam;
+            } else if (PlayerControl.LocalPlayer == Jackal.jackal) {
+                var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                jackalTeam.Add(PlayerControl.LocalPlayer);
+                __instance.yourTeam = jackalTeam;
             }
         }
 
@@ -195,6 +199,13 @@ namespace TheOtherRoles
                 __instance.__this.Title.Color = Snitch.color;
                 __instance.__this.ImpostorText.Text = "Finish your tasks to find the [FF1919FF]Impostors[FFFFFFFF]";
                 __instance.__this.BackgroundBar.material.color = Snitch.color;
+            }
+            else if (PlayerControl.LocalPlayer == Jackal.jackal)
+            {
+                __instance.__this.Title.Text = "Jackal";
+                __instance.__this.Title.Color = Jackal.color;
+                __instance.__this.ImpostorText.Text = "Kill all crewmates and [FF1919FF]impostors[FFFFFFFF] to win";
+                __instance.__this.BackgroundBar.material.color = Jackal.color;
             }
         }
     }
