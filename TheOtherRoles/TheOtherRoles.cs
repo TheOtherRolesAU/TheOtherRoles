@@ -561,7 +561,7 @@ namespace TheOtherRoles
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("BonusRoles.Resources.SidekickButton.png", 100f);
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SidekickButton.png", 100f);
             return buttonSprite;
         }
 

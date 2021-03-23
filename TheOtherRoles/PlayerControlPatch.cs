@@ -57,6 +57,11 @@ namespace TheOtherRoles {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
+                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
+                        // if that player is not targetable: skip check
+                        continue;
+                    }
+
                     if (@object && (!@object.inVent || targetPlayersInVents))
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;

@@ -24,6 +24,8 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
         public Harmony Harmony { get; } = new Harmony(Id);
+        public static TheOtherRolesPlugin Instance { get { return PluginSingleton<TheOtherRolesPlugin>.Instance; } }
+        internal static BepInEx.Logging.ManualLogSource Logger { get { return Instance.Log; } }
 
         // Roles
         public static int num = 0;
