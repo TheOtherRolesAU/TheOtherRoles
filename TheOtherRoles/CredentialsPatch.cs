@@ -12,11 +12,11 @@ namespace TheOtherRoles
     {
         static void Postfix(VersionShower __instance) {
             string spacer = new String('\n', 15);
+            string text = "[FCCE03FF]TheOtherRoles[] v1.7b:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thund3rstorm[]\n- Balanced with [FFEB91FF]Dhalucard";
             if (__instance.text.Text.Contains(spacer))
-                __instance.text.Text += "\n";
+                __instance.text.Text += "\n" + text;
             else
-                __instance.text.Text += spacer;
-            __instance.text.Text += "[FFFFFFFF]- Loaded [FCCE03FF]TheOtherRoles[FFFFFFFF] v1.8b\n  by [FCCE03FF]Eisbison[FFFFFFFF] and [FFE46BFF]Thunderstorm584[FFFFFFFF]\n- Balanced with [FFE46BFF]Dhalucard[FFFFFFFF]";
+                __instance.text.Text += spacer + text;
         }
     }
 
