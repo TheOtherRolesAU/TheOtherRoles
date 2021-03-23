@@ -1,0 +1,49 @@
+Discussed reworks with Dhalucard:
+    - Lovers: A (Crew/Imp) should be able to have another role
+    - Shifter: Change it to thief -> Can only Shift ones, other player turns into a crewmate (Tasks need to be added to the Thief, or they should not be deleted in the first place)
+    - Time Master: Fixed number of time shields (if there's a kill attempt the time rewinds instead) or Time Master Impostor
+    - Child: Introduce Child impostor (higher cooldown or no kills at all while growing, other Impostor gets a buff in the mean time)
+    - Medic: Kill attempt by Impostors break the shield during the next meeting (option)
+    - Option: Max number of meetings in a game, Mayor can always call one meeting per game (ignores the max count)
+    - Jackal
+    - Spy/Seer: ?
+    
+
+Roles in development:
+    - Tracker: Deactivate the arrow when the Tracker dies
+    - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
+    - Vampire: Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
+
+High priority:
+    - Remove bodies after meeting (2nd lover if a lover is being exiled -> one might exile the second lover as well as otherwise the suicide will be performed after the meeting, in some instances maybe a bitten player by the Vampire)
+    - CustomButton: Stop cooldowns for players in vents
+    - DCs/leaving players cause bugs in the end game computation (games sometimes won't end)
+    - Jester/Child/Lover: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - End game computation: Reactor/Oxy win results in a lover win if both lovers are still alive?
+
+Medium priority:
+    - Refactor Vampire sprite update code (move it)
+    - Add option: Vampire can kill in garlic range
+    - Add role description: Watch out for it counting as an uncompleted task for the Snitch
+    - CustomButton: Add hotkeys (for the ones that replace the kill button)
+    - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
+    - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 
+    - Garlic and footprints renderering/gameobject layer (they are not visible on the ramp/in the comms room/in the weapons room on Polus)
+    - Morphling: Add a short cooldown after sampling to prevent a "double click"
+    - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
+    - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
+    - Custom Settings: On some screen resolutions it glitches out of the screen, add a spacer option
+
+
+Low priority:
+    - Sheriff: Change option "Sheriff can kill the Jester" to "Sheriff can kill neutrals.
+    - Lovers: Chat
+    - Swapper: Handle the problem where a really late swap causes only some players to swap and hence might cause different exiled players for some of the clients (because of the RPC delay)
+    - Sheriff: Both die option
+    - Mafioso/Janitor: Set UseButtonImage instead of leaving the sabotage image (when they are unable to use the sabotage)
+    - Mayor: Maybe let him vote two times instead of voting ones with two votes
+    - Morphling + Camouflager: Duration option
+    - TimeMaster: Rewinding and vents are still not perfect
+    - Medic: Check shield break code should maybe be moved to a more logical location
+    - Dead pets are being revived by the Camouflager (but they're only visible to the dead players as they are on another layer)
+    - Swapper: Light/Comms should not just close when opening them (but one can't delete the tasks, as the comms task is needed to e.g. block the camera) light/comms

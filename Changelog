@@ -1,0 +1,14 @@
+Version 1.7 changes:
+
+- Roles:
+    - Snitch
+    - Bounty Hunter
+    - Vampire
+    - Tracker
+
+- Bugfixes:
+    - Detective doesn't see footprints of players in vents anymore
+    - Impostors see a blue outline around all vents if an engineer is inside one of them (option)
+
+- Other:
+    - New role assignment system
