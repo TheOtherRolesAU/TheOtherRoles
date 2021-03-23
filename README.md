@@ -48,10 +48,10 @@ Even more roles are coming soon :)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
 \
-**Changes in v1.6:**
+**Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
-- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
+- Impostors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
