@@ -12,7 +12,7 @@ Discussed reworks with Dhalucard:
 Roles in development:
     - Tracker: Deactivate the arrow when the Tracker dies
     - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
-    - Vampire: Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
+    - Vampire: Vampire kill should not be a suicide (because that results in a wrong medic info + animation), Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
 
 High priority:
     - Remove bodies after meeting (2nd lover if a lover is being exiled -> one might exile the second lover as well as otherwise the suicide will be performed after the meeting, in some instances maybe a bitten player by the Vampire)
