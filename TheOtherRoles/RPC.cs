@@ -457,7 +457,7 @@ namespace TheOtherRoles
             if (Vampire.vampire == null || Vampire.bitten == null) return;
 
             if (!Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, false)) {
-                Vampire.bitten.MurderPlayer(Vampire.bitten); // Suicide because of the kill animation teleport
+                Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
         }

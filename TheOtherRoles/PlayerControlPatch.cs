@@ -325,7 +325,13 @@ namespace TheOtherRoles {
         }
     }
 
-
+    [HarmonyPatch(typeof(KillAnimation),nameof(KillAnimation.CoPerformKill))]
+    class Test {
+        public static void Prefix(KillAnimation __instance, ref PlayerControl CPKODPCJPOO, ref PlayerControl PAIBDFDMIGK) {
+            if (Vampire.vampire != null && Vampire.vampire == CPKODPCJPOO && Vampire.bitten != null && Vampire.bitten == PAIBDFDMIGK)
+                CPKODPCJPOO = PAIBDFDMIGK;
+        }
+    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
