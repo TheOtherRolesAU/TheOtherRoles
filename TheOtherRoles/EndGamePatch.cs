@@ -79,7 +79,7 @@ namespace TheOtherRoles {
             }
 
             // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
-            else if (Lovers.existingAndAlive()) {
+            else if (Lovers.existingAndAlive() && OFLKLGMHBEL != GameOverReason.ImpostorBySabotage) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
                 if (TempData.DidHumansWin(OFLKLGMHBEL)) {

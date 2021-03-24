@@ -32,6 +32,7 @@ Medium priority:
     - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
     - Custom Settings: On some screen resolutions it glitches out of the screen, add a spacer option
+    - Add proper GameOverReasons
 
 
 Low priority:
