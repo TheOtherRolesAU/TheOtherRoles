@@ -15,7 +15,7 @@ Roles in development:
     - Vampire: Vampire kill should not be a suicide (because that results in a wrong medic info + animation), Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), if a bitten player dies at the beginning of a meeting he should be exiled, VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
 
 High priority:
-    - Jester/Child/Lover: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
     - Refactor Vampire sprite update code (move it)
