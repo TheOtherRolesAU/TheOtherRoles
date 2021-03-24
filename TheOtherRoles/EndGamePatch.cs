@@ -113,7 +113,7 @@ namespace TheOtherRoles {
             }
             
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
-            else if ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead)) {
+            else if (!TempData.DidHumansWin(OFLKLGMHBEL) && Jackal.jackal != null && !Jackal.jackal.Data.IsDead) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
@@ -280,7 +280,7 @@ namespace TheOtherRoles {
                 // No Impostors alive but still more crewmates than jackals
                 return true;
             }
-            else if (statistics.TeamJackalAlive > 0 && statistics.TeamJackalAlive >= statistics.TeamCrewmatesAlive) {
+            else if (statistics.TeamImpostorsAlive <= 0 && statistics.TeamJackalAlive > 0 && statistics.TeamJackalAlive >= statistics.TeamCrewmatesAlive) {
                 // No Impostors alive and Team Jackal is and there are equal or more of Team Jackal than crewmates -> Jackal Win
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
@@ -296,7 +296,7 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive <= 0)             {
+            if (statistics.TeamImpostorsAlive <= 0) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
                     __instance.enabled = false;
                     ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);

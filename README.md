@@ -51,9 +51,11 @@ Even more roles are coming soon :)
 \
 **Changes in v1.8:**
 - Added the Jackal and Sidekick roles
+- Fixed a bug that prevented the game from continuing after a meeting when lovers were still alive
+- If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
 
 \
-**Changes in v1.6:**
+**Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
 - Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
@@ -462,6 +464,8 @@ Depending on the options he can use vents and even get himself a Sidekick to sup
 
 The create Sidekick action may only be used once per game per Jackal.
 A Jackal may be killed by a Sheriff.
+A Jackal cannot target the Child, while it's growing up.
+Creating a Sidekick removes all tasks of the Sidekick. If the Sidekick was the last crewmember with tasks left, this results in a win for completing all tasks for the crewmates.
 
 ### Game Options
 | Name | Description
@@ -482,6 +486,7 @@ Upon the death of the Jackal he might get promoted to Jackal himself, and potent
 
 A player that is assigned as sidekick loses his previous role (if he had one) except the lover role.
 A Sidekick may be killed by a Sheriff.
+A Sidekick cannot target the Child, while it's growing up.
 
 ### Game Options
 | Name | Description

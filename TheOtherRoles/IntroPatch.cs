@@ -204,7 +204,7 @@ namespace TheOtherRoles
             {
                 __instance.__this.Title.Text = "Jackal";
                 __instance.__this.Title.Color = Jackal.color;
-                __instance.__this.ImpostorText.Text = "Kill all crewmates and [FF1919FF]impostors[FFFFFFFF] to win";
+                __instance.__this.ImpostorText.Text = "Kill all crewmates and [FF1919FF]Impostors[FFFFFFFF] to win";
                 __instance.__this.BackgroundBar.material.color = Jackal.color;
             }
         }

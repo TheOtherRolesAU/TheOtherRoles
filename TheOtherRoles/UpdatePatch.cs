@@ -20,8 +20,6 @@ namespace TheOtherRoles
                 player.nameText.Text = player.Data.PlayerName;
                 if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
                     player.nameText.Color = Palette.ImpostorRed;
-                } else if((PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick) && (player == Jackal.jackal || player == Sidekick.sidekick || player == Jackal.fakeSidekick)) {
-                    player.nameText.Color = Jackal.color;
                 } else {
                     player.nameText.Color = Color.white;
                 }
@@ -33,8 +31,6 @@ namespace TheOtherRoles
                         player.NameText.Text = playerControl.Data.PlayerName;
                         if (PlayerControl.LocalPlayer.Data.IsImpostor && playerControl.Data.IsImpostor) {
                             player.NameText.Color = Palette.ImpostorRed;
-                        } else if((PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick) && (playerControl == Jackal.jackal || playerControl == Sidekick.sidekick || playerControl == Jackal.fakeSidekick)) {
-                            player.NameText.Color = Jackal.color;
                         } else {
                             player.NameText.Color = Color.white;
                         }
