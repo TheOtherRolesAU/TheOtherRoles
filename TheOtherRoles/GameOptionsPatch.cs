@@ -71,7 +71,7 @@ namespace TheOtherRoles
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1);
             }
-            hudString += "\n Press tab for more...";
+            hudString += "\n Press tab for more...\n\n\n";
             __result = hudString;
         }
     }
