@@ -434,12 +434,7 @@ namespace TheOtherRoles
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
-                    if (Medic.shielded != null && Medic.shielded == Jackal.currentTarget) {
-                        MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
-                        RPCProcedure.shieldedMurderAttempt();
-                        return;    
-                    }
+                    if (!Helpers.handleMurderAttempt(Jackal.currentTarget)) return;
                     byte targetId = Jackal.currentTarget.PlayerId;
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalKill, Hazel.SendOption.None, -1);
                     killWriter.Write(targetId);
@@ -459,13 +454,7 @@ namespace TheOtherRoles
             // Sidekick Kill
             sidekickKillButton = new CustomButton(
                 () => {
-                    if (Medic.shielded != null && Medic.shielded == Sidekick.currentTarget) {
-                        MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
-                        RPCProcedure.shieldedMurderAttempt();
-                        return;    
-                    }
-
+                    if (!Helpers.handleMurderAttempt(Sidekick.currentTarget)) return;
                     byte targetId = Sidekick.currentTarget.PlayerId;
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickKill, Hazel.SendOption.None, -1);
                     killWriter.Write(targetId);

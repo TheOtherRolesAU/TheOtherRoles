@@ -538,6 +538,7 @@ namespace TheOtherRoles
                     if(player == Tracker.tracker) Child.clearAndReload();
                     if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
                     if(player == Snitch.snitch) Snitch.clearAndReload();
+                    if(player == Swapper.swapper) Snitch.clearAndReload();
 
                     // Impostor roles
                     if(player == Morphling.morphling) Morphling.clearAndReload();
@@ -547,7 +548,8 @@ namespace TheOtherRoles
                     if(player == Janitor.janitor) Janitor.clearAndReload();
                     if(player == Vampire.vampire) Vampire.clearAndReload();
 
-                    // The Sidekick stays a part of the lover couple!       
+                    // The Sidekick stays a part of the lover couple! 
+
                     if (PlayerControl.LocalPlayer == null) return;
                     if (PlayerControl.LocalPlayer == player) {
                         var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();

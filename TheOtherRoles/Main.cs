@@ -193,7 +193,8 @@ namespace TheOtherRoles
                 sidekickPromotesToJackal,
                 sidekickCanKill,
                 sidekickCanUseVents,
-                jackalPromotedFromSidekickCanCreateSidekick
+                jackalPromotedFromSidekickCanCreateSidekick,
+                jackalCanCreateSidekickFromImpostor
             };
         }
     }

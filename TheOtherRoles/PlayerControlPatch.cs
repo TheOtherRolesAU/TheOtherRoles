@@ -145,6 +145,7 @@ namespace TheOtherRoles {
                 // Only exclude sidekick from beeing targeted if the jackal can create sidekicks from impostors
                 if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
             }
+            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
         }
 
@@ -152,6 +153,7 @@ namespace TheOtherRoles {
             if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
             var untargetablePlayers = new List<PlayerControl>();
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
+            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
         }
 
@@ -321,12 +323,15 @@ namespace TheOtherRoles {
     public static class MurderPlayerPatch
     {
         public static bool resetToCrewmate = false;
+        public static bool resetToDead = false;
 
         public static void Prefix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
         {
             // Allow everyone to murder players
             resetToCrewmate = !__instance.Data.IsImpostor;
+            resetToDead = __instance.Data.IsDead;
             __instance.Data.IsImpostor = true;
+            __instance.Data.IsDead = false;
         }
 
         public static void Postfix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
@@ -337,6 +342,7 @@ namespace TheOtherRoles {
 
             // Reset killer to crewmate if resetToCrewmate
             if (resetToCrewmate) __instance.Data.IsImpostor = false;
+            if (resetToDead) __instance.Data.IsDead = true;
 
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && PAIBDFDMIGK == Lovers.lover1) || (Lovers.lover2 != null && PAIBDFDMIGK == Lovers.lover2)) {

@@ -174,7 +174,15 @@ namespace TheOtherRoles {
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
             }
             else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
-                textRenderer.Text = "Jackal Wins";
+                var jackalText = "Jackal";
+                if(Jackal.formerJackals.Count > 0) {
+                    jackalText = "Jackals";
+                }
+                if(Sidekick.sidekick != null) {
+                    textRenderer.Text = $"{jackalText} and Sidekick Win";
+                } else {
+                    textRenderer.Text = $"{jackalText} Wins";
+                }
                 textRenderer.Color = Jackal.color;
             }
             
@@ -184,6 +192,148 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))] 
     class CheckEndCriteriaPatch{
+
+        public static bool Prefix(ShipStatus __instance) {
+            if (!GameData.Instance) return false;
+            var statistics = new PlayerStatistics(__instance);
+            if(CheckAndEndGameForSabotageWin(__instance)) return false;
+            if(CheckAndEndGameForTaskWin(__instance)) return false;
+            if(CheckAndEndGameForLoverWin(__instance, statistics)) return false;
+            if(CheckAndEndGameForJackalWin(__instance, statistics)) return false;
+            if(CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
+            if(CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
+            return false;
+        }
+
+        private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
+            ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
+            if (systemType != null) {
+                LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
+                if (lifeSuppSystemType.Countdown < 0f) {
+                    EndGameForSabotage(__instance);
+                    lifeSuppSystemType.Countdown = 10000f;
+                    return true;
+                }
+            }
+            ISystemType systemType2 = __instance.Systems.ContainsKey(SystemTypes.Reactor) ? __instance.Systems[SystemTypes.Reactor] : null;
+            if (systemType2 == null) {
+                systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
+            }
+            if (systemType2 != null) {
+                ReactorSystemType reactorSystemType = systemType2.TryCast<ReactorSystemType>();
+                if (reactorSystemType.Countdown < 0f) {
+                    EndGameForSabotage(__instance);
+                    reactorSystemType.Countdown = 10000f;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForTaskWin(ShipStatus __instance) {
+            bool localCompletedAllTasks = true;
+            foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks) {
+                localCompletedAllTasks = localCompletedAllTasks && t.IsComplete;
+            }
+
+            if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+            {
+                if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(GameOverReason.HumansByTask, false);
+                    return true;
+                }
+            }
+            else if (localCompletedAllTasks)
+            {
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                __instance.Begin();
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (statistics.NonImpostorsAlive + statistics.TeamImpostorsAlive == 3 && Lovers.existingAndAlive()) { // 3 players with 2 lovers is always a lover win (either shared with crewmates or solo for lovers, marked as impostor win)
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(Lovers.existingWithImpLover() ? GameOverReason.ImpostorByKill : GameOverReason.HumansByVote, false); // should be implemented using a proper GameOverReason in the future
+                    return true;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(Lovers.existingWithImpLover() ? StringNames.GameOverImpostorKills : StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            if (statistics.NonImpostorsAlive == statistics.TeamImpostorsAlive && Lovers.existingAndAlive() && Lovers.existingWithImpLover()) { // 3 vs 3 or 2 vs 2 is not win if both lovers are alive and one is an impostor
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (statistics.TeamJackalAlive > 0 && statistics.TeamImpostorsAlive > 0) {
+                // There is still a jackal/sidekick and an impostor alive
+                return true;
+            } 
+            else if (statistics.TeamImpostorsAlive <= 0 && statistics.TeamJackalAlive > 0 && statistics.TeamCrewmatesAlive > statistics.TeamJackalAlive) {
+                // No Impostors alive but still more crewmates than jackals
+                return true;
+            }
+            else if (statistics.TeamJackalAlive > 0 && statistics.TeamJackalAlive >= statistics.TeamCrewmatesAlive) {
+                // No Impostors alive and Team Jackal is and there are equal or more of Team Jackal than crewmates -> Jackal Win
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                    return true;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (statistics.TeamImpostorsAlive <= 0)             {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);
+                    return true;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if ((statistics.TeamImpostorsAlive > 0 && statistics.TeamImpostorsAlive >= statistics.NonImpostorsAlive) || statistics.NonImpostorsAlive == 0) {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
+                    __instance.enabled = false;
+                    GameOverReason endReason;
+                    switch (TempData.LastDeathReason) {
+                        case DeathReason.Exile:
+                            endReason = GameOverReason.ImpostorByVote;
+                            break;
+                        case DeathReason.Kill:
+                            endReason = GameOverReason.ImpostorByKill;
+                            break;
+                        default:
+                            endReason = GameOverReason.ImpostorByVote;
+                            break;
+                    }
+                    ShipStatus.RpcEndGame(endReason, false);
+                    return true;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
 
         private static void ReviveEveryone() {
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
@@ -201,35 +351,24 @@ namespace TheOtherRoles {
                 return;
             }
             DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverSabotage, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+            ReviveEveryone();
         }
 
-        [HarmonyPriority(Priority.Last)]
-        public static bool Prefix(ShipStatus __instance) {
-            if (!GameData.Instance)
-            {
-                return false;
-            }
-            ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
-            if (systemType != null)
-            {
-                LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
-                if (lifeSuppSystemType.Countdown < 0f)
-                {
-                    EndGameForSabotage(__instance);
-                    lifeSuppSystemType.Countdown = 10000f;
-                }
-            }
-            ISystemType systemType2 = __instance.Systems.ContainsKey(SystemTypes.Reactor) ? __instance.Systems[SystemTypes.Reactor] : null;
-            if (systemType2 == null) systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
-            if (systemType2 != null)
-            {
-                ReactorSystemType reactorSystemType = systemType2.TryCast<ReactorSystemType>();
-                if (reactorSystemType.Countdown < 0f)
-                {
-                    EndGameForSabotage(__instance);
-                    reactorSystemType.Countdown = 10000f;
-                }
-            }
+    }
+
+    internal class PlayerStatistics {
+
+        public int TeamImpostorsDeadOrAlive {get;set;}
+        public int TeamImpostorsAlive {get;set;}
+        public int TeamCrewmatesAlive {get;set;}
+        public int TeamJackalAlive {get;set;}
+        public int NonImpostorsAlive {get;set;}
+
+        public PlayerStatistics(ShipStatus __instance) {
+            GetPlayerCounts();
+        }
+
+        private void GetPlayerCounts() {
             int numNonImpostorAlive = 0;
             int numImpostorsAlive = 0;
             int numImpostorsDeadOrAlive = 0;
@@ -258,96 +397,12 @@ namespace TheOtherRoles {
             var numTeamJackalAlive = 0;
             if (Jackal.jackal != null && Jackal.jackal.Data.IsDead == false) numTeamJackalAlive++;
             if (Sidekick.sidekick != null && Sidekick.sidekick.Data.IsDead == false) numTeamJackalAlive++;
-            if (numTeamJackalAlive > 0 && numImpostorsAlive > 0) {
-                // There is still a jackal/sidekick and an impostor alive
-                return false;
-            } 
-            else if (numImpostorsAlive <= 0 && numTeamJackalAlive > 0 && (numNonImpostorAlive - numTeamJackalAlive) > numTeamJackalAlive) {
-                // No Impostors alive but still more crewmates than jackal
-                return false;
-            }
-            else if ((numNonImpostorAlive - numTeamJackalAlive) <= numTeamJackalAlive) {
-                // No Impostors alive and Team Jackal is at least half of the members alive. Jackal Win
-                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
-                    return false;
-                }
-                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
-                return false;
-            }
 
-            if (numImpostorsAlive <= 0 && (!DestroyableSingleton<TutorialManager>.InstanceExists || numImpostorsDeadOrAlive > 0))
-            {
-                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);
-                    return false;
-                }
-                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
-                return false;
-            }
-            else
-            {
-                if (numNonImpostorAlive > numImpostorsAlive)
-                {
-                    bool localCompletedAllTasks = true;
-                    foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks) {
-                        localCompletedAllTasks = localCompletedAllTasks && t.IsComplete;
-                    }
-
-                    if (!DestroyableSingleton<TutorialManager>.InstanceExists)
-                    {
-                        if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
-                        {
-                            __instance.enabled = false;
-                            ShipStatus.RpcEndGame(GameOverReason.HumansByTask, false);
-                            return false;
-                        }
-                    }
-                    else if (localCompletedAllTasks)
-                    {
-                        DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                        __instance.Begin();
-                    }
-                    if (numNonImpostorAlive + numImpostorsAlive == 3 && Lovers.existingAndAlive()) { // 3 players with 2 lovers is always a lover win (either shared with crewmates or solo for lovers, marked as impostor win)
-                        __instance.enabled = false;
-                        ShipStatus.RpcEndGame(Lovers.existingWithImpLover() ? GameOverReason.ImpostorByKill : GameOverReason.HumansByVote, false); // should be implemented using a proper GameOverReason in the future
-                        return false;
-                    }
-                    return false;
-                }
-                if (numNonImpostorAlive == numImpostorsAlive && Lovers.existingAndAlive() && Lovers.existingWithImpLover()) { // 3 vs 3 or 2 vs 2 is not win if both lovers are alive and one is an impostor
-                    return false;
-                }
-                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
-                {
-                    __instance.enabled = false;
-                    GameOverReason endReason;
-                    switch (TempData.LastDeathReason)
-                    {
-                    case DeathReason.Exile:
-                        endReason = GameOverReason.ImpostorByVote;
-                        break;
-                    case DeathReason.Kill:
-                        endReason = GameOverReason.ImpostorByKill;
-                        break;
-                    default:
-                        endReason = GameOverReason.ImpostorByVote;
-                        break;
-                    }
-                    ShipStatus.RpcEndGame(endReason, false);
-                    return false;
-                }
-                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                
-                ReviveEveryone();
-                return false;
-            }
+            NonImpostorsAlive = numNonImpostorAlive;
+            TeamCrewmatesAlive = numNonImpostorAlive - numTeamJackalAlive;
+            TeamImpostorsAlive = numImpostorsAlive;
+            TeamImpostorsDeadOrAlive = numImpostorsDeadOrAlive;
+            TeamJackalAlive = numTeamJackalAlive;
         }
     }
 }

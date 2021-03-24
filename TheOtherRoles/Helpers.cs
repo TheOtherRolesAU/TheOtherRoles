@@ -268,6 +268,16 @@ namespace TheOtherRoles {
                 r = "Snitch";
                 c = Snitch.color;
             }
+            else if (Jackal.jackal != null && p == Jackal.jackal) {
+                r = "Jackal";
+                c = Jackal.color;
+                g = false;
+            }
+            else if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
+                r = "Sidekick";
+                c = Sidekick.color;
+                g = false;
+            }
             else if (p.Data.IsImpostor) { // Just Impostor
                 r = "Impostor";
                 c = Palette.ImpostorRed;
