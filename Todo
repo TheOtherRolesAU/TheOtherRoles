@@ -12,7 +12,7 @@ Discussed reworks with Dhalucard:
 Roles in development:
     - Tracker: Deactivate the arrow when the Tracker dies
     - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
-    - Vampire: Vampire kill should not be a suicide (because that results in a wrong medic info + animation), Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), if a bitten player dies at the beginning of a meeting he should be exiled, VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
+    - Vampire: Garlic layer (same for footsteps)
 
 High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)

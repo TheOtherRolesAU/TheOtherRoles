@@ -48,10 +48,16 @@ Even more roles are coming soon :)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
 \
-**Changes in v1.6:**
+**Changes in v1.8:**
+- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting.
+- Lover: New option that sets how often an ImpLover appears. If a Lover is exiled, his partner doesn't spawn a dead body anymore.
+- Cooldowns now stop cooling down, if a player sits inside a vent.
+
+\
+**Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
-- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
+- Impostors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
