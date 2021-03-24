@@ -108,7 +108,7 @@ namespace TheOtherRoles
                 }
             }
             else if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
-                // Jackal can see the jackal
+                // Sidekick can see the jackal
                 setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
                 if (Jackal.jackal != null) {
                     setPlayerNameColor(Jackal.jackal, Jackal.color);
@@ -165,58 +165,6 @@ namespace TheOtherRoles
             }
         }
 
-        static void jesterClearTasks() {
-            if (Jester.jester == null) return;
-
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Jester.jester.myTasks)
-                if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy)
-                    toRemove.Add(task);
-            foreach (PlayerTask task in toRemove)
-                Jester.jester.RemoveTask(task);
-        }
-
-        static void jackalClearTasks() {
-            if (Jackal.jackal == null) return;
-
-            // Jackal has no tasks
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Jackal.jackal.myTasks) {
-                if (task.TaskType != TaskTypes.FixComms && 
-                    task.TaskType != TaskTypes.FixLights && 
-                    task.TaskType != TaskTypes.ResetReactor && 
-                    task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy
-                    && task.gameObject.GetComponent<ImportantTextTask>() == null) {
-                    toRemove.Add(task);
-                }
-            }   
-            foreach (PlayerTask task in toRemove) {
-                Jackal.jackal.RemoveTask(task);
-            }
-        }
-
-        static void sidekickClearTasks() {
-            if (Sidekick.sidekick == null) return;
-
-            // Sidekick has no tasks
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Sidekick.sidekick.myTasks) {
-                if (task.TaskType != TaskTypes.FixComms && 
-                    task.TaskType != TaskTypes.FixLights && 
-                    task.TaskType != TaskTypes.ResetReactor && 
-                    task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy
-                    && task.gameObject.GetComponent<ImportantTextTask>() == null) {
-                    toRemove.Add(task);
-                }
-            }
-                    
-            foreach (PlayerTask task in toRemove) {
-                Sidekick.sidekick.RemoveTask(task);
-            }
-        }
-
         static void mafiosoDeactivateKillButtonIfNecessary(HudManager __instance) {
             if (Mafioso.mafioso == null || Mafioso.mafioso != PlayerControl.LocalPlayer) return;
 
@@ -240,17 +188,6 @@ namespace TheOtherRoles
                 __instance.KillButton.isActive = false;
                 __instance.KillButton.enabled = false;
             }
-        }
-
-        static void shifterClearTasks() {
-            if (Shifter.shifter == null) return;
-
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Shifter.shifter.myTasks)
-                if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy)
-                    toRemove.Add(task);
-            foreach (PlayerTask task in toRemove)
-                Shifter.shifter.RemoveTask(task);
         }
 
         static void seerUpdate() {
@@ -466,13 +403,13 @@ namespace TheOtherRoles
             // Mafia
             setMafiaNameTags();
             // Jester
-            jesterClearTasks();
+            Helpers.removeTasksFromPlayer(Jester.jester)
             // Mafioso
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor
             janitorDeactivateKillButton(__instance);
             // Shifter
-            shifterClearTasks();
+            Helpers.removeTasksFromPlayer(Shifter.shifter)
             // Seer update
             seerUpdate();
             // Spy update();
@@ -488,9 +425,9 @@ namespace TheOtherRoles
             // Snitch
             snitchUpdate();
             // Jackal
-            jackalClearTasks();
-            // Jackal
-            sidekickClearTasks();
+            Helpers.removeTasksFromPlayer(Jackal.jackal)
+            // Sidekick
+            Helpers.removeTasksFromPlayer(Sidekick.sidekick)
         }
     }
 }

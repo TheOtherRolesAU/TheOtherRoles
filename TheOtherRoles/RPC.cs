@@ -571,23 +571,12 @@ namespace TheOtherRoles
                 Jackal.canCreateSidekick = false;
             }
             Sidekick.clearAndReload();
-         
             if (PlayerControl.LocalPlayer == null) return;
             if (PlayerControl.LocalPlayer == player) {
-
-                var toRemove = new List<PlayerTask>();
-                foreach (PlayerTask task in player.myTasks) {
-                    if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy) {
-                        toRemove.Add(task);
-                    }
-                }
-                foreach (PlayerTask task in toRemove) {
-                    player.RemoveTask(task);
-                }
-
+                Helpers.removeTasksFromPlayer(player, true);
                 var textTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                 textTask.transform.SetParent(player.transform, false);
-                var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a sidekick" : "";
+                var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a Sidekick" : "";
                 textTask.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
                 player.myTasks.Insert(0, textTask);
             }

@@ -404,7 +404,7 @@ namespace TheOtherRoles {
             if (PlayerControl.LocalPlayer == null) return;
             var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             task.transform.SetParent(__instance.transform, false);
-            var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a sidekick" : "";
+            var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a Sidekick" : "";
             if (__instance == Jackal.jackal) task.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
             if (__instance == Sidekick.sidekick) task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
             __instance.myTasks.Insert(0, task);

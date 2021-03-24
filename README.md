@@ -462,6 +462,8 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 Jackal get selected from the crewmates but is in it's own team and has the purpose of eliminating all other players
 Depending on the options he can use vents and even get himself a Sidekick to support him against the others.
 
+If both impostors and jackals are in the game the game continues even if all crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
+
 The create Sidekick action may only be used once per game per Jackal.
 A Jackal may be killed by a Sheriff.
 A Jackal cannot target the Child, while it's growing up.
@@ -476,7 +478,7 @@ Creating a Sidekick removes all tasks of the Sidekick. If the Sidekick was the l
 | Jackal can use vents | Yes/No |
 | Jackal can create a sidekick | Yes/No |
 | Jackals promoted from sidekick can create a sidekick | Yes/No (to prevent the jackal team from growing) |
-| Jackals can make an impostor to his sidekick | Yes/No (to prevent a jackal from turning an impostor into a sidekick) |
+| Jackals can make an impostor to his sidekick | Yes/No (to prevent a jackal from turning an impostor into a sidekick, if he uses the ability on an impostor he sees the impostor as sidekick, but the impostor isn't converted to sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
 -----------------------
 
 ## Sidekick
