@@ -14,6 +14,7 @@ Even more roles are coming soon :)
   - Mafioso
 - [Morphling](#morphling)
 - [Camouflager](#camouflager)
+- [Vampire](#vampire)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -30,15 +31,16 @@ Even more roles are coming soon :)
 - [Shifter](#shifter)
 - [Time Master](#time-master)
 - [Swapper](#swapper)
+- [Tracker](#tracker)
+- [Snitch](#snitch)
 - [Jackal](#jackal)
 - [Sidekick](#sidekick)
-
 
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
 | 2021.3.5s | v1.8 | [Download]???
-| 2021.3.5s | v1.7 | [Download]???
+| 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
 | 2021.3.5s | v1.4 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.4/TheOtherRoles.zip)
@@ -49,6 +51,12 @@ Even more roles are coming soon :)
 \
 **Changes in v1.8:**
 - Added the Jackal and Sidekick roles
+
+\
+**Changes in v1.6:**
+- **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
+- The role assignment system has been changed
+- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
@@ -82,7 +90,7 @@ Even more roles are coming soon :)
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -162,6 +170,23 @@ are hidden and all players have the same color.
 | Camouflager Cooldown | -
 -----------------------
 
+## Vampire
+### **Team: Impostors**
+The Vampire is an impostor, that can bite other player. Bitten players die after a configurable amount of time.\
+If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
+If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.
+\
+**NOTE**
+- If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
+- The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Vampire Spawn Chance | -
+| Vampire Kill Delay | -
+-----------------------
+
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
 There are always two lovers which are linked together.\
@@ -221,7 +246,7 @@ The Seer can make mistakes (how many depends on the selected option). If a mista
 
 \
 **NOTE**
-- **Good players:** Crewmates with all their special roles\
+- **Good players:** Crewmates with all their special roles
 - **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover) and the neutral roles (Jester, Shifter)
 - **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
 - If the role of a revealed player changes during the game (because of e.g. the Shifter), the information of the Seers also adapts.
@@ -241,7 +266,8 @@ The Seer can make mistakes (how many depends on the selected option). If a mista
 ## Engineer
 ### **Team: Crewmates**
 The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
-The Engineer can use vents.
+The Engineer can use vents. If the Engineer is inside a vent, the impostors will see a blue outline
+around all vents on the map (in order to warn them).
 Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
 you can double click on the tasks instead.
 \
@@ -261,6 +287,7 @@ The Detective can see footprints that other players leave behind.
 **NOTE**
 - Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the
 Detective still sees the right (original) colors.
+- The detective does not see footprints of players that sit in vents
 
 ### Game Options
 | Name | Description |
@@ -403,6 +430,30 @@ and can't fix lights and comms.
 | Swapper Spawn Chance | -
 -----------------------
 
+## Tracker
+### **Team: Crewmates**
+The Tracker can select one player in a game and tracks this player for the rest of the game.
+An arrow points to the last tracked position of the player.
+The arrow updates it's position every few seconds (configurable).
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Tracker Spawn Chance | -
+| Tracker Update Intervall | Sets how often the position is being updated
+-----------------------
+
+## Snitch
+### **Team: Crewmates**
+When the Snitch finshes all the tasks, arrows will appear (only visible to the Snitch) that point to the impostors.
+When the Snitch has one task left (configurable) the Snitch will be revealed to the impostors, also with an arrow.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Snitch Spawn Chance | -
+| Task Count Where Impostors See Snitch | -
+-----------------------
 
 ## Jackal
 ### **Team: Jackal**
@@ -421,6 +472,7 @@ A Jackal may be killed by a Sheriff.
 | Jackal can use vents | Yes/No |
 | Jackal can create a sidekick | Yes/No |
 | Jackals promoted from sidekick can create a sidekick | Yes/No (to prevent the jackal team from growing) |
+| Jackals can make an impostor to his sidekick | Yes/No (to prevent a jackal from turning an impostor into a sidekick) |
 -----------------------
 
 ## Sidekick
@@ -439,7 +491,6 @@ A Sidekick may be killed by a Sheriff.
 | Sidekick can kill | Yes/No |
 | Sidekick can use vents | Yes/No |
 -----------------------
-
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
