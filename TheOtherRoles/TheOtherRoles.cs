@@ -283,11 +283,11 @@ namespace TheOtherRoles
         public static bool notAckedExiledIsLover = false;
 
         public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !lover1.Data.Disconnected && !lover2.Data.Disconnected && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
         public static bool existingWithImpLover() {
-            return lover1 != null && lover2 != null && (lover1.Data.IsImpostor || lover2.Data.IsImpostor);
+            return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected && (lover1.Data.IsImpostor || lover2.Data.IsImpostor);
         }
 
         public static void clearAndReload() {

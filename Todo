@@ -16,9 +16,7 @@ Roles in development:
 
 High priority:
     - Remove bodies after meeting (2nd lover if a lover is being exiled -> one might exile the second lover as well as otherwise the suicide will be performed after the meeting, in some instances maybe a bitten player by the Vampire)
-    - DCs/leaving players cause bugs in the end game computation (games sometimes won't end)
     - Jester/Child/Lover: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
-    - End game computation: Reactor/Oxy win results in a lover win if both lovers are still alive?
 
 Medium priority:
     - Refactor Vampire sprite update code (move it)
