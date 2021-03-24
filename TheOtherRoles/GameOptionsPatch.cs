@@ -50,7 +50,7 @@ namespace TheOtherRoles
             var hudString = stringBuilder.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 22;
+            int roleSettingsLines = 19 + 23;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
