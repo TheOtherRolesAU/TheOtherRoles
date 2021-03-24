@@ -548,6 +548,7 @@ namespace TheOtherRoles
     public static class Jackal {
         public static PlayerControl jackal;
         public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+        public static PlayerControl fakeSidekick;
 
         public static PlayerControl currentTarget;
         public static List<PlayerControl> formerJackals = new List<PlayerControl>();
@@ -558,6 +559,7 @@ namespace TheOtherRoles
         public static bool canCreateSidekick = true;
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
+        public static bool canCreateSidekickFromImpostor = true;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -569,6 +571,7 @@ namespace TheOtherRoles
             formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
+            fakeSidekick = null;
             cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
             createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
         }
@@ -576,11 +579,13 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             jackal = null;
             currentTarget = null;
+            fakeSidekick = null;
             cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
             createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
             canUseVents = TheOtherRolesPlugin.jackalCanUseVents.GetValue();
             canCreateSidekick = TheOtherRolesPlugin.jackalCanCreateSidekick.GetValue();
             jackalPromotedFromSidekickCanCreateSidekick = TheOtherRolesPlugin.jackalPromotedFromSidekickCanCreateSidekick.GetValue();
+            canCreateSidekickFromImpostor = TheOtherRolesPlugin.jackalCanCreateSidekickFromImpostor.GetValue();
             formerJackals.Clear();
         }
         

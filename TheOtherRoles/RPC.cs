@@ -515,6 +515,10 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
+                    if(!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                        Jackal.fakeSidekick = player;
+                        return;
+                    }
                     Sidekick.sidekick = player;
                     player.RemoveInfected();
 

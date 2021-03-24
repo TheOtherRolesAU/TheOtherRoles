@@ -100,6 +100,7 @@ namespace TheOtherRoles
         public static CustomToggleOption sidekickCanKill = CustomOption.AddToggle(num++.ToString(), "Sidekick can kill", false);
         public static CustomToggleOption sidekickCanUseVents = CustomOption.AddToggle(num++.ToString(), "Sidekick can use vents", true);
         public static CustomToggleOption jackalPromotedFromSidekickCanCreateSidekick = CustomOption.AddToggle(num++.ToString(), "Jackals promoted from sidekick can create a sidekick", true);
+        public static CustomToggleOption jackalCanCreateSidekickFromImpostor = CustomOption.AddToggle(num++.ToString(), "Jackals can make an impostor to his sidekick", true);
 
 
         public static List<CustomOption> options = new List<CustomOption>();

@@ -141,7 +141,10 @@ namespace TheOtherRoles {
         static void jackalSetTarget() {
             if (Jackal.jackal == null || Jackal.jackal != PlayerControl.LocalPlayer) return;
             var untargetablePlayers = new List<PlayerControl>();
-            if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
+            if(Jackal.canCreateSidekickFromImpostor) {
+                // Only exclude sidekick from beeing targeted if the jackal can create sidekicks from impostors
+                if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
+            }
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
         }
 

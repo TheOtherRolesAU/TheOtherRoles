@@ -20,23 +20,27 @@ namespace TheOtherRoles
                 player.nameText.Text = player.Data.PlayerName;
                 if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
                     player.nameText.Color = Palette.ImpostorRed;
+                } else if((PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick) && (player == Jackal.jackal || player == Sidekick.sidekick || player == Jackal.fakeSidekick)) {
+                    player.nameText.Color = Jackal.color;
                 } else {
                     player.nameText.Color = Color.white;
                 }
             }
-            if (MeetingHud.Instance != null)
+            if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                     PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
                     if (playerControl != null) {
                         player.NameText.Text = playerControl.Data.PlayerName;
                         if (PlayerControl.LocalPlayer.Data.IsImpostor && playerControl.Data.IsImpostor) {
                             player.NameText.Color = Palette.ImpostorRed;
+                        } else if((PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick) && (playerControl == Jackal.jackal || playerControl == Sidekick.sidekick || playerControl == Jackal.fakeSidekick)) {
+                            player.NameText.Color = Jackal.color;
                         } else {
                             player.NameText.Color = Color.white;
                         }
                     }
                 }
-
+            }
             if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !x.Data.IsImpostor);
@@ -49,7 +53,7 @@ namespace TheOtherRoles
                             player.NameText.Color =  Palette.ImpostorRed;
                     }
             }
-            
+
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
@@ -102,6 +106,9 @@ namespace TheOtherRoles
                 setPlayerNameColor(Jackal.jackal, Jackal.color);
                 if (Sidekick.sidekick != null) {
                     setPlayerNameColor(Sidekick.sidekick, Jackal.color);
+                }
+                if (Jackal.fakeSidekick != null) {
+                    setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
             else if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {

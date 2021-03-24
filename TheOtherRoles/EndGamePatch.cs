@@ -184,6 +184,7 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))] 
     class CheckEndCriteriaPatch{
+
         private static void ReviveEveryone() {
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
                 GameData.Instance.AllPlayers[i].Object.Revive();
@@ -202,6 +203,7 @@ namespace TheOtherRoles {
             DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverSabotage, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
         }
 
+        [HarmonyPriority(Priority.Last)]
         public static bool Prefix(ShipStatus __instance) {
             if (!GameData.Instance)
             {

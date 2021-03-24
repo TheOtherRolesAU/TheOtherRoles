@@ -54,6 +54,7 @@
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Reobfuscate">
+        <Message Text="Deobfuscated: $(Deobfuscated)" Importance="high"/>
         <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
     </Target>
 </Project>

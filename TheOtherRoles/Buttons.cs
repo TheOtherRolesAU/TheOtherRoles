@@ -423,8 +423,8 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.jackalCreatesSidekick(Jackal.currentTarget.PlayerId);
                 },
-                () => { return Jackal.canCreateSidekick && Sidekick.sidekick == null && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Sidekick.sidekick == null && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
+                () => { return Jackal.canCreateSidekick && Sidekick.sidekick == null && Jackal.fakeSidekick == null && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Sidekick.sidekick == null && Jackal.fakeSidekick == null && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
                 Jackal.getSidekickButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
