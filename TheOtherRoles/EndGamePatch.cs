@@ -269,7 +269,7 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0) {
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover)) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
@@ -284,7 +284,7 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorAliveHasLover)) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
                     __instance.enabled = false;
                     GameOverReason endReason;
@@ -349,9 +349,15 @@ namespace TheOtherRoles {
         public int TeamJackalAlive {get;set;}
         public int TeamLoversAlive {get;set;}
         public int TotalAlive {get;set;}
+        public bool TeamImpostorHasAliveLover {get;set;}
+        public bool TeamJackalHasAliveLover {get;set;}
 
         public PlayerStatistics(ShipStatus __instance) {
             GetPlayerCounts();
+        }
+
+        public bool isLover(PlayerInfo p) {
+            return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.PlayerId);
         }
 
         private void GetPlayerCounts() {
@@ -359,6 +365,8 @@ namespace TheOtherRoles {
             int numImpostorsAlive = 0;
             int numLoversAlive = 0;
             int numTotalAlive = 0;
+            bool impLover = false;
+            bool jackalLover = false;
 
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
@@ -368,16 +376,22 @@ namespace TheOtherRoles {
                     if (!playerInfo.IsDead)
                     {
                         numTotalAlive++;
-                        if (playerInfo.IsImpostor)
+
+                        bool lover = isLover(playerInfo);
+                        if (lover) numLoversAlive++;
+
+                        if (playerInfo.IsImpostor) {
                             numImpostorsAlive++;
-                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == playerInfo.PlayerId)
+                            if (lover) impLover = true;
+                        }
+                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == playerInfo.PlayerId) {
                             numJackalAlive++;
-                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == playerInfo.PlayerId)
+                            if (lover) jackalLover = true;
+                        }
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == playerInfo.PlayerId) {
                             numJackalAlive++;
-                        if (Lovers.lover1 != null && Lovers.lover1.PlayerId == playerInfo.PlayerId)
-                            numLoversAlive++;
-                        if (Lovers.lover2 != null && Lovers.lover2.PlayerId == playerInfo.PlayerId)
-                            numLoversAlive++;
+                            if (lover) jackalLover = true;
+                        }
                     }
                 }
             }
@@ -386,6 +400,8 @@ namespace TheOtherRoles {
             TeamImpostorsAlive = numImpostorsAlive;
             TeamLoversAlive = numLoversAlive;
             TotalAlive = numTotalAlive;
+            TeamImpostorHasAliveLover = impLover;
+            TeamJackalHasAliveLover = jackalLover;
         }
     }
 }
