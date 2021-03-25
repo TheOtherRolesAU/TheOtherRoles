@@ -49,6 +49,7 @@ namespace TheOtherRoles
                 __instance.__this.ImpostorText.Text = "Hunt [ED653BFF]" + BountyHunter.target?.Data?.PlayerName + "[FFFFFFFF] down";
                 __instance.__this.BackgroundBar.material.color = BountyHunter.color;
             }
+            else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
             else {
                 __instance.__this.Title.Text = roleInfo.name;
                 __instance.__this.Title.Color = roleInfo.color;
