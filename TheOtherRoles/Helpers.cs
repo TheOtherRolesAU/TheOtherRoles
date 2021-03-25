@@ -133,14 +133,13 @@ namespace TheOtherRoles {
             if(player == null) return;
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks) {
+                if (!removeImportantTextTasks && task.gameObject.GetComponent<ImportantTextTask>() != null)
+                    continue;
                 if (task.TaskType != TaskTypes.FixComms && 
                     task.TaskType != TaskTypes.FixLights && 
                     task.TaskType != TaskTypes.ResetReactor && 
                     task.TaskType != TaskTypes.ResetSeismic && 
                     task.TaskType != TaskTypes.RestoreOxy) {
-                    toRemove.Add(task);
-                }
-                if (task.gameObject.GetComponent<ImportantTextTask>() != null && removeImportantTextTask == true) {
                     toRemove.Add(task);
                 }
             }   
