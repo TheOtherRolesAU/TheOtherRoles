@@ -18,6 +18,7 @@ High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - Crowded mod
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - Add option: Vampire can kill in garlic range
