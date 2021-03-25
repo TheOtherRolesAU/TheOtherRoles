@@ -360,9 +360,6 @@ namespace TheOtherRoles {
             int numLoversAlive = 0;
             int numTotalAlive = 0;
 
-            if (Jackal.jackal != null && Jackal.jackal.Data.IsDead == false && !Jackal.jackal.Data.Disconnected) numTeamJackalAlive++;
-            if (Sidekick.sidekick != null && Sidekick.sidekick.Data.IsDead == false && !Sidekick.sidekick.Data.Disconnected) numTeamJackalAlive++;
-
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
                 GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
@@ -373,17 +370,18 @@ namespace TheOtherRoles {
                         numTotalAlive++;
                         if (playerInfo.IsImpostor)
                             numImpostorsAlive++;
-                        if (Jackal.jackal != null && Jackal.jackal.playerId == playerInfo.playerId)
+                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == playerInfo.PlayerId)
                             numJackalAlive++;
-                        if (Sidekick.sidekick != null && Sidekick.sidekick.playerid == playerInfo.playerId)
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == playerInfo.PlayerId)
                             numJackalAlive++;
-                        if (Lovers.lover1 != null && Lovers.lover1.playerId == playerInfo.playerId)
+                        if (Lovers.lover1 != null && Lovers.lover1.PlayerId == playerInfo.PlayerId)
                             numLoversAlive++;
-                        if (Lovers.lover2 != null && Lovers.lover2.playerId == playerInfo.playerId)
+                        if (Lovers.lover2 != null && Lovers.lover2.PlayerId == playerInfo.PlayerId)
                             numLoversAlive++;
                     }
                 }
             }
+
             TeamJackalAlive = numJackalAlive;
             TeamImpostorsAlive = numImpostorsAlive;
             TeamLoversAlive = numLoversAlive;
