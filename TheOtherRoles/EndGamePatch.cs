@@ -37,6 +37,12 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
+        private static GameOverReason gameOverReason;
+        public static void Prefix(AmongUsClient __instance, ref GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
+            gameOverReason = OFLKLGMHBEL;
+            if ((int)OFLKLGMHBEL >= 10) OFLKLGMHBEL = GameOverReason.ImpostorByKill;
+        }
+
         public static void Postfix(AmongUsClient __instance, GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
             AdditionalTempData.clear();
 
@@ -97,14 +103,22 @@ namespace TheOtherRoles {
             }
 
             // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
-            else if (Lovers.existingAndAlive() && OFLKLGMHBEL != GameOverReason.ImpostorBySabotage) {
+            else if (Lovers.existingAndAlive() && gameOverReason == (GameOverReason)10) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
-                if (TempData.DidHumansWin(OFLKLGMHBEL)) {
+                if (!Lovers.existingWithImpLover()) {
                     AdditionalTempData.winCondition = WinCondition.LoversTeamWin;
+                    TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                        if (p == null) continue;
+                        if (p == Lovers.lover1 || p == Lovers.lover2)
+                            TempData.winners.Add(new WinningPlayerData(p.Data));
+                        else if (p != Shifter.shifter && p != Jester.jester&& p != Jackal.jackal && p != Sidekick.sidekick)
+                            TempData.winners.Add(new WinningPlayerData(p.Data));
+                    }
                 }
                 // Lovers solo win
-                else if (Lovers.existingWithImpLover()){
+                else {
                     AdditionalTempData.winCondition = WinCondition.LoversSoloWin;
                     TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                     TempData.winners.Add(new WinningPlayerData(Lovers.lover1.Data));
@@ -113,7 +127,7 @@ namespace TheOtherRoles {
             }
             
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
-            else if (OFLKLGMHBEL == GameOverReason.ImpostorByKill && (Jackal.jackal != null && !Jackal.jackal.Data.IsDead || Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead)) {
+            else if (gameOverReason == (GameOverReason)11 && (Jackal.jackal != null && !Jackal.jackal.Data.IsDead || Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead)) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
@@ -133,7 +147,7 @@ namespace TheOtherRoles {
                 }
             }
 
-            // Reset Bonus Roles Settings
+            // Reset Role Settings
             clearAndReloadRoles();
             clearGameHistory();
         }
@@ -254,14 +268,14 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TotalAlive == 3 && statistics.TeamLoversAlive == 2) {
+            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame(Lovers.existingWithImpLover() ? GameOverReason.ImpostorByKill : GameOverReason.HumansByVote, false); // should be implemented using a proper GameOverReason in the future
+                    ShipStatus.RpcEndGame((GameOverReason)10, false); // should be implemented using a proper GameOverReason in the future
                     return true;
                 }
-                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(Lovers.existingWithImpLover() ? StringNames.GameOverImpostorKills : StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -273,7 +287,7 @@ namespace TheOtherRoles {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame(GameOverReason.ImpostorByKill, false);
+                    ShipStatus.RpcEndGame((GameOverReason)11, false);
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
@@ -284,7 +298,7 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorAliveHasLover)) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover)) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
                     __instance.enabled = false;
                     GameOverReason endReason;
@@ -356,7 +370,7 @@ namespace TheOtherRoles {
             GetPlayerCounts();
         }
 
-        public bool isLover(PlayerInfo p) {
+        private bool isLover(GameData.PlayerInfo p) {
             return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.PlayerId);
         }
 
