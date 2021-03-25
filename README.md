@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Banner.png)
-![eisbison infographic](./Preview.png)
+![eisbison infographic](./Preview_v1.8.png)
 
 
 # The Other Roles
@@ -36,6 +36,8 @@ Even more roles are coming soon :)
 - [Jackal](#jackal)
 - [Sidekick](#sidekick)
 
+The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
+
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
@@ -51,11 +53,12 @@ Even more roles are coming soon :)
 \
 **Changes in v1.8:**
 - **New Roles:** Added the Jackal and Sidekick roles
-- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting.
+- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting. One can now set the cooldown and whether a normal kill is possible when a target is next to a garlic or not.
 - Lover: New option that sets how often an ImpLover appears. If a Lover is exiled, his partner doesn't spawn a dead body anymore.
 - Cooldowns now stop cooling down, if a player sits inside a vent.
-- Fixed a bug that prevented the game from continuing after a meeting when lovers were still alive
+- Fixed a bug that prevented the game from continuing after a meeting (for an edge case with Lovers)
 - If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
+- We added a description for your current role right above the task list
 
 \
 **Changes in v1.7:**
@@ -190,6 +193,8 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 |----------|:-------------:|
 | Vampire Spawn Chance | -
 | Vampire Kill Delay | -
+| Vampire Cooldown | Sets the kill/bite cooldown
+| Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
 ## Lovers
@@ -470,7 +475,7 @@ If both impostors and jackals are in the game the game continues even if all cre
 The create Sidekick action may only be used once per game per Jackal.
 A Jackal may be killed by a Sheriff.
 A Jackal cannot target the Child, while it's growing up.
-Creating a Sidekick removes all tasks of the Sidekick. If the Sidekick was the last crewmember with tasks left, this results in a win for completing all tasks for the crewmates.
+Creating a Sidekick removes all tasks of the Sidekick. If the Sidekick was the last crewmate with tasks left, this results in a win for completing all tasks for the crewmates.
 
 ### Game Options
 | Name | Description
