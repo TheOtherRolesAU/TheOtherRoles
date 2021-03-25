@@ -492,6 +492,8 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
 
         public static float delay = 10f;
+        public static float cooldown = float.MaxValue;
+        public static bool canKillNearGarlics = true;
         public static bool localPlacedGarlic = false;
         public static bool garlicsActive = true;
 
@@ -528,6 +530,8 @@ namespace TheOtherRoles
             currentTarget = null;
             garlicsActive = TheOtherRolesPlugin.vampireSpawnRate.GetValue() > 0;
             delay = TheOtherRolesPlugin.vampireKillDelay.GetValue();
+            cooldown = TheOtherRolesPlugin.vampireCooldown.GetValue();
+            canKillNearGarlics = TheOtherRolesPlugin.vampireCanKillNearGarlics.GetValue();
         }
     }
 

@@ -181,7 +181,7 @@ namespace TheOtherRoles
             else if (Jackal.jackal != null && p == Jackal.jackal) {
                 name = "Jackal";
                 color = Jackal.color;
-                introDescription = "Kill all crewmates and [FF1919FF]Impostors[FFFFFFFF] to win";
+                introDescription = "Kill all Crewmates and [FF1919FF]Impostors[FFFFFFFF] to win";
                 shortDescription = "";
                 isGood = false;                
             }
@@ -189,7 +189,7 @@ namespace TheOtherRoles
                 name = "Sidekick";
                 color = Sidekick.color;
                 introDescription = "";
-                shortDescription = "Help your jackal to kill everyone";
+                shortDescription = "Help your Jackal to kill everyone";
                 isGood = false;
             }
             else if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {

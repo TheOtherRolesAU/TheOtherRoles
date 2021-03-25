@@ -40,8 +40,8 @@ namespace TheOtherRoles
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
-            float crewCountSettings = TheOtherRolesPlugin.crewmateRolesCount.GetValue();
-            float impCountSettings = TheOtherRolesPlugin.impostorRolesCount.GetValue();
+            float crewCountSettings = (float)TheOtherRolesPlugin.crewmateRolesCount.GetValue() / 2;
+            float impCountSettings = (float)TheOtherRolesPlugin.impostorRolesCount.GetValue() / 2;
 
             if (crewCountSettings % 1 == 0.5f) crewCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
             if (impCountSettings % 1 == 0.5f) impCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);

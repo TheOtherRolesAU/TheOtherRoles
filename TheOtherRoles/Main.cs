@@ -30,9 +30,11 @@ namespace TheOtherRoles
         // Roles
         public static int num = 0;
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10"};
+        public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
 
-        public static CustomNumberOption crewmateRolesCount = CustomOption.AddNumber(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", 10, 0, 10, 0.5f);
-        public static CustomNumberOption impostorRolesCount = CustomOption.AddNumber(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", 3, 0, 3, 0.5f);
+        public static CustomStringOption crewmateRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
+        public static CustomStringOption impostorRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
 
         public static CustomStringOption mafiaSpawnRate = CustomOption.AddString(num++.ToString(), cs(Janitor.color) + "Mafia", rates);
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString(num++.ToString(), cs(Morphling.color) + "Morphling", rates);
@@ -63,7 +65,9 @@ namespace TheOtherRoles
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber(num++.ToString(), "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber(num++.ToString(), "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber(num++.ToString(), "Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 2.5f, 30f, 2.5f);
+        public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 1f, 20f, 1f);
+        public static CustomNumberOption vampireCooldown = CustomOption.AddNumber(num++.ToString(), "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle(num++.ToString(), "Vampire Can Kill Near Garlics", true);
 
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber(num++.ToString(), "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle(num++.ToString(), "Both Lovers Die", true);
@@ -159,6 +163,8 @@ namespace TheOtherRoles
                 morphlingCooldown,
                 camouflagerCooldown,
                 vampireKillDelay,
+                vampireCooldown,
+                vampireCanKillNearGarlics,
 
                 loversImpLoverRate,
                 loversBothDie,

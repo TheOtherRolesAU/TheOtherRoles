@@ -43,7 +43,7 @@ namespace TheOtherRoles
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             spyButton.MaxTimer = Spy.cooldown;
-            vampireKillButton.MaxTimer = PlayerControl.GameOptions.KillCooldown;
+            vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
 
@@ -371,11 +371,11 @@ namespace TheOtherRoles
                 },
                 () => { return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    if (Vampire.targetNearGarlic)
+                    if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics)
                         vampireKillButton.killButtonManager.renderer.sprite = __instance.KillButton.renderer.sprite;
                     else
                         vampireKillButton.killButtonManager.renderer.sprite = Vampire.getButtonSprite();
-                    return Vampire.currentTarget != null && PlayerControl.LocalPlayer.CanMove;
+                    return Vampire.currentTarget != null && PlayerControl.LocalPlayer.CanMove && (!Vampire.targetNearGarlic || Vampire.canKillNearGarlics);
                 },
                 () => {
                     vampireKillButton.Timer = vampireKillButton.MaxTimer;
