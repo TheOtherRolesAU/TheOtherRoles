@@ -418,7 +418,6 @@ namespace TheOtherRoles {
             RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(__instance);        
             var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             task.transform.SetParent(__instance.transform, false);
-            __instance.myTasks.Insert(0, task);
 
             if (__instance == Jackal.jackal) {
                 var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
@@ -426,6 +425,8 @@ namespace TheOtherRoles {
             } else {
                 task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
             }
+
+            __instance.myTasks.Insert(0, task);
         }
     }
 }
