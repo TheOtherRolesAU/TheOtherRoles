@@ -24,6 +24,8 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
         public Harmony Harmony { get; } = new Harmony(Id);
+        public static TheOtherRolesPlugin Instance { get { return PluginSingleton<TheOtherRolesPlugin>.Instance; } }
+        internal static BepInEx.Logging.ManualLogSource Logger { get { return Instance.Log; } }
 
         // Roles
         public static int num = 0;
@@ -55,6 +57,7 @@ namespace TheOtherRoles
         // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString(num++.ToString(), cs(BountyHunter.color) + "Bounty Hunter", rates);
         public static CustomStringOption trackerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Tracker.color) + "Tracker", rates);
         public static CustomStringOption snitchSpawnRate = CustomOption.AddString(num++.ToString(), cs(Snitch.color) + "Snitch", rates);
+        public static CustomStringOption jackalSpawnRate = CustomOption.AddString(num++.ToString(), cs(Jackal.color) + "Jackal", rates);
 
         // Role settings
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber(num++.ToString(), "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
@@ -89,6 +92,17 @@ namespace TheOtherRoles
         // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle(num++.ToString(), "Bounty Gets Notified", true); 
         public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber(num++.ToString(), "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
         public static CustomNumberOption snitchLeftTasksForImpostors = CustomOption.AddNumber(num++.ToString(), "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f);
+
+        public static CustomNumberOption jackalKillCooldown = CustomOption.AddNumber(num++.ToString(), "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption jackalCreateSidekickCooldown = CustomOption.AddNumber(num++.ToString(), "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption jackalCanUseVents = CustomOption.AddToggle(num++.ToString(), "Jackal can use vents", true);
+        public static CustomToggleOption jackalCanCreateSidekick = CustomOption.AddToggle(num++.ToString(), "Jackal can create a sidekick", false);
+        public static CustomToggleOption sidekickPromotesToJackal = CustomOption.AddToggle(num++.ToString(), "Sidekick gets promoted to Jackal on Jackal death", false);
+        public static CustomToggleOption sidekickCanKill = CustomOption.AddToggle(num++.ToString(), "Sidekick can kill", false);
+        public static CustomToggleOption sidekickCanUseVents = CustomOption.AddToggle(num++.ToString(), "Sidekick can use vents", true);
+        public static CustomToggleOption jackalPromotedFromSidekickCanCreateSidekick = CustomOption.AddToggle(num++.ToString(), "Jackals promoted from Sidekick can create a Sidekick", true);
+        public static CustomToggleOption jackalCanCreateSidekickFromImpostor = CustomOption.AddToggle(num++.ToString(), "Jackals can make an Impostor to his Sidekick", true);
+
 
         public static List<CustomOption> options = new List<CustomOption>();
         public static int optionsPage = 1;
@@ -139,6 +153,7 @@ namespace TheOtherRoles
                 // bountyHunterSpawnRate,
                 trackerSpawnRate,
                 snitchSpawnRate,
+                jackalSpawnRate,
 
                 janitorCooldown,
                 morphlingCooldown,
@@ -171,7 +186,17 @@ namespace TheOtherRoles
                 childGrowingUpDuration,
                 // bountyHunterNotifyBounty,
                 trackerUpdateIntervall,
-                snitchLeftTasksForImpostors
+                snitchLeftTasksForImpostors,
+
+                jackalKillCooldown,
+                jackalCreateSidekickCooldown,
+                jackalCanUseVents,
+                jackalCanCreateSidekick,
+                sidekickPromotesToJackal,
+                sidekickCanKill,
+                sidekickCanUseVents,
+                jackalPromotedFromSidekickCanCreateSidekick,
+                jackalCanCreateSidekickFromImpostor
             };
         }
     }

@@ -261,6 +261,7 @@ namespace TheOtherRoles
 
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
+
         public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
             // Prevent growing Child exile
             if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
@@ -340,6 +341,10 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Tracker.";
                     else if(Snitch.snitch != null && ExileController.Instance.exiled.Object.PlayerId == Snitch.snitch.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Snitch.";
+                    else if(Jackal.jackal != null && ExileController.Instance.exiled.Object.PlayerId == Jackal.jackal.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Jackal.";
+                    else if(Sidekick.sidekick != null && ExileController.Instance.exiled.Object.PlayerId == Sidekick.sidekick.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }
@@ -360,7 +365,7 @@ namespace TheOtherRoles
                     else if(Lovers.lover2 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover2.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
                     else if(Vampire.vampire != null && ExileController.Instance.exiled.Object.PlayerId == Vampire.vampire.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Vamipre.";
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Vampire.";
                 }
 
                 // Hide number of remaining impostors on Jester win
