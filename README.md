@@ -59,6 +59,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug that prevented the game from continuing after a meeting (for an edge case with Lovers)
 - If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
 - We added a description for your current role right above the task list
+- Added a description for the [Role Assignment System](#role-assignment)
 
 \
 **Changes in v1.7:**
@@ -125,6 +126,21 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
 
 # Roles
+
+## Role Assignment
+We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
+if you're using it right.
+
+First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
+The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
+- First all roles that are set to 100% are being assigned to arbitrary players
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+
+**Example:**\
+Settings: 2 special crewmate roles, Snitch: 100%, Spy: 10%, Tracker: 30%\
+Result: Snitch is assigned, then one role out of the pool [Spy, Tracker, Tracker, Tracker] is being selected\
+Note: Changing the settings to Spy: 20%, Tracker: 60% would statistically result in the same outcome .
+
 
 ## Mafia
 ### **Team: Impostors**
@@ -257,7 +273,7 @@ The Seer can make mistakes (how many depends on the selected option). If a mista
 \
 **NOTE**
 - **Good players:** Crewmates with all their special roles
-- **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover) and the neutral roles (Jester, Shifter)
+- **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover), the neutral roles (Jester, Shifter) and the team Jackal.
 - **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
 - If the role of a revealed player changes during the game (because of e.g. the Shifter), the information of the Seers also adapts.
 - When the Camouflager camouflages all players or the Morphling copies the appearance of another player, the Seer still sees the information they gained earlier (i.e. they still see that the player is the Morphling even if their appearance is different).
