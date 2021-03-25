@@ -113,7 +113,7 @@ namespace TheOtherRoles {
             }
             
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
-            else if (!TempData.DidHumansWin(OFLKLGMHBEL) && Jackal.jackal != null && !Jackal.jackal.Data.IsDead) {
+            else if (OFLKLGMHBEL == GameOverReason.ImpostorByKill && (Jackal.jackal != null && !Jackal.jackal.Data.IsDead || Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead)) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
