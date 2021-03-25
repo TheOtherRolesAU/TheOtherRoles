@@ -501,8 +501,8 @@ The priority of the win conditions is the following:
 2. Team Impostor wins by sabotage
 3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
 4. Lovers among the last three players win
-5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left)
-6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left)
+5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
+6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
 7. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
