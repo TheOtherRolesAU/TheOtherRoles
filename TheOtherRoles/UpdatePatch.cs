@@ -24,7 +24,7 @@ namespace TheOtherRoles
                     player.nameText.Color = Color.white;
                 }
             }
-            if (MeetingHud.Instance != null)
+            if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                     PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
                     if (playerControl != null) {
@@ -36,7 +36,7 @@ namespace TheOtherRoles
                         }
                     }
                 }
-
+            }
             if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !x.Data.IsImpostor);
@@ -49,7 +49,7 @@ namespace TheOtherRoles
                             player.NameText.Color =  Palette.ImpostorRed;
                     }
             }
-            
+
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
@@ -97,6 +97,23 @@ namespace TheOtherRoles
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
             else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
+            else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
+                // Jackal can see his sidekick
+                setPlayerNameColor(Jackal.jackal, Jackal.color);
+                if (Sidekick.sidekick != null) {
+                    setPlayerNameColor(Sidekick.sidekick, Jackal.color);
+                }
+                if (Jackal.fakeSidekick != null) {
+                    setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
+                }
+            }
+            else if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
+                // Sidekick can see the jackal
+                setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
+                if (Jackal.jackal != null) {
+                    setPlayerNameColor(Jackal.jackal, Jackal.color);
+                }
+            }
 
             // Crewmate roles with no changes: Child
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
@@ -410,6 +427,10 @@ namespace TheOtherRoles
             vampireDeactivateKillButton(__instance);
             // Snitch
             snitchUpdate();
+            // Jackal
+            Helpers.removeTasksFromPlayer(Jackal.jackal);
+            // Sidekick
+            Helpers.removeTasksFromPlayer(Sidekick.sidekick);
         }
     }
 }

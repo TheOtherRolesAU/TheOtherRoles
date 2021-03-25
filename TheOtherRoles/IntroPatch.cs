@@ -21,6 +21,10 @@ namespace TheOtherRoles
                 var shifterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 shifterTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = shifterTeam;
+            } else if (PlayerControl.LocalPlayer == Jackal.jackal) {
+                var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                jackalTeam.Add(PlayerControl.LocalPlayer);
+                __instance.yourTeam = jackalTeam;
             }
         }
 

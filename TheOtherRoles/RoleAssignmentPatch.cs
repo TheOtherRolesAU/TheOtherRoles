@@ -71,6 +71,7 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Child, TheOtherRolesPlugin.childSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Tracker, TheOtherRolesPlugin.trackerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Snitch, TheOtherRolesPlugin.snitchSpawnRate.GetValue());
+            crewSettings.Add((byte)RoleId.Jackal, TheOtherRolesPlugin.jackalSpawnRate.GetValue());
             // crewSettings.Add((byte)RoleId.BountyHunter, TheOtherRolesPlugin.bountyHunterSpawnRate.GetValue()); BOUNTY HUNTER
 
             // Set multiple player roles
@@ -82,7 +83,7 @@ namespace TheOtherRoles
             }
 
             if (rnd.Next(1, 101) <= TheOtherRolesPlugin.loversSpawnRate.GetValue() * 10) {
-                if (impostors.Count > 0 && crewmates.Count > 0 && maxCrewmateRoles > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
+                if (impostors.Count > 0 && crewmates.Count > 0 && maxCrewmateRoles > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= TheOtherRolesPlugin.loversImpLoverRate.GetValue()) {
                     setRoleToRandomPlayer((byte)RoleId.Lover1, impostors); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates);
                     maxCrewmateRoles--;

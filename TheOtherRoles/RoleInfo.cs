@@ -141,13 +141,6 @@ namespace TheOtherRoles
                 iDesc = "Swap votes to exile the [FF1919FF]Impostors";
                 sDesc = "Swap votes";
             }
-            else if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                n = p.Data.IsImpostor ? "ImpLover" : "Lover";
-                c = p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color;
-                iDesc = "You are in [FC03BEFF]Love[]";
-                sDesc = "You are in love";
-                g = !p.Data.IsImpostor;
-            }
             else if (Seer.seer != null && p == Seer.seer) { 
                 n = "Seer";
                 c = Seer.color;
@@ -184,6 +177,27 @@ namespace TheOtherRoles
                 c = Snitch.color;
                 iDesc = "Finish your tasks to find the [FF1919FF]Impostors[]";
                 sDesc = "Finish your tasks";
+            }
+            else if (Jackal.jackal != null && p == Jackal.jackal) {
+                n = "Jackal";
+                c = Jackal.color;
+                iDesc = "Kill all crewmates and [FF1919FF]Impostors[FFFFFFFF] to win";
+                sDesc = "";
+                g = false;                
+            }
+            else if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
+                n = "Sidekick";
+                c = Sidekick.color;
+                iDesc = "";
+                sDesc = "Help your jackal to kill everyone";
+                g = false;
+            }
+            else if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
+                n = p.Data.IsImpostor ? "ImpLover" : "Lover";
+                c = p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color;
+                iDesc = "You are in [FC03BEFF]Love[]";
+                sDesc = "You are in love";
+                g = !p.Data.IsImpostor;
             }
             else if (p.Data.IsImpostor) { // Just Impostor
                 n = "Impostor";

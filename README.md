@@ -33,12 +33,13 @@ Even more roles are coming soon :)
 - [Swapper](#swapper)
 - [Tracker](#tracker)
 - [Snitch](#snitch)
-
-
+- [Jackal](#jackal)
+- [Sidekick](#sidekick)
 
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 | 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
@@ -48,10 +49,19 @@ Even more roles are coming soon :)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
 \
-**Changes in v1.6:**
+**Changes in v1.8:**
+- **New Roles:** Added the Jackal and Sidekick roles
+- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting.
+- Lover: New option that sets how often an ImpLover appears. If a Lover is exiled, his partner doesn't spawn a dead body anymore.
+- Cooldowns now stop cooling down, if a player sits inside a vent.
+- Fixed a bug that prevented the game from continuing after a meeting when lovers were still alive
+- If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
+
+\
+**Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
-- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
+- Impostors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
@@ -85,7 +95,7 @@ Even more roles are coming soon :)
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -109,7 +119,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling and Camouflager role come from **Ottomated**
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
 
 # Roles
 
@@ -448,6 +458,48 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 |----------|:-------------:|
 | Snitch Spawn Chance | -
 | Task Count Where Impostors See Snitch | -
+-----------------------
+
+## Jackal
+### **Team: Jackal**
+Jackal get selected from the crewmates but is in it's own team and has the purpose of eliminating all other players
+Depending on the options he can use vents and even get himself a Sidekick to support him against the others.
+
+If both impostors and jackals are in the game the game continues even if all crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
+
+The create Sidekick action may only be used once per game per Jackal.
+A Jackal may be killed by a Sheriff.
+A Jackal cannot target the Child, while it's growing up.
+Creating a Sidekick removes all tasks of the Sidekick. If the Sidekick was the last crewmember with tasks left, this results in a win for completing all tasks for the crewmates.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal Spawn Chance | - |
+| Jackal/Sidekick Kill Cooldown | Kill cooldown |
+| Jackal Create Sidekick Cooldown | Cooldown before a sidekick can be created |
+| Jackal can use vents | Yes/No |
+| Jackal can create a sidekick | Yes/No |
+| Jackals promoted from sidekick can create a sidekick | Yes/No (to prevent the jackal team from growing) |
+| Jackals can make an impostor to his sidekick | Yes/No (to prevent a jackal from turning an impostor into a sidekick, if he uses the ability on an impostor he sees the impostor as sidekick, but the impostor isn't converted to sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+-----------------------
+
+## Sidekick
+### **Team: Jackal**
+Gets assigned to a player during the game by the Create Sidekick Action of the Jackal and joins the Jackal in his quest to eliminate all other players.
+Upon the death of the Jackal he might get promoted to Jackal himself, and potentially even assign a sidekick of his own.
+
+A player that is assigned as sidekick loses his previous role (if he had one) except the lover role.
+A Sidekick may be killed by a Sheriff.
+A Sidekick cannot target the Child, while it's growing up.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
+| Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
+| Sidekick can kill | Yes/No |
+| Sidekick can use vents | Yes/No |
 -----------------------
 
 # Source code

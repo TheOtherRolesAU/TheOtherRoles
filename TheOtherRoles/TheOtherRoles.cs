@@ -45,6 +45,8 @@ namespace TheOtherRoles
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
+            Jackal.clearAndReload();
+            Sidekick.clearAndReload();
         }
 
         public static class Jester {
@@ -283,11 +285,11 @@ namespace TheOtherRoles
         public static bool notAckedExiledIsLover = false;
 
         public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !lover1.Data.Disconnected && !lover2.Data.Disconnected && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
         public static bool existingWithImpLover() {
-            return lover1 != null && lover2 != null && (lover1.Data.IsImpostor || lover2.Data.IsImpostor);
+            return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected && (lover1.Data.IsImpostor || lover2.Data.IsImpostor);
         }
 
         public static void clearAndReload() {
@@ -542,4 +544,73 @@ namespace TheOtherRoles
             snitch = null;
         }
     }
+
+    public static class Jackal {
+        public static PlayerControl jackal;
+        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+        public static PlayerControl fakeSidekick;
+
+        public static PlayerControl currentTarget;
+        public static List<PlayerControl> formerJackals = new List<PlayerControl>();
+        
+        public static float cooldown = float.MaxValue;
+        public static float createSidekickCooldown = float.MaxValue;
+        public static bool canUseVents = true;
+        public static bool canCreateSidekick = true;
+        public static Sprite buttonSprite;
+        public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
+        public static bool canCreateSidekickFromImpostor = true;
+
+        public static Sprite getSidekickButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SidekickButton.png", 100f);
+            return buttonSprite;
+        }
+
+        public static void removeCurrentJackal() {
+            formerJackals.Add(jackal);
+            jackal = null;
+            currentTarget = null;
+            fakeSidekick = null;
+            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+        }
+
+        public static void clearAndReload() {
+            jackal = null;
+            currentTarget = null;
+            fakeSidekick = null;
+            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+            canUseVents = TheOtherRolesPlugin.jackalCanUseVents.GetValue();
+            canCreateSidekick = TheOtherRolesPlugin.jackalCanCreateSidekick.GetValue();
+            jackalPromotedFromSidekickCanCreateSidekick = TheOtherRolesPlugin.jackalPromotedFromSidekickCanCreateSidekick.GetValue();
+            canCreateSidekickFromImpostor = TheOtherRolesPlugin.jackalCanCreateSidekickFromImpostor.GetValue();
+            formerJackals.Clear();
+        }
+        
+    }
+
+    public static class Sidekick {
+        public static PlayerControl sidekick;
+        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+
+        public static PlayerControl currentTarget;
+
+        public static float cooldown = float.MaxValue;
+        public static bool canUseVents = true;
+        public static bool canKill = true;
+        public static bool promotesToJackal = true;
+
+        public static void clearAndReload() {
+            sidekick = null;
+            currentTarget = null;
+            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            canUseVents = TheOtherRolesPlugin.sidekickCanUseVents.GetValue();
+            canKill = TheOtherRolesPlugin.sidekickCanKill.GetValue();
+            promotesToJackal = TheOtherRolesPlugin.sidekickPromotesToJackal.GetValue();
+        }
+        
+    }
+
 }
