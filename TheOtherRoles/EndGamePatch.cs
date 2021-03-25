@@ -113,7 +113,7 @@ namespace TheOtherRoles {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Shifter.shifter && p != Jester.jester&& p != Jackal.jackal && p != Sidekick.sidekick)
+                        else if (p != Shifter.shifter && p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                     }
                 }
@@ -188,15 +188,7 @@ namespace TheOtherRoles {
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
             }
             else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
-                var jackalText = "Jackal";
-                if(Jackal.formerJackals.Count > 0) {
-                    jackalText = "Jackals";
-                }
-                if(Sidekick.sidekick != null) {
-                    textRenderer.Text = $"{jackalText} and Sidekick Win";
-                } else {
-                    textRenderer.Text = $"{jackalText} Wins";
-                }
+                textRenderer.Text = "Team Jackal Wins";
                 textRenderer.Color = Jackal.color;
             }
             
