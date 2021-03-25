@@ -364,7 +364,13 @@ namespace TheOtherRoles {
         }
     }
 
-
+    [HarmonyPatch(typeof(KillAnimation),nameof(KillAnimation.CoPerformKill))]
+    class Test {
+        public static void Prefix(KillAnimation __instance, ref PlayerControl CPKODPCJPOO, ref PlayerControl PAIBDFDMIGK) {
+            if (Vampire.vampire != null && Vampire.vampire == CPKODPCJPOO && Vampire.bitten != null && Vampire.bitten == PAIBDFDMIGK)
+                CPKODPCJPOO = PAIBDFDMIGK;
+        }
+    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
@@ -378,12 +384,8 @@ namespace TheOtherRoles {
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
                 PlayerControl otherLover = __instance == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (PlayerControl.LocalPlayer == __instance && otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) { // Only the dead lover sends the rpc
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.None, -1);
-                    writer.Write(otherLover.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.loverSuicide(otherLover.PlayerId);
-                }
+                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie)
+                    otherLover.Exiled();
             }
             
             // Sidekick promotion trigger on exile

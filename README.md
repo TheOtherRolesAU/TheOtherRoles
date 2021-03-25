@@ -39,7 +39,7 @@ Even more roles are coming soon :)
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.3.5s | v1.8 | [Download]???
+| 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 | 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
@@ -50,7 +50,10 @@ Even more roles are coming soon :)
 
 \
 **Changes in v1.8:**
-- Added the Jackal and Sidekick roles
+- **New Roles:** Added the Jackal and Sidekick roles
+- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting.
+- Lover: New option that sets how often an ImpLover appears. If a Lover is exiled, his partner doesn't spawn a dead body anymore.
+- Cooldowns now stop cooling down, if a player sits inside a vent.
 - Fixed a bug that prevented the game from continuing after a meeting when lovers were still alive
 - If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
 
@@ -58,7 +61,7 @@ Even more roles are coming soon :)
 **Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
-- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
+- Impostors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
@@ -92,7 +95,7 @@ Even more roles are coming soon :)
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -116,7 +119,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling and Camouflager role come from **Ottomated**
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
 
 # Roles
 

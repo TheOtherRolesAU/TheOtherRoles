@@ -165,6 +165,7 @@ namespace TheOtherRoles
 
         static void onClick(int i, MeetingHud __instance)
         {
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.Data.IsDead) return; 
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (__instance.playerStates[i].isDead) return;
 

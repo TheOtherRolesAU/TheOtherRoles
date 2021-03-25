@@ -65,6 +65,7 @@ namespace TheOtherRoles
         public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber(num++.ToString(), "Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 2.5f, 30f, 2.5f);
 
+        public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber(num++.ToString(), "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle(num++.ToString(), "Both Lovers Die", true);
         public static CustomNumberOption shifterCooldown = CustomOption.AddNumber(num++.ToString(), "Shifter Cooldown", 30f, 10f, 60f, 2.5f);
 
@@ -159,6 +160,7 @@ namespace TheOtherRoles
                 camouflagerCooldown,
                 vampireKillDelay,
 
+                loversImpLoverRate,
                 loversBothDie,
                 shifterCooldown,
 
