@@ -200,8 +200,8 @@ namespace TheOtherRoles {
             if(CheckAndEndGameForTaskWin(__instance)) return false;
             if(CheckAndEndGameForLoverWin(__instance, statistics)) return false;
             if(CheckAndEndGameForJackalWin(__instance, statistics)) return false;
-            if(CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
             if(CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
+            if(CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
             return false;
         }
 
@@ -254,7 +254,7 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.NonImpostorsAlive + statistics.TeamImpostorsAlive == 3 && Lovers.existingAndAlive()) { // 3 players with 2 lovers is always a lover win (either shared with crewmates or solo for lovers, marked as impostor win)
+            if (statistics.TotalAlive == 3 && statistics.TeamLoversAlive == 2) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
@@ -265,23 +265,11 @@ namespace TheOtherRoles {
                 ReviveEveryone();
                 return true;
             }
-            if (statistics.NonImpostorsAlive == statistics.TeamImpostorsAlive && Lovers.existingAndAlive() && Lovers.existingWithImpLover()) { // 3 vs 3 or 2 vs 2 is not win if both lovers are alive and one is an impostor
-                return true;
-            }
             return false;
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive > 0 && statistics.TeamImpostorsAlive > 0) {
-                // There is still a jackal/sidekick and an impostor alive
-                return true;
-            } 
-            else if (statistics.TeamImpostorsAlive <= 0 && statistics.TeamJackalAlive > 0 && statistics.TeamCrewmatesAlive > statistics.TeamJackalAlive) {
-                // No Impostors alive but still more crewmates than jackals
-                return true;
-            }
-            else if (statistics.TeamImpostorsAlive <= 0 && statistics.TeamJackalAlive > 0 && statistics.TeamJackalAlive >= statistics.TeamCrewmatesAlive) {
-                // No Impostors alive and Team Jackal is and there are equal or more of Team Jackal than crewmates -> Jackal Win
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
@@ -295,22 +283,8 @@ namespace TheOtherRoles {
             return false;
         }
 
-        private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive <= 0) {
-                if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
-                    __instance.enabled = false;
-                    ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
-                return true;
-            }
-            return false;
-        }
-
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if ((statistics.TeamImpostorsAlive > 0 && statistics.TeamImpostorsAlive >= statistics.NonImpostorsAlive) || statistics.NonImpostorsAlive == 0) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0) {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
                     __instance.enabled = false;
                     GameOverReason endReason;
@@ -329,6 +303,20 @@ namespace TheOtherRoles {
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0) {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists) {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);
+                    return true;
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -357,52 +345,49 @@ namespace TheOtherRoles {
     }
 
     internal class PlayerStatistics {
-
-        public int TeamImpostorsDeadOrAlive {get;set;}
         public int TeamImpostorsAlive {get;set;}
-        public int TeamCrewmatesAlive {get;set;}
         public int TeamJackalAlive {get;set;}
-        public int NonImpostorsAlive {get;set;}
+        public int TeamLoversAlive {get;set;}
+        public int TotalAlive {get;set;}
 
         public PlayerStatistics(ShipStatus __instance) {
             GetPlayerCounts();
         }
 
         private void GetPlayerCounts() {
-            int numNonImpostorAlive = 0;
+            int numJackalAlive = 0;
             int numImpostorsAlive = 0;
-            int numImpostorsDeadOrAlive = 0;
+            int numLoversAlive = 0;
+            int numTotalAlive = 0;
+
+            if (Jackal.jackal != null && Jackal.jackal.Data.IsDead == false && !Jackal.jackal.Data.Disconnected) numTeamJackalAlive++;
+            if (Sidekick.sidekick != null && Sidekick.sidekick.Data.IsDead == false && !Sidekick.sidekick.Data.Disconnected) numTeamJackalAlive++;
+
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
                 GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                 if (!playerInfo.Disconnected)
                 {
-                    if (playerInfo.IsImpostor)
-                    {
-                        numImpostorsDeadOrAlive++;
-                    }
                     if (!playerInfo.IsDead)
                     {
+                        numTotalAlive++;
                         if (playerInfo.IsImpostor)
-                        {
                             numImpostorsAlive++;
-                        }
-                        else
-                        {
-                            numNonImpostorAlive++;
-                        }
+                        if (Jackal.jackal != null && Jackal.jackal.playerId == playerInfo.playerId)
+                            numJackalAlive++;
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.playerid == playerInfo.playerId)
+                            numJackalAlive++;
+                        if (Lovers.lover1 != null && Lovers.lover1.playerId == playerInfo.playerId)
+                            numLoversAlive++;
+                        if (Lovers.lover2 != null && Lovers.lover2.playerId == playerInfo.playerId)
+                            numLoversAlive++;
                     }
                 }
             }
-            var numTeamJackalAlive = 0;
-            if (Jackal.jackal != null && Jackal.jackal.Data.IsDead == false) numTeamJackalAlive++;
-            if (Sidekick.sidekick != null && Sidekick.sidekick.Data.IsDead == false) numTeamJackalAlive++;
-
-            NonImpostorsAlive = numNonImpostorAlive;
-            TeamCrewmatesAlive = numNonImpostorAlive - numTeamJackalAlive;
+            TeamJackalAlive = numJackalAlive;
             TeamImpostorsAlive = numImpostorsAlive;
-            TeamImpostorsDeadOrAlive = numImpostorsDeadOrAlive;
-            TeamJackalAlive = numTeamJackalAlive;
+            TeamLoversAlive = numLoversAlive;
+            TotalAlive = numTotalAlive;
         }
     }
 }
