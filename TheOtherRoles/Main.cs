@@ -30,10 +30,12 @@ namespace TheOtherRoles
         // Roles
         public static int num = 0;
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10"};
+        public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
 
-        public static CustomNumberOption crewmateRolesCount = CustomOption.AddNumber(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", 10, 0, 10, 0.5f);
-        public static CustomNumberOption impostorRolesCount = CustomOption.AddNumber(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", 3, 0, 3, 0.5f);
-
+        public static CustomStringOption crewmateRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
+        public static CustomStringOption impostorRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
+        
         public static CustomStringOption mafiaSpawnRate = CustomOption.AddString(num++.ToString(), cs(Janitor.color) + "Mafia", rates);
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString(num++.ToString(), cs(Morphling.color) + "Morphling", rates);
         public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Camouflager.color) + "Camouflager", rates);
