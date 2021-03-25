@@ -396,7 +396,7 @@ namespace TheOtherRoles
                 Seer.revealedPlayers.Add(target, targetOrMistake);
 
                 if (PlayerControl.LocalPlayer == target && HudManager.Instance?.FullScreen != null) {
-                    SeerInfo si = SeerInfo.getSeerInfoForPlayer(target); // Use SeerInfo for target here, because we need the isGood of the targets role
+                    RoleInfo si = RoleInfo.getRoleInfoForPlayer(target); // Use RoleInfo of target here, because we need the isGood of the targets role
                     bool showNotification = false;
                     if (Seer.playersWithNotification == 0 ) showNotification = true;
                     else if (Seer.playersWithNotification == 1 && si.isGood) showNotification = true;
