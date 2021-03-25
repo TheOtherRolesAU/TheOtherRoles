@@ -397,18 +397,35 @@ namespace TheOtherRoles {
         }
     }
 
-    
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
     public static class Role
     {
         public static void Postfix(PlayerControl __instance)
         {
             if (PlayerControl.LocalPlayer == null) return;
+
+            // Remove default ImportantTextTasks
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask t in __instance.myTasks) {
+                if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
+                    toRemove.Add(t);
+                }
+            }   
+            foreach (PlayerTask t in toRemove)
+                __instance.RemoveTask(t);
+
+            // Add description
+            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(__instance);        
             var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             task.transform.SetParent(__instance.transform, false);
-            var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a Sidekick" : "";
-            if (__instance == Jackal.jackal) task.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
-            if (__instance == Sidekick.sidekick) task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+
+            if (__instance == Jackal.jackal) {
+                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+            } else {
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+            }
+
             __instance.myTasks.Insert(0, task);
         }
     }

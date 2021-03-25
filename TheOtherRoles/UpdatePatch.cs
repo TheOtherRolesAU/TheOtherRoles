@@ -202,9 +202,9 @@ namespace TheOtherRoles
 
                 // Update color and name regarding settings and given info
                 string result = target.Data.PlayerName;
-                SeerInfo si = SeerInfo.getSeerInfoForPlayer(targetOrMistake);
+                RoleInfo si = RoleInfo.getRoleInfoForPlayer(targetOrMistake);
                 if (Seer.kindOfInfo == 0)
-                    result = target.Data.PlayerName + " (" + si.roleName + ")";
+                    result = target.Data.PlayerName + " (" + si.name + ")";
                 else if (Seer.kindOfInfo == 1) {
                     si.color = si.isGood ? new Color(250f / 255f, 217f / 255f, 52f / 255f, 1) : new Color (51f / 255f, 61f / 255f, 54f / 255f, 1); 
                 }
@@ -365,10 +365,13 @@ namespace TheOtherRoles
             if (Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
-            foreach (PlayerTask t in Snitch.snitch.myTasks) {
-                if (t.TaskType != TaskTypes.FixComms && t.TaskType != TaskTypes.FixLights && t.TaskType != TaskTypes.ResetReactor && t.TaskType != TaskTypes.ResetSeismic && t.TaskType != TaskTypes.RestoreOxy)
-                    if (!t.IsComplete) numberOfTasks++;
-            }
+            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
+			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
+				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
+					if (!playerInfo.Tasks[i].Complete)
+						numberOfTasks++;
+				}
+			}
 
             if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));

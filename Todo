@@ -21,7 +21,6 @@ Medium priority:
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - Add option: Vampire can kill in garlic range
-    - Add role description: Watch out for it counting as an uncompleted task for the Snitch
     - CustomButton: Add hotkeys (for the ones that replace the kill button)
     - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
     - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 

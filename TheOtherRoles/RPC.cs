@@ -408,7 +408,7 @@ namespace TheOtherRoles
                 Seer.revealedPlayers.Add(target, targetOrMistake);
 
                 if (PlayerControl.LocalPlayer == target && HudManager.Instance?.FullScreen != null) {
-                    SeerInfo si = SeerInfo.getSeerInfoForPlayer(target); // Use SeerInfo for target here, because we need the isGood of the targets role
+                    RoleInfo si = RoleInfo.getRoleInfoForPlayer(target); // Use RoleInfo of target here, because we need the isGood of the targets role
                     bool showNotification = false;
                     if (Seer.playersWithNotification == 0 ) showNotification = true;
                     else if (Seer.playersWithNotification == 1 && si.isGood) showNotification = true;
@@ -548,13 +548,16 @@ namespace TheOtherRoles
                     if(player == Janitor.janitor) Janitor.clearAndReload();
                     if(player == Vampire.vampire) Vampire.clearAndReload();
 
-                    // The Sidekick stays a part of the lover couple! 
-
+                    // The Sidekick stays a part of the lover couple!
+                    
                     if (PlayerControl.LocalPlayer == null) return;
                     if (PlayerControl.LocalPlayer == player) {
+                        //Only the Lover keeps his ImportantTextTask
+                        Helpers.removeTasksFromPlayer(player, player != Lovers.lover1 && player != Lovers.lover2);
+                        
                         var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                         task.transform.SetParent(player.transform, false);
-                        task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+                        task.Text = "[00B4EBFF]Sidekick: Help your Jackal to kill everyone";
                         player.myTasks.Insert(0, task);
                     }
 
@@ -576,8 +579,8 @@ namespace TheOtherRoles
                 Helpers.removeTasksFromPlayer(player, true);
                 var textTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                 textTask.transform.SetParent(player.transform, false);
-                var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a Sidekick" : "";
-                textTask.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
+                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                textTask.Text = $"[00B4EBFF]Jackal: Kill everyone{getSidekickText}"; 
                 player.myTasks.Insert(0, textTask);
             }
             return;
