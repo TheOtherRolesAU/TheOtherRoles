@@ -128,6 +128,26 @@ namespace TheOtherRoles {
             return true;
         }
 
+        
+        public static void removeTasksFromPlayer(PlayerControl player, bool removeImportantTextTasks = false) {
+            if(player == null) return;
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask task in player.myTasks) {
+                if (!removeImportantTextTasks && task.gameObject.GetComponent<ImportantTextTask>() != null)
+                    continue;
+                if (task.TaskType != TaskTypes.FixComms && 
+                    task.TaskType != TaskTypes.FixLights && 
+                    task.TaskType != TaskTypes.ResetReactor && 
+                    task.TaskType != TaskTypes.ResetSeismic && 
+                    task.TaskType != TaskTypes.RestoreOxy) {
+                    toRemove.Add(task);
+                }
+            }   
+            foreach (PlayerTask task in toRemove) {
+                player.RemoveTask(task);
+            }
+        }
+
         public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
         {
             Vector3 temp = default(Vector3);
@@ -267,6 +287,16 @@ namespace TheOtherRoles {
             else if (Snitch.snitch != null && p == Snitch.snitch) {
                 r = "Snitch";
                 c = Snitch.color;
+            }
+            else if (Jackal.jackal != null && p == Jackal.jackal) {
+                r = "Jackal";
+                c = Jackal.color;
+                g = false;
+            }
+            else if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
+                r = "Sidekick";
+                c = Sidekick.color;
+                g = false;
             }
             else if (p.Data.IsImpostor) { // Just Impostor
                 r = "Impostor";

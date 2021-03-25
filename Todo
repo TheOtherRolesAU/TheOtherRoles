@@ -22,6 +22,7 @@ High priority:
     - End game computation: Reactor/Oxy win results in a lover win if both lovers are still alive?
 
 Medium priority:
+    - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - Add option: Vampire can kill in garlic range
     - Add role description: Watch out for it counting as an uncompleted task for the Snitch

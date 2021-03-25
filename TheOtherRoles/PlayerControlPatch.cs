@@ -44,7 +44,7 @@ namespace TheOtherRoles {
             }
         }
 
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false) {
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
@@ -57,6 +57,11 @@ namespace TheOtherRoles {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
+                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
+                        // if that player is not targetable: skip check
+                        continue;
+                    }
+
                     if (@object && (!@object.inVent || targetPlayersInVents))
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
@@ -131,6 +136,25 @@ namespace TheOtherRoles {
             }
             Vampire.targetNearGarlic = targetNearGarlic;
             Vampire.currentTarget = target;
+        }
+
+        static void jackalSetTarget() {
+            if (Jackal.jackal == null || Jackal.jackal != PlayerControl.LocalPlayer) return;
+            var untargetablePlayers = new List<PlayerControl>();
+            if(Jackal.canCreateSidekickFromImpostor) {
+                // Only exclude sidekick from beeing targeted if the jackal can create sidekicks from impostors
+                if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
+            }
+            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
+            Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+        }
+
+        static void sidekickSetTarget() {
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            var untargetablePlayers = new List<PlayerControl>();
+            if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
+            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
+            Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
         }
 
         static void engineerUpdate() {
@@ -208,6 +232,10 @@ namespace TheOtherRoles {
                 engineerUpdate();
                 // Tracker
                 trackerUpdate();
+                // Jackal
+                jackalSetTarget();
+                // Sidekick
+                sidekickSetTarget();
             } 
         }
     }
@@ -295,12 +323,15 @@ namespace TheOtherRoles {
     public static class MurderPlayerPatch
     {
         public static bool resetToCrewmate = false;
+        public static bool resetToDead = false;
 
         public static void Prefix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
         {
             // Allow everyone to murder players
             resetToCrewmate = !__instance.Data.IsImpostor;
+            resetToDead = __instance.Data.IsDead;
             __instance.Data.IsImpostor = true;
+            __instance.Data.IsDead = false;
         }
 
         public static void Postfix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
@@ -311,6 +342,7 @@ namespace TheOtherRoles {
 
             // Reset killer to crewmate if resetToCrewmate
             if (resetToCrewmate) __instance.Data.IsImpostor = false;
+            if (resetToDead) __instance.Data.IsDead = true;
 
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && PAIBDFDMIGK == Lovers.lover1) || (Lovers.lover2 != null && PAIBDFDMIGK == Lovers.lover2)) {
@@ -321,6 +353,13 @@ namespace TheOtherRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
+            }
+            
+            // Sidekick promotion trigger on murder
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && PAIBDFDMIGK == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
             }
         }
     }
@@ -346,6 +385,29 @@ namespace TheOtherRoles {
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
             }
+            
+            // Sidekick promotion trigger on exile
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes();
+            }
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
+    public static class Role
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (PlayerControl.LocalPlayer == null) return;
+            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+            task.transform.SetParent(__instance.transform, false);
+            var getSidekickText = Jackal.canCreateSidekick ? " and get yourself a Sidekick" : "";
+            if (__instance == Jackal.jackal) task.Text = $"[00B4EBFF]Role: Jackal\nKill everyone{getSidekickText}[]";
+            if (__instance == Sidekick.sidekick) task.Text = "[00B4EBFF]Role: Sidekick\nHelp your jackal to kill everyone[]";
+            __instance.myTasks.Insert(0, task);
         }
     }
 }
