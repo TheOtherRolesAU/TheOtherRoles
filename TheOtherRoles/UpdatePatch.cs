@@ -403,13 +403,13 @@ namespace TheOtherRoles
             // Mafia
             setMafiaNameTags();
             // Jester
-            Helpers.removeTasksFromPlayer(Jester.jester)
+            Helpers.removeTasksFromPlayer(Jester.jester);
             // Mafioso
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor
             janitorDeactivateKillButton(__instance);
             // Shifter
-            Helpers.removeTasksFromPlayer(Shifter.shifter)
+            Helpers.removeTasksFromPlayer(Shifter.shifter);
             // Seer update
             seerUpdate();
             // Spy update();
@@ -425,9 +425,9 @@ namespace TheOtherRoles
             // Snitch
             snitchUpdate();
             // Jackal
-            Helpers.removeTasksFromPlayer(Jackal.jackal)
+            Helpers.removeTasksFromPlayer(Jackal.jackal);
             // Sidekick
-            Helpers.removeTasksFromPlayer(Sidekick.sidekick)
+            Helpers.removeTasksFromPlayer(Sidekick.sidekick);
         }
     }
 }

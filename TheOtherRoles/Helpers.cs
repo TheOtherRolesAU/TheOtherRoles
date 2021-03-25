@@ -129,7 +129,7 @@ namespace TheOtherRoles {
         }
 
         
-        public static void removeTasksFromPlayer(PlayerControl player, bool removeImportantTextTask = false) {
+        public static void removeTasksFromPlayer(PlayerControl player, bool removeImportantTextTasks = false) {
             if(player == null) return;
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks) {
