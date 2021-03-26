@@ -107,7 +107,9 @@ namespace TheOtherRoles
                     setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
-            else if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
+            
+            // No else if here, as a Lover of team Jackal needs the colors
+            if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
                 // Sidekick can see the jackal
                 setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
                 if (Jackal.jackal != null) {
