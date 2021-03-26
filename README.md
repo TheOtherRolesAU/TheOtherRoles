@@ -41,6 +41,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 | 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
@@ -50,6 +51,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
+\
+**Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
 **Changes in v1.8:**
 - **New Roles:** Added the Jackal and Sidekick roles
@@ -99,7 +102,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -501,8 +504,8 @@ The priority of the win conditions is the following:
 2. Team Impostor wins by sabotage
 3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
 4. Lovers among the last three players win
-5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left)
-6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left)
+5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
+6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
 7. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
