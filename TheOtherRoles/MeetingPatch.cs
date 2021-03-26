@@ -158,7 +158,9 @@ namespace TheOtherRoles
                 Swapper.playerId2 = Byte.MaxValue;
 
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
-                Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == IHDMFDEEDEL.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == IHDMFDEEDEL.PlayerId));
+                Lovers.notAckedExiledIsLover = false;
+                if (IHDMFDEEDEL != null)
+                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == IHDMFDEEDEL.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == IHDMFDEEDEL.PlayerId));
             }
         }
 
