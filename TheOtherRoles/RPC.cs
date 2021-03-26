@@ -530,15 +530,18 @@ namespace TheOtherRoles
                     if(player == Lighter.lighter) Lighter.clearAndReload();
                     if(player == Detective.detective) Detective.clearAndReload();
                     if(player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
-                    if(player == Medic.medic) Medic.clearAndReload();
+                    if(player == Medic.medic) {
+                        if (Medic.shielded != null) Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+                        Medic.clearAndReload();
+                    }
                     if(player == Shifter.shifter) Shifter.clearAndReload();
                     if(player == Seer.seer) Seer.clearAndReload();
                     if(player == Spy.spy) Spy.clearAndReload();
                     if(player == Child.child) Child.clearAndReload();
-                    if(player == Tracker.tracker) Child.clearAndReload();
+                    if(player == Tracker.tracker) Tracker.clearAndReload();
                     if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
                     if(player == Snitch.snitch) Snitch.clearAndReload();
-                    if(player == Swapper.swapper) Snitch.clearAndReload();
+                    if(player == Swapper.swapper) Swapper.clearAndReload();
 
                     // Impostor roles
                     if(player == Morphling.morphling) Morphling.clearAndReload();
