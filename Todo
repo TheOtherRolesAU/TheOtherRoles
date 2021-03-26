@@ -45,3 +45,18 @@ Low priority:
     - Medic: Check shield break code should maybe be moved to a more logical location
     - Dead pets are being revived by the Camouflager (but they're only visible to the dead players as they are on another layer)
     - Swapper: Light/Comms should not just close when opening them (but one can't delete the tasks, as the comms task is needed to e.g. block the camera) light/comms
+
+Role/implementation community ideas:
+    - Roles scrambler
+    - Camouflage comms
+    - Mind control
+    - Dummy spawner character
+    - Impostors don't know each other and can kill each other
+    - Medic -> Guardian
+    - Night vision camera
+    - Glitch
+    - Necromancy
+    - Vent digger/Camera placer
+    - Cameleon
+    - Invisibility imp/crew
+    - Character that can walk through walls for a second
