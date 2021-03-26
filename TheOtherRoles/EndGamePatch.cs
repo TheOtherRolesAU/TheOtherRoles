@@ -12,6 +12,11 @@ using System;
 using System.Text;
 
 namespace TheOtherRoles {
+    enum CustomGameOverReason {
+        LoversWin = 10,
+        TeamJackalWin = 11
+    }
+
     enum WinCondition {
         Default,
         LoversTeamWin,
@@ -103,7 +108,7 @@ namespace TheOtherRoles {
             }
 
             // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
-            else if (Lovers.existingAndAlive() && gameOverReason == (GameOverReason)10) {
+            else if (Lovers.existingAndAlive() && gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
                 if (!Lovers.existingWithImpLover()) {
@@ -127,7 +132,7 @@ namespace TheOtherRoles {
             }
             
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
-            else if (gameOverReason == (GameOverReason)11 && (Jackal.jackal != null && !Jackal.jackal.Data.IsDead || Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead)) {
+            else if (gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && (Jackal.jackal != null && !Jackal.jackal.Data.IsDead || Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead)) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
@@ -264,7 +269,7 @@ namespace TheOtherRoles {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame((GameOverReason)10, false); // should be implemented using a proper GameOverReason in the future
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false); // should be implemented using a proper GameOverReason in the future
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
@@ -279,7 +284,7 @@ namespace TheOtherRoles {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame((GameOverReason)11, false);
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
