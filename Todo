@@ -12,19 +12,17 @@ Discussed reworks with Dhalucard:
 Roles in development:
     - Tracker: Deactivate the arrow when the Tracker dies
     - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
-    - Vampire: Vampire kill should not be a suicide (because that results in a wrong medic info + animation), Test what happens if a bitten player starts a meeting (does the bitten-report workaround not fire here?), VampirTryKill RPC should resend the bitten player to make sure everyone kills the same player
+    - Vampire: Garlic layer (same for footsteps)
 
 High priority:
-    - Remove bodies after meeting (2nd lover if a lover is being exiled -> one might exile the second lover as well as otherwise the suicide will be performed after the meeting, in some instances maybe a bitten player by the Vampire)
-    - CustomButton: Stop cooldowns for players in vents
-    - DCs/leaving players cause bugs in the end game computation (games sometimes won't end)
-    - Jester/Child/Lover: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
-    - End game computation: Reactor/Oxy win results in a lover win if both lovers are still alive?
+    - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - On Lovers win with JackalLover, it says Lovers and Crewmate win (maybe count that as a Lovers solo win)
+    - Crowded mod
+    - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - Add option: Vampire can kill in garlic range
-    - Add role description: Watch out for it counting as an uncompleted task for the Snitch
     - CustomButton: Add hotkeys (for the ones that replace the kill button)
     - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
     - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 
@@ -33,6 +31,7 @@ Medium priority:
     - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
     - Custom Settings: On some screen resolutions it glitches out of the screen, add a spacer option
+    - Add proper GameOverReasons
 
 
 Low priority:
@@ -47,3 +46,18 @@ Low priority:
     - Medic: Check shield break code should maybe be moved to a more logical location
     - Dead pets are being revived by the Camouflager (but they're only visible to the dead players as they are on another layer)
     - Swapper: Light/Comms should not just close when opening them (but one can't delete the tasks, as the comms task is needed to e.g. block the camera) light/comms
+
+Role/implementation community ideas:
+    - Roles scrambler
+    - Camouflage comms
+    - Mind control
+    - Dummy spawner character
+    - Impostors don't know each other and can kill each other
+    - Medic -> Guardian
+    - Night vision camera
+    - Glitch
+    - Necromancy
+    - Vent digger/Camera placer
+    - Cameleon
+    - Invisibility imp/crew
+    - Character that can walk through walls for a second

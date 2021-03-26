@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Banner.png)
-![eisbison infographic](./Preview.png)
+![eisbison infographic](./Preview_v1.8.png)
 
 
 # The Other Roles
@@ -33,12 +33,15 @@ Even more roles are coming soon :)
 - [Swapper](#swapper)
 - [Tracker](#tracker)
 - [Snitch](#snitch)
+- [Jackal](#jackal)
+- [Sidekick](#sidekick)
 
-
+The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases :
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 | 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
 | 2021.3.5s | v1.6 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.6/TheOtherRoles.zip)
 | 2021.3.5s | v1.5 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.5/TheOtherRoles.zip)
@@ -48,10 +51,21 @@ Even more roles are coming soon :)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
 
 \
-**Changes in v1.6:**
+**Changes in v1.8:**
+- **New Roles:** Added the Jackal and Sidekick roles
+- Vampire: Medic report shows the right info now. A bitten Swapper is not able to swap if he dies at the beginning of a meeting. One can now set the cooldown and whether a normal kill is possible when a target is next to a garlic or not.
+- Lover: New option that sets how often an ImpLover appears. If a Lover is exiled, his partner doesn't spawn a dead body anymore.
+- Cooldowns now stop cooling down, if a player sits inside a vent.
+- Fixed a bug that prevented the game from continuing after a meeting (for an edge case with Lovers)
+- If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
+- We added a description for your current role right above the task list
+- Added a description for the [Role Assignment System](#role-assignment)
+
+\
+**Changes in v1.7:**
 - **New Roles:** The Vampire, the Tracker and the Snitch are now in the game
 - The role assignment system has been changed
-- Impstors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
+- Impostors now see a blue outline around all vents of the map, if the Engineer sits inside one of them
 
 \
 **Changes in v1.6:**
@@ -85,7 +99,7 @@ Even more roles are coming soon :)
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -109,9 +123,24 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling and Camouflager role come from **Ottomated**
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
 
 # Roles
+
+## Role Assignment
+We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
+if you're using it right.
+
+First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
+The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
+- First all roles that are set to 100% are being assigned to arbitrary players
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+
+**Example:**\
+Settings: 2 special crewmate roles, Snitch: 100%, Spy: 10%, Tracker: 30%\
+Result: Snitch is assigned, then one role out of the pool [Spy, Tracker, Tracker, Tracker] is being selected\
+Note: Changing the settings to Spy: 20%, Tracker: 60% would statistically result in the same outcome .
+
 
 ## Mafia
 ### **Team: Impostors**
@@ -180,6 +209,8 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 |----------|:-------------:|
 | Vampire Spawn Chance | -
 | Vampire Kill Delay | -
+| Vampire Cooldown | Sets the kill/bite cooldown
+| Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
 ## Lovers
@@ -187,7 +218,8 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 There are always two lovers which are linked together.\
 Their goal is it to stay alive together until the end of the game.\
 If one Lover dies (and the option is activated), the other Lover suicides.\
-There is a 67% chance that both Lovers are crewmates and a 33% chance that one of them is an impostor (ImpLover) and one a crewmate. In both cases they don't see the role of the other player, they only see that they are a Lover\
+You can specify the chance of one Lover being an impostor.\
+The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
 If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).
@@ -200,6 +232,7 @@ If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win"
 | Name | Description |
 |----------|:-------------:|
 | Lovers Spawn Chance | -
+| Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
 -----------------------
 
@@ -242,7 +275,7 @@ The Seer can make mistakes (how many depends on the selected option). If a mista
 \
 **NOTE**
 - **Good players:** Crewmates with all their special roles
-- **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover) and the neutral roles (Jester, Shifter)
+- **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover), the neutral roles (Jester, Shifter) and the team Jackal.
 - **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
 - If the role of a revealed player changes during the game (because of e.g. the Shifter), the information of the Seers also adapts.
 - When the Camouflager camouflages all players or the Morphling copies the appearance of another player, the Seer still sees the information they gained earlier (i.e. they still see that the player is the Morphling even if their appearance is different).
@@ -448,6 +481,68 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 |----------|:-------------:|
 | Snitch Spawn Chance | -
 | Task Count Where Impostors See Snitch | -
+-----------------------
+
+## Jackal
+### **Team: Jackal**
+The Jackal is part of an extra team, that tries to eliminate all the other players.\
+The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
+The Jackal (if allowed by the options) can select another player to be his Sidekick.
+Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses it's one role (except if he's a Lover, then he plays in two teams).
+The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
+The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.\
+\
+The team Jackal enables multiple new outcomes of the game, listing some examples here:
+- The Impostors could be eliminated and then the crew plays against the team Jackal.
+- The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
+
+The priority of the win conditions is the following:
+1. Jester wins by vote
+2. Team Impostor wins by sabotage
+3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
+4. Lovers among the last three players win
+5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left)
+6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left)
+7. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
+
+**NOTE:**
+- The Jackal (and his Sidekick) may be killed by a Sheriff.
+- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as it's Sidekick
+- The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (that's why converting the last crewmate with tasks left into a Sidekick results in a task win for the crew)
+
+If both impostors and jackals are in the game the game continues even if all crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
+
+
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal Spawn Chance | - |
+| Jackal/Sidekick Kill Cooldown | Kill cooldown |
+| Jackal Create Sidekick Cooldown | Cooldown before a sidekick can be created |
+| Jackal can use vents | Yes/No |
+| Jackal can create a sidekick | Yes/No |
+| Jackals promoted from sidekick can create a sidekick | Yes/No (to prevent the jackal team from growing) |
+| Jackals can make an impostor to his sidekick | Yes/No (to prevent a jackal from turning an impostor into a sidekick, if he uses the ability on an impostor he sees the impostor as sidekick, but the impostor isn't converted to sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+-----------------------
+
+## Sidekick
+### **Team: Jackal**
+Gets assigned to a player during the game by the "Create Sidekick Action" of the Jackal and joins the Jackal in his quest to eliminate all other players.\
+Upon the death of the Jackal (depending on the options), he might get promoted to Jackal himself and potentially even assign a Sidekick of his own.
+\
+**NOTE:**
+- A player that converts into a Sidekick loses his previous role and tasks (if he had one), except the lover role.
+- The Sidekick may be killed by a Sheriff.
+- The Sidekick cannot target the Child, while it's growing up.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
+| Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
+| Sidekick can kill | Yes/No |
+| Sidekick can use vents | Yes/No |
 -----------------------
 
 # Source code

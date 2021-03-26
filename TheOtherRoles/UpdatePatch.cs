@@ -24,7 +24,7 @@ namespace TheOtherRoles
                     player.nameText.Color = Color.white;
                 }
             }
-            if (MeetingHud.Instance != null)
+            if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                     PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
                     if (playerControl != null) {
@@ -36,7 +36,7 @@ namespace TheOtherRoles
                         }
                     }
                 }
-
+            }
             if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !x.Data.IsImpostor);
@@ -49,7 +49,7 @@ namespace TheOtherRoles
                             player.NameText.Color =  Palette.ImpostorRed;
                     }
             }
-            
+
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
@@ -97,6 +97,25 @@ namespace TheOtherRoles
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
             else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
+            else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
+                // Jackal can see his sidekick
+                setPlayerNameColor(Jackal.jackal, Jackal.color);
+                if (Sidekick.sidekick != null) {
+                    setPlayerNameColor(Sidekick.sidekick, Jackal.color);
+                }
+                if (Jackal.fakeSidekick != null) {
+                    setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
+                }
+            }
+            
+            // No else if here, as a Lover of team Jackal needs the colors
+            if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
+                // Sidekick can see the jackal
+                setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
+                if (Jackal.jackal != null) {
+                    setPlayerNameColor(Jackal.jackal, Jackal.color);
+                }
+            }
 
             // Crewmate roles with no changes: Child
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
@@ -148,17 +167,6 @@ namespace TheOtherRoles
             }
         }
 
-        static void jesterClearTasks() {
-            if (Jester.jester == null) return;
-
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Jester.jester.myTasks)
-                if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy)
-                    toRemove.Add(task);
-            foreach (PlayerTask task in toRemove)
-                Jester.jester.RemoveTask(task);
-        }
-
         static void mafiosoDeactivateKillButtonIfNecessary(HudManager __instance) {
             if (Mafioso.mafioso == null || Mafioso.mafioso != PlayerControl.LocalPlayer) return;
 
@@ -184,17 +192,6 @@ namespace TheOtherRoles
             }
         }
 
-        static void shifterClearTasks() {
-            if (Shifter.shifter == null) return;
-
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in Shifter.shifter.myTasks)
-                if (task.TaskType != TaskTypes.FixComms && task.TaskType != TaskTypes.FixLights && task.TaskType != TaskTypes.ResetReactor && task.TaskType != TaskTypes.ResetSeismic && task.TaskType != TaskTypes.RestoreOxy)
-                    toRemove.Add(task);
-            foreach (PlayerTask task in toRemove)
-                Shifter.shifter.RemoveTask(task);
-        }
-
         static void seerUpdate() {
             if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
 
@@ -207,9 +204,9 @@ namespace TheOtherRoles
 
                 // Update color and name regarding settings and given info
                 string result = target.Data.PlayerName;
-                SeerInfo si = SeerInfo.getSeerInfoForPlayer(targetOrMistake);
+                RoleInfo si = RoleInfo.getRoleInfoForPlayer(targetOrMistake);
                 if (Seer.kindOfInfo == 0)
-                    result = target.Data.PlayerName + " (" + si.roleName + ")";
+                    result = target.Data.PlayerName + " (" + si.name + ")";
                 else if (Seer.kindOfInfo == 1) {
                     si.color = si.isGood ? new Color(250f / 255f, 217f / 255f, 52f / 255f, 1) : new Color (51f / 255f, 61f / 255f, 54f / 255f, 1); 
                 }
@@ -370,10 +367,13 @@ namespace TheOtherRoles
             if (Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
-            foreach (PlayerTask t in Snitch.snitch.myTasks) {
-                if (t.TaskType != TaskTypes.FixComms && t.TaskType != TaskTypes.FixLights && t.TaskType != TaskTypes.ResetReactor && t.TaskType != TaskTypes.ResetSeismic && t.TaskType != TaskTypes.RestoreOxy)
-                    if (!t.IsComplete) numberOfTasks++;
-            }
+            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
+			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
+				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
+					if (!playerInfo.Tasks[i].Complete)
+						numberOfTasks++;
+				}
+			}
 
             if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
@@ -408,13 +408,13 @@ namespace TheOtherRoles
             // Mafia
             setMafiaNameTags();
             // Jester
-            jesterClearTasks();
+            Helpers.removeTasksFromPlayer(Jester.jester);
             // Mafioso
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor
             janitorDeactivateKillButton(__instance);
             // Shifter
-            shifterClearTasks();
+            Helpers.removeTasksFromPlayer(Shifter.shifter);
             // Seer update
             seerUpdate();
             // Spy update();
@@ -429,6 +429,10 @@ namespace TheOtherRoles
             vampireDeactivateKillButton(__instance);
             // Snitch
             snitchUpdate();
+            // Jackal
+            Helpers.removeTasksFromPlayer(Jackal.jackal);
+            // Sidekick
+            Helpers.removeTasksFromPlayer(Sidekick.sidekick);
         }
     }
 }
