@@ -4,13 +4,13 @@ using System;
 using System.IO;
 using System.Net.Http;
 using UnityEngine;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 using Reactor.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
     static class HudManagerStartPatch
@@ -25,6 +25,9 @@ namespace BonusRoles
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton spyButton;
+        private static CustomButton trackerButton;
+        private static CustomButton vampireKillButton;
+        private static CustomButton garlicButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -37,8 +40,12 @@ namespace BonusRoles
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             spyButton.MaxTimer = Spy.cooldown;
+            vampireKillButton.MaxTimer = PlayerControl.GameOptions.KillCooldown;
+            trackerButton.MaxTimer = 0f;
+            garlicButton.MaxTimer = 0f;
 
             spyButton.EffectDuration = Spy.duration;
+            vampireKillButton.EffectDuration= Vampire.delay;
         }
 
         public static void Postfix(HudManager __instance)
@@ -80,7 +87,7 @@ namespace BonusRoles
                 },
                 () => {},
                 Engineer.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -115,7 +122,7 @@ namespace BonusRoles
                 () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
                 () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer;},
                 Janitor.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -148,7 +155,7 @@ namespace BonusRoles
                 () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -164,7 +171,7 @@ namespace BonusRoles
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => { timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;},
                 TimeMaster.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -182,7 +189,7 @@ namespace BonusRoles
                 () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => {},
                 Medic.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -202,7 +209,7 @@ namespace BonusRoles
                 () => { return Shifter.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { shifterShiftButton.Timer = shifterShiftButton.MaxTimer; },
                 Shifter.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -232,7 +239,7 @@ namespace BonusRoles
                 () => { return Seer.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => {},
                 Seer.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance
             );
 
@@ -262,7 +269,7 @@ namespace BonusRoles
                     Morphling.sampledTarget = null;
                 },
                 Morphling.getSampleSprite(),
-                new Vector3(0f, 1.3f, 0f),
+                new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
                 10f,
@@ -287,7 +294,7 @@ namespace BonusRoles
                     camouflagerButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
                 },
                 Camouflager.getButtonSprite(),
-                new Vector3(0f, 1.3f, 0f),
+                new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
                 10f,
@@ -307,13 +314,94 @@ namespace BonusRoles
                     spyButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
                 },
                 Spy.getButtonSprite(),
-                Vector3.zero,
+                new Vector3(-1.3f, 0, 0),
                 __instance,
                 true,
                 0f,
                 () => {
                     spyButton.Timer = spyButton.MaxTimer;
                 }
+            );
+
+            // Tracker button
+            trackerButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrackerUsedTracker, Hazel.SendOption.None, -1);
+                    writer.Write(Tracker.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.trackerUsedTracker(Tracker.currentTarget.PlayerId);
+                },
+                () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker; },
+                () => { },
+                Tracker.getButtonSprite(),
+                new Vector3(-1.3f, 0, 0),
+                __instance
+            );
+
+            vampireKillButton = new CustomButton(
+                () => {
+                    if (Helpers.handleMurderAttempt(Vampire.currentTarget)) {
+                        if (Vampire.targetNearGarlic) {
+			                PlayerControl.LocalPlayer.RpcMurderPlayer(Vampire.currentTarget);
+                            vampireKillButton.HasEffect = false; // Block effect on this click
+                            vampireKillButton.Timer = vampireKillButton.MaxTimer;
+                        } else {
+                            Vampire.bitten = Vampire.currentTarget;
+                            Reactor.Coroutines.Start(Vampire.killWithDelay());
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireBiteNotification, Hazel.SendOption.None, -1);
+                            writer.Write(Vampire.bitten.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.vampireBiteNotification(Vampire.bitten.PlayerId); 
+                            vampireKillButton.HasEffect = true; // Trigger effect on this click
+                        }
+                    } else {
+                        vampireKillButton.HasEffect = false; // Block effect if no action was fired
+                    }
+                },
+                () => { return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (Vampire.targetNearGarlic)
+                        vampireKillButton.killButtonManager.renderer.sprite = __instance.KillButton.renderer.sprite;
+                    else
+                        vampireKillButton.killButtonManager.renderer.sprite = Vampire.getButtonSprite();
+                    return Vampire.currentTarget != null && PlayerControl.LocalPlayer.CanMove;
+                },
+                () => {
+                    vampireKillButton.Timer = vampireKillButton.MaxTimer;
+                    vampireKillButton.isEffectActive = false;
+                    vampireKillButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Vampire.getButtonSprite(),
+                new Vector3(-1.3f, 0, 0),
+                __instance,
+                false,
+                0f,
+                () => {
+                    vampireKillButton.Timer = vampireKillButton.MaxTimer;
+                }
+            );
+
+            garlicButton = new CustomButton(
+                () => {
+                    Vampire.localPlacedGarlic = true;
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1*sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceGarlic, Hazel.SendOption.None);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placeGarlic(buff); 
+                },
+                () => { return !Vampire.localPlacedGarlic && !PlayerControl.LocalPlayer.Data.IsDead && Vampire.garlicsActive; },
+                () => { return PlayerControl.LocalPlayer.CanMove && !Vampire.localPlacedGarlic; },
+                () => { },
+                Vampire.getGarlicButtonSprite(),
+                Vector3.zero,
+                __instance,
+                true
             );
         }
     }

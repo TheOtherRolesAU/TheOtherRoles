@@ -4,12 +4,12 @@ using System.IO;
 using System.Net.Http;
 using UnityEngine;
 using System.Linq;
-using static BonusRoles.BonusRoles;
-using static BonusRoles.GameHistory;
+using static TheOtherRoles.TheOtherRoles;
+using static TheOtherRoles.GameHistory;
 using Reactor.Extensions;
 using System.Collections.Generic;
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
 
     [HarmonyPatch(typeof(Vent), "CanUse")]

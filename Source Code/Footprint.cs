@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using static BonusRoles.BonusRoles;
+using static TheOtherRoles.TheOtherRoles;
 
-namespace BonusRoles{
+namespace TheOtherRoles{
     class Footprint {
         private static List<Footprint> footprints = new List<Footprint>();
         private static Sprite sprite;
@@ -14,7 +14,7 @@ namespace BonusRoles{
 
         public static Sprite getFootprintSprite() {
             if (sprite) return sprite;
-            sprite = Helpers.loadSpriteFromResources("BonusRoles.Resources.Footprint.png", 600f);
+            sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
             return sprite;
         }
 
@@ -45,9 +45,7 @@ namespace BonusRoles{
 
         IEnumerator CoFadeOutAndDestroy(float duration)
         {
-            for (float t = 0f; t < duration; t += Time.deltaTime)
-            {
-                // Check not null since if game ends, this access throws an error
+            for (float t = 0f; t < duration; t += Time.deltaTime) {
                 if (spriteRenderer) spriteRenderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp(1f - t/duration, 0f, 1f));
 
                 yield return null;

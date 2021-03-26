@@ -1,37 +1,41 @@
 using HarmonyLib;
 using Hazel;
-using static BonusRoles.BonusRoles;
-using static BonusRoles.HudManagerStartPatch;
-using static BonusRoles.GameHistory;
+using static TheOtherRoles.TheOtherRoles;
+using static TheOtherRoles.HudManagerStartPatch;
+using static TheOtherRoles.GameHistory;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System;
 
-namespace BonusRoles
+namespace TheOtherRoles
 {
     enum RoleId {
-        Jester = 0,
-        Mayor = 1,
-        Engineer = 2,
-        Sheriff = 3,
-        Lighter = 4,
-        Godfather = 5,
-        Mafioso = 6,
-        Janitor = 7,
-        Detective = 8,
-        TimeMaster = 9,
-        Medic = 10,
-        Shifter = 11,
-        Swapper = 12,
-        Lover1 = 13,
-        Lover2 = 14,
-        Seer = 15,
-        Morphling = 16,
-        Camouflager = 17,
-        Spy = 18,
-        Child = 19,
+        Jester,
+        Mayor,
+        Engineer,
+        Sheriff,
+        Lighter,
+        Godfather,
+        Mafioso,
+        Janitor,
+        Detective,
+        TimeMaster,
+        Medic,
+        Shifter,
+        Swapper,
+        Lover1,
+        Lover2,
+        Seer,
+        Morphling,
+        Camouflager,
+        Spy,
+        Child,
+        BountyHunter,
+        Tracker,
+        Vampire,
+        Snitch
     }
 
     enum CustomRPC
@@ -44,7 +48,7 @@ namespace BonusRoles
 
         // Role functionality
 
-        JesterWin = 80,
+        JesterBountyHunterWin = 80,
         EngineerFixLights = 81,
         EngineerUsedRepair = 82,
         JanitorClean = 83,
@@ -58,8 +62,12 @@ namespace BonusRoles
         SeerReveal = 91,
         MorphlingMorph = 92,
         CamouflagerCamouflage = 93,
-        ChildDied = 94,
+        TrackerUsedTracker = 94,
         LoverSuicide = 95,
+        SetBountyHunterTarget = 96,
+        VampireBiteNotification = 97,
+        VampireTryKill = 98,
+        PlaceGarlic = 99,
     }
 
     public static class RPCProcedure {
@@ -67,6 +75,7 @@ namespace BonusRoles
         // Main Controls
 
         public static void resetVariables() {
+            Garlic.clearGarlics();
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
@@ -148,25 +157,62 @@ namespace BonusRoles
                     case RoleId.Child:
                         Child.child = player;
                         break;
+                    case RoleId.BountyHunter:
+                        BountyHunter.bountyHunter = player;
+                        break;
+                    case RoleId.Tracker:
+                        Tracker.tracker = player;
+                        break;
+                    case RoleId.Vampire:
+                        Vampire.vampire = player;
+                        break;
+                    case RoleId.Snitch:
+                        Snitch.snitch = player;
+                        break;
                     }
                 }
         }
 
         // Role functionality
 
-        public static void jesterWin() {
-            Jester.jester.Revive();
-            Jester.jester.Data.IsDead = false;
-            Jester.jester.Data.IsImpostor = true;
+        public static void jesterBountyHunterWin(byte exiledId) {
+            PlayerControl exiled = Helpers.playerById(exiledId);
+            if (exiled == null) return;
+
+            bool jesterWin = false;
+            bool bountyHunterWin = false;
+
+            if (Jester.jester != null && exiled == Jester.jester) {
+                Jester.jester.Revive();
+                Jester.jester.Data.IsDead = false;
+                Jester.jester.Data.IsImpostor = true;
+                jesterWin = true;
+            }
+            if (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target == exiled) {
+                BountyHunter.bountyHunter.Data.IsImpostor = true;
+                bountyHunterWin = true;
+            }
+
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (player != Jester.jester)
+                if (player != null && player != Jester.jester && player != BountyHunter.bountyHunter)
                 {
                     player.RemoveInfected();
                     player.Die(DeathReason.Exile);
                     player.Data.IsDead = true;
                     player.Data.IsImpostor = false;
                 }
+            }
+            if (jesterWin && !bountyHunterWin && BountyHunter.bountyHunter != null) {
+                BountyHunter.bountyHunter.RemoveInfected();
+                BountyHunter.bountyHunter.Die(DeathReason.Exile);
+                BountyHunter.bountyHunter.Data.IsDead = true;
+                BountyHunter.bountyHunter.Data.IsImpostor = false;
+            } else if (bountyHunterWin && !jesterWin && Jester.jester != null) {
+                Jester.jester.RemoveInfected();
+                Jester.jester.Die(DeathReason.Exile);
+                Jester.jester.Data.IsDead = true;
+                Jester.jester.Data.IsImpostor = false;
             }
         }
 
@@ -315,7 +361,13 @@ namespace BonusRoles
                         Spy.spy = oldShifter;
                     } else if (Child.child != null && Child.child == player) {
                         Child.child = oldShifter;
-                    } else { // Crewmate
+                    } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
+                        BountyHunter.bountyHunter = oldShifter;
+                    } else if (Tracker.tracker != null && Tracker.tracker == player) {
+                        Tracker.tracker = oldShifter;
+                    } else if (Snitch.snitch != null && Snitch.snitch == player) {
+                        Snitch.snitch = oldShifter;
+                    }else { // Crewmate
                     }
                     
                     Shifter.shifter = player;
@@ -378,29 +430,51 @@ namespace BonusRoles
             Camouflager.camouflageTimer = 10f;
         }
 
-        public static void childDied() {
-            Child.child.Revive();
-            Child.child.Data.IsDead = false;
-            Child.child.Data.IsImpostor = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player != null && player != Child.child)
-                {
-                    player.RemoveInfected();
-                    player.Die(DeathReason.Exile);
-                    player.Data.IsDead = true;
-                    player.Data.IsImpostor = false;
-                }
-            }
-        }
-
         public static void loverSuicide(byte remainingLoverId) {
             if (Lovers.lover1 != null && !Lovers.lover1.Data.IsDead && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
             } else if (Lovers.lover2 != null && !Lovers.lover2.Data.IsDead && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
-        }     
+        }
+
+        public static void setBountyHunterTarget(byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                if (player.PlayerId == targetId)
+                    BountyHunter.target = player;
+        }
+
+        public static void vampireBiteNotification(byte targetId) {
+            if (Vampire.vampire == null) return;
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId && !player.Data.IsDead) {
+                        Vampire.bitten = player;
+                }
+            }
+        }
+
+        public static void vampireTryKill() {
+            if (Vampire.vampire == null || Vampire.bitten == null) return;
+
+            if (!Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, false)) {
+                Vampire.bitten.MurderPlayer(Vampire.bitten); // Suicide because of the kill animation teleport
+            }
+            Vampire.bitten = null;
+        }
+
+        public static void placeGarlic(byte[] buff) {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            new Garlic(position);
+        }
+
+        public static void trackerUsedTracker(byte targetId) {
+            Tracker.usedTracker = true;
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                if (player.PlayerId == targetId)
+                    Tracker.tracked = player;
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -429,8 +503,8 @@ namespace BonusRoles
 
                 // Role functionality
 
-                case (byte)CustomRPC.JesterWin:
-                    RPCProcedure.jesterWin();
+                case (byte)CustomRPC.JesterBountyHunterWin:
+                    RPCProcedure.jesterBountyHunterWin(HFPCBBHJIPJ.ReadByte());
                     break;
                 case (byte)CustomRPC.EngineerFixLights:
                     RPCProcedure.engineerFixLights();
@@ -475,11 +549,23 @@ namespace BonusRoles
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
                     break;
-                case (byte)CustomRPC.ChildDied:
-                    RPCProcedure.childDied();
-                    break;
                 case (byte)CustomRPC.LoverSuicide:
                     RPCProcedure.loverSuicide(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetBountyHunterTarget:
+                    RPCProcedure.setBountyHunterTarget(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.VampireBiteNotification:
+                    RPCProcedure.vampireBiteNotification(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.VampireTryKill:
+                    RPCProcedure.vampireTryKill();
+                    break;
+                case (byte)CustomRPC.PlaceGarlic:
+                    RPCProcedure.placeGarlic(HFPCBBHJIPJ.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.TrackerUsedTracker:
+                    RPCProcedure.trackerUsedTracker(HFPCBBHJIPJ.ReadByte());
                     break;
             }
         }

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static BonusRoles.BonusRoles;
-using static BonusRoles.GameHistory;
+using static TheOtherRoles.TheOtherRoles;
+using static TheOtherRoles.GameHistory;
 using UnityEngine;
 
-namespace BonusRoles {
+namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
@@ -44,7 +44,7 @@ namespace BonusRoles {
             }
         }
 
-        static PlayerControl setAnyRoleTarget() {
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
@@ -54,10 +54,10 @@ namespace BonusRoles {
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
-                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead)
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
-                    if (@object && !@object.inVent)
+                    if (@object && (!@object.inVent || targetPlayersInVents))
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
                         float magnitude = vector.magnitude;
@@ -74,30 +74,34 @@ namespace BonusRoles {
 
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
-            Medic.currentTarget = setAnyRoleTarget();
+            Medic.currentTarget = setTarget();
         }
 
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
-            Shifter.currentTarget = setAnyRoleTarget();
+            Shifter.currentTarget = setTarget();
         }
 
         
         static void morphlingSetTarget() {
             if (Morphling.morphling == null || Morphling.morphling != PlayerControl.LocalPlayer) return;
-            Morphling.currentTarget = setAnyRoleTarget();
+            Morphling.currentTarget = setTarget();
         }
         
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != PlayerControl.LocalPlayer) return;
-            Sheriff.currentTarget = setAnyRoleTarget();
+            Sheriff.currentTarget = setTarget();
         }
 
         static void seerSetTarget() {
             if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
-            Seer.currentTarget = setAnyRoleTarget();
+            Seer.currentTarget = setTarget();
             if (Seer.currentTarget != null && Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
+        }
 
+        static void trackerSetTarget() {
+            if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
+            Tracker.currentTarget = setTarget();
         }
 
         static void detectiveSetFootPrints() {
@@ -107,12 +111,74 @@ namespace BonusRoles {
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                    if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead) {
+                    if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) {
                         new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
                     }
                 }
             }
+        }
 
+        static void vampireSetTarget() {
+            if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
+		    PlayerControl target = setTarget(true, true);
+            bool targetNearGarlic = false;
+            if (target != null) {
+                foreach (Garlic garlic in Garlic.garlics) {
+                    if (Vector2.Distance(garlic.garlic.transform.position, target.transform.position) <= 1.91f) {
+                        targetNearGarlic = true;
+                    }
+                }
+            }
+            Vampire.targetNearGarlic = targetNearGarlic;
+            Vampire.currentTarget = target;
+        }
+
+        static void engineerUpdate() {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor && Engineer.engineer != null) {
+                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                    if (vent.Field_7?.material != null) {
+                        if (Engineer.engineer.inVent) {
+                            vent.Field_7.material.SetFloat("_Outline", 1f);
+                            vent.Field_7.material.SetColor("_OutlineColor", Engineer.color);
+                        } else if (vent.Field_7.material.GetColor("_AddColor") != Color.red) {
+                            vent.Field_7.material.SetFloat("_Outline", 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        static void trackerUpdate() {
+            if (Tracker.tracker == null || Tracker.tracked == null) return;
+
+            if (Tracker.arrow?.arrow != null && PlayerControl.LocalPlayer != Tracker.tracker) {
+                Tracker.arrow.arrow.SetActive(false);
+                return;
+            }
+
+            if (Tracker.arrow?.arrow != null && Tracker.tracked != null) {
+                Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
+
+                if (Tracker.timeUntilUpdate <= 0f) {
+                    bool trackedOnMap = !Tracker.tracked.Data.IsDead;
+                    System.Console.WriteLine("Update");
+                    Vector3 position = Tracker.tracked.transform.position;
+                    if (!trackedOnMap) { // Check for dead body
+                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
+                        if (body != null) {
+                            trackedOnMap = true;
+                            position = body.transform.position;
+                            System.Console.WriteLine("DeadBody");
+                        }
+                    }
+
+                    Tracker.arrow.Update(position);
+                    Tracker.arrow.arrow.SetActive(trackedOnMap);
+                    Tracker.timeUntilUpdate = Tracker.updateIntervall;
+                } else {
+                    Tracker.arrow.Update();
+                }
+            }
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -133,7 +199,34 @@ namespace BonusRoles {
                 seerSetTarget();
                 // Detective
                 detectiveSetFootPrints();
+                // Tracker
+                trackerSetTarget();
+                // Vampire
+                vampireSetTarget();
+                Garlic.UpdateAll();
+                // Engineer
+                engineerUpdate();
+                // Tracker
+                trackerUpdate();
             } 
+        }
+    }
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
+    class StartMeetingHostPatch {
+        public static void Prefix(PlayerControl __instance) {
+            // Perform vampire bite kill before the meeting starts for HOST
+            if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
+                RPCProcedure.vampireTryKill();
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
+    class StartMeetingClientPatch {
+        public static void Prefix(PlayerControl __instance) {
+            // Perform vampire bite kill before the meeting starts for CLIENTS
+            if (AmongUsClient.Instance.AmClient)
+            RPCProcedure.vampireTryKill();
         }
     }
 
@@ -141,18 +234,7 @@ namespace BonusRoles {
     class PerformKillPatch
     {
         public static bool Prefix(KillButtonManager __instance) {
-            // Block impostor shielded kill
-            if (Medic.shielded != null && Medic.shielded == __instance.CurrentTarget) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shieldedMurderAttempt();
-                return false;
-            }
-            // Block impostor not fully grown child kill
-            else if (Child.child != null && __instance.CurrentTarget == Child.child && !Child.isGrownUp()) {
-                return false;
-            }
-            return true;
+            return Helpers.handleMurderAttempt(__instance.CurrentTarget);
         }
     }
 
@@ -212,38 +294,23 @@ namespace BonusRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
     public static class MurderPlayerPatch
     {
-        public static void Prefix(PlayerControl __instance, PlayerControl PAIBDFDMIGK, out bool __state)
-        {
-            // __state denotes if the player performing the murder needs to be reset to crewmate
-            __state = false;
+        public static bool resetToCrewmate = false;
 
-            // Allow Sheriff to kill "as crewmate" by assigning the impostor role
-            if (Sheriff.sheriff != null && __instance == Sheriff.sheriff) {
-                __instance.Data.IsImpostor = true;
-                __state = true;
-            }
-            // Allow Shifter to suicide
-            else if (Shifter.shifter != null && __instance == Shifter.shifter) {
-                __instance.Data.IsImpostor = true;
-                __state = true;
-            }
-            // Allow Lover which is no impostor to suicide
-            else if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
-                if (!__instance.Data.IsImpostor) {
-                    __instance.Data.IsImpostor = true;
-                    __state = true;
-                }
-            }
+        public static void Prefix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
+        {
+            // Allow everyone to murder players
+            resetToCrewmate = !__instance.Data.IsImpostor;
+            __instance.Data.IsImpostor = true;
         }
 
-        public static void Postfix(PlayerControl __instance, PlayerControl PAIBDFDMIGK, bool __state)
+        public static void Postfix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
         {
             // Collect dead player info
             DeadPlayer deadPlayer = new DeadPlayer(PAIBDFDMIGK, DateTime.UtcNow, DeathReason.Kill, __instance);
             GameHistory.deadPlayers.Add(deadPlayer);
 
-            // Reset killer to crewmate if __state
-            if (__state) __instance.Data.IsImpostor = false;
+            // Reset killer to crewmate if resetToCrewmate
+            if (resetToCrewmate) __instance.Data.IsImpostor = false;
 
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && PAIBDFDMIGK == Lovers.lover1) || (Lovers.lover2 != null && PAIBDFDMIGK == Lovers.lover2)) {
@@ -279,7 +346,6 @@ namespace BonusRoles {
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
                 }
             }
-
         }
     }
 }
