@@ -93,7 +93,7 @@ namespace TheOtherRoles
                 if (!player.Data.IsImpostor)
                 {
                     player.RemoveInfected();
-                    player.Die(DeathReason.Exile);
+                    player.MurderPlayer(player);
                     player.Data.IsDead = true;
                 }
             }
