@@ -221,7 +221,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
-            if (shielded != null) Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+            if (shielded?.myRend?.material != null) shielded.myRend.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
