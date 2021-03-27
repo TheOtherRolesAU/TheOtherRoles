@@ -501,7 +501,7 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 The Jackal is part of an extra team, that tries to eliminate all the other players.\
 The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
 The Jackal (if allowed by the options) can select another player to be his Sidekick.
-Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses it's one role (except if he's a Lover, then he plays in two teams).
+Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses his current role (except if he's a Lover, then he plays in two teams).
 The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
 The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.\
 \
@@ -520,7 +520,7 @@ The priority of the win conditions is the following:
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
-- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as it's Sidekick
+- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as its Sidekick
 - The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (that's why converting the last crewmate with tasks left into a Sidekick results in a task win for the crew)
 
 If both impostors and jackals are in the game the game continues even if all crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
