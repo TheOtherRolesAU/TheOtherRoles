@@ -199,7 +199,7 @@ namespace TheOtherRoles
                     }
 
                     if (firstPlayer != null && secondPlayer != null) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.None, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
                         writer.Write((byte)firstPlayer.TargetPlayerId);
                         writer.Write((byte)secondPlayer.TargetPlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -287,7 +287,7 @@ namespace TheOtherRoles
                 if (ExileController.Instance.exiled != null) {
                     byte exiledId = ExileController.Instance.exiled.PlayerId;
                     if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.None, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
                         writer.Write(exiledId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.jesterBountyHunterWin(exiledId);

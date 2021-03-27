@@ -517,7 +517,7 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.None, -1);
+            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(killWriter);
             RPCProcedure.vampireTryKill();
         }
