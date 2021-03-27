@@ -38,7 +38,7 @@ Even more roles are coming soon :)
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
-# Releases :
+# Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
@@ -49,8 +49,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2021.3.5s | v1.4 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.4/TheOtherRoles.zip)
 | 2021.3.5s | v1.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.3/TheOtherRoles.zip)
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
-| 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
+| 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 
+# Changelog
+<details>
+  <summary>Click to show the Changelog</summary>
+
+**Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
 **Changes in v1.8:**
 - **New Roles:** Added the Jackal and Sidekick roles
@@ -98,6 +103,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - The game over screen now shows if the Jester/Child/Lovers won.
 - A bug was removed where the Jester won together with the crewmates.
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
+</details>
 
 # Installation 
 1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
@@ -118,6 +124,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**\
 [CooldownButton](https://github.com/DorCoMaNdO/Reactor-Essentials/blob/master/Essentials/UI/CooldownButton.cs) - Code for the cooldown button comes from **DorCoMaNdO**\
+[Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**\
 [Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
 [Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
 [ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
