@@ -114,7 +114,7 @@ namespace TheOtherRoles {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 if (notifyOthers) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.None, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 }
                 RPCProcedure.shieldedMurderAttempt();

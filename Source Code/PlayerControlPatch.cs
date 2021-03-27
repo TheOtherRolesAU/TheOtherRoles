@@ -27,7 +27,7 @@ namespace TheOtherRoles {
                     if (TimeMaster.reviveDuringRewind && PlayerControl.LocalPlayer.Data.IsDead) {
                         DeadPlayer deadPlayer = deadPlayers.Where(x => x.player == PlayerControl.LocalPlayer).FirstOrDefault();
                         if (deadPlayer != null && next.Item2 < deadPlayer.timeOfDeath) {
-                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, SendOption.None, -1);
+                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, Hazel.SendOption.Reliable, -1);
                             write.Write(PlayerControl.LocalPlayer.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(write);
                             RPCProcedure.timeMasterRevive(PlayerControl.LocalPlayer.PlayerId);
@@ -158,10 +158,10 @@ namespace TheOtherRoles {
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.Data.IsImpostor && Engineer.engineer != null) {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
                     if (vent.Field_7?.material != null) {
-                        if (Engineer.engineer.inVent) {
+                        if (Engineer.engineer != null && Engineer.engineer.inVent) {
                             vent.Field_7.material.SetFloat("_Outline", 1f);
                             vent.Field_7.material.SetColor("_OutlineColor", Engineer.color);
                         } else if (vent.Field_7.material.GetColor("_AddColor") != Color.red) {
@@ -173,26 +173,24 @@ namespace TheOtherRoles {
         }
 
         static void trackerUpdate() {
-            if (Tracker.tracker == null || Tracker.tracked == null) return;
+            if (Tracker.arrow?.arrow == null) return;
 
-            if (Tracker.arrow?.arrow != null && PlayerControl.LocalPlayer != Tracker.tracker) {
+            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) {
                 Tracker.arrow.arrow.SetActive(false);
                 return;
             }
 
-            if (Tracker.arrow?.arrow != null && Tracker.tracked != null) {
+            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead) {
                 Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
                 if (Tracker.timeUntilUpdate <= 0f) {
                     bool trackedOnMap = !Tracker.tracked.Data.IsDead;
-                    System.Console.WriteLine("Update");
                     Vector3 position = Tracker.tracked.transform.position;
                     if (!trackedOnMap) { // Check for dead body
                         DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
                         if (body != null) {
                             trackedOnMap = true;
                             position = body.transform.position;
-                            System.Console.WriteLine("DeadBody");
                         }
                     }
 
@@ -348,7 +346,7 @@ namespace TheOtherRoles {
             if ((Lovers.lover1 != null && PAIBDFDMIGK == Lovers.lover1) || (Lovers.lover2 != null && PAIBDFDMIGK == Lovers.lover2)) {
                 PlayerControl otherLover = PAIBDFDMIGK == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
                 if (PlayerControl.LocalPlayer == PAIBDFDMIGK && otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) { // Only the dead lover sends the rpc
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.None, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.Reliable, -1);
                     writer.Write(otherLover.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.loverSuicide(otherLover.PlayerId);
@@ -357,7 +355,7 @@ namespace TheOtherRoles {
             
             // Sidekick promotion trigger on murder
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && PAIBDFDMIGK == Jackal.jackal) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
@@ -390,7 +388,7 @@ namespace TheOtherRoles {
             
             // Sidekick promotion trigger on exile
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.None, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }

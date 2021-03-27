@@ -22,7 +22,7 @@ namespace TheOtherRoles
         }
 
         private static void setRoleToPlayer(byte roleId, byte playerId) {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.None, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -31,7 +31,7 @@ namespace TheOtherRoles
 
         public static void Postfix(Il2CppReferenceArray<GameData.PlayerInfo> FMAOEJEHPAO)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.None, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
@@ -155,7 +155,7 @@ namespace TheOtherRoles
             //         byte targetId = availableTargets[rnd.Next(0, availableTargets.Count)].PlayerId;
             //         crewmates.RemoveAt(bountyHunterIndex);
             //         setRoleToPlayer((byte)RoleId.BountyHunter, bountyHunterId);
-            //         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBountyHunterTarget, Hazel.SendOption.None, -1);
+            //         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBountyHunterTarget, Hazel.SendOption.Reliable, -1);
             //         writer.Write(targetId);
             //         AmongUsClient.Instance.FinishRpcImmediately(writer);
             //         RPCProcedure.setBountyHunterTarget(targetId);

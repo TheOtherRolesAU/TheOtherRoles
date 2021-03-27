@@ -280,40 +280,20 @@ namespace TheOtherRoles
             
             // Everyone but morphling reset
             if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (Morphling.morphling == null || Morphling.morphling != p) {
-                        if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
-                            p.SetName(p.Data.PlayerName);
-                        p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
-                        Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
-                        p.SetPet(p.Data.PetId);
-                        p.CurrentPet.Visible = p.Visible;
-                        p.SetColor(p.Data.ColorId);
-                    }
-                }
+                Camouflager.resetCamouflage();
             }
 
             // Morphling reset
             if ((oldMorphTimer > 0f || oldCamouflageTimer > 0f) && Camouflager.camouflageTimer <= 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null) {
-                Morphling.morphTarget = null;
-                if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
-                    Morphling.morphling.SetName(Morphling.morphling.Data.PlayerName);
-                Morphling.morphling.SetHat(Morphling.morphling.Data.HatId, (int)Morphling.morphling.Data.ColorId);
-                Helpers.setSkinWithAnim(Morphling.morphling.MyPhysics, Morphling.morphling.Data.SkinId);
-                Morphling.morphling.SetPet(Morphling.morphling.Data.PetId);
-                Morphling.morphling.CurrentPet.Visible = Morphling.morphling.Visible;
-                Morphling.morphling.SetColor(Morphling.morphling.Data.ColorId);
+                Morphling.resetMorph();
             }
         }
 
         public static void childUpdate() {
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
-
-                if (Child.child == null) {
-                    p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                    return;
-                }                 
+                p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+                if (Child.child == null) continue;
                 
                 float growingProgress = Child.growingProgress();
                 float scale = growingProgress * 0.35f + 0.35f;
@@ -361,10 +341,11 @@ namespace TheOtherRoles
         }
 
         static void snitchUpdate() {
-            if (Snitch.snitch == null) return;
+            if (Snitch.localArrows == null) return;
 
             foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
-            if (Snitch.snitch.Data.IsDead) return;
+
+            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
             GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
