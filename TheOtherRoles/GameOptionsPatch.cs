@@ -75,4 +75,11 @@ namespace TheOtherRoles
             __result = hudString;
         }
     }
+
+    [HarmonyPatch(typeof(GameSettingMenu), "OnEnable")]
+    class GameSettingMenuPatch {
+        public static void Prefix(GameSettingMenu __instance) {
+            __instance.HideForOnline = new Transform[]{};
+        }
+    }
 }
