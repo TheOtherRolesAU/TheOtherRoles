@@ -511,6 +511,7 @@ namespace TheOtherRoles
             usedTracker = false;
             timeUntilUpdate = 0f;
             updateIntervall = TheOtherRolesPlugin.trackerUpdateIntervall.GetValue();
+            if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
         }
@@ -572,6 +573,11 @@ namespace TheOtherRoles
         public static int taskCountForImpostors = 1;
 
         public static void clearAndReload() {
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                    UnityEngine.Object.Destroy(arrow.arrow);
+            }
             localArrows = new List<Arrow>();
             taskCountForImpostors = Mathf.RoundToInt(TheOtherRolesPlugin.snitchLeftTasksForImpostors.GetValue());
             snitch = null;
