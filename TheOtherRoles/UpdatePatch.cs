@@ -312,7 +312,7 @@ namespace TheOtherRoles
 
                 if (Child.child == null) {
                     p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                    return;
+                    continue;
                 }                 
                 
                 float growingProgress = Child.growingProgress();
@@ -361,10 +361,11 @@ namespace TheOtherRoles
         }
 
         static void snitchUpdate() {
-            if (Snitch.snitch == null) return;
+            if (Snitch.localArrows == null) return;
 
             foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
-            if (Snitch.snitch.Data.IsDead) return;
+            
+            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
             GameData.PlayerInfo playerInfo = Snitch.snitch.Data;

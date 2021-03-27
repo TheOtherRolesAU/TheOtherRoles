@@ -46,13 +46,12 @@ namespace TheOtherRoles
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
-
-            spyButton.EffectDuration = Spy.duration;
-            vampireKillButton.EffectDuration= Vampire.delay;
-
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
+
+            spyButton.EffectDuration = Spy.duration;
+            vampireKillButton.EffectDuration= Vampire.delay;
         }
 
         public static void Postfix(HudManager __instance)

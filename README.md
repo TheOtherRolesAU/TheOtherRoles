@@ -56,7 +56,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Changes in 1.8.2**
-- Add map and impostor count to lobby settings
+- Add map and impostor count to lobby settings.
+- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role. 
 
 **Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
