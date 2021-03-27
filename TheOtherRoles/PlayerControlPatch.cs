@@ -173,26 +173,24 @@ namespace TheOtherRoles {
         }
 
         static void trackerUpdate() {
-            if (Tracker.tracker == null || Tracker.tracked == null) return;
+            if (Tracker.arrow?.arrow == null) return;
 
-            if (Tracker.arrow?.arrow != null && PlayerControl.LocalPlayer != Tracker.tracker) {
+            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) {
                 Tracker.arrow.arrow.SetActive(false);
                 return;
             }
 
-            if (Tracker.arrow?.arrow != null && Tracker.tracked != null) {
+            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker) {
                 Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
                 if (Tracker.timeUntilUpdate <= 0f) {
                     bool trackedOnMap = !Tracker.tracked.Data.IsDead;
-                    System.Console.WriteLine("Update");
                     Vector3 position = Tracker.tracked.transform.position;
                     if (!trackedOnMap) { // Check for dead body
                         DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
                         if (body != null) {
                             trackedOnMap = true;
                             position = body.transform.position;
-                            System.Console.WriteLine("DeadBody");
                         }
                     }
 
