@@ -5,7 +5,7 @@
         <Mappings>NuclearPowered/Mappings:0.2.0</Mappings>
 
         <Description>TheOtherRoles</Description>
-        <Authors>Eibison</Authors>
+        <Authors>Eisbison</Authors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">

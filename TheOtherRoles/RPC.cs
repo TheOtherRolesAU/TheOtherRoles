@@ -530,10 +530,7 @@ namespace TheOtherRoles
                     if(player == Lighter.lighter) Lighter.clearAndReload();
                     if(player == Detective.detective) Detective.clearAndReload();
                     if(player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
-                    if(player == Medic.medic) {
-                        if (Medic.shielded != null) Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
-                        Medic.clearAndReload();
-                    }
+                    if(player == Medic.medic) Medic.clearAndReload();
                     if(player == Shifter.shifter) Shifter.clearAndReload();
                     if(player == Seer.seer) Seer.clearAndReload();
                     if(player == Spy.spy) Spy.clearAndReload();

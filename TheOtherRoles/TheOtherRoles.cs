@@ -221,6 +221,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
+            if (shielded?.myRend?.material != null) shielded.myRend.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
@@ -342,8 +343,20 @@ namespace TheOtherRoles
         public static PlayerControl morphTarget;
         public static float morphTimer = 0f;
 
+        public static void resetMorph() {
+            morphTarget = null;
+            morphTimer = 0f;
+            if (morphling == null) return;
+            morphling.SetName(morphling.Data.PlayerName);
+            morphling.SetHat(morphling.Data.HatId, (int)morphling.Data.ColorId);
+            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.Data.SkinId);
+            morphling.SetPet(morphling.Data.PetId);
+            morphling.CurrentPet.Visible = morphling.Visible;
+            morphling.SetColor(morphling.Data.ColorId);
+        }
 
         public static void clearAndReload() {
+            resetMorph();
             morphling = null;
             currentTarget = null;
             sampledTarget = null;
@@ -379,7 +392,23 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static void resetCamouflage() {
+            camouflageTimer = 0f;
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p == null) continue;
+                if (Morphling.morphling == null || Morphling.morphling != p) {
+                    p.SetName(p.Data.PlayerName);
+                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
+                    p.SetPet(p.Data.PetId);
+                    p.CurrentPet.Visible = p.Visible;
+                    p.SetColor(p.Data.ColorId);
+                }
+            }
+        }
+
         public static void clearAndReload() {
+            resetCamouflage();
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = TheOtherRolesPlugin.camouflagerCooldown.GetValue();
@@ -482,6 +511,7 @@ namespace TheOtherRoles
             usedTracker = false;
             timeUntilUpdate = 0f;
             updateIntervall = TheOtherRolesPlugin.trackerUpdateIntervall.GetValue();
+            if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
         }
@@ -517,7 +547,7 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.None, -1);
+            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(killWriter);
             RPCProcedure.vampireTryKill();
         }
@@ -543,6 +573,11 @@ namespace TheOtherRoles
         public static int taskCountForImpostors = 1;
 
         public static void clearAndReload() {
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                    UnityEngine.Object.Destroy(arrow.arrow);
+            }
             localArrows = new List<Arrow>();
             taskCountForImpostors = Mathf.RoundToInt(TheOtherRolesPlugin.snitchLeftTasksForImpostors.GetValue());
             snitch = null;

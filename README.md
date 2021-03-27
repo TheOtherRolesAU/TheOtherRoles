@@ -38,9 +38,10 @@ Even more roles are coming soon :)
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
-# Releases :
+# Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
 | 2021.3.5s | v1.7 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.7/TheOtherRoles.zip)
@@ -49,8 +50,17 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2021.3.5s | v1.4 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.4/TheOtherRoles.zip)
 | 2021.3.5s | v1.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.3/TheOtherRoles.zip)
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
-| 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip) |
+| 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 
+# Changelog
+<details>
+  <summary>Click to show the Changelog</summary>
+
+**Hotfix 1.8.2**
+- Add map and impostor count to lobby settings.
+- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role. 
+
+**Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
 **Changes in v1.8:**
 - **New Roles:** Added the Jackal and Sidekick roles
@@ -98,9 +108,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - The game over screen now shows if the Jester/Child/Lovers won.
 - A bug was removed where the Jester won together with the crewmates.
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
+</details>
 
 # Installation 
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 6. Run the game (the first launch might take a while)
@@ -118,6 +129,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**\
 [CooldownButton](https://github.com/DorCoMaNdO/Reactor-Essentials/blob/master/Essentials/UI/CooldownButton.cs) - Code for the cooldown button comes from **DorCoMaNdO**\
+[Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**\
 [Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
 [Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
 [ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
@@ -489,7 +501,7 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 The Jackal is part of an extra team, that tries to eliminate all the other players.\
 The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
 The Jackal (if allowed by the options) can select another player to be his Sidekick.
-Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses it's one role (except if he's a Lover, then he plays in two teams).
+Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses his current role (except if he's a Lover, then he plays in two teams).
 The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
 The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.\
 \
@@ -508,7 +520,7 @@ The priority of the win conditions is the following:
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
-- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as it's Sidekick
+- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as its Sidekick
 - The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (that's why converting the last crewmate with tasks left into a Sidekick results in a task win for the crew)
 
 If both impostors and jackals are in the game the game continues even if all crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
