@@ -18,6 +18,7 @@ High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
     - Medic shield rework
     - On Lovers win with JackalLover, it says Lovers and Crewmate win (maybe count that as a Lovers solo win)
