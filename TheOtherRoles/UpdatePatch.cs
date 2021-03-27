@@ -292,11 +292,8 @@ namespace TheOtherRoles
         public static void childUpdate() {
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
-
-                if (Child.child == null) {
-                    p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                    continue;
-                }                 
+                p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+                if (Child.child == null) continue;
                 
                 float growingProgress = Child.growingProgress();
                 float scale = growingProgress * 0.35f + 0.35f;
