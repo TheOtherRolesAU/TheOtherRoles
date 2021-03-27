@@ -27,7 +27,7 @@ namespace TheOtherRoles {
                     if (TimeMaster.reviveDuringRewind && PlayerControl.LocalPlayer.Data.IsDead) {
                         DeadPlayer deadPlayer = deadPlayers.Where(x => x.player == PlayerControl.LocalPlayer).FirstOrDefault();
                         if (deadPlayer != null && next.Item2 < deadPlayer.timeOfDeath) {
-                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, SendOption.None, -1);
+                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, Hazel.SendOption.Reliable, -1);
                             write.Write(PlayerControl.LocalPlayer.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(write);
                             RPCProcedure.timeMasterRevive(PlayerControl.LocalPlayer.PlayerId);
