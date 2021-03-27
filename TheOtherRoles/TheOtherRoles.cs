@@ -342,8 +342,20 @@ namespace TheOtherRoles
         public static PlayerControl morphTarget;
         public static float morphTimer = 0f;
 
+        public static void resetMorph() {
+            morphTarget = null;
+            morphTimer = 0f;
+            if (morphling == null) return;
+            morphling.SetName(morphling.Data.PlayerName);
+            morphling.SetHat(morphling.Data.HatId, (int)morphling.Data.ColorId);
+            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.Data.SkinId);
+            morphling.SetPet(morphling.Data.PetId);
+            morphling.CurrentPet.Visible = morphling.Visible;
+            morphling.SetColor(morphling.Data.ColorId);
+        }
 
         public static void clearAndReload() {
+            resetMorph();
             morphling = null;
             currentTarget = null;
             sampledTarget = null;
@@ -379,7 +391,23 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static void resetCamouflage() {
+            camouflageTimer = 0f;
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p == null) continue;
+                if (Morphling.morphling == null || Morphling.morphling != p) {
+                    p.SetName(p.Data.PlayerName);
+                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
+                    p.SetPet(p.Data.PetId);
+                    p.CurrentPet.Visible = p.Visible;
+                    p.SetColor(p.Data.ColorId);
+                }
+            }
+        }
+
         public static void clearAndReload() {
+            resetCamouflage();
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = TheOtherRolesPlugin.camouflagerCooldown.GetValue();
