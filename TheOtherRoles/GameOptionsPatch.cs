@@ -92,11 +92,10 @@ namespace TheOtherRoles
         public static int previousPreset = -1;
         public static void Postfix(GameOptionsMenu __instance)
         {
+            // Handle presets
             int newPreset = TheOtherRolesPlugin.presetSelection.GetValue();
-            
             if (newPreset != previousPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
                 previousPreset = newPreset;
-                System.Console.WriteLine("here");
 
                 foreach (CustomOption option in TheOtherRolesPlugin.options) {
                     int outInt = 0;
@@ -118,7 +117,6 @@ namespace TheOtherRoles
                         option.SetValue(nmb.ConfigEntry == null ? nmb.GetDefaultValue() : nmb.ConfigEntry.Value);
                     }
                 }
-
             }
         }
     }

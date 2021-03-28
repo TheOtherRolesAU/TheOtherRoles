@@ -41,6 +41,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.5s | v1.8.3 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.3/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
@@ -55,6 +56,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Changes in 1.8.3**
+- Custom options: Introduced customizable presets. Starting with 1.8.3, settings can be copied and used with higher version (1.8.3+).
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
