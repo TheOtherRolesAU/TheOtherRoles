@@ -89,13 +89,13 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
     public class GameOptionsMenuPatchUpdate
     {
-        public static int previousPreset = -1;
+        public static int currentPreset = -1;
         public static void Postfix(GameOptionsMenu __instance)
         {
             // Handle presets
             int newPreset = TheOtherRolesPlugin.presetSelection.GetValue();
-            if (newPreset != previousPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
-                previousPreset = newPreset;
+            if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
+                currentPreset = newPreset;
 
                 foreach (CustomOption option in TheOtherRolesPlugin.options) {
                     int outInt = 0;
