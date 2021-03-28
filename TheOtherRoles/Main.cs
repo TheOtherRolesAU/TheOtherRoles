@@ -32,7 +32,10 @@ namespace TheOtherRoles
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
         public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10"};
         public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
+        public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
+
+        public static CustomStringOption presetSelection = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Preset", false, presets);
         public static CustomStringOption crewmateRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
         public static CustomStringOption impostorRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
 
@@ -131,6 +134,8 @@ namespace TheOtherRoles
 
         public TheOtherRolesPlugin() {
             options = new List<CustomOption>() {
+                presetSelection,
+
                 crewmateRolesCount,
                 impostorRolesCount,
 
