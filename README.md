@@ -41,7 +41,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
+| 2021.3.5s | v1.9 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
