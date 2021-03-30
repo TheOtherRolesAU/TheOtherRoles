@@ -28,84 +28,85 @@ namespace TheOtherRoles
         internal static BepInEx.Logging.ManualLogSource Logger { get { return Instance.Log; } }
 
         // Roles
-        public static int num = 0;
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
         public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10"};
         public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
+        public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
-        public static CustomStringOption crewmateRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
-        public static CustomStringOption impostorRolesCount = CustomOption.AddString(num++.ToString(), "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
 
-        public static CustomStringOption mafiaSpawnRate = CustomOption.AddString(num++.ToString(), cs(Janitor.color) + "Mafia", rates);
-        public static CustomStringOption morphlingSpawnRate = CustomOption.AddString(num++.ToString(), cs(Morphling.color) + "Morphling", rates);
-        public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Camouflager.color) + "Camouflager", rates);
-        public static CustomStringOption vampireSpawnRate = CustomOption.AddString(num++.ToString(), cs(Vampire.color) + "Vampire", rates);
+        public static CustomStringOption presetSelection = CustomOption.AddString("0", "[CCCC00FF]Preset", false, presets);
+        public static CustomStringOption crewmateRolesCount = CustomOption.AddString("1", "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
+        public static CustomStringOption impostorRolesCount = CustomOption.AddString("2", "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
 
-        public static CustomStringOption loversSpawnRate = CustomOption.AddString(num++.ToString(), cs(Lovers.color) + "Lovers", rates);
-        public static CustomStringOption jesterSpawnRate = CustomOption.AddString(num++.ToString(), cs(Jester.color) + "Jester", rates);
-        public static CustomStringOption shifterSpawnRate = CustomOption.AddString(num++.ToString(), cs(Shifter.color) + "Shifter", rates);
+        public static CustomStringOption mafiaSpawnRate = CustomOption.AddString("10", cs(Janitor.color) + "Mafia", rates);
+        public static CustomStringOption morphlingSpawnRate = CustomOption.AddString("20", cs(Morphling.color) + "Morphling", rates);
+        public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString("30", cs(Camouflager.color) + "Camouflager", rates);
+        public static CustomStringOption vampireSpawnRate = CustomOption.AddString("40", cs(Vampire.color) + "Vampire", rates);
 
-        public static CustomStringOption mayorSpawnRate = CustomOption.AddString(num++.ToString(), cs(Mayor.color) + "Mayor", rates);
-        public static CustomStringOption engineerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Engineer.color) + "Engineer", rates);
-        public static CustomStringOption sheriffSpawnRate = CustomOption.AddString(num++.ToString(), cs(Sheriff.color) + "Sheriff", rates);
-        public static CustomStringOption lighterSpawnRate = CustomOption.AddString(num++.ToString(), cs(Lighter.color) + "Lighter", rates);
-        public static CustomStringOption detectiveSpawnRate = CustomOption.AddString(num++.ToString(), cs(Detective.color) + "Detective", rates);
-        public static CustomStringOption timeMasterSpawnRate = CustomOption.AddString(num++.ToString(), cs(TimeMaster.color) + "Time Master", rates);
-        public static CustomStringOption medicSpawnRate = CustomOption.AddString(num++.ToString(), cs(Medic.color) + "Medic", rates);
-        public static CustomStringOption swapperSpawnRate = CustomOption.AddString(num++.ToString(), cs(Swapper.color) + "Swapper", rates);
-        public static CustomStringOption seerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Seer.color) + "Seer", rates);
-        public static CustomStringOption spySpawnRate = CustomOption.AddString(num++.ToString(), cs(Spy.color) + "Spy", rates);
-        public static CustomStringOption childSpawnRate = CustomOption.AddString(num++.ToString(), cs(Child.color) + "Child", rates);
-        // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString(num++.ToString(), cs(BountyHunter.color) + "Bounty Hunter", rates);
-        public static CustomStringOption trackerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Tracker.color) + "Tracker", rates);
-        public static CustomStringOption snitchSpawnRate = CustomOption.AddString(num++.ToString(), cs(Snitch.color) + "Snitch", rates);
-        public static CustomStringOption jackalSpawnRate = CustomOption.AddString(num++.ToString(), cs(Jackal.color) + "Jackal", rates);
+        public static CustomStringOption loversSpawnRate = CustomOption.AddString("50", cs(Lovers.color) + "Lovers", rates);
+        public static CustomStringOption jesterSpawnRate = CustomOption.AddString("60", cs(Jester.color) + "Jester", rates);
+        public static CustomStringOption shifterSpawnRate = CustomOption.AddString("70", cs(Shifter.color) + "Shifter", rates);
+
+        public static CustomStringOption mayorSpawnRate = CustomOption.AddString("80", cs(Mayor.color) + "Mayor", rates);
+        public static CustomStringOption engineerSpawnRate = CustomOption.AddString("90", cs(Engineer.color) + "Engineer", rates);
+        public static CustomStringOption sheriffSpawnRate = CustomOption.AddString("100", cs(Sheriff.color) + "Sheriff", rates);
+        public static CustomStringOption lighterSpawnRate = CustomOption.AddString("110", cs(Lighter.color) + "Lighter", rates);
+        public static CustomStringOption detectiveSpawnRate = CustomOption.AddString("120", cs(Detective.color) + "Detective", rates);
+        public static CustomStringOption timeMasterSpawnRate = CustomOption.AddString("130", cs(TimeMaster.color) + "Time Master", rates);
+        public static CustomStringOption medicSpawnRate = CustomOption.AddString("140", cs(Medic.color) + "Medic", rates);
+        public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color) + "Swapper", rates);
+        public static CustomStringOption seerSpawnRate = CustomOption.AddString("160", cs(Seer.color) + "Seer", rates);
+        public static CustomStringOption spySpawnRate = CustomOption.AddString("170", cs(Spy.color) + "Spy", rates);
+        public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
+        // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString("190", cs(BountyHunter.color) + "Bounty Hunter", rates);
+        public static CustomStringOption trackerSpawnRate = CustomOption.AddString("200", cs(Tracker.color) + "Tracker", rates);
+        public static CustomStringOption snitchSpawnRate = CustomOption.AddString("210", cs(Snitch.color) + "Snitch", rates);
+        public static CustomStringOption jackalSpawnRate = CustomOption.AddString("220", cs(Jackal.color) + "Jackal", rates);
 
         // Role settings
-        public static CustomNumberOption janitorCooldown = CustomOption.AddNumber(num++.ToString(), "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber(num++.ToString(), "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber(num++.ToString(), "Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 1f, 20f, 1f);
-        public static CustomNumberOption vampireCooldown = CustomOption.AddNumber(num++.ToString(), "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle(num++.ToString(), "Vampire Can Kill Near Garlics", true);
+        public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("11", "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber("21", "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption camouflagerCooldown = CustomOption.AddNumber("31", "Camouflager Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber("41", "Vampire Kill Delay", 10f, 1f, 20f, 1f);
+        public static CustomNumberOption vampireCooldown = CustomOption.AddNumber("42", "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle("43", "Vampire Can Kill Near Garlics", true);
 
-        public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber(num++.ToString(), "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
-        public static CustomToggleOption loversBothDie = CustomOption.AddToggle(num++.ToString(), "Both Lovers Die", true);
-        public static CustomNumberOption shifterCooldown = CustomOption.AddNumber(num++.ToString(), "Shifter Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber("51", "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
+        public static CustomToggleOption loversBothDie = CustomOption.AddToggle("52", "Both Lovers Die", true);
+        public static CustomNumberOption shifterCooldown = CustomOption.AddNumber("71", "Shifter Cooldown", 30f, 10f, 60f, 2.5f);
 
-        public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber(num++.ToString(), "Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle(num++.ToString(), "Jester Can Die To Sheriff", false);
-        public static CustomNumberOption lighterVision = CustomOption.AddNumber(num++.ToString(), "Lighter Vision", 2f, 0.25f, 5f, 0.25f);
-        public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle(num++.ToString(), "Anonymous Footprints", false); 
-        public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber(num++.ToString(), "Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);
-        public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber(num++.ToString(), "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
-        public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber(num++.ToString(), "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber(num++.ToString(), "Rewind Time", 3f, 1f, 10f, 1f);
-        public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle(num++.ToString(), "Revive During Rewind", false);
-        public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber(num++.ToString(), "Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
-        public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber(num++.ToString(), "Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
-        public static CustomStringOption medicShowShielded = CustomOption.AddString(num++.ToString(), "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
-        public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle(num++.ToString(), "Shielded Player Sees Murder Attempt", false);
-        public static CustomNumberOption seerCooldown = CustomOption.AddNumber(num++.ToString(), "Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
-        public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber(num++.ToString(), "Seer Chance Of Seeing Right", 100, 0, 100, 5);
-        public static CustomStringOption seerKindOfInfo = CustomOption.AddString(num++.ToString(), "Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
-        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString(num++.ToString(), "Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
-        public static CustomNumberOption spyCooldown = CustomOption.AddNumber(num++.ToString(), "Spy Cooldown", 30f, 10f, 120f, 5f);
-        public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber(num++.ToString(), "Spy Duration", 10f, 2.5f, 60f, 2.5f);
-        public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber(num++.ToString(), "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
-        // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle(num++.ToString(), "Bounty Gets Notified", true); 
-        public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber(num++.ToString(), "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
-        public static CustomNumberOption snitchLeftTasksForImpostors = CustomOption.AddNumber(num++.ToString(), "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f);
-
-        public static CustomNumberOption jackalKillCooldown = CustomOption.AddNumber(num++.ToString(), "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomNumberOption jackalCreateSidekickCooldown = CustomOption.AddNumber(num++.ToString(), "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f);
-        public static CustomToggleOption jackalCanUseVents = CustomOption.AddToggle(num++.ToString(), "Jackal can use vents", true);
-        public static CustomToggleOption jackalCanCreateSidekick = CustomOption.AddToggle(num++.ToString(), "Jackal can create a sidekick", false);
-        public static CustomToggleOption sidekickPromotesToJackal = CustomOption.AddToggle(num++.ToString(), "Sidekick gets promoted to Jackal on Jackal death", false);
-        public static CustomToggleOption sidekickCanKill = CustomOption.AddToggle(num++.ToString(), "Sidekick can kill", false);
-        public static CustomToggleOption sidekickCanUseVents = CustomOption.AddToggle(num++.ToString(), "Sidekick can use vents", true);
-        public static CustomToggleOption jackalPromotedFromSidekickCanCreateSidekick = CustomOption.AddToggle(num++.ToString(), "Jackals promoted from Sidekick can create a Sidekick", true);
-        public static CustomToggleOption jackalCanCreateSidekickFromImpostor = CustomOption.AddToggle(num++.ToString(), "Jackals can make an Impostor to his Sidekick", true);
+        public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber("101", "Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("102", "Sheriff Can Kill The Jester", false);
+        public static CustomNumberOption lighterVision = CustomOption.AddNumber("111", "Lighter Vision", 2f, 0.25f, 5f, 0.25f);
+        public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle("121", "Anonymous Footprints", false); 
+        public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber("122", "Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);
+        public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber("123", "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
+        public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("131", "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("132", "Rewind Time", 3f, 1f, 10f, 1f);
+        public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
+        public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber("141", "Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
+        public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber("142", "Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
+        public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
+        public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
+        public static CustomNumberOption seerCooldown = CustomOption.AddNumber("161", "Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
+        public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber("162", "Seer Chance Of Seeing Right", 100, 0, 100, 5);
+        public static CustomStringOption seerKindOfInfo = CustomOption.AddString("163", "Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
+        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("164", "Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
+        public static CustomNumberOption spyCooldown = CustomOption.AddNumber("171", "Spy Cooldown", 30f, 10f, 120f, 5f);
+        public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber("172", "Spy Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
+        // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle("191", "Bounty Gets Notified", true); 
+        public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber("201", "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
+        public static CustomNumberOption snitchLeftTasksForImpostors = CustomOption.AddNumber("211", "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f);
+        public static CustomNumberOption jackalKillCooldown = CustomOption.AddNumber("221", "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomNumberOption jackalCreateSidekickCooldown = CustomOption.AddNumber("222", "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f);
+        public static CustomToggleOption jackalCanUseVents = CustomOption.AddToggle("223", "Jackal can use vents", true);
+        public static CustomToggleOption jackalCanCreateSidekick = CustomOption.AddToggle("224", "Jackal can create a sidekick", false);
+        public static CustomToggleOption sidekickPromotesToJackal = CustomOption.AddToggle("225", "Sidekick gets promoted to Jackal on Jackal death", false);
+        public static CustomToggleOption sidekickCanKill = CustomOption.AddToggle("226", "Sidekick can kill", false);
+        public static CustomToggleOption sidekickCanUseVents = CustomOption.AddToggle("227", "Sidekick can use vents", true);
+        public static CustomToggleOption jackalPromotedFromSidekickCanCreateSidekick = CustomOption.AddToggle("228", "Jackals promoted from Sidekick can create a Sidekick", true);
+        public static CustomToggleOption jackalCanCreateSidekickFromImpostor = CustomOption.AddToggle("229", "Jackals can make an Impostor to his Sidekick", true);
 
 
         public static List<CustomOption> options = new List<CustomOption>();
@@ -131,6 +132,8 @@ namespace TheOtherRoles
 
         public TheOtherRolesPlugin() {
             options = new List<CustomOption>() {
+                presetSelection,
+
                 crewmateRolesCount,
                 impostorRolesCount,
 
