@@ -22,17 +22,6 @@ namespace TheOtherRoles {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     localPlayerPositions.RemoveAt(0);
                     if (localPlayerPositions.Count > 0) localPlayerPositions.RemoveAt(0); // Skip every second position to rewinde in half the time
-                
-                    // Try reviving LOCAL player 
-                    if (TimeMaster.reviveDuringRewind && PlayerControl.LocalPlayer.Data.IsDead) {
-                        DeadPlayer deadPlayer = deadPlayers.Where(x => x.player == PlayerControl.LocalPlayer).FirstOrDefault();
-                        if (deadPlayer != null && next.Item2 < deadPlayer.timeOfDeath) {
-                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, Hazel.SendOption.Reliable, -1);
-                            write.Write(PlayerControl.LocalPlayer.PlayerId);
-                            AmongUsClient.Instance.FinishRpcImmediately(write);
-                            RPCProcedure.timeMasterRevive(PlayerControl.LocalPlayer.PlayerId);
-                        }
-                    }
                 } else {
                     TimeMaster.isRewinding = false;
                     PlayerControl.LocalPlayer.moveable = true;

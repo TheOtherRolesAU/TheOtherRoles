@@ -59,7 +59,6 @@ namespace TheOtherRoles
         ShieldedMurderAttempt,
         TimeMasterShield,
         TimeMasterRewindTime,
-        TimeMasterRevive,
         ShifterShift,
         SwapperSwap,
         SeerReveal,
@@ -310,17 +309,6 @@ namespace TheOtherRoles
                     new Color(c.r, c.g, c.b, 0.75f)
                 ));
             }
-        }
-
-        public static void timeMasterRevive(byte playerId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == playerId) {
-                    player.Revive();
-                    var body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == playerId);
-                    DeadPlayer deadPlayerEntry = deadPlayers.Where(x => x.player.PlayerId == playerId).FirstOrDefault();
-                    if (body != null) UnityEngine.Object.Destroy(body.gameObject);
-                    if (deadPlayerEntry != null) deadPlayers.Remove(deadPlayerEntry);
-                }
         }
 
         public static void shifterShift(byte targetId) {
@@ -644,9 +632,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
                     RPCProcedure.shieldedMurderAttempt();
-                    break;
-                case (byte)CustomRPC.TimeMasterRevive:
-                    RPCProcedure.timeMasterRevive(HFPCBBHJIPJ.ReadByte());
                     break;
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(HFPCBBHJIPJ.ReadByte());

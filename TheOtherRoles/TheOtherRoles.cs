@@ -201,7 +201,6 @@ namespace TheOtherRoles
             timeMaster = null;
             isRewinding = false;
             shieldActive = false;
-            reviveDuringRewind = TheOtherRolesPlugin.timeMasterReviveDuringRewind.GetValue();
             rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
             cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();
         }
