@@ -473,7 +473,7 @@ namespace TheOtherRoles
         public static void vampireTryKill() {
             if (Vampire.vampire == null || Vampire.bitten == null) return;
 
-            if (!Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, false)) {
+            if (!Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;

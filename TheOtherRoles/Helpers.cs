@@ -110,10 +110,10 @@ namespace TheOtherRoles {
         }
 
 
-        public static bool handleMurderAttempt(PlayerControl target, bool notifyOthers = true) {
+        public static bool handleMurderAttempt(PlayerControl target, bool localCall = false) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
-                if (notifyOthers) {
+                if (!localCall) { // Everyone calls the handleMurderAttempt locally, so don't notify others
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 }
@@ -123,6 +123,17 @@ namespace TheOtherRoles {
             }
             // Block impostor not fully grown child kill
             else if (Child.child != null && target == Child.child && !Child.isGrownUp()) {
+                return false;
+            }
+            // Block Time Master with time shield kill
+            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
+                if (!localCall) { 
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.timeMasterRewindTime();
+                } else {
+                    // Everyone calls the handleMurderAttempt locally as a meeting starts, the TimeMaster stays alive but the time won't be rewinded
+                }
                 return false;
             }
             return true;
