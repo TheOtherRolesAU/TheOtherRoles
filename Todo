@@ -19,6 +19,7 @@ Roles in development:
         - Should the Jackal be able to target players in vents
         - Lover Sidekick being promoted removes the Lover ImportantTaskText and highlights the name in the Lover color (maybe change how Lovers are being displayed)
         - SidekickPromotes RPC call is called by every player
+        - Jackal/Vent/Impostor vent highlighting
 
 High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
