@@ -58,7 +58,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Changes in 1.9**
-- Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).^
+- New button art, created by Bavari
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.

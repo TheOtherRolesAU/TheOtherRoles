@@ -45,35 +45,36 @@ namespace TheOtherRoles
         // Main Controls
 
         ResetVaribles = 50,
-        ForceEnd = 51,
-        SetRole = 52,
+        ForceEnd,
+        SetRole,
 
         // Role functionality
 
         JesterBountyHunterWin = 80,
-        EngineerFixLights = 81,
-        EngineerUsedRepair = 82,
-        JanitorClean = 83,
-        SheriffKill = 84,
-        TimeMasterRewindTime = 85,
-        MedicSetShielded = 86,
-        ShieldedMurderAttempt = 87,
-        TimeMasterRevive = 88,
-        ShifterShift = 89,
-        SwapperSwap = 90,
-        SeerReveal = 91,
-        MorphlingMorph = 92,
-        CamouflagerCamouflage = 93,
-        TrackerUsedTracker = 94,
-        LoverSuicide = 95,
-        SetBountyHunterTarget = 96,
-        VampireBiteNotification = 97,
-        VampireTryKill = 98,
-        PlaceGarlic = 99,
-        JackalKill = 100,
-        SidekickKill = 101,
-        JackalCreatesSidekick = 102,
-        SidekickPromotes = 103
+        EngineerFixLights,
+        EngineerUsedRepair,
+        JanitorClean,
+        SheriffKill,
+        MedicSetShielded,
+        ShieldedMurderAttempt,
+        TimeMasterShield,
+        TimeMasterRewindTime,
+        TimeMasterRevive,
+        ShifterShift,
+        SwapperSwap,
+        SeerReveal,
+        MorphlingMorph,
+        CamouflagerCamouflage,
+        TrackerUsedTracker,
+        LoverSuicide,
+        SetBountyHunterTarget,
+        VampireBiteNotification,
+        VampireTryKill,
+        PlaceGarlic,
+        JackalKill,
+        SidekickKill,
+        JackalCreatesSidekick,
+        SidekickPromotes
     }
 
     public static class RPCProcedure {
@@ -285,6 +286,10 @@ namespace TheOtherRoles
             PlayerControl.LocalPlayer.moveable = false;
             HudManager.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             HudManager.Instance.FullScreen.enabled = true;
+        }
+
+        public static void timeMasterShield() {
+            Reactor.Coroutines.Start(TimeMaster.shieldForShieldDuration());
         }
 
         public static void medicSetShielded(byte shieldedId) {
@@ -630,6 +635,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
+                    break;
+                case (byte)CustomRPC.TimeMasterShield:
+                    RPCProcedure.timeMasterShield();
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
                     RPCProcedure.medicSetShielded(HFPCBBHJIPJ.ReadByte());

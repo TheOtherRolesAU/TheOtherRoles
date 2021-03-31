@@ -178,8 +178,10 @@ namespace TheOtherRoles
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
+        public static float shieldDuration = 3f; // Constant
         public static float cooldown = float.MaxValue;
 
+        public static bool shieldActive = false;
         public static bool isRewinding = false;
 
         private static Sprite buttonSprite;
@@ -189,9 +191,16 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static IEnumerator shieldForShieldDuration() {
+            shieldActive = true;
+            yield return new WaitForSeconds(shieldDuration);
+            shieldActive = false;
+        }
+
         public static void clearAndReload() {
             timeMaster = null;
             isRewinding = false;
+            shieldActive = false;
             reviveDuringRewind = TheOtherRolesPlugin.timeMasterReviveDuringRewind.GetValue();
             rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
             cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();

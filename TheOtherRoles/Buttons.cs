@@ -18,7 +18,7 @@ namespace TheOtherRoles
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
-        private static CustomButton timeMasterRewindTimeButton;
+        private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton seerRevealButton;
@@ -36,7 +36,7 @@ namespace TheOtherRoles
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
-            timeMasterRewindTimeButton.MaxTimer = TimeMaster.cooldown;
+            timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = Shifter.cooldown;
             seerRevealButton.MaxTimer = Seer.cooldown;
@@ -51,7 +51,8 @@ namespace TheOtherRoles
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
 
             spyButton.EffectDuration = Spy.duration;
-            vampireKillButton.EffectDuration= Vampire.delay;
+            vampireKillButton.EffectDuration = Vampire.delay;
+            timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
         }
 
         public static void Postfix(HudManager __instance)
@@ -169,19 +170,21 @@ namespace TheOtherRoles
             );
 
             // Time Master Rewind Time
-            timeMasterRewindTimeButton = new CustomButton(
+            timeMasterShieldButton = new CustomButton(
                 () => {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterShield, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterRewindTime();
-                    timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;
+                    RPCProcedure.timeMasterShield();
                 },
                 () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
-                () => { timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;},
+                () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;},
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance, 
+                true,
+                TimeMaster.shieldDuration,
+                () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
             );
 
             // Medic Shield
