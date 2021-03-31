@@ -159,6 +159,8 @@ namespace TheOtherRoles
             public static float footprintIntervall = 1f;
             public static float footprintDuration = 1f;
             public static bool anonymousFootprints = false;
+            public static float reportNameDuration = 0f;
+            public static float reportColorDuration = 20f;
 
             public static float timer = 1f;
 
@@ -167,6 +169,8 @@ namespace TheOtherRoles
                 anonymousFootprints = TheOtherRolesPlugin.detectiveAnonymousFootprints.GetValue();
                 footprintIntervall = TheOtherRolesPlugin.detectiveFootprintIntervall.GetValue();
                 footprintDuration = TheOtherRolesPlugin.detectiveFootprintDuration.GetValue();
+                reportNameDuration = TheOtherRolesPlugin.detectiveReportNameDuration.GetValue();
+                reportColorDuration = TheOtherRolesPlugin.detectiveReportColorDuration.GetValue();
                 timer = footprintIntervall;
             }
         }
@@ -204,8 +208,6 @@ namespace TheOtherRoles
         public static Color color = new Color(0f / 255f, 80f / 255f, 105f / 255f, 1);
         public static bool usedShield;
 
-        public static float reportNameDuration = 10f;
-        public static float reportColorDuration = 20f;
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
 
@@ -226,8 +228,6 @@ namespace TheOtherRoles
             currentTarget = null;
             usedShield = false;
             shieldedColor = new Color(0f / 255f, 221f / 255f, 255f / 255f, 1);
-            reportNameDuration = TheOtherRolesPlugin.medicReportNameDuration.GetValue();
-            reportColorDuration = TheOtherRolesPlugin.medicReportColorDuration.GetValue();
             showShielded = TheOtherRolesPlugin.medicShowShielded.GetValue();
             showAttemptToShielded = TheOtherRolesPlugin.medicShowAttemptToShielded.GetValue();
         }

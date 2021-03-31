@@ -81,11 +81,11 @@ namespace TheOtherRoles
         public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle("121", "Anonymous Footprints", false); 
         public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber("122", "Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);
         public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber("123", "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
+        public static CustomNumberOption detectiveReportNameDuration = CustomOption.AddNumber("124", "Time Where Detective Reports Will Have Name", 0, 0, 60, 2.5f);
+        public static CustomNumberOption detectiveReportColorDuration = CustomOption.AddNumber("125", "Time Where Detective Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("131", "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("132", "Rewind Time", 3f, 1f, 10f, 1f);
         public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
-        public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber("141", "Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
-        public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber("142", "Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
         public static CustomNumberOption seerCooldown = CustomOption.AddNumber("161", "Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
@@ -179,11 +179,11 @@ namespace TheOtherRoles
                 detectiveAnonymousFootprints,
                 detectiveFootprintIntervall,
                 detectiveFootprintDuration,
+                detectiveReportNameDuration,
+                detectiveReportColorDuration,
                 timeMasterCooldown,
                 timeMasterRewindTime,
                 timeMasterReviveDuringRewind,
-                medicReportNameDuration,
-                medicReportColorDuration,
                 medicShowShielded,
                 medicShowAttemptToShielded,
                 seerCooldown,

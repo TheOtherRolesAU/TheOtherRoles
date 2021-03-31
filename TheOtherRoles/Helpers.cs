@@ -164,5 +164,10 @@ namespace TheOtherRoles {
             target.localPosition = temp;
             yield break;
         }
+
+        public static bool isLighterColor(byte colorId) {
+            List<byte> lighterColors = new List<byte>(){ 3, 4, 5, 7, 10, 11};
+            return lighterColors.Contains(colorId);
+        }
     }
 }

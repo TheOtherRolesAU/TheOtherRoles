@@ -269,8 +269,10 @@ namespace TheOtherRoles {
     {
         static void Postfix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK)
         {
-            // Medic report
-            if (Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId)
+            // Medic or Detective report
+            bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
+            bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
+            if (isMedicReport || isDetectiveReport)
             {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == PAIBDFDMIGK?.PlayerId)?.FirstOrDefault();
 
@@ -278,27 +280,17 @@ namespace TheOtherRoles {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
                     string msg = "";
 
-                    if (timeSinceDeath < Medic.reportNameDuration * 1000) {
-                        msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}! (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
-                    } else if (timeSinceDeath < Medic.reportColorDuration * 1000) {
-                        var colors = new Dictionary<byte, string>() {
-                            {0, "darker"},
-                            {1, "darker"},
-                            {2, "darker"},
-                            {3, "lighter"},
-                            {4, "lighter"},
-                            {5, "lighter"},
-                            {6, "darker"},
-                            {7, "lighter"},
-                            {8, "darker"},
-                            {9, "darker"},
-                            {10, "lighter"},
-                            {11, "lighter"},
-                        };
-                        var typeOfColor = colors[deadPlayer.killerIfExisting.Data.ColorId] ?? "unknown";
-                        msg =  $"Body Report: The killer appears to be a {typeOfColor} color. (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
-                    } else {
-                        msg = $"Body Report: The corpse is too old to gain information from. (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
+                    if (isMedicReport) {
+                        msg = $"Body Report: Killed {Math.Round(timeSinceDeath / 1000)}s ago!";
+                    } else if (isDetectiveReport) {
+                        if (timeSinceDeath < Detective.reportNameDuration * 1000) {
+                            msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
+                        } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.ColorId) ? "darker" : "lighter";
+                            msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
+                        } else {
+                            msg = $"Body Report: The corpse is too old to gain information from!";
+                        }
                     }
 
                     if (!string.IsNullOrWhiteSpace(msg))
