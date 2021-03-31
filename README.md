@@ -58,7 +58,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
-- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role. 
+- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role.
 
 **Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
@@ -81,7 +81,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 \
 **Changes in v1.6:**
 - This update is a small hotfix, fixing the bug where some people were unable to join lobbies.
-- The child can't be voted out anymore before it turns 18, hence games can't end anymore because the child died. 
+- The child can't be voted out anymore before it turns 18, hence games can't end anymore because the child died.
 - Footprints are no longer visible to the Detective, if players are inside vents.
 
 \
@@ -288,7 +288,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 ## Seer
 ### **Team: Crewmates**
 The Seer has the ability to find out about people's intentions. The information is only visible to them.\
-Depending on the selected option they either directly see the role of the player (appended to their name) or if the player is 
+Depending on the selected option they either directly see the role of the player (appended to their name) or if the player is
 a good (name text changes to yellow) or a bad (name text changes to a darker color) player.\
 Depending on the selected option the player will get a blue flash on their screen if they are being revealed by the Seer.
 The Seer can make mistakes (how many depends on the selected option). If a mistake happens, the information of another player (not the target, not the Seer) gets revealed.
@@ -494,7 +494,7 @@ The arrow updates it's position every few seconds (configurable).
 
 ## Snitch
 ### **Team: Crewmates**
-When the Snitch finshes all the tasks, arrows will appear (only visible to the Snitch) that point to the impostors.
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the impostors.
 When the Snitch has one task left (configurable) the Snitch will be revealed to the impostors, also with an arrow.
 
 ### Game Options
