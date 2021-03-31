@@ -60,6 +60,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Changes in 1.9**
 - Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).^
 - New button art, created by Bavari
+- Time Master rework: Check [Time Master](#time-master) for more information
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -175,7 +176,7 @@ The Godfather works like a normal Impostor.\
 The Mafioso is an impostor who cannot kill nor sabotage until the Godfather is dead.\
 The Janitor is an impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
 \
-**NOTE**
+**NOTE:**
 - There have to be 3 impostors activated for the mafia to spawn.
 
 ### Game Options
@@ -189,7 +190,7 @@ The Janitor is an impostor who cannot kill nor sabotage, but they can hide dead 
 ### **Team: Impostors**
 The Morphling is an impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
 \
-**NOTE**
+**NOTE:**
 - They shrink to the size of the child when they copies its look.
 - The color of the footprints does **not** change.
 - The Seer still sees the Morphlings role if they revealed it.
@@ -208,7 +209,7 @@ The Camouflager is an impostor which can additionally activate a camouflage mode
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
 are hidden and all players have the same color.
 \
-**NOTE**
+**NOTE:**
 - The Child and Morphling when copying the child remain small.
 - The color of the footprints does **not** change.
 - The Seer still sees all the roles they revealed.
@@ -226,7 +227,7 @@ The Vampire is an impostor, that can bite other player. Bitten players die after
 If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
 If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.
 \
-**NOTE**
+**NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
 
@@ -250,7 +251,7 @@ The Lovers win if they are both alive among the last 3 players, however they can
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
 If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).
 \
-**NOTE**
+**NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
 - The Lovers can change if the Shifter exchanges role with one of the Lovers
 
@@ -268,7 +269,7 @@ If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win"
 The Sheriff has the ability to kill impostors.
 If they try to kill a crewmate, they die instead.
 
-**NOTE**
+**NOTE:**
 - For now the Shifter won't die to the Sheriff (an option will be added in the next version).
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
 
@@ -299,7 +300,7 @@ Depending on the selected option the player will get a blue flash on their scree
 The Seer can make mistakes (how many depends on the selected option). If a mistake happens, the information of another player (not the target, not the Seer) gets revealed.
 
 \
-**NOTE**
+**NOTE:**
 - **Good players:** Crewmates with all their special roles
 - **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover), the neutral roles (Jester, Shifter) and the team Jackal.
 - **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
@@ -325,7 +326,7 @@ around all vents on the map (in order to warn them).
 Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
 you can double click on the tasks instead.
 \
-**NOTE**
+**NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
 
 ### Game Options
@@ -338,7 +339,7 @@ you can double click on the tasks instead.
 ### **Team: Crewmates**
 The Detective can see footprints that other players leave behind.
 \
-**NOTE**
+**NOTE:**
 - Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the
 Detective still sees the right (original) colors.
 - The detective does not see footprints of players that sit in vents
@@ -371,7 +372,7 @@ The Child's character is smaller and hence visible to everyone in the game.\
 The child works with the crewmates and aims to play out the strength of its "invincibility" in the early game.\
 If the child is voted out before it turns 18, everyone in the lobby loses.
 \
-**NOTE**
+**NOTE:**
 - Impostors can't kill the child (the button does not work) until it turns 18
 - The Sheriff always suicides if he tries to kill the child
 
@@ -391,7 +392,7 @@ If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded crewmate and won't perform a kill if they try to kill a shielded impostor.\
 The Medic's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
-**NOTE**
+**NOTE:**
 - **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
 - **Darker Colors:** Red, blue, green, grey, purple, brown
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
@@ -458,9 +459,18 @@ can only use them, if the player they exchanged roles with have not used them be
 
 ## Time Master
 ### **Team: Crewmates**
-The Time Master can rewind the time. The Time Master won't be affected by the rewind.\
-If set in the options, players will be revived during the time rewind.\
-Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+The Time Master has a time shield which he can activate. The time shield remains active for 3 seconds.\
+If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
+time will rewind for a set amount of time.\
+The kill cooldown of the killer won't be reset, so the Time Master
+has to make sure that the game won't result in the same situation.\
+The Time Master won't be affected by the rewind.\
+\
+**NOTE:**
+- Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+- A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
+- If the Time Master was bitten and has his shield active before when a meeting is called, he survives but the time won't be rewinded.
+- If the Time Master has a Medic shield, he won't rewind.
 
 ### Game Options
 | Name | Description |
@@ -468,7 +478,6 @@ Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
 | Time Master Spawn Chance | - |
 | Time Master Cooldown | - |
 | Rewind Duration | How much time to rewind |
-| Revive During Rewind | Whether to revive dead players when rewinding |
 -----------------------
 
 ## Swapper
