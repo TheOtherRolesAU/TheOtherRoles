@@ -555,9 +555,11 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-            RPCProcedure.vampireTryKill();
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                RPCProcedure.vampireTryKill(false);
+            }
         }
 
         public static void clearAndReload() {

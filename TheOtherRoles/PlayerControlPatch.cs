@@ -232,7 +232,7 @@ namespace TheOtherRoles {
         public static void Prefix(PlayerControl __instance) {
             // Perform vampire bite kill before the meeting starts for HOST
             if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
-                RPCProcedure.vampireTryKill();
+                RPCProcedure.vampireTryKill(true);
         }
     }
 
@@ -241,7 +241,7 @@ namespace TheOtherRoles {
         public static void Prefix(PlayerControl __instance) {
             // Perform vampire bite kill before the meeting starts for CLIENTS
             if (AmongUsClient.Instance.AmClient)
-            RPCProcedure.vampireTryKill();
+            RPCProcedure.vampireTryKill(true);
         }
     }
 

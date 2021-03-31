@@ -178,13 +178,17 @@ namespace TheOtherRoles
                 },
                 () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
-                () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;},
+                () => {
+                    timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
+                    timeMasterShieldButton.isEffectActive = false;
+                    timeMasterShieldButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance, 
                 true,
                 TimeMaster.shieldDuration,
-                () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
+                () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer; }
             );
 
             // Medic Shield

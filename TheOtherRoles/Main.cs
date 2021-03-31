@@ -83,7 +83,6 @@ namespace TheOtherRoles
         public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber("123", "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
         public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("131", "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("132", "Rewind Time", 3f, 1f, 10f, 1f);
-        public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
         public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber("141", "Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
         public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber("142", "Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
@@ -181,7 +180,6 @@ namespace TheOtherRoles
                 detectiveFootprintDuration,
                 timeMasterCooldown,
                 timeMasterRewindTime,
-                timeMasterReviveDuringRewind,
                 medicReportNameDuration,
                 medicReportColorDuration,
                 medicShowShielded,
