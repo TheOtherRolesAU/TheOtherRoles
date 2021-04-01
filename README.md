@@ -61,6 +61,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
 - Medic: The Medic report changed, it only shows the time since death (see Detective)
 - Detective: The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
+- Seer: As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -193,7 +194,6 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 **NOTE**
 - They shrink to the size of the child when they copies its look.
 - The color of the footprints does **not** change.
-- The Seer still sees the Morphlings role if they revealed it.
 - The other impostor still sees that they are an impostor (the name remains red).
 
 ### Game Options
@@ -212,7 +212,6 @@ are hidden and all players have the same color.
 **NOTE**
 - The Child and Morphling when copying the child remain small.
 - The color of the footprints does **not** change.
-- The Seer still sees all the roles they revealed.
 
 ### Game Options
 | Name | Description |
@@ -293,29 +292,12 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 
 ## Seer
 ### **Team: Crewmates**
-The Seer has the ability to find out about people's intentions. The information is only visible to them.\
-Depending on the selected option they either directly see the role of the player (appended to their name) or if the player is 
-a good (name text changes to yellow) or a bad (name text changes to a darker color) player.\
-Depending on the selected option the player will get a blue flash on their screen if they are being revealed by the Seer.
-The Seer can make mistakes (how many depends on the selected option). If a mistake happens, the information of another player (not the target, not the Seer) gets revealed.
-
-\
-**NOTE**
-- **Good players:** Crewmates with all their special roles
-- **Bad players:** Impostors with all their special roles (Mafia, Morphling, Camouflager, ImpLover), the neutral roles (Jester, Shifter) and the team Jackal.
-- **Cooldown:** The cooldown of the Seer wil **not** be reset after a meeting (in order to balance the option to reveal roles)
-- If the role of a revealed player changes during the game (because of e.g. the Shifter), the information of the Seers also adapts.
-- When the Camouflager camouflages all players or the Morphling copies the appearance of another player, the Seer still sees the information they gained earlier (i.e. they still see that the player is the Morphling even if their appearance is different).
-- If the Shifter exchanges the role with the Seer, the information gained by the Seer will be transfered to the new Seer (i.e. the new Seer sees what the old one revealed and the old one "loses" the information they gained).
+The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ### Game Options
-| Name | Description | Options |
-|----------|:-------------:|:-------------:|
-| Seer Spawn Chance | - | -
-| Seer Cooldown | Cooldown for his special ability. This cooldown will **not** be reset after a meeting | -
-| Seer Chance Of Seeing Right | Sets the chance of how likely the Seer makes a mistake | -
-| Info That Seer Reveals | Description above | "Role", "Good/Bad"
-| Players That See When They Are Being Revealed | Selects the group of players that get notified when they are being revealed | "Everyone", "The Good", "The Bad", "Nobody"
+| Name | Description |
+|----------|:-------------:|
+| Seer Spawn Chance | - 
 -----------------------
 
 ## Engineer
