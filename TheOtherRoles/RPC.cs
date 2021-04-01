@@ -3,6 +3,7 @@ using Hazel;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
+using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace TheOtherRoles
         Seer,
         Morphling,
         Camouflager,
-        Spy,
+        Hacker,
         Child,
         BountyHunter,
         Tracker,
@@ -61,7 +62,6 @@ namespace TheOtherRoles
         TimeMasterRewindTime,
         ShifterShift,
         SwapperSwap,
-        SeerReveal,
         MorphlingMorph,
         CamouflagerCamouflage,
         TrackerUsedTracker,
@@ -72,7 +72,7 @@ namespace TheOtherRoles
         PlaceGarlic,
         JackalKill,
         SidekickKill,
-        JackalCreatesSidekick,
+        JackalCreatesSidekick ,
         SidekickPromotes
     }
 
@@ -82,6 +82,7 @@ namespace TheOtherRoles
 
         public static void resetVariables() {
             Garlic.clearGarlics();
+            clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
@@ -157,8 +158,8 @@ namespace TheOtherRoles
                     case RoleId.Camouflager:
                         Camouflager.camouflager = player;
                         break;
-                    case RoleId.Spy:
-                        Spy.spy = player;
+                    case RoleId.Hacker:
+                        Hacker.hacker = player;
                         break;
                     case RoleId.Child:
                         Child.child = player;
@@ -312,21 +313,19 @@ namespace TheOtherRoles
         }
 
         public static void shifterShift(byte targetId) {
+            Shifter.futureShift = null;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId == targetId && Shifter.shifter != null)
                 {
-                    // Suicide when impostor or impostor variants
+                    // Suicide (exile) when impostor or impostor variants
                     if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
-                        Shifter.shifter.MurderPlayer(Shifter.shifter);
+                        Shifter.shifter.Exiled();
+                        Shifter.shifter = null;
                         return;
                     }
 
                     PlayerControl oldShifter = Shifter.shifter;
-                    // Switch tasks
-                    var shifterSabotageTasks = oldShifter.myTasks;
-                    oldShifter.myTasks = player.myTasks;
-                    player.myTasks = shifterSabotageTasks;
 
                     // Switch shield
                     if (Medic.shielded != null && Medic.shielded == player) {
@@ -362,8 +361,8 @@ namespace TheOtherRoles
                         Lovers.lover2 = oldShifter;
                     } else if (Seer.seer != null && Seer.seer == player) {
                         Seer.seer = oldShifter;
-                    } else if (Spy.spy != null && Spy.spy == player) {
-                        Spy.spy = oldShifter;
+                    } else if (Hacker.hacker != null && Hacker.hacker == player) {
+                        Hacker.hacker = oldShifter;
                     } else if (Child.child != null && Child.child == player) {
                         Child.child = oldShifter;
                     } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
@@ -375,7 +374,10 @@ namespace TheOtherRoles
                     }else { // Crewmate
                     }
                     
-                    Shifter.shifter = player;
+                    Shifter.shifter = null;
+                    // Update role descriptions tasks
+                    Helpers.refreshRoleDescription(oldShifter);
+                    Helpers.refreshRoleDescription(player);
 
                     // Set cooldowns to max for both players
                     if (PlayerControl.LocalPlayer == Shifter.shifter || PlayerControl.LocalPlayer == oldShifter)
@@ -388,36 +390,6 @@ namespace TheOtherRoles
             if (MeetingHud.Instance) {
                 Swapper.playerId1 = playerId1;
                 Swapper.playerId2 = playerId2;
-            }
-        }
-
-        public static void seerReveal(byte targetId, byte targetOrMistakeId) {
-            if (Seer.seer == null) return;
-            
-            PlayerControl target = Helpers.playerById(targetId);
-            PlayerControl targetOrMistake = Helpers.playerById(targetOrMistakeId);
-
-            if (target != null && targetOrMistake != null && !Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == targetId)) {
-                Seer.revealedPlayers.Add(target, targetOrMistake);
-
-                if (PlayerControl.LocalPlayer == target && HudManager.Instance?.FullScreen != null) {
-                    RoleInfo si = RoleInfo.getRoleInfoForPlayer(target); // Use RoleInfo of target here, because we need the isGood of the targets role
-                    bool showNotification = false;
-                    if (Seer.playersWithNotification == 0 ) showNotification = true;
-                    else if (Seer.playersWithNotification == 1 && si.isGood) showNotification = true;
-                    else if (Seer.playersWithNotification == 2 && !si.isGood) showNotification = true;
-                    else if (Seer.playersWithNotification == 3) showNotification = false;
-
-                    if (showNotification) {
-                        HudManager.Instance.FullScreen.enabled = true;
-                        Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
-                            HudManager.Instance.FullScreen,
-                            0.5f,
-                            new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
-                            new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
-                        ));
-                    }
-                }
             }
         }
 
@@ -527,7 +499,7 @@ namespace TheOtherRoles
                     if(player == Medic.medic) Medic.clearAndReload();
                     if(player == Shifter.shifter) Shifter.clearAndReload();
                     if(player == Seer.seer) Seer.clearAndReload();
-                    if(player == Spy.spy) Spy.clearAndReload();
+                    if(player == Hacker.hacker) Hacker.clearAndReload();
                     if(player == Child.child) Child.clearAndReload();
                     if(player == Tracker.tracker) Tracker.clearAndReload();
                     if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
@@ -641,11 +613,6 @@ namespace TheOtherRoles
                     byte playerId1 = HFPCBBHJIPJ.ReadByte();
                     byte playerId2 = HFPCBBHJIPJ.ReadByte();
                     RPCProcedure.swapperSwap(playerId1, playerId2);
-                    break;
-                case (byte)CustomRPC.SeerReveal:
-                    byte targetId = HFPCBBHJIPJ.ReadByte();
-                    byte targetOrMistakeId = HFPCBBHJIPJ.ReadByte();
-                    RPCProcedure.seerReveal(targetId, targetOrMistakeId);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
                     RPCProcedure.morphlingMorph(HFPCBBHJIPJ.ReadByte());

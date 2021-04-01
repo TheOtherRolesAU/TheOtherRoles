@@ -39,7 +39,7 @@ namespace TheOtherRoles
             Seer.clearAndReload();
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
-            Spy.clearAndReload();
+            Hacker.clearAndReload();
             Child.clearAndReload();
             BountyHunter.clearAndReload();
             Tracker.clearAndReload();
@@ -144,11 +144,28 @@ namespace TheOtherRoles
             public static PlayerControl lighter;
             public static Color color = new Color(250f / 255f, 204f / 255f, 37f / 255f, 1);
             
-            public static float lighterVision = 2f;
+            public static float lighterModeLightsOnVision = 2f;
+            public static float lighterModeLightsOffVision = 0.75f;
+
+            public static float cooldown = float.MaxValue;
+            public static float duration = 5f;
+
+            public static float lighterTimer = 0f;
+
+            private static Sprite buttonSprite;
+            public static Sprite getButtonSprite() {
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LighterButton.png", 115f);
+                return buttonSprite;
+            }
 
             public static void clearAndReload() {
                 lighter = null;
-                lighterVision = TheOtherRolesPlugin.lighterVision.GetValue();
+                lighterTimer = 0f;
+                cooldown = TheOtherRolesPlugin.lighterCooldown.GetValue();
+                duration = TheOtherRolesPlugin.lighterDuration.GetValue();
+                lighterModeLightsOnVision = TheOtherRolesPlugin.lighterModeLightsOnVision.GetValue();
+                lighterModeLightsOffVision = TheOtherRolesPlugin.lighterModeLightsOffVision.GetValue();
             }
         }
 
@@ -159,6 +176,8 @@ namespace TheOtherRoles
             public static float footprintIntervall = 1f;
             public static float footprintDuration = 1f;
             public static bool anonymousFootprints = false;
+            public static float reportNameDuration = 0f;
+            public static float reportColorDuration = 20f;
 
             public static float timer = 1f;
 
@@ -167,6 +186,8 @@ namespace TheOtherRoles
                 anonymousFootprints = TheOtherRolesPlugin.detectiveAnonymousFootprints.GetValue();
                 footprintIntervall = TheOtherRolesPlugin.detectiveFootprintIntervall.GetValue();
                 footprintDuration = TheOtherRolesPlugin.detectiveFootprintDuration.GetValue();
+                reportNameDuration = TheOtherRolesPlugin.detectiveReportNameDuration.GetValue();
+                reportColorDuration = TheOtherRolesPlugin.detectiveReportColorDuration.GetValue();
                 timer = footprintIntervall;
             }
         }
@@ -187,7 +208,7 @@ namespace TheOtherRoles
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.RewindButton.png", 115f);
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TimeShieldButton.png", 115f);
             return buttonSprite;
         }
 
@@ -212,8 +233,6 @@ namespace TheOtherRoles
         public static Color color = new Color(0f / 255f, 80f / 255f, 105f / 255f, 1);
         public static bool usedShield;
 
-        public static float reportNameDuration = 10f;
-        public static float reportColorDuration = 20f;
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
 
@@ -234,8 +253,6 @@ namespace TheOtherRoles
             currentTarget = null;
             usedShield = false;
             shieldedColor = new Color(0f / 255f, 221f / 255f, 255f / 255f, 1);
-            reportNameDuration = TheOtherRolesPlugin.medicReportNameDuration.GetValue();
-            reportColorDuration = TheOtherRolesPlugin.medicReportColorDuration.GetValue();
             showShielded = TheOtherRolesPlugin.medicShowShielded.GetValue();
             showAttemptToShielded = TheOtherRolesPlugin.medicShowAttemptToShielded.GetValue();
         }
@@ -244,9 +261,8 @@ namespace TheOtherRoles
     public static class Shifter {
         public static PlayerControl shifter;
         public static Color color = new Color(90f / 255f, 90f / 255f, 90f / 255f, 1);
-    
-        public static float cooldown = float.MaxValue;
 
+        public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
 
         private static Sprite buttonSprite;
@@ -259,7 +275,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             shifter = null;
             currentTarget = null;
-            cooldown = TheOtherRolesPlugin.shifterCooldown.GetValue();
+            futureShift = null;
         }
     }
 
@@ -312,29 +328,23 @@ namespace TheOtherRoles
     public static class Seer {
         public static PlayerControl seer;
         public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
-        public static Dictionary<PlayerControl, PlayerControl> revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
-        public static float cooldown = float.MaxValue;
-        public static int kindOfInfo = 0;
-        public static int playersWithNotification = 0;
-        public static float chanceOfSeeingRight = 100;
+        public static float soulDuration = 15f;
+        public static int mode = 0;
 
-        public static PlayerControl currentTarget;
-        
-        private static Sprite buttonSprite;
-        public static Sprite getButtonSprite() {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SeerButton.png", 115f);
-            return buttonSprite;
+        private static Sprite soulSprite;
+        public static Sprite getSoulSprite() {
+            if (soulSprite) return soulSprite;
+            soulSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
+            return soulSprite;
         }
 
         public static void clearAndReload() {
             seer = null;
-            revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
-            cooldown = TheOtherRolesPlugin.seerCooldown.GetValue();
-            kindOfInfo = TheOtherRolesPlugin.seerKindOfInfo.GetValue();
-            playersWithNotification = TheOtherRolesPlugin.seerPlayersWithNotification.GetValue();
-            chanceOfSeeingRight = TheOtherRolesPlugin.seerChanceOfSeeingRight.GetValue();
+            deadBodyPositions = new List<Vector3>();
+            soulDuration = TheOtherRolesPlugin.seerSoulDuration.GetValue();
+            mode = TheOtherRolesPlugin.medicShowShielded.GetValue();
         }
     }
 
@@ -361,6 +371,7 @@ namespace TheOtherRoles
             morphling.SetPet(morphling.Data.PetId);
             morphling.CurrentPet.Visible = morphling.Visible;
             morphling.SetColor(morphling.Data.ColorId);
+            morphling.myRend.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
@@ -423,15 +434,16 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Spy {
-        public static PlayerControl spy;
+    public static class Hacker {
+        public static PlayerControl hacker;
         private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
         public static float cooldown = float.MaxValue;
         public static float duration = 10f;
+        public static bool onlyColorType = false;
 
-        public static float spyTimer = 0f;
+        public static float hackerTimer = 0f;
 
         public static Sprite getAdminTableIconSprite() {
             if (adminTableIcon) return adminTableIcon;
@@ -442,15 +454,16 @@ namespace TheOtherRoles
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpyButton.png", 115f);
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HackerButton.png", 115f);
             return buttonSprite;
         }
 
         public static void clearAndReload() {
-            spy = null;
-            spyTimer = 0f;
-            cooldown = TheOtherRolesPlugin.spyCooldown.GetValue();
-            duration = TheOtherRolesPlugin.spySpyingDuration.GetValue();
+            hacker = null;
+            hackerTimer = 0f;
+            cooldown = TheOtherRolesPlugin.hackerCooldown.GetValue();
+            duration = TheOtherRolesPlugin.hackerHackeringDuration.GetValue();
+            onlyColorType = TheOtherRolesPlugin.hackerOnlyColorType.GetValue();
         }
     }
 

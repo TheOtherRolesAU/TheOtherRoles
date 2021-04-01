@@ -51,14 +51,6 @@ namespace TheOtherRoles {
         public static void Postfix(AmongUsClient __instance, GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
             AdditionalTempData.clear();
 
-            // Remove shifter from winners
-            if (Shifter.shifter != null) {
-                WinningPlayerData shifterWinner = null;
-                foreach (WinningPlayerData winner in  TempData.winners)
-                    if (winner.Name == Shifter.shifter.Data.PlayerName) shifterWinner = winner;
-                
-                if (shifterWinner != null) TempData.winners.Remove(shifterWinner);
-            }
             // Remove Jester from winners (on Jester win he will be added again, see below)
             if (Jester.jester != null) {
                 WinningPlayerData jesterWinner = null;
@@ -118,7 +110,7 @@ namespace TheOtherRoles {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Shifter.shifter && p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
+                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                     }
                 }
@@ -152,9 +144,8 @@ namespace TheOtherRoles {
                 }
             }
 
-            // Reset Role Settings
-            clearAndReloadRoles();
-            clearGameHistory();
+            // Reset Settings
+            RPCProcedure.resetVariables();
         }
     }
 

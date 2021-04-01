@@ -265,6 +265,15 @@ namespace TheOtherRoles
     class ExileBeginPatch {
 
         public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
+            // Shifter shift
+            if (Shifter.shifter != null && PlayerControl.LocalPlayer == Shifter.shifter && Shifter.futureShift != null) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
+                writer.Write(Shifter.futureShift.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                
+                RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
+            }
+
             // Prevent growing Child exile
             if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
                 IHDMFDEEDEL = null;
@@ -292,6 +301,19 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.jesterBountyHunterWin(exiledId);
                     }
+                }
+
+                // Seer spawn souls
+                if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
+                    foreach (Vector3 pos in Seer.deadBodyPositions) {
+                        GameObject soul = new GameObject();
+                        soul.transform.position = pos;
+                        soul.layer = 5;
+                        var rend = soul.AddComponent<SpriteRenderer>();
+                        rend.sprite = Seer.getSoulSprite();
+                        Reactor.Coroutines.Start(Helpers.CoFadeOutAndDestroy(rend, Seer.soulDuration));
+                    }
+                    Seer.deadBodyPositions = new List<Vector3>();
                 }
             }
         }
@@ -333,8 +355,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Lover.";
                     else if(Seer.seer != null && ExileController.Instance.exiled.Object.PlayerId == Seer.seer.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Seer.";
-                    else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
+                    else if(Hacker.hacker != null && ExileController.Instance.exiled.Object.PlayerId == Hacker.hacker.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.exiled.Object.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Child.";
                     else if(BountyHunter.bountyHunter != null && ExileController.Instance.exiled.Object.PlayerId == BountyHunter.bountyHunter.PlayerId)

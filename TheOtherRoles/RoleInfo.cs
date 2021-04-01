@@ -119,8 +119,8 @@ namespace TheOtherRoles
             else if (TimeMaster.timeMaster != null && p == TimeMaster.timeMaster) {
                 name = "Time Master";
                 color = TimeMaster.color;
-                introDescription = "Rewind time to find the [FF1919FF]Impostors";
-                shortDescription = "Rewind time";
+                introDescription = "Save yourself with your time shield";
+                shortDescription = "Use your time shield";
             }
             else if (Medic.medic != null && p == Medic.medic) {
                 name = "Medic";
@@ -131,9 +131,8 @@ namespace TheOtherRoles
             else if (Shifter.shifter != null && p == Shifter.shifter) {
                 name = "Shifter";
                 color = Shifter.color;
-                introDescription = "Shift your role before the game ends";
+                introDescription = "Shift your role";
                 shortDescription = "Shift your role";
-                isGood = false;
             }
             else if (Swapper.swapper != null && p == Swapper.swapper) {
                 name = "Swapper";
@@ -144,14 +143,14 @@ namespace TheOtherRoles
             else if (Seer.seer != null && p == Seer.seer) { 
                 name = "Seer";
                 color = Seer.color;
-                introDescription = "Reveal the intentions of everyone on the ship";
-                shortDescription = "Reveal all roles";
+                introDescription = "You will see players die";
+                shortDescription = "You will see players die";
             }
-            else if (Spy.spy != null && p == Spy.spy) { 
-                name = "Spy";
-                color = Spy.color;
-                introDescription = "Spy on everyone to find the [FF1919FF]Impostors";
-                shortDescription = "Spy on everyone";
+            else if (Hacker.hacker != null && p == Hacker.hacker) { 
+                name = "Hacker";
+                color = Hacker.color;
+                introDescription = "Hacker to find the [FF1919FF]Impostors";
+                shortDescription = "Hacker to find the Impostors";
             }
             else if (Child.child != null && p == Child.child) { 
                 name = "Child";

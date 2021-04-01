@@ -56,12 +56,15 @@ namespace TheOtherRoles
         public static CustomStringOption medicSpawnRate = CustomOption.AddString("140", cs(Medic.color) + "Medic", rates);
         public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color) + "Swapper", rates);
         public static CustomStringOption seerSpawnRate = CustomOption.AddString("160", cs(Seer.color) + "Seer", rates);
-        public static CustomStringOption spySpawnRate = CustomOption.AddString("170", cs(Spy.color) + "Spy", rates);
+        public static CustomStringOption hackerSpawnRate = CustomOption.AddString("170", cs(Hacker.color) + "Hacker", rates);
         public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
         // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString("190", cs(BountyHunter.color) + "Bounty Hunter", rates);
         public static CustomStringOption trackerSpawnRate = CustomOption.AddString("200", cs(Tracker.color) + "Tracker", rates);
         public static CustomStringOption snitchSpawnRate = CustomOption.AddString("210", cs(Snitch.color) + "Snitch", rates);
         public static CustomStringOption jackalSpawnRate = CustomOption.AddString("220", cs(Jackal.color) + "Jackal", rates);
+
+        // Map settings
+        public static CustomNumberOption maxNumberOfMeetings = CustomOption.AddNumber("3", "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1);
 
         // Role settings
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("11", "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
@@ -73,26 +76,27 @@ namespace TheOtherRoles
 
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber("51", "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle("52", "Both Lovers Die", true);
-        public static CustomNumberOption shifterCooldown = CustomOption.AddNumber("71", "Shifter Cooldown", 30f, 10f, 60f, 2.5f);
 
         public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber("101", "Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("102", "Sheriff Can Kill The Jester", false);
-        public static CustomNumberOption lighterVision = CustomOption.AddNumber("111", "Lighter Vision", 2f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterModeLightsOnVision = CustomOption.AddNumber("111", "Lighter Mode Vision On Lights On", 2f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterModeLightsOffVision = CustomOption.AddNumber("112", "Lighter Mode Vision On Lights Off", 0.75f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterCooldown = CustomOption.AddNumber("113", "Lighter Cooldown", 30f, 5f, 120f, 5f);
+        public static CustomNumberOption lighterDuration = CustomOption.AddNumber("114", "Lighter Duration", 5f, 2.5f, 60f, 2.5f);
         public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle("121", "Anonymous Footprints", false); 
         public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber("122", "Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);
         public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber("123", "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
+        public static CustomNumberOption detectiveReportNameDuration = CustomOption.AddNumber("124", "Time Where Detective Reports Will Have Name", 0, 0, 60, 2.5f);
+        public static CustomNumberOption detectiveReportColorDuration = CustomOption.AddNumber("125", "Time Where Detective Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("131", "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("132", "Rewind Time", 3f, 1f, 10f, 1f);
-        public static CustomNumberOption medicReportNameDuration = CustomOption.AddNumber("141", "Time Where Medic Reports Will Have Name", 10, 0, 60, 2.5f);
-        public static CustomNumberOption medicReportColorDuration = CustomOption.AddNumber("142", "Time Where Medic Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
-        public static CustomNumberOption seerCooldown = CustomOption.AddNumber("161", "Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
-        public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber("162", "Seer Chance Of Seeing Right", 100, 0, 100, 5);
-        public static CustomStringOption seerKindOfInfo = CustomOption.AddString("163", "Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
-        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("164", "Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
-        public static CustomNumberOption spyCooldown = CustomOption.AddNumber("171", "Spy Cooldown", 30f, 10f, 120f, 5f);
-        public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber("172", "Spy Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomStringOption seerMode = CustomOption.AddString("161", "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"});
+        public static CustomNumberOption seerSoulDuration = CustomOption.AddNumber("162", "Seer Soul Duration", 15f, 0f, 60f, 5f);
+        public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 0f, 60f, 5f);
+        public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomToggleOption hackerOnlyColorType = CustomOption.AddToggle("173", "Hacker Only Sees Color Type", false);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle("191", "Bounty Gets Notified", true); 
         public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber("201", "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
@@ -154,12 +158,14 @@ namespace TheOtherRoles
                 medicSpawnRate,
                 swapperSpawnRate,
                 seerSpawnRate,
-                spySpawnRate,
+                hackerSpawnRate,
                 childSpawnRate,
                 // bountyHunterSpawnRate,
                 trackerSpawnRate,
                 snitchSpawnRate,
                 jackalSpawnRate,
+
+                maxNumberOfMeetings,
 
                 janitorCooldown,
                 morphlingCooldown,
@@ -170,26 +176,27 @@ namespace TheOtherRoles
 
                 loversImpLoverRate,
                 loversBothDie,
-                shifterCooldown,
 
                 sheriffCooldown,
                 jesterCanDieToSheriff,
-                lighterVision,
+                lighterModeLightsOnVision,
+                lighterModeLightsOffVision,
+                lighterCooldown,
+                lighterDuration,
                 detectiveAnonymousFootprints,
                 detectiveFootprintIntervall,
                 detectiveFootprintDuration,
+                detectiveReportNameDuration,
+                detectiveReportColorDuration,
                 timeMasterCooldown,
                 timeMasterRewindTime,
-                medicReportNameDuration,
-                medicReportColorDuration,
                 medicShowShielded,
                 medicShowAttemptToShielded,
-                seerCooldown,
-                seerChanceOfSeeingRight,
-                seerKindOfInfo,
-                seerPlayersWithNotification,
-                spyCooldown,
-                spySpyingDuration,
+                seerMode,
+                seerSoulDuration,
+                hackerCooldown,
+                hackerHackeringDuration,
+                hackerOnlyColorType,
                 childGrowingUpDuration,
                 // bountyHunterNotifyBounty,
                 trackerUpdateIntervall,

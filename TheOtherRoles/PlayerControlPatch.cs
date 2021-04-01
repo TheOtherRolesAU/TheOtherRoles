@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
+using static TheOtherRoles.MapOptions;
 using UnityEngine;
 
 namespace TheOtherRoles {
@@ -85,12 +86,6 @@ namespace TheOtherRoles {
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != PlayerControl.LocalPlayer) return;
             Sheriff.currentTarget = setTarget();
-        }
-
-        static void seerSetTarget() {
-            if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
-            Seer.currentTarget = setTarget();
-            if (Seer.currentTarget != null && Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
         }
 
         static void trackerSetTarget() {
@@ -206,8 +201,6 @@ namespace TheOtherRoles {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
-                // Seer
-                seerSetTarget();
                 // Detective
                 detectiveSetFootPrints();
                 // Tracker
@@ -228,7 +221,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
-    class StartMeetingHostPatch {
+    class OpenMeetingRoomPatch {
         public static void Prefix(PlayerControl __instance) {
             // Perform vampire bite kill before the meeting starts for HOST
             if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
@@ -237,11 +230,13 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
-    class StartMeetingClientPatch {
-        public static void Prefix(PlayerControl __instance) {
+    class StartMeetingPatch {
+        public static void Prefix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK) {
             // Perform vampire bite kill before the meeting starts for CLIENTS
-            if (AmongUsClient.Instance.AmClient)
-            RPCProcedure.vampireTryKill(true);
+            if (AmongUsClient.Instance.AmClient) RPCProcedure.vampireTryKill(true);
+
+            // Count meetings
+            if (PAIBDFDMIGK == null) meetingsCount++;
         }
     }
 
@@ -258,8 +253,10 @@ namespace TheOtherRoles {
     {
         static void Postfix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK)
         {
-            // Medic report
-            if (Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId)
+            // Medic or Detective report
+            bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
+            bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
+            if (isMedicReport || isDetectiveReport)
             {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == PAIBDFDMIGK?.PlayerId)?.FirstOrDefault();
 
@@ -267,27 +264,17 @@ namespace TheOtherRoles {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
                     string msg = "";
 
-                    if (timeSinceDeath < Medic.reportNameDuration * 1000) {
-                        msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}! (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
-                    } else if (timeSinceDeath < Medic.reportColorDuration * 1000) {
-                        var colors = new Dictionary<byte, string>() {
-                            {0, "darker"},
-                            {1, "darker"},
-                            {2, "darker"},
-                            {3, "lighter"},
-                            {4, "lighter"},
-                            {5, "lighter"},
-                            {6, "darker"},
-                            {7, "lighter"},
-                            {8, "darker"},
-                            {9, "darker"},
-                            {10, "lighter"},
-                            {11, "lighter"},
-                        };
-                        var typeOfColor = colors[deadPlayer.killerIfExisting.Data.ColorId] ?? "unknown";
-                        msg =  $"Body Report: The killer appears to be a {typeOfColor} color. (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
-                    } else {
-                        msg = $"Body Report: The corpse is too old to gain information from. (Killed {Math.Round(timeSinceDeath / 1000)}s ago)";
+                    if (isMedicReport) {
+                        msg = $"Body Report: Killed {Math.Round(timeSinceDeath / 1000)}s ago!";
+                    } else if (isDetectiveReport) {
+                        if (timeSinceDeath < Detective.reportNameDuration * 1000) {
+                            msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
+                        } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.ColorId) ? "darker" : "lighter";
+                            msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
+                        } else {
+                            msg = $"Body Report: The corpse is too old to gain information from!";
+                        }
                     }
 
                     if (!string.IsNullOrWhiteSpace(msg))
@@ -348,6 +335,18 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
+
+            // Seer show flash and add dead player position
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK && Seer.mode <= 1) {
+                HudManager.Instance.FullScreen.enabled = true;
+                Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
+                    HudManager.Instance.FullScreen,
+                    1f,
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
+                ));
+            }
+            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(PAIBDFDMIGK.transform.position);
         }
     }
 
@@ -389,31 +388,7 @@ namespace TheOtherRoles {
     {
         public static void Postfix(PlayerControl __instance)
         {
-            if (PlayerControl.LocalPlayer == null) return;
-
-            // Remove default ImportantTextTasks
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask t in __instance.myTasks) {
-                if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
-                    toRemove.Add(t);
-                }
-            }   
-            foreach (PlayerTask t in toRemove)
-                __instance.RemoveTask(t);
-
-            // Add description
-            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(__instance);        
-            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-            task.transform.SetParent(__instance.transform, false);
-
-            if (__instance == Jackal.jackal) {
-                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
-            } else {
-                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
-            }
-
-            __instance.myTasks.Insert(0, task);
+            Helpers.refreshRoleDescription(__instance);
         }
     }
 }

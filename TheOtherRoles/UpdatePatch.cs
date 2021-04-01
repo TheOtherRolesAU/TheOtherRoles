@@ -87,8 +87,8 @@ namespace TheOtherRoles
             }
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) 
-                setPlayerNameColor(Spy.spy, Spy.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Hacker.hacker, Hacker.color);
             else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
                 setPlayerNameColor(BountyHunter.target, BountyHunter.color);
@@ -192,42 +192,9 @@ namespace TheOtherRoles
             }
         }
 
-        static void seerUpdate() {
-            if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
-
-            // Update revealed players
-            foreach (KeyValuePair<PlayerControl, PlayerControl> entry in Seer.revealedPlayers) {
-                PlayerControl target = entry.Key;
-                PlayerControl targetOrMistake = entry.Value;
-
-                if (target == null || targetOrMistake == null) continue;
-
-                // Update color and name regarding settings and given info
-                string result = target.Data.PlayerName;
-                RoleInfo si = RoleInfo.getRoleInfoForPlayer(targetOrMistake);
-                if (Seer.kindOfInfo == 0)
-                    result = target.Data.PlayerName + " (" + si.name + ")";
-                else if (Seer.kindOfInfo == 1) {
-                    si.color = si.isGood ? new Color(250f / 255f, 217f / 255f, 52f / 255f, 1) : new Color (51f / 255f, 61f / 255f, 54f / 255f, 1); 
-                }
-
-                // Set color and name
-                target.nameText.Color = si.color;
-                target.nameText.Text = result;
-                if (MeetingHud.Instance != null) {
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                        if (target.PlayerId == player.TargetPlayerId) {
-                            player.NameText.Text = result;
-                            player.NameText.Color = si.color;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        static void spyUpdate() {
-            Spy.spyTimer -= Time.deltaTime;
+        static void timerUpdate() {
+            Hacker.hackerTimer -= Time.deltaTime;
+            Lighter.lighterTimer -= Time.deltaTime;
         }
 
         static void camouflageAndMorphActions() {
@@ -242,10 +209,11 @@ namespace TheOtherRoles
             // Set morphling morphed look
             if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
                 if (Morphling.morphling != null && Morphling.morphTarget != null) {
-                    if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
-                        Morphling.morphling.nameText.Text = Morphling.morphTarget.Data.PlayerName;
+                    Morphling.morphling.nameText.Text = Morphling.morphTarget.Data.PlayerName;
                     Morphling.morphling.myRend.material.SetColor("_BackColor", Palette.ShadowColors[Morphling.morphTarget.Data.ColorId]);
                     Morphling.morphling.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[Morphling.morphTarget.Data.ColorId]);
+                    Morphling.morphling.myRend.material.SetFloat("_Outline",  Morphling.morphTarget.myRend.material.GetFloat("_Outline"));
+                    Morphling.morphling.myRend.material.SetColor("_OutlineColor", Morphling.morphTarget.myRend.material.GetColor("_OutlineColor"));
                     Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.Data.HatId, Morphling.morphTarget.Data.ColorId);
                     Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.Data.HatId == 0U) ? 0.7f : 1.05f, -0.5f);
 
@@ -268,10 +236,10 @@ namespace TheOtherRoles
             // Set camouflaged look (overrides morphling morphed look if existent)
             if (Camouflager.camouflageTimer > 0f) {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer)
-                        p.nameText.Text = "";
-                    p.myRend.material.SetColor("_BackColor", Color.grey);
-                    p.myRend.material.SetColor("_BodyColor", Color.grey);
+                    p.nameText.Text = "";
+                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
                     if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
@@ -394,12 +362,8 @@ namespace TheOtherRoles
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor
             janitorDeactivateKillButton(__instance);
-            // Shifter
-            Helpers.removeTasksFromPlayer(Shifter.shifter);
-            // Seer update
-            seerUpdate();
-            // Spy update();
-            spyUpdate();
+            // Timer updates
+            timerUpdate();
             // Camouflager and Morphling
             camouflageAndMorphActions();
             // Child

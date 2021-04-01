@@ -21,16 +21,16 @@ namespace TheOtherRoles
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
-        private static CustomButton seerRevealButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
-        private static CustomButton spyButton;
+        private static CustomButton hackerButton;
         private static CustomButton trackerButton;
         private static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
         private static CustomButton jackalKillButton;
         private static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
+        private static CustomButton lighterButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -38,21 +38,22 @@ namespace TheOtherRoles
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
             timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
-            shifterShiftButton.MaxTimer = Shifter.cooldown;
-            seerRevealButton.MaxTimer = Seer.cooldown;
+            shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
-            spyButton.MaxTimer = Spy.cooldown;
+            hackerButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
+            lighterButton.MaxTimer = Lighter.cooldown;
 
-            spyButton.EffectDuration = Spy.duration;
-            vampireKillButton.EffectDuration = Vampire.delay;
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
+            hackerButton.EffectDuration = Hacker.duration;
+            vampireKillButton.EffectDuration = Vampire.delay;
+            lighterButton.EffectDuration = Lighter.duration; 
         }
 
         public static void Postfix(HudManager __instance)
@@ -213,48 +214,12 @@ namespace TheOtherRoles
             // Shifter shift
             shifterShiftButton = new CustomButton(
                 () => {
-                    shifterShiftButton.Timer = shifterShiftButton.MaxTimer;
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Shifter.currentTarget.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    
-                    RPCProcedure.shifterShift(Shifter.currentTarget.PlayerId);
+                    Shifter.futureShift = Shifter.currentTarget;
                 },
                 () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Shifter.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                () => { shifterShiftButton.Timer = shifterShiftButton.MaxTimer; },
+                () => { return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
+                () => { },
                 Shifter.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
-                __instance
-            );
-
-            // Seer reveal
-            seerRevealButton = new CustomButton(
-                () => {
-                    seerRevealButton.Timer = seerRevealButton.MaxTimer;
-
-                    PlayerControl targetOrMistake = Seer.currentTarget;
-                    if (rnd.Next(1, 101) > Seer.chanceOfSeeingRight) {
-                        var players = PlayerControl.AllPlayerControls.ToArray().ToList();
-                        players.RemoveAll(p => p != null && (p.PlayerId == Seer.seer.PlayerId || p.PlayerId == Seer.currentTarget.PlayerId));
-                        int index = rnd.Next(0, players.Count);
-
-                        if (players.Count != 0 && players[index] != null)
-                            targetOrMistake = players[index];
-                    }
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SeerReveal, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Seer.currentTarget.PlayerId);
-                    writer.Write(targetOrMistake.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    
-                    RPCProcedure.seerReveal(Seer.currentTarget.PlayerId, targetOrMistake.PlayerId);
-                },
-                () => { return Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Seer.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                () => {},
-                Seer.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance
             );
@@ -317,25 +282,25 @@ namespace TheOtherRoles
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
             );
 
-            // Spy button
-            spyButton = new CustomButton(
+            // Hacker button
+            hackerButton = new CustomButton(
                 () => {
-                    Spy.spyTimer = Spy.duration;
+                    Hacker.hackerTimer = Hacker.duration;
                 },
-                () => { return Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
-                    spyButton.Timer = spyButton.MaxTimer;
-                    spyButton.isEffectActive = false;
-                    spyButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                    hackerButton.Timer = hackerButton.MaxTimer;
+                    hackerButton.isEffectActive = false;
+                    hackerButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
                 },
-                Spy.getButtonSprite(),
+                Hacker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance,
                 true,
                 0f,
                 () => {
-                    spyButton.Timer = spyButton.MaxTimer;
+                    hackerButton.Timer = hackerButton.MaxTimer;
                 }
             );
 
@@ -476,6 +441,26 @@ namespace TheOtherRoles
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
                 __instance
+            );
+
+            // Lighter light
+            lighterButton = new CustomButton(
+                () => {
+                    Lighter.lighterTimer = Lighter.duration;
+                },
+                () => { return Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    lighterButton.Timer = lighterButton.MaxTimer;
+                    lighterButton.isEffectActive = false;
+                    lighterButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Lighter.getButtonSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                true,
+                Lighter.duration,
+                () => { lighterButton.Timer = lighterButton.MaxTimer; }
             );
         }
     }

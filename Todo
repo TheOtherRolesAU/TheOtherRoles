@@ -9,6 +9,7 @@ Roles in development:
         - Should the Jackal be able to target players in vents
         - Lover Sidekick being promoted removes the Lover ImportantTaskText and highlights the name in the Lover color (maybe change how Lovers are being displayed)
         - SidekickPromotes RPC call is called by every player
+        - Jackal/Vent/Impostor vent highlighting
 
 High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
@@ -21,7 +22,6 @@ Medium priority:
     - Crowded mod
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
-    - Add option: Vampire can kill in garlic range
     - CustomButton: Add hotkeys (for the ones that replace the kill button)
     - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
     - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 

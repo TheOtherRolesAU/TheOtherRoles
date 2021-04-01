@@ -93,6 +93,18 @@ namespace TheOtherRoles {
             anim.Update(0f);
         }
 
+        public static IEnumerator CoFadeOutAndDestroy(SpriteRenderer renderer, float duration) {
+            for (float t = duration; t > 0; t -= Time.deltaTime) {
+                if (renderer != null) {
+                    var tmp = renderer.color;
+                    tmp.a = Mathf.Clamp(t / duration, 0, 1);
+                    renderer.color = tmp;
+                }
+                yield return null;
+            }
+            if (renderer?.gameObject != null) UnityEngine.Object.Destroy(renderer.gameObject);
+        }
+
         public static IEnumerator CoFlashAndDisable(SpriteRenderer renderer, float duration, Color a, Color b) {
             float singleDuration = duration / 2;
             for (float t = 0f; t < singleDuration; t += Time.deltaTime) {
@@ -158,6 +170,34 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void refreshRoleDescription(PlayerControl player) {
+            if (player == null) return;
+
+            // Remove default ImportantTextTasks
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask t in player.myTasks) {
+                if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
+                    toRemove.Add(t);
+                }
+            }   
+            foreach (PlayerTask t in toRemove)
+                player.RemoveTask(t);
+
+            // Add description
+            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(player);        
+            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+            task.transform.SetParent(player.transform, false);
+
+            if (player == Jackal.jackal) {
+                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+            } else {
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+            }
+
+            player.myTasks.Insert(0, task);
+        }
+
         public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
         {
             Vector3 temp = default(Vector3);
@@ -174,6 +214,11 @@ namespace TheOtherRoles {
             temp.y = dest.y;
             target.localPosition = temp;
             yield break;
+        }
+
+        private static List<byte> lighterColors = new List<byte>(){ 3, 4, 5, 7, 10, 11};
+        public static bool isLighterColor(byte colorId) {
+            return lighterColors.Contains(colorId);
         }
     }
 }
