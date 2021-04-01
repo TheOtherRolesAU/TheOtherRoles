@@ -146,11 +146,11 @@ namespace TheOtherRoles
                 introDescription = "You will see players die";
                 shortDescription = "You will see players die";
             }
-            else if (Spy.spy != null && p == Spy.spy) { 
-                name = "Spy";
-                color = Spy.color;
-                introDescription = "Spy on everyone to find the [FF1919FF]Impostors";
-                shortDescription = "Spy on everyone";
+            else if (Hacker.hacker != null && p == Hacker.hacker) { 
+                name = "Hacker";
+                color = Hacker.color;
+                introDescription = "Hacker to find the [FF1919FF]Impostors";
+                shortDescription = "Hacker to find the Impostors";
             }
             else if (Child.child != null && p == Child.child) { 
                 name = "Child";

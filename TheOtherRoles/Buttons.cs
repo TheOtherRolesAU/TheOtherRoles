@@ -23,7 +23,7 @@ namespace TheOtherRoles
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
-        private static CustomButton spyButton;
+        private static CustomButton hackerButton;
         private static CustomButton trackerButton;
         private static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
@@ -41,7 +41,7 @@ namespace TheOtherRoles
             shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
-            spyButton.MaxTimer = Spy.cooldown;
+            hackerButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
@@ -50,7 +50,7 @@ namespace TheOtherRoles
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
 
-            spyButton.EffectDuration = Spy.duration;
+            hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
         }
@@ -275,25 +275,25 @@ namespace TheOtherRoles
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
             );
 
-            // Spy button
-            spyButton = new CustomButton(
+            // Hacker button
+            hackerButton = new CustomButton(
                 () => {
-                    Spy.spyTimer = Spy.duration;
+                    Hacker.hackerTimer = Hacker.duration;
                 },
-                () => { return Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
-                    spyButton.Timer = spyButton.MaxTimer;
-                    spyButton.isEffectActive = false;
-                    spyButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                    hackerButton.Timer = hackerButton.MaxTimer;
+                    hackerButton.isEffectActive = false;
+                    hackerButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
                 },
-                Spy.getButtonSprite(),
+                Hacker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance,
                 true,
                 0f,
                 () => {
-                    spyButton.Timer = spyButton.MaxTimer;
+                    hackerButton.Timer = hackerButton.MaxTimer;
                 }
             );
 

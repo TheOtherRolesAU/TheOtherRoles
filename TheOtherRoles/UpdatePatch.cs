@@ -87,8 +87,8 @@ namespace TheOtherRoles
             }
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) 
-                setPlayerNameColor(Spy.spy, Spy.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Hacker.hacker, Hacker.color);
             else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
                 setPlayerNameColor(BountyHunter.target, BountyHunter.color);
@@ -193,7 +193,7 @@ namespace TheOtherRoles
         }
 
         static void timerUpdate() {
-            Spy.spyTimer -= Time.deltaTime;
+            Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
         }
 
@@ -237,8 +237,8 @@ namespace TheOtherRoles
             if (Camouflager.camouflageTimer > 0f) {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     p.nameText.Text = "";
-                    p.myRend.material.SetColor("_BackColor", Color.grey);
-                    p.myRend.material.SetColor("_BodyColor", Color.grey);
+                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
                     p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);

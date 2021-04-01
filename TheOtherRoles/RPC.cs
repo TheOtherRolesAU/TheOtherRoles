@@ -31,7 +31,7 @@ namespace TheOtherRoles
         Seer,
         Morphling,
         Camouflager,
-        Spy,
+        Hacker,
         Child,
         BountyHunter,
         Tracker,
@@ -158,8 +158,8 @@ namespace TheOtherRoles
                     case RoleId.Camouflager:
                         Camouflager.camouflager = player;
                         break;
-                    case RoleId.Spy:
-                        Spy.spy = player;
+                    case RoleId.Hacker:
+                        Hacker.hacker = player;
                         break;
                     case RoleId.Child:
                         Child.child = player;
@@ -368,8 +368,8 @@ namespace TheOtherRoles
                         Lovers.lover2 = oldShifter;
                     } else if (Seer.seer != null && Seer.seer == player) {
                         Seer.seer = oldShifter;
-                    } else if (Spy.spy != null && Spy.spy == player) {
-                        Spy.spy = oldShifter;
+                    } else if (Hacker.hacker != null && Hacker.hacker == player) {
+                        Hacker.hacker = oldShifter;
                     } else if (Child.child != null && Child.child == player) {
                         Child.child = oldShifter;
                     } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
@@ -505,7 +505,7 @@ namespace TheOtherRoles
                     if(player == Medic.medic) Medic.clearAndReload();
                     if(player == Shifter.shifter) Shifter.clearAndReload();
                     if(player == Seer.seer) Seer.clearAndReload();
-                    if(player == Spy.spy) Spy.clearAndReload();
+                    if(player == Hacker.hacker) Hacker.clearAndReload();
                     if(player == Child.child) Child.clearAndReload();
                     if(player == Tracker.tracker) Tracker.clearAndReload();
                     if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();

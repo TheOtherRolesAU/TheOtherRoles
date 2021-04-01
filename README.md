@@ -27,7 +27,7 @@ Even more roles are coming soon :)
 - [Child](#child)
 - [Medic](#medic)
 - [Mayor](#mayor)
-- [Spy](#spy)
+- [Hacker](#hacker)
 - [Shifter](#shifter)
 - [Time Master](#time-master)
 - [Swapper](#swapper)
@@ -64,6 +64,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
 - **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
 - **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
+- **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
 - **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
 - **New options:**
@@ -102,7 +103,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Time Master - Buff: He is not affected by his rewind anymore, which gives him more utility. Players will now be rewinded out of vents.
 - Child - Nerf: The child now grows up (see [child](#child)) and becomes a normal crewmate at some point. A growing child is not killable anymore. Some tasks are still not doable for the small child, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
 - Seer - Nerf: Added an option that sets how often the Seer mistakes the player for another.
-- Spy - Nerf: The Spy now only sees the additional information when he activates his "Spy mode". That should stops the spy from camping the admin table/vitals.
+- Hacker - Nerf: The Hacker now only sees the additional information when he activates his "Hacker mode". That should stops the hacker from camping the admin table/vitals.
 - Other: Camouflager/Morphling cooldowns were fixed. Custom regions code was removed to enable 3rd party tools. Some minor bugfixes.
 
 **Changes in v1.4:**
@@ -177,9 +178,9 @@ The count you set will only be reached, if there are enough Crewmates/Impostors 
 - After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
 
 **Example:**\
-Settings: 2 special crewmate roles, Snitch: 100%, Spy: 10%, Tracker: 30%\
-Result: Snitch is assigned, then one role out of the pool [Spy, Tracker, Tracker, Tracker] is being selected\
-Note: Changing the settings to Spy: 20%, Tracker: 60% would statistically result in the same outcome .
+Settings: 2 special crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
+Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
+Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
 
 ## Mafia
@@ -421,21 +422,25 @@ The Mayor can always use his meeting, even if the maximum number of meetings was
 | Mayor Spawn Chance | -
 -----------------------
 
-## Spy
+## Hacker
 ### **Team: Crewmates**
-If the Spy activates the "Spy mode", the Spy gets more information than others from the admin table and vitals for a set duration.\
+If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
 Otherwise he sees the same information as everyone else.
-**Admin table:** The spy can see the colors of the players on the table.\
-**Vitals**: The spy can see how long dead players have been dead for.\
+**Admin table:** The hacker can see the colors (or color types) of the players on the table.\
+**Vitals**: The hacker can see how long dead players have been dead for.\
 \
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
+- **Darker Colors:** Red, blue, green, grey, purple, brown
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Spy Spawn Chance | -
-| Spy Cooldown| -
-| Spy Duration | Sets how long the "Spy mode" remains active
+| Hacker Spawn Chance | -
+| Hacker Cooldown| -
+| Hacker Duration | Sets how long the "Hacker mode" remains active
+| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for lighter and darker colors) 
 -----------------------
 
 
