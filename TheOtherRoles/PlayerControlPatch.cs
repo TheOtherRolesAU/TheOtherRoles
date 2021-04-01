@@ -99,12 +99,6 @@ namespace TheOtherRoles {
             Sheriff.currentTarget = setTarget();
         }
 
-        static void seerSetTarget() {
-            if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
-            Seer.currentTarget = setTarget();
-            if (Seer.currentTarget != null && Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
-        }
-
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -218,8 +212,6 @@ namespace TheOtherRoles {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
-                // Seer
-                seerSetTarget();
                 // Detective
                 detectiveSetFootPrints();
                 // Tracker
@@ -353,6 +345,18 @@ namespace TheOtherRoles {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
+            }
+
+            // Seer show flash
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK) {
+                System.Console.WriteLine("here");
+                HudManager.Instance.FullScreen.enabled = true;
+                Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
+                    HudManager.Instance.FullScreen,
+                    1f,
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
+                ));
             }
         }
     }

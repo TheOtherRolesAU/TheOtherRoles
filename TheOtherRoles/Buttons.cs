@@ -21,7 +21,6 @@ namespace TheOtherRoles
         private static CustomButton timeMasterRewindTimeButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
-        private static CustomButton seerRevealButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton spyButton;
@@ -40,7 +39,6 @@ namespace TheOtherRoles
             timeMasterRewindTimeButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = Shifter.cooldown;
-            seerRevealButton.MaxTimer = Seer.cooldown;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             spyButton.MaxTimer = Spy.cooldown;
@@ -221,36 +219,6 @@ namespace TheOtherRoles
                 () => { return Shifter.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { shifterShiftButton.Timer = shifterShiftButton.MaxTimer; },
                 Shifter.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
-                __instance
-            );
-
-            // Seer reveal
-            seerRevealButton = new CustomButton(
-                () => {
-                    seerRevealButton.Timer = seerRevealButton.MaxTimer;
-
-                    PlayerControl targetOrMistake = Seer.currentTarget;
-                    if (rnd.Next(1, 101) > Seer.chanceOfSeeingRight) {
-                        var players = PlayerControl.AllPlayerControls.ToArray().ToList();
-                        players.RemoveAll(p => p != null && (p.PlayerId == Seer.seer.PlayerId || p.PlayerId == Seer.currentTarget.PlayerId));
-                        int index = rnd.Next(0, players.Count);
-
-                        if (players.Count != 0 && players[index] != null)
-                            targetOrMistake = players[index];
-                    }
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SeerReveal, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Seer.currentTarget.PlayerId);
-                    writer.Write(targetOrMistake.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    
-                    RPCProcedure.seerReveal(Seer.currentTarget.PlayerId, targetOrMistake.PlayerId);
-                },
-                () => { return Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Seer.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                () => {},
-                Seer.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance
             );
