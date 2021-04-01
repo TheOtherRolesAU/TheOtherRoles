@@ -62,7 +62,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Medic: The Medic report changed, it only shows the time since death (see Detective)
 - Detective: The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 - New options:
-  - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached)
+  - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -158,7 +158,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 The mod adds a few new settings to Among Us (in addition to the role settings):
 - The number of Impostor count be set inside a lobby
 - The map can be changed inside a lobby
-- You can set the maximum number of meetings that can be called (every player still only has 1 meeting, but if the maximum number of meetings is reached you can't use your meeting even if you have one left) 
+- You can set the maximum number of meetings that can be called (every player still only has 1 meeting, but if the maximum number of meetings is reached you can't use your meeting even if you have one left, Impostor and Jackal meetings also count) 
 
 # Roles
 
