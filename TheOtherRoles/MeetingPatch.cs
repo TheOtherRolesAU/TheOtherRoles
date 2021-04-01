@@ -265,6 +265,15 @@ namespace TheOtherRoles
     class ExileBeginPatch {
 
         public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
+            // Shifter shift
+            if (Shifter.shifter != null && PlayerControl.LocalPlayer == Shifter.shifter && Shifter.futureShift != null) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
+                writer.Write(Shifter.futureShift.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                
+                RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
+            }
+
             // Prevent growing Child exile
             if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
                 IHDMFDEEDEL = null;
