@@ -212,6 +212,8 @@ namespace TheOtherRoles
                     Morphling.morphling.nameText.Text = Morphling.morphTarget.Data.PlayerName;
                     Morphling.morphling.myRend.material.SetColor("_BackColor", Palette.ShadowColors[Morphling.morphTarget.Data.ColorId]);
                     Morphling.morphling.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[Morphling.morphTarget.Data.ColorId]);
+                    Morphling.morphling.myRend.material.SetFloat("_Outline",  Morphling.morphTarget.myRend.material.GetFloat("_Outline"));
+                    Morphling.morphling.myRend.material.SetColor("_OutlineColor", Morphling.morphTarget.myRend.material.GetColor("_OutlineColor"));
                     Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.Data.HatId, Morphling.morphTarget.Data.ColorId);
                     Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.Data.HatId == 0U) ? 0.7f : 1.05f, -0.5f);
 

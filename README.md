@@ -207,7 +207,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 - The Spy sees their new color on the admin table.
 - The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other impostor still sees that they are an impostor (the name remains red).
-- The shield does **not** change accordingly, we're working on that.
+- The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
 - Tracker and Snitch arrows keep working.
 
 ### Game Options
