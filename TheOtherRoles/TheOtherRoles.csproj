@@ -33,7 +33,7 @@
     <ItemGroup>
         <EmbeddedResource Include="Resources\RepairButton.png"/>
         <EmbeddedResource Include="Resources\CleanButton.png"/>
-        <EmbeddedResource Include="Resources\RewindButton.png"/>
+        <EmbeddedResource Include="Resources\TimeShieldButton.png"/>
         <EmbeddedResource Include="Resources\ShieldButton.png"/>
         <EmbeddedResource Include="Resources\ShiftButton.png"/>
         <EmbeddedResource Include="Resources\SeerButton.png"/>
