@@ -40,7 +40,7 @@
         <EmbeddedResource Include="Resources\MorphButton.png"/>
         <EmbeddedResource Include="Resources\SampleButton.png"/>
         <EmbeddedResource Include="Resources\CamoButton.png"/>
-        <EmbeddedResource Include="Resources\SpyButton.png"/>
+        <EmbeddedResource Include="Resources\HackerButton.png"/>
         <EmbeddedResource Include="Resources\TrackerButton.png"/>
         <EmbeddedResource Include="Resources\VampireButton.png"/>
         <EmbeddedResource Include="Resources\GarlicButton.png"/>

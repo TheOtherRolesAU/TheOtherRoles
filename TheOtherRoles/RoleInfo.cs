@@ -147,11 +147,11 @@ namespace TheOtherRoles
                 introDescription = "Reveal the intentions of everyone on the ship";
                 shortDescription = "Reveal all roles";
             }
-            else if (Spy.spy != null && p == Spy.spy) { 
-                name = "Spy";
-                color = Spy.color;
-                introDescription = "Spy on everyone to find the [FF1919FF]Impostors";
-                shortDescription = "Spy on everyone";
+            else if (Hacker.hacker != null && p == Hacker.hacker) { 
+                name = "Hacker";
+                color = Hacker.color;
+                introDescription = "Hacker on everyone to find the [FF1919FF]Impostors";
+                shortDescription = "Hacker on everyone";
             }
             else if (Child.child != null && p == Child.child) { 
                 name = "Child";

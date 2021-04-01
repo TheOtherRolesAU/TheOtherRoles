@@ -67,7 +67,7 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Shifter, TheOtherRolesPlugin.shifterSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Swapper,TheOtherRolesPlugin.swapperSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Seer, TheOtherRolesPlugin.seerSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Spy, TheOtherRolesPlugin.spySpawnRate.GetValue());
+            crewSettings.Add((byte)RoleId.Hacker, TheOtherRolesPlugin.hackerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Child, TheOtherRolesPlugin.childSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Tracker, TheOtherRolesPlugin.trackerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Snitch, TheOtherRolesPlugin.snitchSpawnRate.GetValue());

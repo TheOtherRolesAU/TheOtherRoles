@@ -87,8 +87,8 @@ namespace TheOtherRoles
             }
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) 
-                setPlayerNameColor(Spy.spy, Spy.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Hacker.hacker, Hacker.color);
             else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
                 setPlayerNameColor(BountyHunter.target, BountyHunter.color);
@@ -227,7 +227,7 @@ namespace TheOtherRoles
         }
 
         static void timerUpdate() {
-            Spy.spyTimer -= Time.deltaTime;
+            Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
         }
 

@@ -56,7 +56,7 @@ namespace TheOtherRoles
         public static CustomStringOption medicSpawnRate = CustomOption.AddString("140", cs(Medic.color) + "Medic", rates);
         public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color) + "Swapper", rates);
         public static CustomStringOption seerSpawnRate = CustomOption.AddString("160", cs(Seer.color) + "Seer", rates);
-        public static CustomStringOption spySpawnRate = CustomOption.AddString("170", cs(Spy.color) + "Spy", rates);
+        public static CustomStringOption hackerSpawnRate = CustomOption.AddString("170", cs(Hacker.color) + "Hacker", rates);
         public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
         // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString("190", cs(BountyHunter.color) + "Bounty Hunter", rates);
         public static CustomStringOption trackerSpawnRate = CustomOption.AddString("200", cs(Tracker.color) + "Tracker", rates);
@@ -98,8 +98,8 @@ namespace TheOtherRoles
         public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber("162", "Seer Chance Of Seeing Right", 100, 0, 100, 5);
         public static CustomStringOption seerKindOfInfo = CustomOption.AddString("163", "Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
         public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("164", "Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
-        public static CustomNumberOption spyCooldown = CustomOption.AddNumber("171", "Spy Cooldown", 30f, 10f, 120f, 5f);
-        public static CustomNumberOption spySpyingDuration = CustomOption.AddNumber("172", "Spy Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 10f, 120f, 5f);
+        public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle("191", "Bounty Gets Notified", true); 
         public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber("201", "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
@@ -161,7 +161,7 @@ namespace TheOtherRoles
                 medicSpawnRate,
                 swapperSpawnRate,
                 seerSpawnRate,
-                spySpawnRate,
+                hackerSpawnRate,
                 childSpawnRate,
                 // bountyHunterSpawnRate,
                 trackerSpawnRate,
@@ -201,8 +201,8 @@ namespace TheOtherRoles
                 seerChanceOfSeeingRight,
                 seerKindOfInfo,
                 seerPlayersWithNotification,
-                spyCooldown,
-                spySpyingDuration,
+                hackerCooldown,
+                hackerHackeringDuration,
                 childGrowingUpDuration,
                 // bountyHunterNotifyBounty,
                 trackerUpdateIntervall,

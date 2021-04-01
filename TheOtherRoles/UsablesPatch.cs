@@ -142,8 +142,8 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
     class VitalsMinigamePatch {
         static void Postfix(VitalsMinigame __instance) {
-            // Spy show time since death
-            bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0;
+            // Hacker show time since death
+            bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
             for (int k = 0; k < __instance.vitals.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.vitals[k];
@@ -154,7 +154,7 @@ namespace TheOtherRoles
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
-                        if (showSpyInfo)
+                        if (showHackerInfo)
                             vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
                         else
                             vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.Instance.GetString(Palette.ShortColorNames[(int)playerInfo.ColorId], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
@@ -171,7 +171,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
-                // Save colors for the Spy
+                // Save colors for the Hacker
                 __instance.timer += Time.deltaTime;
                 if (__instance.timer < 0.1f)
                 {
@@ -254,8 +254,8 @@ namespace TheOtherRoles
             private static Sprite defaultIcon;
 
             static void Postfix(CounterArea __instance) {
-                // Spy display saved colors on the admin panel
-                bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0;
+                // Hacker display saved colors on the admin panel
+                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
 
@@ -265,8 +265,8 @@ namespace TheOtherRoles
 
                         if (renderer != null) {
                             if (defaultIcon == null) defaultIcon = renderer.sprite;
-                            if (showSpyInfo && colors.Count > i && Spy.getAdminTableIconSprite() != null) {
-                                renderer.sprite = Spy.getAdminTableIconSprite();
+                            if (showHackerInfo && colors.Count > i && Hacker.getAdminTableIconSprite() != null) {
+                                renderer.sprite = Hacker.getAdminTableIconSprite();
                                 renderer.color = colors[i];
                             } else {
                                 renderer.sprite = defaultIcon;

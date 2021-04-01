@@ -333,8 +333,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Lover.";
                     else if(Seer.seer != null && ExileController.Instance.exiled.Object.PlayerId == Seer.seer.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Seer.";
-                    else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
+                    else if(Hacker.hacker != null && ExileController.Instance.exiled.Object.PlayerId == Hacker.hacker.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.exiled.Object.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Child.";
                     else if(BountyHunter.bountyHunter != null && ExileController.Instance.exiled.Object.PlayerId == BountyHunter.bountyHunter.PlayerId)
