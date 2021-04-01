@@ -349,6 +349,7 @@ namespace TheOtherRoles
             morphling.SetPet(morphling.Data.PetId);
             morphling.CurrentPet.Visible = morphling.Visible;
             morphling.SetColor(morphling.Data.ColorId);
+            morphling.myRend.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
