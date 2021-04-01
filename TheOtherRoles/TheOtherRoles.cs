@@ -304,29 +304,9 @@ namespace TheOtherRoles
     public static class Seer {
         public static PlayerControl seer;
         public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
-        public static Dictionary<PlayerControl, PlayerControl> revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
-
-        public static float cooldown = float.MaxValue;
-        public static int kindOfInfo = 0;
-        public static int playersWithNotification = 0;
-        public static float chanceOfSeeingRight = 100;
-
-        public static PlayerControl currentTarget;
-        
-        private static Sprite buttonSprite;
-        public static Sprite getButtonSprite() {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SeerButton.png", 115f);
-            return buttonSprite;
-        }
 
         public static void clearAndReload() {
             seer = null;
-            revealedPlayers = new Dictionary<PlayerControl, PlayerControl>();
-            cooldown = TheOtherRolesPlugin.seerCooldown.GetValue();
-            kindOfInfo = TheOtherRolesPlugin.seerKindOfInfo.GetValue();
-            playersWithNotification = TheOtherRolesPlugin.seerPlayersWithNotification.GetValue();
-            chanceOfSeeingRight = TheOtherRolesPlugin.seerChanceOfSeeingRight.GetValue();
         }
     }
 

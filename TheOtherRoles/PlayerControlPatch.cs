@@ -98,12 +98,6 @@ namespace TheOtherRoles {
             Sheriff.currentTarget = setTarget();
         }
 
-        static void seerSetTarget() {
-            if (Seer.seer == null || Seer.seer != PlayerControl.LocalPlayer) return;
-            Seer.currentTarget = setTarget();
-            if (Seer.currentTarget != null && Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == Seer.currentTarget.Data.PlayerId)) Seer.currentTarget = null; // Remove target if already revealed
-        }
-
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -217,8 +211,6 @@ namespace TheOtherRoles {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
-                // Seer
-                seerSetTarget();
                 // Detective
                 detectiveSetFootPrints();
                 // Tracker
