@@ -220,21 +220,23 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
-    class OpenMeetingRoomPatch {
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
+    class StartMeetingPatcher {
         public static void Prefix(PlayerControl __instance) {
-            // Perform vampire bite kill before the meeting starts for HOST
-            if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
-                RPCProcedure.vampireTryKill(true);
+            // Murder the bitten player before the meeting starts
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                RPCProcedure.vampireTryKill();
+            }
         }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
     class StartMeetingPatch {
         public static void Prefix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK) {
-            // Perform vampire bite kill before the meeting starts for CLIENTS
-            if (AmongUsClient.Instance.AmClient) RPCProcedure.vampireTryKill(true);
-
+            // Reset vampire bitten
+            Vampire.bitten = null;
             // Count meetings
             if (PAIBDFDMIGK == null) meetingsCount++;
         }

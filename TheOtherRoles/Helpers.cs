@@ -122,13 +122,11 @@ namespace TheOtherRoles {
         }
 
 
-        public static bool handleMurderAttempt(PlayerControl target, bool localCall = false) {
+        public static bool handleMurderAttempt(PlayerControl target) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
-                if (!localCall) { // Everyone calls the handleMurderAttempt locally, so don't notify others
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                }
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
 
                 return false;
@@ -139,13 +137,9 @@ namespace TheOtherRoles {
             }
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
-                if (!localCall) { 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterRewindTime();
-                } else {
-                    // Everyone calls the handleMurderAttempt locally as a meeting starts, the TimeMaster stays alive but the time won't be rewinded
-                }
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.timeMasterRewindTime();
                 return false;
             }
             return true;

@@ -430,12 +430,9 @@ namespace TheOtherRoles
             }
         }
 
-        public static void vampireTryKill(bool isAttempt) {
-            if (Vampire.vampire == null || Vampire.bitten == null) return;
-
-            if (!Vampire.bitten.Data.IsDead) {
-                if (!isAttempt || Helpers.handleMurderAttempt(Vampire.bitten, true)) // Only check for handleMurderAttempt if this functions is only called locally (because a meeting started)
-                    Vampire.vampire.MurderPlayer(Vampire.bitten);
+        public static void vampireTryKill() {
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead) {
+                Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
         }
@@ -630,7 +627,7 @@ namespace TheOtherRoles
                     RPCProcedure.vampireBiteNotification(HFPCBBHJIPJ.ReadByte());
                     break;
                 case (byte)CustomRPC.VampireTryKill:
-                    RPCProcedure.vampireTryKill(false);
+                    RPCProcedure.vampireTryKill();
                     break;
                 case (byte)CustomRPC.PlaceGarlic:
                     RPCProcedure.placeGarlic(HFPCBBHJIPJ.ReadBytesAndSize());

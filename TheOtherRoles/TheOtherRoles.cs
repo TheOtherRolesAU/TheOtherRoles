@@ -571,7 +571,7 @@ namespace TheOtherRoles
             if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.vampireTryKill(false);
+                RPCProcedure.vampireTryKill();
             }
         }
 
