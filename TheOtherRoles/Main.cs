@@ -63,6 +63,9 @@ namespace TheOtherRoles
         public static CustomStringOption snitchSpawnRate = CustomOption.AddString("210", cs(Snitch.color) + "Snitch", rates);
         public static CustomStringOption jackalSpawnRate = CustomOption.AddString("220", cs(Jackal.color) + "Jackal", rates);
 
+        // Map settings
+        public static CustomNumberOption maxNumberOfMeetings = CustomOption.AddNumber("3", "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1);
+
         // Role settings
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("11", "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber("21", "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
@@ -164,6 +167,8 @@ namespace TheOtherRoles
                 trackerSpawnRate,
                 snitchSpawnRate,
                 jackalSpawnRate,
+
+                maxNumberOfMeetings,
 
                 janitorCooldown,
                 morphlingCooldown,

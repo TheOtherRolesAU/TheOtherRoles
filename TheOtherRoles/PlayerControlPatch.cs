@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
+using static TheOtherRoles.MapOptions;
 using UnityEngine;
 
 namespace TheOtherRoles {
@@ -239,7 +240,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
-    class StartMeetingHostPatch {
+    class OpenMeetingRoomPatch {
         public static void Prefix(PlayerControl __instance) {
             // Perform vampire bite kill before the meeting starts for HOST
             if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
@@ -248,11 +249,13 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
-    class StartMeetingClientPatch {
-        public static void Prefix(PlayerControl __instance) {
+    class StartMeetingPatch {
+        public static void Prefix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK) {
             // Perform vampire bite kill before the meeting starts for CLIENTS
-            if (AmongUsClient.Instance.AmClient)
-            RPCProcedure.vampireTryKill();
+            if (AmongUsClient.Instance.AmClient) RPCProcedure.vampireTryKill();
+
+            // Count meetings
+            if (PAIBDFDMIGK == null) meetingsCount++;
         }
     }
 
