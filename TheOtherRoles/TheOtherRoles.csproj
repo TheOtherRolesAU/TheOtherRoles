@@ -44,6 +44,7 @@
         <EmbeddedResource Include="Resources\TrackerButton.png"/>
         <EmbeddedResource Include="Resources\VampireButton.png"/>
         <EmbeddedResource Include="Resources\GarlicButton.png"/>
+        <EmbeddedResource Include="Resources\LighterButton.png"/>
         <EmbeddedResource Include="Resources\Arrow.png"/>
         <EmbeddedResource Include="Resources\Garlic.png"/>
         <EmbeddedResource Include="Resources\GarlicBackground.png"/>

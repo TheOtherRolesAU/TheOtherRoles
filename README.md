@@ -58,11 +58,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Changes in 1.9**
-- Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
-- Medic: The Medic report changed, it only shows the time since death (see Detective)
-- Detective: The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
-- New options:
+- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- **Medic:** The Medic report changed, it only shows the time since death (see Detective)
+- **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
+- **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
+- **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
+
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -367,14 +369,16 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 
 ## Lighter
 ### **Team: Crewmates**
-The vision of the Lighter never changes, even if the lights are out.\
-Depending on the options the Lighter can have a bigger or smaller vision than other crewmates.
+The Lighter can turn on his lighter every now and then, which increases his vision by a costumizable amount.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Lighter Spawn Chance | -
-| Lighter Vision | -
+| Lighter Mode Vision On Lights On | The vision the Lighter has when the lights are on and the Lighter mode is on
+| Lighter Mode Vision On Lights Off | The vision the Lighter has when the lights are down and the Lighter mode is on
+| Lighter Cooldown | -
+| Lighter Duration | -
 -----------------------
 
 ## Child
