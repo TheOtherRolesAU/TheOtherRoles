@@ -64,6 +64,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
 - **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
 - **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
+- **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
 - **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
 - **New options:**
@@ -425,11 +426,13 @@ The Mayor can always use his meeting, even if the maximum number of meetings was
 ### **Team: Crewmates**
 If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
 Otherwise he sees the same information as everyone else.
-**Admin table:** The hacker can see the colors of the players on the table.\
+**Admin table:** The hacker can see the colors (or color types) of the players on the table.\
 **Vitals**: The hacker can see how long dead players have been dead for.\
 \
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
+- **Darker Colors:** Red, blue, green, grey, purple, brown
 
 ### Game Options
 | Name | Description |
@@ -437,6 +440,7 @@ Otherwise he sees the same information as everyone else.
 | Hacker Spawn Chance | -
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
+| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for lighter and darker colors) 
 -----------------------
 
 
