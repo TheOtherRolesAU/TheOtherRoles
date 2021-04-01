@@ -237,8 +237,8 @@ namespace TheOtherRoles
             if (Camouflager.camouflageTimer > 0f) {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     p.nameText.Text = "";
-                    p.myRend.material.SetColor("_BackColor", Color.grey);
-                    p.myRend.material.SetColor("_BodyColor", Color.grey);
+                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
                     p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);

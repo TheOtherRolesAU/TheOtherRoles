@@ -222,14 +222,23 @@ namespace TheOtherRoles
                                     {
                                         num2--;
                                     } else if (component?.myRend?.material != null) {
-                                        roomColors.Add(component.myRend.material.GetColor("_BodyColor"));
+                                        Color color = component.myRend.material.GetColor("_BodyColor");
+                                        if (Hacker.onlyColorType) {
+                                            var id = Mathf.Max(0, Palette.PlayerColors.IndexOf(color));
+                                            color = Helpers.isLighterColor((byte)id) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                        }
+                                        roomColors.Add(color);
                                     }
                                 } else {
                                     DeadBody component = collider2D.GetComponent<DeadBody>();
                                     if (component) {
                                         GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
-                                        if (playerInfo != null)
-                                            roomColors.Add(Palette.PlayerColors[playerInfo.ColorId]);
+                                        if (playerInfo != null) {
+                                            var color = Palette.PlayerColors[playerInfo.ColorId];
+                                            if (Hacker.onlyColorType)
+                                                color = Helpers.isLighterColor(playerInfo.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                            roomColors.Add(color);
+                                        }
                                     }
                                 }
                             }

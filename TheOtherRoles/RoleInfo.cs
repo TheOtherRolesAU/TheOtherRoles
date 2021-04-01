@@ -149,8 +149,8 @@ namespace TheOtherRoles
             else if (Hacker.hacker != null && p == Hacker.hacker) { 
                 name = "Hacker";
                 color = Hacker.color;
-                introDescription = "Hacker on everyone to find the [FF1919FF]Impostors";
-                shortDescription = "Hacker on everyone";
+                introDescription = "Hacker to find the [FF1919FF]Impostors";
+                shortDescription = "Hacker to find the Impostors";
             }
             else if (Child.child != null && p == Child.child) { 
                 name = "Child";

@@ -419,6 +419,7 @@ namespace TheOtherRoles
 
         public static float cooldown = float.MaxValue;
         public static float duration = 10f;
+        public static bool onlyColorType = false;
 
         public static float hackerTimer = 0f;
 
@@ -440,6 +441,7 @@ namespace TheOtherRoles
             hackerTimer = 0f;
             cooldown = TheOtherRolesPlugin.hackerCooldown.GetValue();
             duration = TheOtherRolesPlugin.hackerHackeringDuration.GetValue();
+            onlyColorType = TheOtherRolesPlugin.hackerOnlyColorType.GetValue();
         }
     }
 

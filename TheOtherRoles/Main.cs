@@ -95,6 +95,7 @@ namespace TheOtherRoles
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
         public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 10f, 120f, 5f);
         public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
+        public static CustomToggleOption hackerOnlyColorType = CustomOption.AddToggle("173", "Hacker Only Show Color Type", false);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle("191", "Bounty Gets Notified", true); 
         public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber("201", "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
@@ -193,6 +194,7 @@ namespace TheOtherRoles
                 medicShowAttemptToShielded,
                 hackerCooldown,
                 hackerHackeringDuration,
+                hackerOnlyColorType,
                 childGrowingUpDuration,
                 // bountyHunterNotifyBounty,
                 trackerUpdateIntervall,
