@@ -94,10 +94,6 @@ namespace TheOtherRoles
         public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
-        public static CustomNumberOption seerCooldown = CustomOption.AddNumber("161", "Seer Cooldown (No Reset After Meeting)", 15f, 30f, 180f, 15f);
-        public static CustomNumberOption seerChanceOfSeeingRight = CustomOption.AddNumber("162", "Seer Chance Of Seeing Right", 100, 0, 100, 5);
-        public static CustomStringOption seerKindOfInfo = CustomOption.AddString("163", "Info That Seer Reveals", new string[] {"Role", "Good/Bad"});
-        public static CustomStringOption seerPlayersWithNotification = CustomOption.AddString("164", "Players That See When They Are Being Revealed", new string[] {"Everyone", "The Good", "The Bad", "Nobody"});
         public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 10f, 120f, 5f);
         public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
@@ -197,10 +193,6 @@ namespace TheOtherRoles
                 timeMasterReviveDuringRewind,
                 medicShowShielded,
                 medicShowAttemptToShielded,
-                seerCooldown,
-                seerChanceOfSeeingRight,
-                seerKindOfInfo,
-                seerPlayersWithNotification,
                 hackerCooldown,
                 hackerHackeringDuration,
                 childGrowingUpDuration,
