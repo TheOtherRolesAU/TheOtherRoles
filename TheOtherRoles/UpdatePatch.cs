@@ -192,8 +192,9 @@ namespace TheOtherRoles
             }
         }
 
-        static void spyUpdate() {
+        static void timerUpdate() {
             Spy.spyTimer -= Time.deltaTime;
+            Lighter.lighterTimer -= Time.deltaTime;
         }
 
         static void camouflageAndMorphActions() {
@@ -360,8 +361,8 @@ namespace TheOtherRoles
             janitorDeactivateKillButton(__instance);
             // Shifter
             Helpers.removeTasksFromPlayer(Shifter.shifter);
-            // Spy update();
-            spyUpdate();
+            // Timer updates
+            timerUpdate();
             // Camouflager and Morphling
             camouflageAndMorphActions();
             // Child

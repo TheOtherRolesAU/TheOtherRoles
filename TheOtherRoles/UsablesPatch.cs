@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
+using static TheOtherRoles.MapOptions;
 using Reactor.Extensions;
 using System.Collections.Generic;
 
@@ -103,6 +104,18 @@ namespace TheOtherRoles
                 __instance.OpenLid.gameObject.SetActive(false);
                 __instance.ButtonActive = false;
             }
+
+            // Handle max number of meetings
+            if (__instance.Field_7 == 1) {
+                int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
+                int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
+                int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
+                __instance.NumberText.Text = $"{localRemaining.ToString()} and the ship has {teamRemaining.ToString()}";
+                __instance.ButtonActive = remaining > 0;
+                __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
+                __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);
+				return;
+			}
         }
     }
 

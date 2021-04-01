@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which currently adds 20 additional roles to the game.
+The **The Other Roles**, is a mod for Amongs Us which currently adds 25 additional roles and new [Settings](#settings) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -58,10 +58,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Changes in 1.9**
-- Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
-- Medic: The Medic report changed, it only shows the time since death (see Detective)
-- Detective: The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
-- Seer: As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- **Medic:** The Medic report changed, it only shows the time since death (see Detective)
+- **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
+- **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
+- **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **New options:**
+  - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -119,7 +122,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 # Installation
 **Windows**
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -131,7 +134,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 **Linux**
 1. Install Among Us via steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
@@ -152,6 +155,12 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
+
+# Settings
+The mod adds a few new settings to Among Us (in addition to the role settings):
+- The number of Impostor count be set inside a lobby
+- The map can be changed inside a lobby
+- You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 
 # Roles
 
@@ -341,14 +350,16 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 
 ## Lighter
 ### **Team: Crewmates**
-The vision of the Lighter never changes, even if the lights are out.\
-Depending on the options the Lighter can have a bigger or smaller vision than other crewmates.
+The Lighter can turn on his lighter every now and then, which increases his vision by a costumizable amount.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Lighter Spawn Chance | -
-| Lighter Vision | -
+| Lighter Mode Vision On Lights On | The vision the Lighter has when the lights are on and the Lighter mode is on
+| Lighter Mode Vision On Lights Off | The vision the Lighter has when the lights are down and the Lighter mode is on
+| Lighter Cooldown | -
+| Lighter Duration | -
 -----------------------
 
 ## Child
@@ -393,7 +404,8 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 
 ## Mayor
 ### **Team: Crewmates**
-The Mayor leades the crewmates by having a vote that counts twice.
+The Mayor leades the crewmates by having a vote that counts twice.\
+The Mayor can always use his meeting, even if the maximum number of meetings was reached.
 
 ### Game Options
 | Name | Description |
@@ -556,7 +568,7 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
-You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are base on theirs. And yes it is in a zip file... I will change that.
+You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests
 If you found any bugs, have an idea for an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)

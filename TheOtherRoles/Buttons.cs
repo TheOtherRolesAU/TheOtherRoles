@@ -30,6 +30,7 @@ namespace TheOtherRoles
         private static CustomButton jackalKillButton;
         private static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
+        private static CustomButton lighterButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -47,9 +48,11 @@ namespace TheOtherRoles
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
+            lighterButton.MaxTimer = Lighter.cooldown;
 
             spyButton.EffectDuration = Spy.duration;
-            vampireKillButton.EffectDuration= Vampire.delay;
+            vampireKillButton.EffectDuration = Vampire.delay;
+            lighterButton.EffectDuration = Lighter.duration; 
         }
 
         public static void Postfix(HudManager __instance)
@@ -437,6 +440,26 @@ namespace TheOtherRoles
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
                 __instance
+            );
+
+            // Lighter light
+            lighterButton = new CustomButton(
+                () => {
+                    Lighter.lighterTimer = Lighter.duration;
+                },
+                () => { return Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    lighterButton.Timer = lighterButton.MaxTimer;
+                    lighterButton.isEffectActive = false;
+                    lighterButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Lighter.getButtonSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                true,
+                Lighter.duration,
+                () => { lighterButton.Timer = lighterButton.MaxTimer; }
             );
         }
     }

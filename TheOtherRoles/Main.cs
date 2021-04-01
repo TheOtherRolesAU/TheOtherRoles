@@ -63,6 +63,9 @@ namespace TheOtherRoles
         public static CustomStringOption snitchSpawnRate = CustomOption.AddString("210", cs(Snitch.color) + "Snitch", rates);
         public static CustomStringOption jackalSpawnRate = CustomOption.AddString("220", cs(Jackal.color) + "Jackal", rates);
 
+        // Map settings
+        public static CustomNumberOption maxNumberOfMeetings = CustomOption.AddNumber("3", "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1);
+
         // Role settings
         public static CustomNumberOption janitorCooldown = CustomOption.AddNumber("11", "Janitor Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption morphlingCooldown = CustomOption.AddNumber("21", "Morphling Cooldown", 30f, 10f, 60f, 2.5f);
@@ -77,7 +80,10 @@ namespace TheOtherRoles
 
         public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber("101", "Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("102", "Sheriff Can Kill The Jester", false);
-        public static CustomNumberOption lighterVision = CustomOption.AddNumber("111", "Lighter Vision", 2f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterModeLightsOnVision = CustomOption.AddNumber("111", "Lighter Mode Vision On Lights On", 2f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterModeLightsOffVision = CustomOption.AddNumber("112", "Lighter Mode Vision On Lights Off", 0.75f, 0.25f, 5f, 0.25f);
+        public static CustomNumberOption lighterCooldown = CustomOption.AddNumber("113", "Lighter Cooldown", 30f, 5f, 120f, 5f);
+        public static CustomNumberOption lighterDuration = CustomOption.AddNumber("114", "Lighter Duration", 5f, 2.5f, 60f, 2.5f);
         public static CustomToggleOption detectiveAnonymousFootprints = CustomOption.AddToggle("121", "Anonymous Footprints", false); 
         public static CustomNumberOption detectiveFootprintIntervall = CustomOption.AddNumber("122", "Footprint Intervall", 0.5f, 0.25f, 10f, 0.25f);
         public static CustomNumberOption detectiveFootprintDuration = CustomOption.AddNumber("123", "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
@@ -158,6 +164,8 @@ namespace TheOtherRoles
                 snitchSpawnRate,
                 jackalSpawnRate,
 
+                maxNumberOfMeetings,
+
                 janitorCooldown,
                 morphlingCooldown,
                 camouflagerCooldown,
@@ -171,7 +179,10 @@ namespace TheOtherRoles
 
                 sheriffCooldown,
                 jesterCanDieToSheriff,
-                lighterVision,
+                lighterModeLightsOnVision,
+                lighterModeLightsOffVision,
+                lighterCooldown,
+                lighterDuration,
                 detectiveAnonymousFootprints,
                 detectiveFootprintIntervall,
                 detectiveFootprintDuration,
