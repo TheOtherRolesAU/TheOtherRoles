@@ -144,8 +144,8 @@ namespace TheOtherRoles
             else if (Seer.seer != null && p == Seer.seer) { 
                 name = "Seer";
                 color = Seer.color;
-                introDescription = "You'll see players die";
-                shortDescription = "You'll see players die";
+                introDescription = "You will see players die";
+                shortDescription = "You will see players die";
             }
             else if (Spy.spy != null && p == Spy.spy) { 
                 name = "Spy";

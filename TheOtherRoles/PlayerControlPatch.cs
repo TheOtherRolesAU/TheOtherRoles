@@ -343,6 +343,18 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
+
+            // Seer show flash
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK) {
+                System.Console.WriteLine("here");
+                HudManager.Instance.FullScreen.enabled = true;
+                Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
+                    HudManager.Instance.FullScreen,
+                    1f,
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
+                    new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
+                ));
+            }
         }
     }
 
