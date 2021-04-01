@@ -158,7 +158,7 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 The mod adds a few new settings to Among Us (in addition to the role settings):
 - The number of Impostor count be set inside a lobby
 - The map can be changed inside a lobby
-- You can set the maximum number of meetings that can be called (every player still only has 1 meeting, but if the maximum number of meetings is reached you can't use your meeting even if you have one left, Impostor and Jackal meetings also count) 
+- You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 
 # Roles
 
