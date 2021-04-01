@@ -63,6 +63,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
 - **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -261,7 +262,7 @@ If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win"
 \
 **NOTE**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
-- The Lovers can change if the Shifter exchanges role with one of the Lovers
+- The Lovers can change if the Shifter takes the role of a Lovers
 
 ### Game Options
 | Name | Description |
@@ -278,7 +279,6 @@ The Sheriff has the ability to kill impostors.
 If they try to kill a crewmate, they die instead.
 
 **NOTE**
-- For now the Shifter won't die to the Sheriff (an option will be added in the next version).
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
 
 ### Game Options
@@ -432,23 +432,26 @@ Otherwise he sees the same information as everyone else.
 
 
 ## Shifter
-### **Team: Neutral**
-The Shifter belongs to no team and has no tasks.\
-The Shifter always loses the game, however they can exchange roles with other players.\
-Swapping roles with a crewmate or a custom crewmate role (or the Jester) gives them their role and their tasks, the other player becomes the new Shifter.\
-Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide.\
+### **Team: Crewmates**
+The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.
+The Shift will always be performed at the end of the next meeting, the target needs to be chosen during the round.
+Even if the Shifter or the target dies before the meeting, the Shift will still be performed.
+Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes the new Shifter.\
+Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
+The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.
+This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
 \
 **NOTE:**
+- The shift will be performed before the Jester win condition is being checked.
 - If the Shifter takes over a role, their new cooldowns will start at the maximum cooldown of the ability
 - One time use abilities (e.g. shielding a player or engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
-can only use them, if the player they exchanged roles with have not used them before)
+can only use them, if the previous player did not used them before)
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
-| Shifter Cooldown | -
 -----------------------
 
 ## Time Master
