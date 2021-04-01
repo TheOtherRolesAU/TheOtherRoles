@@ -143,7 +143,7 @@ namespace TheOtherRoles
     class VitalsMinigamePatch {
         static void Postfix(VitalsMinigame __instance) {
             // Spy show time since death
-            bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0;
+            bool showSpyInfo = Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer && Spy.spyTimer > 0 && Camouflager.camouflageTimer <= 0f;
             for (int k = 0; k < __instance.vitals.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.vitals[k];
