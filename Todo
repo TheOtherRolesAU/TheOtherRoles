@@ -1,13 +1,3 @@
-Discussed reworks with Dhalucard:
-    - Lovers: A (Crew/Imp) should be able to have another role
-    - Shifter: Change it to thief -> Can only Shift ones, other player turns into a crewmate (Tasks need to be added to the Thief, or they should not be deleted in the first place)
-    - Time Master: Fixed number of time shields (if there's a kill attempt the time rewinds instead) or Time Master Impostor
-    - Child: Introduce Child impostor (higher cooldown or no kills at all while growing, other Impostor gets a buff in the mean time)
-    - Medic: Kill attempt by Impostors break the shield during the next meeting (option)
-    - Option: Max number of meetings in a game, Mayor can always call one meeting per game (ignores the max count)
-    - Jackal
-    - Hacker/Seer: ?
-
 Roles in development:
     - Tracker: Deactivate the arrow when the Tracker dies
     - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
