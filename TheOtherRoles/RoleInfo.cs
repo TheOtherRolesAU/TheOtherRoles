@@ -131,9 +131,8 @@ namespace TheOtherRoles
             else if (Shifter.shifter != null && p == Shifter.shifter) {
                 name = "Shifter";
                 color = Shifter.color;
-                introDescription = "Shift your role before the game ends";
+                introDescription = "Shift your role";
                 shortDescription = "Shift your role";
-                isGood = false;
             }
             else if (Swapper.swapper != null && p == Swapper.swapper) {
                 name = "Swapper";

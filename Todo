@@ -8,7 +8,6 @@ Discussed reworks with Dhalucard:
     - Jackal
     - Hacker/Seer: ?
 
-
 Roles in development:
     - Tracker: Deactivate the arrow when the Tracker dies
     - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
@@ -24,7 +23,7 @@ Roles in development:
 High priority:
     - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
-Medium priority:    
+Medium priority:
     - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
     - Medic shield rework

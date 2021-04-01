@@ -320,21 +320,19 @@ namespace TheOtherRoles
         }
 
         public static void shifterShift(byte targetId) {
+            Shifter.futureShift = null;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId == targetId && Shifter.shifter != null)
                 {
-                    // Suicide when impostor or impostor variants
+                    // Suicide (exile) when impostor or impostor variants
                     if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
-                        Shifter.shifter.MurderPlayer(Shifter.shifter);
+                        Shifter.shifter.Exiled();
+                        Shifter.shifter = null;
                         return;
                     }
 
                     PlayerControl oldShifter = Shifter.shifter;
-                    // Switch tasks
-                    var shifterSabotageTasks = oldShifter.myTasks;
-                    oldShifter.myTasks = player.myTasks;
-                    player.myTasks = shifterSabotageTasks;
 
                     // Switch shield
                     if (Medic.shielded != null && Medic.shielded == player) {
@@ -383,7 +381,10 @@ namespace TheOtherRoles
                     }else { // Crewmate
                     }
                     
-                    Shifter.shifter = player;
+                    Shifter.shifter = null;
+                    // Update role descriptions tasks
+                    Helpers.refreshRoleDescription(oldShifter);
+                    Helpers.refreshRoleDescription(player);
 
                     // Set cooldowns to max for both players
                     if (PlayerControl.LocalPlayer == Shifter.shifter || PlayerControl.LocalPlayer == oldShifter)

@@ -147,6 +147,34 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void refreshRoleDescription(PlayerControl player) {
+            if (player == null) return;
+
+            // Remove default ImportantTextTasks
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask t in player.myTasks) {
+                if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
+                    toRemove.Add(t);
+                }
+            }   
+            foreach (PlayerTask t in toRemove)
+                player.RemoveTask(t);
+
+            // Add description
+            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(player);        
+            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+            task.transform.SetParent(player.transform, false);
+
+            if (player == Jackal.jackal) {
+                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+            } else {
+                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+            }
+
+            player.myTasks.Insert(0, task);
+        }
+
         public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
         {
             Vector3 temp = default(Vector3);

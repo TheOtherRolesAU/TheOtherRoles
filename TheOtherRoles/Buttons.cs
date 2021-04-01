@@ -38,7 +38,7 @@ namespace TheOtherRoles
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
             timeMasterRewindTimeButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
-            shifterShiftButton.MaxTimer = Shifter.cooldown;
+            shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
@@ -207,17 +207,11 @@ namespace TheOtherRoles
             // Shifter shift
             shifterShiftButton = new CustomButton(
                 () => {
-                    shifterShiftButton.Timer = shifterShiftButton.MaxTimer;
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Shifter.currentTarget.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    
-                    RPCProcedure.shifterShift(Shifter.currentTarget.PlayerId);
+                    Shifter.futureShift = Shifter.currentTarget;
                 },
                 () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Shifter.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                () => { shifterShiftButton.Timer = shifterShiftButton.MaxTimer; },
+                () => { return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
+                () => { },
                 Shifter.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance
