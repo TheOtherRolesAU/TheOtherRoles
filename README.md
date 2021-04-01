@@ -41,7 +41,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.3.5s | v1.9 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
+| 2021.31.3s | v1.9 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
@@ -59,6 +59,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Changes in 1.9**
 - Custom options: Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- Medic: The Medic report changed, it only shows the time since death (see Detective)
+- Detective: The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 
 **Hotfix 1.8.2**
 - Add map and impostor count to lobby settings.
@@ -336,10 +338,12 @@ you can double click on the tasks instead.
 ## Detective
 ### **Team: Crewmates**
 The Detective can see footprints that other players leave behind.
+The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
 **NOTE**
-- Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the
-Detective still sees the right (original) colors.
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
+- **Darker Colors:** Red, blue, green, grey, purple, brown
+- Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the Detective still sees the right (original) colors.
 - The detective does not see footprints of players that sit in vents
 
 ### Game Options
@@ -349,6 +353,8 @@ Detective still sees the right (original) colors.
 | Anonymous Footprints | If set to true, all footprints will have the same color. Otherwise they will have the color of the respective player.
 | Footprint Intervall | The intervall between two footprints
 | Footprint Duration | Sets how long the footprints remain visible.
+| Time Where Detective Reports Will Have Name | The amount of time that the Detective will have to report the body since death to get the killer's name.  |
+| Time Where Detective Reports Will Have Color Type| The amount of time that the Detective will have to report the body since death to get the killer's color type. |
 -----------------------
 
 ## Lighter
@@ -388,11 +394,9 @@ The shielded player can still be voted out and might also be an impostor.\
 If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
 If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded crewmate and won't perform a kill if they try to kill a shielded impostor.\
-The Medic's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
+The Medic's other feature shows when they report a corpse: they will see how long ago the player died
 \
 **NOTE**
-- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
-- **Darker Colors:** Red, blue, green, grey, purple, brown
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
 
@@ -402,9 +406,7 @@ The Medic's other feature shows when they report a corpse: they recieve clues ab
 |----------|:-------------:|:-------------:|
 | Medic Spawn Chance | - | -
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
-| Time Where Medic Reports Will Have Name | The amount of time that the Medic will have to report the body since death to get the killer's name.  |
-| Time Where Medic Reports Will Have Color Type| The amount of time that the Medic will have to report the body since death to get the killer's color type. |
-|Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
+| Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
 -----------------------
 
 ## Mayor
