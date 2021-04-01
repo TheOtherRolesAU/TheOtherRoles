@@ -93,6 +93,18 @@ namespace TheOtherRoles {
             anim.Update(0f);
         }
 
+        public static IEnumerator CoFadeOutAndDestroy(SpriteRenderer renderer, float duration) {
+            for (float t = duration; t > 0; t -= Time.deltaTime) {
+                if (renderer != null) {
+                    var tmp = renderer.color;
+                    tmp.a = Mathf.Clamp(t / duration, 0, 1);
+                    renderer.color = tmp;
+                }
+                yield return null;
+            }
+            if (renderer?.gameObject != null) UnityEngine.Object.Destroy(renderer.gameObject);
+        }
+
         public static IEnumerator CoFlashAndDisable(SpriteRenderer renderer, float duration, Color a, Color b) {
             float singleDuration = duration / 2;
             for (float t = 0f; t < singleDuration; t += Time.deltaTime) {

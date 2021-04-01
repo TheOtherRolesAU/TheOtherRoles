@@ -49,6 +49,7 @@
         <EmbeddedResource Include="Resources\Garlic.png"/>
         <EmbeddedResource Include="Resources\GarlicBackground.png"/>
         <EmbeddedResource Include="Resources\Footprint.png"/>
+        <EmbeddedResource Include="Resources\Soul.png"/>
         <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
         <EmbeddedResource Include="Resources\SwapperCheck.png"/>
         <EmbeddedResource Include="Resources\SidekickButton.png"/>
