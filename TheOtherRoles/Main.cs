@@ -93,7 +93,9 @@ namespace TheOtherRoles
         public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
-        public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 10f, 120f, 5f);
+        public static CustomStringOption seerMode = CustomOption.AddString("161", "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"});
+        public static CustomNumberOption seerSoulDuration = CustomOption.AddNumber("162", "Seer Soul Duration", 15f, 0f, 60f, 5f);
+        public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 0f, 60f, 5f);
         public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
         public static CustomToggleOption hackerOnlyColorType = CustomOption.AddToggle("173", "Hacker Only Sees Color Type", false);
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
@@ -192,6 +194,8 @@ namespace TheOtherRoles
                 timeMasterReviveDuringRewind,
                 medicShowShielded,
                 medicShowAttemptToShielded,
+                seerMode,
+                seerSoulDuration,
                 hackerCooldown,
                 hackerHackeringDuration,
                 hackerOnlyColorType,

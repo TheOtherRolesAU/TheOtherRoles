@@ -320,9 +320,23 @@ namespace TheOtherRoles
     public static class Seer {
         public static PlayerControl seer;
         public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
+
+        public static float soulDuration = 15f;
+        public static int mode = 0;
+
+        private static Sprite soulSprite;
+        public static Sprite getSoulSprite() {
+            if (soulSprite) return soulSprite;
+            soulSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
+            return soulSprite;
+        }
 
         public static void clearAndReload() {
             seer = null;
+            deadBodyPositions = new List<Vector3>();
+            soulDuration = TheOtherRolesPlugin.seerSoulDuration.GetValue();
+            mode = TheOtherRolesPlugin.medicShowShielded.GetValue();
         }
     }
 

@@ -302,6 +302,19 @@ namespace TheOtherRoles
                         RPCProcedure.jesterBountyHunterWin(exiledId);
                     }
                 }
+
+                // Seer spawn souls
+                if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
+                    foreach (Vector3 pos in Seer.deadBodyPositions) {
+                        GameObject soul = new GameObject();
+                        soul.transform.position = pos;
+                        soul.layer = 5;
+                        var rend = soul.AddComponent<SpriteRenderer>();
+                        rend.sprite = Seer.getSoulSprite();
+                        Reactor.Coroutines.Start(Helpers.CoFadeOutAndDestroy(rend, Seer.soulDuration));
+                    }
+                    Seer.deadBodyPositions = new List<Vector3>();
+                }
             }
         }
     }

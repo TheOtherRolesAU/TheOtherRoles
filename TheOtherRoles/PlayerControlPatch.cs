@@ -347,9 +347,8 @@ namespace TheOtherRoles {
                 RPCProcedure.sidekickPromotes();
             }
 
-            // Seer show flash
-            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK) {
-                System.Console.WriteLine("here");
+            // Seer show flash and add dead player position
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK && Seer.mode <= 1) {
                 HudManager.Instance.FullScreen.enabled = true;
                 Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
                     HudManager.Instance.FullScreen,
@@ -358,6 +357,7 @@ namespace TheOtherRoles {
                     new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
                 ));
             }
+            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(PAIBDFDMIGK.transform.position);
         }
     }
 
