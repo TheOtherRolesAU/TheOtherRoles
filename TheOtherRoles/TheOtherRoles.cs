@@ -144,11 +144,28 @@ namespace TheOtherRoles
             public static PlayerControl lighter;
             public static Color color = new Color(250f / 255f, 204f / 255f, 37f / 255f, 1);
             
-            public static float lighterVision = 2f;
+            public static float lighterModeLightsOnVision = 2f;
+            public static float lighterModeLightsOffVision = 0.75f;
+
+            public static float cooldown = float.MaxValue;
+            public static float duration = 5f;
+
+            public static float lighterTimer = 0f;
+
+            private static Sprite buttonSprite;
+            public static Sprite getButtonSprite() {
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpyButton.png", 115f);
+                return buttonSprite;
+            }
 
             public static void clearAndReload() {
                 lighter = null;
-                lighterVision = TheOtherRolesPlugin.lighterVision.GetValue();
+                lighterTimer = 0f;
+                cooldown = TheOtherRolesPlugin.lighterCooldown.GetValue();
+                duration = TheOtherRolesPlugin.lighterDuration.GetValue();
+                lighterModeLightsOnVision = TheOtherRolesPlugin.lighterModeLightsOnVision.GetValue();
+                lighterModeLightsOffVision = TheOtherRolesPlugin.lighterModeLightsOffVision.GetValue();
             }
         }
 
