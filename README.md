@@ -62,7 +62,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
-- **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **Seer:** As the role didn't work the way it was, we completely changed it. We're still working on the role, for now we're trying a few things. Check the [Seer](#seer) section to get more details about the new Seer.
 - **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
 - **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
@@ -310,12 +310,16 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 
 ## Seer
 ### **Team: Crewmates**
+The Seer has two abilities (one can activate one of them or both in the options).
+The Seer sees the souls of players that died a round earlier, the souls slowy fade away.
 The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Seer Spawn Chance | - 
+| Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
 -----------------------
 
 ## Engineer
