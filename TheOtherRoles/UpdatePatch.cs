@@ -359,8 +359,6 @@ namespace TheOtherRoles
             mafiosoDeactivateKillButtonIfNecessary(__instance);
             // Janitor
             janitorDeactivateKillButton(__instance);
-            // Shifter
-            Helpers.removeTasksFromPlayer(Shifter.shifter);
             // Timer updates
             timerUpdate();
             // Camouflager and Morphling

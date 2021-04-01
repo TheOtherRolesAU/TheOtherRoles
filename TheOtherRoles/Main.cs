@@ -76,7 +76,6 @@ namespace TheOtherRoles
 
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber("51", "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle("52", "Both Lovers Die", true);
-        public static CustomNumberOption shifterCooldown = CustomOption.AddNumber("71", "Shifter Cooldown", 30f, 10f, 60f, 2.5f);
 
         public static CustomNumberOption sheriffCooldown = CustomOption.AddNumber("101", "Sheriff Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption jesterCanDieToSheriff = CustomOption.AddToggle("102", "Sheriff Can Kill The Jester", false);
@@ -175,7 +174,6 @@ namespace TheOtherRoles
 
                 loversImpLoverRate,
                 loversBothDie,
-                shifterCooldown,
 
                 sheriffCooldown,
                 jesterCanDieToSheriff,

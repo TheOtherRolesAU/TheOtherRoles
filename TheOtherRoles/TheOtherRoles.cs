@@ -253,9 +253,8 @@ namespace TheOtherRoles
     public static class Shifter {
         public static PlayerControl shifter;
         public static Color color = new Color(90f / 255f, 90f / 255f, 90f / 255f, 1);
-    
-        public static float cooldown = float.MaxValue;
 
+        public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
 
         private static Sprite buttonSprite;
@@ -268,7 +267,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             shifter = null;
             currentTarget = null;
-            cooldown = TheOtherRolesPlugin.shifterCooldown.GetValue();
+            futureShift = null;
         }
     }
 
