@@ -61,7 +61,6 @@ namespace TheOtherRoles
         TimeMasterRevive = 88,
         ShifterShift = 89,
         SwapperSwap = 90,
-        SeerReveal = 91,
         MorphlingMorph = 92,
         CamouflagerCamouflage = 93,
         TrackerUsedTracker = 94,
@@ -398,36 +397,6 @@ namespace TheOtherRoles
             }
         }
 
-        public static void seerReveal(byte targetId, byte targetOrMistakeId) {
-            if (Seer.seer == null) return;
-            
-            PlayerControl target = Helpers.playerById(targetId);
-            PlayerControl targetOrMistake = Helpers.playerById(targetOrMistakeId);
-
-            if (target != null && targetOrMistake != null && !Seer.revealedPlayers.Keys.Any(p => p.Data.PlayerId == targetId)) {
-                Seer.revealedPlayers.Add(target, targetOrMistake);
-
-                if (PlayerControl.LocalPlayer == target && HudManager.Instance?.FullScreen != null) {
-                    RoleInfo si = RoleInfo.getRoleInfoForPlayer(target); // Use RoleInfo of target here, because we need the isGood of the targets role
-                    bool showNotification = false;
-                    if (Seer.playersWithNotification == 0 ) showNotification = true;
-                    else if (Seer.playersWithNotification == 1 && si.isGood) showNotification = true;
-                    else if (Seer.playersWithNotification == 2 && !si.isGood) showNotification = true;
-                    else if (Seer.playersWithNotification == 3) showNotification = false;
-
-                    if (showNotification) {
-                        HudManager.Instance.FullScreen.enabled = true;
-                        Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
-                            HudManager.Instance.FullScreen,
-                            0.5f,
-                            new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
-                            new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
-                        ));
-                    }
-                }
-            }
-        }
-
         public static void morphlingMorph(byte playerId) {  
             PlayerControl target = Helpers.playerById(playerId);
             if (Morphling.morphling == null || target == null) return;
@@ -647,11 +616,6 @@ namespace TheOtherRoles
                     byte playerId1 = HFPCBBHJIPJ.ReadByte();
                     byte playerId2 = HFPCBBHJIPJ.ReadByte();
                     RPCProcedure.swapperSwap(playerId1, playerId2);
-                    break;
-                case (byte)CustomRPC.SeerReveal:
-                    byte targetId = HFPCBBHJIPJ.ReadByte();
-                    byte targetOrMistakeId = HFPCBBHJIPJ.ReadByte();
-                    RPCProcedure.seerReveal(targetId, targetOrMistakeId);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
                     RPCProcedure.morphlingMorph(HFPCBBHJIPJ.ReadByte());
