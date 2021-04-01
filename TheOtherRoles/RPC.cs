@@ -3,6 +3,7 @@ using Hazel;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
+using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
@@ -82,6 +83,7 @@ namespace TheOtherRoles
 
         public static void resetVariables() {
             Garlic.clearGarlics();
+            clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();

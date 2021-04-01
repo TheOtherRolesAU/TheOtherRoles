@@ -152,9 +152,8 @@ namespace TheOtherRoles {
                 }
             }
 
-            // Reset Role Settings
-            clearAndReloadRoles();
-            clearGameHistory();
+            // Reset Settings
+            RPCProcedure.resetVariables();
         }
     }
 
