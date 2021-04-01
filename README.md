@@ -63,6 +63,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
 - **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
+- **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -202,8 +204,11 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 \
 **NOTE**
 - They shrink to the size of the child when they copies its look.
-- The color of the footprints does **not** change.
+- The Spy sees their new color on the admin table.
+- The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other impostor still sees that they are an impostor (the name remains red).
+- The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
+- Tracker and Snitch arrows keep working.
 
 ### Game Options
 | Name | Description |
@@ -219,8 +224,11 @@ The camouflage mode lasts for 10s and while it is active, all player names/pets/
 are hidden and all players have the same color.
 \
 **NOTE**
-- The Child and Morphling when copying the child remain small.
-- The color of the footprints does **not** change.
+- The Child (and Morphling when copying the child) remains small and show its age.
+- The color of the footprints turns gray (also the ones that were already on the ground).
+- The Spy sees gray icons on the admin table
+- The shield is not visible anymore
+- Tracker and Snitch arrows keep working
 
 ### Game Options
 | Name | Description |
@@ -334,7 +342,7 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 **NOTE**
 - **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
 - **Darker Colors:** Red, blue, green, grey, purple, brown
-- Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the Detective still sees the right (original) colors.
+- When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The detective does not see footprints of players that sit in vents
 
 ### Game Options
@@ -421,7 +429,7 @@ Otherwise he sees the same information as everyone else.
 **Vitals**: The spy can see how long dead players have been dead for.\
 \
 **NOTE:**
-- Even if the Morphling morphes or the Camouflager camouflages, the Spy sees the right colors on the admin table.
+- If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
