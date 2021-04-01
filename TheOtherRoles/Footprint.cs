@@ -12,6 +12,7 @@ namespace TheOtherRoles{
         private GameObject footprint;
         private SpriteRenderer spriteRenderer;
         private PlayerControl owner;
+        private bool anonymousFootprints;
 
         public static Sprite getFootprintSprite() {
             if (sprite) return sprite;
@@ -21,6 +22,7 @@ namespace TheOtherRoles{
 
         public Footprint(float footprintDuration, bool anonymousFootprints, PlayerControl player) {
             this.owner = player;
+            this.anonymousFootprints = anonymousFootprints;
             if (anonymousFootprints)
                 this.color = new Color(0.2f, 0.2f, 0.2f, 1f);
             else
@@ -49,10 +51,12 @@ namespace TheOtherRoles{
         {
             for (float t = 0f; t < duration; t += Time.deltaTime) {
                 Color c = color;
-                if (owner != null && owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)
-                    c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
-                else if (owner != null && owner == Camouflager.camouflager && Camouflager.camouflageTimer > 0)
-                    c = Color.grey;
+                if (!anonymousFootprints && owner != null) {
+                    if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)
+                        c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
+                    else if (Camouflager.camouflageTimer > 0)
+                        c = Color.grey;
+                }
                 if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp(1f - t/duration, 0f, 1f));
 
                 yield return null;

@@ -237,7 +237,7 @@ namespace TheOtherRoles
                     p.nameText.Text = "";
                     p.myRend.material.SetColor("_BackColor", Color.grey);
                     p.myRend.material.SetColor("_BodyColor", Color.grey);
-                    p.myRend.material.SetFloat("_Outline",  1f);
+                    p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
                     if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
