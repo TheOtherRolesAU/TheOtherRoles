@@ -286,6 +286,9 @@ namespace TheOtherRoles
             {
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
+                // Child set higher cooldown
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor && !Child.isGrownUp())
+                    Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * 2);
 
                 if (ExileController.Instance.exiled != null) {
                     byte exiledId = ExileController.Instance.exiled.PlayerId;
