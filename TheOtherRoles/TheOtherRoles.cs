@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Snitch.clearAndReload();
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
+            Eraser.clearAndReload();
         }
 
         public static class Jester {

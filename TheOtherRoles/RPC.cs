@@ -493,11 +493,11 @@ namespace TheOtherRoles
                         Jackal.fakeSidekick = player;
                         return;
                     }
-                    Sidekick.sidekick = player;
                     player.RemoveInfected();
-
                     if (player != Lovers.lover1 && player != Lovers.lover2) erasePlayerRole(player.PlayerId);
                     
+                    Sidekick.sidekick = player;
+
                     if (PlayerControl.LocalPlayer == player) {
                         //Only the Lover keeps his ImportantTextTask
                         Helpers.removeTasksFromPlayer(player, player != Lovers.lover1 && player != Lovers.lover2);
@@ -569,10 +569,16 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) Lovers.clearAndReload(); // The whole Lover couple is being erased
-            if (player == Jackal.jackal) {
-                Jackal.clearAndReload();
+            if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
+                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
+                    RPCProcedure.sidekickPromotes();
+                } else {
+                    Jackal.clearAndReload();
+                }
             }
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+
+            Helpers.refreshRoleDescription(player);
         }
     }
 
