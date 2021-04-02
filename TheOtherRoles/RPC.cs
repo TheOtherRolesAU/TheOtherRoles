@@ -423,11 +423,8 @@ namespace TheOtherRoles
 
         public static void vampireSetBitten(byte targetId, byte reset) {
             if (reset != 0) {
-                System.Console.WriteLine("here");
                 Vampire.bitten = null;
                 return;
-            } else {
-                System.Console.WriteLine(reset);
             }
 
             if (Vampire.vampire == null) return;
