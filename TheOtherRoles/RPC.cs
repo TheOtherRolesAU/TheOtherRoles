@@ -67,7 +67,7 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         LoverSuicide,
         SetBountyHunterTarget,
-        VampireBiteNotification,
+        VampireSetBitten,
         VampireTryKill,
         PlaceGarlic,
         JackalKill,
@@ -421,7 +421,12 @@ namespace TheOtherRoles
                     BountyHunter.target = player;
         }
 
-        public static void vampireBiteNotification(byte targetId) {
+        public static void vampireSetBitten(byte targetId, byte reset) {
+            if (reset != 0) {
+                Vampire.bitten = null;
+                return;
+            }
+
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == targetId && !player.Data.IsDead) {
@@ -623,8 +628,10 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetBountyHunterTarget:
                     RPCProcedure.setBountyHunterTarget(HFPCBBHJIPJ.ReadByte());
                     break;
-                case (byte)CustomRPC.VampireBiteNotification:
-                    RPCProcedure.vampireBiteNotification(HFPCBBHJIPJ.ReadByte());
+                case (byte)CustomRPC.VampireSetBitten:
+                    byte bittenId = HFPCBBHJIPJ.ReadByte();
+                    byte reset = HFPCBBHJIPJ.ReadByte();
+                    RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.VampireTryKill:
                     RPCProcedure.vampireTryKill();

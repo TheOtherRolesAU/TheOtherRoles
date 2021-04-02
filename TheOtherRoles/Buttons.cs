@@ -330,10 +330,11 @@ namespace TheOtherRoles
                         } else {
                             Vampire.bitten = Vampire.currentTarget;
                             Reactor.Coroutines.Start(Vampire.killWithDelay());
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireBiteNotification, Hazel.SendOption.Reliable, -1);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.bitten.PlayerId);
+                            writer.Write(0);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.vampireBiteNotification(Vampire.bitten.PlayerId); 
+                            RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0); 
                             vampireKillButton.HasEffect = true; // Trigger effect on this click
                         }
                     } else {
