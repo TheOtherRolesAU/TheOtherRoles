@@ -549,7 +549,7 @@ namespace TheOtherRoles
         public static bool garlicsActive = true;
 
         public static PlayerControl currentTarget;
-        public static PlayerControl bitten;
+        public static PlayerControl bitten; 
         public static bool targetNearGarlic = false;
 
         private static Sprite buttonSprite;
@@ -574,10 +574,10 @@ namespace TheOtherRoles
                 RPCProcedure.vampireTryKill();
             } else {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
-                writer.Write(0);
-                writer.Write(1);
+                writer.Write(byte.MaxValue);
+                writer.Write(byte.MaxValue);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0);
+                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
             }
         }
 
