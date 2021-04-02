@@ -310,8 +310,6 @@ namespace TheOtherRoles
                     }
                 }
 
-                // Child lose condition
-
                 // Seer spawn souls
                 if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
                     foreach (Vector3 pos in Seer.deadBodyPositions) {
