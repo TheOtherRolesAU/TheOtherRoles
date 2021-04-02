@@ -23,17 +23,6 @@ namespace TheOtherRoles {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     localPlayerPositions.RemoveAt(0);
                     if (localPlayerPositions.Count > 0) localPlayerPositions.RemoveAt(0); // Skip every second position to rewinde in half the time
-                
-                    // Try reviving LOCAL player 
-                    if (TimeMaster.reviveDuringRewind && PlayerControl.LocalPlayer.Data.IsDead) {
-                        DeadPlayer deadPlayer = deadPlayers.Where(x => x.player == PlayerControl.LocalPlayer).FirstOrDefault();
-                        if (deadPlayer != null && next.Item2 < deadPlayer.timeOfDeath) {
-                            MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.TimeMasterRevive, Hazel.SendOption.Reliable, -1);
-                            write.Write(PlayerControl.LocalPlayer.PlayerId);
-                            AmongUsClient.Instance.FinishRpcImmediately(write);
-                            RPCProcedure.timeMasterRevive(PlayerControl.LocalPlayer.PlayerId);
-                        }
-                    }
                 } else {
                     TimeMaster.isRewinding = false;
                     PlayerControl.LocalPlayer.moveable = true;
@@ -231,21 +220,29 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.OpenMeetingRoom))]
-    class OpenMeetingRoomPatch {
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
+    class StartMeetingPatcher {
         public static void Prefix(PlayerControl __instance) {
-            // Perform vampire bite kill before the meeting starts for HOST
-            if (!MeetingHud.Instance && AmongUsClient.Instance.AmHost)
+            // Murder the bitten player before the meeting starts or reset the bitten player
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();
+            } else {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+                writer.Write(byte.MaxValue);
+                writer.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
+            }
         }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
     class StartMeetingPatch {
         public static void Prefix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK) {
-            // Perform vampire bite kill before the meeting starts for CLIENTS
-            if (AmongUsClient.Instance.AmClient) RPCProcedure.vampireTryKill();
-
+            // Reset vampire bitten
+            Vampire.bitten = null;
             // Count meetings
             if (PAIBDFDMIGK == null) meetingsCount++;
         }

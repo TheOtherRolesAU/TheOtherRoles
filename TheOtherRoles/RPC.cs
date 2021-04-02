@@ -46,34 +46,34 @@ namespace TheOtherRoles
         // Main Controls
 
         ResetVaribles = 50,
-        ForceEnd = 51,
-        SetRole = 52,
+        ForceEnd,
+        SetRole,
 
         // Role functionality
 
         JesterBountyHunterWin = 80,
-        EngineerFixLights = 81,
-        EngineerUsedRepair = 82,
-        JanitorClean = 83,
-        SheriffKill = 84,
-        TimeMasterRewindTime = 85,
-        MedicSetShielded = 86,
-        ShieldedMurderAttempt = 87,
-        TimeMasterRevive = 88,
-        ShifterShift = 89,
-        SwapperSwap = 90,
-        MorphlingMorph = 92,
-        CamouflagerCamouflage = 93,
-        TrackerUsedTracker = 94,
-        LoverSuicide = 95,
-        SetBountyHunterTarget = 96,
-        VampireBiteNotification = 97,
-        VampireTryKill = 98,
-        PlaceGarlic = 99,
-        JackalKill = 100,
-        SidekickKill = 101,
-        JackalCreatesSidekick = 102,
-        SidekickPromotes = 103
+        EngineerFixLights,
+        EngineerUsedRepair,
+        JanitorClean,
+        SheriffKill,
+        MedicSetShielded,
+        ShieldedMurderAttempt,
+        TimeMasterShield,
+        TimeMasterRewindTime,
+        ShifterShift,
+        SwapperSwap,
+        MorphlingMorph,
+        CamouflagerCamouflage,
+        TrackerUsedTracker,
+        LoverSuicide,
+        SetBountyHunterTarget,
+        VampireSetBitten,
+        VampireTryKill,
+        PlaceGarlic,
+        JackalKill,
+        SidekickKill,
+        JackalCreatesSidekick ,
+        SidekickPromotes
     }
 
     public static class RPCProcedure {
@@ -288,6 +288,10 @@ namespace TheOtherRoles
             HudManager.Instance.FullScreen.enabled = true;
         }
 
+        public static void timeMasterShield() {
+            Reactor.Coroutines.Start(TimeMaster.shieldForShieldDuration());
+        }
+
         public static void medicSetShielded(byte shieldedId) {
             Medic.usedShield = true;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -306,17 +310,6 @@ namespace TheOtherRoles
                     new Color(c.r, c.g, c.b, 0.75f)
                 ));
             }
-        }
-
-        public static void timeMasterRevive(byte playerId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == playerId) {
-                    player.Revive();
-                    var body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == playerId);
-                    DeadPlayer deadPlayerEntry = deadPlayers.Where(x => x.player.PlayerId == playerId).FirstOrDefault();
-                    if (body != null) UnityEngine.Object.Destroy(body.gameObject);
-                    if (deadPlayerEntry != null) deadPlayers.Remove(deadPlayerEntry);
-                }
         }
 
         public static void shifterShift(byte targetId) {
@@ -428,7 +421,12 @@ namespace TheOtherRoles
                     BountyHunter.target = player;
         }
 
-        public static void vampireBiteNotification(byte targetId) {
+        public static void vampireSetBitten(byte targetId, byte reset) {
+            if (reset != 0) {
+                Vampire.bitten = null;
+                return;
+            }
+
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == targetId && !player.Data.IsDead) {
@@ -438,9 +436,7 @@ namespace TheOtherRoles
         }
 
         public static void vampireTryKill() {
-            if (Vampire.vampire == null || Vampire.bitten == null) return;
-
-            if (!Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, false)) {
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
@@ -603,14 +599,14 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
                     break;
+                case (byte)CustomRPC.TimeMasterShield:
+                    RPCProcedure.timeMasterShield();
+                    break;
                 case (byte)CustomRPC.MedicSetShielded:
                     RPCProcedure.medicSetShielded(HFPCBBHJIPJ.ReadByte());
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
                     RPCProcedure.shieldedMurderAttempt();
-                    break;
-                case (byte)CustomRPC.TimeMasterRevive:
-                    RPCProcedure.timeMasterRevive(HFPCBBHJIPJ.ReadByte());
                     break;
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(HFPCBBHJIPJ.ReadByte());
@@ -632,8 +628,10 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetBountyHunterTarget:
                     RPCProcedure.setBountyHunterTarget(HFPCBBHJIPJ.ReadByte());
                     break;
-                case (byte)CustomRPC.VampireBiteNotification:
-                    RPCProcedure.vampireBiteNotification(HFPCBBHJIPJ.ReadByte());
+                case (byte)CustomRPC.VampireSetBitten:
+                    byte bittenId = HFPCBBHJIPJ.ReadByte();
+                    byte reset = HFPCBBHJIPJ.ReadByte();
+                    RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.VampireTryKill:
                     RPCProcedure.vampireTryKill();

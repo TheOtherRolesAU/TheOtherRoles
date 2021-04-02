@@ -119,8 +119,8 @@ namespace TheOtherRoles
             else if (TimeMaster.timeMaster != null && p == TimeMaster.timeMaster) {
                 name = "Time Master";
                 color = TimeMaster.color;
-                introDescription = "Rewind time to find the [FF1919FF]Impostors";
-                shortDescription = "Rewind time";
+                introDescription = "Save yourself with your time shield";
+                shortDescription = "Use your time shield";
             }
             else if (Medic.medic != null && p == Medic.medic) {
                 name = "Medic";

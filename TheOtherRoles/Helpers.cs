@@ -122,19 +122,26 @@ namespace TheOtherRoles {
         }
 
 
-        public static bool handleMurderAttempt(PlayerControl target, bool notifyOthers = true) {
+        public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
-                if (notifyOthers) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                }
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
 
                 return false;
             }
             // Block impostor not fully grown child kill
             else if (Child.child != null && target == Child.child && !Child.isGrownUp()) {
+                return false;
+            }
+            // Block Time Master with time shield kill
+            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
+                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.timeMasterRewindTime();
+                }
                 return false;
             }
             return true;

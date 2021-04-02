@@ -199,8 +199,10 @@ namespace TheOtherRoles
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
+        public static float shieldDuration = 3f; // Constant
         public static float cooldown = float.MaxValue;
 
+        public static bool shieldActive = false;
         public static bool isRewinding = false;
 
         private static Sprite buttonSprite;
@@ -210,10 +212,16 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static IEnumerator shieldForShieldDuration() {
+            shieldActive = true;
+            yield return new WaitForSeconds(shieldDuration);
+            shieldActive = false;
+        }
+
         public static void clearAndReload() {
             timeMaster = null;
             isRewinding = false;
-            reviveDuringRewind = TheOtherRolesPlugin.timeMasterReviveDuringRewind.GetValue();
+            shieldActive = false;
             rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
             cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();
         }
@@ -541,7 +549,7 @@ namespace TheOtherRoles
         public static bool garlicsActive = true;
 
         public static PlayerControl currentTarget;
-        public static PlayerControl bitten;
+        public static PlayerControl bitten; 
         public static bool targetNearGarlic = false;
 
         private static Sprite buttonSprite;
@@ -560,9 +568,17 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-            RPCProcedure.vampireTryKill();
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                RPCProcedure.vampireTryKill();
+            } else {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+                writer.Write(byte.MaxValue);
+                writer.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
+            }
         }
 
         public static void clearAndReload() {

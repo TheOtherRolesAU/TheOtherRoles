@@ -18,7 +18,7 @@ namespace TheOtherRoles
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
-        private static CustomButton timeMasterRewindTimeButton;
+        private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
@@ -36,7 +36,7 @@ namespace TheOtherRoles
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
-            timeMasterRewindTimeButton.MaxTimer = TimeMaster.cooldown;
+            timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
@@ -50,6 +50,7 @@ namespace TheOtherRoles
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
 
+            timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
@@ -170,19 +171,25 @@ namespace TheOtherRoles
             );
 
             // Time Master Rewind Time
-            timeMasterRewindTimeButton = new CustomButton(
+            timeMasterShieldButton = new CustomButton(
                 () => {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterShield, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterRewindTime();
-                    timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;
+                    RPCProcedure.timeMasterShield();
                 },
                 () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
-                () => { timeMasterRewindTimeButton.Timer = timeMasterRewindTimeButton.MaxTimer;},
+                () => {
+                    timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
+                    timeMasterShieldButton.isEffectActive = false;
+                    timeMasterShieldButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance, 
+                true,
+                TimeMaster.shieldDuration,
+                () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer; }
             );
 
             // Medic Shield
@@ -323,10 +330,11 @@ namespace TheOtherRoles
                         } else {
                             Vampire.bitten = Vampire.currentTarget;
                             Reactor.Coroutines.Start(Vampire.killWithDelay());
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireBiteNotification, Hazel.SendOption.Reliable, -1);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.bitten.PlayerId);
+                            writer.Write(0);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.vampireBiteNotification(Vampire.bitten.PlayerId); 
+                            RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0); 
                             vampireKillButton.HasEffect = true; // Trigger effect on this click
                         }
                     } else {

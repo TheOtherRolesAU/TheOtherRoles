@@ -90,7 +90,6 @@ namespace TheOtherRoles
         public static CustomNumberOption detectiveReportColorDuration = CustomOption.AddNumber("125", "Time Where Detective Reports Will Have Color Type", 20, 0, 120, 2.5f);
         public static CustomNumberOption timeMasterCooldown = CustomOption.AddNumber("131", "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomNumberOption timeMasterRewindTime = CustomOption.AddNumber("132", "Rewind Time", 3f, 1f, 10f, 1f);
-        public static CustomToggleOption timeMasterReviveDuringRewind = CustomOption.AddToggle("133", "Revive During Rewind", false);
         public static CustomStringOption medicShowShielded = CustomOption.AddString("143", "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
         public static CustomToggleOption medicShowAttemptToShielded = CustomOption.AddToggle("144", "Shielded Player Sees Murder Attempt", false);
         public static CustomStringOption seerMode = CustomOption.AddString("161", "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"});
@@ -191,7 +190,6 @@ namespace TheOtherRoles
                 detectiveReportColorDuration,
                 timeMasterCooldown,
                 timeMasterRewindTime,
-                timeMasterReviveDuringRewind,
                 medicShowShielded,
                 medicShowAttemptToShielded,
                 seerMode,
