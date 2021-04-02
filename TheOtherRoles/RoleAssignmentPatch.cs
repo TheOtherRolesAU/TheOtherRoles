@@ -68,13 +68,12 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Swapper,TheOtherRolesPlugin.swapperSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Seer, TheOtherRolesPlugin.seerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Hacker, TheOtherRolesPlugin.hackerSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Child, TheOtherRolesPlugin.childSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Tracker, TheOtherRolesPlugin.trackerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Snitch, TheOtherRolesPlugin.snitchSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Jackal, TheOtherRolesPlugin.jackalSpawnRate.GetValue());
             // crewSettings.Add((byte)RoleId.BountyHunter, TheOtherRolesPlugin.bountyHunterSpawnRate.GetValue()); BOUNTY HUNTER
 
-            // Set multiple player roles
+            // Set special roles
             if (impostors.Count >= 3 && maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= TheOtherRolesPlugin.mafiaSpawnRate.GetValue() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, impostors);
                 setRoleToRandomPlayer((byte)RoleId.Janitor, impostors);
@@ -92,6 +91,16 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer((byte)RoleId.Lover1, crewmates); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates); 
                     maxCrewmateRoles -= 2; 
+                }
+            }
+
+            if (rnd.Next(1, 101) <= TheOtherRolesPlugin.childSpawnRate.GetValue() * 10) {
+                if (impostors.Count > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, impostors); 
+                    maxImpostorRoles--;
+                } else if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, crewmates);
+                    maxCrewmateRoles--;
                 }
             }
 

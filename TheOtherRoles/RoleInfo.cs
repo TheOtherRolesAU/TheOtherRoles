@@ -154,7 +154,7 @@ namespace TheOtherRoles
             }
             else if (Child.child != null && p == Child.child) { 
                 name = "Child";
-                color = Child.color;
+                color = p.Data.IsImpostor ? Palette.ImpostorRed : Child.color;
                 introDescription = "No one will harm you until you grow up";
                 shortDescription = "No one will harm you";
             }
