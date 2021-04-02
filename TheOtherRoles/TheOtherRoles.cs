@@ -473,9 +473,11 @@ namespace TheOtherRoles
         
         public static float growingUpDuration = float.MaxValue;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
+        public static bool triggerChildLose = false;
 
         public static void clearAndReload() {
             child = null;
+            triggerChildLose = false;
             growingUpDuration = TheOtherRolesPlugin.childGrowingUpDuration.GetValue();
             timeOfGrowthStart = DateTime.UtcNow;
         }

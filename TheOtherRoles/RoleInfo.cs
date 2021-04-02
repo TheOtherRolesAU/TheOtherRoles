@@ -153,8 +153,8 @@ namespace TheOtherRoles
                 shortDescription = "Hacker to find the Impostors";
             }
             else if (Child.child != null && p == Child.child) { 
-                name = "Child";
-                color = Child.color;
+                name = p.Data.IsImpostor ? "Bad Child" : "Good Child";
+                color = p.Data.IsImpostor ? Palette.ImpostorRed : Child.color;
                 introDescription = "No one will harm you until you grow up";
                 shortDescription = "No one will harm you";
             }

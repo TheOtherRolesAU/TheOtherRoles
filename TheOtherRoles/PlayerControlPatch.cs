@@ -355,6 +355,12 @@ namespace TheOtherRoles {
                 ));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(PAIBDFDMIGK.transform.position);
+
+            // Child set adapted kill cooldown
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
+                var multiplier = Child.isGrownUp() ? 0.66f : 2f;
+                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+            }
         }
     }
 
@@ -392,7 +398,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
-    public static class Role
+    public static class RoleDescriptionPatch
     {
         public static void Postfix(PlayerControl __instance)
         {

@@ -273,11 +273,6 @@ namespace TheOtherRoles
                 
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
-
-            // Prevent growing Child exile
-            if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
-                IHDMFDEEDEL = null;
-            }
         }
     }
 
@@ -291,11 +286,23 @@ namespace TheOtherRoles
             {
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
+                // Child set adapted cooldown
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
+                    var multiplier = Child.isGrownUp() ? 0.66f : 2f;
+                    Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+                }
 
-                // Jester and Bounty Hunter win condition
                 if (ExileController.Instance.exiled != null) {
                     byte exiledId = ExileController.Instance.exiled.PlayerId;
-                    if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
+
+                    // Child lose condition
+                    if (Child.child != null && Child.child.PlayerId == exiledId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildLose, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.childLose();
+                    }
+                    // Jester and Bounty Hunter win condition
+                    else if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
                         writer.Write(exiledId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);

@@ -43,10 +43,11 @@ namespace TheOtherRoles
         public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString("30", cs(Camouflager.color) + "Camouflager", rates);
         public static CustomStringOption vampireSpawnRate = CustomOption.AddString("40", cs(Vampire.color) + "Vampire", rates);
 
+        public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
         public static CustomStringOption loversSpawnRate = CustomOption.AddString("50", cs(Lovers.color) + "Lovers", rates);
         public static CustomStringOption jesterSpawnRate = CustomOption.AddString("60", cs(Jester.color) + "Jester", rates);
-        public static CustomStringOption shifterSpawnRate = CustomOption.AddString("70", cs(Shifter.color) + "Shifter", rates);
 
+        public static CustomStringOption shifterSpawnRate = CustomOption.AddString("70", cs(Shifter.color) + "Shifter", rates);
         public static CustomStringOption mayorSpawnRate = CustomOption.AddString("80", cs(Mayor.color) + "Mayor", rates);
         public static CustomStringOption engineerSpawnRate = CustomOption.AddString("90", cs(Engineer.color) + "Engineer", rates);
         public static CustomStringOption sheriffSpawnRate = CustomOption.AddString("100", cs(Sheriff.color) + "Sheriff", rates);
@@ -57,7 +58,6 @@ namespace TheOtherRoles
         public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color) + "Swapper", rates);
         public static CustomStringOption seerSpawnRate = CustomOption.AddString("160", cs(Seer.color) + "Seer", rates);
         public static CustomStringOption hackerSpawnRate = CustomOption.AddString("170", cs(Hacker.color) + "Hacker", rates);
-        public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
         // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString("190", cs(BountyHunter.color) + "Bounty Hunter", rates);
         public static CustomStringOption trackerSpawnRate = CustomOption.AddString("200", cs(Tracker.color) + "Tracker", rates);
         public static CustomStringOption snitchSpawnRate = CustomOption.AddString("210", cs(Snitch.color) + "Snitch", rates);
@@ -74,6 +74,7 @@ namespace TheOtherRoles
         public static CustomNumberOption vampireCooldown = CustomOption.AddNumber("42", "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle("43", "Vampire Can Kill Near Garlics", true);
 
+        public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber("51", "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle("52", "Both Lovers Die", true);
 
@@ -97,7 +98,6 @@ namespace TheOtherRoles
         public static CustomNumberOption hackerCooldown = CustomOption.AddNumber("171", "Hacker Cooldown", 30f, 0f, 60f, 5f);
         public static CustomNumberOption hackerHackeringDuration = CustomOption.AddNumber("172", "Hacker Duration", 10f, 2.5f, 60f, 2.5f);
         public static CustomToggleOption hackerOnlyColorType = CustomOption.AddToggle("173", "Hacker Only Sees Color Type", false);
-        public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         // public static CustomToggleOption bountyHunterNotifyBounty = CustomOption.AddToggle("191", "Bounty Gets Notified", true); 
         public static CustomNumberOption trackerUpdateIntervall = CustomOption.AddNumber("201", "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f);
         public static CustomNumberOption snitchLeftTasksForImpostors = CustomOption.AddNumber("211", "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f);
@@ -145,10 +145,11 @@ namespace TheOtherRoles
                 camouflagerSpawnRate,
                 vampireSpawnRate,
 
+                childSpawnRate,
                 loversSpawnRate,
                 jesterSpawnRate,
-                shifterSpawnRate,
 
+                shifterSpawnRate,
                 mayorSpawnRate,
                 engineerSpawnRate,
                 sheriffSpawnRate,
@@ -159,7 +160,6 @@ namespace TheOtherRoles
                 swapperSpawnRate,
                 seerSpawnRate,
                 hackerSpawnRate,
-                childSpawnRate,
                 // bountyHunterSpawnRate,
                 trackerSpawnRate,
                 snitchSpawnRate,
@@ -174,6 +174,7 @@ namespace TheOtherRoles
                 vampireCooldown,
                 vampireCanKillNearGarlics,
 
+                childGrowingUpDuration,
                 loversImpLoverRate,
                 loversBothDie,
 
@@ -197,7 +198,6 @@ namespace TheOtherRoles
                 hackerCooldown,
                 hackerHackeringDuration,
                 hackerOnlyColorType,
-                childGrowingUpDuration,
                 // bountyHunterNotifyBounty,
                 trackerUpdateIntervall,
                 snitchLeftTasksForImpostors,

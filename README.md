@@ -25,6 +25,8 @@ Even more roles are coming soon :)
 - [Detective](#detective)
 - [Lighter](#lighter)
 - [Child](#child)
+  - Child Impostor
+  - Child Crewmate
 - [Medic](#medic)
 - [Mayor](#mayor)
 - [Hacker](#hacker)
@@ -69,6 +71,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
 - **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
+- **Child:** The Child can now be a Crewmate Child or an Impostor Child, check the [Child](#child) section for more details
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -291,6 +294,7 @@ If they try to kill a crewmate, they die instead.
 
 **NOTE**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
+- If the Sheriff shoots a Child Impostor, the Sheriff dies if the Child is still growing up. If it's 18, the Child Impostor dies.
 
 ### Game Options
 | Name | Description |
@@ -378,15 +382,21 @@ The Lighter can turn on his lighter every now and then, which increases his visi
 -----------------------
 
 ## Child
-### **Team: Crewmates**
-The Child won't be harmed by anyone until it turns 18 years old, then it becomes a regular crewmate.\
+### **Team: Crewmates or Impostors**
+The Child can be a Crewmate (67% chance) or an Impostor (33% chance).\
 The Child's character is smaller and hence visible to everyone in the game.\
-The child works with the crewmates and aims to play out the strength of its "invincibility" in the early game.\
-If the child is voted out before it turns 18, everyone in the lobby loses.
-\
+The Child cannot be killed until it turns 18 years old, however it can be voted out.\
+**Impostor Child:**
+  - While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
+  - If it gets thrown out of the ship, everything is fine.
+
+**Crewmate Child:**
+  - The Crewmate Child aims to play out the strength its invincibility in the early game.
+  - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Child.
+
 **NOTE:**
-- Impostors can't kill the child (the button does not work) until it turns 18
-- The Sheriff always suicides if he tries to kill the child
+- Impostors can't kill the Child (the button does not work) until it turns 18
+- The Sheriff can kill the Impostor Child, but only if it's fully grown up
 
 ### Game Options
 | Name | Description |
