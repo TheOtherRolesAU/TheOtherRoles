@@ -270,8 +270,19 @@ namespace TheOtherRoles
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
                 writer.Write(Shifter.futureShift.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
+            }
+
+            // Eraser erase
+            if (Eraser.eraser != null && PlayerControl.LocalPlayer == Eraser.eraser && Eraser.futureErased != null) {
+                foreach (PlayerControl target in Eraser.futureErased) {
+                    if (target != null) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRole, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.erasePlayerRole(target.PlayerId);
+                    }
+                }
             }
         }
     }
