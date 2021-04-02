@@ -145,11 +145,10 @@ namespace TheOtherRoles
                     }
 
                     byte targetId = 0;
-                    if (Sheriff.currentTarget.Data.IsImpostor || 
+                    if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
                         Sheriff.currentTarget == Jackal.jackal || 
                         Sheriff.currentTarget == Sidekick.sidekick || 
-                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget) ||
-                        (Sheriff.currentTarget == Child.child && Child.isGrownUp() && Child.child.Data.IsImpostor))
+                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget))
                         {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
