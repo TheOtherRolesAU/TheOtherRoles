@@ -1,5 +1,3 @@
-readme, write child lose condition before jester/bounty hunter, write sheriff interaction
-
 Roles in development:
     - Vampire: Garlic layer (same for footsteps)
     that does that check and then sends a definite kill call to all the other players (before he sends the openMeeting call).
