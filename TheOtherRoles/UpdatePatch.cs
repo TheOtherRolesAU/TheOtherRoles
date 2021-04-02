@@ -118,7 +118,7 @@ namespace TheOtherRoles
             }
 
             // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor and Mafioso
         }
 
         static void setMafiaNameTags() {

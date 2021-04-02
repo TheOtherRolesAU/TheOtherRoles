@@ -38,7 +38,8 @@ namespace TheOtherRoles
         Vampire,
         Snitch,
         Jackal,
-        Sidekick
+        Sidekick,
+        Eraser
     }
 
     enum CustomRPC
@@ -182,6 +183,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
+                        break;
+                    case RoleId.Eraser:
+                        Eraser.eraser = player;
                         break;
                     }
                 }
@@ -492,30 +496,31 @@ namespace TheOtherRoles
                     player.RemoveInfected();
 
                     // Crewmate roles
-                    if(player == Jester.jester) Jester.clearAndReload();
-                    if(player == Mayor.mayor) Mayor.clearAndReload();
-                    if(player == Engineer.engineer) Engineer.clearAndReload();
-                    if(player == Sheriff.sheriff) Sheriff.clearAndReload();
-                    if(player == Lighter.lighter) Lighter.clearAndReload();
-                    if(player == Detective.detective) Detective.clearAndReload();
-                    if(player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
-                    if(player == Medic.medic) Medic.clearAndReload();
-                    if(player == Shifter.shifter) Shifter.clearAndReload();
-                    if(player == Seer.seer) Seer.clearAndReload();
-                    if(player == Hacker.hacker) Hacker.clearAndReload();
-                    if(player == Child.child) Child.clearAndReload();
-                    if(player == Tracker.tracker) Tracker.clearAndReload();
-                    if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
-                    if(player == Snitch.snitch) Snitch.clearAndReload();
-                    if(player == Swapper.swapper) Swapper.clearAndReload();
+                    if (player == Jester.jester) Jester.clearAndReload();
+                    if (player == Mayor.mayor) Mayor.clearAndReload();
+                    if (player == Engineer.engineer) Engineer.clearAndReload();
+                    if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+                    if (player == Lighter.lighter) Lighter.clearAndReload();
+                    if (player == Detective.detective) Detective.clearAndReload();
+                    if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
+                    if (player == Medic.medic) Medic.clearAndReload();
+                    if (player == Shifter.shifter) Shifter.clearAndReload();
+                    if (player == Seer.seer) Seer.clearAndReload();
+                    if (player == Hacker.hacker) Hacker.clearAndReload();
+                    if (player == Child.child) Child.clearAndReload();
+                    if (player == Tracker.tracker) Tracker.clearAndReload();
+                    if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
+                    if (player == Snitch.snitch) Snitch.clearAndReload();
+                    if (player == Swapper.swapper) Swapper.clearAndReload();
 
                     // Impostor roles
-                    if(player == Morphling.morphling) Morphling.clearAndReload();
-                    if(player == Camouflager.camouflager) Camouflager.clearAndReload();
-                    if(player == Godfather.godfather) Godfather.clearAndReload();
-                    if(player == Mafioso.mafioso) Mafioso.clearAndReload();
-                    if(player == Janitor.janitor) Janitor.clearAndReload();
-                    if(player == Vampire.vampire) Vampire.clearAndReload();
+                    if (player == Morphling.morphling) Morphling.clearAndReload();
+                    if (player == Camouflager.camouflager) Camouflager.clearAndReload();
+                    if (player == Godfather.godfather) Godfather.clearAndReload();
+                    if (player == Mafioso.mafioso) Mafioso.clearAndReload();
+                    if (player == Janitor.janitor) Janitor.clearAndReload();
+                    if (player == Vampire.vampire) Vampire.clearAndReload();
+                    if (player == Eraser.eraser) Eraser.clearAndReload();
 
                     // The Sidekick stays a part of the lover couple!
                     

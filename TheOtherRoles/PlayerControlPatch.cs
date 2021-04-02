@@ -141,6 +141,11 @@ namespace TheOtherRoles {
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
         }
 
+        static void eraserSetTarget() {
+            if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
+            Eraser.currentTarget = setTarget(true);
+        }
+
         static void engineerUpdate() {
             if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
@@ -208,6 +213,8 @@ namespace TheOtherRoles {
                 // Vampire
                 vampireSetTarget();
                 Garlic.UpdateAll();
+                // Eraser
+                eraserSetTarget();
                 // Engineer
                 engineerUpdate();
                 // Tracker

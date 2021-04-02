@@ -42,6 +42,7 @@ namespace TheOtherRoles
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString("20", cs(Morphling.color) + "Morphling", rates);
         public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString("30", cs(Camouflager.color) + "Camouflager", rates);
         public static CustomStringOption vampireSpawnRate = CustomOption.AddString("40", cs(Vampire.color) + "Vampire", rates);
+        public static CustomStringOption eraserSpawnRate = CustomOption.AddString("230", cs(Eraser.color) + "Eraser", rates);
 
         public static CustomStringOption childSpawnRate = CustomOption.AddString("180", cs(Child.color) + "Child", rates);
         public static CustomStringOption loversSpawnRate = CustomOption.AddString("50", cs(Lovers.color) + "Lovers", rates);
@@ -73,6 +74,7 @@ namespace TheOtherRoles
         public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber("41", "Vampire Kill Delay", 10f, 1f, 20f, 1f);
         public static CustomNumberOption vampireCooldown = CustomOption.AddNumber("42", "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle("43", "Vampire Can Kill Near Garlics", true);
+        public static CustomNumberOption eraserCooldown = CustomOption.AddNumber("231", "Eraser Cooldown", 30f, 10f, 60f, 2.5f);
 
         public static CustomNumberOption childGrowingUpDuration = CustomOption.AddNumber("181", "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber("51", "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
@@ -144,6 +146,7 @@ namespace TheOtherRoles
                 morphlingSpawnRate,
                 camouflagerSpawnRate,
                 vampireSpawnRate,
+                eraserSpawnRate,
 
                 childSpawnRate,
                 loversSpawnRate,
@@ -173,6 +176,7 @@ namespace TheOtherRoles
                 vampireKillDelay,
                 vampireCooldown,
                 vampireCanKillNearGarlics,
+                eraserCooldown,
 
                 childGrowingUpDuration,
                 loversImpLoverRate,

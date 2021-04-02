@@ -397,6 +397,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
                     else if(Vampire.vampire != null && ExileController.Instance.exiled.Object.PlayerId == Vampire.vampire.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Vampire.";
+                    else if (Eraser.eraser != null && ExileController.Instance.exiled.Object.PlayerId == Eraser.eraser.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Eraser.";
                 }
 
                 // Hide number of remaining impostors on Jester win

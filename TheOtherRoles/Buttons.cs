@@ -31,6 +31,7 @@ namespace TheOtherRoles
         private static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
         private static CustomButton lighterButton;
+        private static CustomButton eraserButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -49,6 +50,7 @@ namespace TheOtherRoles
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
+            eraserButton.MaxTimer = Eraser.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -464,6 +466,24 @@ namespace TheOtherRoles
                 Lighter.duration,
                 () => { lighterButton.Timer = lighterButton.MaxTimer; }
             );
+
+            // Eraser erase button
+            eraserButton = new CustomButton(
+                () => {
+                    eraserButton.MaxTimer += 10;
+                    eraserButton.Timer = eraserButton.MaxTimer;
+
+                    if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
+                    Eraser.futureErased.Add(Eraser.currentTarget);
+                },
+                () => { return Eraser.eraser != null && Eraser.eraser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null; },
+                () => { eraserButton.Timer = eraserButton.MaxTimer;},
+                Eraser.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance
+            );
+
         }
     }
 }

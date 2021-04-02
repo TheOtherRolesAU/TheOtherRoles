@@ -110,6 +110,13 @@ namespace TheOtherRoles
                 shortDescription = "Bite your enemies";
                 isGood = false;
             }
+            else if (Eraser.eraser != null && p == Eraser.eraser) {
+                name = "Eraser";
+                color = Eraser.color;
+                introDescription = "Kill the Crewmates and erase their roles";
+                shortDescription = "Erase the roles of your enemies";
+                isGood = false;
+            }
             else if (Detective.detective != null && p == Detective.detective) {
                 name = "Detective";
                 color = Detective.color;
