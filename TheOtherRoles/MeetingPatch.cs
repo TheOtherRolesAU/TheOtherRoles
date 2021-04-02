@@ -266,15 +266,16 @@ namespace TheOtherRoles
 
         public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
             // Shifter shift
-            if (Shifter.shifter != null && PlayerControl.LocalPlayer == Shifter.shifter && Shifter.futureShift != null) {
+            if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
                 writer.Write(Shifter.futureShift.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
+            Shifter.futureShift = null;
 
             // Eraser erase
-            if (Eraser.eraser != null && PlayerControl.LocalPlayer == Eraser.eraser && Eraser.futureErased != null) {
+            if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct
                 foreach (PlayerControl target in Eraser.futureErased) {
                     if (target != null) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRole, Hazel.SendOption.Reliable, -1);
@@ -284,6 +285,7 @@ namespace TheOtherRoles
                     }
                 }
             }
+            Eraser.futureErased = new List<PlayerControl>();
         }
     }
 

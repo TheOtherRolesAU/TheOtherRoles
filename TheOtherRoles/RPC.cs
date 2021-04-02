@@ -76,7 +76,9 @@ namespace TheOtherRoles
         JackalCreatesSidekick,
         SidekickPromotes,
         ChildLose,
-        ErasePlayerRole
+        ErasePlayerRole,
+        SetFutureErased,
+        SetFutureShifted
     }
 
     public static class RPCProcedure {
@@ -568,7 +570,11 @@ namespace TheOtherRoles
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
-            if (player == Lovers.lover1 || player == Lovers.lover2) Lovers.clearAndReload(); // The whole Lover couple is being erased
+            if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
+                Lovers.clearAndReload(); 
+                Helpers.refreshRoleDescription(Lovers.lover1);
+                Helpers.refreshRoleDescription(Lovers.lover2);
+            }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
                     RPCProcedure.sidekickPromotes();
@@ -579,6 +585,16 @@ namespace TheOtherRoles
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
 
             Helpers.refreshRoleDescription(player);
+        }
+
+        public static void setFutureErased(byte playerId) {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
+            if (player != null) Eraser.futureErased.Add(player);
+        }
+
+        public static void setFutureShifted(byte playerId) {
+            Shifter.futureShift = Helpers.playerById(playerId);
         }
     }
 
@@ -686,6 +702,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ErasePlayerRole:
                     RPCProcedure.erasePlayerRole(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureErased:
+                    RPCProcedure.setFutureErased(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureShifted:
+                    RPCProcedure.setFutureShifted(HFPCBBHJIPJ.ReadByte());
                     break;
             }
         }
