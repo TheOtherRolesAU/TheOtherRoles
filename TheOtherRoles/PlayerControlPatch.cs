@@ -356,9 +356,11 @@ namespace TheOtherRoles {
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(PAIBDFDMIGK.transform.position);
 
-            // Child set higher kill cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor && !Child.isGrownUp())
-                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * 2);
+            // Child set adapted kill cooldown
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
+                var multiplier = Child.isGrownUp() ? 0.66f : 2f;
+                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+            }
         }
     }
 

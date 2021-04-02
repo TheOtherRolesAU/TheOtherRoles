@@ -1,3 +1,5 @@
+readme, write child lose condition before jester/bounty hunter, write sheriff interaction
+
 Roles in development:
     - Vampire: Garlic layer (same for footsteps)
     that does that check and then sends a definite kill call to all the other players (before he sends the openMeeting call).
@@ -9,9 +11,10 @@ Roles in development:
         - Jackal/Vent/Impostor vent highlighting
 
 High priority:
-    - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - Jester/Bounty Hunter/Child/Jackal: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
     - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
     - Medic shield rework
