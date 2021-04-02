@@ -118,7 +118,7 @@ namespace TheOtherRoles
             }
 
             // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Janitor and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Phantom, Godfather, Janitor and Mafioso
         }
 
         static void setMafiaNameTags() {
@@ -377,6 +377,31 @@ namespace TheOtherRoles
             }
         }
 
+        static void phantomUpdate() {
+            float oldPhantomTimer = Phantom.phantomTimer;
+
+            Phantom.phantomTimer -= Time.deltaTime;
+
+            // Set phantom to be invisible
+            if (Phantom.phantomTimer > 0f) {
+                if (Phantom.phantom != null) {
+                    Phantom.phantom.Visible = false;
+                    Phantom.phantom.CurrentPet.Visible = Phantom.phantom.Visible;
+                }
+            }
+
+            // Phantom set uncloak flag
+            if (oldPhantomTimer > 0f && Phantom.phantomTimer <= 0f && Phantom.phantom != null) {
+                Phantom.unCloak = true;
+            }
+
+            // Phantom uncloak when out of vent
+            if (Phantom.unCloak && !Phantom.phantom.inVent) {
+                Phantom.resetCloak();
+                Phantom.unCloak = false;
+            }
+        }
+
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -414,6 +439,9 @@ namespace TheOtherRoles
             Helpers.removeTasksFromPlayer(Jackal.jackal);
             // Sidekick
             Helpers.removeTasksFromPlayer(Sidekick.sidekick);
+            // Phantom
+            phantomUpdate();
         }
     }
 }
+ 

@@ -110,6 +110,13 @@ namespace TheOtherRoles
                 shortDescription = "Bite your enemies";
                 isGood = false;
             }
+            else if (Phantom.phantom != null && p == Phantom.phantom) {
+                name = "Phantom";
+                color = Phantom.color;
+                introDescription = "Cloak yourself to not get caught";
+                shortDescription = "Turn invisible";
+                isGood = false;
+            }
             else if (Detective.detective != null && p == Detective.detective) {
                 name = "Detective";
                 color = Detective.color;

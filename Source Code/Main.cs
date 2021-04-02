@@ -40,6 +40,7 @@ namespace TheOtherRoles
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString(num++.ToString(), cs(Morphling.color) + "Morphling", rates);
         public static CustomStringOption camouflagerSpawnRate = CustomOption.AddString(num++.ToString(), cs(Camouflager.color) + "Camouflager", rates);
         public static CustomStringOption vampireSpawnRate = CustomOption.AddString(num++.ToString(), cs(Vampire.color) + "Vampire", rates);
+        public static CustomStringOption phantomSpawnRate = CustomOption.AddString(num++.ToString(), cs(Vampire.color) + "Phantom", rates);
 
         public static CustomStringOption loversSpawnRate = CustomOption.AddString(num++.ToString(), cs(Lovers.color) + "Lovers", rates);
         public static CustomStringOption jesterSpawnRate = CustomOption.AddString(num++.ToString(), cs(Jester.color) + "Jester", rates);
@@ -68,6 +69,8 @@ namespace TheOtherRoles
         public static CustomNumberOption vampireKillDelay = CustomOption.AddNumber(num++.ToString(), "Vampire Kill Delay", 10f, 1f, 20f, 1f);
         public static CustomNumberOption vampireCooldown = CustomOption.AddNumber(num++.ToString(), "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
         public static CustomToggleOption vampireCanKillNearGarlics = CustomOption.AddToggle(num++.ToString(), "Vampire Can Kill Near Garlics", true);
+        public static CustomNumberOption phantomCloakDuration = CustomOption.AddNumber(num++.ToString(), "Phantom Cloak Duration", 10f, 5f, 30f, 5f);
+        public static CustomNumberOption phantomCooldown = CustomOption.AddNumber(num++.ToString(), "Phantom Cooldown", 10f, 5f, 30f, 5f);
 
         public static CustomNumberOption loversImpLoverRate = CustomOption.AddNumber(num++.ToString(), "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
         public static CustomToggleOption loversBothDie = CustomOption.AddToggle(num++.ToString(), "Both Lovers Die", true);
@@ -138,6 +141,7 @@ namespace TheOtherRoles
                 morphlingSpawnRate,
                 camouflagerSpawnRate,
                 vampireSpawnRate,
+                phantomSpawnRate,
 
                 loversSpawnRate,
                 jesterSpawnRate,
@@ -165,6 +169,8 @@ namespace TheOtherRoles
                 vampireKillDelay,
                 vampireCooldown,
                 vampireCanKillNearGarlics,
+                phantomCloakDuration,
+                phantomCooldown,
 
                 loversImpLoverRate,
                 loversBothDie,

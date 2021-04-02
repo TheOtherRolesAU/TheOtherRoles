@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Snitch.clearAndReload();
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
+            Phantom.clearAndReload();
         }
 
         public static class Jester {
@@ -652,4 +653,41 @@ namespace TheOtherRoles
         
     }
 
+    /// <summary>
+    /// The Phantom role is an imposter that can cloak itself for
+    /// x seconds turning completely invisible. During the cloak
+    /// period its speed is cut in half.
+    /// </summary>
+	public static class Phantom {
+        public static PlayerControl phantom;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = float.MaxValue;
+        public static float phantomTimer = 0f;
+        public static float cloakTimer = 0f;
+        public static float originalSpeed;
+        public static bool unCloak = false;
+
+        public static void resetCloak() {
+            phantomTimer = 0f;
+            cloakTimer = 0f;
+            if (phantom == null) return;
+            phantom.Visible = true;
+            phantom.CurrentPet.Visible = phantom.Visible;
+            phantom.MyPhysics.Speed = originalSpeed;
+        }
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CloakButton.png", 100f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            resetCloak();
+            phantom = null;
+            cooldown = TheOtherRolesPlugin.phantomCooldown.GetValue();
+        }
+    }
 }

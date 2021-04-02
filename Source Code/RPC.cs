@@ -37,7 +37,8 @@ namespace TheOtherRoles
         Vampire,
         Snitch,
         Jackal,
-        Sidekick
+        Sidekick,
+        Phantom
     }
 
     enum CustomRPC
@@ -73,7 +74,8 @@ namespace TheOtherRoles
         JackalKill = 100,
         SidekickKill = 101,
         JackalCreatesSidekick = 102,
-        SidekickPromotes = 103
+        SidekickPromotes = 103,
+        PhantomCloak = 104
     }
 
     public static class RPCProcedure {
@@ -180,6 +182,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
+                        break;
+                    case RoleId.Phantom:
+                        Phantom.phantom = player;
                         break;
                     }
                 }
@@ -442,6 +447,14 @@ namespace TheOtherRoles
             Camouflager.camouflageTimer = 10f;
         }
 
+        public static void phantomCloak() {
+            if (Phantom.phantom == null) return;
+
+            Phantom.originalSpeed = Phantom.phantom.MyPhysics.Speed;
+            Phantom.phantomTimer = TheOtherRolesPlugin.phantomCloakDuration.GetValue();
+            Phantom.phantom.MyPhysics.Speed *= 0.5f;
+        }
+        
         public static void loverSuicide(byte remainingLoverId) {
             if (Lovers.lover1 != null && !Lovers.lover1.Data.IsDead && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
@@ -547,6 +560,7 @@ namespace TheOtherRoles
                     if(player == Mafioso.mafioso) Mafioso.clearAndReload();
                     if(player == Janitor.janitor) Janitor.clearAndReload();
                     if(player == Vampire.vampire) Vampire.clearAndReload();
+                    if(player == Phantom.phantom) Phantom.clearAndReload();
 
                     // The Sidekick stays a part of the lover couple!
                     
@@ -688,6 +702,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
+                    break;
+                case (byte)CustomRPC.PhantomCloak:
+                    RPCProcedure.phantomCloak();
                     break;
             }
         }

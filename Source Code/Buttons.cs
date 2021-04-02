@@ -31,6 +31,7 @@ namespace TheOtherRoles
         private static CustomButton jackalKillButton;
         private static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
+        private static CustomButton phantomButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -52,6 +53,7 @@ namespace TheOtherRoles
 
             spyButton.EffectDuration = Spy.duration;
             vampireKillButton.EffectDuration= Vampire.delay;
+            phantomButton.MaxTimer = Phantom.cooldown;
         }
 
         public static void Postfix(HudManager __instance)
@@ -308,6 +310,30 @@ namespace TheOtherRoles
                 true,
                 10f,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
+            );
+
+            // Phantom cloak
+            phantomButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PhantomCloak, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.phantomCloak();
+                },
+                () => { return Phantom.phantom != null && Phantom.phantom == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    phantomButton.Timer = phantomButton.MaxTimer;
+                    phantomButton.isEffectActive = false;
+                    phantomButton.killButtonManager.TimerText.Color = Palette.EnabledColor;
+                },
+                Phantom.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                true,
+                TheOtherRolesPlugin.phantomCloakDuration.GetValue(),
+                () => {
+                    phantomButton.Timer = phantomButton.MaxTimer;
+                }
             );
 
             // Spy button

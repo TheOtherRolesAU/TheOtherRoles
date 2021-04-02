@@ -50,7 +50,7 @@ namespace TheOtherRoles
             var hudString = stringBuilder.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 23;
+            int roleSettingsLines = 19 + 24;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
@@ -59,13 +59,13 @@ namespace TheOtherRoles
             } else if (counter == 1) {
                 hudString = hudString.Substring(end1 + 1, end2 - end1);
                 // Temporary fix, should add a new CustomOption for spaces
-                int gap = 2;
+                int gap = 3;
                 int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 7;
+                gap = 8;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 11;
+                gap = 12;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
