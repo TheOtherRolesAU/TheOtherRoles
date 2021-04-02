@@ -273,11 +273,6 @@ namespace TheOtherRoles
                 
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
-
-            // Prevent growing Child exile
-            if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
-                IHDMFDEEDEL = null;
-            }
         }
     }
 
@@ -292,16 +287,25 @@ namespace TheOtherRoles
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
 
-                // Jester and Bounty Hunter win condition
                 if (ExileController.Instance.exiled != null) {
                     byte exiledId = ExileController.Instance.exiled.PlayerId;
-                    if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
+
+                    // Child lose condition
+                    if (Child.child != null && Child.child.PlayerId == exiledId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildLose, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.childLose();
+                    }
+                    // Jester and Bounty Hunter win condition
+                    else if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
                         writer.Write(exiledId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.jesterBountyHunterWin(exiledId);
                     }
                 }
+
+                // Child lose condition
 
                 // Seer spawn souls
                 if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {

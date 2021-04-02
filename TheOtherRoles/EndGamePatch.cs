@@ -14,7 +14,8 @@ using System.Text;
 namespace TheOtherRoles {
     enum CustomGameOverReason {
         LoversWin = 10,
-        TeamJackalWin = 11
+        TeamJackalWin = 11,
+        ChildLose = 12
     }
 
     enum WinCondition {
@@ -24,7 +25,8 @@ namespace TheOtherRoles {
         JesterWin,
         BountyHunterWin,
         JesterAndBountyHunterWin,
-        JackalWin
+        JackalWin,
+        ChildLose
     }
 
     static class AdditionalTempData {
@@ -77,10 +79,21 @@ namespace TheOtherRoles {
                 }
             }
 
-            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
+            bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool jesterWin = Jester.jester != null && Jester.jester.Data.IsImpostor;
             bool bountyHunterWin = BountyHunter.bountyHunter != null && BountyHunter.bountyHunter.Data.IsImpostor;
-            if (jesterWin || bountyHunterWin) {
+
+            // Child lose condition (should be implemented using a proper GameOverReason in the future)
+            if (childLose) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Child.child.Data);
+                wpd.IsYou = false; // If "no one is the Child", it will display the Child, but also show defeat to everyone
+                TempData.winners.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.ChildLose;  
+            }
+
+            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
+            else if (jesterWin || bountyHunterWin) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 if (jesterWin) {
                     WinningPlayerData wpd = new WinningPlayerData(Jester.jester.Data);
@@ -187,6 +200,10 @@ namespace TheOtherRoles {
                 textRenderer.Text = "Team Jackal Wins";
                 textRenderer.Color = Jackal.color;
             }
+            else if (AdditionalTempData.winCondition == WinCondition.ChildLose) {
+                textRenderer.Text = "Child died";
+                textRenderer.Color = Child.color;
+            }
             
             AdditionalTempData.clear();
         }
@@ -198,6 +215,7 @@ namespace TheOtherRoles {
         public static bool Prefix(ShipStatus __instance) {
             if (!GameData.Instance) return false;
             var statistics = new PlayerStatistics(__instance);
+            if (CheckAndEndGameForChildLose(__instance)) return false;
             if(CheckAndEndGameForSabotageWin(__instance)) return false;
             if(CheckAndEndGameForTaskWin(__instance)) return false;
             if(CheckAndEndGameForLoverWin(__instance, statistics)) return false;
@@ -206,6 +224,21 @@ namespace TheOtherRoles {
             if(CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
             return false;
         }
+
+        private static bool CheckAndEndGameForChildLose(ShipStatus __instance) {
+            if (Child.triggerChildLose) {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ChildLose, false);
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
+
 
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
             ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
@@ -260,7 +293,7 @@ namespace TheOtherRoles {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false); // should be implemented using a proper GameOverReason in the future
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false);
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));

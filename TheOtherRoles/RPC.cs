@@ -72,8 +72,9 @@ namespace TheOtherRoles
         PlaceGarlic,
         JackalKill,
         SidekickKill,
-        JackalCreatesSidekick ,
-        SidekickPromotes
+        JackalCreatesSidekick,
+        SidekickPromotes,
+        ChildLose
     }
 
     public static class RPCProcedure {
@@ -553,6 +554,10 @@ namespace TheOtherRoles
             }
             return;
         }
+
+        public static void childLose() {
+            Child.triggerChildLose = true;
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -653,6 +658,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
+                    break;
+                case (byte)CustomRPC.ChildLose:
+                    RPCProcedure.childLose();
                     break;
             }
         }
