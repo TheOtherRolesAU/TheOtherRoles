@@ -94,22 +94,17 @@ namespace TheOtherRoles
             if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
                 currentPreset = newPreset;
 
-                string pluginId = TheOtherRolesPlugin.Id;
-
                 foreach (CustomOption option in CustomOption.Options) {
-                    if (option.PluginID.Contains(pluginId))
-                        option.PluginID = pluginId + newPreset.ToString();
-
                     if (option is CustomStringOption str) {
                         if (str != TheOtherRolesPlugin.presetSelection) {
-                            str.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID, str.GetDefaultValue()) : null;
+                            str.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", str.GetDefaultValue()) : null;
                             option.SetValue(str.ConfigEntry == null ? str.GetDefaultValue() : str.ConfigEntry.Value);
                         }
                     } else if (option is CustomToggleOption tgl) {
-                        tgl.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID, tgl.GetDefaultValue()) : null;
+                        tgl.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", tgl.GetDefaultValue()) : null;
                         option.SetValue(tgl.ConfigEntry == null ? tgl.GetDefaultValue() : tgl.ConfigEntry.Value);
                     } else if (option is CustomNumberOption nmb) {
-                        nmb.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID, nmb.GetDefaultValue()) : null;
+                        nmb.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", nmb.GetDefaultValue()) : null;
                         option.SetValue(nmb.ConfigEntry == null ? nmb.GetDefaultValue() : nmb.ConfigEntry.Value);
                     }
                 }
