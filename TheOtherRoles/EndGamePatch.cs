@@ -45,12 +45,12 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
         private static GameOverReason gameOverReason;
-        public static void Prefix(AmongUsClient __instance, ref GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
-            gameOverReason = OFLKLGMHBEL;
-            if ((int)OFLKLGMHBEL >= 10) OFLKLGMHBEL = GameOverReason.ImpostorByKill;
+        public static void Prefix(AmongUsClient __instance, ref GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
+            gameOverReason = FCBGPMEMOJB;
+            if ((int)FCBGPMEMOJB >= 10) FCBGPMEMOJB = GameOverReason.ImpostorByKill;
         }
 
-        public static void Postfix(AmongUsClient __instance, GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
+        public static void Postfix(AmongUsClient __instance, GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
             AdditionalTempData.clear();
 
             // Remove Jester from winners (on Jester win he will be added again, see below)

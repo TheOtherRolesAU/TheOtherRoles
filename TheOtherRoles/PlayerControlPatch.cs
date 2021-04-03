@@ -247,11 +247,11 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
     class StartMeetingPatch {
-        public static void Prefix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK) {
+        public static void Prefix(PlayerControl __instance, GameData.PlayerInfo IGLDJOKKFJE) {
             // Reset vampire bitten
             Vampire.bitten = null;
             // Count meetings
-            if (PAIBDFDMIGK == null) meetingsCount++;
+            if (IGLDJOKKFJE == null) meetingsCount++;
         }
     }
 
@@ -266,14 +266,14 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch
     {
-        static void Postfix(PlayerControl __instance, GameData.PlayerInfo PAIBDFDMIGK)
+        static void Postfix(PlayerControl __instance, GameData.PlayerInfo IGLDJOKKFJE)
         {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
             if (isMedicReport || isDetectiveReport)
             {
-                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == PAIBDFDMIGK?.PlayerId)?.FirstOrDefault();
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == IGLDJOKKFJE?.PlayerId)?.FirstOrDefault();
 
                 if (deadPlayer != null && deadPlayer.killerIfExisting != null) {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
@@ -314,7 +314,7 @@ namespace TheOtherRoles {
         public static bool resetToCrewmate = false;
         public static bool resetToDead = false;
 
-        public static void Prefix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
+        public static void Prefix(PlayerControl __instance, PlayerControl IGLDJOKKFJE)
         {
             // Allow everyone to murder players
             resetToCrewmate = !__instance.Data.IsImpostor;
@@ -323,10 +323,10 @@ namespace TheOtherRoles {
             __instance.Data.IsDead = false;
         }
 
-        public static void Postfix(PlayerControl __instance, PlayerControl PAIBDFDMIGK)
+        public static void Postfix(PlayerControl __instance, PlayerControl IGLDJOKKFJE)
         {
             // Collect dead player info
-            DeadPlayer deadPlayer = new DeadPlayer(PAIBDFDMIGK, DateTime.UtcNow, DeathReason.Kill, __instance);
+            DeadPlayer deadPlayer = new DeadPlayer(IGLDJOKKFJE, DateTime.UtcNow, DeathReason.Kill, __instance);
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Reset killer to crewmate if resetToCrewmate
@@ -334,9 +334,9 @@ namespace TheOtherRoles {
             if (resetToDead) __instance.Data.IsDead = true;
 
             // Lover suicide trigger on murder
-            if ((Lovers.lover1 != null && PAIBDFDMIGK == Lovers.lover1) || (Lovers.lover2 != null && PAIBDFDMIGK == Lovers.lover2)) {
-                PlayerControl otherLover = PAIBDFDMIGK == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (PlayerControl.LocalPlayer == PAIBDFDMIGK && otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) { // Only the dead lover sends the rpc
+            if ((Lovers.lover1 != null && IGLDJOKKFJE == Lovers.lover1) || (Lovers.lover2 != null && IGLDJOKKFJE == Lovers.lover2)) {
+                PlayerControl otherLover = IGLDJOKKFJE == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                if (PlayerControl.LocalPlayer == IGLDJOKKFJE && otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) { // Only the dead lover sends the rpc
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.Reliable, -1);
                     writer.Write(otherLover.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -345,14 +345,14 @@ namespace TheOtherRoles {
             }
             
             // Sidekick promotion trigger on murder
-            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && PAIBDFDMIGK == Jackal.jackal) {
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && IGLDJOKKFJE == Jackal.jackal) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
 
             // Seer show flash and add dead player position
-            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != PAIBDFDMIGK && Seer.mode <= 1) {
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != IGLDJOKKFJE && Seer.mode <= 1) {
                 HudManager.Instance.FullScreen.enabled = true;
                 Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
                     HudManager.Instance.FullScreen,
@@ -361,7 +361,7 @@ namespace TheOtherRoles {
                     new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
                 ));
             }
-            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(PAIBDFDMIGK.transform.position);
+            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(IGLDJOKKFJE.transform.position);
 
             // Child set adapted kill cooldown
             if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
@@ -373,9 +373,9 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(KillAnimation),nameof(KillAnimation.CoPerformKill))]
     class Test {
-        public static void Prefix(KillAnimation __instance, ref PlayerControl CPKODPCJPOO, ref PlayerControl PAIBDFDMIGK) {
-            if (Vampire.vampire != null && Vampire.vampire == CPKODPCJPOO && Vampire.bitten != null && Vampire.bitten == PAIBDFDMIGK)
-                CPKODPCJPOO = PAIBDFDMIGK;
+        public static void Prefix(KillAnimation __instance, ref PlayerControl KMMMAPHIMLH, ref PlayerControl IGLDJOKKFJE) {
+            if (Vampire.vampire != null && Vampire.vampire == KMMMAPHIMLH && Vampire.bitten != null && Vampire.bitten == IGLDJOKKFJE)
+                KMMMAPHIMLH = IGLDJOKKFJE;
         }
     }
 
