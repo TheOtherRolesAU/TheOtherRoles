@@ -219,8 +219,8 @@ namespace TheOtherRoles {
             yield break;
         }
 
-        private static List<byte> lighterColors = new List<byte>(){ 3, 4, 5, 7, 10, 11};
-        public static bool isLighterColor(byte colorId) {
+        private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
+        public static bool isLighterColor(int colorId) {
             return lighterColors.Contains(colorId);
         }
     }

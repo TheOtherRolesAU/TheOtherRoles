@@ -149,12 +149,12 @@ namespace TheOtherRoles {
         static void engineerUpdate() {
             if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
-                    if (vent.Field_7?.material != null) {
+                    if (vent.myRend?.material != null) {
                         if (Engineer.engineer != null && Engineer.engineer.inVent) {
-                            vent.Field_7.material.SetFloat("_Outline", 1f);
-                            vent.Field_7.material.SetColor("_OutlineColor", Engineer.color);
-                        } else if (vent.Field_7.material.GetColor("_AddColor") != Color.red) {
-                            vent.Field_7.material.SetFloat("_Outline", 0);
+                            vent.myRend.material.SetFloat("_Outline", 1f);
+                            vent.myRend.material.SetColor("_OutlineColor", Engineer.color);
+                        } else if (vent.myRend.material.GetColor("_AddColor") != Color.red) {
+                            vent.myRend.material.SetFloat("_Outline", 0);
                         }
                     }
                 }

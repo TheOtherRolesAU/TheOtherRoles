@@ -66,13 +66,13 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
     class UseButtonSetTargetPatch {
         static void Postfix(UseButtonManager __instance) {
-            if (__instance.Field_3 != null) return;
+            if (__instance.currentTarget != null) return;
 
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (blockSabotageJanitor || blockSabotageMafioso) {
-                // __instance.UseButton.sprite = __instance.UseImage;
+                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
                 __instance.UseButton.color = new Color(1f, 1f, 1f, 0.3f);
             }
 
@@ -82,7 +82,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
-            if (__instance.Field_3 != null) return true;
+            if (__instance.currentTarget != null) return true;
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
@@ -106,7 +106,7 @@ namespace TheOtherRoles
             }
 
             // Handle max number of meetings
-            if (__instance.Field_7 == 1) {
+            if (__instance.state == 1) {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);

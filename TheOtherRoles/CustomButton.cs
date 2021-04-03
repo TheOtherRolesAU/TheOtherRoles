@@ -144,7 +144,7 @@ public class CustomButton
             killButtonManager.renderer.color = Palette.EnabledColor;
             killButtonManager.renderer.material.SetFloat("_Desat", 0f);
         } else {
-            killButtonManager.renderer.color = Palette.DisabledColor;
+            killButtonManager.renderer.color = Palette.DisabledClear;
             killButtonManager.renderer.material.SetFloat("_Desat", 1f);
         }
 
