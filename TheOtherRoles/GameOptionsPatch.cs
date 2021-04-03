@@ -95,6 +95,8 @@ namespace TheOtherRoles
                 currentPreset = newPreset;
 
                 foreach (CustomOption option in CustomOption.Options) {
+                    if (option.PluginID != TheOtherRolesPlugin.Id) continue;
+
                     if (option is CustomStringOption str) {
                         if (str != TheOtherRolesPlugin.presetSelection) {
                             str.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", str.GetDefaultValue()) : null;
