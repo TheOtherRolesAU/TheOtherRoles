@@ -38,19 +38,16 @@ namespace TheOtherRoles
         }
     }
 
+    [HarmonyPriority(Priority.Low)] 
     [HarmonyPatch(typeof(GameOptionsData), "NHJLMAAHKJF")]
     class GameOptionsDataPatch
     {
         private static void Postfix(ref string __result)
         {
-            StringBuilder stringBuilder = new StringBuilder(__result);
-            foreach (CustomOption option in TheOtherRolesPlugin.options) {
-                stringBuilder.AppendLine(string.Format("{0}[]:   {1}", option.Name, option));   
-            }
-            var hudString = stringBuilder.ToString();
+            var hudString = __result;
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 24;
+            int roleSettingsLines = 19 + 25;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
@@ -97,12 +94,11 @@ namespace TheOtherRoles
             if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
                 currentPreset = newPreset;
 
-                foreach (CustomOption option in TheOtherRolesPlugin.options) {
-                    int outInt = 0;
-                    bool isLastCharNumeric = int.TryParse(option.PluginID[option.PluginID.Length - 1].ToString(), out outInt);
-                    if (isLastCharNumeric)
-                        option.PluginID = option.PluginID.Remove(option.PluginID.Length - 1);
-                    option.PluginID += newPreset.ToString();
+                string pluginId = TheOtherRolesPlugin.Id;
+
+                foreach (CustomOption option in CustomOption.Options) {
+                    if (option.PluginID.Contains(pluginId))
+                        option.PluginID = pluginId + newPreset.ToString();
 
                     if (option is CustomStringOption str) {
                         if (str != TheOtherRolesPlugin.presetSelection) {
