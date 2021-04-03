@@ -34,9 +34,9 @@ namespace TheOtherRoles
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
 
-        public static CustomStringOption presetSelection = CustomOption.AddString("0", "[CCCC00FF]Preset", false, presets);
-        public static CustomStringOption crewmateRolesCount = CustomOption.AddString("1", "[CCCC00FF]Number Of Crewmate/Neutral Roles", crewmateRoleCaps);
-        public static CustomStringOption impostorRolesCount = CustomOption.AddString("2", "[CCCC00FF]Number Of Impostor Roles", impostorRoleCaps);
+        public static CustomStringOption presetSelection = CustomOption.AddString("0", "[CCCC00FF]Preset[]", false, presets);
+        public static CustomStringOption crewmateRolesCount = CustomOption.AddString("1", "[CCCC00FF]Number Of Crewmate/Neutral Roles[]", crewmateRoleCaps);
+        public static CustomStringOption impostorRolesCount = CustomOption.AddString("2", "[CCCC00FF]Number Of Impostor Roles[]", impostorRoleCaps);
 
         public static CustomStringOption mafiaSpawnRate = CustomOption.AddString("10", cs(Janitor.color, "Mafia"), rates);
         public static CustomStringOption morphlingSpawnRate = CustomOption.AddString("20", cs(Morphling.color, "Morphling"), rates);

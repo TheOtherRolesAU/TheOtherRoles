@@ -83,12 +83,13 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
-    public class GameOptionsMenuPatchUpdate
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+    public class PresetPatch
     {
         public static int currentPreset = -1;
-        public static void Postfix(GameOptionsMenu __instance)
+        public static void Postfix(HudManager __instance)
         {
+            if ( AmongUsClient.Instance == null || !AmongUsClient.Instance.AmHost) return;
             // Handle presets
             int newPreset = TheOtherRolesPlugin.presetSelection.GetValue();
             if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
