@@ -1,5 +1,6 @@
 using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
@@ -10,14 +11,12 @@ namespace TheOtherRoles
         public string name;
         public string introDescription;
         public string shortDescription;
-        public bool isGood;
 
-        RoleInfo(Color color, string name, string introDescription, string shortDescription, bool isGood) {
+        RoleInfo(string name, Color color, string introDescription, string shortDescription) {
             this.color = color;
             this.name = name;
             this.introDescription = introDescription;
             this.shortDescription = shortDescription;
-            this.isGood = isGood;
         }
 
         public string colorHexString() {
@@ -29,196 +28,181 @@ namespace TheOtherRoles
             return (byte)(f * 255);
         }
 
-
-        public static RoleInfo getRoleInfoForPlayer(PlayerControl p) {
-            string name = "";
-            string introDescription = "";
-            string shortDescription = "";
-            bool isGood = true;
-            Color color = Color.white;
+        public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
+            List<RoleInfo> infos = new List<RoleInfo>();
 
             if (Jester.jester != null && p == Jester.jester) {
-                name = "Jester";
-                color = Jester.color;
-                introDescription = "Get voted out";
-                shortDescription = introDescription;
-                isGood = false;
+                infos.Add(new RoleInfo("Jester",
+                Jester.color,
+                "Get voted out",
+                "Get voted out"));
             }
-            else if (Mayor.mayor != null && p == Mayor.mayor) {
-                name = "Mayor";   
-                color = Mayor.color;
-                introDescription = "Your vote counts twice";
-                shortDescription = introDescription;
+            if (Mayor.mayor != null && p == Mayor.mayor) {
+                infos.Add(new RoleInfo("Mayor",
+                Mayor.color,
+                "Your vote counts twice",
+                "Your vote counts twice"));
             }
-            else if (Engineer.engineer != null && p == Engineer.engineer) {
-                name = "Engineer";   
-                color = Engineer.color;
-                introDescription = "Maintain important systems on the ship";
-                shortDescription = "Repair the ship";
+            if (Engineer.engineer != null && p == Engineer.engineer) {
+                infos.Add(new RoleInfo("Engineer", 
+                Engineer.color,
+                "Maintain important systems on the ship",
+                "Repair the ship"));
             }
-            else if (Sheriff.sheriff != null && p == Sheriff.sheriff) {
-                name = "Sheriff";   
-                color = Sheriff.color;
-                introDescription = "Shoot the [FF1919FF]Impostors";
-                shortDescription = "Shoot the Impostors";
+            if (Sheriff.sheriff != null && p == Sheriff.sheriff) {
+                infos.Add(new RoleInfo("Sheriff",
+                Sheriff.color,
+                "Shoot the [FF1919FF]Impostors",
+                "Shoot the Impostors"));
             }
-            else if (Lighter.lighter != null && p == Lighter.lighter) {
-                name = "Lighter";   
-                color = Lighter.color;
-                introDescription = "Your light never goes out";
-                shortDescription = introDescription;
+            if (Lighter.lighter != null && p == Lighter.lighter) {
+                infos.Add(new RoleInfo("Lighter",   
+                Lighter.color,
+                "Your light never goes out",
+                "Your light never goes out"));
             }
-            else if (Godfather.godfather != null && p == Godfather.godfather) {
-                name = "Godfather";   
-                color = Godfather.color;
-                introDescription = "Kill all Crewmates";
-                shortDescription = introDescription;
-                isGood = false;
+            if (Godfather.godfather != null && p == Godfather.godfather) {
+                infos.Add(new RoleInfo("Godfather",
+                Godfather.color,
+                "Kill all Crewmates",
+                "Kill all Crewmates"));
+                ;
             }
-            else if (Mafioso.mafioso != null && p == Mafioso.mafioso) {
-                name = "Mafioso";   
-                color = Mafioso.color;
-                introDescription = "Work with the [FF1919FF]Mafia[] to kill the Crewmates";
-                shortDescription = "Kill all Crewmates";
-                isGood = false;
+            if (Mafioso.mafioso != null && p == Mafioso.mafioso) {
+                infos.Add(new RoleInfo("Mafioso",
+                Mafioso.color,
+                "Work with the [FF1919FF]Mafia[] to kill the Crewmates",
+                "Kill all Crewmates"));
             }
-            else if (Janitor.janitor != null && p == Janitor.janitor) {
-                name = "Janitor";
-                color = Janitor.color;
-                introDescription = "Work with the [FF1919FF]Mafia[] by hiding dead bodies";
-                shortDescription = "Hide dead bodies";
-                isGood = false;
+            if (Janitor.janitor != null && p == Janitor.janitor) {
+                infos.Add(new RoleInfo("Janitor",
+                Janitor.color,
+                "Work with the [FF1919FF]Mafia[] by hiding dead bodies",
+                "Hide dead bodies"));
             }
-            else if (Morphling.morphling != null && p == Morphling.morphling) {
-                name = "Morphling";
-                color = Morphling.color;
-                introDescription = "Change your look to not get caught";
-                shortDescription = "Change your look";
-                isGood = false;
+            if (Morphling.morphling != null && p == Morphling.morphling) {
+                infos.Add(new RoleInfo("Morphling",
+                Morphling.color,
+                "Change your look to not get caught",
+                "Change your look"));
             }
-            else if (Camouflager.camouflager != null && p == Camouflager.camouflager) {
-                name = "Camouflager";
-                color = Camouflager.color;
-                introDescription = "Camouflage and kill the Crewmates";
-                shortDescription = "Hide among others";
-                isGood = false;
+            if (Camouflager.camouflager != null && p == Camouflager.camouflager) {
+                infos.Add(new RoleInfo("Camouflager",
+                Camouflager.color,
+                "Camouflage and kill the Crewmates",
+                "Hide among others"));
             }
-            else if (Vampire.vampire != null && p == Vampire.vampire) {
-                name = "Vampire";
-                color = Vampire.color;
-                introDescription = "Kill the Crewmates with your bites";
-                shortDescription = "Bite your enemies";
-                isGood = false;
+            if (Vampire.vampire != null && p == Vampire.vampire) {
+                infos.Add(new RoleInfo("Vampire",
+                Vampire.color,
+                "Kill the Crewmates with your bites",
+                "Bite your enemies"));
             }
-            else if (Detective.detective != null && p == Detective.detective) {
-                name = "Detective";
-                color = Detective.color;
-                introDescription = "Find the [FF1919FF]Impostors[] by examining footprints";
-                shortDescription = "Examine footprints";
+            if (Eraser.eraser != null && p == Eraser.eraser) {
+                infos.Add(new RoleInfo("Eraser",
+                Eraser.color,
+                "Kill the Crewmates and erase their roles",
+                "Erase the roles of your enemies"));
             }
-            else if (TimeMaster.timeMaster != null && p == TimeMaster.timeMaster) {
-                name = "Time Master";
-                color = TimeMaster.color;
-                introDescription = "Save yourself with your time shield";
-                shortDescription = "Use your time shield";
+            if (Detective.detective != null && p == Detective.detective) {
+                infos.Add(new RoleInfo("Detective",
+                Detective.color,
+                "Find the [FF1919FF]Impostors[] by examining footprints",
+                "Examine footprints"));
             }
-            else if (Medic.medic != null && p == Medic.medic) {
-                name = "Medic";
-                color = Medic.color;
-                introDescription = "Protect someone with your shield";
-                shortDescription = "Protect other players";
+            if (TimeMaster.timeMaster != null && p == TimeMaster.timeMaster) {
+                infos.Add(new RoleInfo("Time Master",
+                TimeMaster.color,
+                "Save yourself with your time shield",
+                "Use your time shield"));
             }
-            else if (Shifter.shifter != null && p == Shifter.shifter) {
-                name = "Shifter";
-                color = Shifter.color;
-                introDescription = "Shift your role";
-                shortDescription = "Shift your role";
+            if (Medic.medic != null && p == Medic.medic) {
+                infos.Add(new RoleInfo("Medic",
+                Medic.color,
+                "Protect someone with your shield",
+                "Protect other players"));
             }
-            else if (Swapper.swapper != null && p == Swapper.swapper) {
-                name = "Swapper";
-                color = Swapper.color;
-                introDescription = "Swap votes to exile the [FF1919FF]Impostors";
-                shortDescription = "Swap votes";
+            if (Shifter.shifter != null && p == Shifter.shifter) {
+                infos.Add(new RoleInfo("Shifter",
+                Shifter.color,
+                "Shift your role",
+                "Shift your role"));
             }
-            else if (Seer.seer != null && p == Seer.seer) { 
-                name = "Seer";
-                color = Seer.color;
-                introDescription = "You will see players die";
-                shortDescription = "You will see players die";
+            if (Swapper.swapper != null && p == Swapper.swapper) {
+                infos.Add(new RoleInfo("Swapper",
+                Swapper.color,
+                "Swap votes to exile the [FF1919FF]Impostors",
+                "Swap votes"));
             }
-            else if (Hacker.hacker != null && p == Hacker.hacker) { 
-                name = "Hacker";
-                color = Hacker.color;
-                introDescription = "Hacker to find the [FF1919FF]Impostors";
-                shortDescription = "Hacker to find the Impostors";
+            if (Seer.seer != null && p == Seer.seer) { 
+                infos.Add(new RoleInfo("Seer",
+                Seer.color,
+                "You will see players die",
+                "You will see players die"));
             }
-            else if (Child.child != null && p == Child.child) { 
-                name = p.Data.IsImpostor ? "Bad Child" : "Good Child";
-                color = p.Data.IsImpostor ? Palette.ImpostorRed : Child.color;
-                introDescription = "No one will harm you until you grow up";
-                shortDescription = "No one will harm you";
+            if (Hacker.hacker != null && p == Hacker.hacker) { 
+                infos.Add(new RoleInfo("Hacker",
+                Hacker.color,
+                "Hacker to find the [FF1919FF]Impostors",
+                "Hacker to find the Impostors"));
             }
-            else if (BountyHunter.bountyHunter != null && p == BountyHunter.bountyHunter) {
-                name = "Bounty Hunter";
-                color = BountyHunter.color;
-                introDescription = "Hunt your bounty down";
-                shortDescription = "Hunt your bounty";
-                isGood = false;
+            if (Child.child != null && p == Child.child) { 
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",
+                p.Data.IsImpostor ? Palette.ImpostorRed : Child.color,
+                "No one will harm you until you grow up",
+                "No one will harm you"));
             }
-            else if (Tracker.tracker != null && p == Tracker.tracker) {
-                name = "Tracker";
-                color = Tracker.color;
-                introDescription = "Track the [FF1919FF]Impostors[] down";
-                shortDescription = "Track the Impostors down";
+            if (BountyHunter.bountyHunter != null && p == BountyHunter.bountyHunter) {
+                infos.Add(new RoleInfo("Bounty Hunter",
+                BountyHunter.color,
+                "Hunt your bounty down",
+                "Hunt your bounty"));
+                ;
             }
-            else if (Snitch.snitch != null && p == Snitch.snitch) {
-                name = "Snitch";
-                color = Snitch.color;
-                introDescription = "Finish your tasks to find the [FF1919FF]Impostors[]";
-                shortDescription = "Finish your tasks";
+            if (Tracker.tracker != null && p == Tracker.tracker) {
+                infos.Add(new RoleInfo("Tracker",
+                Tracker.color,
+                "Track the [FF1919FF]Impostors[] down",
+                "Track the Impostors down"));
             }
-            else if (Jackal.jackal != null && p == Jackal.jackal) {
-                name = "Jackal";
-                color = Jackal.color;
-                introDescription = "Kill all Crewmates and [FF1919FF]Impostors[FFFFFFFF] to win";
-                shortDescription = "";
-                isGood = false;                
+            if (Snitch.snitch != null && p == Snitch.snitch) {
+                infos.Add(new RoleInfo("Snitch",
+                Snitch.color,
+                "Finish your tasks to find the [FF1919FF]Impostors[]",
+                "Finish your tasks"));
             }
-            else if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
-                name = "Sidekick";
-                color = Sidekick.color;
-                introDescription = "";
-                shortDescription = "Help your Jackal to kill everyone";
-                isGood = false;
+            if (Jackal.jackal != null && p == Jackal.jackal) {
+                infos.Add(new RoleInfo("Jackal",
+                Jackal.color,
+                "Kill all Crewmates and [FF1919FF]Impostors[FFFFFFFF] to win",
+                "Kill everyone"));                
             }
-            else if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                name = p.Data.IsImpostor ? "ImpLover" : "Lover";
-                color = p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color;
-                introDescription = "You are in [FC03BEFF]Love[]";
-                shortDescription = "You are in love";
-                isGood = !p.Data.IsImpostor;
+            if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
+                infos.Add(new RoleInfo("Sidekick",
+                Sidekick.color,
+                "",
+                "Help your Jackal to kill everyone"));
             }
-            else if (p.Data.IsImpostor) { // Just Impostor
-                name = "Impostor";
-                color = Palette.ImpostorRed;
-                introDescription = "";
-                shortDescription = "Sabotage and kill everyone";
-                isGood = false;
-            }
-            else { // Just Crewmate
-                name = "Crewmate";
-                color = Color.white;
-                introDescription = "";
-                shortDescription = "Find the Impostors";
+            if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpLover" : "Lover",
+                p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color,
+                "You are in [FC03BEFF]Love[]",
+                "You are in love"));
             }
 
-            return new RoleInfo(
-                color,
-                name,
-                introDescription,
-                shortDescription,
-                isGood
-            );
+            if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
+                infos.Add(new RoleInfo("Impostor",
+                Palette.ImpostorRed,
+                "",
+                "Sabotage and kill everyone"));
+            } else if (infos.Count == 0) { // Just Crewmate
+                infos.Add(new RoleInfo("Crewmate",
+                Color.white,
+                "",
+                "Find the Impostors"));
+            }
+
+            return infos;
         }
     }
 }

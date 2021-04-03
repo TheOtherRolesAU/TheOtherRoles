@@ -15,6 +15,7 @@ Even more roles are coming soon :)
 - [Morphling](#morphling)
 - [Camouflager](#camouflager)
 - [Vampire](#vampire)
+- [Eraser](#eraser)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -61,7 +62,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Changes in 1.9**
 - **New button art** created by **Bavari**
-- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher versions (1.9+).
 - **Time Master rework:** Check [Time Master](#time-master) for more information
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
@@ -72,6 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
 - **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
 - **Child:** The Child can now be a Crewmate Child or an Impostor Child, check the [Child](#child) section for more details
+- **Eraser:** The Eraser, a new Impostor role, is now part of the mod. Check the [Eraser](#eraser) section for more details
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -228,7 +230,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 ### **Team: Impostors**
 The Camouflager is an impostor which can additionally activate a camouflage mode.
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
-are hidden and all players have the same color.
+are hidden and all players have the same color.\
 \
 **NOTE**
 - The Child (and Morphling when copying the child) remains small and show its age.
@@ -248,7 +250,7 @@ are hidden and all players have the same color.
 ### **Team: Impostors**
 The Vampire is an impostor, that can bite other player. Bitten players die after a configurable amount of time.\
 If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
-If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.
+If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
 \
 **NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
@@ -263,6 +265,27 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 | Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
+## Eraser
+### **Team: Impostors**
+The Eraser is an Impostor that can erase the role of every player that is not an Impostor.\
+The targeted players will lose their role after the meeting right before a player is exiled.\
+After every erase, the cooldown increases by 10 seconds.\
+The erase will be performed, even if the Eraser or his target die before the next meeting.\
+\
+**NOTE:**
+- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
+- Erasing a Lover automatically erases the other Lover as well (if the second Lover is an ImpLover, he will turn into an Impostor)
+- Erasing a Jackal that has a Sidekick, triggers the Sidekick promotion if it's activated in the settings
+- As the erasing is being triggered before the eject of a player, erasing and voting out a Lover in the same round, would result in the
+ex lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Eraser Spawn Chance | -
+| Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
+-----------------------
+
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
 There are always two lovers which are linked together.\
@@ -272,7 +295,7 @@ You can specify the chance of one Lover being an impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
-If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).
+If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).\
 \
 **NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
@@ -462,17 +485,17 @@ Otherwise he sees the same information as everyone else.
 
 ## Shifter
 ### **Team: Crewmates**
-The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.
-The Shift will always be performed at the end of the next meeting, the target needs to be chosen during the round.
-Even if the Shifter or the target dies before the meeting, the Shift will still be performed.
+The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.\
+The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
+Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
 Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes the new Shifter.\
 Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
-The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.
-This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.
+The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
+This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
 \
 **NOTE:**
-- The shift will be performed before the Jester win condition is being checked.
+- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
 - If the Shifter takes over a role, their new cooldowns will start at the maximum cooldown of the ability
 - One time use abilities (e.g. shielding a player or engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
 can only use them, if the previous player did not used them before)

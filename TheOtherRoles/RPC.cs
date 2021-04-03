@@ -38,7 +38,8 @@ namespace TheOtherRoles
         Vampire,
         Snitch,
         Jackal,
-        Sidekick
+        Sidekick,
+        Eraser
     }
 
     enum CustomRPC
@@ -74,7 +75,10 @@ namespace TheOtherRoles
         SidekickKill,
         JackalCreatesSidekick,
         SidekickPromotes,
-        ChildLose
+        ChildLose,
+        ErasePlayerRole,
+        SetFutureErased,
+        SetFutureShifted
     }
 
     public static class RPCProcedure {
@@ -182,6 +186,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
+                        break;
+                    case RoleId.Eraser:
+                        Eraser.eraser = player;
                         break;
                     }
                 }
@@ -314,77 +321,73 @@ namespace TheOtherRoles
         }
 
         public static void shifterShift(byte targetId) {
+            PlayerControl oldShifter = Shifter.shifter;
+            PlayerControl player = Helpers.playerById(targetId);
+            if (player == null || oldShifter == null) return;
+
             Shifter.futureShift = null;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId && Shifter.shifter != null)
-                {
-                    // Suicide (exile) when impostor or impostor variants
-                    if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
-                        Shifter.shifter.Exiled();
-                        Shifter.shifter = null;
-                        return;
-                    }
+            Shifter.clearAndReload();
 
-                    PlayerControl oldShifter = Shifter.shifter;
-
-                    // Switch shield
-                    if (Medic.shielded != null && Medic.shielded == player) {
-                        Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
-                        Medic.shielded = oldShifter;
-                    } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                        Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
-                        Medic.shielded = player;
-                    }
-
-                    // Shift role
-                    if (Jester.jester != null && Jester.jester == player) {
-                        Jester.jester = oldShifter;
-                    } else if (Mayor.mayor != null && Mayor.mayor == player) {
-                        Mayor.mayor = oldShifter;
-                    } else if (Engineer.engineer != null && Engineer.engineer == player) {
-                        Engineer.engineer = oldShifter;
-                    } else if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
-                        Sheriff.sheriff = oldShifter;
-                    } else if (Lighter.lighter != null && Lighter.lighter == player) {
-                        Lighter.lighter = oldShifter;
-                    } else if (Detective.detective != null && Detective.detective == player) {
-                        Detective.detective = oldShifter;
-                    } else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == player) {
-                        TimeMaster.timeMaster = oldShifter;
-                    } else if (Medic.medic != null && Medic.medic == player) {
-                        Medic.medic = oldShifter;
-                    } else if (Swapper.swapper != null && Swapper.swapper == player) {
-                        Swapper.swapper = oldShifter;
-                    } else if (Lovers.lover1 != null && Lovers.lover1 == player) {
-                        Lovers.lover1 = oldShifter;
-                    } else if (Lovers.lover2 != null && Lovers.lover2 == player) {
-                        Lovers.lover2 = oldShifter;
-                    } else if (Seer.seer != null && Seer.seer == player) {
-                        Seer.seer = oldShifter;
-                    } else if (Hacker.hacker != null && Hacker.hacker == player) {
-                        Hacker.hacker = oldShifter;
-                    } else if (Child.child != null && Child.child == player) {
-                        Child.child = oldShifter;
-                    } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
-                        BountyHunter.bountyHunter = oldShifter;
-                    } else if (Tracker.tracker != null && Tracker.tracker == player) {
-                        Tracker.tracker = oldShifter;
-                    } else if (Snitch.snitch != null && Snitch.snitch == player) {
-                        Snitch.snitch = oldShifter;
-                    }else { // Crewmate
-                    }
-                    
-                    Shifter.shifter = null;
-                    // Update role descriptions tasks
-                    Helpers.refreshRoleDescription(oldShifter);
-                    Helpers.refreshRoleDescription(player);
-
-                    // Set cooldowns to max for both players
-                    if (PlayerControl.LocalPlayer == Shifter.shifter || PlayerControl.LocalPlayer == oldShifter)
-                        CustomButton.ResetAllCooldowns();
-                }
+            // Suicide (exile) when impostor or impostor variants
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
+                oldShifter.Exiled();
+                return;
             }
+
+            // Switch shield
+            if (Medic.shielded != null && Medic.shielded == player) {
+                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+                Medic.shielded = oldShifter;
+            } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
+                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+                Medic.shielded = player;
+            }
+
+            // Shift role
+            if (Jester.jester != null && Jester.jester == player) {
+                Jester.jester = oldShifter;
+            } else if (Mayor.mayor != null && Mayor.mayor == player) {
+                Mayor.mayor = oldShifter;
+            } else if (Engineer.engineer != null && Engineer.engineer == player) {
+                Engineer.engineer = oldShifter;
+            } else if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
+                Sheriff.sheriff = oldShifter;
+            } else if (Lighter.lighter != null && Lighter.lighter == player) {
+                Lighter.lighter = oldShifter;
+            } else if (Detective.detective != null && Detective.detective == player) {
+                Detective.detective = oldShifter;
+            } else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == player) {
+                TimeMaster.timeMaster = oldShifter;
+            } else if (Medic.medic != null && Medic.medic == player) {
+                Medic.medic = oldShifter;
+            } else if (Swapper.swapper != null && Swapper.swapper == player) {
+                Swapper.swapper = oldShifter;
+            } else if (Lovers.lover1 != null && Lovers.lover1 == player) {
+                Lovers.lover1 = oldShifter;
+            } else if (Lovers.lover2 != null && Lovers.lover2 == player) {
+                Lovers.lover2 = oldShifter;
+            } else if (Seer.seer != null && Seer.seer == player) {
+                Seer.seer = oldShifter;
+            } else if (Hacker.hacker != null && Hacker.hacker == player) {
+                Hacker.hacker = oldShifter;
+            } else if (Child.child != null && Child.child == player) {
+                Child.child = oldShifter;
+            } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
+                BountyHunter.bountyHunter = oldShifter;
+            } else if (Tracker.tracker != null && Tracker.tracker == player) {
+                Tracker.tracker = oldShifter;
+            } else if (Snitch.snitch != null && Snitch.snitch == player) {
+                Snitch.snitch = oldShifter;
+            }else { // Crewmate
+            }
+            
+            // Update role descriptions tasks
+            Helpers.refreshRoleDescription(oldShifter);
+            Helpers.refreshRoleDescription(player);
+
+            // Set cooldowns to max for both players
+            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
+                CustomButton.ResetAllCooldowns();
         }
 
         public static void swapperSwap(byte playerId1, byte playerId2) {
@@ -488,48 +491,12 @@ namespace TheOtherRoles
                         Jackal.fakeSidekick = player;
                         return;
                     }
-                    Sidekick.sidekick = player;
                     player.RemoveInfected();
-
-                    // Crewmate roles
-                    if(player == Jester.jester) Jester.clearAndReload();
-                    if(player == Mayor.mayor) Mayor.clearAndReload();
-                    if(player == Engineer.engineer) Engineer.clearAndReload();
-                    if(player == Sheriff.sheriff) Sheriff.clearAndReload();
-                    if(player == Lighter.lighter) Lighter.clearAndReload();
-                    if(player == Detective.detective) Detective.clearAndReload();
-                    if(player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
-                    if(player == Medic.medic) Medic.clearAndReload();
-                    if(player == Shifter.shifter) Shifter.clearAndReload();
-                    if(player == Seer.seer) Seer.clearAndReload();
-                    if(player == Hacker.hacker) Hacker.clearAndReload();
-                    if(player == Child.child) Child.clearAndReload();
-                    if(player == Tracker.tracker) Tracker.clearAndReload();
-                    if(player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
-                    if(player == Snitch.snitch) Snitch.clearAndReload();
-                    if(player == Swapper.swapper) Swapper.clearAndReload();
-
-                    // Impostor roles
-                    if(player == Morphling.morphling) Morphling.clearAndReload();
-                    if(player == Camouflager.camouflager) Camouflager.clearAndReload();
-                    if(player == Godfather.godfather) Godfather.clearAndReload();
-                    if(player == Mafioso.mafioso) Mafioso.clearAndReload();
-                    if(player == Janitor.janitor) Janitor.clearAndReload();
-                    if(player == Vampire.vampire) Vampire.clearAndReload();
-
-                    // The Sidekick stays a part of the lover couple!
+                    if (player != Lovers.lover1 && player != Lovers.lover2) erasePlayerRole(player.PlayerId);
                     
-                    if (PlayerControl.LocalPlayer == null) return;
-                    if (PlayerControl.LocalPlayer == player) {
-                        //Only the Lover keeps his ImportantTextTask
-                        Helpers.removeTasksFromPlayer(player, player != Lovers.lover1 && player != Lovers.lover2);
-                        
-                        var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-                        task.transform.SetParent(player.transform, false);
-                        task.Text = "[00B4EBFF]Sidekick: Help your Jackal to kill everyone";
-                        player.myTasks.Insert(0, task);
-                    }
-
+                    Sidekick.sidekick = player;
+                    Helpers.removeTasksFromPlayer(player);
+                    Helpers.refreshRoleDescription(player);
                     return;
                 }
             }
@@ -543,20 +510,71 @@ namespace TheOtherRoles
                 Jackal.canCreateSidekick = false;
             }
             Sidekick.clearAndReload();
-            if (PlayerControl.LocalPlayer == null) return;
-            if (PlayerControl.LocalPlayer == player) {
-                Helpers.removeTasksFromPlayer(player, true);
-                var textTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-                textTask.transform.SetParent(player.transform, false);
-                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-                textTask.Text = $"[00B4EBFF]Jackal: Kill everyone{getSidekickText}"; 
-                player.myTasks.Insert(0, textTask);
-            }
+            Helpers.refreshRoleDescription(player);
             return;
         }
 
         public static void childLose() {
             Child.triggerChildLose = true;
+        }
+        
+        public static void erasePlayerRole(byte playerId) {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (player == null) return;
+
+            // Crewmate roles
+            if (player == Mayor.mayor) Mayor.clearAndReload();
+            if (player == Engineer.engineer) Engineer.clearAndReload();
+            if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+            if (player == Lighter.lighter) Lighter.clearAndReload();
+            if (player == Detective.detective) Detective.clearAndReload();
+            if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
+            if (player == Medic.medic) Medic.clearAndReload();
+            if (player == Shifter.shifter) Shifter.clearAndReload();
+            if (player == Seer.seer) Seer.clearAndReload();
+            if (player == Hacker.hacker) Hacker.clearAndReload();
+            if (player == Child.child) Child.clearAndReload();
+            if (player == Tracker.tracker) Tracker.clearAndReload();
+            if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
+            if (player == Snitch.snitch) Snitch.clearAndReload();
+            if (player == Swapper.swapper) Swapper.clearAndReload();
+
+            // Impostor roles
+            if (player == Morphling.morphling) Morphling.clearAndReload();
+            if (player == Camouflager.camouflager) Camouflager.clearAndReload();
+            if (player == Godfather.godfather) Godfather.clearAndReload();
+            if (player == Mafioso.mafioso) Mafioso.clearAndReload();
+            if (player == Janitor.janitor) Janitor.clearAndReload();
+            if (player == Vampire.vampire) Vampire.clearAndReload();
+            if (player == Eraser.eraser) Eraser.clearAndReload();
+        
+            // Other roles
+            if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
+                Lovers.clearAndReload(); 
+                Helpers.refreshRoleDescription(Lovers.lover1);
+                Helpers.refreshRoleDescription(Lovers.lover2);
+            }
+            if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
+                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
+                    RPCProcedure.sidekickPromotes();
+                } else {
+                    Jackal.clearAndReload();
+                }
+            }
+            if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+
+            Helpers.refreshRoleDescription(player);
+        }
+
+        public static void setFutureErased(byte playerId) {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
+            if (player != null) Eraser.futureErased.Add(player);
+        }
+
+        public static void setFutureShifted(byte playerId) {
+            Shifter.futureShift = Helpers.playerById(playerId);
         }
     }
 
@@ -661,6 +679,15 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ChildLose:
                     RPCProcedure.childLose();
+                    break;
+                case (byte)CustomRPC.ErasePlayerRole:
+                    RPCProcedure.erasePlayerRole(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureErased:
+                    RPCProcedure.setFutureErased(HFPCBBHJIPJ.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureShifted:
+                    RPCProcedure.setFutureShifted(HFPCBBHJIPJ.ReadByte());
                     break;
             }
         }

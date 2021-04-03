@@ -2,7 +2,7 @@ using HarmonyLib;
 using System;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
-
+using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
@@ -27,7 +27,9 @@ namespace TheOtherRoles
         // Intro display role
         static void Postfix(IntroCutscene.CoBegin__d __instance)
         {
-            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            if (infos.Count == 0) return;
+            RoleInfo roleInfo = infos[0];
 
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
