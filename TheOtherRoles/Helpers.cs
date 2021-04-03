@@ -7,6 +7,7 @@ using System.Collections;
 using Reactor.Unstrip;
 using UnhollowerBaseLib;
 using UnityEngine;
+using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
@@ -147,11 +148,11 @@ namespace TheOtherRoles {
             return true;
         }
 
-        public static void removeTasksFromPlayer(PlayerControl player, bool removeImportantTextTasks = false) {
+        public static void removeTasksFromPlayer(PlayerControl player) {
             if (player == null) return;
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks) {
-                if (!removeImportantTextTasks && task.gameObject.GetComponent<ImportantTextTask>() != null)
+                if (task.gameObject.GetComponent<ImportantTextTask>() != null)
                     continue;
                 if (task.TaskType != TaskTypes.FixComms && 
                     task.TaskType != TaskTypes.FixLights && 
@@ -169,15 +170,19 @@ namespace TheOtherRoles {
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
 
-            // Remove default ImportantTextTasks
+            // Remove players current ImportantTaskTexts
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask t in player.myTasks) {
                 if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
                     toRemove.Add(t);
                 }
             }   
-            foreach (PlayerTask t in toRemove)
-                player.RemoveTask(t);
+
+            foreach (PlayerTask t in toRemove) {
+                t.OnRemove();
+                player.myTasks.Remove(t);
+                UnityEngine.Object.Destroy(t.gameObject);
+            }
 
             // Add description
             RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(player);        
