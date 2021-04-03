@@ -185,18 +185,20 @@ namespace TheOtherRoles {
             }
 
             // Add description
-            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(player);        
-            var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-            task.transform.SetParent(player.transform, false);
+            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player);
+            foreach (RoleInfo roleInfo in infos) {
+                var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                task.transform.SetParent(player.transform, false);
 
-            if (player == Jackal.jackal) {
-                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
-            } else {
-                task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+                if (roleInfo.name == "Jackal") {
+                    var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+                } else {
+                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+                }
+
+                player.myTasks.Insert(0, task);
             }
-
-            player.myTasks.Insert(0, task);
         }
 
         public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
