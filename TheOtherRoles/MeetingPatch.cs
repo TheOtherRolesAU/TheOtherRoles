@@ -13,49 +13,102 @@ using Reactor.Extensions;
 
 namespace TheOtherRoles
 {
-    // [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud))]
-    // class MeetingCalculateVotesPatch {
-    //     static bool Prefix(MeetingHud __instance, ref Il2CppStructArray<byte> __result)
-    //     {
-    //         Il2CppStructArray<byte> array = new Il2CppStructArray<byte>(11);
-    //         for (int i = 0; i < __instance.playerStates.Length; i++)
-    //         {
-    //             PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-    //             if (playerVoteArea.didVote)
-    //             {
-    //                 int num = (int)(playerVoteArea.votedFor + 1);
-    //                 if (num >= 0 && num < array.Length)
-    //                 {
-    //                     Il2CppStructArray<byte> array2 = array;
-    //                     int num2 = num;
-    //                     // Mayor count vote twice
-    //                     if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
-    //                         array2[num2] += 2;
-    //                     else
-    //                         array2[num2] += 1;
-    //                 }
-    //             }
-    //         }
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
+    class MeetingCalculateVotesPatch {
+        private static byte[] calculateVotes(MeetingHud __instance) {
+            byte[] array = new byte[11];
+            for (int i = 0; i < __instance.playerStates.Length; i++)
+            {
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.didVote)
+                {
+                    int num = (int)(playerVoteArea.votedFor + 1);
+                    if (num >= 0 && num < array.Length)
+                    {
+                        byte[] array2 = array;
+                        int num2 = num;
+                        // Mayor count vote twice
+                        if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
+                            array2[num2] += 2;
+                        else
+                            array2[num2] += 1;
+                    }
+                }
+            }
 
-    //         // Swapper swap votes
-    //         PlayerVoteArea swapped1 = null;
-    //         PlayerVoteArea swapped2 = null;
+            // Swapper swap votes
+            PlayerVoteArea swapped1 = null;
+            PlayerVoteArea swapped2 = null;
 
-    //         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-    //             if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-    //             if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-    //         }
+            foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+                if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+            }
 
-    //         if (swapped1 != null && swapped2 != null && swapped1.TargetPlayerId + 1 >= 0 && swapped1.TargetPlayerId + 1 < array.Length && swapped2.TargetPlayerId + 1 >= 0 && swapped2.TargetPlayerId + 1 < array.Length) {
-    //             byte tmp = array[swapped1.TargetPlayerId + 1];
-    //             array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
-    //             array[swapped2.TargetPlayerId + 1] = tmp;
-    //         }
+            if (swapped1 != null && swapped2 != null && swapped1.TargetPlayerId + 1 >= 0 && swapped1.TargetPlayerId + 1 < array.Length && swapped2.TargetPlayerId + 1 >= 0 && swapped2.TargetPlayerId + 1 < array.Length) {
+                byte tmp = array[swapped1.TargetPlayerId + 1];
+                array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
+                array[swapped2.TargetPlayerId + 1] = tmp;
+            }
+            return array;
+        }
 
-    //         __result = array;
-    //         return false;
-    //     }
-    // }
+        private static int IndexOfMax(byte[] self, Func<byte, int> comparer, out bool tie) {
+            tie = false;
+            int num = int.MinValue;
+            int result = -1;
+            for (int i = 0; i < self.Length; i++)
+            {
+                int num2 = comparer(self[i]);
+                if (num2 > num)
+                {
+                    result = i;
+                    num = num2;
+                    tie = false;
+                }
+                else if (num2 == num)
+                {
+                    tie = true;
+                    result = -1;
+                }
+            }
+            return result;
+        }
+
+        static bool Prefix(MeetingHud __instance)
+        {
+            System.Console.WriteLine("AAAAA");
+
+            if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
+            {
+                byte[] self = calculateVotes(__instance);
+                bool tie;
+                int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
+                GameData.PlayerInfo exiled = null;
+                foreach (GameData.PlayerInfo pi in GameData.Instance.AllPlayers) {
+                    if (pi.PlayerId == maxIdx) {
+                        exiled = pi;
+                        break;
+                    }
+                }
+                byte[] array = new byte[10];
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    array[(int)playerVoteArea.TargetPlayerId] = playerVoteArea.GetState();
+                }
+                // RPCVotingComplete
+                if (AmongUsClient.Instance.AmClient)
+                    __instance.VotingComplete(array, exiled, tie);
+                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
+                messageWriter.WriteBytesAndSize(array);
+                messageWriter.Write((exiled != null) ? exiled.PlayerId : byte.MaxValue);
+                messageWriter.Write(tie);
+                messageWriter.EndMessage();
+            }
+            return false;
+        }
+    }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
     class MeetingPopulateVotesPatch {
