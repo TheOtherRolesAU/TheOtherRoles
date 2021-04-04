@@ -13,49 +13,49 @@ using Reactor.Extensions;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(MeetingHud), "HBHNOGPDMMJ")]
-    class MeetingCalculateVotesPatch {
-        static bool Prefix(MeetingHud __instance, ref Il2CppStructArray<byte> __result)
-        {
-            Il2CppStructArray<byte> array = new Il2CppStructArray<byte>(11);
-            for (int i = 0; i < __instance.playerStates.Length; i++)
-            {
-                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                if (playerVoteArea.didVote)
-                {
-                    int num = (int)(playerVoteArea.votedFor + 1);
-                    if (num >= 0 && num < array.Length)
-                    {
-                        Il2CppStructArray<byte> array2 = array;
-                        int num2 = num;
-                        // Mayor count vote twice
-                        if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
-                            array2[num2] += 2;
-                        else
-                            array2[num2] += 1;
-                    }
-                }
-            }
+    // [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud))]
+    // class MeetingCalculateVotesPatch {
+    //     static bool Prefix(MeetingHud __instance, ref Il2CppStructArray<byte> __result)
+    //     {
+    //         Il2CppStructArray<byte> array = new Il2CppStructArray<byte>(11);
+    //         for (int i = 0; i < __instance.playerStates.Length; i++)
+    //         {
+    //             PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+    //             if (playerVoteArea.didVote)
+    //             {
+    //                 int num = (int)(playerVoteArea.votedFor + 1);
+    //                 if (num >= 0 && num < array.Length)
+    //                 {
+    //                     Il2CppStructArray<byte> array2 = array;
+    //                     int num2 = num;
+    //                     // Mayor count vote twice
+    //                     if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
+    //                         array2[num2] += 2;
+    //                     else
+    //                         array2[num2] += 1;
+    //                 }
+    //             }
+    //         }
 
-            // Swapper swap votes
-            PlayerVoteArea swapped1 = null;
-            PlayerVoteArea swapped2 = null;
+    //         // Swapper swap votes
+    //         PlayerVoteArea swapped1 = null;
+    //         PlayerVoteArea swapped2 = null;
 
-            foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-                if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-            }
+    //         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+    //             if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+    //             if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+    //         }
 
-            if (swapped1 != null && swapped2 != null && swapped1.TargetPlayerId + 1 >= 0 && swapped1.TargetPlayerId + 1 < array.Length && swapped2.TargetPlayerId + 1 >= 0 && swapped2.TargetPlayerId + 1 < array.Length) {
-                byte tmp = array[swapped1.TargetPlayerId + 1];
-                array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
-                array[swapped2.TargetPlayerId + 1] = tmp;
-            }
+    //         if (swapped1 != null && swapped2 != null && swapped1.TargetPlayerId + 1 >= 0 && swapped1.TargetPlayerId + 1 < array.Length && swapped2.TargetPlayerId + 1 >= 0 && swapped2.TargetPlayerId + 1 < array.Length) {
+    //             byte tmp = array[swapped1.TargetPlayerId + 1];
+    //             array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
+    //             array[swapped2.TargetPlayerId + 1] = tmp;
+    //         }
 
-            __result = array;
-            return false;
-        }
-    }
+    //         __result = array;
+    //         return false;
+    //     }
+    // }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
     class MeetingPopulateVotesPatch {

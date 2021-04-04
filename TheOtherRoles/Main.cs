@@ -49,14 +49,14 @@ namespace TheOtherRoles
         public static CustomStringOption jesterSpawnRate = CustomOption.AddString("60", cs(Jester.color, "Jester"), rates);
 
         public static CustomStringOption shifterSpawnRate = CustomOption.AddString("70", cs(Shifter.color, "Shifter"), rates);
-        public static CustomStringOption mayorSpawnRate = CustomOption.AddString("80", cs(Mayor.color, "Mayor"), rates);
+        // public static CustomStringOption mayorSpawnRate = CustomOption.AddString("80", cs(Mayor.color, "Mayor"), rates);
         public static CustomStringOption engineerSpawnRate = CustomOption.AddString("90", cs(Engineer.color, "Engineer"), rates);
         public static CustomStringOption sheriffSpawnRate = CustomOption.AddString("100", cs(Sheriff.color, "Sheriff"), rates);
         public static CustomStringOption lighterSpawnRate = CustomOption.AddString("110", cs(Lighter.color, "Lighter"), rates);
         public static CustomStringOption detectiveSpawnRate = CustomOption.AddString("120", cs(Detective.color, "Detective"), rates);
         public static CustomStringOption timeMasterSpawnRate = CustomOption.AddString("130", cs(TimeMaster.color, "Time Master"), rates);
         public static CustomStringOption medicSpawnRate = CustomOption.AddString("140", cs(Medic.color, "Medic"), rates);
-        public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color, "Swapper"), rates);
+        // public static CustomStringOption swapperSpawnRate = CustomOption.AddString("150", cs(Swapper.color, "Swapper"), rates);
         public static CustomStringOption seerSpawnRate = CustomOption.AddString("160", cs(Seer.color, "Seer"), rates);
         public static CustomStringOption hackerSpawnRate = CustomOption.AddString("170", cs(Hacker.color, "Hacker"), rates);
         // public static CustomStringOption bountyHunterSpawnRate = CustomOption.AddString("190", cs(BountyHunter.color) + "Bounty Hunter", rates);

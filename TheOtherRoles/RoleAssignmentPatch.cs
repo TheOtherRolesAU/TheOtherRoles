@@ -58,7 +58,7 @@ namespace TheOtherRoles
             impSettings.Add((byte)RoleId.Eraser, TheOtherRolesPlugin.eraserSpawnRate.GetValue());
 
             crewSettings.Add((byte)RoleId.Jester, TheOtherRolesPlugin.jesterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Mayor, TheOtherRolesPlugin.mayorSpawnRate.GetValue());
+            // crewSettings.Add((byte)RoleId.Mayor, TheOtherRolesPlugin.mayorSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Engineer, TheOtherRolesPlugin.engineerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Sheriff, TheOtherRolesPlugin.sheriffSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Lighter, TheOtherRolesPlugin.lighterSpawnRate.GetValue());
@@ -66,7 +66,7 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.TimeMaster, TheOtherRolesPlugin.timeMasterSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Medic, TheOtherRolesPlugin.medicSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Shifter, TheOtherRolesPlugin.shifterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Swapper,TheOtherRolesPlugin.swapperSpawnRate.GetValue());
+            // crewSettings.Add((byte)RoleId.Swapper,TheOtherRolesPlugin.swapperSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Seer, TheOtherRolesPlugin.seerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Hacker, TheOtherRolesPlugin.hackerSpawnRate.GetValue());
             crewSettings.Add((byte)RoleId.Tracker, TheOtherRolesPlugin.trackerSpawnRate.GetValue());
