@@ -68,8 +68,6 @@ public class CustomButton
     public static void HudUpdate()
     {
         buttons.RemoveAll(item => item.killButtonManager == null);
-
-        if (MeetingHud.Instance || ExileController.Instance) return;
     
         for (int i = 0; i < buttons.Count; i++)
         {
@@ -127,7 +125,7 @@ public class CustomButton
 
     private void Update()
     {
-        if (PlayerControl.LocalPlayer.Data == null || !HasButton()) {
+        if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
             setActive(false);
             return;
         }
