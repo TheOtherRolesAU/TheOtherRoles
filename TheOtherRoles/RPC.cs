@@ -381,10 +381,6 @@ namespace TheOtherRoles
             }else { // Crewmate
             }
             
-            // Update role descriptions tasks
-            Helpers.refreshRoleDescription(oldShifter);
-            Helpers.refreshRoleDescription(player);
-
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
@@ -496,7 +492,6 @@ namespace TheOtherRoles
                     
                     Sidekick.sidekick = player;
                     Helpers.removeTasksFromPlayer(player);
-                    Helpers.refreshRoleDescription(player);
                     return;
                 }
             }
@@ -510,7 +505,6 @@ namespace TheOtherRoles
                 Jackal.canCreateSidekick = false;
             }
             Sidekick.clearAndReload();
-            Helpers.refreshRoleDescription(player);
             return;
         }
 
@@ -552,8 +546,6 @@ namespace TheOtherRoles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
-                Helpers.refreshRoleDescription(Lovers.lover1);
-                Helpers.refreshRoleDescription(Lovers.lover2);
             }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
@@ -563,8 +555,6 @@ namespace TheOtherRoles
                 }
             }
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
-
-            Helpers.refreshRoleDescription(player);
         }
 
         public static void setFutureErased(byte playerId) {
