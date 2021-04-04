@@ -196,6 +196,9 @@ namespace TheOtherRoles {
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
+
+            // Update Role Description
+            Helpers.refreshRoleDescription(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
                 // Time Master
@@ -403,15 +406,6 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetTasks))]
-    public static class RoleDescriptionPatch
-    {
-        public static void Postfix(PlayerControl __instance)
-        {
-            Helpers.refreshRoleDescription(__instance);
         }
     }
 }
