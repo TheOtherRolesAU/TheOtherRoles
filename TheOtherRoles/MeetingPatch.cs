@@ -77,8 +77,6 @@ namespace TheOtherRoles
 
         static bool Prefix(MeetingHud __instance)
         {
-            System.Console.WriteLine("AAAAA");
-
             if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
             {
                 byte[] self = calculateVotes(__instance);
