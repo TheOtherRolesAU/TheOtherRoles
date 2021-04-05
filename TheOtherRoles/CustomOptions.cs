@@ -156,7 +156,7 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, string name, bool defaultValue) {
-            return new CustomOption(id, name, new string[]{"False", "True"}, default ? "True" : "False");
+            return new CustomOption(id, name, new string[]{"On", "Off"}, default ? "On" : "Off");
         }
 
         // Static behaviour
@@ -175,7 +175,8 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void ShareOptionSelection() {
+        public static void ShareOptionSelections() {
+            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.CBKCIKKEJHI == false && PlayerControl.LocalPlayer == null) return;
             foreach (CustomOption option in CustomOption.options) {
                 MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
@@ -206,10 +207,8 @@ namespace TheOtherRoles {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 
-                    ShareOptionSelection();// Share all selections
+                    ShareOptionSelections();// Share all selections
                 }
-
-                System.Console.WriteLine(stringOption.GetInt());
            }
         }
     }
@@ -264,6 +263,16 @@ namespace TheOtherRoles {
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
+    public class RpcSyncSettingsPatch
+    {
+        public static void Postfix()
+        {
+            CustomOption.ShareOptionSelections();
+        }
+    }
+
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
     class GameOptionsMenuUpdatePatch
