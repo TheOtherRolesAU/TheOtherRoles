@@ -3,9 +3,14 @@ using UnityEngine;
 using BepInEx.Configuration;
 using static TheOtherRoles.TheOtherRoles;
 using System;
+using System.Linq;
+using HarmonyLib;
+using System.Reflection;
+using System.Text;
+
 
 namespace TheOtherRoles {
-    class CustomOptionsHolder {
+    public class CustomOptionsHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
         public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10"};
         public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
@@ -99,19 +104,22 @@ namespace TheOtherRoles {
         }
     }
 
-    class CustomOption {
+    public class CustomOption {
         public static List<CustomOption> options = new List<CustomOption>();
         public static int preset = 0;
 
         public int id;
         public string name;
-        public string[] selections;
+        public System.Object[] selections;
 
         public int defaultSelection;
         public ConfigEntry<int> entry;
         public int selection;
+        public OptionBehaviour optionBehaviour;
 
-        public CustomOption(int id, string name,  string[] selections, string defaultValue) {
+        // Option creation
+
+        public CustomOption(int id, string name,  System.Object[] selections, System.Object defaultValue) {
             this.id = id;
             this.name = name;
             this.selections = selections;
@@ -119,9 +127,13 @@ namespace TheOtherRoles {
             int index = Array.IndexOf(selections, defaultValue);
             this.defaultSelection = index >= 0 ? index : 0;
 
-            entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", id.ToString(), defaultSelection);
-            selection = Mathf.Clamp(entry.Value, 0, selections.Length - 1);
+            selection = 0;
+            if (id != 0) {
+                entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", id.ToString(), defaultSelection);
+                selection = Mathf.Clamp(entry.Value, 0, selections.Length - 1);
+            }
             options.Add(this);
+            System.Console.WriteLine("here");
         }
 
         public static CustomOption Create(int id, string name, string[] selections, string defaultValue = "") {
@@ -129,14 +141,167 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, string name, float defaultValue, float min, float max, float step) {
-            List<string> selections = new List<string>();
+            List<float> selections = new List<float>();
             for (float s = min; s <= max; s += step)
-                selections.Add(s.ToString());
-            return new CustomOption(id, name, selections.ToArray(), defaultValue.ToString());
+                selections.Add(s);
+            return new CustomOption(id, name, selections.Cast<object>().ToArray(), defaultValue);
         }
 
         public static CustomOption Create(int id, string name, bool defaultValue) {
             return new CustomOption(id, name, new string[]{"False", "True"}, default ? "True" : "False");
+        }
+
+        // Static behaviour
+
+        public static void switchPreset(int newPreset) {
+            System.Console.WriteLine("Preset change");
+            CustomOption.preset = newPreset;
+            foreach (CustomOption option in CustomOption.options) {
+                if (option.id == 0) continue;
+
+                option.entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", option.id.ToString(), option.defaultSelection);
+                option.selection = Mathf.Clamp(option.entry.Value, 0, option.selections.Length - 1);
+                if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption) {
+                    stringOption.IOFLMCGMJBA = stringOption.Value = option.selection;
+                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+                }
+            }
+        }
+
+        // Getter
+
+        public int getSelection() {
+            return selection;
+        }
+
+        public float getFloat() {
+            return (float)selections[selection];
+        }
+
+        // Option changes
+
+        public void valueChanged(OptionBehaviour o) {
+            if (o is StringOption stringOption) {
+                selection = stringOption.IOFLMCGMJBA = stringOption.Value;
+                stringOption.ValueText.Text = selections[selection].ToString();
+
+                if (id == 0) { // Switch preset before sharing the settings
+                    switchPreset(selection);
+                }
+                System.Console.WriteLine(stringOption.GetInt());
+           }
+        }
+    }
+
+    [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
+    class GameOptionsMenuStartPatch {
+        public static void Postfix(GameOptionsMenu __instance) {
+            var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
+            if (template == null) return;
+            var offset = __instance.GetComponentsInChildren<OptionBehaviour>().Min(option => option.transform.localPosition.y);
+            System.Console.WriteLine(offset);
+
+            List<OptionBehaviour> allOptions = __instance.IGFJIPMAJHF.ToList();
+            for (int i = 0; i < CustomOption.options.Count; i++) {
+                CustomOption option = CustomOption.options[i];
+                StringOption stringOption = (UnityEngine.Object.Instantiate(template, template.transform.parent));
+                allOptions.Add(stringOption);
+                stringOption.transform.localPosition = new Vector3(template.transform.localPosition.x, offset - (i + 1) * 0.5F, template.transform.localPosition.z);
+                option.optionBehaviour = stringOption;
+            }
+            __instance.IGFJIPMAJHF = allOptions.ToArray();
+        }
+    }
+
+    [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
+    class GameOptionsMenuUpdatePatch
+    {
+        public static void Postfix(GameOptionsMenu __instance) {
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.IGFJIPMAJHF.Length * 0.5F;
+        }
+    }
+
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
+    class StringOptionOnEnablePatch {
+        public static void Postfix(StringOption __instance) {
+            CustomOption option = CustomOption.options.FirstOrDefault(o => o.optionBehaviour == __instance);
+            if (option != null) {
+                __instance.Value = __instance.IOFLMCGMJBA = option.selection;
+                __instance.ValueText.Text = option.selections[option.selection].ToString();
+                __instance.OnValueChanged = new Action<OptionBehaviour>(option.valueChanged);
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(GameSettingMenu), "OnEnable")]
+    class GameSettingMenuPatch {
+        public static void Prefix(GameSettingMenu __instance) {
+            __instance.HideForOnline = new Transform[]{};
+        }
+    }
+
+    [HarmonyPatch] 
+    class GameOptionsDataPatch
+    {
+        private static IEnumerable<MethodBase> TargetMethods() {
+            return typeof(IGDMNKLDEPI).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+        }
+
+        private static void Postfix(ref string __result)
+        {
+            StringBuilder sb = new StringBuilder(__result);
+            foreach (CustomOption option in CustomOption.options) { 
+                sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+            }
+            var hudString = sb.ToString();
+
+            // int defaultSettingsLines = 19;
+            // int roleSettingsLines = 19 + 25;
+            // int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+            // int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+            // int counter = TheOtherRolesPlugin.optionsPage;
+            // if (counter == 0) {
+            //     hudString = hudString.Substring(0, end1) + "\n";   
+            // } else if (counter == 1) {
+            //     hudString = hudString.Substring(end1 + 1, end2 - end1);
+            //     // Temporary fix, should add a new CustomOption for spaces
+            //     int gap = 1;
+            //     int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+            //     hudString = hudString.Insert(index, "\n");
+            //     gap = 4;
+            //     index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+            //     hudString = hudString.Insert(index, "\n");
+            //     gap = 10;
+            //     index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+            //     hudString = hudString.Insert(index + 1, "\n");
+            //     gap = 14;
+            //     index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+            //     hudString = hudString.Insert(index + 1, "\n");
+            // } else if (counter == 2) {
+            //     hudString = hudString.Substring(end2 + 1);
+            // }
+            hudString += "\n Press tab for more...\n\n\n";
+            __result = hudString;
+        }
+    }
+
+    [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
+    public static class GameOptionsNextPagePatch
+    {
+        public static void Postfix(KeyboardJoystick __instance)
+        {
+            if(Input.GetKeyDown(KeyCode.Tab)) {
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 3;
+            }
+        }
+    }
+
+    
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+    public class GameSettingsScalePatch {
+        public static void Prefix(HudManager __instance) {
+            __instance.GameSettings.scale = 0.5f; 
         }
     }
 }
