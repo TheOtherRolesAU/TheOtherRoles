@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(IntroCutscene.CoBegin__d), nameof(IntroCutscene.CoBegin__d.MoveNext))]
+    [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__11), nameof(IntroCutscene._CoBegin_d__11.MoveNext))]
     class IntroPatch
     {
         // Intro special teams
-        static void Prefix(IntroCutscene.CoBegin__d __instance)
+        static void Prefix(IntroCutscene._CoBegin_d__11 __instance)
         {
             if (PlayerControl.LocalPlayer == Jester.jester)
             {
@@ -25,7 +25,7 @@ namespace TheOtherRoles
         }
 
         // Intro display role
-        static void Postfix(IntroCutscene.CoBegin__d __instance)
+        static void Postfix(IntroCutscene._CoBegin_d__11 __instance)
         {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
             if (infos.Count == 0) return;

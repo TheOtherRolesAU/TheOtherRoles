@@ -45,12 +45,12 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
         private static GameOverReason gameOverReason;
-        public static void Prefix(AmongUsClient __instance, ref GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
-            gameOverReason = OFLKLGMHBEL;
-            if ((int)OFLKLGMHBEL >= 10) OFLKLGMHBEL = GameOverReason.ImpostorByKill;
+        public static void Prefix(AmongUsClient __instance, ref GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
+            gameOverReason = FCBGPMEMOJB;
+            if ((int)FCBGPMEMOJB >= 10) FCBGPMEMOJB = GameOverReason.ImpostorByKill;
         }
 
-        public static void Postfix(AmongUsClient __instance, GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
+        public static void Postfix(AmongUsClient __instance, GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
             AdditionalTempData.clear();
 
             // Remove Jester from winners (on Jester win he will be added again, see below)
@@ -241,10 +241,11 @@ namespace TheOtherRoles {
 
 
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
+            if (__instance.Systems == null) return false;
             ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
             if (systemType != null) {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
-                if (lifeSuppSystemType.Countdown < 0f) {
+                if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f) {
                     EndGameForSabotage(__instance);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
@@ -255,10 +256,10 @@ namespace TheOtherRoles {
                 systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
             }
             if (systemType2 != null) {
-                ReactorSystemType reactorSystemType = systemType2.TryCast<ReactorSystemType>();
-                if (reactorSystemType.Countdown < 0f) {
+                ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
+                if (criticalSystem != null && criticalSystem.Countdown < 0f) {
                     EndGameForSabotage(__instance);
-                    reactorSystemType.Countdown = 10000f;
+                    criticalSystem.ClearSabotage();
                     return true;
                 }
             }

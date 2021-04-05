@@ -84,6 +84,8 @@ namespace TheOtherRoles
                         } else if (task.TaskType == TaskTypes.FixComms) {
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 0);
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 1);
+                        } else if (task.TaskType == TaskTypes.StopCharles) {
+                            
                         }
                     }
                 },
@@ -91,7 +93,7 @@ namespace TheOtherRoles
                 () => {
                     bool sabotageActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
-                        if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms)
+                        if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles)
                             sabotageActive = true;
                     return sabotageActive && !Engineer.usedRepair && PlayerControl.LocalPlayer.CanMove;
                 },

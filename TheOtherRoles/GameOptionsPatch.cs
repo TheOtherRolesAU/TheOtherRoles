@@ -39,9 +39,12 @@ namespace TheOtherRoles
     }
 
     [HarmonyPriority(Priority.Low)] 
-    [HarmonyPatch(typeof(GameOptionsData), "NHJLMAAHKJF")]
     class GameOptionsDataPatch
     {
+        private static IEnumerable<MethodBase> TargetMethods() {
+            return typeof(GameOptionsData).GetMethods(typeof(string), typeof(int));
+        }
+
         private static void Postfix(ref string __result)
         {
             var hudString = __result;

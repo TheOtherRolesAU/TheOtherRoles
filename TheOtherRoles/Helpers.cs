@@ -158,7 +158,8 @@ namespace TheOtherRoles {
                     task.TaskType != TaskTypes.FixLights && 
                     task.TaskType != TaskTypes.ResetReactor && 
                     task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy) {
+                    task.TaskType != TaskTypes.RestoreOxy &&
+                    task.TaskType != TaskTypes.StopCharles) {
                     toRemove.Add(task);
                 }
             }   
@@ -170,11 +171,17 @@ namespace TheOtherRoles {
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
 
-            // Remove players current ImportantTaskTexts
+            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player); 
+
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask t in player.myTasks) {
-                if (t.gameObject.GetComponent<ImportantTextTask>() != null) {
-                    toRemove.Add(t);
+                var textTask = t.gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) {
+                    var info = infos.FirstOrDefault(x => textTask.Text.StartsWith(x.name));
+                    if (info != null)
+                        infos.Remove(info); // TextTask for this RoleInfo does not have to be added, as it already exists
+                    else
+                        toRemove.Add(t); // TextTask does not have a corresponding RoleInfo and will hence be deleted
                 }
             }   
 
@@ -184,8 +191,7 @@ namespace TheOtherRoles {
                 UnityEngine.Object.Destroy(t.gameObject);
             }
 
-            // Add description
-            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player);
+            // Add TextTask for remaining RoleInfos
             foreach (RoleInfo roleInfo in infos) {
                 var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                 task.transform.SetParent(player.transform, false);
@@ -219,8 +225,8 @@ namespace TheOtherRoles {
             yield break;
         }
 
-        private static List<byte> lighterColors = new List<byte>(){ 3, 4, 5, 7, 10, 11};
-        public static bool isLighterColor(byte colorId) {
+        private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
+        public static bool isLighterColor(int colorId) {
             return lighterColors.Contains(colorId);
         }
     }
