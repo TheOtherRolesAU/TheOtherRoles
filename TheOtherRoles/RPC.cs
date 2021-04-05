@@ -52,6 +52,7 @@ namespace TheOtherRoles
         // Main Controls
 
         ResetVaribles = 50,
+        ShareOptionSelection,
         ForceEnd,
         SetRole,
 
@@ -96,6 +97,11 @@ namespace TheOtherRoles
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
+        }
+
+        public static void shareOptionSelection(uint id, uint selection) {
+            CustomOption option = CustomOption.options.FirstOrDefault(option => option.id == (int)id);
+            option.updateSelection((int)selection);
         }
 
         public static void forceEnd() {
@@ -586,6 +592,11 @@ namespace TheOtherRoles
 
                 case (byte)CustomRPC.ResetVaribles:
                     RPCProcedure.resetVariables();
+                    break;
+                case (byte)CustomRPC.ShareOptionSelection:
+                    uint id = DOOILGKLBBF.ReadPackedUInt32();
+                    uint selection = DOOILGKLBBF.ReadPackedUInt32();
+                    RPCProcedure.shareOptionSelection(id, selection);
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();

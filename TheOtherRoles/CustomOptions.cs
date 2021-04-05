@@ -4,6 +4,7 @@ using BepInEx.Configuration;
 using System;
 using System.Linq;
 using HarmonyLib;
+using Hazel;
 using System.Reflection;
 using System.Text;
 using static TheOtherRoles.TheOtherRoles;
@@ -161,7 +162,6 @@ namespace TheOtherRoles {
         // Static behaviour
 
         public static void switchPreset(int newPreset) {
-            System.Console.WriteLine("Preset change");
             CustomOption.preset = newPreset;
             foreach (CustomOption option in CustomOption.options) {
                 if (option.id == 0) continue;
@@ -172,6 +172,15 @@ namespace TheOtherRoles {
                     stringOption.IOFLMCGMJBA = stringOption.Value = option.selection;
                     stringOption.ValueText.Text = option.selections[option.selection].ToString();
                 }
+            }
+        }
+
+        public static void ShareOptionSelection() {
+            foreach (CustomOption option in CustomOption.options) {
+                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
+                messageWriter.WritePacked((uint)option.id);
+                messageWriter.WritePacked((uint)Convert.ToUInt32(option.selection));
+                messageWriter.EndMessage();
             }
         }
 
@@ -187,14 +196,19 @@ namespace TheOtherRoles {
 
         // Option changes
 
-        public void valueChanged(OptionBehaviour o) {
-            if (o is StringOption stringOption) {
-                selection = stringOption.IOFLMCGMJBA = stringOption.Value;
+        public void updateSelection(int newSelection) {
+            selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
+            if (optionBehaviour != null && optionBehaviour is StringOption stringOption) {
+                stringOption.IOFLMCGMJBA = stringOption.Value = selection;
                 stringOption.ValueText.Text = selections[selection].ToString();
 
-                if (id == 0) { // Switch preset before sharing the settings
-                    switchPreset(selection);
+                if (AmongUsClient.Instance?.CBKCIKKEJHI == true && PlayerControl.LocalPlayer) {
+                    if (id == 0) switchPreset(selection); // Switch presets
+                    else if (entry != null) entry.Value = selection; // Save selection to config
+
+                    ShareOptionSelection();// Share all selections
                 }
+
                 System.Console.WriteLine(stringOption.GetInt());
            }
         }
@@ -209,12 +223,45 @@ namespace TheOtherRoles {
             List<OptionBehaviour> allOptions = __instance.IGFJIPMAJHF.ToList();
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
-                StringOption stringOption = (UnityEngine.Object.Instantiate(template, template.transform.parent));
-                allOptions.Add(stringOption);
-                stringOption.transform.localPosition = new Vector3(template.transform.localPosition.x, -7.85f - (i + 1) * 0.5F, template.transform.localPosition.z);
-                option.optionBehaviour = stringOption;
+                if (option.optionBehaviour == null) {
+                    StringOption stringOption = UnityEngine.Object.Instantiate(template, template.transform.parent);
+                    allOptions.Add(stringOption);
+
+                    stringOption.transform.localPosition = new Vector3(template.transform.localPosition.x, -7.85f - (i + 1) * 0.5F, template.transform.localPosition.z);
+                    stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
+                    stringOption.TitleText.Text = option.name;
+                    stringOption.Value = stringOption.IOFLMCGMJBA = option.selection;
+                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+
+                    option.optionBehaviour = stringOption;
+                }
+                option.optionBehaviour.gameObject.SetActive(true);
             }
             __instance.IGFJIPMAJHF = allOptions.ToArray();
+        }
+    }
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
+    public class StringOptionIncreasePatch
+    {
+        public static bool Prefix(StringOption __instance)
+        {
+            CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+            if (option == null) return true;
+            option.updateSelection(option.selection + 1);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
+    public class StringOptionDecreasePatch
+    {
+        public static bool Prefix(StringOption __instance)
+        {
+            CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+            if (option == null) return true;
+            option.updateSelection(option.selection - 1);
+            return false;
         }
     }
 
@@ -223,19 +270,6 @@ namespace TheOtherRoles {
     {
         public static void Postfix(GameOptionsMenu __instance) {
             __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.IGFJIPMAJHF.Length * 0.5F;
-        }
-    }
-
-
-    [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
-    class StringOptionOnEnablePatch {
-        public static void Postfix(StringOption __instance) {
-            CustomOption option = CustomOption.options.FirstOrDefault(o => o.optionBehaviour == __instance);
-            if (option != null) {
-                __instance.Value = __instance.IOFLMCGMJBA = option.selection;
-                __instance.ValueText.Text = option.selections[option.selection].ToString();
-                __instance.OnValueChanged = new Action<OptionBehaviour>(option.valueChanged);
-            }
         }
     }
 
