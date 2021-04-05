@@ -158,7 +158,8 @@ namespace TheOtherRoles {
                     task.TaskType != TaskTypes.FixLights && 
                     task.TaskType != TaskTypes.ResetReactor && 
                     task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy) {
+                    task.TaskType != TaskTypes.RestoreOxy &&
+                    task.TaskType != TaskTypes.StopCharles) {
                     toRemove.Add(task);
                 }
             }   

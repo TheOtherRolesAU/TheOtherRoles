@@ -8,6 +8,10 @@ Roles in development:
         - SidekickPromotes RPC call is called by every player
         - Jackal/Vent/Impostor vent highlighting
 
+Airship todos:
+- Engineer should be able to fix the new sabotage
+- Test all roles
+
 High priority:
     - Jester/Bounty Hunter/Child/Jackal: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
