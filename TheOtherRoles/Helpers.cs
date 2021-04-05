@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Reactor.Extensions;
 using System.Collections;
-using Reactor.Unstrip;
 using UnhollowerBaseLib;
 using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
+
+using TaskTypes = CBFIAGIGOFA;
 
 namespace TheOtherRoles {
     public static class Helpers {
@@ -43,11 +43,12 @@ namespace TheOtherRoles {
 
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
             try {
-            Texture2D texture = GUIExtensions.CreateEmptyTexture();
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
             Assembly assembly = Assembly.GetExecutingAssembly();
             Stream stream = assembly.GetManifestResourceStream(path);
-            byte[] byteTexture = Reactor.Extensions.Extensions.ReadFully(stream);
-            ImageConversion.LoadImage(texture, byteTexture, false);
+            var byteTexture = new byte[stream.Length];
+            var read = stream.Read(byteTexture, 0, (int) stream.Length);
+            LoadImage(texture, byteTexture, false);
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
             } catch {
                 System.Console.WriteLine("Error loading sprite from path: " + path);
@@ -71,14 +72,14 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint skinId) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)skinId];
+        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint LFDAHOFPIAM) {
+            SkinData nextSkin = DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllSkins[(int)LFDAHOFPIAM];
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
             var anim = spriteAnim.m_animator;
             var skinLayer = playerPhysics.Skin;
 
-            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
+            var currentPhysicsAnim = playerPhysics.NDIJGONKPMC.GetCurrentAnimation();
             if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
             else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
             else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
@@ -86,7 +87,7 @@ namespace TheOtherRoles {
             else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
             else clip = nextSkin.IdleAnim;
 
-            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            float progress = playerPhysics.NDIJGONKPMC.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             skinLayer.skin = nextSkin;
 
             spriteAnim.Play(clip, 1f);

@@ -4,13 +4,12 @@ using System.IO;
 using System.Net.Http;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
-using Reactor.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Essentials.Options;
-using Essentials;
+
+using GameOptionsData = IGDMNKLDEPI;
 
 namespace TheOtherRoles
 {
@@ -20,7 +19,7 @@ namespace TheOtherRoles
     {
         public static void Postfix(GameOptionsMenu __instance)
         {
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.Children.Length * 0.5F;
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.IGFJIPMAJHF.Length * 0.5F;
         }
     }
 
@@ -41,42 +40,42 @@ namespace TheOtherRoles
     [HarmonyPriority(Priority.Low)] 
     class GameOptionsDataPatch
     {
-        private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(GameOptionsData).GetMethods(typeof(string), typeof(int));
-        }
+        //Update private static IEnumerable<MethodBase> TargetMethods() {
+        //     return typeof(GameOptionsData).GetMethods(typeof(string), typeof(int));
+        // }
 
-        private static void Postfix(ref string __result)
-        {
-            var hudString = __result;
+        // private static void Postfix(ref string __result)
+        // {
+        //     var hudString = __result;
 
-            int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 25;
-            int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int counter = TheOtherRolesPlugin.optionsPage;
-            if (counter == 0) {
-                hudString = hudString.Substring(0, end1) + "\n";   
-            } else if (counter == 1) {
-                hudString = hudString.Substring(end1 + 1, end2 - end1);
-                // Temporary fix, should add a new CustomOption for spaces
-                int gap = 1;
-                int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-                gap = 4;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-                gap = 10;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-                gap = 14;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-            } else if (counter == 2) {
-                hudString = hudString.Substring(end2 + 1);
-            }
-            hudString += "\n Press tab for more...\n\n\n";
-            __result = hudString;
-        }
+        //     int defaultSettingsLines = 19;
+        //     int roleSettingsLines = 19 + 25;
+        //     int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //     int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //     int counter = TheOtherRolesPlugin.optionsPage;
+        //     if (counter == 0) {
+        //         hudString = hudString.Substring(0, end1) + "\n";   
+        //     } else if (counter == 1) {
+        //         hudString = hudString.Substring(end1 + 1, end2 - end1);
+        //         // Temporary fix, should add a new CustomOption for spaces
+        //         int gap = 1;
+        //         int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //         hudString = hudString.Insert(index, "\n");
+        //         gap = 4;
+        //         index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //         hudString = hudString.Insert(index, "\n");
+        //         gap = 10;
+        //         index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //         hudString = hudString.Insert(index + 1, "\n");
+        //         gap = 14;
+        //         index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+        //         hudString = hudString.Insert(index + 1, "\n");
+        //     } else if (counter == 2) {
+        //         hudString = hudString.Substring(end2 + 1);
+        //     }
+        //     hudString += "\n Press tab for more...\n\n\n";
+        //     __result = hudString;
+        // }
     }
 
     [HarmonyPatch(typeof(GameSettingMenu), "OnEnable")]
@@ -89,31 +88,31 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class PresetPatch
     {
-        public static int currentPreset = -1;
-        public static void Postfix(HudManager __instance)
-        {
-            // Handle presets
-            int newPreset = TheOtherRolesPlugin.presetSelection.GetValue();
-            if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
-                currentPreset = newPreset;
+        //Update public static int currentPreset = -1;
+        // public static void Postfix(HudManager __instance)
+        // {
+        //     // Handle presets
+        //     int newPreset = TheOtherRolesPlugin.presetSelection.GetValue();
+        //     if (newPreset != currentPreset && AmongUsClient.Instance && PlayerControl.LocalPlayer && AmongUsClient.Instance.AmHost) {
+        //         currentPreset = newPreset;
 
-                foreach (CustomOption option in CustomOption.Options) {
-                    if (option.PluginID != TheOtherRolesPlugin.Id) continue;
+        //         foreach (CustomOption option in CustomOption.Options) {
+        //             if (option.PluginID != TheOtherRolesPlugin.Id) continue;
 
-                    if (option is CustomStringOption str) {
-                        if (str != TheOtherRolesPlugin.presetSelection) {
-                            str.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", str.GetDefaultValue()) : null;
-                            option.SetValue(str.ConfigEntry == null ? str.GetDefaultValue() : str.ConfigEntry.Value);
-                        }
-                    } else if (option is CustomToggleOption tgl) {
-                        tgl.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", tgl.GetDefaultValue()) : null;
-                        option.SetValue(tgl.ConfigEntry == null ? tgl.GetDefaultValue() : tgl.ConfigEntry.Value);
-                    } else if (option is CustomNumberOption nmb) {
-                        nmb.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", nmb.GetDefaultValue()) : null;
-                        option.SetValue(nmb.ConfigEntry == null ? nmb.GetDefaultValue() : nmb.ConfigEntry.Value);
-                    }
-                }
-            }
-        }
+        //             if (option is CustomStringOption str) {
+        //                 if (str != TheOtherRolesPlugin.presetSelection) {
+        //                     str.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", str.GetDefaultValue()) : null;
+        //                     option.SetValue(str.ConfigEntry == null ? str.GetDefaultValue() : str.ConfigEntry.Value);
+        //                 }
+        //             } else if (option is CustomToggleOption tgl) {
+        //                 tgl.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", tgl.GetDefaultValue()) : null;
+        //                 option.SetValue(tgl.ConfigEntry == null ? tgl.GetDefaultValue() : tgl.ConfigEntry.Value);
+        //             } else if (option is CustomNumberOption nmb) {
+        //                 nmb.ConfigEntry = option.SaveValue ? EssentialsPlugin.Instance.Config.Bind(option.PluginID, option.ConfigID + $"__{newPreset}", nmb.GetDefaultValue()) : null;
+        //                 option.SetValue(nmb.ConfigEntry == null ? nmb.GetDefaultValue() : nmb.ConfigEntry.Value);
+        //             }
+        //         }
+        //     }
+        // }
     }
 }

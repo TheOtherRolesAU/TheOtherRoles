@@ -4,6 +4,8 @@ using System.Collections;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 
+using Palette = GLNPIJPGGNJ;
+
 namespace TheOtherRoles{
     class Footprint {
         private static List<Footprint> footprints = new List<Footprint>();
@@ -24,9 +26,9 @@ namespace TheOtherRoles{
             this.owner = player;
             this.anonymousFootprints = anonymousFootprints;
             if (anonymousFootprints)
-                this.color = Palette.PlayerColors[6];
+                this.color = Palette.CALCLMEEPGL[6];
             else
-                this.color = Palette.PlayerColors[(int) player.Data.ColorId];
+                this.color = Palette.CALCLMEEPGL[(int) player.IDOFAMCIJKE.JFHFMIKFHGG];
 
             footprint = new GameObject("Footprint");
             Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
@@ -44,7 +46,7 @@ namespace TheOtherRoles{
             footprint.SetActive(true);
             footprints.Add(this);
 
-            Reactor.Coroutines.Start(CoFadeOutAndDestroy(footprintDuration));
+            //Update Reactor.Coroutines.Start(CoFadeOutAndDestroy(footprintDuration));
         }
 
         IEnumerator CoFadeOutAndDestroy(float duration)
@@ -52,10 +54,10 @@ namespace TheOtherRoles{
             for (float t = 0f; t < duration; t += Time.deltaTime) {
                 Color c = color;
                 if (!anonymousFootprints && owner != null) {
-                    if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)
-                        c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
+                    if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.IDOFAMCIJKE != null)
+                        c = Palette.CHIIBPFJACF[Morphling.morphTarget.IDOFAMCIJKE.JFHFMIKFHGG];
                     else if (Camouflager.camouflageTimer > 0)
-                        c = Palette.PlayerColors[6];
+                        c = Palette.CALCLMEEPGL[6];
                 }
                 if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp(1f - t/duration, 0f, 1f));
 

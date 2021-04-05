@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__11), nameof(IntroCutscene._CoBegin_d__11.MoveNext))]
+    [HarmonyPatch(typeof(IntroCutscene.MDIMNFHLFBN), nameof(IntroCutscene.MDIMNFHLFBN.MoveNext))]
     class IntroPatch
     {
         // Intro special teams
-        static void Prefix(IntroCutscene._CoBegin_d__11 __instance)
+        static void Prefix(IntroCutscene.MDIMNFHLFBN __instance)
         {
             if (PlayerControl.LocalPlayer == Jester.jester)
             {
@@ -25,7 +25,7 @@ namespace TheOtherRoles
         }
 
         // Intro display role
-        static void Postfix(IntroCutscene._CoBegin_d__11 __instance)
+        static void Postfix(IntroCutscene.MDIMNFHLFBN __instance)
         {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
             if (infos.Count == 0) return;
@@ -34,26 +34,26 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__this.Title.Text = PlayerControl.LocalPlayer.Data.IsImpostor ? "[FF1919FF]Imp[FC03BEFF]Lover" : "Lover";
-                __instance.__this.Title.Color = PlayerControl.LocalPlayer.Data.IsImpostor ? Color.white : Lovers.color;
-                __instance.__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.Data?.PlayerName ?? "");
-                __instance.__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__this.BackgroundBar.material.color = Lovers.color;
+                __instance.__4__this.Title.Text = PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ? "[FF1919FF]Imp[FC03BEFF]Lover" : "Lover";
+                __instance.__4__this.Title.Color = PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ? Color.white : Lovers.color;
+                __instance.__4__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.IDOFAMCIJKE?.HGGCLJHCDBM ?? "");
+                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
+                __instance.__4__this.BackgroundBar.material.color = Lovers.color;
             }
             else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter)
             {
-                __instance.__this.Title.Text = "Bounty Hunter";
-                __instance.__this.Title.Color = BountyHunter.color;
-                __instance.__this.ImpostorText.Text = "Hunt [ED653BFF]" + BountyHunter.target?.Data?.PlayerName + "[FFFFFFFF] down";
-                __instance.__this.BackgroundBar.material.color = BountyHunter.color;
+                __instance.__4__this.Title.Text = "Bounty Hunter";
+                __instance.__4__this.Title.Color = BountyHunter.color;
+                __instance.__4__this.ImpostorText.Text = "Hunt [ED653BFF]" + BountyHunter.target?.IDOFAMCIJKE?.HGGCLJHCDBM + "[FFFFFFFF] down";
+                __instance.__4__this.BackgroundBar.material.color = BountyHunter.color;
             }
             else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
             else {
-                __instance.__this.Title.Text = roleInfo.name;
-                __instance.__this.Title.Color = roleInfo.color;
-                __instance.__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__this.ImpostorText.Text = roleInfo.introDescription;
-                __instance.__this.BackgroundBar.material.color = roleInfo.color;
+                __instance.__4__this.Title.Text = roleInfo.name;
+                __instance.__4__this.Title.Color = roleInfo.color;
+                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
+                __instance.__4__this.ImpostorText.Text = roleInfo.introDescription;
+                __instance.__4__this.BackgroundBar.material.color = roleInfo.color;
             }
         }
     }

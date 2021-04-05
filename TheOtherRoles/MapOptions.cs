@@ -15,7 +15,7 @@ namespace TheOtherRoles{
         public static void clearAndReloadMapOptions() {
             meetingsCount = 0;
 
-            maxNumberOfMeetings = Mathf.RoundToInt(TheOtherRolesPlugin.maxNumberOfMeetings.GetValue());
+            //Update maxNumberOfMeetings = Mathf.RoundToInt(TheOtherRolesPlugin.maxNumberOfMeetings.GetValue());
         }
     }
 } 

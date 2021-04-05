@@ -5,14 +5,13 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
-using Reactor;
 using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO;
 using UnityEngine;
-using Reactor.Unstrip;
-using Reactor.Extensions;
+
+using Palette = GLNPIJPGGNJ;
 
 namespace TheOtherRoles
 {
@@ -88,7 +87,7 @@ namespace TheOtherRoles
 
         public static class Godfather {
             public static PlayerControl godfather;
-            public static Color color = Palette.ImpostorRed;
+            public static Color color = Palette.LDCHDOFJPGH;
 
             public static void clearAndReload() {
                 godfather = null;
@@ -97,7 +96,7 @@ namespace TheOtherRoles
 
         public static class Mafioso {
             public static PlayerControl mafioso;
-            public static Color color = Palette.ImpostorRed;
+            public static Color color = Palette.LDCHDOFJPGH;
 
             public static void clearAndReload() {
                 mafioso = null;
@@ -107,7 +106,7 @@ namespace TheOtherRoles
 
         public static class Janitor {
             public static PlayerControl janitor;
-            public static Color color = Palette.ImpostorRed;
+            public static Color color = Palette.LDCHDOFJPGH;
 
             public static float cooldown = float.MaxValue;
 
@@ -120,7 +119,7 @@ namespace TheOtherRoles
 
             public static void clearAndReload() {
                 janitor = null;
-                cooldown = TheOtherRolesPlugin.janitorCooldown.GetValue();
+                // cooldown = TheOtherRolesPlugin.janitorCooldown.GetValue();
             }
         }
 
@@ -136,8 +135,8 @@ namespace TheOtherRoles
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
-                cooldown = TheOtherRolesPlugin.sheriffCooldown.GetValue();
-                jesterCanDieToSheriff = TheOtherRolesPlugin.jesterCanDieToSheriff.GetValue();
+                // cooldown = TheOtherRolesPlugin.sheriffCooldown.GetValue();
+                // jesterCanDieToSheriff = TheOtherRolesPlugin.jesterCanDieToSheriff.GetValue();
             }
         }
 
@@ -163,10 +162,10 @@ namespace TheOtherRoles
             public static void clearAndReload() {
                 lighter = null;
                 lighterTimer = 0f;
-                cooldown = TheOtherRolesPlugin.lighterCooldown.GetValue();
-                duration = TheOtherRolesPlugin.lighterDuration.GetValue();
-                lighterModeLightsOnVision = TheOtherRolesPlugin.lighterModeLightsOnVision.GetValue();
-                lighterModeLightsOffVision = TheOtherRolesPlugin.lighterModeLightsOffVision.GetValue();
+                // cooldown = TheOtherRolesPlugin.lighterCooldown.GetValue();
+                // duration = TheOtherRolesPlugin.lighterDuration.GetValue();
+                // lighterModeLightsOnVision = TheOtherRolesPlugin.lighterModeLightsOnVision.GetValue();
+                // lighterModeLightsOffVision = TheOtherRolesPlugin.lighterModeLightsOffVision.GetValue();
             }
         }
 
@@ -184,11 +183,11 @@ namespace TheOtherRoles
 
             public static void clearAndReload() {
                 detective = null;
-                anonymousFootprints = TheOtherRolesPlugin.detectiveAnonymousFootprints.GetValue();
-                footprintIntervall = TheOtherRolesPlugin.detectiveFootprintIntervall.GetValue();
-                footprintDuration = TheOtherRolesPlugin.detectiveFootprintDuration.GetValue();
-                reportNameDuration = TheOtherRolesPlugin.detectiveReportNameDuration.GetValue();
-                reportColorDuration = TheOtherRolesPlugin.detectiveReportColorDuration.GetValue();
+                // anonymousFootprints = TheOtherRolesPlugin.detectiveAnonymousFootprints.GetValue();
+                // footprintIntervall = TheOtherRolesPlugin.detectiveFootprintIntervall.GetValue();
+                // footprintDuration = TheOtherRolesPlugin.detectiveFootprintDuration.GetValue();
+                // reportNameDuration = TheOtherRolesPlugin.detectiveReportNameDuration.GetValue();
+                // reportColorDuration = TheOtherRolesPlugin.detectiveReportColorDuration.GetValue();
                 timer = footprintIntervall;
             }
         }
@@ -223,8 +222,8 @@ namespace TheOtherRoles
             timeMaster = null;
             isRewinding = false;
             shieldActive = false;
-            rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
-            cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();
+            // rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
+            // cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();
         }
     }
 
@@ -249,13 +248,13 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
-            if (shielded?.myRend?.material != null) shielded.myRend.material.SetFloat("_Outline", 0f);
+            if (shielded?.LNMJKMLHMIM?.material != null) shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
             shieldedColor = new Color(0f / 255f, 221f / 255f, 255f / 255f, 1);
-            showShielded = TheOtherRolesPlugin.medicShowShielded.GetValue();
-            showAttemptToShielded = TheOtherRolesPlugin.medicShowAttemptToShielded.GetValue();
+            // showShielded = TheOtherRolesPlugin.medicShowShielded.GetValue();
+            // showAttemptToShielded = TheOtherRolesPlugin.medicShowAttemptToShielded.GetValue();
         }
     }
 
@@ -311,18 +310,18 @@ namespace TheOtherRoles
         public static bool notAckedExiledIsLover = false;
 
         public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !lover1.Data.Disconnected && !lover2.Data.Disconnected && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+            return lover1 != null && lover2 != null && !lover1.IDOFAMCIJKE.FGNJJFABIHJ && !lover2.IDOFAMCIJKE.FGNJJFABIHJ && !lover1.IDOFAMCIJKE.GBPMEHJFECK && !lover2.IDOFAMCIJKE.GBPMEHJFECK && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
         public static bool existingWithImpLover() {
-            return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected && (lover1.Data.IsImpostor || lover2.Data.IsImpostor);
+            return lover1 != null && lover2 != null && !lover1.IDOFAMCIJKE.GBPMEHJFECK && !lover2.IDOFAMCIJKE.GBPMEHJFECK && (lover1.IDOFAMCIJKE.CIDDOFDJHJH || lover2.IDOFAMCIJKE.CIDDOFDJHJH);
         }
 
         public static void clearAndReload() {
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
-            bothDie = TheOtherRolesPlugin.loversBothDie.GetValue();
+            // bothDie = TheOtherRolesPlugin.loversBothDie.GetValue();
         }
     }
 
@@ -344,14 +343,14 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             seer = null;
             deadBodyPositions = new List<Vector3>();
-            soulDuration = TheOtherRolesPlugin.seerSoulDuration.GetValue();
-            mode = TheOtherRolesPlugin.medicShowShielded.GetValue();
+            // soulDuration = TheOtherRolesPlugin.seerSoulDuration.GetValue();
+            // mode = TheOtherRolesPlugin.medicShowShielded.GetValue();
         }
     }
 
     public static class Morphling {
         public static PlayerControl morphling;
-        public static Color color = Palette.ImpostorRed;
+        public static Color color = Palette.LDCHDOFJPGH;
         private static Sprite sampleSprite;
         private static Sprite morphSprite;
     
@@ -366,13 +365,13 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             if (morphling == null) return;
-            morphling.SetName(morphling.Data.PlayerName);
-            morphling.SetHat(morphling.Data.HatId, (int)morphling.Data.ColorId);
-            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.Data.SkinId);
-            morphling.SetPet(morphling.Data.PetId);
-            morphling.CurrentPet.Visible = morphling.Visible;
-            morphling.SetColor(morphling.Data.ColorId);
-            morphling.myRend.material.SetFloat("_Outline", 0f);
+            morphling.SetName(morphling.IDOFAMCIJKE.HGGCLJHCDBM);
+            morphling.SetHat(morphling.IDOFAMCIJKE.MFIOGLKPMGD, (int)morphling.IDOFAMCIJKE.JFHFMIKFHGG);
+            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.IDOFAMCIJKE.LFDAHOFPIAM);
+            morphling.SetPet(morphling.IDOFAMCIJKE.GKFOHNJHFOE);
+            morphling.CurrentPet.FHBHBMIJFID = morphling.FHBHBMIJFID;
+            morphling.SetColor(morphling.IDOFAMCIJKE.JFHFMIKFHGG);
+            morphling.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
@@ -382,7 +381,7 @@ namespace TheOtherRoles
             sampledTarget = null;
             morphTarget = null;
             morphTimer = 0f;
-            cooldown = TheOtherRolesPlugin.morphlingCooldown.GetValue();
+            // cooldown = TheOtherRolesPlugin.morphlingCooldown.GetValue();
         }
 
         public static Sprite getSampleSprite() {
@@ -400,7 +399,7 @@ namespace TheOtherRoles
 
     public static class Camouflager {
         public static PlayerControl camouflager;
-        public static Color color = Palette.ImpostorRed;
+        public static Color color = Palette.LDCHDOFJPGH;
     
         public static float cooldown = float.MaxValue;
         public static float camouflageTimer = 0f;
@@ -417,12 +416,12 @@ namespace TheOtherRoles
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
                 if (Morphling.morphling == null || Morphling.morphling != p) {
-                    p.SetName(p.Data.PlayerName);
-                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
-                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
-                    p.SetPet(p.Data.PetId);
-                    p.CurrentPet.Visible = p.Visible;
-                    p.SetColor(p.Data.ColorId);
+                    p.SetName(p.IDOFAMCIJKE.HGGCLJHCDBM);
+                    p.SetHat(p.IDOFAMCIJKE.MFIOGLKPMGD, (int)p.IDOFAMCIJKE.JFHFMIKFHGG);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.IDOFAMCIJKE.LFDAHOFPIAM);
+                    p.SetPet(p.IDOFAMCIJKE.GKFOHNJHFOE);
+                    p.CurrentPet.FHBHBMIJFID = p.FHBHBMIJFID;
+                    p.SetColor(p.IDOFAMCIJKE.JFHFMIKFHGG);
                 }
             }
         }
@@ -431,7 +430,7 @@ namespace TheOtherRoles
             resetCamouflage();
             camouflager = null;
             camouflageTimer = 0f;
-            cooldown = TheOtherRolesPlugin.camouflagerCooldown.GetValue();
+            // cooldown = TheOtherRolesPlugin.camouflagerCooldown.GetValue();
         }
     }
 
@@ -462,9 +461,9 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             hacker = null;
             hackerTimer = 0f;
-            cooldown = TheOtherRolesPlugin.hackerCooldown.GetValue();
-            duration = TheOtherRolesPlugin.hackerHackeringDuration.GetValue();
-            onlyColorType = TheOtherRolesPlugin.hackerOnlyColorType.GetValue();
+            // cooldown = TheOtherRolesPlugin.hackerCooldown.GetValue();
+            // duration = TheOtherRolesPlugin.hackerHackeringDuration.GetValue();
+            // onlyColorType = TheOtherRolesPlugin.hackerOnlyColorType.GetValue();
         }
     }
 
@@ -479,7 +478,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             child = null;
             triggerChildLose = false;
-            growingUpDuration = TheOtherRolesPlugin.childGrowingUpDuration.GetValue();
+            // growingUpDuration = TheOtherRolesPlugin.childGrowingUpDuration.GetValue();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
@@ -534,7 +533,7 @@ namespace TheOtherRoles
             tracked = null;
             usedTracker = false;
             timeUntilUpdate = 0f;
-            updateIntervall = TheOtherRolesPlugin.trackerUpdateIntervall.GetValue();
+            // updateIntervall = TheOtherRolesPlugin.trackerUpdateIntervall.GetValue();
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
@@ -543,7 +542,7 @@ namespace TheOtherRoles
 
     public static class Vampire {
         public static PlayerControl vampire;
-        public static Color color = Palette.ImpostorRed;
+        public static Color color = Palette.LDCHDOFJPGH;
 
         public static float delay = 10f;
         public static float cooldown = float.MaxValue;
@@ -571,7 +570,7 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+            if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten)) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();
@@ -590,10 +589,10 @@ namespace TheOtherRoles
             targetNearGarlic = false;
             localPlacedGarlic = false;
             currentTarget = null;
-            garlicsActive = TheOtherRolesPlugin.vampireSpawnRate.GetValue() > 0;
-            delay = TheOtherRolesPlugin.vampireKillDelay.GetValue();
-            cooldown = TheOtherRolesPlugin.vampireCooldown.GetValue();
-            canKillNearGarlics = TheOtherRolesPlugin.vampireCanKillNearGarlics.GetValue();
+            // garlicsActive = TheOtherRolesPlugin.vampireSpawnRate.GetValue() > 0;
+            // delay = TheOtherRolesPlugin.vampireKillDelay.GetValue();
+            // cooldown = TheOtherRolesPlugin.vampireCooldown.GetValue();
+            // canKillNearGarlics = TheOtherRolesPlugin.vampireCanKillNearGarlics.GetValue();
         }
     }
 
@@ -611,7 +610,7 @@ namespace TheOtherRoles
                     UnityEngine.Object.Destroy(arrow.arrow);
             }
             localArrows = new List<Arrow>();
-            taskCountForImpostors = Mathf.RoundToInt(TheOtherRolesPlugin.snitchLeftTasksForImpostors.GetValue());
+            // taskCountForImpostors = Mathf.RoundToInt(TheOtherRolesPlugin.snitchLeftTasksForImpostors.GetValue());
             snitch = null;
         }
     }
@@ -643,20 +642,20 @@ namespace TheOtherRoles
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
-            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
-            createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+            // cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            // createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
         }
 
         public static void clearAndReload() {
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
-            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
-            createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
-            canUseVents = TheOtherRolesPlugin.jackalCanUseVents.GetValue();
-            canCreateSidekick = TheOtherRolesPlugin.jackalCanCreateSidekick.GetValue();
-            jackalPromotedFromSidekickCanCreateSidekick = TheOtherRolesPlugin.jackalPromotedFromSidekickCanCreateSidekick.GetValue();
-            canCreateSidekickFromImpostor = TheOtherRolesPlugin.jackalCanCreateSidekickFromImpostor.GetValue();
+            // cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            // createSidekickCooldown = TheOtherRolesPlugin.jackalCreateSidekickCooldown.GetValue();
+            // canUseVents = TheOtherRolesPlugin.jackalCanUseVents.GetValue();
+            // canCreateSidekick = TheOtherRolesPlugin.jackalCanCreateSidekick.GetValue();
+            // jackalPromotedFromSidekickCanCreateSidekick = TheOtherRolesPlugin.jackalPromotedFromSidekickCanCreateSidekick.GetValue();
+            // canCreateSidekickFromImpostor = TheOtherRolesPlugin.jackalCanCreateSidekickFromImpostor.GetValue();
             formerJackals.Clear();
         }
         
@@ -676,16 +675,16 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             sidekick = null;
             currentTarget = null;
-            cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
-            canUseVents = TheOtherRolesPlugin.sidekickCanUseVents.GetValue();
-            canKill = TheOtherRolesPlugin.sidekickCanKill.GetValue();
-            promotesToJackal = TheOtherRolesPlugin.sidekickPromotesToJackal.GetValue();
+            // cooldown = TheOtherRolesPlugin.jackalKillCooldown.GetValue();
+            // canUseVents = TheOtherRolesPlugin.sidekickCanUseVents.GetValue();
+            // canKill = TheOtherRolesPlugin.sidekickCanKill.GetValue();
+            // promotesToJackal = TheOtherRolesPlugin.sidekickPromotesToJackal.GetValue();
         }
     }
 
     public static class Eraser {
         public static PlayerControl eraser;
-        public static Color color = Palette.ImpostorRed;
+        public static Color color = Palette.LDCHDOFJPGH;
 
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
@@ -702,7 +701,7 @@ namespace TheOtherRoles
             eraser = null;
             futureErased = new List<PlayerControl>();
             currentTarget = null;
-            cooldown = TheOtherRolesPlugin.eraserCooldown.GetValue();
+            // cooldown = TheOtherRolesPlugin.eraserCooldown.GetValue();
         }
     }
 }

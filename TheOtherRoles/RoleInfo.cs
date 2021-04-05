@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
+using Palette = GLNPIJPGGNJ;
+
 namespace TheOtherRoles
 {
     public class RoleInfo {
@@ -147,8 +149,8 @@ namespace TheOtherRoles
                 "Hacker to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
-                infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",
-                p.Data.IsImpostor ? Palette.ImpostorRed : Child.color,
+                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "Bad Child" : "Good Child",
+                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Child.color,
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
@@ -184,15 +186,15 @@ namespace TheOtherRoles
                 "Help your Jackal to kill everyone"));
             }
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpLover" : "Lover",
-                p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color,
+                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "ImpLover" : "Lover",
+                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Lovers.color,
                 "You are in [FC03BEFF]Love[]",
                 "You are in love"));
             }
 
-            if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
+            if (infos.Count == 0 && p.IDOFAMCIJKE.CIDDOFDJHJH) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
-                Palette.ImpostorRed,
+                Palette.LDCHDOFJPGH,
                 "",
                 "Sabotage and kill everyone"));
             } else if (infos.Count == 0) { // Just Crewmate
