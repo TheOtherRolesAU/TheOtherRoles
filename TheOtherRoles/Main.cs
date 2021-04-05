@@ -11,6 +11,7 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
@@ -26,12 +27,10 @@ namespace TheOtherRoles
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
 
-        public TheOtherRolesPlugin() {
-            Instance = this;
-        }
-
         public override void Load() {
-            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
+            DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
+            Instance = this;
+            CustomOptionHolder.Load();
 
             Harmony.PatchAll();
         }
