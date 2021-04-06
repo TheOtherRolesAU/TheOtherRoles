@@ -101,9 +101,7 @@ namespace TheOtherRoles {
             Tracker.currentTarget = setTarget();
         }
 
-        static void detectiveUpdateFootPrints() {
-            Footprint.UpdateAll();
-            
+        static void detectiveUpdateFootPrints() {            
             if (Detective.detective == null || Detective.detective != PlayerControl.LocalPlayer) return;
 
             Detective.timer -= Time.fixedDeltaTime;
