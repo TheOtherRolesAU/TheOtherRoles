@@ -15,32 +15,6 @@ using TaskTypes = CBFIAGIGOFA;
 namespace TheOtherRoles {
     public static class Helpers {
 
-        public static Sprite LoadSpriteFromEmbeddedResources(string resource, float PixelPerUnit) {
-            try {
-                System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-                System.IO.Stream myStream = myAssembly.GetManifestResourceStream(resource);
-                byte[] image = new byte[myStream.Length];
-                myStream.Read(image, 0, (int) myStream.Length);
-                Texture2D myTexture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                LoadImage(myTexture, image, true);
-                return Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), new Vector2(0.5f, 0.5f), PixelPerUnit);
-            } catch { }
-            return null;
-        }
-
-        internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
-        internal static d_LoadImage iCall_LoadImage;
-        private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable) {
-            if (iCall_LoadImage == null)
-                iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
-
-            var il2cppArray = (Il2CppStructArray<byte>) data;
-
-            return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
-        }
-
-        public static int a  = 0;
-
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
             try {
             Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
@@ -54,6 +28,17 @@ namespace TheOtherRoles {
                 System.Console.WriteLine("Error loading sprite from path: " + path);
             }
             return null;
+        }
+
+        internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
+        internal static d_LoadImage iCall_LoadImage;
+        private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable) {
+            if (iCall_LoadImage == null)
+                iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
+
+            var il2cppArray = (Il2CppStructArray<byte>) data;
+
+            return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
         }
 
         public static PlayerControl playerById(byte id)
