@@ -14,6 +14,7 @@ using Palette = GLNPIJPGGNJ;
 using DeathReason = KAPJFCMEBJE;
 using SwitchSystem = FNEHFOPHPJO;
 using SystemTypes = LGBKLKNAINN;
+using Effects = HLPCBNMDEHF;
 
 namespace TheOtherRoles
 {
@@ -308,7 +309,10 @@ namespace TheOtherRoles
         }
 
         public static void timeMasterShield() {
-            //Update Reactor.Coroutines.Start(TimeMaster.shieldForShieldDuration());
+            TimeMaster.shieldActive = true;
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {
+                if (p == 1f) TimeMaster.shieldActive = false;
+            })));
         }
 
         public static void medicSetShielded(byte shieldedId) {
@@ -319,15 +323,21 @@ namespace TheOtherRoles
         }
 
         public static void shieldedMurderAttempt() {
+            System.Console.WriteLine(Medic.showAttemptToShielded);
             if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.CMJOLNCMAPD?.FullScreen != null) {
-                Color c = Palette.LDCHDOFJPGH;
                 HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
-                //Update Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
-                //     HudManager.CMJOLNCMAPD.FullScreen,
-                //     0.5f,
-                //     new Color(c.r, c.g, c.b, 0f),
-                //     new Color(c.r, c.g, c.b, 0.75f)
-                // ));
+                HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {
+                    var renderer = HudManager.CMJOLNCMAPD.FullScreen;
+                    Color c = Palette.LDCHDOFJPGH;
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(p * 2 * 0.75f));
+                    } else {
+                        if (renderer != null)
+                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01((1-p) * 2 * 0.75f));
+                    }
+                    if (p == 1f && renderer != null) renderer.enabled = false;
+                })));
             }
         }
 
