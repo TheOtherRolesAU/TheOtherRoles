@@ -11,6 +11,7 @@ Roles in development:
 Airship todos:
 - Engineer should be able to fix the new sabotage
 - Test all roles
+- Starting the new sabotage creates a nullpointerexception
 
 High priority:
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)

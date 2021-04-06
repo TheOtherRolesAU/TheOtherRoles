@@ -90,7 +90,8 @@ namespace TheOtherRoles
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 0);
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 1);
                         } else if (task.TaskType == TaskTypes.StopCharles) {
-                            
+                            ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 0 | 16);
+                            ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 1 | 16);
                         }
                     }
                 },
