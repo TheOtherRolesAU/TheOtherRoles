@@ -45,7 +45,8 @@ namespace TheOtherRoles
         Snitch,
         Jackal,
         Sidekick,
-        Eraser
+        Eraser,
+        Trickster
     }
 
     enum CustomRPC
@@ -85,7 +86,8 @@ namespace TheOtherRoles
         ChildLose,
         ErasePlayerRole,
         SetFutureErased,
-        SetFutureShifted
+        SetFutureShifted,
+        PlaceJackInTheBox
     }
 
     public static class RPCProcedure {
@@ -94,6 +96,7 @@ namespace TheOtherRoles
 
         public static void resetVariables() {
             Garlic.clearGarlics();
+            JackInTheBox.clearJackInTheBoxes();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -201,6 +204,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Eraser:
                         Eraser.eraser = player;
+                        break;
+                    case RoleId.Trickster:
+                        Trickster.trickster = player;
                         break;
                     }
                 }

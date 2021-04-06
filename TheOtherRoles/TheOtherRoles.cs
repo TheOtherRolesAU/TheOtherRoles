@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
             Eraser.clearAndReload();
+            Trickster.clearAndReload();
         }
 
         public static class Jester {
@@ -683,4 +684,24 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
         }
     }
+
+    public static class Trickster {
+        public static PlayerControl trickster;
+        public static Color color = Palette.LDCHDOFJPGH;
+
+        public static float cooldown = float.MaxValue;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            trickster = null;
+            cooldown = CustomOptionHolder.tricksterPlaceBoxCooldown.getFloat();
+        }
+    }
+    
 }
