@@ -281,7 +281,7 @@ namespace TheOtherRoles
             HudManager.CMJOLNCMAPD.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
             PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.rewindTime / 2, new Action<float>((p) => {
-                if (p == 1f) HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
+                if (p == 1f) HudManager.CMJOLNCMAPD.FullScreen.enabled = false;
             })));
 
             if (TimeMaster.timeMaster == null) return;
