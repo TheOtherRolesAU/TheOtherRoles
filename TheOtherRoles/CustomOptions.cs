@@ -191,6 +191,10 @@ namespace TheOtherRoles {
             return selection;
         }
 
+        public bool getBool() {
+            return selection > 0;
+        }
+
         public float getFloat() {
             return (float)selections[selection];
         }
