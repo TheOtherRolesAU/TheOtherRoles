@@ -34,7 +34,6 @@ namespace TheOtherRoles {
                 } else {
                     TimeMaster.isRewinding = false;
                     PlayerControl.LocalPlayer.moveable = true;
-                    HudManager.CMJOLNCMAPD.FullScreen.enabled = false;
                 }
             } else {
                 while (localPlayerPositions.Count >= Mathf.Round(TimeMaster.rewindTime / Time.fixedDeltaTime)) localPlayerPositions.RemoveAt(localPlayerPositions.Count - 1);
