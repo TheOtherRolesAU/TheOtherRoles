@@ -243,7 +243,18 @@ namespace TheOtherRoles
                     p.LNMJKMLHMIM.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
-                    if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
+                    bool spawnPet = false;
+                    if (p.CurrentPet == null) spawnPet = true;
+                    else if (p.CurrentPet.EKONGILOOPE != DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllPets[0].EKONGILOOPE) {
+                        UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
+                        spawnPet = true;
+                    }
+
+                    if (spawnPet) {
+                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllPets[0]);
+                        p.CurrentPet.transform.position = p.transform.position;
+                        p.CurrentPet.Source = p;
+                    }
                 }
             } 
             
