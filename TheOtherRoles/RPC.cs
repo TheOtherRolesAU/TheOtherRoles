@@ -314,7 +314,7 @@ namespace TheOtherRoles
 
         public static void timeMasterShield() {
             TimeMaster.shieldActive = true;
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.shieldDuration, new Action<float>((p) => {
                 if (p == 1f) TimeMaster.shieldActive = false;
             })));
         }
@@ -327,7 +327,6 @@ namespace TheOtherRoles
         }
 
         public static void shieldedMurderAttempt() {
-            System.Console.WriteLine(Medic.showAttemptToShielded);
             if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.CMJOLNCMAPD?.FullScreen != null) {
                 HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
                 HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {

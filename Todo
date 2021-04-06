@@ -9,9 +9,9 @@ Roles in development:
         - Jackal/Vent/Impostor vent highlighting
 
 Airship todos:
-- Engineer should be able to fix the new sabotage
-- Test all roles
 - Starting the new sabotage creates a nullpointerexception
+- Detective has some footprints at the beginning of the game which do not vanish (probably because the rend?.gameObject is still null, when they should despawn)
+
 
 High priority:
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
