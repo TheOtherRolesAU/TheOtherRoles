@@ -16,6 +16,7 @@ using Constants = NFONDPLFBCP;
 using PhysicsHelpers = IEPBCHBGDOA;
 using DeathReason = KAPJFCMEBJE;
 using GameOptionsData = IGDMNKLDEPI;
+using Effects = HLPCBNMDEHF;
 
 namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
@@ -368,12 +369,17 @@ namespace TheOtherRoles {
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.IDOFAMCIJKE.FGNJJFABIHJ && Seer.seer != IGLDJOKKFJE && Seer.mode <= 1) {
                 HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
-                //Update Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
-                //     HudManager.CMJOLNCMAPD.FullScreen,
-                //     1f,
-                //     new Color(42f / 255f, 187f / 255f, 245f / 255f, 0f),
-                //     new Color(42f / 255f, 187f / 255f, 245f / 255f, 0.75f)
-                // ));
+                HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(1f, new Action<float>((p) => {
+                    var renderer = HudManager.CMJOLNCMAPD.FullScreen;
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(42f / 255f, 187f / 255f, 245f / 255f, Mathf.Clamp01(p * 2 * 0.75f));
+                    } else {
+                        if (renderer != null)
+                            renderer.color = new Color(42f / 255f, 187f / 255f, 245f / 255f, Mathf.Clamp01((1-p) * 2 * 0.75f));
+                    }
+                    if (p == 1f && renderer != null) renderer.enabled = false;
+                })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(IGLDJOKKFJE.transform.position);
 

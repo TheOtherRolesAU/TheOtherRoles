@@ -1,19 +1,15 @@
 using HarmonyLib;
 using Hazel;
 using System;
-using System.IO;
-using System.Net.Http;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
-using System.Collections.Generic;
-using System.Linq;
-using UnhollowerBaseLib;
 
 using Palette = GLNPIJPGGNJ;
 using TaskTypes = CBFIAGIGOFA;
 using SystemTypes = LGBKLKNAINN;
 using Constants = NFONDPLFBCP;
 using PhysicsHelpers = IEPBCHBGDOA;
+using Effects = HLPCBNMDEHF;
 
 namespace TheOtherRoles
 {
@@ -343,12 +339,31 @@ namespace TheOtherRoles
                             vampireKillButton.Timer = vampireKillButton.MaxTimer;
                         } else {
                             Vampire.bitten = Vampire.currentTarget;
-                            //Update Reactor.Coroutines.Start(Vampire.killWithDelay());
+                            // Notify players about bitten
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.bitten.PlayerId);
                             writer.Write(0);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0); 
+                            RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0);
+
+                            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Vampire.delay, new Action<float>((p) => { // Delayed action
+                                if (p == 1f) {
+                                    if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                                        // Perform kill
+                                        MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                                        AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                                        RPCProcedure.vampireTryKill();
+                                    } else {
+                                        // Notify players about clearing bitten
+                                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+                                        writer.Write(byte.MaxValue);
+                                        writer.Write(byte.MaxValue);
+                                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                        RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
+                                    }
+                                }
+                            })));
+
                             vampireKillButton.HasEffect = true; // Trigger effect on this click
                         }
                     } else {

@@ -212,12 +212,6 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
-        public static IEnumerator shieldForShieldDuration() {
-            shieldActive = true;
-            yield return new WaitForSeconds(shieldDuration);
-            shieldActive = false;
-        }
-
         public static void clearAndReload() {
             timeMaster = null;
             isRewinding = false;
@@ -566,21 +560,6 @@ namespace TheOtherRoles
             if (garlicButtonSprite) return garlicButtonSprite;
             garlicButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.GarlicButton.png", 115f);
             return garlicButtonSprite;
-        }
-
-        public static IEnumerator killWithDelay() {
-            yield return new WaitForSeconds(delay);
-            if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten)) {
-                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.vampireTryKill();
-            } else {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
-                writer.Write(byte.MaxValue);
-                writer.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
-            }
         }
 
         public static void clearAndReload() {

@@ -387,7 +387,15 @@ namespace TheOtherRoles
                         soul.layer = 5;
                         var rend = soul.AddComponent<SpriteRenderer>();
                         rend.sprite = Seer.getSoulSprite();
-                        //Update Reactor.Coroutines.Start(Helpers.CoFadeOutAndDestroy(rend, Seer.soulDuration));
+                        
+                        PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Seer.soulDuration, new Action<float>((p) => {
+                            if (rend != null) {
+                                var tmp = rend.color;
+                                tmp.a = Mathf.Clamp01(1 - p);
+                                rend.color = tmp;
+                            }    
+                            if (p == 1f && rend?.gameObject != null) UnityEngine.Object.Destroy(rend.gameObject);
+                        })));
                     }
                     Seer.deadBodyPositions = new List<Vector3>();
                 }
