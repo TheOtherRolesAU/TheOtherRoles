@@ -13,7 +13,9 @@ Airship todos:
 - Test all roles
 
 High priority:
-    - Jester/Bounty Hunter/Child/Jackal: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
+    - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
+    - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
     - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
