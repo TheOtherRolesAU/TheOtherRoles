@@ -156,7 +156,7 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, string name, bool defaultValue) {
-            return new CustomOption(id, name, new string[]{"On", "Off"}, default ? "On" : "Off");
+            return new CustomOption(id, name, new string[]{"Off", "On"}, default ? "On" : "Off");
         }
 
         // Static behaviour
