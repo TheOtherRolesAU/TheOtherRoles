@@ -62,6 +62,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Changes in 2.0.0**
 - **New button art** created by **Bavari**
+- **New mod updater/installer tool** created by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). Check the [Installation](#installation) section for more details.
 - **Custom options:** Introduced customizable presets. Starting with 2.0.0, settings can be copied and used with higher versions (2.0.0).
 - **Time Master rework:** Check [Time Master](#time-master) for more information
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
@@ -132,7 +133,16 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 </details>
 
 # Installation
-**Windows**
+## Windows Auto Installation/Updateing Using The AmongUsModUpdater
+This tool was made by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). It automatically installs/updates the TheOtherRoles mod to the newest version, runs the game and
+syncs your game options automatically.
+
+1. Simply get the newest [release](https://github.com/Narua2010/AmongUsModUpdater/releases/latest) of the [AmongUsModUpdater](https://github.com/Narua2010/AmongUsModUpdater)
+2. Unzip the folder and run the **setup.exe**
+
+If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
+
+## Windows Manual Installation
 1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
@@ -143,7 +153,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
-**Linux**
+**Linux Manual**
 1. Install Among Us via steam
 2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
