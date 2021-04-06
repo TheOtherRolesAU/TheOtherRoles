@@ -13,6 +13,7 @@ Airship todos:
 
 High priority:
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
+    - Set proper default values
     - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"
     - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
     - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)

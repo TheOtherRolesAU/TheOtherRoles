@@ -133,7 +133,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 </details>
 
 # Installation
-## Windows Auto Installation/Updateing Using The AmongUsModUpdater
+## Windows Auto Installation/Updating Using The AmongUsModUpdater
 This tool was made by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). It automatically installs/updates the TheOtherRoles mod to the newest version, runs the game and
 syncs your game options automatically.
 
