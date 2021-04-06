@@ -1,6 +1,5 @@
 Roles in development:
     - Vampire: Garlic layer (same for footsteps)
-    that does that check and then sends a definite kill call to all the other players (before he sends the openMeeting call).
     - Jackal:
         - Lover Jackal with Crew Lover should be a Lovers solo win
         - Should the Jackal be able to target players in vents
@@ -9,12 +8,12 @@ Roles in development:
         - Jackal/Vent/Impostor vent highlighting
 
 Airship todos:
-- Starting the new sabotage creates a nullpointerexception
-- Detective has some footprints at the beginning of the game which do not vanish (probably because the rend?.gameObject is still null, when they should despawn)
-
+    - Starting the new sabotage creates a nullpointerexception
+    - Detective has some footprints at the beginning of the game which do not vanish (probably because the rend?.gameObject is still null, when they should despawn)
 
 High priority:
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
+    - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"
     - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
     - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
@@ -22,19 +21,14 @@ Medium priority:
     - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
     - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
-    - Medic shield rework
-    - On Lovers win with JackalLover, it says Lovers and Crewmate win (maybe count that as a Lovers solo win)
     - Crowded mod
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - CustomButton: Add hotkeys (for the ones that replace the kill button)
     - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
-    - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 
-    - Garlic and footprints renderering/gameobject layer (they are not visible on the ramp/in the comms room/in the weapons room on Polus)
     - Morphling: Add a short cooldown after sampling to prevent a "double click"
     - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
-    - Custom Settings: On some screen resolutions it glitches out of the screen, add a spacer option
     - Add proper GameOverReasons
 
 
