@@ -10,6 +10,12 @@ using System.Linq;
 using UnityEngine;
 using System;
 
+using Palette = GLNPIJPGGNJ;
+using DeathReason = KAPJFCMEBJE;
+using SwitchSystem = FNEHFOPHPJO;
+using SystemTypes = LGBKLKNAINN;
+using Effects = HLPCBNMDEHF;
+
 namespace TheOtherRoles
 {
     enum RoleId {
@@ -47,6 +53,7 @@ namespace TheOtherRoles
         // Main Controls
 
         ResetVaribles = 50,
+        ShareOptionSelection,
         ForceEnd,
         SetRole,
 
@@ -93,14 +100,19 @@ namespace TheOtherRoles
             setCustomButtonCooldowns();
         }
 
+        public static void shareOptionSelection(uint id, uint selection) {
+            CustomOption option = CustomOption.options.FirstOrDefault(option => option.id == (int)id);
+            option.updateSelection((int)selection);
+        }
+
         public static void forceEnd() {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (!player.Data.IsImpostor)
+                if (!player.IDOFAMCIJKE.CIDDOFDJHJH)
                 {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
-                    player.Data.IsDead = true;
+                    player.IDOFAMCIJKE.FGNJJFABIHJ = true;
                 }
             }
         }
@@ -205,12 +217,12 @@ namespace TheOtherRoles
 
             if (Jester.jester != null && exiled == Jester.jester) {
                 Jester.jester.Revive();
-                Jester.jester.Data.IsDead = false;
-                Jester.jester.Data.IsImpostor = true;
+                Jester.jester.IDOFAMCIJKE.FGNJJFABIHJ = false;
+                Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH = true;
                 jesterWin = true;
             }
-            if (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target == exiled) {
-                BountyHunter.bountyHunter.Data.IsImpostor = true;
+            if (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ && BountyHunter.target == exiled) {
+                BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH = true;
                 bountyHunterWin = true;
             }
 
@@ -220,26 +232,26 @@ namespace TheOtherRoles
                 {
                     player.RemoveInfected();
                     player.Die(DeathReason.Exile);
-                    player.Data.IsDead = true;
-                    player.Data.IsImpostor = false;
+                    player.IDOFAMCIJKE.FGNJJFABIHJ = true;
+                    player.IDOFAMCIJKE.CIDDOFDJHJH = false;
                 }
             }
             if (jesterWin && !bountyHunterWin && BountyHunter.bountyHunter != null) {
                 BountyHunter.bountyHunter.RemoveInfected();
                 BountyHunter.bountyHunter.Die(DeathReason.Exile);
-                BountyHunter.bountyHunter.Data.IsDead = true;
-                BountyHunter.bountyHunter.Data.IsImpostor = false;
+                BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ = true;
+                BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH = false;
             } else if (bountyHunterWin && !jesterWin && Jester.jester != null) {
                 Jester.jester.RemoveInfected();
                 Jester.jester.Die(DeathReason.Exile);
-                Jester.jester.Data.IsDead = true;
-                Jester.jester.Data.IsImpostor = false;
+                Jester.jester.IDOFAMCIJKE.FGNJJFABIHJ = true;
+                Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH = false;
             }
         }
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
-            switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+            switchSystem.GNPBPJHLPAO = switchSystem.KNFBDAFFMGF;
         }
 
         public static void engineerUsedRepair() {
@@ -249,7 +261,7 @@ namespace TheOtherRoles
         public static void janitorClean(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).GMBAIPNOKLP == playerId)
                     UnityEngine.Object.Destroy(array[i].gameObject);
             }
         }
@@ -266,15 +278,21 @@ namespace TheOtherRoles
         }
 
         public static void timeMasterRewindTime() {
+            HudManager.CMJOLNCMAPD.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
+            HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.rewindTime / 2, new Action<float>((p) => {
+                if (p == 1f) HudManager.CMJOLNCMAPD.FullScreen.enabled = false;
+            })));
+
             if (TimeMaster.timeMaster == null) return;
 
             PlayerControl lp = PlayerControl.LocalPlayer;
-            if (lp?.Data != null && !lp.Data.IsDead && lp.inVent) {
+            if (lp?.IDOFAMCIJKE != null && !lp.IDOFAMCIJKE.FGNJJFABIHJ && lp.inVent) {
                 if ((float)(DateTime.UtcNow -localVentEnterTimePoint).TotalMilliseconds < 1000 * TimeMaster.rewindTime) {
-                    foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                    foreach (Vent vent in ShipStatus.Instance.GIDPCPOEFBC) {
                         bool canUse;
                         bool couldUse;
-                        vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+                        vent.CanUse(PlayerControl.LocalPlayer.IDOFAMCIJKE, out canUse, out couldUse);
                         if (canUse) {
                             PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
 			                vent.SetButtons(false);
@@ -292,12 +310,13 @@ namespace TheOtherRoles
             if (Minigame.Instance)
                 Minigame.Instance.ForceClose();
             PlayerControl.LocalPlayer.moveable = false;
-            HudManager.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
-            HudManager.Instance.FullScreen.enabled = true;
         }
 
         public static void timeMasterShield() {
-            Reactor.Coroutines.Start(TimeMaster.shieldForShieldDuration());
+            TimeMaster.shieldActive = true;
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.shieldDuration, new Action<float>((p) => {
+                if (p == 1f) TimeMaster.shieldActive = false;
+            })));
         }
 
         public static void medicSetShielded(byte shieldedId) {
@@ -308,15 +327,20 @@ namespace TheOtherRoles
         }
 
         public static void shieldedMurderAttempt() {
-            if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.Instance?.FullScreen != null) {
-                Color c = Palette.ImpostorRed;
-                HudManager.Instance.FullScreen.enabled = true;
-                Reactor.Coroutines.Start(Helpers.CoFlashAndDisable(
-                    HudManager.Instance.FullScreen,
-                    0.5f,
-                    new Color(c.r, c.g, c.b, 0f),
-                    new Color(c.r, c.g, c.b, 0.75f)
-                ));
+            if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.CMJOLNCMAPD?.FullScreen != null) {
+                HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
+                HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {
+                    var renderer = HudManager.CMJOLNCMAPD.FullScreen;
+                    Color c = Palette.LDCHDOFJPGH;
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(p * 2 * 0.75f));
+                    } else {
+                        if (renderer != null)
+                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01((1-p) * 2 * 0.75f));
+                    }
+                    if (p == 1f && renderer != null) renderer.enabled = false;
+                })));
             }
         }
 
@@ -329,17 +353,17 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
+            if (player.IDOFAMCIJKE.CIDDOFDJHJH || player == Jackal.jackal || player == Sidekick.sidekick) {
                 oldShifter.Exiled();
                 return;
             }
 
             // Switch shield
             if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
                 Medic.shielded = oldShifter;
             } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
+                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
                 Medic.shielded = player;
             }
 
@@ -408,9 +432,9 @@ namespace TheOtherRoles
         }
 
         public static void loverSuicide(byte remainingLoverId) {
-            if (Lovers.lover1 != null && !Lovers.lover1.Data.IsDead && Lovers.lover1.PlayerId == remainingLoverId) {
+            if (Lovers.lover1 != null && !Lovers.lover1.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
-            } else if (Lovers.lover2 != null && !Lovers.lover2.Data.IsDead && Lovers.lover2.PlayerId == remainingLoverId) {
+            } else if (Lovers.lover2 != null && !Lovers.lover2.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
         }
@@ -429,14 +453,14 @@ namespace TheOtherRoles
 
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                if (player.PlayerId == targetId && !player.Data.IsDead) {
+                if (player.PlayerId == targetId && !player.IDOFAMCIJKE.FGNJJFABIHJ) {
                         Vampire.bitten = player;
                 }
             }
         }
 
         public static void vampireTryKill() {
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead) {
+            if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
@@ -483,7 +507,7 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if(!Jackal.canCreateSidekickFromImpostor && player.IDOFAMCIJKE.CIDDOFDJHJH) {
                         Jackal.fakeSidekick = player;
                         return;
                     }
@@ -548,7 +572,7 @@ namespace TheOtherRoles
                 Lovers.clearAndReload(); 
             }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
-                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
+                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ) {
                     RPCProcedure.sidekickPromotes();
                 } else {
                     Jackal.clearAndReload();
@@ -581,6 +605,11 @@ namespace TheOtherRoles
 
                 case (byte)CustomRPC.ResetVaribles:
                     RPCProcedure.resetVariables();
+                    break;
+                case (byte)CustomRPC.ShareOptionSelection:
+                    uint id = DOOILGKLBBF.ReadPackedUInt32();
+                    uint selection = DOOILGKLBBF.ReadPackedUInt32();
+                    RPCProcedure.shareOptionSelection(id, selection);
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();

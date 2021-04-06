@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Reactor.Extensions;
-using Reactor.Unstrip;
 using UnityEngine;
+
+using Palette = GLNPIJPGGNJ;
 
 public class CustomButton
 {
@@ -125,7 +125,7 @@ public class CustomButton
 
     private void Update()
     {
-        if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
+        if (PlayerControl.LocalPlayer.IDOFAMCIJKE == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
             setActive(false);
             return;
         }
@@ -139,10 +139,10 @@ public class CustomButton
             if (hudManager.KillButton != null) hudManager.KillButton.transform.localPosition = hudManager.UseButton.transform.localPosition - new Vector3(1.3f, 0, 0); // Align the kill button (because it's on another position depending on the screen resolution)
         }
         if (CouldUse()) {
-            killButtonManager.renderer.color = Palette.EnabledColor;
+            killButtonManager.renderer.color = Palette.MKAFGNEBHKC;
             killButtonManager.renderer.material.SetFloat("_Desat", 0f);
         } else {
-            killButtonManager.renderer.color = Palette.DisabledClear;
+            killButtonManager.renderer.color = Palette.POCKGPCFGOE;
             killButtonManager.renderer.material.SetFloat("_Desat", 1f);
         }
 
@@ -155,7 +155,7 @@ public class CustomButton
         
         if (Timer <= 0 && HasEffect && isEffectActive) {
             isEffectActive = false;
-            killButtonManager.TimerText.Color = Palette.EnabledColor;
+            killButtonManager.TimerText.Color = Palette.MKAFGNEBHKC;
             OnEffectEnds();
         }
     

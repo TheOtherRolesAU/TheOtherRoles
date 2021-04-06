@@ -15,7 +15,7 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance) {
                 string spacer = new String('\n', 21);
-                string fullCredentials = "[FCCE03FF]TheOtherRoles[] v1.9:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard[]\n- Button design by [FFEB91FF]Bavari[]";
+                string fullCredentials = "[FCCE03FF]TheOtherRoles[] v2.0.0 beta:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard[]\n- Button design by [FFEB91FF]Bavari[]";
                 if (__instance.text.Text.Contains(spacer))
                     __instance.text.Text += "\n" + fullCredentials;
                 else
@@ -28,7 +28,7 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance)
             {
-                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.CJDCOJJNIGL.Started)
                     __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]";
                 else
                     __instance.text.Text += "\n\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]\nand [FFEB91FF]Thunderstorm584[]\nBalanced with [FFEB91FF]Dhalucard[]\nButton design by [FFEB91FF]Bavari[]";

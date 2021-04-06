@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Reactor.Extensions;
 using System.Collections;
-using Reactor.Unstrip;
 using UnhollowerBaseLib;
 using UnityEngine;
 using System.Linq;
@@ -12,19 +10,23 @@ using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
 
+using TaskTypes = CBFIAGIGOFA;
+
 namespace TheOtherRoles {
     public static class Helpers {
 
-        public static Sprite LoadSpriteFromEmbeddedResources(string resource, float PixelPerUnit) {
+        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
             try {
-                System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-                System.IO.Stream myStream = myAssembly.GetManifestResourceStream(resource);
-                byte[] image = new byte[myStream.Length];
-                myStream.Read(image, 0, (int) myStream.Length);
-                Texture2D myTexture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                LoadImage(myTexture, image, true);
-                return Sprite.Create(myTexture, new Rect(0, 0, myTexture.width, myTexture.height), new Vector2(0.5f, 0.5f), PixelPerUnit);
-            } catch { }
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(path);
+            var byteTexture = new byte[stream.Length];
+            var read = stream.Read(byteTexture, 0, (int) stream.Length);
+            LoadImage(texture, byteTexture, false);
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            } catch {
+                System.Console.WriteLine("Error loading sprite from path: " + path);
+            }
             return null;
         }
 
@@ -37,22 +39,6 @@ namespace TheOtherRoles {
             var il2cppArray = (Il2CppStructArray<byte>) data;
 
             return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
-        }
-
-        public static int a  = 0;
-
-        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
-            try {
-            Texture2D texture = GUIExtensions.CreateEmptyTexture();
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream(path);
-            byte[] byteTexture = Reactor.Extensions.Extensions.ReadFully(stream);
-            ImageConversion.LoadImage(texture, byteTexture, false);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-            } catch {
-                System.Console.WriteLine("Error loading sprite from path: " + path);
-            }
-            return null;
         }
 
         public static PlayerControl playerById(byte id)
@@ -71,14 +57,14 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint skinId) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)skinId];
+        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint LFDAHOFPIAM) {
+            SkinData nextSkin = DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllSkins[(int)LFDAHOFPIAM];
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
             var anim = spriteAnim.m_animator;
             var skinLayer = playerPhysics.Skin;
 
-            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
+            var currentPhysicsAnim = playerPhysics.NDIJGONKPMC.GetCurrentAnimation();
             if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
             else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
             else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
@@ -86,42 +72,13 @@ namespace TheOtherRoles {
             else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
             else clip = nextSkin.IdleAnim;
 
-            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            float progress = playerPhysics.NDIJGONKPMC.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             skinLayer.skin = nextSkin;
 
             spriteAnim.Play(clip, 1f);
             anim.Play("a", 0, progress % 1);
             anim.Update(0f);
         }
-
-        public static IEnumerator CoFadeOutAndDestroy(SpriteRenderer renderer, float duration) {
-            for (float t = duration; t > 0; t -= Time.deltaTime) {
-                if (renderer != null) {
-                    var tmp = renderer.color;
-                    tmp.a = Mathf.Clamp(t / duration, 0, 1);
-                    renderer.color = tmp;
-                }
-                yield return null;
-            }
-            if (renderer?.gameObject != null) UnityEngine.Object.Destroy(renderer.gameObject);
-        }
-
-        public static IEnumerator CoFlashAndDisable(SpriteRenderer renderer, float duration, Color a, Color b) {
-            float singleDuration = duration / 2;
-            for (float t = 0f; t < singleDuration; t += Time.deltaTime) {
-                if (renderer != null)
-                    renderer.color = Color.Lerp(a, b, Mathf.Clamp(t / singleDuration, 0, 1));
-                yield return null;
-            }
-            for (float t = singleDuration; t > 0f; t -= Time.deltaTime) {
-                if (renderer != null)
-                    renderer.color = Color.Lerp(a, b, Mathf.Clamp(t / singleDuration, 0, 1));
-                yield return null;
-            }
-            
-            if (renderer != null) renderer.enabled = false;
-        }
-
 
         public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
@@ -205,24 +162,6 @@ namespace TheOtherRoles {
 
                 player.myTasks.Insert(0, task);
             }
-        }
-
-        public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
-        {
-            Vector3 temp = default(Vector3);
-            temp.z = target.localPosition.z;
-            for (float time = 0f; time < duration; time += Time.deltaTime)
-            {
-                float num = time / duration;
-                temp.x = Mathf.SmoothStep(source.x, dest.x, num);
-                temp.y = Mathf.SmoothStep(source.y, dest.y, num);
-                target.localPosition = temp;
-                yield return null;
-            }
-            temp.x = dest.x;
-            temp.y = dest.y;
-            target.localPosition = temp;
-            yield break;
         }
 
         private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};

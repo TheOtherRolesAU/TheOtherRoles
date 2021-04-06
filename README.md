@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Banner.png)
-![eisbison infographic](./Preview_v1.9.png)
+![eisbison infographic](./Preview_v2.0.png)
 
 
 # The Other Roles
@@ -44,7 +44,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.31.3s | v1.9 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
+| **2021.31.3s** | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
@@ -60,9 +60,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
-**Changes in 1.9**
+**Changes in 2.0.0**
 - **New button art** created by **Bavari**
-- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher versions (1.9+).
+- **Custom options:** Introduced customizable presets. Starting with 2.0.0, settings can be copied and used with higher versions (2.0.0).
 - **Time Master rework:** Check [Time Master](#time-master) for more information
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
@@ -133,7 +133,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 # Installation
 **Windows**
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -145,7 +145,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 **Linux**
 1. Install Among Us via steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.9/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
@@ -154,10 +154,13 @@ We recommend you to play on custom servers rather than on the official ones. A g
 the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 
 # Credits & Resources
-[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used\
+[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
-[Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**. We made a few changes, which can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of the fork.\
-[CooldownButton](https://github.com/DorCoMaNdO/Reactor-Essentials/blob/master/Essentials/UI/CooldownButton.cs) - Code for the cooldown button comes from **DorCoMaNdO**\
+[Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
+- Before v1.6: We used the default Essentials release
+- v1.6-v1.8: We slightly changed the default Essentials. The changes can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of our fork.
+- v2.0.0 and later: As we're not using Reactor anymore, we are using our own implementation, inspired by the one from **DorCoMaNdO**
+
 [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**\
 [Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
 [Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
@@ -557,7 +560,7 @@ The arrow updates it's position every few seconds (configurable).
 
 ## Snitch
 ### **Team: Crewmates**
-When the Snitch finshes all the tasks, arrows will appear (only visible to the Snitch) that point to the impostors.
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the impostors.
 When the Snitch has one task left (configurable) the Snitch will be revealed to the impostors, also with an arrow.
 
 ### Game Options
