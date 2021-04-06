@@ -100,7 +100,9 @@ namespace TheOtherRoles {
             Tracker.currentTarget = setTarget();
         }
 
-        static void detectiveSetFootPrints() {
+        static void detectiveUpdateFootPrints() {
+            Footprint.UpdateAll();
+            
             if (Detective.detective == null || Detective.detective != PlayerControl.LocalPlayer) return;
 
             Detective.timer -= Time.fixedDeltaTime;
@@ -219,7 +221,7 @@ namespace TheOtherRoles {
                 // Sheriff
                 sheriffSetTarget();
                 // Detective
-                detectiveSetFootPrints();
+                detectiveUpdateFootPrints();
                 // Tracker
                 trackerSetTarget();
                 // Vampire

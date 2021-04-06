@@ -125,8 +125,9 @@ namespace TheOtherRoles
 
             bool doSwap = swapped1 != null && swapped2 != null;
             if (doSwap) {
-                //Update Reactor.Coroutines.Start(Helpers.Slide2D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
-                //Update Reactor.Coroutines.Start(Helpers.Slide2D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
+
+                __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
+                __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
             }
 
             // Mayor display vote twice

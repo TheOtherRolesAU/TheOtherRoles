@@ -15,6 +15,7 @@ namespace TheOtherRoles{
         private SpriteRenderer spriteRenderer;
         private PlayerControl owner;
         private bool anonymousFootprints;
+        private float duration;
 
         public static Sprite getFootprintSprite() {
             if (sprite) return sprite;
@@ -25,6 +26,7 @@ namespace TheOtherRoles{
         public Footprint(float footprintDuration, bool anonymousFootprints, PlayerControl player) {
             this.owner = player;
             this.anonymousFootprints = anonymousFootprints;
+            this.duration = footprintDuration;
             if (anonymousFootprints)
                 this.color = Palette.CALCLMEEPGL[6];
             else
@@ -45,13 +47,19 @@ namespace TheOtherRoles{
 
             footprint.SetActive(true);
             footprints.Add(this);
-
-            //Update Reactor.Coroutines.Start(CoFadeOutAndDestroy(footprintDuration));
         }
 
-        IEnumerator CoFadeOutAndDestroy(float duration)
+        public static void UpdateAll() {
+            foreach (Footprint footprint in footprints) {
+                if (footprint != null) footprint.updateFootprint();
+            }
+        }
+
+        private float t = 0;
+        private void updateFootprint()
         {
-            for (float t = 0f; t < duration; t += Time.deltaTime) {
+            if (t < duration) {
+                t += Time.fixedDeltaTime;
                 Color c = color;
                 if (!anonymousFootprints && owner != null) {
                     if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.IDOFAMCIJKE != null)
@@ -61,10 +69,11 @@ namespace TheOtherRoles{
                 }
                 if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp(1f - t/duration, 0f, 1f));
 
-                yield return null;
+            } else {
+                if (footprint != null)
+                    UnityEngine.Object.Destroy(footprint);
+                footprints.Remove(this);
             }
-            UnityEngine.Object.Destroy(footprint);
-            footprints.Remove(this);
         }
     }
 }

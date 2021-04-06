@@ -208,24 +208,6 @@ namespace TheOtherRoles {
             }
         }
 
-        public static IEnumerator Slide2D(Transform target, Vector2 source, Vector2 dest, float duration = 0.75f)
-        {
-            Vector3 temp = default(Vector3);
-            temp.z = target.localPosition.z;
-            for (float time = 0f; time < duration; time += Time.deltaTime)
-            {
-                float num = time / duration;
-                temp.x = Mathf.SmoothStep(source.x, dest.x, num);
-                temp.y = Mathf.SmoothStep(source.y, dest.y, num);
-                target.localPosition = temp;
-                yield return null;
-            }
-            temp.x = dest.x;
-            temp.y = dest.y;
-            target.localPosition = temp;
-            yield break;
-        }
-
         private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
         public static bool isLighterColor(int colorId) {
             return lighterColors.Contains(colorId);
