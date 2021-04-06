@@ -1,19 +1,6 @@
-Discussed reworks with Dhalucard:
-    - Lovers: A (Crew/Imp) should be able to have another role
-    - Shifter: Change it to thief -> Can only Shift ones, other player turns into a crewmate (Tasks need to be added to the Thief, or they should not be deleted in the first place)
-    - Time Master: Fixed number of time shields (if there's a kill attempt the time rewinds instead) or Time Master Impostor
-    - Child: Introduce Child impostor (higher cooldown or no kills at all while growing, other Impostor gets a buff in the mean time)
-    - Medic: Kill attempt by Impostors break the shield during the next meeting (option)
-    - Option: Max number of meetings in a game, Mayor can always call one meeting per game (ignores the max count)
-    - Jackal
-    - Spy/Seer: ?
-
-
 Roles in development:
-    - Tracker: Deactivate the arrow when the Tracker dies
-    - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
-    - Vampire: Garlic layer (same for footsteps), Garlic button is active during meetings (shouldn't be)
-
+    - Vampire: Garlic layer (same for footsteps)
+    that does that check and then sends a definite kill call to all the other players (before he sends the openMeeting call).
     - Jackal:
         - Lover Jackal with Crew Lover should be a Lovers solo win
         - Should the Jackal be able to target players in vents
@@ -21,10 +8,15 @@ Roles in development:
         - SidekickPromotes RPC call is called by every player
         - Jackal/Vent/Impostor vent highlighting
 
-High priority:
-    - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+Airship todos:
+- Engineer should be able to fix the new sabotage
+- Test all roles
 
-Medium priority:    
+High priority:
+    - Jester/Bounty Hunter/Child/Jackal: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+
+Medium priority:
+    - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
     - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
     - Medic shield rework

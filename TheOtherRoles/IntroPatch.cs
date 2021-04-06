@@ -2,25 +2,21 @@ using HarmonyLib;
 using System;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
-
+using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(IntroCutscene.CoBegin__d), nameof(IntroCutscene.CoBegin__d.MoveNext))]
+    [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__11), nameof(IntroCutscene._CoBegin_d__11.MoveNext))]
     class IntroPatch
     {
         // Intro special teams
-        static void Prefix(IntroCutscene.CoBegin__d __instance)
+        static void Prefix(IntroCutscene._CoBegin_d__11 __instance)
         {
             if (PlayerControl.LocalPlayer == Jester.jester)
             {
                 var jesterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 jesterTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = jesterTeam;
-            } else if (PlayerControl.LocalPlayer == Shifter.shifter) {
-                var shifterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                shifterTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = shifterTeam;
             } else if (PlayerControl.LocalPlayer == Jackal.jackal) {
                 var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 jackalTeam.Add(PlayerControl.LocalPlayer);
@@ -29,9 +25,11 @@ namespace TheOtherRoles
         }
 
         // Intro display role
-        static void Postfix(IntroCutscene.CoBegin__d __instance)
+        static void Postfix(IntroCutscene._CoBegin_d__11 __instance)
         {
-            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            if (infos.Count == 0) return;
+            RoleInfo roleInfo = infos[0];
 
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {

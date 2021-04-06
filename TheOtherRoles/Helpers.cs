@@ -7,6 +7,7 @@ using System.Collections;
 using Reactor.Unstrip;
 using UnhollowerBaseLib;
 using UnityEngine;
+using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
@@ -93,6 +94,18 @@ namespace TheOtherRoles {
             anim.Update(0f);
         }
 
+        public static IEnumerator CoFadeOutAndDestroy(SpriteRenderer renderer, float duration) {
+            for (float t = duration; t > 0; t -= Time.deltaTime) {
+                if (renderer != null) {
+                    var tmp = renderer.color;
+                    tmp.a = Mathf.Clamp(t / duration, 0, 1);
+                    renderer.color = tmp;
+                }
+                yield return null;
+            }
+            if (renderer?.gameObject != null) UnityEngine.Object.Destroy(renderer.gameObject);
+        }
+
         public static IEnumerator CoFlashAndDisable(SpriteRenderer renderer, float duration, Color a, Color b) {
             float singleDuration = duration / 2;
             for (float t = 0f; t < singleDuration; t += Time.deltaTime) {
@@ -110,13 +123,11 @@ namespace TheOtherRoles {
         }
 
 
-        public static bool handleMurderAttempt(PlayerControl target, bool notifyOthers = true) {
+        public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
-                if (notifyOthers) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                }
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
 
                 return false;
@@ -125,25 +136,74 @@ namespace TheOtherRoles {
             else if (Child.child != null && target == Child.child && !Child.isGrownUp()) {
                 return false;
             }
+            // Block Time Master with time shield kill
+            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
+                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.timeMasterRewindTime();
+                }
+                return false;
+            }
             return true;
         }
 
-        public static void removeTasksFromPlayer(PlayerControl player, bool removeImportantTextTasks = false) {
+        public static void removeTasksFromPlayer(PlayerControl player) {
             if (player == null) return;
             var toRemove = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks) {
-                if (!removeImportantTextTasks && task.gameObject.GetComponent<ImportantTextTask>() != null)
+                if (task.gameObject.GetComponent<ImportantTextTask>() != null)
                     continue;
                 if (task.TaskType != TaskTypes.FixComms && 
                     task.TaskType != TaskTypes.FixLights && 
                     task.TaskType != TaskTypes.ResetReactor && 
                     task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy) {
+                    task.TaskType != TaskTypes.RestoreOxy &&
+                    task.TaskType != TaskTypes.StopCharles) {
                     toRemove.Add(task);
                 }
             }   
             foreach (PlayerTask task in toRemove) {
                 player.RemoveTask(task);
+            }
+        }
+
+        public static void refreshRoleDescription(PlayerControl player) {
+            if (player == null) return;
+
+            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player); 
+
+            var toRemove = new List<PlayerTask>();
+            foreach (PlayerTask t in player.myTasks) {
+                var textTask = t.gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) {
+                    var info = infos.FirstOrDefault(x => textTask.Text.StartsWith(x.name));
+                    if (info != null)
+                        infos.Remove(info); // TextTask for this RoleInfo does not have to be added, as it already exists
+                    else
+                        toRemove.Add(t); // TextTask does not have a corresponding RoleInfo and will hence be deleted
+                }
+            }   
+
+            foreach (PlayerTask t in toRemove) {
+                t.OnRemove();
+                player.myTasks.Remove(t);
+                UnityEngine.Object.Destroy(t.gameObject);
+            }
+
+            // Add TextTask for remaining RoleInfos
+            foreach (RoleInfo roleInfo in infos) {
+                var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+                task.transform.SetParent(player.transform, false);
+
+                if (roleInfo.name == "Jackal") {
+                    var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+                } else {
+                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+                }
+
+                player.myTasks.Insert(0, task);
             }
         }
 
@@ -165,8 +225,8 @@ namespace TheOtherRoles {
             yield break;
         }
 
-        private static List<byte> lighterColors = new List<byte>(){ 3, 4, 5, 7, 10, 11};
-        public static bool isLighterColor(byte colorId) {
+        private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
+        public static bool isLighterColor(int colorId) {
             return lighterColors.Contains(colorId);
         }
     }

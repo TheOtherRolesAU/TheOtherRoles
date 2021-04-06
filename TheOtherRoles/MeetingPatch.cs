@@ -8,14 +8,15 @@ using System.Collections;
 using System;
 using System.Text;
 using UnityEngine;
+using System.Reflection;
+using Reactor.Extensions;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(MeetingHud), "CalculateVotes")]
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
     class MeetingCalculateVotesPatch {
-        static bool Prefix(MeetingHud __instance, ref Il2CppStructArray<byte> __result)
-        {
-            Il2CppStructArray<byte> array = new Il2CppStructArray<byte>(11);
+        private static byte[] calculateVotes(MeetingHud __instance) {
+            byte[] array = new byte[11];
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -24,7 +25,7 @@ namespace TheOtherRoles
                     int num = (int)(playerVoteArea.votedFor + 1);
                     if (num >= 0 && num < array.Length)
                     {
-                        Il2CppStructArray<byte> array2 = array;
+                        byte[] array2 = array;
                         int num2 = num;
                         // Mayor count vote twice
                         if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
@@ -49,15 +50,67 @@ namespace TheOtherRoles
                 array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
                 array[swapped2.TargetPlayerId + 1] = tmp;
             }
+            return array;
+        }
 
-            __result = array;
+        private static int IndexOfMax(byte[] self, Func<byte, int> comparer, out bool tie) {
+            tie = false;
+            int num = int.MinValue;
+            int result = -1;
+            for (int i = 0; i < self.Length; i++)
+            {
+                int num2 = comparer(self[i]);
+                if (num2 > num)
+                {
+                    result = i;
+                    num = num2;
+                    tie = false;
+                }
+                else if (num2 == num)
+                {
+                    tie = true;
+                    result = -1;
+                }
+            }
+            return result;
+        }
+
+        static bool Prefix(MeetingHud __instance)
+        {
+            if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
+            {
+                byte[] self = calculateVotes(__instance);
+                bool tie;
+                int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
+                GameData.PlayerInfo exiled = null;
+                foreach (GameData.PlayerInfo pi in GameData.Instance.AllPlayers) {
+                    if (pi.PlayerId == maxIdx) {
+                        exiled = pi;
+                        break;
+                    }
+                }
+                byte[] array = new byte[10];
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    array[(int)playerVoteArea.TargetPlayerId] = playerVoteArea.GetState();
+                }
+                // RPCVotingComplete
+                if (AmongUsClient.Instance.AmClient)
+                    __instance.VotingComplete(array, exiled, tie);
+                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
+                messageWriter.WriteBytesAndSize(array);
+                messageWriter.Write((exiled != null) ? exiled.PlayerId : byte.MaxValue);
+                messageWriter.Write(tie);
+                messageWriter.EndMessage();
+            }
             return false;
         }
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
     class MeetingPopulateVotesPatch {
-        static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> GNKPMAGJLNC)
+        static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> HIDHPMAKEKH)
         {
             // Swapper swap votes
             PlayerVoteArea swapped1 = null;
@@ -87,7 +140,7 @@ namespace TheOtherRoles
                 for (int j = 0; j < __instance.playerStates.Length; j++)
                 {
                     PlayerVoteArea playerVoteArea2 = __instance.playerStates[j];
-                    byte self = GNKPMAGJLNC[(int)playerVoteArea2.TargetPlayerId];
+                    byte self = HIDHPMAKEKH[(int)playerVoteArea2.TargetPlayerId];
 
                     if (!((self & 128) > 0))
                     {
@@ -151,7 +204,7 @@ namespace TheOtherRoles
         
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
         class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, byte[] GNKPMAGJLNC, GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL)
+            static void Postfix(MeetingHud __instance, byte[] HIDHPMAKEKH, GameData.PlayerInfo KLHCDCKJHKC, bool EMLKEPIBJLK)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -159,8 +212,8 @@ namespace TheOtherRoles
 
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
-                if (IHDMFDEEDEL != null)
-                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == IHDMFDEEDEL.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == IHDMFDEEDEL.PlayerId));
+                if (KLHCDCKJHKC != null)
+                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == KLHCDCKJHKC.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == KLHCDCKJHKC.PlayerId));
             }
         }
 
@@ -251,10 +304,10 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Deserialize))]
         class MeetingDeserializePatch {
-            static void Postfix(MeetingHud __instance, MessageReader HFPCBBHJIPJ, bool CHDIOBMNLGH)
+            static void Postfix(MeetingHud __instance, MessageReader DOOILGKLBBF, bool IHJEKEOFMGJ)
             {
                 // Add swapper buttons
-                if (CHDIOBMNLGH) {
+                if (IHJEKEOFMGJ) {
                     addSwapperSwapButtons(__instance);
                 }
             }
@@ -264,11 +317,28 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
 
-        public static void Prefix(ref GameData.PlayerInfo IHDMFDEEDEL, bool DCHFIBODGIL) {
-            // Prevent growing Child exile
-            if (Child.child != null && IHDMFDEEDEL != null && IHDMFDEEDEL.PlayerId == Child.child.PlayerId && !Child.isGrownUp()) {
-                IHDMFDEEDEL = null;
+        public static void Prefix(ref GameData.PlayerInfo KLHCDCKJHKC, bool EMLKEPIBJLK) {
+            // Shifter shift
+            if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
+                writer.Write(Shifter.futureShift.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
+            Shifter.futureShift = null;
+
+            // Eraser erase
+            if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
+                foreach (PlayerControl target in Eraser.futureErased) {
+                    if (target != null) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRole, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.erasePlayerRole(target.PlayerId);
+                    }
+                }
+            }
+            Eraser.futureErased = new List<PlayerControl>();
         }
     }
 
@@ -282,16 +352,41 @@ namespace TheOtherRoles
             {
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
+                // Child set adapted cooldown
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
+                    var multiplier = Child.isGrownUp() ? 0.66f : 2f;
+                    Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+                }
 
-                // Jester and Bounty Hunter win condition
                 if (ExileController.Instance.exiled != null) {
                     byte exiledId = ExileController.Instance.exiled.PlayerId;
-                    if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
+
+                    // Child lose condition
+                    if (Child.child != null && Child.child.PlayerId == exiledId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildLose, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.childLose();
+                    }
+                    // Jester and Bounty Hunter win condition
+                    else if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.Data.IsDead && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
                         writer.Write(exiledId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.jesterBountyHunterWin(exiledId);
                     }
+                }
+
+                // Seer spawn souls
+                if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
+                    foreach (Vector3 pos in Seer.deadBodyPositions) {
+                        GameObject soul = new GameObject();
+                        soul.transform.position = pos;
+                        soul.layer = 5;
+                        var rend = soul.AddComponent<SpriteRenderer>();
+                        rend.sprite = Seer.getSoulSprite();
+                        Reactor.Coroutines.Start(Helpers.CoFadeOutAndDestroy(rend, Seer.soulDuration));
+                    }
+                    Seer.deadBodyPositions = new List<Vector3>();
                 }
             }
         }
@@ -300,12 +395,12 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class MeetingExiledTextPatch
     {
-        static void Postfix(ref string __result, StringNames DKEHCKOHMOH, Il2CppReferenceArray<Il2CppSystem.Object> DKBJCINDDCD)
+        static void Postfix(ref string __result, StringNames MKFNKGIBBHP, Il2CppReferenceArray<Il2CppSystem.Object> BPBFAAEIABN)
         {
             if (ExileController.Instance != null && ExileController.Instance.exiled != null)
             {
                 // Exile role text for roles that are being assigned to crewmates
-                if (DKEHCKOHMOH == StringNames.ExileTextPN || DKEHCKOHMOH == StringNames.ExileTextSN)
+                if (MKFNKGIBBHP == StringNames.ExileTextPN || MKFNKGIBBHP == StringNames.ExileTextSN)
                 {
                     if( Jester.jester != null && ExileController.Instance.exiled.Object.PlayerId == Jester.jester.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Jester.";
@@ -333,8 +428,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Lover.";
                     else if(Seer.seer != null && ExileController.Instance.exiled.Object.PlayerId == Seer.seer.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Seer.";
-                    else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
+                    else if(Hacker.hacker != null && ExileController.Instance.exiled.Object.PlayerId == Hacker.hacker.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.exiled.Object.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Child.";
                     else if(BountyHunter.bountyHunter != null && ExileController.Instance.exiled.Object.PlayerId == BountyHunter.bountyHunter.PlayerId)
@@ -351,7 +446,7 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }
                 // Exile role text for roles that are being assigned to impostors
-                if (DKEHCKOHMOH == StringNames.ExileTextPP || DKEHCKOHMOH == StringNames.ExileTextSP) {
+                if (MKFNKGIBBHP == StringNames.ExileTextPP || MKFNKGIBBHP == StringNames.ExileTextSP) {
                     if(Godfather.godfather != null && ExileController.Instance.exiled.Object.PlayerId == Godfather.godfather.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Godfather.";
                     else if(Mafioso.mafioso != null && ExileController.Instance.exiled.Object.PlayerId == Mafioso.mafioso.PlayerId)
@@ -368,10 +463,12 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
                     else if(Vampire.vampire != null && ExileController.Instance.exiled.Object.PlayerId == Vampire.vampire.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Vampire.";
+                    else if (Eraser.eraser != null && ExileController.Instance.exiled.Object.PlayerId == Eraser.eraser.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Eraser.";
                 }
 
                 // Hide number of remaining impostors on Jester win
-                if (DKEHCKOHMOH == StringNames.ImpostorsRemainP || DKEHCKOHMOH == StringNames.ImpostorsRemainS)
+                if (MKFNKGIBBHP == StringNames.ImpostorsRemainP || MKFNKGIBBHP == StringNames.ImpostorsRemainS)
                 {
                     if (Jester.jester != null && ExileController.Instance.exiled.Object.PlayerId == Jester.jester.PlayerId)
                         __result = "";

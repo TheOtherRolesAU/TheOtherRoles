@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Banner.png)
-![eisbison infographic](./Preview_v1.8.png)
+![eisbison infographic](./Preview_v1.9.png)
 
 
 # The Other Roles
@@ -15,6 +15,7 @@ Even more roles are coming soon :)
 - [Morphling](#morphling)
 - [Camouflager](#camouflager)
 - [Vampire](#vampire)
+- [Eraser](#eraser)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -25,9 +26,11 @@ Even more roles are coming soon :)
 - [Detective](#detective)
 - [Lighter](#lighter)
 - [Child](#child)
+  - Child Impostor
+  - Child Crewmate
 - [Medic](#medic)
 - [Mayor](#mayor)
-- [Spy](#spy)
+- [Hacker](#hacker)
 - [Shifter](#shifter)
 - [Time Master](#time-master)
 - [Swapper](#swapper)
@@ -58,11 +61,19 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Changes in 1.9**
-- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher version (1.9+).
+- **New button art** created by **Bavari**
+- **Custom options:** Introduced customizable presets. Starting with 1.9, settings can be copied and used with higher versions (1.9+).
+- **Time Master rework:** Check [Time Master](#time-master) for more information
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
 - **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
-- **Seer:** As the role didn't work the way it was, we'll completely change it. We are still thinking of something, that makes the role more interesting. For now, check the [Seer](#seer) section to get more details about the new Seer.
+- **Seer:** As the role didn't work the way it was, we completely changed it. We're still working on the role, for now we're trying a few things. Check the [Seer](#seer) section to get more details about the new Seer.
+- **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
+- **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
+- **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
+- **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
+- **Child:** The Child can now be a Crewmate Child or an Impostor Child, check the [Child](#child) section for more details
+- **Eraser:** The Eraser, a new Impostor role, is now part of the mod. Check the [Eraser](#eraser) section for more details
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -99,7 +110,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Time Master - Buff: He is not affected by his rewind anymore, which gives him more utility. Players will now be rewinded out of vents.
 - Child - Nerf: The child now grows up (see [child](#child)) and becomes a normal crewmate at some point. A growing child is not killable anymore. Some tasks are still not doable for the small child, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
 - Seer - Nerf: Added an option that sets how often the Seer mistakes the player for another.
-- Spy - Nerf: The Spy now only sees the additional information when he activates his "Spy mode". That should stops the spy from camping the admin table/vitals.
+- Hacker - Nerf: The Hacker now only sees the additional information when he activates his "Hacker mode". That should stops the hacker from camping the admin table/vitals.
 - Other: Camouflager/Morphling cooldowns were fixed. Custom regions code was removed to enable 3rd party tools. Some minor bugfixes.
 
 **Changes in v1.4:**
@@ -174,9 +185,9 @@ The count you set will only be reached, if there are enough Crewmates/Impostors 
 - After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
 
 **Example:**\
-Settings: 2 special crewmate roles, Snitch: 100%, Spy: 10%, Tracker: 30%\
-Result: Snitch is assigned, then one role out of the pool [Spy, Tracker, Tracker, Tracker] is being selected\
-Note: Changing the settings to Spy: 20%, Tracker: 60% would statistically result in the same outcome .
+Settings: 2 special crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
+Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
+Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
 
 ## Mafia
@@ -186,7 +197,7 @@ The Godfather works like a normal Impostor.\
 The Mafioso is an impostor who cannot kill nor sabotage until the Godfather is dead.\
 The Janitor is an impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
 \
-**NOTE**
+**NOTE:**
 - There have to be 3 impostors activated for the mafia to spawn.
 
 ### Game Options
@@ -200,10 +211,13 @@ The Janitor is an impostor who cannot kill nor sabotage, but they can hide dead 
 ### **Team: Impostors**
 The Morphling is an impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
 \
-**NOTE**
+**NOTE:**
 - They shrink to the size of the child when they copies its look.
-- The color of the footprints does **not** change.
+- The Spy sees their new color on the admin table.
+- The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other impostor still sees that they are an impostor (the name remains red).
+- The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
+- Tracker and Snitch arrows keep working.
 
 ### Game Options
 | Name | Description |
@@ -216,11 +230,14 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 ### **Team: Impostors**
 The Camouflager is an impostor which can additionally activate a camouflage mode.
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
-are hidden and all players have the same color.
+are hidden and all players have the same color.\
 \
 **NOTE**
-- The Child and Morphling when copying the child remain small.
-- The color of the footprints does **not** change.
+- The Child (and Morphling when copying the child) remains small and show its age.
+- The color of the footprints turns gray (also the ones that were already on the ground).
+- The Spy sees gray icons on the admin table
+- The shield is not visible anymore
+- Tracker and Snitch arrows keep working
 
 ### Game Options
 | Name | Description |
@@ -233,9 +250,9 @@ are hidden and all players have the same color.
 ### **Team: Impostors**
 The Vampire is an impostor, that can bite other player. Bitten players die after a configurable amount of time.\
 If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
-If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.
+If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
 \
-**NOTE**
+**NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
 
@@ -248,6 +265,27 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 | Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
+## Eraser
+### **Team: Impostors**
+The Eraser is an Impostor that can erase the role of every player that is not an Impostor.\
+The targeted players will lose their role after the meeting right before a player is exiled.\
+After every erase, the cooldown increases by 10 seconds.\
+The erase will be performed, even if the Eraser or his target die before the next meeting.\
+\
+**NOTE:**
+- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
+- Erasing a Lover automatically erases the other Lover as well (if the second Lover is an ImpLover, he will turn into an Impostor)
+- Erasing a Jackal that has a Sidekick, triggers the Sidekick promotion if it's activated in the settings
+- As the erasing is being triggered before the eject of a player, erasing and voting out a Lover in the same round, would result in the
+ex lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Eraser Spawn Chance | -
+| Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
+-----------------------
+
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
 There are always two lovers which are linked together.\
@@ -257,11 +295,11 @@ You can specify the chance of one Lover being an impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
-If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).
+If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).\
 \
-**NOTE**
+**NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
-- The Lovers can change if the Shifter exchanges role with one of the Lovers
+- The Lovers can change if the Shifter takes the role of a Lovers
 
 ### Game Options
 | Name | Description |
@@ -278,8 +316,8 @@ The Sheriff has the ability to kill impostors.
 If they try to kill a crewmate, they die instead.
 
 **NOTE**
-- For now the Shifter won't die to the Sheriff (an option will be added in the next version).
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
+- If the Sheriff shoots a Child Impostor, the Sheriff dies if the Child is still growing up. If it's 18, the Child Impostor dies.
 
 ### Game Options
 | Name | Description |
@@ -301,12 +339,16 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 
 ## Seer
 ### **Team: Crewmates**
+The Seer has two abilities (one can activate one of them or both in the options).
+The Seer sees the souls of players that died a round earlier, the souls slowy fade away.
 The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Seer Spawn Chance | - 
+| Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
 -----------------------
 
 ## Engineer
@@ -317,7 +359,7 @@ around all vents on the map (in order to warn them).
 Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
 you can double click on the tasks instead.
 \
-**NOTE**
+**NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
 
 ### Game Options
@@ -334,7 +376,7 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 **NOTE**
 - **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
 - **Darker Colors:** Red, blue, green, grey, purple, brown
-- Even when the Morphling changes their appearance or the Camouflager camouflages everyone, the Detective still sees the right (original) colors.
+- When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The detective does not see footprints of players that sit in vents
 
 ### Game Options
@@ -363,15 +405,21 @@ The Lighter can turn on his lighter every now and then, which increases his visi
 -----------------------
 
 ## Child
-### **Team: Crewmates**
-The Child won't be harmed by anyone until it turns 18 years old, then it becomes a regular crewmate.\
+### **Team: Crewmates or Impostors**
+The Child can be a Crewmate (67% chance) or an Impostor (33% chance).\
 The Child's character is smaller and hence visible to everyone in the game.\
-The child works with the crewmates and aims to play out the strength of its "invincibility" in the early game.\
-If the child is voted out before it turns 18, everyone in the lobby loses.
-\
-**NOTE**
-- Impostors can't kill the child (the button does not work) until it turns 18
-- The Sheriff always suicides if he tries to kill the child
+The Child cannot be killed until it turns 18 years old, however it can be voted out.\
+**Impostor Child:**
+  - While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
+  - If it gets thrown out of the ship, everything is fine.
+
+**Crewmate Child:**
+  - The Crewmate Child aims to play out the strength its invincibility in the early game.
+  - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Child.
+
+**NOTE:**
+- Impostors can't kill the Child (the button does not work) until it turns 18
+- The Sheriff can kill the Impostor Child, but only if it's fully grown up
 
 ### Game Options
 | Name | Description |
@@ -413,49 +461,65 @@ The Mayor can always use his meeting, even if the maximum number of meetings was
 | Mayor Spawn Chance | -
 -----------------------
 
-## Spy
+## Hacker
 ### **Team: Crewmates**
-If the Spy activates the "Spy mode", the Spy gets more information than others from the admin table and vitals for a set duration.\
+If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
 Otherwise he sees the same information as everyone else.
-**Admin table:** The spy can see the colors of the players on the table.\
-**Vitals**: The spy can see how long dead players have been dead for.\
+**Admin table:** The hacker can see the colors (or color types) of the players on the table.\
+**Vitals**: The hacker can see how long dead players have been dead for.\
 \
 **NOTE:**
-- Even if the Morphling morphes or the Camouflager camouflages, the Spy sees the right colors on the admin table.
+- If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
+- **Darker Colors:** Red, blue, green, grey, purple, brown
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Spy Spawn Chance | -
-| Spy Cooldown| -
-| Spy Duration | Sets how long the "Spy mode" remains active
+| Hacker Spawn Chance | -
+| Hacker Cooldown| -
+| Hacker Duration | Sets how long the "Hacker mode" remains active
+| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for lighter and darker colors) 
 -----------------------
 
 
 ## Shifter
-### **Team: Neutral**
-The Shifter belongs to no team and has no tasks.\
-The Shifter always loses the game, however they can exchange roles with other players.\
-Swapping roles with a crewmate or a custom crewmate role (or the Jester) gives them their role and their tasks, the other player becomes the new Shifter.\
-Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide.\
+### **Team: Crewmates**
+The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.\
+The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
+Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
+Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes the new Shifter.\
+Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
+The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
+This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
 \
 **NOTE:**
+- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
 - If the Shifter takes over a role, their new cooldowns will start at the maximum cooldown of the ability
 - One time use abilities (e.g. shielding a player or engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
-can only use them, if the player they exchanged roles with have not used them before)
+can only use them, if the previous player did not used them before)
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
-| Shifter Cooldown | -
 -----------------------
 
 ## Time Master
 ### **Team: Crewmates**
-The Time Master can rewind the time. The Time Master won't be affected by the rewind.\
-If set in the options, players will be revived during the time rewind.\
-Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+The Time Master has a time shield which he can activate. The time shield remains active for 3 seconds.\
+If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
+time will rewind for a set amount of time.\
+The kill cooldown of the killer won't be reset, so the Time Master
+has to make sure that the game won't result in the same situation.\
+The Time Master won't be affected by the rewind.\
+\
+**NOTE:**
+- Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+- A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
+- If the Time Master was bitten and has his shield active before when a meeting is called, he survives but the time won't be rewinded.
+- If the Time Master has a Medic shield, he won't rewind.
 
 ### Game Options
 | Name | Description |
@@ -463,7 +527,6 @@ Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
 | Time Master Spawn Chance | - |
 | Time Master Cooldown | - |
 | Rewind Duration | How much time to rewind |
-| Revive During Rewind | Whether to revive dead players when rewinding |
 -----------------------
 
 ## Swapper

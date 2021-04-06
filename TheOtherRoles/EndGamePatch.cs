@@ -14,7 +14,8 @@ using System.Text;
 namespace TheOtherRoles {
     enum CustomGameOverReason {
         LoversWin = 10,
-        TeamJackalWin = 11
+        TeamJackalWin = 11,
+        ChildLose = 12
     }
 
     enum WinCondition {
@@ -24,7 +25,8 @@ namespace TheOtherRoles {
         JesterWin,
         BountyHunterWin,
         JesterAndBountyHunterWin,
-        JackalWin
+        JackalWin,
+        ChildLose
     }
 
     static class AdditionalTempData {
@@ -43,22 +45,14 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
         private static GameOverReason gameOverReason;
-        public static void Prefix(AmongUsClient __instance, ref GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
-            gameOverReason = OFLKLGMHBEL;
-            if ((int)OFLKLGMHBEL >= 10) OFLKLGMHBEL = GameOverReason.ImpostorByKill;
+        public static void Prefix(AmongUsClient __instance, ref GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
+            gameOverReason = FCBGPMEMOJB;
+            if ((int)FCBGPMEMOJB >= 10) FCBGPMEMOJB = GameOverReason.ImpostorByKill;
         }
 
-        public static void Postfix(AmongUsClient __instance, GameOverReason OFLKLGMHBEL, bool JFFPAKGPNJA) {
+        public static void Postfix(AmongUsClient __instance, GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
             AdditionalTempData.clear();
 
-            // Remove shifter from winners
-            if (Shifter.shifter != null) {
-                WinningPlayerData shifterWinner = null;
-                foreach (WinningPlayerData winner in  TempData.winners)
-                    if (winner.Name == Shifter.shifter.Data.PlayerName) shifterWinner = winner;
-                
-                if (shifterWinner != null) TempData.winners.Remove(shifterWinner);
-            }
             // Remove Jester from winners (on Jester win he will be added again, see below)
             if (Jester.jester != null) {
                 WinningPlayerData jesterWinner = null;
@@ -85,10 +79,21 @@ namespace TheOtherRoles {
                 }
             }
 
-            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
+            bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool jesterWin = Jester.jester != null && Jester.jester.Data.IsImpostor;
             bool bountyHunterWin = BountyHunter.bountyHunter != null && BountyHunter.bountyHunter.Data.IsImpostor;
-            if (jesterWin || bountyHunterWin) {
+
+            // Child lose condition (should be implemented using a proper GameOverReason in the future)
+            if (childLose) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Child.child.Data);
+                wpd.IsYou = false; // If "no one is the Child", it will display the Child, but also show defeat to everyone
+                TempData.winners.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.ChildLose;  
+            }
+
+            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
+            else if (jesterWin || bountyHunterWin) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 if (jesterWin) {
                     WinningPlayerData wpd = new WinningPlayerData(Jester.jester.Data);
@@ -118,7 +123,7 @@ namespace TheOtherRoles {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Shifter.shifter && p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
+                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                     }
                 }
@@ -195,6 +200,10 @@ namespace TheOtherRoles {
                 textRenderer.Text = "Team Jackal Wins";
                 textRenderer.Color = Jackal.color;
             }
+            else if (AdditionalTempData.winCondition == WinCondition.ChildLose) {
+                textRenderer.Text = "Child died";
+                textRenderer.Color = Child.color;
+            }
             
             AdditionalTempData.clear();
         }
@@ -206,6 +215,7 @@ namespace TheOtherRoles {
         public static bool Prefix(ShipStatus __instance) {
             if (!GameData.Instance) return false;
             var statistics = new PlayerStatistics(__instance);
+            if (CheckAndEndGameForChildLose(__instance)) return false;
             if(CheckAndEndGameForSabotageWin(__instance)) return false;
             if(CheckAndEndGameForTaskWin(__instance)) return false;
             if(CheckAndEndGameForLoverWin(__instance, statistics)) return false;
@@ -215,11 +225,27 @@ namespace TheOtherRoles {
             return false;
         }
 
+        private static bool CheckAndEndGameForChildLose(ShipStatus __instance) {
+            if (Child.triggerChildLose) {
+                if (!DestroyableSingleton<TutorialManager>.InstanceExists)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ChildLose, false);
+                }
+                DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
+
+
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
+            if (__instance.Systems == null) return false;
             ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
             if (systemType != null) {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
-                if (lifeSuppSystemType.Countdown < 0f) {
+                if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f) {
                     EndGameForSabotage(__instance);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
@@ -230,10 +256,10 @@ namespace TheOtherRoles {
                 systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
             }
             if (systemType2 != null) {
-                ReactorSystemType reactorSystemType = systemType2.TryCast<ReactorSystemType>();
-                if (reactorSystemType.Countdown < 0f) {
+                ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
+                if (criticalSystem != null && criticalSystem.Countdown < 0f) {
                     EndGameForSabotage(__instance);
-                    reactorSystemType.Countdown = 10000f;
+                    criticalSystem.ClearSabotage();
                     return true;
                 }
             }
@@ -268,7 +294,7 @@ namespace TheOtherRoles {
                 if (!DestroyableSingleton<TutorialManager>.InstanceExists)
                 {
                     __instance.enabled = false;
-                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false); // should be implemented using a proper GameOverReason in the future
+                    ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false);
                     return true;
                 }
                 DestroyableSingleton<HudManager>.Instance.ShowPopUp(DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));

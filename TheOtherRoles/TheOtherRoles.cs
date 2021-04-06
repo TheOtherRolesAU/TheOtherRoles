@@ -39,7 +39,7 @@ namespace TheOtherRoles
             Seer.clearAndReload();
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
-            Spy.clearAndReload();
+            Hacker.clearAndReload();
             Child.clearAndReload();
             BountyHunter.clearAndReload();
             Tracker.clearAndReload();
@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Snitch.clearAndReload();
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
+            Eraser.clearAndReload();
         }
 
         public static class Jester {
@@ -199,8 +200,10 @@ namespace TheOtherRoles
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
+        public static float shieldDuration = 3f; // Constant
         public static float cooldown = float.MaxValue;
 
+        public static bool shieldActive = false;
         public static bool isRewinding = false;
 
         private static Sprite buttonSprite;
@@ -210,10 +213,16 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static IEnumerator shieldForShieldDuration() {
+            shieldActive = true;
+            yield return new WaitForSeconds(shieldDuration);
+            shieldActive = false;
+        }
+
         public static void clearAndReload() {
             timeMaster = null;
             isRewinding = false;
-            reviveDuringRewind = TheOtherRolesPlugin.timeMasterReviveDuringRewind.GetValue();
+            shieldActive = false;
             rewindTime = TheOtherRolesPlugin.timeMasterRewindTime.GetValue();
             cooldown = TheOtherRolesPlugin.timeMasterCooldown.GetValue();
         }
@@ -253,9 +262,8 @@ namespace TheOtherRoles
     public static class Shifter {
         public static PlayerControl shifter;
         public static Color color = new Color(90f / 255f, 90f / 255f, 90f / 255f, 1);
-    
-        public static float cooldown = float.MaxValue;
 
+        public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
 
         private static Sprite buttonSprite;
@@ -268,7 +276,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             shifter = null;
             currentTarget = null;
-            cooldown = TheOtherRolesPlugin.shifterCooldown.GetValue();
+            futureShift = null;
         }
     }
 
@@ -321,9 +329,23 @@ namespace TheOtherRoles
     public static class Seer {
         public static PlayerControl seer;
         public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
+
+        public static float soulDuration = 15f;
+        public static int mode = 0;
+
+        private static Sprite soulSprite;
+        public static Sprite getSoulSprite() {
+            if (soulSprite) return soulSprite;
+            soulSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
+            return soulSprite;
+        }
 
         public static void clearAndReload() {
             seer = null;
+            deadBodyPositions = new List<Vector3>();
+            soulDuration = TheOtherRolesPlugin.seerSoulDuration.GetValue();
+            mode = TheOtherRolesPlugin.medicShowShielded.GetValue();
         }
     }
 
@@ -350,6 +372,7 @@ namespace TheOtherRoles
             morphling.SetPet(morphling.Data.PetId);
             morphling.CurrentPet.Visible = morphling.Visible;
             morphling.SetColor(morphling.Data.ColorId);
+            morphling.myRend.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
@@ -412,15 +435,16 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Spy {
-        public static PlayerControl spy;
+    public static class Hacker {
+        public static PlayerControl hacker;
         private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
         public static float cooldown = float.MaxValue;
         public static float duration = 10f;
+        public static bool onlyColorType = false;
 
-        public static float spyTimer = 0f;
+        public static float hackerTimer = 0f;
 
         public static Sprite getAdminTableIconSprite() {
             if (adminTableIcon) return adminTableIcon;
@@ -431,15 +455,16 @@ namespace TheOtherRoles
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpyButton.png", 115f);
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HackerButton.png", 115f);
             return buttonSprite;
         }
 
         public static void clearAndReload() {
-            spy = null;
-            spyTimer = 0f;
-            cooldown = TheOtherRolesPlugin.spyCooldown.GetValue();
-            duration = TheOtherRolesPlugin.spySpyingDuration.GetValue();
+            hacker = null;
+            hackerTimer = 0f;
+            cooldown = TheOtherRolesPlugin.hackerCooldown.GetValue();
+            duration = TheOtherRolesPlugin.hackerHackeringDuration.GetValue();
+            onlyColorType = TheOtherRolesPlugin.hackerOnlyColorType.GetValue();
         }
     }
 
@@ -449,9 +474,11 @@ namespace TheOtherRoles
         
         public static float growingUpDuration = float.MaxValue;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
+        public static bool triggerChildLose = false;
 
         public static void clearAndReload() {
             child = null;
+            triggerChildLose = false;
             growingUpDuration = TheOtherRolesPlugin.childGrowingUpDuration.GetValue();
             timeOfGrowthStart = DateTime.UtcNow;
         }
@@ -525,7 +552,7 @@ namespace TheOtherRoles
         public static bool garlicsActive = true;
 
         public static PlayerControl currentTarget;
-        public static PlayerControl bitten;
+        public static PlayerControl bitten; 
         public static bool targetNearGarlic = false;
 
         private static Sprite buttonSprite;
@@ -544,9 +571,17 @@ namespace TheOtherRoles
 
         public static IEnumerator killWithDelay() {
             yield return new WaitForSeconds(delay);
-            MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-            RPCProcedure.vampireTryKill();
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                RPCProcedure.vampireTryKill();
+            } else {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+                writer.Write(byte.MaxValue);
+                writer.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
+            }
         }
 
         public static void clearAndReload() {
@@ -646,7 +681,28 @@ namespace TheOtherRoles
             canKill = TheOtherRolesPlugin.sidekickCanKill.GetValue();
             promotesToJackal = TheOtherRolesPlugin.sidekickPromotesToJackal.GetValue();
         }
-        
     }
 
+    public static class Eraser {
+        public static PlayerControl eraser;
+        public static Color color = Palette.ImpostorRed;
+
+        public static List<PlayerControl> futureErased = new List<PlayerControl>();
+        public static PlayerControl currentTarget;
+        public static float cooldown = float.MaxValue;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.EraserButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            eraser = null;
+            futureErased = new List<PlayerControl>();
+            currentTarget = null;
+            cooldown = TheOtherRolesPlugin.eraserCooldown.GetValue();
+        }
+    }
 }
