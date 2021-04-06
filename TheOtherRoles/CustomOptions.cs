@@ -229,8 +229,8 @@ namespace TheOtherRoles {
                 if (option.optionBehaviour == null) {
                     StringOption stringOption = UnityEngine.Object.Instantiate(template, template.transform.parent);
                     allOptions.Add(stringOption);
-
                     stringOption.transform.localPosition = new Vector3(template.transform.localPosition.x, -7.85f - (i + 1) * 0.5F, template.transform.localPosition.z);
+
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
                     stringOption.TitleText.Text = option.name;
                     stringOption.Value = stringOption.IOFLMCGMJBA = option.selection;
@@ -241,6 +241,21 @@ namespace TheOtherRoles {
                 option.optionBehaviour.gameObject.SetActive(true);
             }
             __instance.IGFJIPMAJHF = allOptions.ToArray();
+        }
+    }
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
+    public class StringOptionEnablePatch {
+        public static bool Prefix(StringOption __instance) {
+            CustomOption option = CustomOption.options.FirstOrDefault(option => option.optionBehaviour == __instance);
+            if (option == null) return true;
+
+            __instance.OnValueChanged = new Action<OptionBehaviour>((o) => {});
+            __instance.TitleText.Text = option.name;
+            __instance.Value = __instance.IOFLMCGMJBA = option.selection;
+            __instance.ValueText.Text = option.selections[option.selection].ToString();
+            
+            return false;
         }
     }
 
