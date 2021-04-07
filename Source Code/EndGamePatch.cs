@@ -24,7 +24,8 @@ namespace TheOtherRoles {
     enum CustomGameOverReason {
         LoversWin = 10,
         TeamJackalWin = 11,
-        ChildLose = 12
+        ChildLose = 12,
+        JesterWin = 13
     }
 
     enum WinCondition {
@@ -32,8 +33,6 @@ namespace TheOtherRoles {
         LoversTeamWin,
         LoversSoloWin,
         JesterWin,
-        BountyHunterWin,
-        JesterAndBountyHunterWin,
         JackalWin,
         ChildLose
     }
@@ -89,10 +88,9 @@ namespace TheOtherRoles {
             }
 
             bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
-            bool jesterWin = Jester.jester != null && Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH;
-            bool bountyHunterWin = BountyHunter.bountyHunter != null && BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH;
+            bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
 
-            // Child lose condition (should be implemented using a proper GameOverReason in the future)
+            // Child lose
             if (childLose) {
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 WinningPlayerData wpd = new WinningPlayerData(Child.child.IDOFAMCIJKE);
@@ -101,27 +99,15 @@ namespace TheOtherRoles {
                 AdditionalTempData.winCondition = WinCondition.ChildLose;  
             }
 
-            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
-            else if (jesterWin || bountyHunterWin) {
+            // Jester win
+            else if (jesterWin) {
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                if (jesterWin) {
-                    WinningPlayerData wpd = new WinningPlayerData(Jester.jester.IDOFAMCIJKE);
-                    wpd.CIDDOFDJHJH = false; 
-                    TempData.BDGOKPKHCNB.Add(wpd);
-                    AdditionalTempData.winCondition = WinCondition.JesterWin;
-                }
-                if (bountyHunterWin) {
-                    WinningPlayerData wpd = new WinningPlayerData(BountyHunter.bountyHunter.IDOFAMCIJKE);
-                    wpd.CIDDOFDJHJH = false; 
-                    TempData.BDGOKPKHCNB.Add(wpd);
-                    if (AdditionalTempData.winCondition == WinCondition.JesterWin)
-                        AdditionalTempData.winCondition = WinCondition.JesterAndBountyHunterWin;
-                    else
-                        AdditionalTempData.winCondition = WinCondition.BountyHunterWin;  
-                }
+                WinningPlayerData wpd = new WinningPlayerData(Jester.jester.IDOFAMCIJKE);
+                TempData.BDGOKPKHCNB.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.JesterWin;
             }
 
-            // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
+            // Lovers win conditions
             else if (Lovers.existingAndAlive() && gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
@@ -184,14 +170,6 @@ namespace TheOtherRoles {
                 textRenderer.Text = "Jester Wins";
                 textRenderer.Color = Jester.color;
             }
-            else if (AdditionalTempData.winCondition == WinCondition.BountyHunterWin) {
-                textRenderer.Text = "Bounty Hunter Wins";
-                textRenderer.Color = BountyHunter.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.JesterAndBountyHunterWin) {
-                textRenderer.Text = "[AD653BFF]Bounty Hunter[FFFFFFFF] and [FF54A7FF]Jester[FFFFFFFF] Win";
-                textRenderer.Color = Color.white;
-            }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 if (AdditionalTempData.localIsLover) {
                     __instance.WinText.Text = "Double Victory";
@@ -225,12 +203,13 @@ namespace TheOtherRoles {
             if (!GameData.Instance) return false;
             var statistics = new PlayerStatistics(__instance);
             if (CheckAndEndGameForChildLose(__instance)) return false;
-            if(CheckAndEndGameForSabotageWin(__instance)) return false;
-            if(CheckAndEndGameForTaskWin(__instance)) return false;
-            if(CheckAndEndGameForLoverWin(__instance, statistics)) return false;
-            if(CheckAndEndGameForJackalWin(__instance, statistics)) return false;
-            if(CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
-            if(CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
+            if (CheckAndEndGameForJesterWin(__instance)) return false;
+            if (CheckAndEndGameForSabotageWin(__instance)) return false;
+            if (CheckAndEndGameForTaskWin(__instance)) return false;
+            if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
+            if (CheckAndEndGameForJackalWin(__instance, statistics)) return false;
+            if (CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
+            if (CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
             return false;
         }
 
@@ -248,6 +227,19 @@ namespace TheOtherRoles {
             return false;
         }
 
+        private static bool CheckAndEndGameForJesterWin(ShipStatus __instance) {
+            if (Jester.triggerJesterWin) {
+                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+                {
+                    __instance.enabled = false;
+                    ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.JesterWin, false);
+                }
+                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                ReviveEveryone();
+                return true;
+            }
+            return false;
+        }
 
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
             if (__instance.Systems == null) return false;
