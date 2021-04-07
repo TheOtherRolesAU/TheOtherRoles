@@ -58,8 +58,7 @@ namespace TheOtherRoles
 
         // Role functionality
 
-        JesterWin = 80,
-        EngineerFixLights,
+        EngineerFixLights = 81,
         EngineerUsedRepair,
         JanitorClean,
         SheriffKill,
@@ -80,7 +79,6 @@ namespace TheOtherRoles
         SidekickKill,
         JackalCreatesSidekick,
         SidekickPromotes,
-        ChildLose,
         ErasePlayerRole,
         SetFutureErased,
         SetFutureShifted
@@ -202,10 +200,6 @@ namespace TheOtherRoles
         }
 
         // Role functionality
-
-        public static void jesterWin(byte exiledId) {
-
-        }
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
@@ -481,10 +475,6 @@ namespace TheOtherRoles
             Sidekick.clearAndReload();
             return;
         }
-
-        public static void childLose() {
-            Child.triggerChildLose = true;
-        }
         
         public static void erasePlayerRole(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
@@ -638,9 +628,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
-                    break;
-                case (byte)CustomRPC.ChildLose:
-                    RPCProcedure.childLose();
                     break;
                 case (byte)CustomRPC.ErasePlayerRole:
                     RPCProcedure.erasePlayerRole(DOOILGKLBBF.ReadByte());

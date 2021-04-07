@@ -201,15 +201,16 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void childSizeUpdate() {
+        public static void playerSizeUpdate(PlayerControl p) {
             if (Child.child == null) return;
 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
-
-            Child.child.transform.localScale = new Vector3(scale, scale, 1f);
-            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
-                Morphling.morphling.transform.localScale = new Vector3(scale, scale, 1f);
+            
+            if (p == Child.child)
+                Child.child.transform.localScale = new Vector3(scale, scale, 1f);
+            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+                p.transform.localScale = new Vector3(scale, scale, 1f);
         }
 
         public static void Prefix(PlayerControl __instance) {
@@ -224,6 +225,8 @@ namespace TheOtherRoles {
 
             // Update Role Description
             Helpers.refreshRoleDescription(__instance);
+            // Child and Morphling shrink
+            playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
                 // Time Master
@@ -253,8 +256,6 @@ namespace TheOtherRoles {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
-                // Child and Morphling shrink
-                childSizeUpdate();
             } 
         }
     }
@@ -419,6 +420,17 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
     {
+        public static void Prefix(PlayerControl __instance) {
+            // Child exile lose condition
+            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+                Child.triggerChildLose = true;
+            }
+            // Jester win condition
+            else if (Jester.jester != null && Jester.jester == __instance) {
+                Jester.triggerJesterWin = true;
+            } 
+        }
+
         public static void Postfix(PlayerControl __instance)
         {
             // Collect dead player info

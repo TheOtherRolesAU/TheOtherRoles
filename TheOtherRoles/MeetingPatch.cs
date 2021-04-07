@@ -361,24 +361,6 @@ namespace TheOtherRoles
                     Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
                 }
 
-                if (ExileController.Instance.KLHCDCKJHKC != null) {
-                    byte exiledId = ExileController.Instance.KLHCDCKJHKC.GMBAIPNOKLP;
-
-                    // Child lose condition
-                    if (Child.child != null && Child.child.PlayerId == exiledId && !Child.isGrownUp() && !Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildLose, Hazel.SendOption.Reliable, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.childLose();
-                    }
-                    // Jester win condition
-                    else if (Jester.jester != null && Jester.jester.PlayerId == exiledId) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterWin, Hazel.SendOption.Reliable, -1);
-                        writer.Write(exiledId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.jesterWin(exiledId);
-                    }
-                }
-
                 // Seer spawn souls
                 if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
                     foreach (Vector3 pos in Seer.deadBodyPositions) {

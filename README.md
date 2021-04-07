@@ -65,6 +65,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
 - Introduced a one second cooldown after the Morphling sampled another player
 - The Child can now always reach all usables (ladders, tasks, ...)
+- We removed a bug, where some footprints remained on the ground forever
+- We changed the Jester win and Child lose conditions, they're not being affected by server delays anymore
 
 **Changes in 2.0.0**
 - **New button art** created by **Bavari**

@@ -52,8 +52,11 @@ namespace TheOtherRoles
             public static PlayerControl jester;
             public static Color color = new Color(255f / 255f, 84f / 255f, 167f / 255f, 1);
 
+            public static bool triggerJesterWin = false;
+
             public static void clearAndReload() {
                 jester = null;
+                triggerJesterWin = false;
             }
         }
 
