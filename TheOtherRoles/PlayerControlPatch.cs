@@ -201,6 +201,24 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void childSizeUpdate() {
+            if (Child.child == null) return;
+
+            float growingProgress = Child.growingProgress();
+            float scale = growingProgress * 0.35f + 0.35f;
+
+            Child.child.transform.localScale = new Vector3(scale, scale, 1f);
+            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+                Morphling.morphling.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+        public static void Prefix(PlayerControl __instance) {
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
+
+            // Reset player sizes
+            __instance.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
 
@@ -235,6 +253,8 @@ namespace TheOtherRoles {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
+                // Child and Morphling shrink
+                childSizeUpdate();
             } 
         }
     }

@@ -270,32 +270,23 @@ namespace TheOtherRoles
         }
 
         public static void childUpdate() {
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                if (p == null) continue;
-                p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                if (Child.child == null) continue;
+            if (Child.child == null) return;
                 
-                float growingProgress = Child.growingProgress();
-                float scale = growingProgress * 0.35f + 0.35f;
-                string suffix = "";
-                if (growingProgress != 1f)
-                    suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
+            float growingProgress = Child.growingProgress();
+            float scale = growingProgress * 0.35f + 0.35f;
+            string suffix = "";
+            if (growingProgress != 1f)
+                suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
 
-                if (Child.child == p) {
-                    p.transform.localScale = new Vector3(scale, scale, 1f);
-                    p.nameText.Text += suffix;
-                    if (MeetingHud.Instance != null)
-                        foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
-                            if (player.NameText != null && p.PlayerId == player.HMPHKKGPLAG)
-                                player.NameText.Text += suffix;
-                }
-                else if (Morphling.morphling != null && Morphling.morphling == p && Morphling.morphTarget != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f) {
-                    p.transform.localScale = new Vector3(scale, scale, 1f);
-                    p.nameText.Text += suffix;
-                }
-                else
-                    p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            Child.child.nameText.Text += suffix;
+            if (MeetingHud.Instance != null) {
+                foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
+                    if (player.NameText != null && Child.child.PlayerId == player.HMPHKKGPLAG)
+                        player.NameText.Text += suffix;
             }
+
+            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+                Morphling.morphling.nameText.Text += suffix;
         }
 
         public static void bountyHunterUpdate() {

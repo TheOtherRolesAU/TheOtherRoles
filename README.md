@@ -64,6 +64,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Hotfix 2.0.0**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
 - Introduced a one second cooldown after the Morphling sampled another player
+- The Child can now always reach all usables (ladders, tasks, ...)
 
 **Changes in 2.0.0**
 - **New button art** created by **Bavari**
