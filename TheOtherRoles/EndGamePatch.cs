@@ -32,8 +32,6 @@ namespace TheOtherRoles {
         LoversTeamWin,
         LoversSoloWin,
         JesterWin,
-        BountyHunterWin,
-        JesterAndBountyHunterWin,
         JackalWin,
         ChildLose
     }
@@ -90,7 +88,6 @@ namespace TheOtherRoles {
 
             bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool jesterWin = Jester.jester != null && Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH;
-            bool bountyHunterWin = BountyHunter.bountyHunter != null && BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH;
 
             // Child lose condition (should be implemented using a proper GameOverReason in the future)
             if (childLose) {
@@ -101,24 +98,13 @@ namespace TheOtherRoles {
                 AdditionalTempData.winCondition = WinCondition.ChildLose;  
             }
 
-            // Jester and Bounty Hunter win condition (should be implemented using a proper GameOverReason in the future)
-            else if (jesterWin || bountyHunterWin) {
+            // Jester win condition (should be implemented using a proper GameOverReason in the future)
+            else if (jesterWin) {
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                if (jesterWin) {
-                    WinningPlayerData wpd = new WinningPlayerData(Jester.jester.IDOFAMCIJKE);
-                    wpd.CIDDOFDJHJH = false; 
-                    TempData.BDGOKPKHCNB.Add(wpd);
-                    AdditionalTempData.winCondition = WinCondition.JesterWin;
-                }
-                if (bountyHunterWin) {
-                    WinningPlayerData wpd = new WinningPlayerData(BountyHunter.bountyHunter.IDOFAMCIJKE);
-                    wpd.CIDDOFDJHJH = false; 
-                    TempData.BDGOKPKHCNB.Add(wpd);
-                    if (AdditionalTempData.winCondition == WinCondition.JesterWin)
-                        AdditionalTempData.winCondition = WinCondition.JesterAndBountyHunterWin;
-                    else
-                        AdditionalTempData.winCondition = WinCondition.BountyHunterWin;  
-                }
+                WinningPlayerData wpd = new WinningPlayerData(Jester.jester.IDOFAMCIJKE);
+                wpd.CIDDOFDJHJH = false; 
+                TempData.BDGOKPKHCNB.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.JesterWin;
             }
 
             // Lovers win conditions (should be implemented using a proper GameOverReason in the future)
@@ -183,14 +169,6 @@ namespace TheOtherRoles {
             if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
                 textRenderer.Text = "Jester Wins";
                 textRenderer.Color = Jester.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.BountyHunterWin) {
-                textRenderer.Text = "Bounty Hunter Wins";
-                textRenderer.Color = BountyHunter.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.JesterAndBountyHunterWin) {
-                textRenderer.Text = "[AD653BFF]Bounty Hunter[FFFFFFFF] and [FF54A7FF]Jester[FFFFFFFF] Win";
-                textRenderer.Color = Color.white;
             }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 if (AdditionalTempData.localIsLover) {

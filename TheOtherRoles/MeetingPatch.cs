@@ -370,12 +370,12 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.childLose();
                     }
-                    // Jester and Bounty Hunter win condition
-                    else if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
+                    // Jester win condition
+                    else if (Jester.jester != null && Jester.jester.PlayerId == exiledId) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterWin, Hazel.SendOption.Reliable, -1);
                         writer.Write(exiledId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.jesterBountyHunterWin(exiledId);
+                        RPCProcedure.jesterWin(exiledId);
                     }
                 }
 
@@ -443,8 +443,6 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Child.";
-                    else if(BountyHunter.bountyHunter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == BountyHunter.bountyHunter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Bounty Hunter.";
                     else if(Tracker.tracker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Tracker.tracker.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Tracker.";
                     else if(Snitch.snitch != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Snitch.snitch.PlayerId)

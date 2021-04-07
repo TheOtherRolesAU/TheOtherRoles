@@ -90,10 +90,6 @@ namespace TheOtherRoles
                 setPlayerNameColor(Seer.seer, Seer.color);  
             else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
-                setPlayerNameColor(BountyHunter.target, BountyHunter.color);
-            }
             else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
             else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
@@ -289,19 +285,6 @@ namespace TheOtherRoles
                 Morphling.morphling.nameText.Text += suffix;
         }
 
-        public static void bountyHunterUpdate() {
-            if (BountyHunter.bountyHunter == null || BountyHunter.target == null) return;
-
-            if (BountyHunter.notifyBounty && PlayerControl.LocalPlayer == BountyHunter.target) {
-                string suffix = "[AD653BFF] (Bounty)[FFFFFFFF]";
-                PlayerControl.LocalPlayer.nameText.Text += suffix;
-                if (MeetingHud.Instance != null)
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
-                        if (player.NameText != null && PlayerControl.LocalPlayer.PlayerId == player.HMPHKKGPLAG)
-                            player.NameText.Text += suffix;
-            }
-        }
-
         static void vampireDeactivateKillButton(HudManager __instance) {
             if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer) {
                 __instance.KillButton.gameObject.SetActive(false);
@@ -371,8 +354,6 @@ namespace TheOtherRoles
             camouflageAndMorphActions();
             // Child
             childUpdate();
-            // Bounty Hunter
-            bountyHunterUpdate();
             // Vampire
             vampireDeactivateKillButton(__instance);
             // Snitch

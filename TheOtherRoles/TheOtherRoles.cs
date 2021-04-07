@@ -40,7 +40,6 @@ namespace TheOtherRoles
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
             Child.clearAndReload();
-            BountyHunter.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
@@ -484,20 +483,6 @@ namespace TheOtherRoles
 
         public static bool isGrownUp() {
             return growingProgress() == 1f;
-        }
-    }
-
-    public static class BountyHunter {
-        public static PlayerControl bountyHunter;
-        public static Color color = new Color(237f / 255f, 101f / 255f, 59f / 255f, 1);
-
-        public static bool notifyBounty = true;
-        public static PlayerControl target;
-    
-        public static void clearAndReload() {
-            bountyHunter = null;
-            target = null;
-            // notifyBounty = CustomOptionHolder.bountyHunterNotifyBounty.getBool();
         }
     }
 
