@@ -243,11 +243,11 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.morphlingMorph(Morphling.sampledTarget.PlayerId);
                         Morphling.sampledTarget = null;
-                        morphlingButton.HasEffect = true; // Trigger effect on this click
+                        morphlingButton.EffectDuration = 10f;
                     } else if (Morphling.currentTarget != null) {
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
-                        morphlingButton.HasEffect = false; // Block effect on this click
+                        morphlingButton.EffectDuration = 1f;
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ; },
@@ -265,8 +265,10 @@ namespace TheOtherRoles
                 true,
                 10f,
                 () => {
-                    morphlingButton.Timer = morphlingButton.MaxTimer;
-                    morphlingButton.Sprite = Morphling.getSampleSprite();
+                    if (Morphling.sampledTarget == null) {
+                        morphlingButton.Timer = morphlingButton.MaxTimer;
+                        morphlingButton.Sprite = Morphling.getSampleSprite();
+                    }
                 }
             );
 
@@ -512,6 +514,8 @@ namespace TheOtherRoles
                 __instance
             );
 
+            // Set the default (or settings from the previous game) timers/durations when spawning the buttons
+            setCustomButtonCooldowns();
         }
     }
 }

@@ -6,28 +6,25 @@ Roles in development:
         - Lover Sidekick being promoted removes the Lover ImportantTaskText and highlights the name in the Lover color (maybe change how Lovers are being displayed)
         - SidekickPromotes RPC call is called by every player
         - Jackal/Vent/Impostor vent highlighting
+    - Shifter and Eraser: Fake tasks for neutral roles, which will be activated on Shift/Erase
 
 Airship todos:
-    - Starting the new sabotage creates a nullpointerexception
-    - Detective has some footprints at the beginning of the game which do not vanish (probably because the rend?.gameObject is still null, when they should despawn)
+    - Eraser/Shifter did not work for some players
+    - Seer flash did not work for some players
 
 High priority:
+    - Crowded mod
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
     - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"
     - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
     - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - Host/Client Skip/Tie message
     - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
-    - Morphling add small cooldown (0.5s) after sampling
-    - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
-    - Crowded mod
+    - Promoting a Vampire to be the Sidekick, saves the last bitten target right now (as Vampire.vampire and Vampire.bitten are set to null)
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
-    - CustomButton: Add hotkeys (for the ones that replace the kill button)
-    - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
-    - Morphling: Add a short cooldown after sampling to prevent a "double click"
-    - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
     - Add proper GameOverReasons
 
