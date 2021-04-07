@@ -178,8 +178,7 @@ namespace TheOtherRoles
             public static bool anonymousFootprints = false;
             public static float reportNameDuration = 0f;
             public static float reportColorDuration = 20f;
-
-            public static float timer = 1f;
+            public static float timer = 6.2f;
 
             public static void clearAndReload() {
                 detective = null;
@@ -188,7 +187,7 @@ namespace TheOtherRoles
                 footprintDuration = CustomOptionHolder.detectiveFootprintDuration.getFloat();
                 reportNameDuration = CustomOptionHolder.detectiveReportNameDuration.getFloat();
                 reportColorDuration = CustomOptionHolder.detectiveReportColorDuration.getFloat();
-                timer = footprintIntervall;
+                timer = 6.2f;
             }
         }
     }
