@@ -514,6 +514,8 @@ namespace TheOtherRoles
                 __instance
             );
 
+            // Set the default (or settings from the previous game) timers/durations when spawning the buttons
+            setCustomButtonCooldowns();
         }
     }
 }
