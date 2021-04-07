@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using Reactor.Extensions;
 using System.Linq;
 
 namespace TheOtherRoles{
@@ -19,51 +18,49 @@ namespace TheOtherRoles{
             return jackInTheBoxSprite;
         }
 
-        private GameObject JackInTheBoxGameObject;
-        private GameObject JackInTheBoxVentObject;
-        public Vent JackInTheBoxVent;
+        private GameObject gameObject;
+        private Vent vent;
 
         public JackInTheBox(Vector2 p) {
-            JackInTheBoxGameObject = new GameObject("JackInTheBox");
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
-            JackInTheBoxGameObject.transform.position = position;
-            JackInTheBoxGameObject.transform.localPosition = position;
+            gameObject = new GameObject("JackInTheBox");
+            var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
+            Vector3 position = new Vector3(p.x, p.y, referenceVent.transform.position.z);
+            gameObject.transform.position = position;
 
-            if (PlayerControl.LocalPlayer == JackInTheBox.jackinthebox) {
+            if (PlayerControl.LocalPlayer == Trickster.trickster) {
                 // Only render the box for the Jack-In-The-Box player
-                var renderer = JackInTheBoxGameObject.AddComponent<SpriteRenderer>();
-                renderer.sprite = getJackInTheBoxSprite();
+                var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
+                boxRenderer.sprite = getJackInTheBoxSprite();
             }
-            JackInTheBoxGameObject.SetActive(true);
+
+            TheOtherRolesPlugin.Instance.Log.LogInfo("Createvent ");
+            vent = UnityEngine.Object.Instantiate<Vent>(referenceVent, referenceVent.transform.parent);
+            vent.transform.position = gameObject.transform.position;
+            vent.Left = null;
+            vent.Right = null;
+            vent.Center = null;
+            vent.EnterVentAnim = null;
+            vent.ExitVentAnim = null;
+            vent.Id = ShipStatus.Instance.GIDPCPOEFBC.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
+            TheOtherRolesPlugin.Instance.Log.LogInfo("Replace vent Sprite");
+            var ventRenderer = vent.GetComponent<SpriteRenderer>();
+            ventRenderer.sprite = getJackInTheBoxSprite();
+            vent.LNMJKMLHMIM = ventRenderer;
+            vent.gameObject.SetActive(false);
+
+            TheOtherRolesPlugin.Instance.Log.LogInfo("Add created vent to AllVents");
+            var allVentsList = ShipStatus.Instance.GIDPCPOEFBC.ToList();
+            allVentsList.Add(vent);
+            ShipStatus.Instance.GIDPCPOEFBC = allVentsList.ToArray();
+
+            gameObject.SetActive(true);
 
             AllJackInTheBoxes.Add(this);
         }
 
         public void convertToVent() {
-            var referenceVent = ShipStatus.Instance.AllVents.FirstOrDefault();
-            JackInTheBoxGameObject.SetActive(false);
-            
-            JackInTheBoxVent = UnityEngine.Object.Instantiate(referenceVent);
-            JackInTheBoxVent.gameObject.SetActive(false);
-            var position = new Vector3(JackInTheBoxGameObject.transform.position.x, JackInTheBoxGameObject.transform.position.y, referenceVent.transform.position.z);
-
-            JackInTheBoxVent.transform.position = position;
-            JackInTheBoxVent.Left = null;
-            JackInTheBoxVent.Right = null;
-            JackInTheBoxVent.Center = null;
-            JackInTheBoxVent.EnterVentAnim = null;
-            JackInTheBoxVent.ExitVentAnim = null;
-
-            JackInTheBoxVent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
-
-            var renderer = JackInTheBoxVent.GetComponent<SpriteRenderer>();
-            renderer.sprite = getJackInTheBoxSprite();
-
-            JackInTheBoxVent.gameObject.SetActive(true);
-            
-            var allVentsList = ShipStatus.Instance.AllVents.ToList();
-            allVentsList.Add(JackInTheBoxVent);
-            ShipStatus.Instance.AllVents = allVentsList.ToArray();
+            gameObject.SetActive(false);
+            vent.gameObject.SetActive(true);
             return;
         }
 
@@ -84,12 +81,12 @@ namespace TheOtherRoles{
             for(var i = 0;i < AllJackInTheBoxes.Count - 1;i++) {
                 var a = AllJackInTheBoxes[i];
                 var b = AllJackInTheBoxes[i + 1];
-                a.JackInTheBoxVent.Right = b.JackInTheBoxVent;
-                b.JackInTheBoxVent.Left = a.JackInTheBoxVent;
+                a.vent.Right = b.vent;
+                b.vent.Left = a.vent;
             }
             // Connect first with last
-            AllJackInTheBoxes.First().JackInTheBoxVent.Left = AllJackInTheBoxes.Last().JackInTheBoxVent;
-            AllJackInTheBoxes.Last().JackInTheBoxVent.Right = AllJackInTheBoxes.First().JackInTheBoxVent;
+            AllJackInTheBoxes.First().vent.Left = AllJackInTheBoxes.Last().vent;
+            AllJackInTheBoxes.Last().vent.Right = AllJackInTheBoxes.First().vent;
         }
 
         public static void clearJackInTheBoxes() {

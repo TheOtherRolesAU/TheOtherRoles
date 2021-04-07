@@ -342,6 +342,11 @@ namespace TheOtherRoles
                 }
             }
             Eraser.futureErased = new List<PlayerControl>();
+
+            // Trickster boxes
+            if (Trickster.trickster != null && JackInTheBox.hasJackInTheBoxLimitReached()) {
+                JackInTheBox.convertToVents();
+            }
         }
     }
 

@@ -33,6 +33,8 @@ namespace TheOtherRoles
         private static CustomButton jackalSidekickButton;
         private static CustomButton lighterButton;
         private static CustomButton eraserButton;
+        private static CustomButton placeJackInTheBoxButton;        
+        private static CustomButton lightsOutButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -52,11 +54,17 @@ namespace TheOtherRoles
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
             eraserButton.MaxTimer = Eraser.cooldown;
+            placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
+            lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
+            lightsOutButton.EffectDuration = Trickster.lightsOutDuration; 
+
+            // Already set the timer to the max, as the button is enabled during the game and not available at the start
+            lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
 
         public static void Postfix(HudManager __instance)
@@ -510,6 +518,50 @@ namespace TheOtherRoles
                 Eraser.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance
+            );
+
+            placeJackInTheBoxButton = new CustomButton(
+                () => {
+                    placeJackInTheBoxButton.Timer = placeJackInTheBoxButton.MaxTimer;
+
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1*sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceJackInTheBox, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placeJackInTheBox(buff); 
+                },
+                () => { return Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ && !JackInTheBox.hasJackInTheBoxLimitReached(); },
+                () => { return PlayerControl.LocalPlayer.AMDJMEEHNIG && !JackInTheBox.hasJackInTheBoxLimitReached(); },
+                () => { placeJackInTheBoxButton.Timer = placeJackInTheBoxButton.MaxTimer;},
+                Trickster.getPlaceBoxButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance
+            );
+            
+            lightsOutButton = new CustomButton(
+                () => {
+                    
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LightsOut, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.lightsOut(); 
+                },
+                () => { return Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ && JackInTheBox.hasJackInTheBoxLimitReached(); },
+                () => { return PlayerControl.LocalPlayer.AMDJMEEHNIG && JackInTheBox.hasJackInTheBoxLimitReached(); },
+                () => { 
+                    lightsOutButton.Timer = lightsOutButton.MaxTimer;
+                    lightsOutButton.isEffectActive = false;
+                    lightsOutButton.killButtonManager.TimerText.Color = Palette.MKAFGNEBHKC;
+                },
+                Trickster.getLightsOutButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                true,
+                Trickster.lightsOutDuration,
+                () => { lightsOutButton.Timer = lightsOutButton.MaxTimer; }
             );
 
         }

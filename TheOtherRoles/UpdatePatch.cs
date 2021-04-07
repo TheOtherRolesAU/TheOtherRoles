@@ -196,6 +196,7 @@ namespace TheOtherRoles
         static void timerUpdate() {
             Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
+            Trickster.lightsOutTimer -= Time.deltaTime;
         }
 
         static void camouflageAndMorphActions() {

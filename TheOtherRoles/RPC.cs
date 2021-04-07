@@ -87,7 +87,8 @@ namespace TheOtherRoles
         ErasePlayerRole,
         SetFutureErased,
         SetFutureShifted,
-        PlaceJackInTheBox
+        PlaceJackInTheBox,
+        LightsOut
     }
 
     public static class RPCProcedure {
@@ -571,6 +572,7 @@ namespace TheOtherRoles
             if (player == Janitor.janitor) Janitor.clearAndReload();
             if (player == Vampire.vampire) Vampire.clearAndReload();
             if (player == Eraser.eraser) Eraser.clearAndReload();
+            if (player == Trickster.trickster) Trickster.clearAndReload();
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -595,6 +597,17 @@ namespace TheOtherRoles
 
         public static void setFutureShifted(byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
+        }
+        
+        public static void placeJackInTheBox(byte[] buff) {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            new JackInTheBox(position);
+        }
+
+        public static void lightsOut() {
+            Trickster.lightsOutTimer = Trickster.lightsOutDuration;
         }
     }
 
@@ -713,6 +726,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
                     RPCProcedure.setFutureShifted(DOOILGKLBBF.ReadByte());
+                    break;
+                case (byte)CustomRPC.PlaceJackInTheBox:
+                    RPCProcedure.placeJackInTheBox(DOOILGKLBBF.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.LightsOut:
+                    RPCProcedure.lightsOut();
                     break;
             }
         }

@@ -688,20 +688,32 @@ namespace TheOtherRoles
     public static class Trickster {
         public static PlayerControl trickster;
         public static Color color = Palette.LDCHDOFJPGH;
+        public static float placeBoxCooldown = 30f;
+        public static float lightsOutCooldown = 30f;
+        public static float lightsOutDuration = 10f;
+        public static float lightsOutTimer = 0f;
 
-        public static float cooldown = float.MaxValue;
-
-        private static Sprite buttonSprite;
-        public static Sprite getButtonSprite() {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
-            return buttonSprite;
+        private static Sprite placeBoxButtonSprite;
+        private static Sprite lightOutButtonSprite;
+        public static Sprite getPlaceBoxButtonSprite() {
+            if (placeBoxButtonSprite) return placeBoxButtonSprite;
+            placeBoxButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
+            return placeBoxButtonSprite;
+        }
+        public static Sprite getLightsOutButtonSprite() {
+            if (lightOutButtonSprite) return lightOutButtonSprite;
+            lightOutButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LightsOutButton.png", 115f);
+            return lightOutButtonSprite;
         }
 
         public static void clearAndReload() {
             trickster = null;
-            cooldown = CustomOptionHolder.tricksterPlaceBoxCooldown.getFloat();
+            lightsOutTimer = 0f;
+            placeBoxCooldown = CustomOptionHolder.tricksterPlaceBoxCooldown.getFloat();
+            lightsOutCooldown = CustomOptionHolder.tricksterLightsOutCooldown.getFloat();
+            lightsOutDuration = CustomOptionHolder.tricksterLightsOutDuration.getFloat();
         }
+
     }
     
 }
