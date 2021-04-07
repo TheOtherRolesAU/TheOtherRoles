@@ -7,26 +7,32 @@ using System.Threading.Tasks;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
-    public static class VersionShowerPatch
-    {
-        static void Postfix(VersionShower __instance) {
-            string spacer = new String('\n', 15);
-            string text = "[FCCE03FF]TheOtherRoles[] v1.8.2:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard";
-            if (__instance.text.Text.Contains(spacer))
-                __instance.text.Text += "\n" + text;
-            else
-                __instance.text.Text += spacer + text;
-        }
-    }
+    [HarmonyPatch]
+    public static class CredentialsPatch {
+        [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
 
-    [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-    public static class PingTrackerPatch
-    {
-        static void Postfix(VersionShower __instance)
+        private static class VersionShowerPatch
         {
-            __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[FFFFFFFF]";
-            __instance.text.Text += "\nModded by [FCCE03FF]Eisbison[FFFFFFFF]";
+            static void Postfix(VersionShower __instance) {
+                string spacer = new String('\n', 21);
+                string fullCredentials = "[FCCE03FF]TheOtherRoles[] v2.0.0 beta:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard[]\n- Button design by [FFEB91FF]Bavari[]";
+                if (__instance.text.Text.Contains(spacer))
+                    __instance.text.Text += "\n" + fullCredentials;
+                else
+                    __instance.text.Text += spacer + fullCredentials;
+            }
+        }
+
+        [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
+        private static class PingTrackerPatch
+        {
+            static void Postfix(VersionShower __instance)
+            {
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.CJDCOJJNIGL.Started)
+                    __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]";
+                else
+                    __instance.text.Text += "\n\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]\nand [FFEB91FF]Thunderstorm584[]\nBalanced with [FFEB91FF]Dhalucard[]\nButton design by [FFEB91FF]Bavari[]";
+            }
         }
     }
 }

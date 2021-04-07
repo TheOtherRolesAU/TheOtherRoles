@@ -1,60 +1,308 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>1.0.0</Version>
-        <Mappings>NuclearPowered/Mappings:0.2.0</Mappings>
+        <Version>2.0.0</Version>
 
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">
-        <GameVersion>2021.3.5s</GameVersion>
+        <GameVersion>2021.3.31.3s</GameVersion>
         <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Itch'">
-        <GameVersion>2021.3.5i</GameVersion>
+        <GameVersion>2021.3.31i</GameVersion>
         <DefineConstants>$(DefineConstants);ITCH</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
-        <Deobfuscate Include="$(AmongUs)\BepInEx\plugins\Reactor-$(GameVersion).dll" />
-
-        <PackageReference Include="Reactor.OxygenFilter.MSBuild" Version="0.2.9" />
+        <EmbeddedResource Include="Resources\RepairButton.png" />
+        <EmbeddedResource Include="Resources\CleanButton.png" />
+        <EmbeddedResource Include="Resources\TimeShieldButton.png" />
+        <EmbeddedResource Include="Resources\ShieldButton.png" />
+        <EmbeddedResource Include="Resources\ShiftButton.png" />
+        <EmbeddedResource Include="Resources\SeerButton.png" />
+        <EmbeddedResource Include="Resources\MorphButton.png" />
+        <EmbeddedResource Include="Resources\SampleButton.png" />
+        <EmbeddedResource Include="Resources\CamoButton.png" />
+        <EmbeddedResource Include="Resources\HackerButton.png" />
+        <EmbeddedResource Include="Resources\TrackerButton.png" />
+        <EmbeddedResource Include="Resources\VampireButton.png" />
+        <EmbeddedResource Include="Resources\GarlicButton.png" />
+        <EmbeddedResource Include="Resources\LighterButton.png" />
+        <EmbeddedResource Include="Resources\EraserButton.png" />
+        <EmbeddedResource Include="Resources\Arrow.png" />
+        <EmbeddedResource Include="Resources\Garlic.png" />
+        <EmbeddedResource Include="Resources\GarlicBackground.png" />
+        <EmbeddedResource Include="Resources\Footprint.png" />
+        <EmbeddedResource Include="Resources\Soul.png" />
+        <EmbeddedResource Include="Resources\AdminTableIcon.png" />
+        <EmbeddedResource Include="Resources\SwapperCheck.png" />
+        <EmbeddedResource Include="Resources\SidekickButton.png" />
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Essentials">
-        <HintPath>$(AmongUs)\BepInEx\plugins\Essentials-$(GameVersion).dll</HintPath>
+      <Reference Include="0Harmony">
+        <HintPath>$(AmongUs)\BepInEx\core\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Apple">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Apple.dll</HintPath>
+      </Reference>
+      <Reference Include="AppleCore">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\AppleCore.dll</HintPath>
+      </Reference>
+      <Reference Include="AppleMacos">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\AppleMacos.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Assembly-CSharp.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Assembly-CSharp-firstpass.dll</HintPath>
+      </Reference>
+      <Reference Include="AssemblyUnhollower">
+        <HintPath>$(AmongUs)\BepInEx\core\AssemblyUnhollower.dll</HintPath>
+      </Reference>
+      <Reference Include="BepInEx.Core">
+        <HintPath>$(AmongUs)\BepInEx\core\BepInEx.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="BepInEx.IL2CPP">
+        <HintPath>$(AmongUs)\BepInEx\core\BepInEx.IL2CPP.dll</HintPath>
+      </Reference>
+      <Reference Include="BepInEx.Preloader.Core">
+        <HintPath>$(AmongUs)\BepInEx\core\BepInEx.Preloader.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="FacebookStore">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\FacebookStore.dll</HintPath>
+      </Reference>
+      <Reference Include="Hazel">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Hazel.dll</HintPath>
+      </Reference>
+      <Reference Include="Iced">
+        <HintPath>$(AmongUs)\BepInEx\core\Iced.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2Cpp.TlsAdapter">
+        <HintPath>$(AmongUs)\BepInEx\core\Il2Cpp.TlsAdapter.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppDumper">
+        <HintPath>$(AmongUs)\BepInEx\core\Il2CppDumper.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppMono.Security">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppMono.Security.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2Cppmscorlib">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2Cppmscorlib.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Configuration">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Configuration.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Core">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Data">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Data.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Net.Http">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Net.Http.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Numerics">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Numerics.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Runtime.Serialization">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Runtime.Serialization.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Xml">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Xml.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSystem.Xml.Linq">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Il2CppSystem.Xml.Linq.dll</HintPath>
+      </Reference>
+      <Reference Include="Mono.Cecil">
+        <HintPath>$(AmongUs)\BepInEx\core\Mono.Cecil.dll</HintPath>
+      </Reference>
+      <Reference Include="Mono.Cecil.Mdb">
+        <HintPath>$(AmongUs)\BepInEx\core\Mono.Cecil.Mdb.dll</HintPath>
+      </Reference>
+      <Reference Include="Mono.Cecil.Pdb">
+        <HintPath>$(AmongUs)\BepInEx\core\Mono.Cecil.Pdb.dll</HintPath>
+      </Reference>
+      <Reference Include="Mono.Cecil.Rocks">
+        <HintPath>$(AmongUs)\BepInEx\core\Mono.Cecil.Rocks.dll</HintPath>
+      </Reference>
+      <Reference Include="MonoMod.RuntimeDetour">
+        <HintPath>$(AmongUs)\BepInEx\core\MonoMod.RuntimeDetour.dll</HintPath>
+      </Reference>
+      <Reference Include="MonoMod.Utils">
+        <HintPath>$(AmongUs)\BepInEx\core\MonoMod.Utils.dll</HintPath>
+      </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Newtonsoft.Json.dll</HintPath>
+      </Reference>
+      <Reference Include="Purchasing.Common">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Purchasing.Common.dll</HintPath>
+      </Reference>
+      <Reference Include="QRCoder">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\QRCoder.dll</HintPath>
+      </Reference>
+      <Reference Include="Rewired_Core">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Rewired_Core.dll</HintPath>
+      </Reference>
+      <Reference Include="Rewired_Windows">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Rewired_Windows.dll</HintPath>
+      </Reference>
+      <Reference Include="Security">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Security.dll</HintPath>
+      </Reference>
+      <Reference Include="SemVer">
+        <HintPath>$(AmongUs)\BepInEx\core\SemVer.dll</HintPath>
+      </Reference>
+      <Reference Include="Stores">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Stores.dll</HintPath>
+      </Reference>
+      <Reference Include="UnhollowerBaseLib">
+        <HintPath>$(AmongUs)\BepInEx\core\UnhollowerBaseLib.dll</HintPath>
+      </Reference>
+      <Reference Include="UnhollowerRuntimeLib">
+        <HintPath>$(AmongUs)\BepInEx\core\UnhollowerRuntimeLib.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Addressables">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Unity.Addressables.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.Analytics.DataPrivacy">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Unity.Analytics.DataPrivacy.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.ResourceManager">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Unity.ResourceManager.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.TextMeshPro">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\Unity.TextMeshPro.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AIModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.AIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AndroidJNIModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.AndroidJNIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AnimationModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.AnimationModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AssetBundleModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.AssetBundleModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AudioModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.AudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.DirectorModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.DirectorModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.GridModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.GridModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.IMGUIModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.IMGUIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.InputLegacyModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.InputModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.InputModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.JSONSerializeModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.JSONSerializeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ParticleSystemModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.ParticleSystemModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.Physics2DModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.Physics2DModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.Purchasing">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.Purchasing.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ScreenCaptureModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SharedInternalsModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.SharedInternalsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteMaskModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.SpriteMaskModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SpriteShapeModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.SpriteShapeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.SubsystemsModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.SubsystemsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TerrainModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.TerrainModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextCoreModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.TextCoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextRenderingModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.TextRenderingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TilemapModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.TilemapModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UI.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIElementsNativeModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UIElementsNativeModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityAnalyticsModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VFXModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.VFXModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VideoModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.VideoModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.VRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.XRModule">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\UnityEngine.XRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="winrt">
+        <HintPath>$(AmongUs)\BepInEx\unhollowed\winrt.dll</HintPath>
       </Reference>
     </ItemGroup>
 
-    <ItemGroup>
-        <EmbeddedResource Include="Resources\RepairButton.png"/>
-        <EmbeddedResource Include="Resources\CleanButton.png"/>
-        <EmbeddedResource Include="Resources\RewindButton.png"/>
-        <EmbeddedResource Include="Resources\ShieldButton.png"/>
-        <EmbeddedResource Include="Resources\ShiftButton.png"/>
-        <EmbeddedResource Include="Resources\SeerButton.png"/>
-        <EmbeddedResource Include="Resources\MorphButton.png"/>
-        <EmbeddedResource Include="Resources\SampleButton.png"/>
-        <EmbeddedResource Include="Resources\CamoButton.png"/>
-        <EmbeddedResource Include="Resources\SpyButton.png"/>
-        <EmbeddedResource Include="Resources\TrackerButton.png"/>
-        <EmbeddedResource Include="Resources\VampireButton.png"/>
-        <EmbeddedResource Include="Resources\GarlicButton.png"/>
-        <EmbeddedResource Include="Resources\Arrow.png"/>
-        <EmbeddedResource Include="Resources\Garlic.png"/>
-        <EmbeddedResource Include="Resources\GarlicBackground.png"/>
-        <EmbeddedResource Include="Resources\Footprint.png"/>
-        <EmbeddedResource Include="Resources\AdminTableIcon.png"/>
-        <EmbeddedResource Include="Resources\SwapperCheck.png"/>
-        <EmbeddedResource Include="Resources\SidekickButton.png"/>
-    </ItemGroup>
-
-    <Target Name="Copy" AfterTargets="Reobfuscate">
-        <Message Text="Deobfuscated: $(Deobfuscated)" Importance="high"/>
-        <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" Condition="'$(Configuration)' == 'Debug'" />
+    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+        <Message Text="Second occurrence" />
+        <Copy SourceFiles="$(ProjectDir)\bin\Debug\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
     </Target>
 </Project>

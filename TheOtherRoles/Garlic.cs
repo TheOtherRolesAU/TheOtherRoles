@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles{
     class Garlic {
@@ -57,7 +56,7 @@ namespace TheOtherRoles{
 
         public void Update() {
             if (background != null)
-                background.transform.Rotate(Vector3.forward * 6 * Time.deltaTime);
+                background.transform.Rotate(Vector3.forward * 6 * Time.fixedDeltaTime);
         }
     }
 }

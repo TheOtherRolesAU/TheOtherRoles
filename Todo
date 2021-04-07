@@ -1,39 +1,34 @@
-Discussed reworks with Dhalucard:
-    - Lovers: A (Crew/Imp) should be able to have another role
-    - Shifter: Change it to thief -> Can only Shift ones, other player turns into a crewmate (Tasks need to be added to the Thief, or they should not be deleted in the first place)
-    - Time Master: Fixed number of time shields (if there's a kill attempt the time rewinds instead) or Time Master Impostor
-    - Child: Introduce Child impostor (higher cooldown or no kills at all while growing, other Impostor gets a buff in the mean time)
-    - Medic: Kill attempt by Impostors break the shield during the next meeting (option)
-    - Option: Max number of meetings in a game, Mayor can always call one meeting per game (ignores the max count)
-    - Jackal
-    - Spy/Seer: ?
-
-
 Roles in development:
-    - Tracker: Deactivate the arrow when the Tracker dies
-    - Snitch: Deactivate the arrows (if ever active) if the Snitch dies, Snitch ImportantTaskText counts as an uncompleted task with the current computation -> fix that because otherwise role descriptions might count as tasks as well
     - Vampire: Garlic layer (same for footsteps)
+    - Jackal:
+        - Lover Jackal with Crew Lover should be a Lovers solo win
+        - Should the Jackal be able to target players in vents
+        - Lover Sidekick being promoted removes the Lover ImportantTaskText and highlights the name in the Lover color (maybe change how Lovers are being displayed)
+        - SidekickPromotes RPC call is called by every player
+        - Jackal/Vent/Impostor vent highlighting
+
+Airship todos:
+    - Starting the new sabotage creates a nullpointerexception
+    - Detective has some footprints at the beginning of the game which do not vanish (probably because the rend?.gameObject is still null, when they should despawn)
 
 High priority:
-    - Jester/Bounty Hunter: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
+    - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"
+    - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
+    - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
+    - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
     - Morphling add small cooldown (0.5s) after sampling
     - Promoting a Vampire to be the Sidekick, stops the last bitten target to die (as Vampire.vampire and Vampire.bitten are set to null)
-    - Medic shield rework
-    - On Lovers win with JackalLover, it says Lovers and Crewmate win (maybe count that as a Lovers solo win)
     - Crowded mod
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
-    - Add option: Vampire can kill in garlic range
     - CustomButton: Add hotkeys (for the ones that replace the kill button)
     - Bounty Hunter: Should the Seer reveal him as a good or as a bad player?
-    - Add option: On camouflage/morphed hide/adapt Seer/Detective/Child/maybe shield 
-    - Garlic and footprints renderering/gameobject layer (they are not visible on the ramp/in the comms room/in the weapons room on Polus)
     - Morphling: Add a short cooldown after sampling to prevent a "double click"
     - Spawn system: Include Lovers in the default ticket system (This might not be relevant anymore after the Lovers "rework")
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
-    - Custom Settings: On some screen resolutions it glitches out of the screen, add a spacer option
     - Add proper GameOverReasons
 
 
