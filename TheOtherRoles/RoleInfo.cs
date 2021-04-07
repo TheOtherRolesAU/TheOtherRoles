@@ -154,13 +154,6 @@ namespace TheOtherRoles
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
-            if (BountyHunter.bountyHunter != null && p == BountyHunter.bountyHunter) {
-                infos.Add(new RoleInfo("Bounty Hunter",
-                BountyHunter.color,
-                "Hunt your bounty down",
-                "Hunt your bounty"));
-                ;
-            }
             if (Tracker.tracker != null && p == Tracker.tracker) {
                 infos.Add(new RoleInfo("Tracker",
                 Tracker.color,
