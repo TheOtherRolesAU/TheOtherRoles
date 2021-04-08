@@ -182,9 +182,11 @@ namespace TheOtherRoles {
         }
 
         static void impostorSetTarget() {
-            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return; // Not IsImpostor
-            if (PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) return; // IsDead
-
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ||!PlayerControl.LocalPlayer.AMDJMEEHNIG || PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) { // !isImpostor || !canMove || isDead
+                HudManager.CMJOLNCMAPD.KillButton.SetTarget(null);
+                return;
+            }
+            
             PlayerControl target = null; 
             if (Spy.spy != null) {
                 if (Spy.impostorsCanKillAnyone) {
@@ -231,7 +233,7 @@ namespace TheOtherRoles {
         }
 
         public static void playerSizeUpdate(PlayerControl p) {
-            if (Child.child == null) return;
+            if (Child.child == null  || Camouflager.camouflageTimer > 0f) return;
 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;

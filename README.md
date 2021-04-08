@@ -66,6 +66,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
 - **Eraser:** The Eraser can now also remove the role of other Impostors. This enables him to reveal the Spy, but might result in removing the special ability of his partner.
+- **Camouflager:** The Child age/size will now also be hidden, to allow the Child Impostor to kill during camouflage
 
 **Hotfix 2.0.1**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
@@ -261,7 +262,7 @@ The camouflage mode lasts for 10s and while it is active, all player names/pets/
 are hidden and all players have the same color.\
 \
 **NOTE**
-- The Child (and Morphling when copying the child) remains small and show its age.
+- The Child will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Spy sees gray icons on the admin table
 - The shield is not visible anymore
