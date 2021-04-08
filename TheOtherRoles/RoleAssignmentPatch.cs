@@ -73,7 +73,7 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
-            // crewSettings.Add((byte)RoleId.BountyHunter, CustomOptionHolder.bountyHunterSpawnRate.getSelection()); BOUNTY HUNTER
+            crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
 
             // Set special roles
             if (impostors.Count >= 3 && maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
@@ -154,24 +154,6 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer(roleId, impostors);
                 }
             }
-
-            // if (crewmates.Count > 0 && (rnd.Next(1, 101) <= CustomOptionHolder.bountyHunterSpawnRate.getSelection())) {
-            //     List<PlayerControl> availableTargets = PlayerControl.AllPlayerControls.ToArray().ToList();
-            //     var bountyHunterIndex = rnd.Next(0, crewmates.Count);
-            //     byte bountyHunterId = crewmates[bountyHunterIndex].PlayerId;
-
-            //     availableTargets.RemoveAll(x => x.IDOFAMCIJKE.CIDDOFDJHJH || x.PlayerId == bountyHunterId);
-
-            //     if (availableTargets.Count > 0) {
-            //         byte targetId = availableTargets[rnd.Next(0, availableTargets.Count)].PlayerId;
-            //         crewmates.RemoveAt(bountyHunterIndex);
-            //         setRoleToPlayer((byte)RoleId.BountyHunter, bountyHunterId);
-            //         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBountyHunterTarget, Hazel.SendOption.Reliable, -1);
-            //         writer.Write(targetId);
-            //         AmongUsClient.Instance.FinishRpcImmediately(writer);
-            //         RPCProcedure.setBountyHunterTarget(targetId);
-            //     }
-            // }
         }
     }
 }

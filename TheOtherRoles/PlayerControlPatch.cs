@@ -116,7 +116,18 @@ namespace TheOtherRoles {
 
         static void vampireSetTarget() {
             if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
-		    PlayerControl target = setTarget(true, true);
+
+		    PlayerControl target = null;
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
             bool targetNearGarlic = false;
             if (target != null) {
                 foreach (Garlic garlic in Garlic.garlics) {
@@ -150,7 +161,7 @@ namespace TheOtherRoles {
 
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
-            Eraser.currentTarget = setTarget(true);
+            Eraser.currentTarget = setTarget();
         }
 
         static void engineerUpdate() {
@@ -168,6 +179,23 @@ namespace TheOtherRoles {
                     } catch {}
                 }
             }
+        }
+
+        static void impostorSetTarget() {
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return;
+
+            PlayerControl target = null; 
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
+            HudManager.CMJOLNCMAPD.KillButton.SetTarget(target);
         }
 
         static void trackerUpdate() {
@@ -201,11 +229,32 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void playerSizeUpdate(PlayerControl p) {
+            if (Child.child == null) return;
+
+            float growingProgress = Child.growingProgress();
+            float scale = growingProgress * 0.35f + 0.35f;
+            
+            if (p == Child.child)
+                Child.child.transform.localScale = new Vector3(scale, scale, 1f);
+            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+                p.transform.localScale = new Vector3(scale, scale, 1f);
+        }
+
+        public static void Prefix(PlayerControl __instance) {
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
+
+            // Reset player sizes
+            __instance.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
 
             // Update Role Description
             Helpers.refreshRoleDescription(__instance);
+            // Child and Morphling shrink
+            playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
                 // Time Master
@@ -235,6 +284,8 @@ namespace TheOtherRoles {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
+                // Impostor
+                impostorSetTarget();
             } 
         }
     }
@@ -297,7 +348,7 @@ namespace TheOtherRoles {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
                             msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.IDOFAMCIJKE.JFHFMIKFHGG) ? "darker" : "lighter";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.IDOFAMCIJKE.JFHFMIKFHGG) ? "lighter" : "darker";
                             msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";
@@ -399,6 +450,17 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
     {
+        public static void Prefix(PlayerControl __instance) {
+            // Child exile lose condition
+            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+                Child.triggerChildLose = true;
+            }
+            // Jester win condition
+            else if (Jester.jester != null && Jester.jester == __instance) {
+                Jester.triggerJesterWin = true;
+            } 
+        }
+
         public static void Postfix(PlayerControl __instance)
         {
             // Collect dead player info

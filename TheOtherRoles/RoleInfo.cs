@@ -160,13 +160,6 @@ namespace TheOtherRoles
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
-            if (BountyHunter.bountyHunter != null && p == BountyHunter.bountyHunter) {
-                infos.Add(new RoleInfo("Bounty Hunter",
-                BountyHunter.color,
-                "Hunt your bounty down",
-                "Hunt your bounty"));
-                ;
-            }
             if (Tracker.tracker != null && p == Tracker.tracker) {
                 infos.Add(new RoleInfo("Tracker",
                 Tracker.color,
@@ -182,7 +175,7 @@ namespace TheOtherRoles
             if (Jackal.jackal != null && p == Jackal.jackal) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
-                "Kill all Crewmates and [FF1919FF]Impostors[FFFFFFFF] to win",
+                "Kill all Crewmates and [FF1919FF]Impostors[] to win",
                 "Kill everyone"));                
             }
             if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
@@ -197,7 +190,12 @@ namespace TheOtherRoles
                 "You are in [FC03BEFF]Love[]",
                 "You are in love"));
             }
-
+            if (Spy.spy != null && p == Spy.spy) {
+                infos.Add(new RoleInfo("Spy",
+                Spy.color,
+                "Confuse the [FF1919FF]Impostors[]",
+                "Confuse the Impostors"));
+            }
             if (infos.Count == 0 && p.IDOFAMCIJKE.CIDDOFDJHJH) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.LDCHDOFJPGH,

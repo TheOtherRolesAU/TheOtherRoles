@@ -90,10 +90,6 @@ namespace TheOtherRoles
                 setPlayerNameColor(Seer.seer, Seer.color);  
             else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (BountyHunter.bountyHunter != null && BountyHunter.target != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(BountyHunter.bountyHunter, BountyHunter.color);
-                setPlayerNameColor(BountyHunter.target, BountyHunter.color);
-            }
             else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
             else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
@@ -108,6 +104,9 @@ namespace TheOtherRoles
                     setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
+            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Spy.spy, Spy.color);
+            }
             
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
@@ -116,6 +115,11 @@ namespace TheOtherRoles
                 if (Jackal.jackal != null) {
                     setPlayerNameColor(Jackal.jackal, Jackal.color);
                 }
+            }
+
+            // No else if here, as the Impostors need the Spy name to be colored
+            if (Spy.spy != null && PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+                setPlayerNameColor(Spy.spy, Spy.color);
             }
 
             // Crewmate roles with no changes: Child
@@ -244,7 +248,18 @@ namespace TheOtherRoles
                     p.LNMJKMLHMIM.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
-                    if (p.CurrentPet) UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
+                    bool spawnPet = false;
+                    if (p.CurrentPet == null) spawnPet = true;
+                    else if (p.CurrentPet.EKONGILOOPE != DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllPets[0].EKONGILOOPE) {
+                        UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
+                        spawnPet = true;
+                    }
+
+                    if (spawnPet) {
+                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllPets[0]);
+                        p.CurrentPet.transform.position = p.transform.position;
+                        p.CurrentPet.Source = p;
+                    }
                 }
             } 
             
@@ -260,45 +275,23 @@ namespace TheOtherRoles
         }
 
         public static void childUpdate() {
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                if (p == null) continue;
-                p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-                if (Child.child == null) continue;
+            if (Child.child == null) return;
                 
-                float growingProgress = Child.growingProgress();
-                float scale = growingProgress * 0.35f + 0.35f;
-                string suffix = "";
-                if (growingProgress != 1f)
-                    suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
+            float growingProgress = Child.growingProgress();
+            float scale = growingProgress * 0.35f + 0.35f;
+            string suffix = "";
+            if (growingProgress != 1f)
+                suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
 
-                if (Child.child == p) {
-                    p.transform.localScale = new Vector3(scale, scale, 1f);
-                    p.nameText.Text += suffix;
-                    if (MeetingHud.Instance != null)
-                        foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
-                            if (player.NameText != null && p.PlayerId == player.HMPHKKGPLAG)
-                                player.NameText.Text += suffix;
-                }
-                else if (Morphling.morphling != null && Morphling.morphling == p && Morphling.morphTarget != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f) {
-                    p.transform.localScale = new Vector3(scale, scale, 1f);
-                    p.nameText.Text += suffix;
-                }
-                else
-                    p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            Child.child.nameText.Text += suffix;
+            if (MeetingHud.Instance != null) {
+                foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
+                    if (player.NameText != null && Child.child.PlayerId == player.HMPHKKGPLAG)
+                        player.NameText.Text += suffix;
             }
-        }
 
-        public static void bountyHunterUpdate() {
-            if (BountyHunter.bountyHunter == null || BountyHunter.target == null) return;
-
-            if (BountyHunter.notifyBounty && PlayerControl.LocalPlayer == BountyHunter.target) {
-                string suffix = "[AD653BFF] (Bounty)[FFFFFFFF]";
-                PlayerControl.LocalPlayer.nameText.Text += suffix;
-                if (MeetingHud.Instance != null)
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.DHCOPOOJCLN)
-                        if (player.NameText != null && PlayerControl.LocalPlayer.PlayerId == player.HMPHKKGPLAG)
-                            player.NameText.Text += suffix;
-            }
+            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+                Morphling.morphling.nameText.Text += suffix;
         }
 
         static void vampireDeactivateKillButton(HudManager __instance) {
@@ -370,8 +363,6 @@ namespace TheOtherRoles
             camouflageAndMorphActions();
             // Child
             childUpdate();
-            // Bounty Hunter
-            bountyHunterUpdate();
             // Vampire
             vampireDeactivateKillButton(__instance);
             // Snitch

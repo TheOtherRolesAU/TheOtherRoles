@@ -40,13 +40,13 @@ namespace TheOtherRoles
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
             Child.clearAndReload();
-            BountyHunter.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
             Eraser.clearAndReload();
+            Spy.clearAndReload();
             Trickster.clearAndReload();
         }
 
@@ -54,8 +54,11 @@ namespace TheOtherRoles
             public static PlayerControl jester;
             public static Color color = new Color(255f / 255f, 84f / 255f, 167f / 255f, 1);
 
+            public static bool triggerJesterWin = false;
+
             public static void clearAndReload() {
                 jester = null;
+                triggerJesterWin = false;
             }
         }
 
@@ -109,7 +112,7 @@ namespace TheOtherRoles
             public static PlayerControl janitor;
             public static Color color = Palette.LDCHDOFJPGH;
 
-            public static float cooldown = float.MaxValue;
+            public static float cooldown = 30f;
 
             private static Sprite buttonSprite;
             public static Sprite getButtonSprite() {
@@ -128,8 +131,9 @@ namespace TheOtherRoles
             public static PlayerControl sheriff;
             public static Color color = new Color(255f / 255f, 204f / 255f, 0f / 255f, 1);
 
-            public static float cooldown = float.MaxValue;
+            public static float cooldown = 30f;
             public static bool jesterCanDieToSheriff = false;
+            public static bool spyCanDieToSheriff = false;
 
             public static PlayerControl currentTarget;
 
@@ -138,6 +142,7 @@ namespace TheOtherRoles
                 currentTarget = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 jesterCanDieToSheriff = CustomOptionHolder.jesterCanDieToSheriff.getBool();
+                spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
             }
         }
 
@@ -148,7 +153,7 @@ namespace TheOtherRoles
             public static float lighterModeLightsOnVision = 2f;
             public static float lighterModeLightsOffVision = 0.75f;
 
-            public static float cooldown = float.MaxValue;
+            public static float cooldown = 30f;
             public static float duration = 5f;
 
             public static float lighterTimer = 0f;
@@ -179,8 +184,7 @@ namespace TheOtherRoles
             public static bool anonymousFootprints = false;
             public static float reportNameDuration = 0f;
             public static float reportColorDuration = 20f;
-
-            public static float timer = 1f;
+            public static float timer = 6.2f;
 
             public static void clearAndReload() {
                 detective = null;
@@ -189,7 +193,7 @@ namespace TheOtherRoles
                 footprintDuration = CustomOptionHolder.detectiveFootprintDuration.getFloat();
                 reportNameDuration = CustomOptionHolder.detectiveReportNameDuration.getFloat();
                 reportColorDuration = CustomOptionHolder.detectiveReportColorDuration.getFloat();
-                timer = footprintIntervall;
+                timer = 6.2f;
             }
         }
     }
@@ -201,7 +205,7 @@ namespace TheOtherRoles
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
         public static float shieldDuration = 3f; // Constant
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
 
         public static bool shieldActive = false;
         public static bool isRewinding = false;
@@ -349,7 +353,7 @@ namespace TheOtherRoles
         private static Sprite sampleSprite;
         private static Sprite morphSprite;
     
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
 
         public static PlayerControl currentTarget;
         public static PlayerControl sampledTarget;
@@ -396,7 +400,7 @@ namespace TheOtherRoles
         public static PlayerControl camouflager;
         public static Color color = Palette.LDCHDOFJPGH;
     
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
         public static float camouflageTimer = 0f;
 
         private static Sprite buttonSprite;
@@ -434,7 +438,7 @@ namespace TheOtherRoles
         private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
         public static float duration = 10f;
         public static bool onlyColorType = false;
 
@@ -466,7 +470,7 @@ namespace TheOtherRoles
         public static PlayerControl child;
         public static Color color = Color.white;
         
-        public static float growingUpDuration = float.MaxValue;
+        public static float growingUpDuration = 400f;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
         public static bool triggerChildLose = false;
 
@@ -486,20 +490,6 @@ namespace TheOtherRoles
 
         public static bool isGrownUp() {
             return growingProgress() == 1f;
-        }
-    }
-
-    public static class BountyHunter {
-        public static PlayerControl bountyHunter;
-        public static Color color = new Color(237f / 255f, 101f / 255f, 59f / 255f, 1);
-
-        public static bool notifyBounty = true;
-        public static PlayerControl target;
-    
-        public static void clearAndReload() {
-            bountyHunter = null;
-            target = null;
-            // notifyBounty = CustomOptionHolder.bountyHunterNotifyBounty.getBool();
         }
     }
 
@@ -540,7 +530,7 @@ namespace TheOtherRoles
         public static Color color = Palette.LDCHDOFJPGH;
 
         public static float delay = 10f;
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
         public static bool canKillNearGarlics = true;
         public static bool localPlacedGarlic = false;
         public static bool garlicsActive = true;
@@ -603,8 +593,8 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static List<PlayerControl> formerJackals = new List<PlayerControl>();
         
-        public static float cooldown = float.MaxValue;
-        public static float createSidekickCooldown = float.MaxValue;
+        public static float cooldown = 30f;
+        public static float createSidekickCooldown = 30f;
         public static bool canUseVents = true;
         public static bool canCreateSidekick = true;
         public static Sprite buttonSprite;
@@ -647,7 +637,7 @@ namespace TheOtherRoles
 
         public static PlayerControl currentTarget;
 
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
         public static bool canUseVents = true;
         public static bool canKill = true;
         public static bool promotesToJackal = true;
@@ -668,7 +658,7 @@ namespace TheOtherRoles
 
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
-        public static float cooldown = float.MaxValue;
+        public static float cooldown = 30f;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -682,6 +672,18 @@ namespace TheOtherRoles
             futureErased = new List<PlayerControl>();
             currentTarget = null;
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
+        }
+    }
+    
+    public static class Spy {
+        public static PlayerControl spy;
+        public static Color color = Palette.LDCHDOFJPGH;
+
+        public static bool impostorsCanKillAnyone = true;
+
+        public static void clearAndReload() {
+            spy = null;
+            impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
         }
     }
 
@@ -715,5 +717,4 @@ namespace TheOtherRoles
         }
 
     }
-    
 }

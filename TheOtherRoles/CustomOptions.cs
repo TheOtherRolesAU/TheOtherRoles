@@ -20,12 +20,16 @@ namespace TheOtherRoles {
         public static CustomOption presetSelection, crewmateRolesCount, impostorRolesCount;
         public static CustomOption mafiaSpawnRate, morphlingSpawnRate, camouflagerSpawnRate, vampireSpawnRate, eraserSpawnRate, tricksterSpawnRate;
         public static CustomOption childSpawnRate, loversSpawnRate, jesterSpawnRate;
-        public static CustomOption shifterSpawnRate, mayorSpawnRate, engineerSpawnRate, sheriffSpawnRate, lighterSpawnRate, detectiveSpawnRate, timeMasterSpawnRate, medicSpawnRate, swapperSpawnRate, seerSpawnRate, hackerSpawnRate, trackerSpawnRate, snitchSpawnRate, jackalSpawnRate;
+        public static CustomOption shifterSpawnRate, mayorSpawnRate, engineerSpawnRate, sheriffSpawnRate, lighterSpawnRate, detectiveSpawnRate, timeMasterSpawnRate, medicSpawnRate, swapperSpawnRate, seerSpawnRate, hackerSpawnRate, trackerSpawnRate, snitchSpawnRate, jackalSpawnRate, spySpawnRate;
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption janitorCooldown, morphlingCooldown, camouflagerCooldown, vampireKillDelay, vampireCooldown, vampireCanKillNearGarlics, eraserCooldown, tricksterPlaceBoxCooldown, tricksterLightsOutCooldown, tricksterLightsOutDuration;
         public static CustomOption childGrowingUpDuration, loversImpLoverRate, loversBothDie;
-        public static CustomOption sheriffCooldown, jesterCanDieToSheriff, lighterModeLightsOnVision, lighterModeLightsOffVision, lighterCooldown, lighterDuration, detectiveAnonymousFootprints, detectiveFootprintIntervall, detectiveFootprintDuration, detectiveReportNameDuration, detectiveReportColorDuration, timeMasterCooldown, timeMasterRewindTime, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType, trackerUpdateIntervall, snitchLeftTasksForImpostors, jackalKillCooldown, jackalCreateSidekickCooldown, jackalCanUseVents, jackalCanCreateSidekick, sidekickPromotesToJackal, sidekickCanKill, sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor;
-    
+        public static CustomOption sheriffCooldown, jesterCanDieToSheriff, lighterModeLightsOnVision, lighterModeLightsOffVision, lighterCooldown,
+        lighterDuration, detectiveAnonymousFootprints, detectiveFootprintIntervall, detectiveFootprintDuration, detectiveReportNameDuration, detectiveReportColorDuration,
+        timeMasterCooldown, timeMasterRewindTime, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType,
+        trackerUpdateIntervall, snitchLeftTasksForImpostors, jackalKillCooldown, jackalCreateSidekickCooldown, jackalCanUseVents, jackalCanCreateSidekick, sidekickPromotesToJackal, sidekickCanKill,
+        sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor, spyCanDieToSheriff, spyImpostorsCanKillAnyone;
+
         public static string cs(Color c, string s) {
             return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]{4}[]", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
@@ -45,7 +49,7 @@ namespace TheOtherRoles {
             camouflagerSpawnRate = CustomOption.Create(30, cs(Camouflager.color, "Camouflager"), rates);
             vampireSpawnRate = CustomOption.Create(40, cs(Vampire.color, "Vampire"), rates);
             eraserSpawnRate = CustomOption.Create(230, cs(Eraser.color, "Eraser"), rates);
-            tricksterSpawnRate = CustomOption.Create(240, cs(Trickster.color, "Trickster"), rates);
+            tricksterSpawnRate = CustomOption.Create(250, cs(Trickster.color, "Trickster"), rates);
 
             childSpawnRate = CustomOption.Create(180, cs(Child.color, "Child"), rates);
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates);
@@ -65,6 +69,7 @@ namespace TheOtherRoles {
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates);
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "Snitch"), rates);
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates);
+            spySpawnRate = CustomOption.Create(240, cs(Spy.color, "Spy"), rates);
 
             // Map settings
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1);
@@ -77,9 +82,9 @@ namespace TheOtherRoles {
             vampireCooldown = CustomOption.Create(42, "Vampire Cooldown", 30f, 10f, 60f, 2.5f);
             vampireCanKillNearGarlics = CustomOption.Create(43, "Vampire Can Kill Near Garlics", true);
             eraserCooldown = CustomOption.Create(231, "Eraser Cooldown", 30f, 10f, 120f, 5f);
-            tricksterPlaceBoxCooldown = CustomOption.Create(232, "Trickster Box Cooldown", 10f, 0f, 30f, 2.5f);
-            tricksterLightsOutCooldown = CustomOption.Create(233, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f);
-            tricksterLightsOutDuration = CustomOption.Create(234, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f);
+            tricksterPlaceBoxCooldown = CustomOption.Create(251, "Trickster Box Cooldown", 10f, 0f, 30f, 2.5f);
+            tricksterLightsOutCooldown = CustomOption.Create(252, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f);
+            tricksterLightsOutDuration = CustomOption.Create(253, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f);
 
             childGrowingUpDuration = CustomOption.Create(181, "Child Growing Up Duration", 400f, 100f, 1500f, 100f);
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f);
@@ -109,13 +114,15 @@ namespace TheOtherRoles {
             snitchLeftTasksForImpostors = CustomOption.Create(211, "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f);
             jackalKillCooldown = CustomOption.Create(221, "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f);
             jackalCreateSidekickCooldown = CustomOption.Create(222, "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f);
-            jackalCanUseVents = CustomOption.Create(223, "Jackal can use vents", true);
-            jackalCanCreateSidekick = CustomOption.Create(224, "Jackal can create a sidekick", false);
-            sidekickPromotesToJackal = CustomOption.Create(225, "Sidekick gets promoted to Jackal on Jackal death", false);
-            sidekickCanKill = CustomOption.Create(226, "Sidekick can kill", false);
-            sidekickCanUseVents = CustomOption.Create(227, "Sidekick can use vents", true);
-            jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals promoted from Sidekick can create a Sidekick", true);
-            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals can make an Impostor to his Sidekick", true);
+            jackalCanUseVents = CustomOption.Create(223, "Jackal Can Use Vents", true);
+            jackalCanCreateSidekick = CustomOption.Create(224, "Jackal Can Create A Sidekick", false);
+            sidekickPromotesToJackal = CustomOption.Create(225, "Sidekick Gets Promoted To Jackal On Jackal Death", false);
+            sidekickCanKill = CustomOption.Create(226, "Sidekick Can Kill", false);
+            sidekickCanUseVents = CustomOption.Create(227, "Sidekick Can Use Vents", true);
+            jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true);
+            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true);
+            spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false);
+            spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true);
         }
     }
 
@@ -328,7 +335,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 26;
+            int roleSettingsLines = defaultSettingsLines + 27;
             int detailedSettingsLines = roleSettingsLines + 28;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();

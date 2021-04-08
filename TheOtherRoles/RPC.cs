@@ -39,13 +39,13 @@ namespace TheOtherRoles
         Camouflager,
         Hacker,
         Child,
-        BountyHunter,
         Tracker,
         Vampire,
         Snitch,
         Jackal,
         Sidekick,
         Eraser,
+        Spy,
         Trickster
     }
 
@@ -60,8 +60,7 @@ namespace TheOtherRoles
 
         // Role functionality
 
-        JesterBountyHunterWin = 80,
-        EngineerFixLights,
+        EngineerFixLights = 81,
         EngineerUsedRepair,
         JanitorClean,
         SheriffKill,
@@ -75,7 +74,6 @@ namespace TheOtherRoles
         CamouflagerCamouflage,
         TrackerUsedTracker,
         LoverSuicide,
-        SetBountyHunterTarget,
         VampireSetBitten,
         VampireTryKill,
         PlaceGarlic,
@@ -83,7 +81,6 @@ namespace TheOtherRoles
         SidekickKill,
         JackalCreatesSidekick,
         SidekickPromotes,
-        ChildLose,
         ErasePlayerRole,
         SetFutureErased,
         SetFutureShifted,
@@ -185,9 +182,6 @@ namespace TheOtherRoles
                     case RoleId.Child:
                         Child.child = player;
                         break;
-                    case RoleId.BountyHunter:
-                        BountyHunter.bountyHunter = player;
-                        break;
                     case RoleId.Tracker:
                         Tracker.tracker = player;
                         break;
@@ -206,6 +200,9 @@ namespace TheOtherRoles
                     case RoleId.Eraser:
                         Eraser.eraser = player;
                         break;
+                    case RoleId.Spy:
+                        Spy.spy = player;
+                        break;
                     case RoleId.Trickster:
                         Trickster.trickster = player;
                         break;
@@ -214,47 +211,6 @@ namespace TheOtherRoles
         }
 
         // Role functionality
-
-        public static void jesterBountyHunterWin(byte exiledId) {
-            PlayerControl exiled = Helpers.playerById(exiledId);
-            if (exiled == null) return;
-
-            bool jesterWin = false;
-            bool bountyHunterWin = false;
-
-            if (Jester.jester != null && exiled == Jester.jester) {
-                Jester.jester.Revive();
-                Jester.jester.IDOFAMCIJKE.FGNJJFABIHJ = false;
-                Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH = true;
-                jesterWin = true;
-            }
-            if (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ && BountyHunter.target == exiled) {
-                BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH = true;
-                bountyHunterWin = true;
-            }
-
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player != null && player != Jester.jester && player != BountyHunter.bountyHunter)
-                {
-                    player.RemoveInfected();
-                    player.Die(DeathReason.Exile);
-                    player.IDOFAMCIJKE.FGNJJFABIHJ = true;
-                    player.IDOFAMCIJKE.CIDDOFDJHJH = false;
-                }
-            }
-            if (jesterWin && !bountyHunterWin && BountyHunter.bountyHunter != null) {
-                BountyHunter.bountyHunter.RemoveInfected();
-                BountyHunter.bountyHunter.Die(DeathReason.Exile);
-                BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ = true;
-                BountyHunter.bountyHunter.IDOFAMCIJKE.CIDDOFDJHJH = false;
-            } else if (bountyHunterWin && !jesterWin && Jester.jester != null) {
-                Jester.jester.RemoveInfected();
-                Jester.jester.Die(DeathReason.Exile);
-                Jester.jester.IDOFAMCIJKE.FGNJJFABIHJ = true;
-                Jester.jester.IDOFAMCIJKE.CIDDOFDJHJH = false;
-            }
-        }
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
@@ -403,13 +359,13 @@ namespace TheOtherRoles
                 Hacker.hacker = oldShifter;
             } else if (Child.child != null && Child.child == player) {
                 Child.child = oldShifter;
-            } else if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == player) {
-                BountyHunter.bountyHunter = oldShifter;
             } else if (Tracker.tracker != null && Tracker.tracker == player) {
                 Tracker.tracker = oldShifter;
             } else if (Snitch.snitch != null && Snitch.snitch == player) {
                 Snitch.snitch = oldShifter;
-            }else { // Crewmate
+            } else if (Spy.spy != null && Spy.spy == player) {
+                Spy.spy = oldShifter;
+            } else { // Crewmate
             }
             
             // Set cooldowns to max for both players
@@ -444,12 +400,6 @@ namespace TheOtherRoles
             } else if (Lovers.lover2 != null && !Lovers.lover2.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
-        }
-
-        public static void setBountyHunterTarget(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == targetId)
-                    BountyHunter.target = player;
         }
 
         public static void vampireSetBitten(byte targetId, byte reset) {
@@ -538,10 +488,6 @@ namespace TheOtherRoles
             Sidekick.clearAndReload();
             return;
         }
-
-        public static void childLose() {
-            Child.triggerChildLose = true;
-        }
         
         public static void erasePlayerRole(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
@@ -560,9 +506,9 @@ namespace TheOtherRoles
             if (player == Hacker.hacker) Hacker.clearAndReload();
             if (player == Child.child) Child.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
-            if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
+            if (player == Spy.spy) Spy.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -646,9 +592,6 @@ namespace TheOtherRoles
 
                 // Role functionality
 
-                case (byte)CustomRPC.JesterBountyHunterWin:
-                    RPCProcedure.jesterBountyHunterWin(DOOILGKLBBF.ReadByte());
-                    break;
                 case (byte)CustomRPC.EngineerFixLights:
                     RPCProcedure.engineerFixLights();
                     break;
@@ -690,9 +633,6 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.LoverSuicide:
                     RPCProcedure.loverSuicide(DOOILGKLBBF.ReadByte());
                     break;
-                case (byte)CustomRPC.SetBountyHunterTarget:
-                    RPCProcedure.setBountyHunterTarget(DOOILGKLBBF.ReadByte());
-                    break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = DOOILGKLBBF.ReadByte();
                     byte reset = DOOILGKLBBF.ReadByte();
@@ -718,9 +658,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
-                    break;
-                case (byte)CustomRPC.ChildLose:
-                    RPCProcedure.childLose();
                     break;
                 case (byte)CustomRPC.ErasePlayerRole:
                     RPCProcedure.erasePlayerRole(DOOILGKLBBF.ReadByte());

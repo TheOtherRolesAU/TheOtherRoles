@@ -3,6 +3,7 @@ using System;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TheOtherRoles
 {
@@ -22,6 +23,17 @@ namespace TheOtherRoles
                 jackalTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = jackalTeam;
             }
+
+            // Add the Spy to the Impostor team (for the Impostors)
+            if (Spy.spy != null && PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+                List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                foreach (PlayerControl p in players) {
+                    if (p == Spy.spy || p.IDOFAMCIJKE.CIDDOFDJHJH)
+                        fakeImpostorTeam.Add(p);
+                }
+                __instance.yourTeam = fakeImpostorTeam;
+            }
         }
 
         // Intro display role
@@ -39,13 +51,6 @@ namespace TheOtherRoles
                 __instance.__4__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.IDOFAMCIJKE?.HGGCLJHCDBM ?? "");
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
                 __instance.__4__this.BackgroundBar.material.color = Lovers.color;
-            }
-            else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter)
-            {
-                __instance.__4__this.Title.Text = "Bounty Hunter";
-                __instance.__4__this.Title.Color = BountyHunter.color;
-                __instance.__4__this.ImpostorText.Text = "Hunt [ED653BFF]" + BountyHunter.target?.IDOFAMCIJKE?.HGGCLJHCDBM + "[FFFFFFFF] down";
-                __instance.__4__this.BackgroundBar.material.color = BountyHunter.color;
             }
             else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
             else {

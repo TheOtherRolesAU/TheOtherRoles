@@ -162,8 +162,8 @@ namespace TheOtherRoles
                     if ((Sheriff.currentTarget.IDOFAMCIJKE.CIDDOFDJHJH && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
                         Sheriff.currentTarget == Jackal.jackal || 
                         Sheriff.currentTarget == Sidekick.sidekick || 
-                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget))
-                        {
+                        (Sheriff.spyCanDieToSheriff && Spy.spy != null && Spy.spy == Sheriff.currentTarget) ||
+                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget)) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
                     else {
@@ -251,11 +251,11 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.morphlingMorph(Morphling.sampledTarget.PlayerId);
                         Morphling.sampledTarget = null;
-                        morphlingButton.HasEffect = true; // Trigger effect on this click
+                        morphlingButton.EffectDuration = 10f;
                     } else if (Morphling.currentTarget != null) {
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
-                        morphlingButton.HasEffect = false; // Block effect on this click
+                        morphlingButton.EffectDuration = 1f;
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ; },
@@ -273,8 +273,10 @@ namespace TheOtherRoles
                 true,
                 10f,
                 () => {
-                    morphlingButton.Timer = morphlingButton.MaxTimer;
-                    morphlingButton.Sprite = Morphling.getSampleSprite();
+                    if (Morphling.sampledTarget == null) {
+                        morphlingButton.Timer = morphlingButton.MaxTimer;
+                        morphlingButton.Sprite = Morphling.getSampleSprite();
+                    }
                 }
             );
 
@@ -564,6 +566,8 @@ namespace TheOtherRoles
                 () => { lightsOutButton.Timer = lightsOutButton.MaxTimer; }
             );
 
+            // Set the default (or settings from the previous game) timers/durations when spawning the buttons
+            setCustomButtonCooldowns();
         }
     }
 }
