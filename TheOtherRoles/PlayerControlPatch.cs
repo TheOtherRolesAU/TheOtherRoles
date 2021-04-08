@@ -182,7 +182,8 @@ namespace TheOtherRoles {
         }
 
         static void impostorSetTarget() {
-            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return;
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return; // Not IsImpostor
+            if (PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) return; // IsDead
 
             PlayerControl target = null; 
             if (Spy.spy != null) {
