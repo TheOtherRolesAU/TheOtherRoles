@@ -7,18 +7,12 @@ Roles in development:
         - SidekickPromotes RPC call is called by every player
         - Jackal/Vent/Impostor vent highlighting
     - Shifter and Eraser: Fake tasks for neutral roles, which will be activated on Shift/Erase
+    - Spy: As a morphed Morphling keeps his Red name, the other Impostor can see that he's not a Spy
 
 Airship todos:
     - Eraser/Shifter did not work for some players
     - Seer flash did not work for some players
 
-Spy:
-    - Test Sheriff
-    - Test imp kill ceach other
-    - README
-    - Spy bei Shift/Erase/Jackal
-    - AchTUNG VAMPIRE/ERASE/ANDERES
-    - Block imp spy kill, if option deactivated
 
 High priority:
     - Modded handshake to let people know if someone is on the wrong mod version
