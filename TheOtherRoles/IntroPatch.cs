@@ -3,6 +3,7 @@ using System;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TheOtherRoles
 {
@@ -21,6 +22,17 @@ namespace TheOtherRoles
                 var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 jackalTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = jackalTeam;
+            }
+
+            // Add the Spy to the Impostor team (for the Impostors)
+            if (Spy.spy != null && PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+                List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                foreach (PlayerControl p in players) {
+                    if (p == Spy.spy || p.IDOFAMCIJKE.CIDDOFDJHJH)
+                        fakeImpostorTeam.Add(p);
+                }
+                __instance.yourTeam = fakeImpostorTeam;
             }
         }
 

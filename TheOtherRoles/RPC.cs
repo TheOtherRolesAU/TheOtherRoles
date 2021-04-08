@@ -44,7 +44,8 @@ namespace TheOtherRoles
         Snitch,
         Jackal,
         Sidekick,
-        Eraser
+        Eraser,
+        Spy
     }
 
     enum CustomRPC
@@ -194,6 +195,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Eraser:
                         Eraser.eraser = player;
+                        break;
+                    case RoleId.Spy:
+                        Spy.spy = player;
                         break;
                     }
                 }
@@ -352,7 +356,9 @@ namespace TheOtherRoles
                 Tracker.tracker = oldShifter;
             } else if (Snitch.snitch != null && Snitch.snitch == player) {
                 Snitch.snitch = oldShifter;
-            }else { // Crewmate
+            } else if (Spy.spy != null && Spy.spy == player) {
+                Spy.spy = oldShifter;
+            } else { // Crewmate
             }
             
             // Set cooldowns to max for both players
@@ -495,6 +501,7 @@ namespace TheOtherRoles
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
+            if (player == Spy.spy) Spy.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();

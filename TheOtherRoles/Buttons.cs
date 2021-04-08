@@ -154,8 +154,8 @@ namespace TheOtherRoles
                     if ((Sheriff.currentTarget.IDOFAMCIJKE.CIDDOFDJHJH && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
                         Sheriff.currentTarget == Jackal.jackal || 
                         Sheriff.currentTarget == Sidekick.sidekick || 
-                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget))
-                        {
+                        (Sheriff.spyCanDieToSheriff && Spy.spy != null && Spy.spy == Sheriff.currentTarget) ||
+                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget)) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
                     else {
