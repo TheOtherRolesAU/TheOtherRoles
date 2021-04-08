@@ -116,7 +116,7 @@ namespace TheOtherRoles {
 
         static void vampireSetTarget() {
             if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
-            
+
 		    PlayerControl target = null;
             if (Spy.spy != null) {
                 if (Spy.impostorsCanKillAnyone) {
@@ -161,7 +161,7 @@ namespace TheOtherRoles {
 
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
-            Eraser.currentTarget = setTarget(true);
+            Eraser.currentTarget = setTarget();
         }
 
         static void engineerUpdate() {

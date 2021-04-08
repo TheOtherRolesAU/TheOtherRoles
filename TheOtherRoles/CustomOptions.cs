@@ -118,7 +118,7 @@ namespace TheOtherRoles {
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true);
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true);
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false);
-            spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyyone If There Is A Spy", true);
+            spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true);
         }
     }
 
@@ -331,8 +331,8 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 25;
-            int detailedSettingsLines = 19 + 25 + 25;
+            int roleSettingsLines = 19 + 26;
+            int detailedSettingsLines = 19 + 26 + 25;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();

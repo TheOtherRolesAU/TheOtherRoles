@@ -65,6 +65,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
+- **Eraser:** The Eraser can now also remove the role of other Impostors. This enables him to reveal the Spy, but might result in removing the special ability of his partner.
 
 **Hotfix 2.0.1**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
@@ -294,7 +295,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 
 ## Eraser
 ### **Team: Impostors**
-The Eraser is an Impostor that can erase the role of every player that is not an Impostor.\
+The Eraser is an Impostor that can erase the role of every player.\
 The targeted players will lose their role after the meeting right before a player is exiled.\
 After every erase, the cooldown increases by 10 seconds.\
 The erase will be performed, even if the Eraser or his target die before the next meeting.\
@@ -305,6 +306,7 @@ The erase will be performed, even if the Eraser or his target die before the nex
 - Erasing a Jackal that has a Sidekick, triggers the Sidekick promotion if it's activated in the settings
 - As the erasing is being triggered before the eject of a player, erasing and voting out a Lover in the same round, would result in the
 ex lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
+- The Eraser can erase the role of other Impostors to reveal if they are a real Impostor or a Spy. When erasing a real Impostor, the Impostor loses its special ability.
 
 ### Game Options
 | Name | Description |
@@ -670,7 +672,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 |----------|:-------------:|
 | Spy Spawn Chance |
 | Spy Can Die To Sheriff | 
-| Impostors Can Kill Anyyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
 -----------------------
 
 
