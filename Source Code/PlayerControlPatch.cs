@@ -116,7 +116,18 @@ namespace TheOtherRoles {
 
         static void vampireSetTarget() {
             if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
-		    PlayerControl target = setTarget(true, true);
+
+		    PlayerControl target = null;
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
             bool targetNearGarlic = false;
             if (target != null) {
                 foreach (Garlic garlic in Garlic.garlics) {
@@ -150,7 +161,7 @@ namespace TheOtherRoles {
 
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
-            Eraser.currentTarget = setTarget(true);
+            Eraser.currentTarget = setTarget();
         }
 
         static void engineerUpdate() {
@@ -168,6 +179,26 @@ namespace TheOtherRoles {
                     } catch {}
                 }
             }
+        }
+
+        static void impostorSetTarget() {
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ||!PlayerControl.LocalPlayer.AMDJMEEHNIG || PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) { // !isImpostor || !canMove || isDead
+                HudManager.CMJOLNCMAPD.KillButton.SetTarget(null);
+                return;
+            }
+            
+            PlayerControl target = null; 
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
+            HudManager.CMJOLNCMAPD.KillButton.SetTarget(target);
         }
 
         static void trackerUpdate() {
@@ -202,7 +233,7 @@ namespace TheOtherRoles {
         }
 
         public static void playerSizeUpdate(PlayerControl p) {
-            if (Child.child == null) return;
+            if (Child.child == null  || Camouflager.camouflageTimer > 0f) return;
 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
@@ -256,6 +287,8 @@ namespace TheOtherRoles {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
+                // Impostor
+                impostorSetTarget();
             } 
         }
     }

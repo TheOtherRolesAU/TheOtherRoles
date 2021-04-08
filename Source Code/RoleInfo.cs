@@ -169,7 +169,7 @@ namespace TheOtherRoles
             if (Jackal.jackal != null && p == Jackal.jackal) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
-                "Kill all Crewmates and [FF1919FF]Impostors[FFFFFFFF] to win",
+                "Kill all Crewmates and [FF1919FF]Impostors[] to win",
                 "Kill everyone"));                
             }
             if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
@@ -184,7 +184,12 @@ namespace TheOtherRoles
                 "You are in [FC03BEFF]Love[]",
                 "You are in love"));
             }
-
+            if (Spy.spy != null && p == Spy.spy) {
+                infos.Add(new RoleInfo("Spy",
+                Spy.color,
+                "Confuse the [FF1919FF]Impostors[]",
+                "Confuse the Impostors"));
+            }
             if (infos.Count == 0 && p.IDOFAMCIJKE.CIDDOFDJHJH) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.LDCHDOFJPGH,

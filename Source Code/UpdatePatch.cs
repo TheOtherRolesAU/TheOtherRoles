@@ -104,6 +104,9 @@ namespace TheOtherRoles
                     setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
+            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Spy.spy, Spy.color);
+            }
             
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
@@ -112,6 +115,11 @@ namespace TheOtherRoles
                 if (Jackal.jackal != null) {
                     setPlayerNameColor(Jackal.jackal, Jackal.color);
                 }
+            }
+
+            // No else if here, as the Impostors need the Spy name to be colored
+            if (Spy.spy != null && PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+                setPlayerNameColor(Spy.spy, Spy.color);
             }
 
             // Crewmate roles with no changes: Child
@@ -266,7 +274,7 @@ namespace TheOtherRoles
         }
 
         public static void childUpdate() {
-            if (Child.child == null) return;
+            if (Child.child == null || Camouflager.camouflageTimer > 0f) return;
                 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;

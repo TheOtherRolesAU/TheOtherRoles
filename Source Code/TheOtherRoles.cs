@@ -46,6 +46,7 @@ namespace TheOtherRoles
             Jackal.clearAndReload();
             Sidekick.clearAndReload();
             Eraser.clearAndReload();
+            Spy.clearAndReload();
         }
 
         public static class Jester {
@@ -131,6 +132,7 @@ namespace TheOtherRoles
 
             public static float cooldown = 30f;
             public static bool jesterCanDieToSheriff = false;
+            public static bool spyCanDieToSheriff = false;
 
             public static PlayerControl currentTarget;
 
@@ -139,6 +141,7 @@ namespace TheOtherRoles
                 currentTarget = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 jesterCanDieToSheriff = CustomOptionHolder.jesterCanDieToSheriff.getBool();
+                spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
             }
         }
 
@@ -668,6 +671,18 @@ namespace TheOtherRoles
             futureErased = new List<PlayerControl>();
             currentTarget = null;
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
+        }
+    }
+
+    public static class Spy {
+        public static PlayerControl spy;
+        public static Color color = Palette.LDCHDOFJPGH;
+
+        public static bool impostorsCanKillAnyone = true;
+
+        public static void clearAndReload() {
+            spy = null;
+            impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
         }
     }
 }
