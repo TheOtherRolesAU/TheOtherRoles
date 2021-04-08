@@ -361,24 +361,6 @@ namespace TheOtherRoles
                     Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
                 }
 
-                if (ExileController.Instance.KLHCDCKJHKC != null) {
-                    byte exiledId = ExileController.Instance.KLHCDCKJHKC.GMBAIPNOKLP;
-
-                    // Child lose condition
-                    if (Child.child != null && Child.child.PlayerId == exiledId && !Child.isGrownUp() && !Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChildLose, Hazel.SendOption.Reliable, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.childLose();
-                    }
-                    // Jester and Bounty Hunter win condition
-                    else if ((Jester.jester != null && Jester.jester.PlayerId == exiledId) || (BountyHunter.bountyHunter != null && !BountyHunter.bountyHunter.IDOFAMCIJKE.FGNJJFABIHJ && BountyHunter.target != null && BountyHunter.target.PlayerId == exiledId)) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JesterBountyHunterWin, Hazel.SendOption.Reliable, -1);
-                        writer.Write(exiledId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.jesterBountyHunterWin(exiledId);
-                    }
-                }
-
                 // Seer spawn souls
                 if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
                     foreach (Vector3 pos in Seer.deadBodyPositions) {
@@ -443,8 +425,6 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Child.child.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Child.";
-                    else if(BountyHunter.bountyHunter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == BountyHunter.bountyHunter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Bounty Hunter.";
                     else if(Tracker.tracker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Tracker.tracker.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Tracker.";
                     else if(Snitch.snitch != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Snitch.snitch.PlayerId)

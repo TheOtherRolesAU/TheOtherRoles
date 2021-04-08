@@ -15,7 +15,7 @@ using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", "2.0.0")]
+    [BepInPlugin(Id, "The Other Roles", "2.0.1")]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
