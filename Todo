@@ -12,7 +12,16 @@ Airship todos:
     - Eraser/Shifter did not work for some players
     - Seer flash did not work for some players
 
+Spy:
+    - Test Sheriff
+    - Test imp kill ceach other
+    - README
+    - Spy bei Shift/Erase/Jackal
+    - AchTUNG VAMPIRE/ERASE/ANDERES
+    - Block imp spy kill, if option deactivated
+
 High priority:
+    - Modded handshake to let people know if someone is on the wrong mod version
     - Crowded mod
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
     - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"

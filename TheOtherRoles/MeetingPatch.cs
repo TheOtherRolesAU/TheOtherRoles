@@ -433,6 +433,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Jackal.";
                     else if(Sidekick.sidekick != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Sidekick.sidekick.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Sidekick.";
+                    else if(Spy.spy != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Spy.spy.PlayerId)
+                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Spy.";
                     else
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was not The Impostor.";
                 }

@@ -38,14 +38,16 @@ Even more roles are coming soon :)
 - [Snitch](#snitch)
 - [Jackal](#jackal)
 - [Sidekick](#sidekick)
+- [Spy](#spy)
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| **2021.31.3s** | v2.0.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
-| 2021.31.3s | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
+| 2021.3.31.3s| v2.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip)
+| 2021.3.31.3s| v2.0.1 beta| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
+| 2021.3.31.3s | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
@@ -60,6 +62,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.1.0**
+- **New Role:** [Spy](#spy)
 
 **Hotfix 2.0.1**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
@@ -152,7 +157,7 @@ syncs your game options automatically.
 If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
 
 ## Windows Manual Installation
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -164,7 +169,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 **Linux Manual**
 1. Install Among Us via steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
@@ -650,6 +655,24 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 | Sidekick can kill | Yes/No |
 | Sidekick can use vents | Yes/No |
 -----------------------
+
+## Spy
+### **Team: Crewmates**
+The Spy is a Crewmate, which has no special abilities.\
+The Spy looks like an additional Impostor to the Impostors, they can't tell the difference.\
+There are two possibilities (depending on the set options):
+- The Impostors can't kill the Spy (because otherwise their kill button would reveal, who the Spy is)
+- The Impostors can kill the Spy but they can also kill their Impostor partner (if they mistake another Impostor for the Spy)
+You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Spy Spawn Chance |
+| Spy Can Die To Sheriff | 
+| Impostors Can Kill Anyyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+-----------------------
+
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
