@@ -108,7 +108,7 @@ namespace TheOtherRoles
             }
             if (Trickster.trickster != null && p == Trickster.trickster) {
                 infos.Add(new RoleInfo("Trickster",
-                Eraser.color,
+                Trickster.color,
                 "Use your jack-in-the-boxes to surprise others",
                 "Surprise your enemies"));
             }
