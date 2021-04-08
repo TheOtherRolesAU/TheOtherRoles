@@ -116,7 +116,18 @@ namespace TheOtherRoles {
 
         static void vampireSetTarget() {
             if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
-		    PlayerControl target = setTarget(true, true);
+            
+		    PlayerControl target = null;
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
             bool targetNearGarlic = false;
             if (target != null) {
                 foreach (Garlic garlic in Garlic.garlics) {
@@ -168,6 +179,23 @@ namespace TheOtherRoles {
                     } catch {}
                 }
             }
+        }
+
+        static void impostorSetTarget() {
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return;
+
+            PlayerControl target = null; 
+            if (Spy.spy != null) {
+                if (Spy.impostorsCanKillAnyone) {
+                    target = setTarget(false, true);
+                } else {
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                }
+            } else {
+                target = setTarget(true, true);
+            }
+
+            HudManager.CMJOLNCMAPD.KillButton.SetTarget(target);
         }
 
         static void trackerUpdate() {
@@ -256,6 +284,8 @@ namespace TheOtherRoles {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
+                // Impostor
+                impostorSetTarget();
             } 
         }
     }
