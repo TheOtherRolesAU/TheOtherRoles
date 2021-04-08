@@ -203,7 +203,7 @@ namespace TheOtherRoles
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
-        public static float shieldDuration = 3f; // Constant
+        public static float shieldDuration = 3f;
         public static float cooldown = 30f;
 
         public static bool shieldActive = false;
@@ -221,6 +221,7 @@ namespace TheOtherRoles
             isRewinding = false;
             shieldActive = false;
             rewindTime = CustomOptionHolder.timeMasterRewindTime.getFloat();
+            shieldDuration = CustomOptionHolder.timeMasterShieldDuration.getFloat();
             cooldown = CustomOptionHolder.timeMasterCooldown.getFloat();
         }
     }

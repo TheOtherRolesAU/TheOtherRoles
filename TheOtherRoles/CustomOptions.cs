@@ -26,7 +26,7 @@ namespace TheOtherRoles {
         public static CustomOption childGrowingUpDuration, loversImpLoverRate, loversBothDie;
         public static CustomOption sheriffCooldown, jesterCanDieToSheriff, lighterModeLightsOnVision, lighterModeLightsOffVision, lighterCooldown,
         lighterDuration, detectiveAnonymousFootprints, detectiveFootprintIntervall, detectiveFootprintDuration, detectiveReportNameDuration, detectiveReportColorDuration,
-        timeMasterCooldown, timeMasterRewindTime, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType,
+        timeMasterCooldown, timeMasterRewindTime, timeMasterShieldDuration, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType,
         trackerUpdateIntervall, snitchLeftTasksForImpostors, jackalKillCooldown, jackalCreateSidekickCooldown, jackalCanUseVents, jackalCanCreateSidekick, sidekickPromotesToJackal, sidekickCanKill,
         sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor, spyCanDieToSheriff, spyImpostorsCanKillAnyone;
 
@@ -97,8 +97,9 @@ namespace TheOtherRoles {
             detectiveFootprintDuration = CustomOption.Create(123, "Footprint Duration", 5f, 0.25f, 10f, 0.25f);
             detectiveReportNameDuration = CustomOption.Create(124, "Time Where Detective Reports Will Have Name", 0, 0, 60, 2.5f);
             detectiveReportColorDuration = CustomOption.Create(125, "Time Where Detective Reports Will Have Color Type", 20, 0, 120, 2.5f);
-            timeMasterCooldown = CustomOption.Create(131, "Time Master Cooldown", 30f, 10f, 60f, 2.5f);
+            timeMasterCooldown = CustomOption.Create(131, "Time Master Cooldown", 30f, 10f, 120f, 2.5f);
             timeMasterRewindTime = CustomOption.Create(132, "Rewind Time", 3f, 1f, 10f, 1f);
+            timeMasterShieldDuration = CustomOption.Create(133, "Time Master Shield Duration", 3f, 1f, 20f, 1f);
             medicShowShielded = CustomOption.Create(143, "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"});
             medicShowAttemptToShielded = CustomOption.Create(144, "Shielded Player Sees Murder Attempt", false);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"});
