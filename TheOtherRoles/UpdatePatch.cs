@@ -274,7 +274,7 @@ namespace TheOtherRoles
         }
 
         public static void childUpdate() {
-            if (Child.child == null) return;
+            if (Child.child == null || Camouflager.camouflageTimer > 0f) return;
                 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
