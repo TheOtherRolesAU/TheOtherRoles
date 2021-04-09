@@ -25,7 +25,7 @@ namespace TheOtherRoles {
         lighterDuration, detectiveAnonymousFootprints, detectiveFootprintIntervall, detectiveFootprintDuration, detectiveReportNameDuration, detectiveReportColorDuration,
         timeMasterCooldown, timeMasterRewindTime, timeMasterShieldDuration, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType,
         trackerUpdateIntervall, snitchLeftTasksForImpostors, jackalKillCooldown, jackalCreateSidekickCooldown, jackalCanUseVents, jackalCanCreateSidekick, sidekickPromotesToJackal, sidekickCanKill,
-        sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor, spyCanDieToSheriff, spyImpostorsCanKillAnyone;
+        sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor, spyCanDieToSheriff, spyImpostorsCanKillAnyone, allowSkipOnEmergencyMeetings;
 
         public static string cs(Color c, string s) {
             return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]{4}[]", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
@@ -137,7 +137,7 @@ namespace TheOtherRoles {
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
-
+            allowSkipOnEmergencyMeetings = CustomOption.Create(4, "Allow Skips On Emergency Meetings", true);
         }
     }
 
@@ -186,7 +186,7 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false) {
-            return new CustomOption(id, name, new string[]{"Off", "On"}, default ? "On" : "Off", parent, isHeader);
+            return new CustomOption(id, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader);
         }
 
         // Static behaviour

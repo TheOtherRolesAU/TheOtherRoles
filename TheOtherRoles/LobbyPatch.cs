@@ -19,10 +19,13 @@ namespace TheOtherRoles {
             private static string currentText = "";
 
             public static void Prefix(GameStartManager __instance) {
+                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
                 update = GameData.Instance.BCFPPIDIMJK != __instance.GGIPHNCFKFH;
             }
 
             public static void Postfix(GameStartManager __instance) {
+                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
+
                 if (update) currentText = __instance.PlayerCounter.Text;
 
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
