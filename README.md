@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which currently adds 25 additional roles and new [Settings](#settings) to the game.
+The **The Other Roles**, is a mod for Amongs Us which adds manny new roles and new [Settings](#settings) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
