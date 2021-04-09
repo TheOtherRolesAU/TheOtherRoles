@@ -66,8 +66,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.2.0**
 - You can now set how long the Time Master shield lasts
-- The lobby now shows how much time is left until it closes
+- The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
+- Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
@@ -204,10 +205,10 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- The number of Impostor count be set inside a lobby
-- The map can be changed inside a lobby
-- You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
-
+- **Number of Impostors:** The number of Impostor count be set inside a lobby
+- **Map:** The map can be changed inside a lobby
+- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
+- **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 # Roles
 
 ## Role Assignment
