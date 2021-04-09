@@ -563,6 +563,7 @@ The Time Master won't be affected by the rewind.\
 | Time Master Spawn Chance | - |
 | Time Master Cooldown | - |
 | Rewind Duration | How much time to rewind |
+| Time Master Shield Duration |
 -----------------------
 
 ## Swapper
