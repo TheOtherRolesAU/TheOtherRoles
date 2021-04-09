@@ -33,7 +33,7 @@ namespace TheOtherRoles{
                 boxRenderer.sprite = getJackInTheBoxSprite();
             }
 
-            TheOtherRolesPlugin.Instance.Log.LogInfo("Createvent ");
+            TheOtherRolesPlugin.Instance.Log.LogInfo("Create vent");
             vent = UnityEngine.Object.Instantiate<Vent>(referenceVent, referenceVent.transform.parent);
             vent.transform.position = gameObject.transform.position;
             vent.Left = null;
@@ -41,6 +41,7 @@ namespace TheOtherRoles{
             vent.Center = null;
             vent.EnterVentAnim = null;
             vent.ExitVentAnim = null;
+            vent.GetComponent<PowerTools.SpriteAnim>().Stop();
             vent.Id = ShipStatus.Instance.GIDPCPOEFBC.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             TheOtherRolesPlugin.Instance.Log.LogInfo("Replace vent Sprite");
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
