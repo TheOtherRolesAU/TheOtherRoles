@@ -613,7 +613,7 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 The priority of the win conditions is the following:
 1. Jester wins by vote
 2. Team Impostor wins by sabotage
-3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
+3. Team Crew wins by tasks (also possible if the whole Crew is dead)
 4. Lovers among the last three players win
 5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
 6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
