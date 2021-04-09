@@ -67,7 +67,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.2.0**
 - You can now set how long the Time Master shield lasts
 - The lobby now shows how much time is left until it closes
--
+- We changed the look/layout of the settings
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
