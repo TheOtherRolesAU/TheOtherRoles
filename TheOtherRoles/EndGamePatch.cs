@@ -87,8 +87,10 @@ namespace TheOtherRoles {
                 }
             }
 
-            bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
+            bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
+            bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.NMINNGMJPML(gameOverReason) && !Lovers.existingWithImpLover())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (ImpLover can only win solo wins)
+            bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.IDOFAMCIJKE.FGNJJFABIHJ) || (Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ));
 
             // Child lose
             if (childLose) {
@@ -108,7 +110,7 @@ namespace TheOtherRoles {
             }
 
             // Lovers win conditions
-            else if (Lovers.existingAndAlive() && gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin) {
+            else if (loversWin) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
                 if (!Lovers.existingWithImpLover()) {
@@ -132,7 +134,7 @@ namespace TheOtherRoles {
             }
             
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
-            else if (gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && (Jackal.jackal != null && !Jackal.jackal.IDOFAMCIJKE.FGNJJFABIHJ || Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ)) {
+            else if (teamJackalWin) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();

@@ -69,6 +69,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
 - Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
+- Fixed a bug where a Lovers win wasn't displayed properly
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
@@ -332,7 +333,7 @@ You can specify the chance of one Lover being an impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
-If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).\
+If one Lover is an impostor and one a crewmate, they can only get a "Lovers solo win" where only they win (even if there is another impostor alive).\
 \
 **NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
