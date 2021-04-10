@@ -23,18 +23,16 @@ namespace TheOtherRoles{
 
         public JackInTheBox(Vector2 p) {
             gameObject = new GameObject("JackInTheBox");
-            var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
-            Vector3 position = new Vector3(p.x, p.y, referenceVent.transform.position.z);
+            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f); 
+            
+            // Create the marker
             gameObject.transform.position = position;
+            var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
+            boxRenderer.sprite = getJackInTheBoxSprite();
 
-            if (PlayerControl.LocalPlayer == Trickster.trickster) {
-                // Only render the box for the Jack-In-The-Box player
-                var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
-                boxRenderer.sprite = getJackInTheBoxSprite();
-            }
-
-            TheOtherRolesPlugin.Instance.Log.LogInfo("Create vent");
-            vent = UnityEngine.Object.Instantiate<Vent>(referenceVent, referenceVent.transform.parent);
+            // Create the vent
+            var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
+            vent = UnityEngine.Object.Instantiate<Vent>(referenceVent);
             vent.transform.position = gameObject.transform.position;
             vent.Left = null;
             vent.Right = null;
@@ -43,20 +41,28 @@ namespace TheOtherRoles{
             vent.ExitVentAnim = null;
             vent.GetComponent<PowerTools.SpriteAnim>().Stop();
             vent.Id = ShipStatus.Instance.GIDPCPOEFBC.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
-            TheOtherRolesPlugin.Instance.Log.LogInfo("Replace vent Sprite");
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = getJackInTheBoxSprite();
             vent.LNMJKMLHMIM = ventRenderer;
-            vent.gameObject.SetActive(false);
-
-            TheOtherRolesPlugin.Instance.Log.LogInfo("Add created vent to AllVents");
             var allVentsList = ShipStatus.Instance.GIDPCPOEFBC.ToList();
             allVentsList.Add(vent);
             ShipStatus.Instance.GIDPCPOEFBC = allVentsList.ToArray();
+            vent.gameObject.SetActive(false);
+            vent.name = "JackInTheBoxVent_" + vent.Id;
 
-            gameObject.SetActive(true);
+            // Only render the box for the Trickster
+            var playerIsTrickster = PlayerControl.LocalPlayer == Trickster.trickster;
+            gameObject.SetActive(playerIsTrickster);
 
             AllJackInTheBoxes.Add(this);
+        }
+
+        public static void UpdateStates() {
+            if (boxesConvertedToVents == true) return;
+            foreach(var box in AllJackInTheBoxes) {
+                var playerIsTrickster = PlayerControl.LocalPlayer == Trickster.trickster;
+                box.gameObject.SetActive(playerIsTrickster);
+            }
         }
 
         public void convertToVent() {

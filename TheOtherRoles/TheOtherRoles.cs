@@ -714,6 +714,7 @@ namespace TheOtherRoles
             placeBoxCooldown = CustomOptionHolder.tricksterPlaceBoxCooldown.getFloat();
             lightsOutCooldown = CustomOptionHolder.tricksterLightsOutCooldown.getFloat();
             lightsOutDuration = CustomOptionHolder.tricksterLightsOutDuration.getFloat();
+            JackInTheBox.UpdateStates(); // if the role is erased, we might have to update the state of the created objects
         }
 
     }

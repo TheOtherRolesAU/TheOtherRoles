@@ -44,6 +44,20 @@ namespace TheOtherRoles
                     roleCouldUse = true;
             }
 
+            var usableDistance = __instance.GBFKHOCBAOF;
+            if (__instance.name.StartsWith("JackInTheBoxVent_")) {
+                if(Trickster.trickster != PlayerControl.LocalPlayer) {
+                    // Only the Trickster can use the Jack-In-The-Boxes!
+                    canUse = false;
+                    couldUse = false;
+                    __result = num;
+                    return false; 
+                } else {
+                    // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
+                    usableDistance = 0.4f; 
+                }
+            }
+
             couldUse = ((@object.inVent || roleCouldUse) && !pc.FGNJJFABIHJ && (@object.AMDJMEEHNIG || @object.inVent));
             canUse = couldUse;
             if (canUse)
@@ -51,7 +65,8 @@ namespace TheOtherRoles
                 Vector2 truePosition = @object.GetTruePosition();
                 Vector3 position = __instance.transform.position;
                 num = Vector2.Distance(truePosition, position);
-                canUse &= (num <= __instance.GBFKHOCBAOF && !PhysicsHelpers.GCFCONMBBOF(truePosition, position, Constants.NCOONMPDEDB, false));
+                
+                canUse &= (num <= usableDistance && !PhysicsHelpers.GCFCONMBBOF(truePosition, position, Constants.NCOONMPDEDB, false));
             }
             __result = num;
             return false;
