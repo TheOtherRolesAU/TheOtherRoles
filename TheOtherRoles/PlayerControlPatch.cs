@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
-using static TheOtherRoles.MapOptions;
 using UnityEngine;
 
 using SystemTypes = LGBKLKNAINN;
@@ -294,7 +293,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
-    class StartMeetingPatcher {
+    class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             // Murder the bitten player before the meeting starts or reset the bitten player
             if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
@@ -310,17 +309,6 @@ namespace TheOtherRoles {
             }
         }
     }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
-    class StartMeetingPatch {
-        public static void Prefix(PlayerControl __instance, GameData.OFKOJOKOOAK IGLDJOKKFJE) {
-            // Reset vampire bitten
-            Vampire.bitten = null;
-            // Count meetings
-            if (IGLDJOKKFJE == null) meetingsCount++;
-        }
-    }
-
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     class PerformKillPatch
     {

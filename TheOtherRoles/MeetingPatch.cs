@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
+using static TheOtherRoles.MapOptions;
 using System.Collections;
 using System;
 using System.Text;
@@ -15,196 +16,203 @@ using Palette = GLNPIJPGGNJ;
 
 namespace TheOtherRoles
 {
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
-    class MeetingCalculateVotesPatch {
-        private static byte[] calculateVotes(MeetingHud __instance) {
-            byte[] array = new byte[11];
-            for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
-            {
-                PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
-                if (playerVoteArea.didVote)
-                {
-                    int num = (int)(playerVoteArea.votedFor + 1);
-                    if (num >= 0 && num < array.Length)
-                    {
-                        byte[] array2 = array;
-                        int num2 = num;
-                        // Mayor count vote twice
-                        if (Mayor.mayor != null && playerVoteArea.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId)
-                            array2[num2] += 2;
-                        else
-                            array2[num2] += 1;
-                    }
-                }
-            }
+    [HarmonyPatch]
+    class MeetingHudPatch {
+        static bool[] selections;
+        static SpriteRenderer[] renderers;
+        private static GameData.OFKOJOKOOAK target = null;
 
-            // Swapper swap votes
-            PlayerVoteArea swapped1 = null;
-            PlayerVoteArea swapped2 = null;
-
-            foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
-            }
-
-            if (swapped1 != null && swapped2 != null && swapped1.HMPHKKGPLAG + 1 >= 0 && swapped1.HMPHKKGPLAG + 1 < array.Length && swapped2.HMPHKKGPLAG + 1 >= 0 && swapped2.HMPHKKGPLAG + 1 < array.Length) {
-                byte tmp = array[swapped1.HMPHKKGPLAG + 1];
-                array[swapped1.HMPHKKGPLAG + 1] = array[swapped2.HMPHKKGPLAG + 1];
-                array[swapped2.HMPHKKGPLAG + 1] = tmp;
-            }
-            return array;
-        }
-
-        private static int IndexOfMax(byte[] self, Func<byte, int> comparer, out bool tie) {
-            tie = false;
-            int num = int.MinValue;
-            int result = -1;
-            for (int i = 0; i < self.Length; i++)
-            {
-                int num2 = comparer(self[i]);
-                if (num2 > num)
-                {
-                    result = i;
-                    num = num2;
-                    tie = false;
-                }
-                else if (num2 == num)
-                {
-                    tie = true;
-                    result = -1;
-                }
-            }
-            return result;
-        }
-
-        static bool Prefix(MeetingHud __instance)
-        {
-            if (__instance.DHCOPOOJCLN.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
-            {
-                byte[] self = calculateVotes(__instance);
-                bool tie;
-                int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
-                GameData.OFKOJOKOOAK exiled = null;
-                foreach (GameData.OFKOJOKOOAK pi in GameData.Instance.AllPlayers) {
-                    if (pi.GMBAIPNOKLP == maxIdx) {
-                        exiled = pi;
-                        break;
-                    }
-                }
-                byte[] array = new byte[10];
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
+        class MeetingCalculateVotesPatch {
+            private static byte[] calculateVotes(MeetingHud __instance) {
+                byte[] array = new byte[11];
                 for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
-                    array[(int)playerVoteArea.HMPHKKGPLAG] = playerVoteArea.GetState();
-                }
-                // RPCVotingComplete
-                if (AmongUsClient.Instance.HNMILJEOEKN)
-                    __instance.MJIJGEBBMAO(array, exiled, tie);
-                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
-                messageWriter.WriteBytesAndSize(array);
-                messageWriter.Write((exiled != null) ? exiled.GMBAIPNOKLP : byte.MaxValue);
-                messageWriter.Write(tie);
-                messageWriter.EndMessage();
-            }
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OMFOBKIENPI))]
-    class MeetingPopulateVotesPatch {
-        static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> HIDHPMAKEKH)
-        {
-            // Swapper swap votes
-            PlayerVoteArea swapped1 = null;
-            PlayerVoteArea swapped2 = null;
-
-            foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
-            }
-
-            bool doSwap = swapped1 != null && swapped2 != null;
-            if (doSwap) {
-
-                __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
-                __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
-            }
-
-            // Mayor display vote twice
-            __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
-            int num = doSwap ? 4 : 0; // Delay animaton if swapping
-            for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
-            {
-                PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
-                playerVoteArea.ClearForResults();
-                int num2 = doSwap ? 4 : 0; // Delay animaton if swapping
-                bool mayorFirstVoteDisplayed = false;
-
-                for (int j = 0; j < __instance.DHCOPOOJCLN.Length; j++)
-                {
-                    PlayerVoteArea playerVoteArea2 = __instance.DHCOPOOJCLN[j];
-                    byte self = HIDHPMAKEKH[(int)playerVoteArea2.HMPHKKGPLAG];
-
-                    if (!((self & 128) > 0))
+                    if (playerVoteArea.didVote)
                     {
-                        GameData.OFKOJOKOOAK playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.HMPHKKGPLAG);
-                        int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
-                        if (votedFor == (int)playerVoteArea.HMPHKKGPLAG)
+                        int num = (int)(playerVoteArea.votedFor + 1);
+                        if (num >= 0 && num < array.Length)
                         {
-                            SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                            if (PlayerControl.GameOptions.LNMFPEMGKOB)
-                            {
-                                PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer);
-                            }
+                            byte[] array2 = array;
+                            int num2 = num;
+                            // Mayor count vote twice
+                            if (Mayor.mayor != null && playerVoteArea.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId)
+                                array2[num2] += 2;
                             else
-                            {
-                                PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer);
-                            }
-                            spriteRenderer.transform.SetParent(playerVoteArea.transform);
-                            spriteRenderer.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num2, 0f, 0f);
-                            spriteRenderer.transform.localScale = Vector3.zero;
-                            spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                            __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
-                            num2++;
-                        }
-                        else if (i == 0 && votedFor == -1)
-                        {
-                            SpriteRenderer spriteRenderer2 = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                            if (PlayerControl.GameOptions.LNMFPEMGKOB)
-                            {
-                                PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer2);
-                            }
-                            else
-                            {
-                                PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer2);
-                            }
-                            spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
-                            spriteRenderer2.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num, 0f, 0f);
-                            spriteRenderer2.transform.localScale = Vector3.zero;
-                            spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                            __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num * 0.5f, spriteRenderer2.transform, 1f, 0.5f));
-                            num++;
-                        }
-
-                        // Major vote, redo this iteration to place a second vote
-                        if (Mayor.mayor != null && playerVoteArea2.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
-                            mayorFirstVoteDisplayed = true;
-                            j--;    
+                                array2[num2] += 1;
                         }
                     }
                 }
+
+                // Swapper swap votes
+                PlayerVoteArea swapped1 = null;
+                PlayerVoteArea swapped2 = null;
+
+                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
+                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                }
+
+                if (swapped1 != null && swapped2 != null && swapped1.HMPHKKGPLAG + 1 >= 0 && swapped1.HMPHKKGPLAG + 1 < array.Length && swapped2.HMPHKKGPLAG + 1 >= 0 && swapped2.HMPHKKGPLAG + 1 < array.Length) {
+                    byte tmp = array[swapped1.HMPHKKGPLAG + 1];
+                    array[swapped1.HMPHKKGPLAG + 1] = array[swapped2.HMPHKKGPLAG + 1];
+                    array[swapped2.HMPHKKGPLAG + 1] = tmp;
+                }
+                return array;
             }
 
-            return false;
+            private static int IndexOfMax(byte[] self, Func<byte, int> comparer, out bool tie) {
+                tie = false;
+                int num = int.MinValue;
+                int result = -1;
+                for (int i = 0; i < self.Length; i++)
+                {
+                    int num2 = comparer(self[i]);
+                    if (num2 > num)
+                    {
+                        result = i;
+                        num = num2;
+                        tie = false;
+                    }
+                    else if (num2 == num)
+                    {
+                        tie = true;
+                        result = -1;
+                    }
+                }
+                return result;
+            }
+
+            static bool Prefix(MeetingHud __instance)
+            {
+                if (__instance.DHCOPOOJCLN.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
+                {
+                    // If skipping is disabled, replace skipps/no-votes with self vote
+                    if (target == null && !allowSkipOnEmergencyMeetings) {
+                        foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
+                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.HMPHKKGPLAG; // TargetPlayerId
+                        }
+                    }
+
+                    byte[] self = calculateVotes(__instance);
+                    bool tie;
+                    int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
+                    GameData.OFKOJOKOOAK exiled = null;
+                    foreach (GameData.OFKOJOKOOAK pi in GameData.Instance.AllPlayers) {
+                        if (pi.GMBAIPNOKLP == maxIdx) {
+                            exiled = pi;
+                            break;
+                        }
+                    }
+                    byte[] array = new byte[10];
+                    for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                    {
+                        PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                        array[(int)playerVoteArea.HMPHKKGPLAG] = playerVoteArea.GetState();
+                    }
+                    // RPCVotingComplete
+                    if (AmongUsClient.Instance.HNMILJEOEKN)
+                        __instance.MJIJGEBBMAO(array, exiled, tie);
+                    MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
+                    messageWriter.WriteBytesAndSize(array);
+                    messageWriter.Write((exiled != null) ? exiled.GMBAIPNOKLP : byte.MaxValue);
+                    messageWriter.Write(tie);
+                    messageWriter.EndMessage();
+                }
+                return false;
+            }
         }
-    }
 
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OMFOBKIENPI))]
+        class MeetingPopulateVotesPatch {
+            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> HIDHPMAKEKH)
+            {
+                // Swapper swap votes
+                PlayerVoteArea swapped1 = null;
+                PlayerVoteArea swapped2 = null;
 
-    [HarmonyPatch]
-    class MeetingHudPopulateButtonsPatch {
-        static bool[] selections;
-        static SpriteRenderer[] renderers;
-        
+                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
+                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                }
+
+                bool doSwap = swapped1 != null && swapped2 != null;
+                if (doSwap) {
+
+                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
+                }
+
+                // Mayor display vote twice
+                __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                int num = doSwap ? 4 : 0; // Delay animaton if swapping
+                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                    playerVoteArea.ClearForResults();
+                    int num2 = doSwap ? 4 : 0; // Delay animaton if swapping
+                    bool mayorFirstVoteDisplayed = false;
+
+                    for (int j = 0; j < __instance.DHCOPOOJCLN.Length; j++)
+                    {
+                        PlayerVoteArea playerVoteArea2 = __instance.DHCOPOOJCLN[j];
+                        byte self = HIDHPMAKEKH[(int)playerVoteArea2.HMPHKKGPLAG];
+
+                        if (!((self & 128) > 0))
+                        {
+                            GameData.OFKOJOKOOAK playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.HMPHKKGPLAG);
+                            int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
+                            if (votedFor == (int)playerVoteArea.HMPHKKGPLAG)
+                            {
+                                SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
+                                if (PlayerControl.GameOptions.LNMFPEMGKOB)
+                                {
+                                    PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer);
+                                }
+                                else
+                                {
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer);
+                                }
+                                spriteRenderer.transform.SetParent(playerVoteArea.transform);
+                                spriteRenderer.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num2, 0f, 0f);
+                                spriteRenderer.transform.localScale = Vector3.zero;
+                                spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
+                                __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+                                num2++;
+                            }
+                            else if (i == 0 && votedFor == -1)
+                            {
+                                SpriteRenderer spriteRenderer2 = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
+                                if (PlayerControl.GameOptions.LNMFPEMGKOB)
+                                {
+                                    PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer2);
+                                }
+                                else
+                                {
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer2);
+                                }
+                                spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
+                                spriteRenderer2.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num, 0f, 0f);
+                                spriteRenderer2.transform.localScale = Vector3.zero;
+                                spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
+                                __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num * 0.5f, spriteRenderer2.transform, 1f, 0.5f));
+                                num++;
+                            }
+
+                            // Major vote, redo this iteration to place a second vote
+                            if (Mayor.mayor != null && playerVoteArea2.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
+                                mayorFirstVoteDisplayed = true;
+                                j--;    
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.MJIJGEBBMAO))]
         class MeetingHudVotingCompletedPatch {
             static void Postfix(MeetingHud __instance, byte[] HIDHPMAKEKH, GameData.OFKOJOKOOAK KLHCDCKJHKC, bool EMLKEPIBJLK)
@@ -313,6 +321,27 @@ namespace TheOtherRoles
                 if (IHJEKEOFMGJ) {
                     addSwapperSwapButtons(__instance);
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
+        class StartMeetingPatch {
+            public static void Prefix(PlayerControl __instance, GameData.OFKOJOKOOAK IGLDJOKKFJE) {
+                // Reset vampire bitten
+                Vampire.bitten = null;
+                // Count meetings
+                if (IGLDJOKKFJE == null) meetingsCount++;
+                // Save the meeting target
+                target = IGLDJOKKFJE;
+            }
+        }
+
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
+        class MeetingHudUpdatePatch {
+            static void Postfix(MeetingHud __instance) {
+                // Deactivate skip Button if skipping on emergency meetings is disabled
+                if (target == null && !allowSkipOnEmergencyMeetings)
+                    __instance.SkipVoteButton.gameObject.SetActive(false);
             }
         }
     }
