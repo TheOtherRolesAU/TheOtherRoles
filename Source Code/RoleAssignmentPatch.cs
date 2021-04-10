@@ -29,19 +29,19 @@ namespace TheOtherRoles
             RPCProcedure.setRole(roleId, playerId);
         }
 
-        public static void Postfix(Il2CppReferenceArray<GameData.PlayerInfo> FMAOEJEHPAO)
+        public static void Postfix(Il2CppReferenceArray<GameData.OFKOJOKOOAK> LBJJHLMFDJL)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.Data.IsImpostor);
+            crewmates.RemoveAll(x => x.IDOFAMCIJKE.CIDDOFDJHJH);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.Data.IsImpostor);
+            impostors.RemoveAll(x => !x.IDOFAMCIJKE.CIDDOFDJHJH);
 
-            float crewCountSettings = (float)TheOtherRolesPlugin.crewmateRolesCount.GetValue() / 2;
-            float impCountSettings = (float)TheOtherRolesPlugin.impostorRolesCount.GetValue() / 2;
+            float crewCountSettings = (float)CustomOptionHolder.crewmateRolesCount.getSelection() / 2;
+            float impCountSettings = (float)CustomOptionHolder.impostorRolesCount.getSelection() / 2;
 
             if (crewCountSettings % 1 == 0.5f) crewCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
             if (impCountSettings % 1 == 0.5f) impCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
@@ -52,38 +52,38 @@ namespace TheOtherRoles
             Dictionary<byte, int> impSettings = new Dictionary<byte, int>();
             Dictionary<byte, int> crewSettings = new Dictionary<byte, int>();
             
-            impSettings.Add((byte)RoleId.Morphling, TheOtherRolesPlugin.morphlingSpawnRate.GetValue());
-            impSettings.Add((byte)RoleId.Camouflager, TheOtherRolesPlugin.camouflagerSpawnRate.GetValue());
-            impSettings.Add((byte)RoleId.Vampire, TheOtherRolesPlugin.vampireSpawnRate.GetValue());
+            impSettings.Add((byte)RoleId.Morphling, CustomOptionHolder.morphlingSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Camouflager, CustomOptionHolder.camouflagerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Vampire, CustomOptionHolder.vampireSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Eraser, CustomOptionHolder.eraserSpawnRate.getSelection());
 
-            crewSettings.Add((byte)RoleId.Jester, TheOtherRolesPlugin.jesterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Mayor, TheOtherRolesPlugin.mayorSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Engineer, TheOtherRolesPlugin.engineerSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Sheriff, TheOtherRolesPlugin.sheriffSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Lighter, TheOtherRolesPlugin.lighterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Detective, TheOtherRolesPlugin.detectiveSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.TimeMaster, TheOtherRolesPlugin.timeMasterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Medic, TheOtherRolesPlugin.medicSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Shifter, TheOtherRolesPlugin.shifterSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Swapper,TheOtherRolesPlugin.swapperSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Seer, TheOtherRolesPlugin.seerSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Spy, TheOtherRolesPlugin.spySpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Child, TheOtherRolesPlugin.childSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Tracker, TheOtherRolesPlugin.trackerSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Snitch, TheOtherRolesPlugin.snitchSpawnRate.GetValue());
-            crewSettings.Add((byte)RoleId.Jackal, TheOtherRolesPlugin.jackalSpawnRate.GetValue());
-            // crewSettings.Add((byte)RoleId.BountyHunter, TheOtherRolesPlugin.bountyHunterSpawnRate.GetValue()); BOUNTY HUNTER
+            crewSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Mayor, CustomOptionHolder.mayorSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Engineer, CustomOptionHolder.engineerSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Sheriff, CustomOptionHolder.sheriffSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Lighter, CustomOptionHolder.lighterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Detective, CustomOptionHolder.detectiveSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.TimeMaster, CustomOptionHolder.timeMasterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Medic, CustomOptionHolder.medicSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Shifter, CustomOptionHolder.shifterSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Swapper,CustomOptionHolder.swapperSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Seer, CustomOptionHolder.seerSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Hacker, CustomOptionHolder.hackerSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
 
-            // Set multiple player roles
-            if (impostors.Count >= 3 && maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= TheOtherRolesPlugin.mafiaSpawnRate.GetValue() * 10)) {
+            // Set special roles
+            if (impostors.Count >= 3 && maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, impostors);
                 setRoleToRandomPlayer((byte)RoleId.Janitor, impostors);
                 setRoleToRandomPlayer((byte)RoleId.Mafioso, impostors);
                 maxImpostorRoles -= 3;
             }
 
-            if (rnd.Next(1, 101) <= TheOtherRolesPlugin.loversSpawnRate.GetValue() * 10) {
-                if (impostors.Count > 0 && crewmates.Count > 0 && maxCrewmateRoles > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= TheOtherRolesPlugin.loversImpLoverRate.GetValue()) {
+            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
+                if (impostors.Count > 0 && crewmates.Count > 0 && maxCrewmateRoles > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection()) {
                     setRoleToRandomPlayer((byte)RoleId.Lover1, impostors); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates);
                     maxCrewmateRoles--;
@@ -92,6 +92,16 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer((byte)RoleId.Lover1, crewmates); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates); 
                     maxCrewmateRoles -= 2; 
+                }
+            }
+
+            if (rnd.Next(1, 101) <= CustomOptionHolder.childSpawnRate.getSelection() * 10) {
+                if (impostors.Count > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, impostors); 
+                    maxImpostorRoles--;
+                } else if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, crewmates);
+                    maxCrewmateRoles--;
                 }
             }
 
@@ -143,24 +153,6 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer(roleId, impostors);
                 }
             }
-
-            // if (crewmates.Count > 0 && (rnd.Next(1, 101) <= TheOtherRolesPlugin.bountyHunterSpawnRate.GetValue())) {
-            //     List<PlayerControl> availableTargets = PlayerControl.AllPlayerControls.ToArray().ToList();
-            //     var bountyHunterIndex = rnd.Next(0, crewmates.Count);
-            //     byte bountyHunterId = crewmates[bountyHunterIndex].PlayerId;
-
-            //     availableTargets.RemoveAll(x => x.Data.IsImpostor || x.PlayerId == bountyHunterId);
-
-            //     if (availableTargets.Count > 0) {
-            //         byte targetId = availableTargets[rnd.Next(0, availableTargets.Count)].PlayerId;
-            //         crewmates.RemoveAt(bountyHunterIndex);
-            //         setRoleToPlayer((byte)RoleId.BountyHunter, bountyHunterId);
-            //         writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBountyHunterTarget, Hazel.SendOption.Reliable, -1);
-            //         writer.Write(targetId);
-            //         AmongUsClient.Instance.FinishRpcImmediately(writer);
-            //         RPCProcedure.setBountyHunterTarget(targetId);
-            //     }
-            // }
         }
     }
 }
