@@ -31,7 +31,7 @@ namespace TheOtherRoles {
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
                 int minutes = (int)timer / 60;
                 int seconds = (int)timer % 60;
-                string suffix = $" ({minutes}:{seconds})";
+                string suffix = $" ({minutes:00}:{seconds:00})";
 
                 __instance.PlayerCounter.Text = currentText + suffix;
             }

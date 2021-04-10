@@ -293,7 +293,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
-    class CmdReportDeadBodyPatch {
+    class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             // Murder the bitten player before the meeting starts or reset the bitten player
             if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten, true)) {

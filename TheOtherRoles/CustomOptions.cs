@@ -16,16 +16,102 @@ namespace TheOtherRoles {
         public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
+        public static CustomOption presetSelection;
+        public static CustomOption crewmateRolesCount;
+        public static CustomOption impostorRolesCount;
 
-        public static CustomOption presetSelection, crewmateRolesCount, impostorRolesCount, mafiaSpawnRate, morphlingSpawnRate, camouflagerSpawnRate,
-        vampireSpawnRate, eraserSpawnRate, childSpawnRate, loversSpawnRate, jesterSpawnRate, shifterSpawnRate, mayorSpawnRate, engineerSpawnRate, sheriffSpawnRate,
-        lighterSpawnRate, detectiveSpawnRate, timeMasterSpawnRate, medicSpawnRate, swapperSpawnRate, seerSpawnRate, hackerSpawnRate, trackerSpawnRate, snitchSpawnRate,
-        jackalSpawnRate, spySpawnRate, maxNumberOfMeetings, janitorCooldown, morphlingCooldown, camouflagerCooldown, vampireKillDelay, vampireCooldown, vampireCanKillNearGarlics,
-        eraserCooldown, childGrowingUpDuration, loversImpLoverRate, loversBothDie, sheriffCooldown, jesterCanDieToSheriff, lighterModeLightsOnVision, lighterModeLightsOffVision, lighterCooldown,
-        lighterDuration, detectiveAnonymousFootprints, detectiveFootprintIntervall, detectiveFootprintDuration, detectiveReportNameDuration, detectiveReportColorDuration,
-        timeMasterCooldown, timeMasterRewindTime, timeMasterShieldDuration, medicShowShielded, medicShowAttemptToShielded, seerMode, seerSoulDuration, hackerCooldown, hackerHackeringDuration, hackerOnlyColorType,
-        trackerUpdateIntervall, snitchLeftTasksForImpostors, jackalKillCooldown, jackalCreateSidekickCooldown, jackalCanUseVents, jackalCanCreateSidekick, sidekickPromotesToJackal, sidekickCanKill,
-        sidekickCanUseVents, jackalPromotedFromSidekickCanCreateSidekick, jackalCanCreateSidekickFromImpostor, spyCanDieToSheriff, spyImpostorsCanKillAnyone, allowSkipOnEmergencyMeetings;
+        public static CustomOption mafiaSpawnRate;
+        public static CustomOption janitorCooldown;
+
+        public static CustomOption morphlingSpawnRate;
+        public static CustomOption morphlingCooldown;
+
+        public static CustomOption camouflagerSpawnRate;
+        public static CustomOption camouflagerCooldown;
+
+        public static CustomOption vampireSpawnRate;
+        public static CustomOption vampireKillDelay;
+        public static CustomOption vampireCooldown;
+        public static CustomOption vampireCanKillNearGarlics;
+
+        public static CustomOption eraserSpawnRate;
+        public static CustomOption eraserCooldown;
+
+        public static CustomOption childSpawnRate;
+        public static CustomOption childGrowingUpDuration;
+
+        public static CustomOption loversSpawnRate;
+        public static CustomOption loversImpLoverRate;
+        public static CustomOption loversBothDie;
+
+        public static CustomOption jesterSpawnRate;
+
+        public static CustomOption shifterSpawnRate;
+
+        public static CustomOption mayorSpawnRate;
+
+        public static CustomOption engineerSpawnRate;
+
+        public static CustomOption sheriffSpawnRate;
+        public static CustomOption sheriffCooldown;
+        public static CustomOption jesterCanDieToSheriff;
+
+        public static CustomOption lighterSpawnRate;
+        public static CustomOption lighterModeLightsOnVision;
+        public static CustomOption lighterModeLightsOffVision;
+        public static CustomOption lighterCooldown;
+        public static CustomOption lighterDuration;
+
+        public static CustomOption detectiveSpawnRate;
+        public static CustomOption detectiveAnonymousFootprints;
+        public static CustomOption detectiveFootprintIntervall;
+        public static CustomOption detectiveFootprintDuration;
+        public static CustomOption detectiveReportNameDuration;
+        public static CustomOption detectiveReportColorDuration;
+
+        public static CustomOption timeMasterSpawnRate;
+        public static CustomOption timeMasterCooldown;
+        public static CustomOption timeMasterRewindTime;
+        public static CustomOption timeMasterShieldDuration;
+
+        public static CustomOption medicSpawnRate;
+        public static CustomOption medicShowShielded;
+        public static CustomOption medicShowAttemptToShielded;
+
+        public static CustomOption swapperSpawnRate;
+
+        public static CustomOption seerSpawnRate;
+        public static CustomOption seerMode;
+        public static CustomOption seerSoulDuration;
+
+        public static CustomOption hackerSpawnRate;
+        public static CustomOption hackerCooldown;
+        public static CustomOption hackerHackeringDuration;
+        public static CustomOption hackerOnlyColorType;
+
+        public static CustomOption trackerSpawnRate;
+        public static CustomOption trackerUpdateIntervall;
+
+        public static CustomOption snitchSpawnRate;
+        public static CustomOption snitchLeftTasksForImpostors;
+
+        public static CustomOption jackalSpawnRate;
+        public static CustomOption jackalKillCooldown;
+        public static CustomOption jackalCreateSidekickCooldown;
+        public static CustomOption jackalCanUseVents;
+        public static CustomOption jackalCanCreateSidekick;
+        public static CustomOption sidekickPromotesToJackal;
+        public static CustomOption sidekickCanKill;
+        public static CustomOption sidekickCanUseVents;
+        public static CustomOption jackalPromotedFromSidekickCanCreateSidekick;
+        public static CustomOption jackalCanCreateSidekickFromImpostor;
+
+        public static CustomOption spySpawnRate;
+        public static CustomOption spyCanDieToSheriff;
+        public static CustomOption spyImpostorsCanKillAnyone;
+
+        public static CustomOption maxNumberOfMeetings;
+        public static CustomOption allowSkipOnEmergencyMeetings;
 
         public static string cs(Color c, string s) {
             return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]{4}[]", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);

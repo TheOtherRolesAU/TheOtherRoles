@@ -89,7 +89,7 @@ namespace TheOtherRoles {
 
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
             bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
-            bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.NMINNGMJPML(gameOverReason) && !Lovers.existingWithImpLover())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (ImpLover can only win solo wins)
+            bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.NMINNGMJPML(gameOverReason) && Lovers.existingAndCrewLovers())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.IDOFAMCIJKE.FGNJJFABIHJ) || (Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ));
 
             // Child lose
@@ -113,7 +113,7 @@ namespace TheOtherRoles {
             else if (loversWin) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
                 // Double win for lovers, crewmates also win
-                if (!Lovers.existingWithImpLover()) {
+                if (Lovers.existingAndCrewLovers()) {
                     AdditionalTempData.winCondition = WinCondition.LoversTeamWin;
                     TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls) {

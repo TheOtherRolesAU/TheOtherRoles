@@ -312,8 +312,9 @@ namespace TheOtherRoles
             return lover1 != null && lover2 != null && !lover1.IDOFAMCIJKE.FGNJJFABIHJ && !lover2.IDOFAMCIJKE.FGNJJFABIHJ && !lover1.IDOFAMCIJKE.GBPMEHJFECK && !lover2.IDOFAMCIJKE.GBPMEHJFECK && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
-        public static bool existingWithImpLover() {
-            return lover1 != null && lover2 != null && !lover1.IDOFAMCIJKE.GBPMEHJFECK && !lover2.IDOFAMCIJKE.GBPMEHJFECK && (lover1.IDOFAMCIJKE.CIDDOFDJHJH || lover2.IDOFAMCIJKE.CIDDOFDJHJH);
+        public static bool existingAndCrewLovers() {
+            if (lover1 == null || lover2 == null || lover1.IDOFAMCIJKE.GBPMEHJFECK || lover2.IDOFAMCIJKE.GBPMEHJFECK) return false; // Null or disconnected
+            return !(lover1.IDOFAMCIJKE.CIDDOFDJHJH || lover2.IDOFAMCIJKE.CIDDOFDJHJH || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
         }
 
         public static void clearAndReload() {
