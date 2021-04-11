@@ -430,7 +430,20 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(KillAnimation),nameof(KillAnimation.CoPerformKill))]
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
+    class PlayerControlSetCoolDownPatch {
+        public static bool Prefix(PlayerControl __instance, float KAIMOLNHDCG) {
+            if (PlayerControl.GameOptions.ELBDIKIOHHH <= 0f) return false;
+            float multiplier = 1f;
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) multiplier = Child.isGrownUp() ? 0.66f : 2f;
+
+            __instance.killTimer = Mathf.Clamp(KAIMOLNHDCG, 0f, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            DestroyableSingleton<HudManager>.CMJOLNCMAPD.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
     class Test {
         public static void Prefix(KillAnimation __instance, ref PlayerControl KMMMAPHIMLH, ref PlayerControl IGLDJOKKFJE) {
             if (Vampire.vampire != null && Vampire.vampire == KMMMAPHIMLH && Vampire.bitten != null && Vampire.bitten == IGLDJOKKFJE)
