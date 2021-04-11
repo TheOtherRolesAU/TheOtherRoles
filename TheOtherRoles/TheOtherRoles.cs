@@ -332,6 +332,7 @@ namespace TheOtherRoles
         public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static float soulDuration = 15f;
+        public static bool limitSoulDuration = false;
         public static int mode = 0;
 
         private static Sprite soulSprite;
@@ -344,6 +345,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             seer = null;
             deadBodyPositions = new List<Vector3>();
+            limitSoulDuration = CustomOptionHolder.seerLimitSoulDuration.getBool();
             soulDuration = CustomOptionHolder.seerSoulDuration.getFloat();
             mode = CustomOptionHolder.medicShowShielded.getSelection();
         }
