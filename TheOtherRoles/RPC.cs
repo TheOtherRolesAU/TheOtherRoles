@@ -248,6 +248,10 @@ namespace TheOtherRoles
         }
 
         public static void timeMasterRewindTime() {
+            TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
+            if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
+                resetTimeMasterButton();
+            }
             HudManager.CMJOLNCMAPD.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
             PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.rewindTime / 2, new Action<float>((p) => {
