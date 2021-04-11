@@ -83,6 +83,7 @@ namespace TheOtherRoles {
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
         public static CustomOption seerSoulDuration;
+        public static CustomOption seerLimitSoulDuration;
 
         public static CustomOption hackerSpawnRate;
         public static CustomOption hackerCooldown;
@@ -203,7 +204,8 @@ namespace TheOtherRoles {
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
-            seerSoulDuration = CustomOption.Create(162, "Seer Soul Duration", 15f, 0f, 60f, 5f, seerSpawnRate);
+            seerLimitSoulDuration = CustomOption.Create(163, "Seer Limit Soul Duration", false, seerSpawnRate);
+            seerSoulDuration = CustomOption.Create(162, "Seer Soul Duration", 15f, 0f, 60f, 5f, seerLimitSoulDuration);
         
             hackerSpawnRate = CustomOption.Create(170, cs(Hacker.color, "Hacker"), rates, null, true);
             hackerCooldown = CustomOption.Create(171, "Hacker Cooldown", 30f, 0f, 60f, 5f, hackerSpawnRate);
@@ -431,7 +433,12 @@ namespace TheOtherRoles {
             float offset = -7.85f;
             foreach (CustomOption option in CustomOption.options) {
                 if (option?.optionBehaviour?.gameObject != null) {
-                    bool enabled = option.parent == null || option.parent.selection != 0;
+                    bool enabled = true;
+                    var parent = option.parent;
+                    while (parent != null && enabled) {
+                        enabled = parent.selection != 0;
+                        parent = parent.parent;
+                    }
                     option.optionBehaviour.gameObject.SetActive(enabled);
                     if (enabled) {
                         offset -= option.isHeader ? 0.75f : 0.5f;

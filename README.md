@@ -405,6 +405,7 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 |----------|:-------------:|
 | Seer Spawn Chance | - 
 | Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
 | Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
 -----------------------
 
