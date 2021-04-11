@@ -96,6 +96,8 @@ namespace TheOtherRoles {
                 if (AmongUsClient.Instance.CBKCIKKEJHI) {
                     uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                        var dummyComponent = player.GetComponent<DummyBehaviour>();
+                        if (dummyComponent != null && dummyComponent.enabled) continue;
                         if (!playerVersions.ContainsKey(player.PlayerId) || playerVersions[player.PlayerId] != hostVersion) continueStart = false;
                     }
                 }
