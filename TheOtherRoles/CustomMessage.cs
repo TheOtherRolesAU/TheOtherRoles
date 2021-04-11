@@ -5,7 +5,9 @@ using System;
 using Effects = HLPCBNMDEHF;
 
 namespace TheOtherRoles{
-    class CustomMessage {
+
+    public class CustomMessage {
+
         private TextRenderer text;
         private static List<CustomMessage> customMessages = new List<CustomMessage>();
 
@@ -13,7 +15,8 @@ namespace TheOtherRoles{
             RoomTracker roomTracker =  HudManager.CMJOLNCMAPD?.roomTracker;
             if (roomTracker != null) {
                 GameObject gameObject = UnityEngine.Object.Instantiate(roomTracker.gameObject);
-                gameObject.transform.SetParent(roomTracker.gameObject.transform.parent);
+                
+                gameObject.transform.SetParent(HudManager.CMJOLNCMAPD.transform);
                 UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
                 text = gameObject.GetComponent<TextRenderer>();
                 
@@ -23,7 +26,8 @@ namespace TheOtherRoles{
                 text.Text = message;
                 text.RefreshMesh();
 
-                gameObject.transform.position = new Vector3(0, 0, gameObject.transform.position.z);
+                // Use local position to place it in the player's view instead of the world location
+                gameObject.transform.localPosition = new Vector3(0, -1.8f, gameObject.transform.localPosition.z);
                 customMessages.Add(this);
 
                 HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(duration, new Action<float>((p) => {

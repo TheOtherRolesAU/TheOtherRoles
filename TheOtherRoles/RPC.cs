@@ -556,7 +556,7 @@ namespace TheOtherRoles
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
             if(PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
-                // Show indicator that lights are currently off
+                new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
     }
