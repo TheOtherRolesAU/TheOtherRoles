@@ -470,7 +470,9 @@ namespace TheOtherRoles
     public static class Child {
         public static PlayerControl child;
         public static Color color = Color.white;
-        
+        public const float defaultColliderRadius = 0.2233912f;
+            public const float defaultColliderOffset = 0.3636057f;
+
         public static float growingUpDuration = 400f;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
         public static bool triggerChildLose = false;
