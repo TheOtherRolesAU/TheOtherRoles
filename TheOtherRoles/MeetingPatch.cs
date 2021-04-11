@@ -25,7 +25,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[11];
+                byte[] array = new byte[__instance.DHCOPOOJCLN.Length + 1];
                 for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
@@ -105,7 +105,7 @@ namespace TheOtherRoles
                             break;
                         }
                     }
-                    byte[] array = new byte[10];
+                    byte[] array = new byte[__instance.DHCOPOOJCLN.Length];
                     for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
                     {
                         PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
