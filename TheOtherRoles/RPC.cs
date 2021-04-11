@@ -211,9 +211,9 @@ namespace TheOtherRoles
                 }
         }
 
-        public static void versionHandshake(uint version, byte playerId) {
+        public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
             if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
-                GameStartManagerPatch.playerVersions[playerId] = version;
+                GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
             }
         }
 
@@ -596,9 +596,11 @@ namespace TheOtherRoles
                     RPCProcedure.setRole(roleId, playerId);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
-                    uint version = DOOILGKLBBF.ReadPackedUInt32();
+                    byte major = DOOILGKLBBF.ReadByte();
+                    byte minor = DOOILGKLBBF.ReadByte();
+                    byte patch = DOOILGKLBBF.ReadByte();
                     byte versionOwnerId = DOOILGKLBBF.ReadByte();
-                    RPCProcedure.versionHandshake(version, versionOwnerId);
+                    RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
 
                 // Role functionality

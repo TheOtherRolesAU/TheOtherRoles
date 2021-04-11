@@ -9,7 +9,7 @@ using Palette = GLNPIJPGGNJ;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
-        public static Dictionary<byte, uint> playerVersions = new Dictionary<byte, uint>();
+        public static Dictionary<byte, Tuple<byte, byte, byte>> playerVersions = new Dictionary<byte, Tuple<byte, byte, byte>>();
         private static float timer = 600f;
         private static bool versionSent = false;
 
@@ -17,7 +17,7 @@ namespace TheOtherRoles {
         public class GameStartManagerStartPatch {
             public static void Postfix() {
                 // Refresh version infos
-                playerVersions = new Dictionary<byte, uint>();
+                playerVersions = new Dictionary<byte, Tuple<byte, byte, byte>>();
                 versionSent = false;
 
                 // Reset lobby countdown timer
@@ -40,16 +40,16 @@ namespace TheOtherRoles {
                 if (PlayerControl.LocalPlayer != null && !versionSent) {
                     versionSent = true;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
-                    uint version = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
-                    writer.WritePacked(version);
+                    writer.Write(TheOtherRolesPlugin.Major);
+                    writer.Write(TheOtherRolesPlugin.Minor);
+                    writer.Write(TheOtherRolesPlugin.Patch);
                     writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.versionHandshake(version, PlayerControl.LocalPlayer.PlayerId);
+                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, PlayerControl.LocalPlayer.PlayerId);
                 }
 
                 // Host update with version handshake infos
                 if (AmongUsClient.Instance.CBKCIKKEJHI) {
-                    uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
                     bool blockStart = false;
                     string message = "";
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
@@ -59,9 +59,9 @@ namespace TheOtherRoles {
                         else if (!playerVersions.ContainsKey(player.PlayerId))  {
                             blockStart = true;
                             message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated or no version of The Other Roles\n";
-                        } else if (playerVersions[player.PlayerId] != hostVersion) {
+                        } else if (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated version ({playerVersions[player.PlayerId]}) of The Other Roles\n";
+                            message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n";
                         }
                     }
                     if (blockStart) {
@@ -98,7 +98,8 @@ namespace TheOtherRoles {
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                         var dummyComponent = player.GetComponent<DummyBehaviour>();
                         if (dummyComponent != null && dummyComponent.enabled) continue;
-                        if (!playerVersions.ContainsKey(player.PlayerId) || playerVersions[player.PlayerId] != hostVersion) continueStart = false;
+                        if (!playerVersions.ContainsKey(player.PlayerId) || (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch))
+                            continueStart = false;
                     }
                 }
                 return continueStart;
