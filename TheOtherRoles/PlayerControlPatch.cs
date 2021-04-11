@@ -444,7 +444,7 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
-    class Test {
+    class KillAnimationCoPerformKillPatch {
         public static void Prefix(KillAnimation __instance, ref PlayerControl KMMMAPHIMLH, ref PlayerControl IGLDJOKKFJE) {
             if (Vampire.vampire != null && Vampire.vampire == KMMMAPHIMLH && Vampire.bitten != null && Vampire.bitten == IGLDJOKKFJE)
                 KMMMAPHIMLH = IGLDJOKKFJE;
