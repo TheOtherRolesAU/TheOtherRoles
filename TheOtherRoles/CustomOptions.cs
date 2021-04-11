@@ -45,6 +45,7 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
 
         public static CustomOption jesterSpawnRate;
+        public static CustomOption jesterCanCallEmergency;
 
         public static CustomOption shifterSpawnRate;
 
@@ -79,6 +80,7 @@ namespace TheOtherRoles {
         public static CustomOption medicShowAttemptToShielded;
 
         public static CustomOption swapperSpawnRate;
+        public static CustomOption swapperCanCallEmergency;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
@@ -166,6 +168,7 @@ namespace TheOtherRoles {
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
+            jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 
@@ -201,6 +204,7 @@ namespace TheOtherRoles {
             medicShowAttemptToShielded = CustomOption.Create(144, "Shielded Player Sees Murder Attempt", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);

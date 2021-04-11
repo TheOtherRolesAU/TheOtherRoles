@@ -117,13 +117,27 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(EmergencyMinigame), nameof(EmergencyMinigame.Update))]
     class EmergencyMinigameUpdatePatch {
         static void Postfix(EmergencyMinigame __instance) {
-            // Swapper deactivate emergency button
-            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer) {
-                __instance.StatusText.Text = "The Swapper can't start an emergency meeting";
+            var roleCanCallEmergency = true;
+            var statusText = "";
+
+            // Deactivate emergency button for Swapper
+            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer && !Swapper.canCallEmergency) {
+                roleCanCallEmergency = false;
+                statusText = "The Swapper can't start an emergency meeting";
+            }
+            // Potentially deactivate emergency button for Jester
+            if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.canCallEmergency) {
+                roleCanCallEmergency = false;
+                statusText = "The Jester can't start an emergency meeting";
+            }
+
+            if (!roleCanCallEmergency) {
+                __instance.StatusText.Text = statusText;
                 __instance.NumberText.Text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
                 __instance.ButtonActive = false;
+                return;
             }
 
             // Handle max number of meetings
