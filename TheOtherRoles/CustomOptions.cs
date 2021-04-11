@@ -45,6 +45,7 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
 
         public static CustomOption jesterSpawnRate;
+        public static CustomOption jesterCanCallEmergency;
 
         public static CustomOption shifterSpawnRate;
 
@@ -165,6 +166,7 @@ namespace TheOtherRoles {
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
+            jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 

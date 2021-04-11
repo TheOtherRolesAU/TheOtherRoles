@@ -392,6 +392,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Name | Description |
 |----------|:-------------:|
 | Jester Spawn Chance | -
+| Jester can call emergency meeting | Option to disable the emergency button for the Jester
 -----------------------
 
 ## Seer
