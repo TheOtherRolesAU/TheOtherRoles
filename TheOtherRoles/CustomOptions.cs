@@ -476,7 +476,7 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 19;
             int roleSettingsLines = 19 + 27;
-            int detailedSettingsLines = 19 + 27 + 36;
+            int detailedSettingsLines = 19 + 27 + 37;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
