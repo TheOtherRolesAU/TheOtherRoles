@@ -70,6 +70,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - We changed the look/layout of the settings
 - Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
 - Fixed a bug where a Lovers win wasn't displayed properly
+- Fixed the Among Us bug where people were unable to move after meetings
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
