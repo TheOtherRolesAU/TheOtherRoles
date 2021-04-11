@@ -579,6 +579,7 @@ The Time Master won't be affected by the rewind.\
 - A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
 - If the Time Master was bitten and has his shield active before when a meeting is called, he survives but the time won't be rewinded.
 - If the Time Master has a Medic shield, he won't rewind.
+- The shield itself ends immediately when triggered. So the timemaster can be attacked again as soon as the rewind ends.
 
 ### Game Options
 | Name | Description |

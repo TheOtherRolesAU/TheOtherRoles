@@ -67,6 +67,12 @@ namespace TheOtherRoles
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
 
+        public static void resetTimeMasterButton() {
+            timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
+            timeMasterShieldButton.isEffectActive = false;
+            timeMasterShieldButton.killButtonManager.TimerText.Color = Palette.MKAFGNEBHKC;
+        }
+
         public static void Postfix(HudManager __instance)
         {
             // Engineer Repair
