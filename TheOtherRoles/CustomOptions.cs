@@ -80,6 +80,7 @@ namespace TheOtherRoles {
         public static CustomOption medicShowAttemptToShielded;
 
         public static CustomOption swapperSpawnRate;
+        public static CustomOption swapperCanCallEmergency;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
@@ -202,6 +203,7 @@ namespace TheOtherRoles {
             medicShowAttemptToShielded = CustomOption.Create(144, "Shielded Player Sees Murder Attempt", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);

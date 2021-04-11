@@ -592,13 +592,14 @@ The Time Master won't be affected by the rewind.\
 ### **Team: Crewmates**
 During meetings the Swapper can exchange votes that two people get (i.e. all votes
 that player A got will be given to player B and vice versa).\
-Because of the Swappers strength in meetings, they can't start emergency meetings
+Because of the Swappers strength in meetings, they might not start emergency meetings
 and can't fix lights and comms.
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Swapper Spawn Chance | -
+| Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
 -----------------------
 
 ## Tracker

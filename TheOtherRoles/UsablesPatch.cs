@@ -121,7 +121,7 @@ namespace TheOtherRoles
             var statusText = "";
 
             // Deactivate emergency button for Swapper
-            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer) {
+            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer && !Swapper.canCallEmergency) {
                 roleCanCallEmergency = false;
                 statusText = "The Swapper can't start an emergency meeting";
             }
@@ -137,6 +137,7 @@ namespace TheOtherRoles
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
                 __instance.ButtonActive = false;
+                return;
             }
 
             // Handle max number of meetings
