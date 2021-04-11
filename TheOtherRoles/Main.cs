@@ -26,8 +26,23 @@ namespace TheOtherRoles
         public static int optionsPage = 1;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public ConfigEntry<string> Ip { get; set; }
+        public ConfigEntry<ushort> Port { get; set; }
 
         public override void Load() {
+            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
+            Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
+            Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
+
+            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.CMJOLNCMAPD;
+            IRegionInfo[] regions = ServerManager.DefaultRegions;
+
+            regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
+            ServerManager.DefaultRegions = regions;
+            serverManager.GDOLGIJJLBL = regions;
+            serverManager.SaveServers();
+
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
             CustomOptionHolder.Load();
