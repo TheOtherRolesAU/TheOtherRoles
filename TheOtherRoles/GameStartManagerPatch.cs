@@ -53,10 +53,12 @@ namespace TheOtherRoles {
                     bool blockStart = false;
                     string message = "";
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                        if (!playerVersions.ContainsKey(player.PlayerId))  {
+                        var dummyComponent = player.GetComponent<DummyBehaviour>();
+                        if (dummyComponent != null && dummyComponent.enabled)
+                            continue;
+                        else if (!playerVersions.ContainsKey(player.PlayerId))  {
                             blockStart = true;
                             message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated or no version of The Other Roles\n";
-                            System.Console.WriteLine(player.IDOFAMCIJKE.HGGCLJHCDBM);
                         } else if (playerVersions[player.PlayerId] != hostVersion) {
                             blockStart = true;
                             message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated version ({playerVersions[player.PlayerId]}) of The Other Roles\n";
