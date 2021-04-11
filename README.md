@@ -74,6 +74,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
 - Fixed a bug where the Child Impostor had the same cooldowns as normal Impostors
 - Fixed a bug where the Vampire/Janitor/Mafioso would lose their kill button after being erased
+- The Child is now able to use ladders and it can do all the tasks right away
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
