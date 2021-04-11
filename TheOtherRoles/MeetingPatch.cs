@@ -371,6 +371,11 @@ namespace TheOtherRoles
                 }
             }
             Eraser.futureErased = new List<PlayerControl>();
+
+            // Trickster boxes
+            if (Trickster.trickster != null && JackInTheBox.hasJackInTheBoxLimitReached()) {
+                JackInTheBox.convertToVents();
+            }
         }
     }
 
@@ -399,14 +404,16 @@ namespace TheOtherRoles
                         var rend = soul.AddComponent<SpriteRenderer>();
                         rend.sprite = Seer.getSoulSprite();
                         
-                        PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Seer.soulDuration, new Action<float>((p) => {
-                            if (rend != null) {
-                                var tmp = rend.color;
-                                tmp.a = Mathf.Clamp01(1 - p);
-                                rend.color = tmp;
-                            }    
-                            if (p == 1f && rend?.gameObject != null) UnityEngine.Object.Destroy(rend.gameObject);
-                        })));
+                        if(Seer.limitSoulDuration) {
+                            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Seer.soulDuration, new Action<float>((p) => {
+                                if (rend != null) {
+                                    var tmp = rend.color;
+                                    tmp.a = Mathf.Clamp01(1 - p);
+                                    rend.color = tmp;
+                                }    
+                                if (p == 1f && rend?.gameObject != null) UnityEngine.Object.Destroy(rend.gameObject);
+                            })));
+                        }
                     }
                     Seer.deadBodyPositions = new List<Vector3>();
                 }
@@ -487,6 +494,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Vampire.";
                     else if (Eraser.eraser != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Eraser.eraser.PlayerId)
                         __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Eraser.";
+                    else if (Trickster.trickster != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Trickster.trickster.PlayerId)
+                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Trickster.";
                 }
 
                 // Hide number of remaining impostors on Jester win

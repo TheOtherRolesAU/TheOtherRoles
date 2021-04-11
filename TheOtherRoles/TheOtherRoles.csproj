@@ -41,6 +41,9 @@
         <EmbeddedResource Include="Resources\AdminTableIcon.png" />
         <EmbeddedResource Include="Resources\SwapperCheck.png" />
         <EmbeddedResource Include="Resources\SidekickButton.png" />
+        <EmbeddedResource Include="Resources\PlaceJackInTheBoxButton.png" />
+        <EmbeddedResource Include="Resources\JackInTheBox.png" />
+        <EmbeddedResource Include="Resources\LightsOutButton.png" />
     </ItemGroup>
 
     <ItemGroup>

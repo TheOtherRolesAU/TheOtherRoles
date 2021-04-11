@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Sidekick.clearAndReload();
             Eraser.clearAndReload();
             Spy.clearAndReload();
+            Trickster.clearAndReload();
         }
 
         public static class Jester {
@@ -54,10 +55,12 @@ namespace TheOtherRoles
             public static Color color = new Color(255f / 255f, 84f / 255f, 167f / 255f, 1);
 
             public static bool triggerJesterWin = false;
+            public static bool canCallEmergency = true;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
+                canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
             }
         }
 
@@ -282,6 +285,7 @@ namespace TheOtherRoles
         public static PlayerControl swapper;
         public static Color color = new Color(240f / 255f, 128f / 255f, 72f / 255f, 1);
         private static Sprite spriteCheck;
+        public static bool canCallEmergency = false;
 
         public static byte playerId1 = Byte.MaxValue;
         public static byte playerId2 = Byte.MaxValue;
@@ -296,6 +300,7 @@ namespace TheOtherRoles
             swapper = null;
             playerId1 = Byte.MaxValue;
             playerId2 = Byte.MaxValue;
+            canCallEmergency = CustomOptionHolder.swapperCanCallEmergency.getBool();
         }
     }
 
@@ -331,6 +336,7 @@ namespace TheOtherRoles
         public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static float soulDuration = 15f;
+        public static bool limitSoulDuration = false;
         public static int mode = 0;
 
         private static Sprite soulSprite;
@@ -343,6 +349,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             seer = null;
             deadBodyPositions = new List<Vector3>();
+            limitSoulDuration = CustomOptionHolder.seerLimitSoulDuration.getBool();
             soulDuration = CustomOptionHolder.seerSoulDuration.getFloat();
             mode = CustomOptionHolder.medicShowShielded.getSelection();
         }
@@ -677,7 +684,7 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
         }
     }
-
+    
     public static class Spy {
         public static PlayerControl spy;
         public static Color color = Palette.LDCHDOFJPGH;
@@ -688,5 +695,37 @@ namespace TheOtherRoles
             spy = null;
             impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
         }
+    }
+
+    public static class Trickster {
+        public static PlayerControl trickster;
+        public static Color color = Palette.LDCHDOFJPGH;
+        public static float placeBoxCooldown = 30f;
+        public static float lightsOutCooldown = 30f;
+        public static float lightsOutDuration = 10f;
+        public static float lightsOutTimer = 0f;
+
+        private static Sprite placeBoxButtonSprite;
+        private static Sprite lightOutButtonSprite;
+        public static Sprite getPlaceBoxButtonSprite() {
+            if (placeBoxButtonSprite) return placeBoxButtonSprite;
+            placeBoxButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
+            return placeBoxButtonSprite;
+        }
+        public static Sprite getLightsOutButtonSprite() {
+            if (lightOutButtonSprite) return lightOutButtonSprite;
+            lightOutButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LightsOutButton.png", 115f);
+            return lightOutButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            trickster = null;
+            lightsOutTimer = 0f;
+            placeBoxCooldown = CustomOptionHolder.tricksterPlaceBoxCooldown.getFloat();
+            lightsOutCooldown = CustomOptionHolder.tricksterLightsOutCooldown.getFloat();
+            lightsOutDuration = CustomOptionHolder.tricksterLightsOutDuration.getFloat();
+            JackInTheBox.UpdateStates(); // if the role is erased, we might have to update the state of the created objects
+        }
+
     }
 }

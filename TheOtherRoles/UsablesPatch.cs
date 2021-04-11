@@ -44,6 +44,20 @@ namespace TheOtherRoles
                     roleCouldUse = true;
             }
 
+            var usableDistance = __instance.GBFKHOCBAOF;
+            if (__instance.name.StartsWith("JackInTheBoxVent_")) {
+                if(Trickster.trickster != PlayerControl.LocalPlayer) {
+                    // Only the Trickster can use the Jack-In-The-Boxes!
+                    canUse = false;
+                    couldUse = false;
+                    __result = num;
+                    return false; 
+                } else {
+                    // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
+                    usableDistance = 0.4f; 
+                }
+            }
+
             couldUse = ((@object.inVent || roleCouldUse) && !pc.FGNJJFABIHJ && (@object.AMDJMEEHNIG || @object.inVent));
             canUse = couldUse;
             if (canUse)
@@ -51,7 +65,8 @@ namespace TheOtherRoles
                 Vector2 truePosition = @object.GetTruePosition();
                 Vector3 position = __instance.transform.position;
                 num = Vector2.Distance(truePosition, position);
-                canUse &= (num <= __instance.GBFKHOCBAOF && !PhysicsHelpers.GCFCONMBBOF(truePosition, position, Constants.NCOONMPDEDB, false));
+                
+                canUse &= (num <= usableDistance && !PhysicsHelpers.GCFCONMBBOF(truePosition, position, Constants.NCOONMPDEDB, false));
             }
             __result = num;
             return false;
@@ -102,13 +117,27 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(EmergencyMinigame), nameof(EmergencyMinigame.Update))]
     class EmergencyMinigameUpdatePatch {
         static void Postfix(EmergencyMinigame __instance) {
-            // Swapper deactivate emergency button
-            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer) {
-                __instance.StatusText.Text = "The Swapper can't start an emergency meeting";
+            var roleCanCallEmergency = true;
+            var statusText = "";
+
+            // Deactivate emergency button for Swapper
+            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer && !Swapper.canCallEmergency) {
+                roleCanCallEmergency = false;
+                statusText = "The Swapper can't start an emergency meeting";
+            }
+            // Potentially deactivate emergency button for Jester
+            if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.canCallEmergency) {
+                roleCanCallEmergency = false;
+                statusText = "The Jester can't start an emergency meeting";
+            }
+
+            if (!roleCanCallEmergency) {
+                __instance.StatusText.Text = statusText;
                 __instance.NumberText.Text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
                 __instance.ButtonActive = false;
+                return;
             }
 
             // Handle max number of meetings

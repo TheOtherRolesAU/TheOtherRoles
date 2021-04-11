@@ -106,6 +106,12 @@ namespace TheOtherRoles
                 "Kill the Crewmates and erase their roles",
                 "Erase the roles of your enemies"));
             }
+            if (Trickster.trickster != null && p == Trickster.trickster) {
+                infos.Add(new RoleInfo("Trickster",
+                Trickster.color,
+                "Use your jack-in-the-boxes to surprise others",
+                "Surprise your enemies"));
+            }
             if (Detective.detective != null && p == Detective.detective) {
                 infos.Add(new RoleInfo("Detective",
                 Detective.color,

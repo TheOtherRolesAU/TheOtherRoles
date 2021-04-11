@@ -33,7 +33,7 @@ namespace TheOtherRoles
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
             CustomOptionHolder.Load();
-
+            
             Harmony.PatchAll();
         }
     }

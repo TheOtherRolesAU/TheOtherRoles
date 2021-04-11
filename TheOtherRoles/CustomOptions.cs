@@ -45,6 +45,7 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
 
         public static CustomOption jesterSpawnRate;
+        public static CustomOption jesterCanCallEmergency;
 
         public static CustomOption shifterSpawnRate;
 
@@ -79,10 +80,12 @@ namespace TheOtherRoles {
         public static CustomOption medicShowAttemptToShielded;
 
         public static CustomOption swapperSpawnRate;
+        public static CustomOption swapperCanCallEmergency;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
         public static CustomOption seerSoulDuration;
+        public static CustomOption seerLimitSoulDuration;
 
         public static CustomOption hackerSpawnRate;
         public static CustomOption hackerCooldown;
@@ -109,6 +112,11 @@ namespace TheOtherRoles {
         public static CustomOption spySpawnRate;
         public static CustomOption spyCanDieToSheriff;
         public static CustomOption spyImpostorsCanKillAnyone;
+
+        public static CustomOption tricksterSpawnRate;
+        public static CustomOption tricksterPlaceBoxCooldown;
+        public static CustomOption tricksterLightsOutCooldown;
+        public static CustomOption tricksterLightsOutDuration;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption allowSkipOnEmergencyMeetings;
@@ -147,6 +155,11 @@ namespace TheOtherRoles {
             eraserSpawnRate = CustomOption.Create(230, cs(Eraser.color, "Eraser"), rates, null, true);
             eraserCooldown = CustomOption.Create(231, "Eraser Cooldown", 30f, 10f, 120f, 5f, eraserSpawnRate);
 
+            tricksterSpawnRate = CustomOption.Create(250, cs(Trickster.color, "Trickster"), rates, null, true);
+            tricksterPlaceBoxCooldown = CustomOption.Create(251, "Trickster Box Cooldown", 10f, 0f, 30f, 2.5f, tricksterSpawnRate);
+            tricksterLightsOutCooldown = CustomOption.Create(252, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f, tricksterSpawnRate);
+            tricksterLightsOutDuration = CustomOption.Create(253, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
+
             childSpawnRate = CustomOption.Create(180, cs(Child.color, "Child"), rates, null, true);
             childGrowingUpDuration = CustomOption.Create(181, "Child Growing Up Duration", 400f, 100f, 1500f, 100f, childSpawnRate);
 
@@ -155,6 +168,7 @@ namespace TheOtherRoles {
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
+            jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 
@@ -190,10 +204,12 @@ namespace TheOtherRoles {
             medicShowAttemptToShielded = CustomOption.Create(144, "Shielded Player Sees Murder Attempt", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
-            seerSoulDuration = CustomOption.Create(162, "Seer Soul Duration", 15f, 0f, 60f, 5f, seerSpawnRate);
+            seerLimitSoulDuration = CustomOption.Create(163, "Seer Limit Soul Duration", false, seerSpawnRate);
+            seerSoulDuration = CustomOption.Create(162, "Seer Soul Duration", 15f, 0f, 60f, 5f, seerLimitSoulDuration);
         
             hackerSpawnRate = CustomOption.Create(170, cs(Hacker.color, "Hacker"), rates, null, true);
             hackerCooldown = CustomOption.Create(171, "Hacker Cooldown", 30f, 0f, 60f, 5f, hackerSpawnRate);
@@ -421,7 +437,12 @@ namespace TheOtherRoles {
             float offset = -7.85f;
             foreach (CustomOption option in CustomOption.options) {
                 if (option?.optionBehaviour?.gameObject != null) {
-                    bool enabled = option.parent == null || option.parent.selection != 0;
+                    bool enabled = true;
+                    var parent = option.parent;
+                    while (parent != null && enabled) {
+                        enabled = parent.selection != 0;
+                        parent = parent.parent;
+                    }
                     option.optionBehaviour.gameObject.SetActive(enabled);
                     if (enabled) {
                         offset -= option.isHeader ? 0.75f : 0.5f;
@@ -465,8 +486,8 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 26;
-            int detailedSettingsLines = 19 + 26 + 33;
+            int roleSettingsLines = 19 + 27;
+            int detailedSettingsLines = 19 + 27 + 37;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -482,10 +503,10 @@ namespace TheOtherRoles {
                 gap = 4;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 10;
+                gap = 11;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 14;
+                gap = 15;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {

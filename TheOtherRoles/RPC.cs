@@ -45,7 +45,8 @@ namespace TheOtherRoles
         Jackal,
         Sidekick,
         Eraser,
-        Spy
+        Spy,
+        Trickster
     }
 
     enum CustomRPC
@@ -83,7 +84,9 @@ namespace TheOtherRoles
         SidekickPromotes,
         ErasePlayerRole,
         SetFutureErased,
-        SetFutureShifted
+        SetFutureShifted,
+        PlaceJackInTheBox,
+        LightsOut
     }
 
     public static class RPCProcedure {
@@ -92,6 +95,7 @@ namespace TheOtherRoles
 
         public static void resetVariables() {
             Garlic.clearGarlics();
+            JackInTheBox.clearJackInTheBoxes();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -199,6 +203,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Spy:
                         Spy.spy = player;
+                        break;
+                    case RoleId.Trickster:
+                        Trickster.trickster = player;
                         break;
                     }
                 }
@@ -518,6 +525,7 @@ namespace TheOtherRoles
             if (player == Janitor.janitor) Janitor.clearAndReload();
             if (player == Vampire.vampire) Vampire.clearAndReload();
             if (player == Eraser.eraser) Eraser.clearAndReload();
+            if (player == Trickster.trickster) Trickster.clearAndReload();
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -542,6 +550,21 @@ namespace TheOtherRoles
 
         public static void setFutureShifted(byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
+        }
+        
+        public static void placeJackInTheBox(byte[] buff) {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            new JackInTheBox(position);
+        }
+
+        public static void lightsOut() {
+            Trickster.lightsOutTimer = Trickster.lightsOutDuration;
+            // If the local player is impostor indicate lights out
+            if(PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+                new CustomMessage("Lights are out", Trickster.lightsOutDuration);
+            }
         }
     }
 
@@ -655,6 +678,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
                     RPCProcedure.setFutureShifted(DOOILGKLBBF.ReadByte());
+                    break;
+                case (byte)CustomRPC.PlaceJackInTheBox:
+                    RPCProcedure.placeJackInTheBox(DOOILGKLBBF.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.LightsOut:
+                    RPCProcedure.lightsOut();
                     break;
             }
         }
