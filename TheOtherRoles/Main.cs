@@ -15,11 +15,13 @@ using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", "2.2.0")]
+    [BepInPlugin(Id, "The Other Roles", Version)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
+        public const string Version = "2.2.0";
+
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
 

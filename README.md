@@ -71,6 +71,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
 - Fixed a bug where a Lovers win wasn't displayed properly
 - Fixed the Among Us bug where people were unable to move after meetings
+- We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
