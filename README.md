@@ -324,6 +324,25 @@ ex lover surviving as the partnership was erased before. Also a Jester win would
 | Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
 -----------------------
 
+## Trickster
+### **Team: Impostors**
+The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players. \
+If the Trickster has placed all of his boxes they will be converted into a vent network usable only by the trickster himself, but the boxes are revealed to the others. \
+If the boxes are converted to a vent network, the trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while. \
+
+\
+**NOTE:**
+- Impostors will get a text indicator at the bottom of the screen to notify them if the lights are out due to the trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Trickster Spawn Chance | -
+| Trickster Box Cooldown | Cooldown for placing jack-in-the-boxes
+| Trickster Lights Out Cooldown | Cooldown for his "lights out" ability
+| Trickster Lights Out Duration | Duration after which the light is automatically restored
+-----------------------
+
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
 There are always two lovers which are linked together.\
