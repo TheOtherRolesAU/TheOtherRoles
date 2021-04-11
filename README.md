@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which currently adds 25 additional roles and new [Settings](#settings) to the game.
+The **The Other Roles**, is a mod for Amongs Us which adds manny new roles and new [Settings](#settings) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -45,6 +45,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.3.31.3s| v2.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.0/TheOtherRoles.zip)
 | 2021.3.31.3s| v2.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip)
 | 2021.3.31.3s| v2.0.1 beta| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
 | 2021.3.31.3s | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
@@ -62,6 +63,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.2.0**
+- You can now set how long the Time Master shield lasts
+- The host now sees for how long the lobby will remain open
+- We changed the look/layout of the settings
+- Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
+- Fixed a bug where a Lovers win wasn't displayed properly
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
@@ -159,7 +167,7 @@ syncs your game options automatically.
 If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
 
 ## Windows Manual Installation
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -171,7 +179,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 **Linux Manual**
 1. Install Among Us via steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
@@ -198,10 +206,10 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- The number of Impostor count be set inside a lobby
-- The map can be changed inside a lobby
-- You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
-
+- **Number of Impostors:** The number of Impostor count be set inside a lobby
+- **Map:** The map can be changed inside a lobby
+- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
+- **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 # Roles
 
 ## Role Assignment
@@ -325,7 +333,7 @@ You can specify the chance of one Lover being an impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
-If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).\
+If one Lover is an impostor and one a crewmate, they can only get a "Lovers solo win" where only they win (even if there is another impostor alive).\
 \
 **NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
@@ -557,6 +565,7 @@ The Time Master won't be affected by the rewind.\
 | Time Master Spawn Chance | - |
 | Time Master Cooldown | - |
 | Rewind Duration | How much time to rewind |
+| Time Master Shield Duration |
 -----------------------
 
 ## Swapper
