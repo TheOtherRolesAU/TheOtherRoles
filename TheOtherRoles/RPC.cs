@@ -229,7 +229,6 @@ namespace TheOtherRoles
             // Fill dummy MessageReader and call MyPhysics.HandleRpc as the corountines cannot be accessed
             MessageReader reader = new MessageReader();
             byte[] bytes = BitConverter.GetBytes(ventId);
-            System.Console.WriteLine(bytes.Length);
             if (!BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
             reader.Buffer = bytes;
@@ -630,6 +629,12 @@ namespace TheOtherRoles
                     byte patch = DOOILGKLBBF.ReadByte();
                     byte versionOwnerId = DOOILGKLBBF.ReadByte();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
+                    break;
+                case (byte)CustomRPC.UseUncheckedVent:
+                    int ventId = DOOILGKLBBF.ReadPackedInt32();
+                    byte ventingPlayer = DOOILGKLBBF.ReadByte();
+                    byte isEnter = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.useUncheckedVent(ventId, ventingPlayer, isEnter);
                     break;
 
                 // Role functionality
