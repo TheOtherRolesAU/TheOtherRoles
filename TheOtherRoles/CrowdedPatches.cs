@@ -58,8 +58,10 @@ namespace TheOtherRoles {
             public static void Postfix() {
                 bool isCustom = Helpers.isCustomServer();
                 foreach (SpriteRenderer renderer in additionalButtons) {
-                    renderer.enabled = false;
-                    renderer.gameObject.GetComponentInChildren<TextRenderer>().Color = isCustom ? Color.white : Palette.JMELLHINKGM;
+                    if (renderer != null && renderer.gameObject != null) {
+                        renderer.enabled = false;
+                        renderer.gameObject.GetComponentInChildren<TextRenderer>().Color = isCustom ? Color.white : Palette.JMELLHINKGM;
+                    }
                 }
             }
         }

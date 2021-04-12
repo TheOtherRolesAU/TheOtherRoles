@@ -5,7 +5,6 @@ using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System;
@@ -59,6 +58,7 @@ namespace TheOtherRoles
         SetRole,
         SetUncheckedColor,
         VersionHandshake,
+        UseUncheckedVent,
 
         // Role functionality
 
@@ -221,6 +221,20 @@ namespace TheOtherRoles
             if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
                 GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
             }
+        }
+
+        public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (player == null) return;
+            // Fill dummy MessageReader and call MyPhysics.HandleRpc as the corountines cannot be accessed
+            MessageReader reader = new MessageReader();
+            byte[] bytes = BitConverter.GetBytes(ventId);
+            System.Console.WriteLine(bytes.Length);
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+            reader.Buffer = bytes;
+            reader.Length = bytes.Length;
+            player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
         // Role functionality

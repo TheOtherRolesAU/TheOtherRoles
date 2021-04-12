@@ -1,7 +1,6 @@
 using HarmonyLib;
 using System;
-using System.IO;
-using System.Net.Http;
+using Hazel;
 using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
@@ -75,12 +74,27 @@ namespace TheOtherRoles
 
     [HarmonyPatch(typeof(Vent), "Use")]
     public static class VentUsePatch {
-        public static void Prefix(Vent __instance) {
+        public static bool Prefix(Vent __instance) {
             bool flag;
             bool flag2;
             __instance.CanUse(PlayerControl.LocalPlayer.IDOFAMCIJKE, out flag, out flag2);
-            if (flag && !PlayerControl.LocalPlayer.inVent)
-                localVentEnterTimePoint = DateTime.UtcNow;
+
+            if (!flag) return true;  // Continue with default method
+
+            bool isEnter = !PlayerControl.LocalPlayer.inVent;
+            if (isEnter) localVentEnterTimePoint = DateTime.UtcNow;
+            
+            if (!__instance.name.StartsWith("JackInTheBoxVent_")) return true; // Continue with default method
+
+            __instance.SetButtons(isEnter);
+            MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
+            writer.WritePacked(__instance.Id);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(isEnter ? byte.MaxValue : (byte)0);
+            writer.EndMessage();
+            RPCProcedure.useUncheckedVent(__instance.Id, PlayerControl.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+
+            return false;
         }
     }
 
