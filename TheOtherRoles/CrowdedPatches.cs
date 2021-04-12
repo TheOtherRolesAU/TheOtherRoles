@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using UnityEngine;
-using UnityEngine.Events;
+
+using Palette = GLNPIJPGGNJ;
 
 namespace TheOtherRoles {
     static class CreateGameOptionsPatches
@@ -43,6 +44,38 @@ namespace TheOtherRoles {
                     } 
                     passiveButton.OnClick.AddListener((UnityEngine.Events.UnityAction)onClick);
                 }
+            }
+        }
+
+
+        [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
+        public static class GameDataGetAvailableIdPatch {
+            public static bool Prefix(ref GameData __instance, out sbyte __result) {
+                for (sbyte i = 0; i <= 15; i++)
+                    if (!__instance.AllPlayers.ToArray().Any(p => p.GMBAIPNOKLP == i)) {
+                        __result = i;
+                        return false;
+                    }
+                __result = -1;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
+        public static class PlayerControlCheckColorPatch {
+            public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
+                __instance.RpcSetColor(JAKOFFAIMMM);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
+        public static class PlayerTabUpdateAvailableColorsPatch {
+            public static bool Prefix(PlayerTab __instance) {
+                PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.IDOFAMCIJKE.JFHFMIKFHGG, __instance.DemoImage);
+                for (int i = 0; i < Palette.CALCLMEEPGL.Length; i++)
+                    __instance.BENAMDPPABB.Add(i);
+                return false;
             }
         }
     }
