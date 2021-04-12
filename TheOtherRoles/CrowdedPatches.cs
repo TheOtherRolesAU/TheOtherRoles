@@ -9,13 +9,11 @@ using SaveManager = ALOOOIHKCAC;
 using GameOptionsData = IGDMNKLDEPI;
 
 namespace TheOtherRoles {
-    [HarmonyPatch]
-    static class CreateOptionsPickerPatch
-    {
-    public static List<SpriteRenderer> additionalButtons = new List<SpriteRenderer>();
 
     [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
     public static class CreateOptionsPickerStartPatch {
+        public static List<SpriteRenderer> additionalButtons = new List<SpriteRenderer>();
+
         public static void Postfix(CreateOptionsPicker __instance) {
             List<SpriteRenderer> maxPlayerButtons = __instance.MaxPlayerButtons.ToList();
             additionalButtons = new List<SpriteRenderer>();
@@ -60,6 +58,7 @@ namespace TheOtherRoles {
             }
         }
     }
+
 
     [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GJJLFHMDLGA), MethodType.Getter)]
     public static class SaveManagerGetHostOptions
