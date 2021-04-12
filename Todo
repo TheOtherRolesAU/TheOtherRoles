@@ -9,6 +9,9 @@ Roles in development:
     - Shifter and Eraser: Fake tasks for neutral roles, which will be activated on Shift/Erase
     - Spy: As a morphed Morphling keeps his Red name, the other Impostor can see that he's not a Spy
 
+TODO: only if custom selected allow this
+test color setting
+test vitals
 
 High priority:
     - Reintroduce the BountyHunter role, as it was somehow requested multiple times during the last few days

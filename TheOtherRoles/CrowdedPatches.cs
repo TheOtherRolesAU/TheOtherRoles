@@ -78,5 +78,25 @@ namespace TheOtherRoles {
                 return false;
             }
         }
+
+        [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
+        public static class SecurityLoggerAwakePatch
+        {
+            public static void Postfix(SecurityLogger __instance)
+            {
+                __instance.AIECLALEDPN = new float[15]; // Timers
+            }
+        }
+
+        [HarmonyPatch(typeof(KeyMinigame),nameof(KeyMinigame.Start))]
+        public static class KeyMinigameStartPatch
+        {
+            public static bool Prefix(KeyMinigame __instance)
+            {
+                __instance.ANIFEEMBMDA = (PlayerControl.LocalPlayer != null) ? PlayerControl.LocalPlayer.PlayerId % 10 : 0;
+                __instance.Slots[__instance.ANIFEEMBMDA].Image.sprite = __instance.Slots[__instance.ANIFEEMBMDA].Highlit;
+                return false;
+            }
+        }
     }
 }
