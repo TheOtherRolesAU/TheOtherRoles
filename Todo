@@ -9,40 +9,22 @@ Roles in development:
     - Shifter and Eraser: Fake tasks for neutral roles, which will be activated on Shift/Erase
     - Spy: As a morphed Morphling keeps his Red name, the other Impostor can see that he's not a Spy
 
-Crowded:
-- Test vitals/voting
-- Update README.md
-
 High priority:
     - Reintroduce the BountyHunter role, as it was somehow requested multiple times during the last few days
-    - Modded handshake to let people know if someone is on the wrong mod version
-    - Crowded mod
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
-    - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"
     - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
     - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
     - Host/Client Skip/Tie message
-    - Child doubled cooldown only shows the progress on the button when it reaches the normal cooldown (cuz the maxCooldown is fixed)
     - Promoting a Vampire to be the Sidekick, saves the last bitten target right now (as Vampire.vampire and Vampire.bitten are set to null)
     - Vent outline for/"against" Jackal team
     - Refactor Vampire sprite update code (move it)
     - Move code where it's possible from the HudManager.Update to the PlayerControl.FixedUpdate
-    - Add proper GameOverReasons
-
 
 Low priority:
-    - Sheriff: Change option "Sheriff can kill the Jester" to "Sheriff can kill neutrals.
     - Lovers: Chat
-    - Swapper: Handle the problem where a really late swap causes only some players to swap and hence might cause different exiled players for some of the clients (because of the RPC delay)
     - Sheriff: Both die option
-    - Mafioso/Janitor: Set UseButtonImage instead of leaving the sabotage image (when they are unable to use the sabotage)
-    - Mayor: Maybe let him vote two times instead of voting ones with two votes
-    - Morphling + Camouflager: Duration option
-    - TimeMaster: Rewinding and vents are still not perfect
-    - Medic: Check shield break code should maybe be moved to a more logical location
-    - Dead pets are being revived by the Camouflager (but they're only visible to the dead players as they are on another layer)
     - Swapper: Light/Comms should not just close when opening them (but one can't delete the tasks, as the comms task is needed to e.g. block the camera) light/comms
 
 Role/implementation community ideas:
