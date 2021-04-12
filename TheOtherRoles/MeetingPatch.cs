@@ -21,6 +21,7 @@ namespace TheOtherRoles
         static bool[] selections;
         static SpriteRenderer[] renderers;
         private static GameData.OFKOJOKOOAK target = null;
+        private static int currentPage = 0;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
         class MeetingCalculateVotesPatch {
@@ -342,6 +343,24 @@ namespace TheOtherRoles
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && !allowSkipOnEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
+                
+                // Crowded
+                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+                    currentPage = currentPage == 0 ? 1 : 0;
+
+                PlayerVoteArea[] playerButtons = __instance.DHCOPOOJCLN.OrderBy(x => x.isDead).ToArray();
+                int i = 0;
+                foreach (PlayerVoteArea button in playerButtons) {
+                    if (i >= currentPage * 10 && i < (currentPage + 1) * 10) {
+                        button.gameObject.SetActive(true);
+
+                        int relativeIndex = i % 10;
+                        Vector3 offset = new Vector3(__instance.VoteButtonOffsets.x * (relativeIndex % 2), __instance.VoteButtonOffsets.y * (relativeIndex / 2), -1f);
+                        button.transform.localPosition = __instance.VoteOrigin + offset;
+                    } else
+                        button.gameObject.SetActive(false);
+                    i++;
+                }
             }
         }
     }
