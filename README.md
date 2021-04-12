@@ -16,6 +16,7 @@ Even more roles are coming soon :)
 - [Camouflager](#camouflager)
 - [Vampire](#vampire)
 - [Eraser](#eraser)
+- [Trickster](#trickster)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -66,6 +67,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.2.0**
 - **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#Custom-Servers-and-10+-Players) section. During meetings use the up/down keys, on vitals use the left/right keys.
+- **Added a new Impostor role: The Trickster** check the [Trickster](#trickster) section for more infos
 - You can now set how long the Time Master shield lasts
 - The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
