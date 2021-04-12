@@ -174,8 +174,21 @@ namespace TheOtherRoles
         }
     }
 
+    [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+    class VitalsMinigameBeginPatch {
+        static void Postfix(VitalsMinigame __instance) {
+            for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
+                var vitalsPanel = __instance.MCCBOPIEOEC[i];
+                var player = GameData.Instance.AllPlayers[i];
+                vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 3 ? player.HGGCLJHCDBM.Substring(0, 3).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+            }
+        }
+    }
+    
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
-    class VitalsMinigamePatch {
+    class VitalsMinigameUpdatePatch {
+        private static int currentPage = 0;
+
         static void Postfix(VitalsMinigame __instance) {
             // Hacker show time since death
             bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
@@ -196,6 +209,29 @@ namespace TheOtherRoles
                     }
                 }
 	    	}
+
+            // Crowded
+            if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer)) return;
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+                currentPage = currentPage == 1 ? 0 : 1;
+                
+            VitalsPanel[] vitalsPanels = __instance.MCCBOPIEOEC.OrderBy(x => (x.IsDead ? 0 : 1) + (x.IsDiscon ? 2 : 0)).ToArray();
+            int i = 0;
+            foreach (VitalsPanel panel in vitalsPanels) {
+                if (i >= currentPage * 10 && i < (currentPage + 1) * 10)
+                {
+                    panel.gameObject.SetActive(true);
+                    int relativeIndex = i % 10;
+                    var transform = panel.transform;
+                    var localPosition = transform.localPosition;
+                    localPosition = new Vector3(-2.7f + 0.6f * relativeIndex, localPosition.y, localPosition.z);
+                    transform.localPosition = localPosition;
+                }
+                else
+                    panel.gameObject.SetActive(false);
+                i++;
+            }
         }
     }    
 
