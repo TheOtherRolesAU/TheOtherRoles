@@ -168,5 +168,9 @@ namespace TheOtherRoles {
         public static bool isLighterColor(int colorId) {
             return lighterColors.Contains(colorId);
         }
+
+        public static bool isCustomServer() {
+            return DestroyableSingleton<ServerManager>.CMJOLNCMAPD?.LDHDIAFIPCG == TheOtherRolesPlugin.Ip.Value;
+        }
     }
 }

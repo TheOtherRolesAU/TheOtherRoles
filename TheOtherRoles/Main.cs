@@ -25,8 +25,8 @@ namespace TheOtherRoles
         public static int optionsPage = 1;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
-        public ConfigEntry<string> Ip { get; set; }
-        public ConfigEntry<ushort> Port { get; set; }
+        public static ConfigEntry<string> Ip { get; set; }
+        public static ConfigEntry<ushort> Port { get; set; }
 
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
