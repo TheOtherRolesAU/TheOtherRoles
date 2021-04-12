@@ -213,7 +213,7 @@ We always recommend you to play on custom servers rather than on the official on
 4. Make sure to forward the right ports on the hosting machine
 5. Run the server and setup the client
 
-**Setting up Server as Docker Container**
+**Setting up Server as Docker Container:** \
 If you want to run the server as a docker container you'll need to use the image
 ```
 aeonlucid/impostor:nightly
