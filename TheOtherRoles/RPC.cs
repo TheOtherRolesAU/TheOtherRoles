@@ -58,6 +58,7 @@ namespace TheOtherRoles
         ForceEnd,
         SetRole,
         SetUncheckedColor,
+        VersionHandshake,
 
         // Role functionality
 
@@ -214,6 +215,12 @@ namespace TheOtherRoles
         public static void setUncheckedColor(byte colorId, byte playerId) {
             var player = Helpers.playerById(playerId);
             if (player != null) player.SetColor(colorId);
+        }
+
+        public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
+            if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
+                GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
+            }
         }
 
         // Role functionality
@@ -602,6 +609,13 @@ namespace TheOtherRoles
                     byte c = DOOILGKLBBF.ReadByte();
                     byte p = DOOILGKLBBF.ReadByte();
                     RPCProcedure.setUncheckedColor(c, p);
+                    break;
+                case (byte)CustomRPC.VersionHandshake:
+                    byte major = DOOILGKLBBF.ReadByte();
+                    byte minor = DOOILGKLBBF.ReadByte();
+                    byte patch = DOOILGKLBBF.ReadByte();
+                    byte versionOwnerId = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
 
                 // Role functionality

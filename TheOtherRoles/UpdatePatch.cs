@@ -172,31 +172,6 @@ namespace TheOtherRoles
             }
         }
 
-        static void mafiosoDeactivateKillButtonIfNecessary(HudManager __instance) {
-            if (Mafioso.mafioso == null || Mafioso.mafioso != PlayerControl.LocalPlayer) return;
-
-            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ && __instance.UseButton.isActiveAndEnabled && Godfather.godfather != null && Godfather.godfather.IDOFAMCIJKE.FGNJJFABIHJ) {
-                __instance.KillButton.gameObject.SetActive(true);
-                __instance.KillButton.renderer.enabled = true;
-                __instance.KillButton.isActive = true;
-                __instance.KillButton.enabled = true;
-            } else {
-                __instance.KillButton.gameObject.SetActive(false);
-                __instance.KillButton.renderer.enabled = false;
-                __instance.KillButton.isActive = false;
-                __instance.KillButton.enabled = false;
-            }
-        }
-
-        static void janitorDeactivateKillButton(HudManager __instance) {
-            if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer) {
-                __instance.KillButton.gameObject.SetActive(false);
-                __instance.KillButton.renderer.enabled = false;
-                __instance.KillButton.isActive = false;
-                __instance.KillButton.enabled = false;
-            }
-        }
-
         static void timerUpdate() {
             Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
@@ -294,13 +269,21 @@ namespace TheOtherRoles
                 Morphling.morphling.nameText.Text += suffix;
         }
 
-        static void vampireDeactivateKillButton(HudManager __instance) {
-            if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer) {
-                __instance.KillButton.gameObject.SetActive(false);
-                __instance.KillButton.renderer.enabled = false;
-                __instance.KillButton.isActive = false;
-                __instance.KillButton.enabled = false;
-            }
+        static void updateImpostorKillButton(HudManager __instance) {
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) return;
+            bool enabled = true;
+            if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer)
+                enabled = false;
+            else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.IDOFAMCIJKE.FGNJJFABIHJ)
+                enabled = false;
+            else if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
+                enabled = false;
+            enabled &= __instance.UseButton.isActiveAndEnabled;
+            
+            __instance.KillButton.gameObject.SetActive(enabled);
+            __instance.KillButton.renderer.enabled = enabled;
+            __instance.KillButton.isActive = enabled;
+            __instance.KillButton.enabled = enabled;
         }
 
         static void snitchUpdate() {
@@ -353,18 +336,14 @@ namespace TheOtherRoles
             setMafiaNameTags();
             // Jester
             Helpers.removeTasksFromPlayer(Jester.jester);
-            // Mafioso
-            mafiosoDeactivateKillButtonIfNecessary(__instance);
-            // Janitor
-            janitorDeactivateKillButton(__instance);
+            // Impostors
+            updateImpostorKillButton(__instance);
             // Timer updates
             timerUpdate();
             // Camouflager and Morphling
             camouflageAndMorphActions();
             // Child
             childUpdate();
-            // Vampire
-            vampireDeactivateKillButton(__instance);
             // Snitch
             snitchUpdate();
             // Jackal

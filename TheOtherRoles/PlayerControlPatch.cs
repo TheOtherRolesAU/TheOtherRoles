@@ -232,22 +232,32 @@ namespace TheOtherRoles {
         }
 
         public static void playerSizeUpdate(PlayerControl p) {
+            // Set default player size
+            CircleCollider2D collider = p.GetComponent<CircleCollider2D>();
+            
+            p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+            collider.radius = Child.defaultColliderRadius;
+            collider.offset = Child.defaultColliderOffset * Vector2.down;
+
+            // Set adapted player size to Child and Morphling
             if (Child.child == null  || Camouflager.camouflageTimer > 0f) return;
 
             float growingProgress = Child.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
-            
-            if (p == Child.child)
-                Child.child.transform.localScale = new Vector3(scale, scale, 1f);
-            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+            float correctedColliderRadius = Child.defaultColliderRadius * 0.7f / scale; // scale / 0.7f is the factor by which we decrease the player size, hence we need to increase the collider size by 0.7f / scale
+
+            if (p == Child.child) {
                 p.transform.localScale = new Vector3(scale, scale, 1f);
+                collider.radius = correctedColliderRadius;
+            }
+            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f) {
+                p.transform.localScale = new Vector3(scale, scale, 1f);
+                collider.radius = correctedColliderRadius;
+            }
         }
 
         public static void Prefix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
-
-            // Reset player sizes
-            __instance.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -289,6 +299,18 @@ namespace TheOtherRoles {
                 // Impostor
                 impostorSetTarget();
             } 
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.WalkPlayerTo))]
+    class PlayerPhysicsWalkPlayerToPatch {
+        private static Vector2 offset = Vector2.zero;
+        public static void Prefix(PlayerPhysics __instance) {
+            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.BADPLKHHINK == Child.child ||  (Morphling.morphling != null && __instance.BADPLKHHINK == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
+            if (correctOffset) {
+                float currentScaling = (Child.growingProgress() + 1) * 0.5f;
+                __instance.BADPLKHHINK.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
+            }
         }
     }
 
@@ -430,8 +452,21 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(KillAnimation),nameof(KillAnimation.CoPerformKill))]
-    class Test {
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
+    class PlayerControlSetCoolDownPatch {
+        public static bool Prefix(PlayerControl __instance, float KAIMOLNHDCG) {
+            if (PlayerControl.GameOptions.ELBDIKIOHHH <= 0f) return false;
+            float multiplier = 1f;
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) multiplier = Child.isGrownUp() ? 0.66f : 2f;
+
+            __instance.killTimer = Mathf.Clamp(KAIMOLNHDCG, 0f, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            DestroyableSingleton<HudManager>.CMJOLNCMAPD.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
+    class KillAnimationCoPerformKillPatch {
         public static void Prefix(KillAnimation __instance, ref PlayerControl KMMMAPHIMLH, ref PlayerControl IGLDJOKKFJE) {
             if (Vampire.vampire != null && Vampire.vampire == KMMMAPHIMLH && Vampire.bitten != null && Vampire.bitten == IGLDJOKKFJE)
                 KMMMAPHIMLH = IGLDJOKKFJE;
@@ -471,6 +506,22 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.AMDJMEEHNIG), MethodType.Getter)]
+    class PlayerControlCanMovePatch {
+        public static bool Prefix(PlayerControl __instance, ref bool __result)
+        {
+            __result = __instance.moveable &&
+                !Minigame.Instance &&
+                (!DestroyableSingleton<HudManager>.JECNDKBIOFO || (!DestroyableSingleton<HudManager>.CMJOLNCMAPD.Chat.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CMJOLNCMAPD.KillOverlay.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CMJOLNCMAPD.GameMenu.LFGAAGECFFO)) &&
+                (!MapBehaviour.Instance || !MapBehaviour.Instance.IPOGMCKNALI) &&
+                !MeetingHud.Instance &&
+                !CustomPlayerMenu.Instance &&
+                !ExileController.Instance &&
+                !IntroCutscene.Instance;
+            return false;
         }
     }
 }
