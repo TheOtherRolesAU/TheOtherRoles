@@ -213,6 +213,29 @@ We always recommend you to play on custom servers rather than on the official on
 4. Make sure to forward the right ports on the hosting machine
 5. Run the server and setup the client
 
+**Setting up Server as Docker Container**
+If you want to run the server as a docker container you'll need to use the image
+```
+aeonlucid/impostor:nightly
+```
+(Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
+
+In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+```
+IMPOSTOR_AntiCheat__Enabled=false
+IMPOSTOR_AntiCheat__BanIpFromGame=false
+```
+
+Example to docker run command:
+```
+docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
+Or use to run it in the background
+```
+docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
 
 # Credits & Resources
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
