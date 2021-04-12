@@ -177,6 +177,8 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
     class VitalsMinigameBeginPatch {
         static void Postfix(VitalsMinigame __instance) {
+            if (!Helpers.isCustomServer()) return;
+
             for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
                 var vitalsPanel = __instance.MCCBOPIEOEC[i];
                 var player = GameData.Instance.AllPlayers[i];
@@ -210,8 +212,7 @@ namespace TheOtherRoles
                 }
 	    	}
 
-            // Crowded
-            if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer)) return;
+            if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer) || !Helpers.isCustomServer()) return;
 
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
                 currentPage = currentPage == 1 ? 0 : 1;

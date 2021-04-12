@@ -92,6 +92,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
     public static class PlayerControlCmdCheckColorPatch {
         public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
+            if (!Helpers.isCustomServer()) return true;
+
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
             writer.Write(JAKOFFAIMMM);
             writer.Write(__instance.PlayerId);
@@ -104,6 +106,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
     public static class PlayerTabUpdateAvailableColorsPatch {
         public static bool Prefix(PlayerTab __instance) {
+            if (!Helpers.isCustomServer()) return true;
+
             PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.IDOFAMCIJKE.JFHFMIKFHGG, __instance.DemoImage);
             for (int i = 0; i < Palette.CALCLMEEPGL.Length; i++)
                 __instance.BENAMDPPABB.Add(i);
@@ -114,9 +118,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(SecurityLogger), nameof(SecurityLogger.Awake))]
     public static class SecurityLoggerAwakePatch
     {
-        public static void Postfix(SecurityLogger __instance)
-        {
-            __instance.AIECLALEDPN = new float[15]; // Timers
+        public static void Postfix(SecurityLogger __instance) {
+            __instance.AIECLALEDPN = new float[15];
         }
     }
 

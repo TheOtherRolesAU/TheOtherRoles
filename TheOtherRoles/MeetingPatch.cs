@@ -344,7 +344,8 @@ namespace TheOtherRoles
                 if (target == null && !allowSkipOnEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
                 
-                // Crowded
+                if (!Helpers.isCustomServer()) return;
+                
                 if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
                     currentPage = currentPage == 0 ? 1 : 0;
 
