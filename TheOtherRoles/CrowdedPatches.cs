@@ -5,6 +5,8 @@ using UnityEngine;
 using Hazel;
 
 using Palette = GLNPIJPGGNJ;
+using SaveManager = ALOOOIHKCAC;
+using GameOptionsData = IGDMNKLDEPI;
 
 namespace TheOtherRoles {
     static class CreateGameOptionsPatches
@@ -48,6 +50,20 @@ namespace TheOtherRoles {
             }
         }
 
+        [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GJJLFHMDLGA), MethodType.Getter)]
+        public static class SaveManagerGetHostOptions
+        {
+            public static bool Prefix(out GameOptionsData __result)
+            {
+                SaveManager.KEEEOKAJAFI ??= SaveManager.OODOOJLHAEC("gameHostOptions"); // LoadGameOptions
+
+                SaveManager.KEEEOKAJAFI.PCBBPGNJPJN = Mathf.Clamp(SaveManager.KEEEOKAJAFI.PCBBPGNJPJN, 1, SaveManager.KEEEOKAJAFI.BKOLCIHDBPK - 1);
+                SaveManager.KEEEOKAJAFI.MLLMFMOMIAC = Mathf.Clamp(SaveManager.KEEEOKAJAFI.MLLMFMOMIAC, 0, 2);
+
+                __result = SaveManager.KEEEOKAJAFI;
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(GameData), nameof(GameData.GetAvailableId))]
         public static class GameDataGetAvailableIdPatch {
@@ -62,8 +78,8 @@ namespace TheOtherRoles {
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
-        public static class PlayerControlCheckColorPatch {
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
+        public static class PlayerControlCmdCheckColorPatch {
             public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
                 writer.Write(JAKOFFAIMMM);

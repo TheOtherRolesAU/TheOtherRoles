@@ -11,7 +11,6 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
@@ -42,6 +41,9 @@ namespace TheOtherRoles
             ServerManager.DefaultRegions = regions;
             serverManager.GDOLGIJJLBL = regions;
             serverManager.SaveServers();
+
+            IGDMNKLDEPI.OHDJGJFDDDP = IGDMNKLDEPI.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
+            IGDMNKLDEPI.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
@@ -107,5 +109,4 @@ namespace TheOtherRoles
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
-
 }
