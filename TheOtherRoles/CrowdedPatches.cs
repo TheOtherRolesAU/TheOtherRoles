@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using UnityEngine;
+using Hazel;
 
 using Palette = GLNPIJPGGNJ;
 
@@ -64,7 +65,11 @@ namespace TheOtherRoles {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
         public static class PlayerControlCheckColorPatch {
             public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
-                __instance.RpcSetColor(JAKOFFAIMMM);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
+                writer.Write(JAKOFFAIMMM);
+                writer.Write(__instance.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setUncheckedColor(JAKOFFAIMMM, __instance.PlayerId);
                 return false;
             }
         }

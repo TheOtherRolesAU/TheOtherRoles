@@ -57,6 +57,7 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
+        SetUncheckedColor,
 
         // Role functionality
 
@@ -208,6 +209,11 @@ namespace TheOtherRoles
                         break;
                     }
                 }
+        }
+
+        public static void setUncheckedColor(byte colorId, byte playerId) {
+            var player = Helpers.playerById(playerId);
+            if (player != null) player.SetColor(colorId);
         }
 
         // Role functionality
@@ -592,7 +598,11 @@ namespace TheOtherRoles
                     byte playerId = DOOILGKLBBF.ReadByte();
                     RPCProcedure.setRole(roleId, playerId);
                     break;
-
+                case (byte)CustomRPC.SetUncheckedColor:
+                    byte c = DOOILGKLBBF.ReadByte();
+                    byte p = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.setUncheckedColor(c, p);
+                    break;
 
                 // Role functionality
 
