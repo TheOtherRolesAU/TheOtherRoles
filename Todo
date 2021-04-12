@@ -9,10 +9,8 @@ Roles in development:
     - Shifter and Eraser: Fake tasks for neutral roles, which will be activated on Shift/Erase
     - Spy: As a morphed Morphling keeps his Red name, the other Impostor can see that he's not a Spy
 
-
 High priority:
     - Reintroduce the BountyHunter role, as it was somehow requested multiple times during the last few days
-    - Modded handshake to let people know if someone is on the wrong mod version
     - Crowded mod
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
     - Lovers win condition: It doesn't show that they won, if it's a Lover + Crew win with > 3 players left, Lover + Team Jackal Lover zeigt "Lovers and Crewmate win", statt "Lovers solo win"

@@ -57,6 +57,7 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
+        VersionHandshake,
 
         // Role functionality
 
@@ -208,6 +209,12 @@ namespace TheOtherRoles
                         break;
                     }
                 }
+        }
+
+        public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
+            if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
+                GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
+            }
         }
 
         // Role functionality
@@ -592,7 +599,13 @@ namespace TheOtherRoles
                     byte playerId = DOOILGKLBBF.ReadByte();
                     RPCProcedure.setRole(roleId, playerId);
                     break;
-
+                case (byte)CustomRPC.VersionHandshake:
+                    byte major = DOOILGKLBBF.ReadByte();
+                    byte minor = DOOILGKLBBF.ReadByte();
+                    byte patch = DOOILGKLBBF.ReadByte();
+                    byte versionOwnerId = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
+                    break;
 
                 // Role functionality
 

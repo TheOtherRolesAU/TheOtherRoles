@@ -70,6 +70,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - We changed the look/layout of the settings
 - Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
 - Fixed a bug where a Lovers win wasn't displayed properly
+- Fixed the Among Us bug where people were unable to move after meetings
+- We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
+- Fixed a bug where the Child Impostor had the same cooldowns as normal Impostors
+- Fixed a bug where the Vampire/Janitor/Mafioso would lose their kill button after being erased
+- The Child is now able to use ladders and it can do all the tasks right away
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
@@ -547,7 +552,7 @@ Otherwise he sees the same information as everyone else.
 The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.\
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
-Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes the new Shifter.\
+Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes a Crewmate.\
 Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
 The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
@@ -567,7 +572,7 @@ can only use them, if the previous player did not used them before)
 
 ## Time Master
 ### **Team: Crewmates**
-The Time Master has a time shield which he can activate. The time shield remains active for 3 seconds.\
+The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
 If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
 time will rewind for a set amount of time.\
 The kill cooldown of the killer won't be reset, so the Time Master
@@ -575,7 +580,7 @@ has to make sure that the game won't result in the same situation.\
 The Time Master won't be affected by the rewind.\
 \
 **NOTE:**
-- Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+- Only the movement is affected by the rewind
 - A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
 - If the Time Master was bitten and has his shield active before when a meeting is called, he survives but the time won't be rewinded.
 - If the Time Master has a Medic shield, he won't rewind.
@@ -643,13 +648,14 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Jester wins by vote
-2. Team Impostor wins by sabotage
-3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
-4. Lovers among the last three players win
-5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
-6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
-7. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
+1. Crewmate Child lose by vote
+2. Jester wins by vote
+3. Team Impostor wins by sabotage
+4. Team Crew wins by tasks (also possible if the whole Crew is dead)
+5. Lovers among the last three players win
+6. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
+7. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
+8. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
