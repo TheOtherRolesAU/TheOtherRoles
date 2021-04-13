@@ -67,9 +67,9 @@ namespace TheOtherRoles {
 
                         byte value = byte.Parse(nextButton.name);
                         var targetOptions = __instance.GetTargetOptions();
-                        if (value <= targetOptions.PCBBPGNJPJN) {
-                            targetOptions.PCBBPGNJPJN = value - 1;
-                            __instance.ABNOBIOJDEH(targetOptions.PCBBPGNJPJN);
+                        if (value <= targetOptions.DIGMGCJMGDB) {
+                            targetOptions.DIGMGCJMGDB = value - 1;
+                            __instance.SetImpostorButtons(targetOptions.DIGMGCJMGDB);
                         }
                         __instance.SetMaxPlayersButtons(value);
                     }
@@ -97,12 +97,12 @@ namespace TheOtherRoles {
     {
         public static bool Prefix(out GameOptionsData __result)
         {
-            SaveManager.KEEEOKAJAFI ??= SaveManager.OODOOJLHAEC("gameHostOptions");
+            SaveManager.KMHAKICCDOJ ??= SaveManager.DHHFAHODPGO("gameHostOptions");
 
-            SaveManager.KEEEOKAJAFI.PCBBPGNJPJN = Mathf.Clamp(SaveManager.KEEEOKAJAFI.PCBBPGNJPJN, 1, SaveManager.KEEEOKAJAFI.BKOLCIHDBPK - 1);
-            SaveManager.KEEEOKAJAFI.MLLMFMOMIAC = Mathf.Clamp(SaveManager.KEEEOKAJAFI.MLLMFMOMIAC, 0, 2);
+            SaveManager.KMHAKICCDOJ.DIGMGCJMGDB = Mathf.Clamp(SaveManager.KMHAKICCDOJ.DIGMGCJMGDB, 1, SaveManager.KMHAKICCDOJ.OAFCIBONLNJ - 1);
+            SaveManager.KMHAKICCDOJ.OCPGKHJJAHL = Mathf.Clamp(SaveManager.KMHAKICCDOJ.OCPGKHJJAHL, 0, 2);
 
-            __result = SaveManager.KEEEOKAJAFI;
+            __result = SaveManager.KMHAKICCDOJ;
             return false;
         }
     }
@@ -141,7 +141,7 @@ namespace TheOtherRoles {
 
             PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.PPMOEEPBHJO.IMMNCAGJJJC, __instance.DemoImage);
             for (int i = 0; i < Palette.AEDCMKGJKAG.Length; i++)
-                __instance.BENAMDPPABB.Add(i);
+                __instance.HDGKLGFNEIB.Add(i);
             return false;
         }
     }
@@ -150,7 +150,7 @@ namespace TheOtherRoles {
     public static class SecurityLoggerAwakePatch
     {
         public static void Postfix(SecurityLogger __instance) {
-            __instance.AIECLALEDPN = new float[15];
+            __instance.DLAMJHGNEIF = new float[15];
         }
     }
 
@@ -159,8 +159,8 @@ namespace TheOtherRoles {
     {
         public static bool Prefix(KeyMinigame __instance)
         {
-            __instance.ANIFEEMBMDA = (PlayerControl.LocalPlayer != null) ? PlayerControl.LocalPlayer.PlayerId % 10 : 0;
-            __instance.Slots[__instance.ANIFEEMBMDA].Image.sprite = __instance.Slots[__instance.ANIFEEMBMDA].Highlit;
+            __instance.CKEKJGDMNDB = (PlayerControl.LocalPlayer != null) ? PlayerControl.LocalPlayer.PlayerId % 10 : 0;
+            __instance.Slots[__instance.CKEKJGDMNDB].Image.sprite = __instance.Slots[__instance.CKEKJGDMNDB].Highlit;
             return false;
         }
     }

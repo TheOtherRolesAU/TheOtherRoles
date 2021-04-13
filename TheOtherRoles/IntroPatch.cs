@@ -46,18 +46,18 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__4__this.Title.Text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "[FF1919FF]Imp[FC03BEFF]Lover" : "Lover";
-                __instance.__4__this.Title.Color = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? Color.white : Lovers.color;
-                __instance.__4__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.PPMOEEPBHJO?.PCLLABJCIPC ?? "");
+                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "[FF1919FF]Imp[FC03BEFF]Lover" : "Lover";
+                __instance.__4__this.Title.color = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? Color.white : Lovers.color;
+                __instance.__4__this.ImpostorText.text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.PPMOEEPBHJO?.PCLLABJCIPC ?? "");
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
                 __instance.__4__this.BackgroundBar.material.color = Lovers.color;
             }
             else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
             else {
-                __instance.__4__this.Title.Text = roleInfo.name;
-                __instance.__4__this.Title.Color = roleInfo.color;
+                __instance.__4__this.Title.text = roleInfo.name;
+                __instance.__4__this.Title.color = roleInfo.color;
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__4__this.ImpostorText.Text = roleInfo.introDescription;
+                __instance.__4__this.ImpostorText.text = roleInfo.introDescription;
                 __instance.__4__this.BackgroundBar.material.color = roleInfo.color;
             }
         }

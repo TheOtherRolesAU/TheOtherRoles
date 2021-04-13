@@ -44,11 +44,11 @@ namespace TheOtherRoles
 
             regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
             ServerManager.DefaultRegions = regions;
-            serverManager.GDOLGIJJLBL = regions;
+            serverManager.AGFAPIKFOFF = regions;
             serverManager.SaveServers();
 
-            CEIOGGEDKAN.OHDJGJFDDDP = CEIOGGEDKAN.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
-            CEIOGGEDKAN.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+            CEIOGGEDKAN.LMADJLEGIMH = CEIOGGEDKAN.IJGNCMMDGDI = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
+            CEIOGGEDKAN.JMEMPINECJN = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
@@ -86,14 +86,14 @@ namespace TheOtherRoles
 
                 bots.Add(playerControl);
                 GameData.Instance.AddPlayer(playerControl);
-                AmongUsClient.Instance.Spawn(playerControl, -2, EOCEBECJBHG.None);
+                AmongUsClient.Instance.Spawn(playerControl, -2, IDCDPDDALNM.None);
                 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.CALCLMEEPGL.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.JFHFMIKFHGG);
+                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.AEDCMKGJKAG.Length));
+                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.IMMNCAGJJJC);
                 playerControl.SetPet((uint) random.Next(HatManager.CHNDKKBEIDG.AllPets.Count));
                 playerControl.SetSkin((uint) random.Next(HatManager.CHNDKKBEIDG.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);

@@ -32,7 +32,7 @@ namespace TheOtherRoles {
 
             public static void Prefix(GameStartManager __instance) {
                 if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
-                update = GameData.Instance.BCFPPIDIMJK != __instance.GGIPHNCFKFH;
+                update = GameData.Instance.MFDAIFHGKMG != __instance.OBFONKJNJFF;
             }
 
             public static void Postfix(GameStartManager __instance) {
@@ -65,11 +65,11 @@ namespace TheOtherRoles {
                         }
                     }
                     if (blockStart) {
-                        __instance.StartButton.color = Palette.POCKGPCFGOE;
-                        __instance.GameStartText.Text = message;
+                        __instance.StartButton.color = Palette.ILFJLECIGDB;
+                        __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
-                        __instance.StartButton.color = ((__instance.GGIPHNCFKFH >= __instance.MinPlayers) ? Palette.MKAFGNEBHKC : Palette.POCKGPCFGOE);
+                        __instance.StartButton.color = ((__instance.OBFONKJNJFF >= __instance.MinPlayers) ? Palette.BJENLBHMKAI : Palette.ILFJLECIGDB);
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     }
                 }
@@ -77,14 +77,14 @@ namespace TheOtherRoles {
                 // Lobby timer
                 if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
 
-                if (update) currentText = __instance.PlayerCounter.Text;
+                if (update) currentText = __instance.PlayerCounter.text;
 
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
                 int minutes = (int)timer / 60;
                 int seconds = (int)timer % 60;
                 string suffix = $" ({minutes:00}:{seconds:00})";
 
-                __instance.PlayerCounter.Text = currentText + suffix;
+                __instance.PlayerCounter.text = currentText + suffix;
             }
         }
 

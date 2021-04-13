@@ -140,12 +140,12 @@ namespace TheOtherRoles
                 bool doSwap = swapped1 != null && swapped2 != null;
                 if (doSwap) {
 
-                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
-                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
                 }
 
                 // Mayor display vote twice
-                __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                __instance.TitleText.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = doSwap ? 4 : 0; // Delay animaton if swapping
                 for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
@@ -232,7 +232,7 @@ namespace TheOtherRoles
         static void onClick(int i, MeetingHud __instance)
         {
             if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.PPMOEEPBHJO.IAGJEKLJCCI) return; 
-            if (__instance.FOIGOPKABAA == MeetingHud.DDMMMDGMFIK.Results) return;
+            if (__instance.FOIGOPKABAA == MeetingHud.MANCENPNMAC.Results) return;
             if (__instance.GBKFCOAKLAH[i].isDead) return;
 
             int selectedCount = selections.Where(b => b).Count();

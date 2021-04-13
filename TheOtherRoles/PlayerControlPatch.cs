@@ -42,7 +42,7 @@ namespace TheOtherRoles {
 
         static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
             PlayerControl result = null;
-            float num = GameOptionsData.FECFGOOCIJL[Mathf.Clamp(PlayerControl.GameOptions.MLLMFMOMIAC, 0, 2)];
+            float num = GameOptionsData.DCAJHEGBLDD[Mathf.Clamp(PlayerControl.GameOptions.OCPGKHJJAHL, 0, 2)];
             if (!ShipStatus.Instance) return result;
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
@@ -62,7 +62,7 @@ namespace TheOtherRoles {
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
                         float magnitude = vector.magnitude;
-                        if (magnitude <= num && !PhysicsHelpers.HKFKKEKGLHF(truePosition, vector.normalized, magnitude, Constants.LEOCDMEJGPA))
+                        if (magnitude <= num && !PhysicsHelpers.HLIEDNLNBBH(truePosition, vector.normalized, magnitude, Constants.LEOCDMEJGPA))
                         {
                             result = @object;
                             num = magnitude;
@@ -306,10 +306,10 @@ namespace TheOtherRoles {
     class PlayerPhysicsWalkPlayerToPatch {
         private static Vector2 offset = Vector2.zero;
         public static void Prefix(PlayerPhysics __instance) {
-            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.BADPLKHHINK == Child.child ||  (Morphling.morphling != null && __instance.BADPLKHHINK == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
+            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.EMHCBDEIOLO == Child.child ||  (Morphling.morphling != null && __instance.EMHCBDEIOLO == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
             if (correctOffset) {
                 float currentScaling = (Child.growingProgress() + 1) * 0.5f;
-                __instance.BADPLKHHINK.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
+                __instance.EMHCBDEIOLO.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
             }
         }
     }

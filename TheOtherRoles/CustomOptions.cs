@@ -301,8 +301,8 @@ namespace TheOtherRoles {
                 option.entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", option.id.ToString(), option.defaultSelection);
                 option.selection = Mathf.Clamp(option.entry.Value, 0, option.selections.Length - 1);
                 if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption) {
-                    stringOption.IOFLMCGMJBA = stringOption.Value = option.selection;
-                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+                    stringOption.LCDAKOCANPH = stringOption.Value = option.selection;
+                    stringOption.ValueText.text = option.selections[option.selection].ToString();
                 }
             }
         }
@@ -336,8 +336,8 @@ namespace TheOtherRoles {
         public void updateSelection(int newSelection) {
             selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
             if (optionBehaviour != null && optionBehaviour is StringOption stringOption) {
-                stringOption.IOFLMCGMJBA = stringOption.Value = selection;
-                stringOption.ValueText.Text = selections[selection].ToString();
+                stringOption.LCDAKOCANPH = stringOption.Value = selection;
+                stringOption.ValueText.text = selections[selection].ToString();
 
                 if (AmongUsClient.Instance?.HHBLOCGKFAB == true && PlayerControl.LocalPlayer) {
                     if (id == 0) switchPreset(selection); // Switch presets
@@ -355,7 +355,7 @@ namespace TheOtherRoles {
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
 
-            List<OptionBehaviour> allOptions = __instance.IGFJIPMAJHF.ToList();
+            List<OptionBehaviour> allOptions = __instance.MCAHCPOHNFI.ToList();
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
@@ -363,15 +363,15 @@ namespace TheOtherRoles {
                     allOptions.Add(stringOption);
 
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
-                    stringOption.TitleText.Text = option.name;
-                    stringOption.Value = stringOption.IOFLMCGMJBA = option.selection;
-                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+                    stringOption.TitleText.text = option.name;
+                    stringOption.Value = stringOption.LCDAKOCANPH = option.selection;
+                    stringOption.ValueText.text = option.selections[option.selection].ToString();
 
                     option.optionBehaviour = stringOption;
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
-            __instance.IGFJIPMAJHF = allOptions.ToArray();
+            __instance.MCAHCPOHNFI = allOptions.ToArray();
         }
     }
 
@@ -382,9 +382,9 @@ namespace TheOtherRoles {
             if (option == null) return true;
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => {});
-            __instance.TitleText.Text = option.name;
-            __instance.Value = __instance.IOFLMCGMJBA = option.selection;
-            __instance.ValueText.Text = option.selections[option.selection].ToString();
+            __instance.TitleText.text = option.name;
+            __instance.Value = __instance.LCDAKOCANPH = option.selection;
+            __instance.ValueText.text = option.selections[option.selection].ToString();
             
             return false;
         }
@@ -429,7 +429,7 @@ namespace TheOtherRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.IGFJIPMAJHF.Length * 0.55F; 
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.MCAHCPOHNFI.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
@@ -535,7 +535,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class GameSettingsScalePatch {
         public static void Prefix(HudManager __instance) {
-            __instance.GameSettings.scale = 0.5f; 
+            // __instance.GameSettings.scale = 0.5f; 
         }
     }
 }

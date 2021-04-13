@@ -146,8 +146,8 @@ namespace TheOtherRoles
             }
 
             if (!roleCanCallEmergency) {
-                __instance.StatusText.Text = statusText;
-                __instance.NumberText.Text = string.Empty;
+                __instance.StatusText.text = statusText;
+                __instance.NumberText.text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
                 __instance.ButtonActive = false;
@@ -159,7 +159,7 @@ namespace TheOtherRoles
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
-                __instance.NumberText.Text = $"{localRemaining.ToString()} and the ship has {teamRemaining.ToString()}";
+                __instance.NumberText.text = $"{localRemaining.ToString()} and the ship has {teamRemaining.ToString()}";
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
                 __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);
@@ -196,7 +196,7 @@ namespace TheOtherRoles
                 for (int i = 0; i < __instance.PMKNJGLKGDD.Length; i++) {
                     var vitalsPanel = __instance.PMKNJGLKGDD[i];
                     var player = GameData.Instance.AllPlayers[i];
-                    vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
+                    vitalsPanel.Text.text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                 }
             }
         }
@@ -226,11 +226,11 @@ namespace TheOtherRoles
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
                         if (showHackerInfo)
-                            vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
+                            vitalsPanel.Text.text = Math.Round(timeSinceDeath / 1000) + "s";
                         else if (__instance.PMKNJGLKGDD.Length > 10)
-                            vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
+                            vitalsPanel.Text.text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                         else 
-                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.OCCIKHJPJPK[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                            vitalsPanel.Text.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.MBDDHJCCLBP[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}
@@ -245,28 +245,28 @@ namespace TheOtherRoles
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
                 // Save colors for the Hacker
-                __instance.HAHFHCCIEGH += Time.deltaTime;
-                if (__instance.HAHFHCCIEGH < 0.1f)
+                __instance.PPKFBIONLAL += Time.deltaTime;
+                if (__instance.PPKFBIONLAL < 0.1f)
                 {
                     return false;
                 }
-                __instance.HAHFHCCIEGH = 0f;
+                __instance.PPKFBIONLAL = 0f;
                 players = new Dictionary<SystemTypes, List<Color>>();
                 bool commsActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
                         if (task.TaskType == TaskTypes.FixComms) commsActive = true;       
 
 
-                if (!__instance.KGMLJDGMIND && commsActive)
+                if (!__instance.PIMGCOPFDBG && commsActive)
                 {
-                    __instance.KGMLJDGMIND = true;
+                    __instance.PIMGCOPFDBG = true;
                     __instance.BackgroundColor.SetColor(Palette.EGHCBLDNCGP);
                     __instance.SabotageText.gameObject.SetActive(true);
                     return false;
                 }
-                if (__instance.KGMLJDGMIND && !commsActive)
+                if (__instance.PIMGCOPFDBG && !commsActive)
                 {
-                    __instance.KGMLJDGMIND = false;
+                    __instance.PIMGCOPFDBG = false;
                     __instance.BackgroundColor.SetColor(Color.green);
                     __instance.SabotageText.gameObject.SetActive(false);
                 }
@@ -279,15 +279,15 @@ namespace TheOtherRoles
 
                     if (!commsActive)
                     {
-                        PlainShipRoom plainShipRoom = ShipStatus.Instance.EMIBABGLHIO[counterArea.RoomType];
+                        PlainShipRoom plainShipRoom = ShipStatus.Instance.DFAAPCDKCCO[counterArea.RoomType];
 
                         if (plainShipRoom != null && plainShipRoom.roomArea)
                         {
-                            int num = plainShipRoom.roomArea.OverlapCollider(__instance.CGAANOHJEKD, __instance.BLDONECDJFJ);
+                            int num = plainShipRoom.roomArea.OverlapCollider(__instance.CMCPAKBKLDP, __instance.HMNBGCJAGLM);
                             int num2 = num;
                             for (int j = 0; j < num; j++)
                             {
-                                Collider2D collider2D = __instance.BLDONECDJFJ[j];
+                                Collider2D collider2D = __instance.HMNBGCJAGLM[j];
                                 if (!(collider2D.tag == "DeadBody"))
                                 {
                                     PlayerControl component = collider2D.GetComponent<PlayerControl>();
@@ -341,8 +341,8 @@ namespace TheOtherRoles
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
 
-                    for (int i = 0; i < __instance.KIFEIHAMMJC.Count; i++) {
-                        PoolableBehavior icon = __instance.KIFEIHAMMJC[i];
+                    for (int i = 0; i < __instance.OHFFOMPLFLL.Count; i++) {
+                        PoolableBehavior icon = __instance.OHFFOMPLFLL[i];
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {

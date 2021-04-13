@@ -70,7 +70,7 @@ namespace TheOtherRoles
         public static void resetTimeMasterButton() {
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
-            timeMasterShieldButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+            timeMasterShieldButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
         }
 
         public static void Postfix(HudManager __instance)
@@ -203,7 +203,7 @@ namespace TheOtherRoles
                 () => {
                     timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
                     timeMasterShieldButton.isEffectActive = false;
-                    timeMasterShieldButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    timeMasterShieldButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
@@ -270,7 +270,7 @@ namespace TheOtherRoles
                     morphlingButton.Timer = morphlingButton.MaxTimer;
                     morphlingButton.Sprite = Morphling.getSampleSprite();
                     morphlingButton.isEffectActive = false;
-                    morphlingButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    morphlingButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                     Morphling.sampledTarget = null;
                 },
                 Morphling.getSampleSprite(),
@@ -298,7 +298,7 @@ namespace TheOtherRoles
                 () => {
                     camouflagerButton.Timer = camouflagerButton.MaxTimer;
                     camouflagerButton.isEffectActive = false;
-                    camouflagerButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    camouflagerButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 Camouflager.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
@@ -318,7 +318,7 @@ namespace TheOtherRoles
                 () => {
                     hackerButton.Timer = hackerButton.MaxTimer;
                     hackerButton.isEffectActive = false;
-                    hackerButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    hackerButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 Hacker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
@@ -397,7 +397,7 @@ namespace TheOtherRoles
                 () => {
                     vampireKillButton.Timer = vampireKillButton.MaxTimer;
                     vampireKillButton.isEffectActive = false;
-                    vampireKillButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    vampireKillButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 Vampire.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
@@ -499,7 +499,7 @@ namespace TheOtherRoles
                 () => {
                     lighterButton.Timer = lighterButton.MaxTimer;
                     lighterButton.isEffectActive = false;
-                    lighterButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    lighterButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 Lighter.getButtonSprite(),
                 new Vector3(-1.3f, 0f, 0f),
@@ -561,7 +561,7 @@ namespace TheOtherRoles
                 () => { 
                     lightsOutButton.Timer = lightsOutButton.MaxTimer;
                     lightsOutButton.isEffectActive = false;
-                    lightsOutButton.killButtonManager.TimerText.Color = Palette.BJENLBHMKAI;
+                    lightsOutButton.killButtonManager.TimerText.color = Palette.BJENLBHMKAI;
                 },
                 Trickster.getLightsOutButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
