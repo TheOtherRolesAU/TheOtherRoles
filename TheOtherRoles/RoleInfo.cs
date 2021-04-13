@@ -130,7 +130,7 @@ namespace TheOtherRoles
             if (Swapper.swapper != null && p == Swapper.swapper) {
                 infos.Add(new RoleInfo("Swapper",
                 Swapper.color,
-                "Swap votes to exile the <color=#FF1919FF>Impostors",
+                "Swap votes to exile the <color=#FF1919FF>Impostors</color>",
                 "Swap votes"));
             }
             if (Seer.seer != null && p == Seer.seer) { 
@@ -142,8 +142,8 @@ namespace TheOtherRoles
             if (Hacker.hacker != null && p == Hacker.hacker) { 
                 infos.Add(new RoleInfo("Hacker",
                 Hacker.color,
-                "Hacker to find the <color=#FF1919FF>Impostors",
-                "Hacker to find the Impostors"));
+                "Hacke to find the <color=#FF1919FF>Impostors</color>",
+                "Hacke to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
                 infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "Bad Child" : "Good Child",
