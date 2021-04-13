@@ -362,7 +362,7 @@ namespace TheOtherRoles
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0);
 
-                            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(Vampire.delay, new Action<float>((p) => { // Delayed action
+                            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(Vampire.delay, new Action<float>((p) => { // Delayed action
                                 if (p == 1f) {
                                     if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.IAGJEKLJCCI && Helpers.handleMurderAttempt(Vampire.bitten)) {
                                         // Perform kill
