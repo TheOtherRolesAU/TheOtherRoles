@@ -31,7 +31,7 @@ namespace TheOtherRoles {
             private static string currentText = "";
 
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
                 update = GameData.Instance.BCFPPIDIMJK != __instance.GGIPHNCFKFH;
             }
 
@@ -49,7 +49,7 @@ namespace TheOtherRoles {
                 }
 
                 // Host update with version handshake infos
-                if (AmongUsClient.Instance.CBKCIKKEJHI) {
+                if (AmongUsClient.Instance.HHBLOCGKFAB) {
                     bool blockStart = false;
                     string message = "";
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
@@ -75,7 +75,7 @@ namespace TheOtherRoles {
                 }
 
                 // Lobby timer
-                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
 
                 if (update) currentText = __instance.PlayerCounter.Text;
 
@@ -93,7 +93,7 @@ namespace TheOtherRoles {
             public static bool Prefix(GameStartManager __instance) {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
-                if (AmongUsClient.Instance.CBKCIKKEJHI) {
+                if (AmongUsClient.Instance.HHBLOCGKFAB) {
                     uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                         var dummyComponent = player.GetComponent<DummyBehaviour>();

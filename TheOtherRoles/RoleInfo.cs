@@ -156,7 +156,7 @@ namespace TheOtherRoles
             }
             if (Child.child != null && p == Child.child) { 
                 infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "Bad Child" : "Good Child",
-                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.LDCHDOFJPGH : Child.color,
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Child.color,
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
@@ -186,7 +186,7 @@ namespace TheOtherRoles
             }
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
                 infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "ImpLover" : "Lover",
-                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.LDCHDOFJPGH : Lovers.color,
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Lovers.color,
                 "You are in [FC03BEFF]Love[]",
                 "You are in love"));
             }
@@ -198,7 +198,7 @@ namespace TheOtherRoles
             }
             if (infos.Count == 0 && p.PPMOEEPBHJO.FDNMBJOAPFL) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
-                Palette.LDCHDOFJPGH,
+                Palette.JPCHLLEJNEH,
                 "",
                 "Sabotage and kill everyone"));
             } else if (infos.Count == 0) { // Just Crewmate

@@ -130,7 +130,7 @@ namespace TheOtherRoles
                             {
                                 Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
                                 Vector2 truePosition2 = component.AMIPFAILDIF;
-                                if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.POECPOEKKNO && !PhysicsHelpers.GCFCONMBBOF(truePosition, truePosition2, Constants.DHLPLBPJNBA, false))
+                                if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.POECPOEKKNO && !PhysicsHelpers.DOAHONIIFJD(truePosition, truePosition2, Constants.LEOCDMEJGPA, false))
                                 {
                                     GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.GetPlayerById(component.ParentId);
                                     

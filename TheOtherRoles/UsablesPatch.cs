@@ -24,7 +24,7 @@ namespace TheOtherRoles
         public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
             float num = float.MaxValue;
-            PlayerControl @object = pc.GPBBCHGPABL;
+            PlayerControl @object = pc.GJPBCGFPMOD;
 
 
             bool roleCouldUse = false;
@@ -43,7 +43,7 @@ namespace TheOtherRoles
                     roleCouldUse = true;
             }
 
-            var usableDistance = __instance.GBFKHOCBAOF;
+            var usableDistance = __instance.KNKPIDOGFFC;
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
                 if(Trickster.trickster != PlayerControl.LocalPlayer) {
                     // Only the Trickster can use the Jack-In-The-Boxes!
@@ -65,7 +65,7 @@ namespace TheOtherRoles
                 Vector3 position = __instance.transform.position;
                 num = Vector2.Distance(truePosition, position);
                 
-                canUse &= (num <= usableDistance && !PhysicsHelpers.GCFCONMBBOF(truePosition, position, Constants.NCOONMPDEDB, false));
+                canUse &= (num <= usableDistance && !PhysicsHelpers.DOAHONIIFJD(truePosition, position, Constants.KOMPKLHCHJI, false));
             }
             __result = num;
             return false;
@@ -101,7 +101,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
     class UseButtonSetTargetPatch {
         static void Postfix(UseButtonManager __instance) {
-            if (__instance.FKANCEFMKPH != null) return;
+            if (__instance.LHAKKAAOLLM != null) return;
 
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
@@ -117,7 +117,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
-            if (__instance.FKANCEFMKPH != null) return true;
+            if (__instance.LHAKKAAOLLM != null) return true;
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
@@ -155,7 +155,7 @@ namespace TheOtherRoles
             }
 
             // Handle max number of meetings
-            if (__instance.MJMOOPLLNPO == 1) {
+            if (__instance.FOIGOPKABAA == 1) {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
@@ -192,9 +192,9 @@ namespace TheOtherRoles
     class VitalsMinigameBeginPatch {
         static void Postfix(VitalsMinigame __instance) {
 
-            if (__instance.MCCBOPIEOEC.Length > 10) {
-                for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
-                    var vitalsPanel = __instance.MCCBOPIEOEC[i];
+            if (__instance.PMKNJGLKGDD.Length > 10) {
+                for (int i = 0; i < __instance.PMKNJGLKGDD.Length; i++) {
+                    var vitalsPanel = __instance.PMKNJGLKGDD[i];
                     var player = GameData.Instance.AllPlayers[i];
                     vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                 }
@@ -209,13 +209,13 @@ namespace TheOtherRoles
         static void Postfix(VitalsMinigame __instance) {
             // Hacker show time since death
             bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
-            for (int k = 0; k < __instance.MCCBOPIEOEC.Length; k++)
+            for (int k = 0; k < __instance.PMKNJGLKGDD.Length; k++)
             {
-                VitalsPanel vitalsPanel = __instance.MCCBOPIEOEC[k];
+                VitalsPanel vitalsPanel = __instance.PMKNJGLKGDD[k];
                 GameData.LGBOMGHJELL player = GameData.Instance.AllPlayers[k];
 
                 // Crowded scaling
-                float scale = 10f / Mathf.Max(10, __instance.MCCBOPIEOEC.Length);
+                float scale = 10f / Mathf.Max(10, __instance.PMKNJGLKGDD.Length);
                 vitalsPanel.transform.localPosition = new Vector3((float)k * 0.6f * scale + -2.7f, 0.2f, -1f);
                 vitalsPanel.transform.localScale = new Vector3(scale, scale, vitalsPanel.transform.localScale.z);
 
@@ -227,7 +227,7 @@ namespace TheOtherRoles
 
                         if (showHackerInfo)
                             vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
-                        else if (__instance.MCCBOPIEOEC.Length > 10)
+                        else if (__instance.PMKNJGLKGDD.Length > 10)
                             vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                         else 
                             vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.OCCIKHJPJPK[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
@@ -260,7 +260,7 @@ namespace TheOtherRoles
                 if (!__instance.KGMLJDGMIND && commsActive)
                 {
                     __instance.KGMLJDGMIND = true;
-                    __instance.BackgroundColor.SetColor(Palette.JMELLHINKGM);
+                    __instance.BackgroundColor.SetColor(Palette.EGHCBLDNCGP);
                     __instance.SabotageText.gameObject.SetActive(true);
                     return false;
                 }

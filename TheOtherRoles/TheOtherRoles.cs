@@ -93,7 +93,7 @@ namespace TheOtherRoles
 
         public static class Godfather {
             public static PlayerControl godfather;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static void clearAndReload() {
                 godfather = null;
@@ -102,7 +102,7 @@ namespace TheOtherRoles
 
         public static class Mafioso {
             public static PlayerControl mafioso;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static void clearAndReload() {
                 mafioso = null;
@@ -112,7 +112,7 @@ namespace TheOtherRoles
 
         public static class Janitor {
             public static PlayerControl janitor;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static float cooldown = 30f;
 
@@ -357,7 +357,7 @@ namespace TheOtherRoles
 
     public static class Morphling {
         public static PlayerControl morphling;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
         private static Sprite sampleSprite;
         private static Sprite morphSprite;
     
@@ -406,7 +406,7 @@ namespace TheOtherRoles
 
     public static class Camouflager {
         public static PlayerControl camouflager;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
     
         public static float cooldown = 30f;
         public static float camouflageTimer = 0f;
@@ -537,7 +537,7 @@ namespace TheOtherRoles
 
     public static class Vampire {
         public static PlayerControl vampire;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static float delay = 10f;
         public static float cooldown = 30f;
@@ -664,7 +664,7 @@ namespace TheOtherRoles
 
     public static class Eraser {
         public static PlayerControl eraser;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
@@ -687,7 +687,7 @@ namespace TheOtherRoles
     
     public static class Spy {
         public static PlayerControl spy;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static bool impostorsCanKillAnyone = true;
 
@@ -699,7 +699,7 @@ namespace TheOtherRoles
 
     public static class Trickster {
         public static PlayerControl trickster;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
         public static float placeBoxCooldown = 30f;
         public static float lightsOutCooldown = 30f;
         public static float lightsOutDuration = 10f;

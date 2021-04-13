@@ -54,7 +54,7 @@ namespace TheOtherRoles {
                     nextButton.GetComponentInChildren<MeshFilter>().mesh = null;
                     text.Text = "1" + i;
                     text.RefreshMesh();
-                    text.Color = Helpers.isCustomServer() ? Color.white : Palette.JMELLHINKGM;
+                    text.Color = Helpers.isCustomServer() ? Color.white : Palette.EGHCBLDNCGP;
 
                     nextButton.transform.position = nextButton.transform.position + new Vector3(i * (maxPlayerButtons[1].transform.position.x - maxPlayerButtons[0].transform.position.x), 0, 0);
                     var passiveButton = nextButton.GetComponent<PassiveButton>();
@@ -85,7 +85,7 @@ namespace TheOtherRoles {
                 foreach (SpriteRenderer renderer in additionalButtons) {
                     if (renderer != null && renderer.gameObject != null) {
                         renderer.enabled = false;
-                        renderer.gameObject.GetComponentInChildren<TextRenderer>().Color = isCustom ? Color.white : Palette.JMELLHINKGM;
+                        renderer.gameObject.GetComponentInChildren<TextRenderer>().Color = isCustom ? Color.white : Palette.EGHCBLDNCGP;
                     }
                 }
             }

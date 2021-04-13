@@ -20,7 +20,7 @@ namespace TheOtherRoles
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 player.nameText.Text = player.PPMOEEPBHJO.PCLLABJCIPC;
                 if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && player.PPMOEEPBHJO.FDNMBJOAPFL) {
-                    player.nameText.Color = Palette.LDCHDOFJPGH;
+                    player.nameText.Color = Palette.JPCHLLEJNEH;
                 } else {
                     player.nameText.Color = Color.white;
                 }
@@ -31,7 +31,7 @@ namespace TheOtherRoles
                     if (playerControl != null) {
                         player.NameText.Text = playerControl.PPMOEEPBHJO.PCLLABJCIPC;
                         if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && playerControl.PPMOEEPBHJO.FDNMBJOAPFL) {
-                            player.NameText.Color = Palette.LDCHDOFJPGH;
+                            player.NameText.Color = Palette.JPCHLLEJNEH;
                         } else {
                             player.NameText.Color = Color.white;
                         }
@@ -42,12 +42,12 @@ namespace TheOtherRoles
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !x.PPMOEEPBHJO.FDNMBJOAPFL);
                 foreach (PlayerControl player in impostors)
-                    player.nameText.Color = Palette.LDCHDOFJPGH;
+                    player.nameText.Color = Palette.JPCHLLEJNEH;
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH) {
                         PlayerControl playerControl = Helpers.playerById((byte)player.GEIOMAPOPKA);
                         if (playerControl != null && playerControl.PPMOEEPBHJO.FDNMBJOAPFL)
-                            player.NameText.Color =  Palette.LDCHDOFJPGH;
+                            player.NameText.Color =  Palette.JPCHLLEJNEH;
                     }
             }
 

@@ -217,7 +217,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForChildLose(ShipStatus __instance) {
             if (Child.triggerChildLose) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
                 {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.ChildLose, false);
@@ -231,7 +231,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForJesterWin(ShipStatus __instance) {
             if (Jester.triggerJesterWin) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
                 {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.JesterWin, false);
@@ -275,7 +275,7 @@ namespace TheOtherRoles {
                 localCompletedAllTasks = localCompletedAllTasks && t.MOHGOCFFHLF;
             }
 
-            if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+            if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
             {
                 if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
                 {
@@ -294,7 +294,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
                 {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.LoversWin, false);
@@ -309,7 +309,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
                 {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
@@ -324,7 +324,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2)) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO) {
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM) {
                     __instance.enabled = false;
                     GameOverReason endReason;
                     switch (TempData.EBGJMGKCIFN) {
@@ -350,7 +350,7 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0) {
-                if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO) {
+                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM) {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH(GameOverReason.HumansByVote, false);
                     return true;
@@ -364,14 +364,14 @@ namespace TheOtherRoles {
 
         private static void ReviveEveryone() {
             for (int i = 0; i < GameData.Instance.BCFPPIDIMJK; i++)
-                GameData.Instance.AllPlayers[i].GPBBCHGPABL.Revive();
+                GameData.Instance.AllPlayers[i].GJPBCGFPMOD.Revive();
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) UnityEngine.Object.Destroy(array[i].gameObject);
         }
 
         private static void EndGameForSabotage(ShipStatus __instance)
         {
-            if (!DestroyableSingleton<TutorialManager>.JECNDKBIOFO)
+            if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
             {
                 __instance.enabled = false;
                 ShipStatus.PBKIGLMJEDH(GameOverReason.ImpostorBySabotage, false);

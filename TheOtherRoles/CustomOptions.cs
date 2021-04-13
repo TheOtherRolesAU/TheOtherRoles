@@ -308,7 +308,7 @@ namespace TheOtherRoles {
         }
 
         public static void ShareOptionSelections() {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.CBKCIKKEJHI == false && PlayerControl.LocalPlayer == null) return;
+            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.HHBLOCGKFAB == false && PlayerControl.LocalPlayer == null) return;
             foreach (CustomOption option in CustomOption.options) {
                 MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
@@ -339,7 +339,7 @@ namespace TheOtherRoles {
                 stringOption.IOFLMCGMJBA = stringOption.Value = selection;
                 stringOption.ValueText.Text = selections[selection].ToString();
 
-                if (AmongUsClient.Instance?.CBKCIKKEJHI == true && PlayerControl.LocalPlayer) {
+                if (AmongUsClient.Instance?.HHBLOCGKFAB == true && PlayerControl.LocalPlayer) {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 

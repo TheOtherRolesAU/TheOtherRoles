@@ -36,9 +36,9 @@ namespace TheOtherRoles
             RPCProcedure.resetVariables();
 
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.PPMOEEPBHJO.CIDDOFDJHJH);
+            crewmates.RemoveAll(x => x.PPMOEEPBHJO.FDNMBJOAPFL);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.PPMOEEPBHJO.CIDDOFDJHJH);
+            impostors.RemoveAll(x => !x.PPMOEEPBHJO.FDNMBJOAPFL);
 
             float crewCountSettings = (float)CustomOptionHolder.crewmateRolesCount.getSelection() / 2;
             float impCountSettings = (float)CustomOptionHolder.impostorRolesCount.getSelection() / 2;

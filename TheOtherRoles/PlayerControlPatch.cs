@@ -52,7 +52,7 @@ namespace TheOtherRoles {
                 GameData.LGBOMGHJELL LGBOMGHJELL = allPlayers[i];
                 if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.FNPNJHNKEBK != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.IAGJEKLJCCI && (!onlyCrewmates || !LGBOMGHJELL.FDNMBJOAPFL))
                 {
-                    PlayerControl @object = LGBOMGHJELL.GPBBCHGPABL;
+                    PlayerControl @object = LGBOMGHJELL.GJPBCGFPMOD;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
                         // if that player is not targetable: skip check
                         continue;
@@ -62,7 +62,7 @@ namespace TheOtherRoles {
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
                         float magnitude = vector.magnitude;
-                        if (magnitude <= num && !PhysicsHelpers.HKFKKEKGLHF(truePosition, vector.normalized, magnitude, Constants.DHLPLBPJNBA))
+                        if (magnitude <= num && !PhysicsHelpers.HKFKKEKGLHF(truePosition, vector.normalized, magnitude, Constants.LEOCDMEJGPA))
                         {
                             result = @object;
                             num = magnitude;
@@ -164,8 +164,8 @@ namespace TheOtherRoles {
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && ShipStatus.Instance?.GIDPCPOEFBC != null) {
-                foreach (Vent vent in ShipStatus.Instance.GIDPCPOEFBC) {
+            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && ShipStatus.Instance?.GJHKPDGJHJN != null) {
+                foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
                     try {
                         if (vent?.KJAENOGGEOK?.material != null) {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
@@ -370,7 +370,7 @@ namespace TheOtherRoles {
 
                     if (!string.IsNullOrWhiteSpace(msg))
                     {   
-                        if (AmongUsClient.Instance.HNMILJEOEKN && DestroyableSingleton<HudManager>.CHNDKKBEIDG)
+                        if (AmongUsClient.Instance.BPADAHAOBLM && DestroyableSingleton<HudManager>.CHNDKKBEIDG)
                         {
                             DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                         }
@@ -447,7 +447,7 @@ namespace TheOtherRoles {
             // Child set adapted kill cooldown
             if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
                 var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+                Child.child.SetKillTimer(PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
             }
         }
     }
@@ -455,12 +455,12 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
     class PlayerControlSetCoolDownPatch {
         public static bool Prefix(PlayerControl __instance, float KAIMOLNHDCG) {
-            if (PlayerControl.GameOptions.ELBDIKIOHHH <= 0f) return false;
+            if (PlayerControl.GameOptions.DGOPNLEEAAJ <= 0f) return false;
             float multiplier = 1f;
             if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) multiplier = Child.isGrownUp() ? 0.66f : 2f;
 
-            __instance.killTimer = Mathf.Clamp(KAIMOLNHDCG, 0f, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
-            DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            __instance.killTimer = Mathf.Clamp(KAIMOLNHDCG, 0f, PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
+            DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
             return false;
         }
     }
@@ -515,8 +515,8 @@ namespace TheOtherRoles {
         {
             __result = __instance.moveable &&
                 !Minigame.Instance &&
-                (!DestroyableSingleton<HudManager>.JECNDKBIOFO || (!DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillOverlay.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.GameMenu.LFGAAGECFFO)) &&
-                (!MapBehaviour.Instance || !MapBehaviour.Instance.IPOGMCKNALI) &&
+                (!DestroyableSingleton<HudManager>.BMHJGNNOGDM || (!DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.ENPNFFCCKON && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillOverlay.ENPNFFCCKON && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.GameMenu.ENPNFFCCKON)) &&
+                (!MapBehaviour.Instance || !MapBehaviour.Instance.FLLAHBDIMHD) &&
                 !MeetingHud.Instance &&
                 !CustomPlayerMenu.Instance &&
                 !ExileController.Instance &&

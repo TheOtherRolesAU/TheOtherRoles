@@ -111,11 +111,11 @@ namespace TheOtherRoles
         public static void forceEnd() {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (!player.PPMOEEPBHJO.CIDDOFDJHJH)
+                if (!player.PPMOEEPBHJO.FDNMBJOAPFL)
                 {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
-                    player.PPMOEEPBHJO.FGNJJFABIHJ = true;
+                    player.PPMOEEPBHJO.IAGJEKLJCCI = true;
                 }
             }
         }
@@ -218,7 +218,7 @@ namespace TheOtherRoles
         }
 
         public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
-            if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
+            if (AmongUsClient.Instance.HHBLOCGKFAB) { // If lobby host
                 GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
             }
         }
@@ -240,7 +240,7 @@ namespace TheOtherRoles
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
-            switchSystem.GNPBPJHLPAO = switchSystem.KNFBDAFFMGF;
+            switchSystem.BBCFBNPEPIE = switchSystem.FLDLDHLDCLM;
         }
 
         public static void engineerUsedRepair() {
@@ -280,9 +280,9 @@ namespace TheOtherRoles
             if (TimeMaster.timeMaster == null) return;
 
             PlayerControl lp = PlayerControl.LocalPlayer;
-            if (lp?.PPMOEEPBHJO != null && !lp.PPMOEEPBHJO.FGNJJFABIHJ && lp.inVent) {
+            if (lp?.PPMOEEPBHJO != null && !lp.PPMOEEPBHJO.IAGJEKLJCCI && lp.inVent) {
                 if ((float)(DateTime.UtcNow -localVentEnterTimePoint).TotalMilliseconds < 1000 * TimeMaster.rewindTime) {
-                    foreach (Vent vent in ShipStatus.Instance.GIDPCPOEFBC) {
+                    foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
                         bool canUse;
                         bool couldUse;
                         vent.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out canUse, out couldUse);
@@ -324,7 +324,7 @@ namespace TheOtherRoles
                 HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
                 HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(0.5f, new Action<float>((p) => {
                     var renderer = HudManager.CHNDKKBEIDG.FullScreen;
-                    Color c = Palette.LDCHDOFJPGH;
+                    Color c = Palette.JPCHLLEJNEH;
                     if (p < 0.5) {
                         if (renderer != null)
                             renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(p * 2 * 0.75f));
@@ -346,17 +346,17 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.PPMOEEPBHJO.CIDDOFDJHJH || player == Jackal.jackal || player == Sidekick.sidekick) {
+            if (player.PPMOEEPBHJO.FDNMBJOAPFL || player == Jackal.jackal || player == Sidekick.sidekick) {
                 oldShifter.Exiled();
                 return;
             }
 
             // Switch shield
             if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
                 Medic.shielded = oldShifter;
             } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
                 Medic.shielded = player;
             }
 
@@ -425,9 +425,9 @@ namespace TheOtherRoles
         }
 
         public static void loverSuicide(byte remainingLoverId) {
-            if (Lovers.lover1 != null && !Lovers.lover1.PPMOEEPBHJO.FGNJJFABIHJ && Lovers.lover1.PlayerId == remainingLoverId) {
+            if (Lovers.lover1 != null && !Lovers.lover1.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
-            } else if (Lovers.lover2 != null && !Lovers.lover2.PPMOEEPBHJO.FGNJJFABIHJ && Lovers.lover2.PlayerId == remainingLoverId) {
+            } else if (Lovers.lover2 != null && !Lovers.lover2.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
         }
@@ -440,14 +440,14 @@ namespace TheOtherRoles
 
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                if (player.PlayerId == targetId && !player.PPMOEEPBHJO.FGNJJFABIHJ) {
+                if (player.PlayerId == targetId && !player.PPMOEEPBHJO.IAGJEKLJCCI) {
                         Vampire.bitten = player;
                 }
             }
         }
 
         public static void vampireTryKill() {
-            if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.FGNJJFABIHJ) {
+            if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.IAGJEKLJCCI) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
@@ -494,7 +494,7 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.PPMOEEPBHJO.CIDDOFDJHJH) {
+                    if(!Jackal.canCreateSidekickFromImpostor && player.PPMOEEPBHJO.FDNMBJOAPFL) {
                         Jackal.fakeSidekick = player;
                         return;
                     }
@@ -556,7 +556,7 @@ namespace TheOtherRoles
                 Lovers.clearAndReload(); 
             }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
-                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.FGNJJFABIHJ) {
+                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI) {
                     RPCProcedure.sidekickPromotes();
                 } else {
                     Jackal.clearAndReload();
@@ -585,7 +585,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(PlayerControl.LocalPlayer.PPMOEEPBHJO.CIDDOFDJHJH) {
+            if(PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }

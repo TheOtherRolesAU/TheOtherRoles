@@ -170,7 +170,7 @@ namespace TheOtherRoles {
         }
 
         public static bool isCustomServer() {
-            return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.LDHDIAFIPCG == TheOtherRolesPlugin.Ip.Value;
+            return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.KEABFOHAECE == TheOtherRolesPlugin.Ip.Value;
         }
     }
 }
