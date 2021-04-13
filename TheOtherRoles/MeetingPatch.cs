@@ -25,7 +25,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[11];
+                byte[] array = new byte[__instance.DHCOPOOJCLN.Length + 1];
                 for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
@@ -105,7 +105,7 @@ namespace TheOtherRoles
                             break;
                         }
                     }
-                    byte[] array = new byte[10];
+                    byte[] array = new byte[__instance.DHCOPOOJCLN.Length];
                     for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
                     {
                         PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
@@ -274,9 +274,21 @@ namespace TheOtherRoles
             }
         }
 
-        static void addSwapperSwapButtons(MeetingHud __instance) {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
+        static void populateButtonsPostfix(MeetingHud __instance) {
+            // Reposition button if there are more than 10 players
+            float scale = 5f / 8f; // 8 rows are needed instead of 5
+            if (__instance.DHCOPOOJCLN != null && __instance.DHCOPOOJCLN.Length > 10) {
+                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++) {
+                    PlayerVoteArea area = __instance.DHCOPOOJCLN[i];
+                    bool isLeft = i % 2 == 0;
+                    int num2 = i / 2;
+                    area.transform.localPosition = __instance.VoteOrigin + new Vector3(isLeft ? 1f : 3.9f, __instance.VoteButtonOffsets.y * (float)num2 * scale, area.transform.localPosition.z);
+                    area.transform.localScale = new Vector3(area.transform.localScale.x * scale, area.transform.localScale.y * scale, area.transform.localScale.z);
+                }
+            }
 
+            // Add Swapper Buttons
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
             selections = new bool[__instance.DHCOPOOJCLN.Length];
             renderers = new SpriteRenderer[__instance.DHCOPOOJCLN.Length];
 
@@ -308,8 +320,7 @@ namespace TheOtherRoles
         class MeetingServerStartPatch {
             static void Postfix(MeetingHud __instance)
             {
-                // Add swapper buttons
-                addSwapperSwapButtons(__instance);
+                populateButtonsPostfix(__instance);
             }
         }
 
@@ -319,7 +330,7 @@ namespace TheOtherRoles
             {
                 // Add swapper buttons
                 if (IHJEKEOFMGJ) {
-                    addSwapperSwapButtons(__instance);
+                    populateButtonsPostfix(__instance);
                 }
             }
         }

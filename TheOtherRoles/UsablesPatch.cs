@@ -1,7 +1,6 @@
 using HarmonyLib;
 using System;
-using System.IO;
-using System.Net.Http;
+using Hazel;
 using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
@@ -75,12 +74,27 @@ namespace TheOtherRoles
 
     [HarmonyPatch(typeof(Vent), "Use")]
     public static class VentUsePatch {
-        public static void Prefix(Vent __instance) {
+        public static bool Prefix(Vent __instance) {
             bool flag;
             bool flag2;
             __instance.CanUse(PlayerControl.LocalPlayer.IDOFAMCIJKE, out flag, out flag2);
-            if (flag && !PlayerControl.LocalPlayer.inVent)
-                localVentEnterTimePoint = DateTime.UtcNow;
+
+            if (!flag) return true;  // Continue with default method
+
+            bool isEnter = !PlayerControl.LocalPlayer.inVent;
+            if (isEnter) localVentEnterTimePoint = DateTime.UtcNow;
+            
+            if (!__instance.name.StartsWith("JackInTheBoxVent_")) return true; // Continue with default method
+
+            __instance.SetButtons(isEnter);
+            MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
+            writer.WritePacked(__instance.Id);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(isEnter ? byte.MaxValue : (byte)0);
+            writer.EndMessage();
+            RPCProcedure.useUncheckedVent(__instance.Id, PlayerControl.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+
+            return false;
         }
     }
 
@@ -174,25 +188,49 @@ namespace TheOtherRoles
         }
     }
 
+    [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+    class VitalsMinigameBeginPatch {
+        static void Postfix(VitalsMinigame __instance) {
+
+            if (__instance.MCCBOPIEOEC.Length > 10) {
+                for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
+                    var vitalsPanel = __instance.MCCBOPIEOEC[i];
+                    var player = GameData.Instance.AllPlayers[i];
+                    vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                }
+            }
+        }
+    }
+    
+
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
-    class VitalsMinigamePatch {
+    class VitalsMinigameUpdatePatch {
+
         static void Postfix(VitalsMinigame __instance) {
             // Hacker show time since death
             bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
             for (int k = 0; k < __instance.MCCBOPIEOEC.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.MCCBOPIEOEC[k];
-                GameData.OFKOJOKOOAK OFKOJOKOOAK = GameData.Instance.AllPlayers[k];
+                GameData.OFKOJOKOOAK player = GameData.Instance.AllPlayers[k];
 
+                // Crowded scaling
+                float scale = 10f / Mathf.Max(10, __instance.MCCBOPIEOEC.Length);
+                vitalsPanel.transform.localPosition = new Vector3((float)k * 0.6f * scale + -2.7f, 0.2f, -1f);
+                vitalsPanel.transform.localScale = new Vector3(scale, scale, vitalsPanel.transform.localScale.z);
+
+                // Hacker update
                 if (vitalsPanel.IsDead) {
-                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == OFKOJOKOOAK?.GMBAIPNOKLP)?.FirstOrDefault();
+                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.GMBAIPNOKLP)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
                         if (showHackerInfo)
                             vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
-                        else
-                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(Palette.OCCIKHJPJPK[(int)OFKOJOKOOAK.JFHFMIKFHGG], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                        else if (__instance.MCCBOPIEOEC.Length > 10)
+                            vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                        else 
+                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(Palette.OCCIKHJPJPK[(int)player.JFHFMIKFHGG], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}

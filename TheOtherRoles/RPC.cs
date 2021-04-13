@@ -5,7 +5,6 @@ using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System;
@@ -57,7 +56,9 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
+        SetUncheckedColor,
         VersionHandshake,
+        UseUncheckedVent,
 
         // Role functionality
 
@@ -211,10 +212,28 @@ namespace TheOtherRoles
                 }
         }
 
+        public static void setUncheckedColor(byte colorId, byte playerId) {
+            var player = Helpers.playerById(playerId);
+            if (player != null) player.SetColor(colorId);
+        }
+
         public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
             if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
                 GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
             }
+        }
+
+        public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (player == null) return;
+            // Fill dummy MessageReader and call MyPhysics.HandleRpc as the corountines cannot be accessed
+            MessageReader reader = new MessageReader();
+            byte[] bytes = BitConverter.GetBytes(ventId);
+            if (!BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+            reader.Buffer = bytes;
+            reader.Length = bytes.Length;
+            player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
         // Role functionality
@@ -599,12 +618,23 @@ namespace TheOtherRoles
                     byte playerId = DOOILGKLBBF.ReadByte();
                     RPCProcedure.setRole(roleId, playerId);
                     break;
+                case (byte)CustomRPC.SetUncheckedColor:
+                    byte c = DOOILGKLBBF.ReadByte();
+                    byte p = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.setUncheckedColor(c, p);
+                    break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = DOOILGKLBBF.ReadByte();
                     byte minor = DOOILGKLBBF.ReadByte();
                     byte patch = DOOILGKLBBF.ReadByte();
                     byte versionOwnerId = DOOILGKLBBF.ReadByte();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
+                    break;
+                case (byte)CustomRPC.UseUncheckedVent:
+                    int ventId = DOOILGKLBBF.ReadPackedInt32();
+                    byte ventingPlayer = DOOILGKLBBF.ReadByte();
+                    byte isEnter = DOOILGKLBBF.ReadByte();
+                    RPCProcedure.useUncheckedVent(ventId, ventingPlayer, isEnter);
                     break;
 
                 // Role functionality

@@ -11,7 +11,6 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
@@ -31,8 +30,26 @@ namespace TheOtherRoles
         public static int optionsPage = 1;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<string> Ip { get; set; }
+        public static ConfigEntry<ushort> Port { get; set; }
 
         public override void Load() {
+            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
+            Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
+            Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
+
+            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.CMJOLNCMAPD;
+            IRegionInfo[] regions = ServerManager.DefaultRegions;
+
+            regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
+            ServerManager.DefaultRegions = regions;
+            serverManager.GDOLGIJJLBL = regions;
+            serverManager.SaveServers();
+
+            IGDMNKLDEPI.OHDJGJFDDDP = IGDMNKLDEPI.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
+            IGDMNKLDEPI.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
             CustomOptionHolder.Load();
@@ -97,5 +114,4 @@ namespace TheOtherRoles
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
-
 }

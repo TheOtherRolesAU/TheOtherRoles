@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which adds manny new roles and new [Settings](#settings) to the game.
+The **The Other Roles**, is a mod for Amongs Us which adds manny new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -16,6 +16,7 @@ Even more roles are coming soon :)
 - [Camouflager](#camouflager)
 - [Vampire](#vampire)
 - [Eraser](#eraser)
+- [Trickster](#trickster)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -65,6 +66,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.2.0**
+- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#Custom-Servers-and-10+-Players) section. During meetings use the up/down keys, on vitals use the left/right keys.
+- **Added a new Impostor role: The Trickster** check the [Trickster](#trickster) section for more infos
 - You can now set how long the Time Master shield lasts
 - The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
@@ -188,9 +191,51 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
-# Custom Servers
-We recommend you to play on custom servers rather than on the official ones. A guide on how to set up a server will be added soon. In order to make your client able to connect to a custom server we recommend using [Unify](https://github.com/moltenmods/unify). Just add
-the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
+# Custom Servers and 10+ Players
+We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod).
+
+**Setup the Clients:**
+1. Run the game one time after you installed TheOtherRoles to generate the config files
+2. Open the Among Us folder (or the folder containing the TheOtherRoles mod), go to the subfolder BepInEx/config/ and replace the *Custom Server IP* and *Custom Server Port* in the **me.eisbison.theotherroles.cfg** with the ones of your server
+3. Launch the game and select the region *Custom*
+
+**Setup the Server:**
+1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
+2. Follow the steps (using the server release you just downloaded) on the official [Impostor-Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server)
+3. Make sure to set the following values to false in the *config.json* file:
+```
+    ...
+    "AntiCheat": {
+      "Enabled": false,
+      "BanIpFromGame": false
+    }
+```
+4. Make sure to forward the right ports on the hosting machine
+5. Run the server and setup the client
+
+**Setting up Server as Docker Container:** \
+If you want to run the server as a docker container you'll need to use the image
+```
+aeonlucid/impostor:nightly
+```
+(Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
+
+In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+```
+IMPOSTOR_AntiCheat__Enabled=false
+IMPOSTOR_AntiCheat__BanIpFromGame=false
+```
+
+Example to docker run command:
+```
+docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
+Or use to run it in the background
+```
+docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
 
 # Credits & Resources
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
@@ -207,7 +252,8 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
+[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
