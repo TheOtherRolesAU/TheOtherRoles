@@ -122,7 +122,7 @@ namespace TheOtherRoles {
         public static CustomOption allowSkipOnEmergencyMeetings;
 
         public static string cs(Color c, string s) {
-            return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]{4}[]", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
+            return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
  
         private static byte ToByte(float f) {
@@ -133,10 +133,10 @@ namespace TheOtherRoles {
         public static void Load() {
             
             // Role Options
-            presetSelection = CustomOption.Create(0, "[CCCC00FF]Preset[]", presets, null, true);
+            presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
 
-            crewmateRolesCount = CustomOption.Create(1, "[CCCC00FF]Number Of Crewmate/Neutral Roles[]", crewmateRoleCaps, null, true);
-            impostorRolesCount = CustomOption.Create(2, "[CCCC00FF]Number Of Impostor Roles[]", impostorRoleCaps);
+            crewmateRolesCount = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Crewmate/Neutral Roles"), crewmateRoleCaps, null, true);
+            impostorRolesCount = CustomOption.Create(2, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Impostor Roles"), impostorRoleCaps);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);

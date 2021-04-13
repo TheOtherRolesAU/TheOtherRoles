@@ -32,8 +32,8 @@ namespace TheOtherRoles{
 
                 HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(duration, new Action<float>((p) => {
                     bool even = ((int)(p * duration / 0.25f)) % 2 == 0; // Bool flips every 0.25 seconds
-                    string prefix = "[" + (even ? "FCBA03FF" : "FF0000FF") + "]";
-                    text.Text = prefix + message;
+                    string prefix = (even ? "<color=#FCBA03FF>" : "<color=#FF0000FF>");
+                    text.Text = prefix + message + "</color>";
                     if (text != null) text.Color = even ? Color.yellow : Color.red;
                     if (p == 1f && text?.gameObject != null) {
                         UnityEngine.Object.Destroy(text.gameObject);

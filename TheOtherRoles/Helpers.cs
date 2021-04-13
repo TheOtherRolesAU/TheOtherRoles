@@ -155,9 +155,9 @@ namespace TheOtherRoles {
 
                 if (roleInfo.name == "Jackal") {
                     var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: Kill everyone{getSidekickText}";  
+                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");  
                 } else {
-                    task.Text = $"{roleInfo.colorHexString()}{roleInfo.name}: {roleInfo.shortDescription}";  
+                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");  
                 }
 
                 player.myTasks.Insert(0, task);
@@ -171,6 +171,15 @@ namespace TheOtherRoles {
 
         public static bool isCustomServer() {
             return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.KEABFOHAECE == TheOtherRolesPlugin.Ip.Value;
+        }
+
+        public static string cs(Color c, string s) {
+            return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
+        }
+ 
+        private static byte ToByte(float f) {
+            f = Mathf.Clamp01(f);
+            return (byte)(f * 255);
         }
     }
 }

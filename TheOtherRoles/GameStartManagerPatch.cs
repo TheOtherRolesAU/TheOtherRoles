@@ -58,10 +58,10 @@ namespace TheOtherRoles {
                             continue;
                         else if (!playerVersions.ContainsKey(player.PlayerId))  {
                             blockStart = true;
-                            message += $"[FF0000FF]{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n";
+                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n</color>";
                         } else if (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"[FF0000FF]{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n";
+                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n</color>";
                         }
                     }
                     if (blockStart) {
