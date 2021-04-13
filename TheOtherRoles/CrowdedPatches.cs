@@ -29,9 +29,9 @@ using HarmonyLib;
 using UnityEngine;
 using Hazel;
 
-using Palette = GLNPIJPGGNJ;
-using SaveManager = ALOOOIHKCAC;
-using GameOptionsData = IGDMNKLDEPI;
+using Palette = BLMBFIODBKL;
+using SaveManager = BLCGIFOPMIA;
+using GameOptionsData = CEIOGGEDKAN;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -92,7 +92,7 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GJJLFHMDLGA), MethodType.Getter)]
+    [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LCNLLGFAEJE), MethodType.Getter)]
     public static class SaveManagerGetHostOptions
     {
         public static bool Prefix(out GameOptionsData __result)

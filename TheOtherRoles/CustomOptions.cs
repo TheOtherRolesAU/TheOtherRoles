@@ -464,7 +464,7 @@ namespace TheOtherRoles {
     class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(IGDMNKLDEPI).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+            return typeof(CEIOGGEDKAN).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
         }
 
         private static void Postfix(ref string __result)

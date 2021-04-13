@@ -11,14 +11,14 @@ using UnhollowerBaseLib;
 using System;
 using System.Text;
 
-using GameOverReason = JBJHCLOILBF;
-using TempData = DIJKKMDMDCM;
-using WinningPlayerData = KBEBEPNGKOD;
-using DeathReason = KAPJFCMEBJE;
-using SystemTypes = LGBKLKNAINN;
-using ISystemType = CBFMKGACLNE;
-using LifeSuppSystemType = MHEBFNFMKPH;
-using ICriticalSabotage = IEGIFFLBFJG;
+using GameOverReason = AMGMAKBHCMN;
+using TempData = MFEGHOFFKKA;
+using WinningPlayerData = FDAHKHEDJPN;
+using DeathReason = EGHDCAKGMKI;
+using SystemTypes = BCPJLGGNHBC;
+using ISystemType = JBBCJFNFOBB;
+using LifeSuppSystemType = GIICFCLBGOD;
+using ICriticalSabotage = KMBJMPDCFJE;
 
 namespace TheOtherRoles {
     enum CustomGameOverReason {
@@ -50,7 +50,7 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.MDDLANONDOD))]
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.DDIEDPFFHOG))]
     public class OnGameEndPatch {
         private static GameOverReason gameOverReason;
         public static void Prefix(AmongUsClient __instance, ref GameOverReason FCBGPMEMOJB, bool GKFHPFPIHGA) {
@@ -159,7 +159,7 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.BIGANIAENKO))]
+    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.CMELCNKGDDP))]
     public class EndGameManagerSetUpPatch {
         public static void Postfix(EndGameManager __instance) {
             GameObject bonusText = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
@@ -198,7 +198,7 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.NBEBPPBCGLJ))] 
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.KMPKPPGPNIH))] 
     class CheckEndCriteriaPatch{
 
         public static bool Prefix(ShipStatus __instance) {
@@ -395,7 +395,7 @@ namespace TheOtherRoles {
             GetBCFPPIDIMJKs();
         }
 
-        private bool isLover(GameData.OFKOJOKOOAK p) {
+        private bool isLover(GameData.LGBOMGHJELL p) {
             return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.GMBAIPNOKLP) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.GMBAIPNOKLP);
         }
 
@@ -409,25 +409,25 @@ namespace TheOtherRoles {
 
             for (int i = 0; i < GameData.Instance.BCFPPIDIMJK; i++)
             {
-                GameData.OFKOJOKOOAK OFKOJOKOOAK = GameData.Instance.AllPlayers[i];
-                if (!OFKOJOKOOAK.GBPMEHJFECK)
+                GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.AllPlayers[i];
+                if (!LGBOMGHJELL.GBPMEHJFECK)
                 {
-                    if (!OFKOJOKOOAK.FGNJJFABIHJ)
+                    if (!LGBOMGHJELL.FGNJJFABIHJ)
                     {
                         numTotalAlive++;
 
-                        bool lover = isLover(OFKOJOKOOAK);
+                        bool lover = isLover(LGBOMGHJELL);
                         if (lover) numLoversAlive++;
 
-                        if (OFKOJOKOOAK.CIDDOFDJHJH) {
+                        if (LGBOMGHJELL.CIDDOFDJHJH) {
                             numImpostorsAlive++;
                             if (lover) impLover = true;
                         }
-                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == OFKOJOKOOAK.GMBAIPNOKLP) {
+                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == LGBOMGHJELL.GMBAIPNOKLP) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
-                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == OFKOJOKOOAK.GMBAIPNOKLP) {
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == LGBOMGHJELL.GMBAIPNOKLP) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }

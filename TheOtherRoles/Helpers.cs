@@ -10,7 +10,7 @@ using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
 
-using TaskTypes = CBFIAGIGOFA;
+using TaskTypes = DMOAGPGAFKM;
 
 namespace TheOtherRoles {
     public static class Helpers {

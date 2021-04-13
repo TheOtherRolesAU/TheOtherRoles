@@ -9,13 +9,13 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using UnityEngine;
 
-using SystemTypes = LGBKLKNAINN;
-using Palette = GLNPIJPGGNJ;
-using Constants = NFONDPLFBCP;
-using PhysicsHelpers = IEPBCHBGDOA;
-using DeathReason = KAPJFCMEBJE;
-using GameOptionsData = IGDMNKLDEPI;
-using Effects = HLPCBNMDEHF;
+using SystemTypes = BCPJLGGNHBC;
+using Palette = BLMBFIODBKL;
+using Constants = LNCOKMACBKP;
+using PhysicsHelpers = FJFJIDCFLDJ;
+using DeathReason = EGHDCAKGMKI;
+using GameOptionsData = CEIOGGEDKAN;
+using Effects = AEOEPNHOJDP;
 
 namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
@@ -46,13 +46,13 @@ namespace TheOtherRoles {
             if (!ShipStatus.Instance) return result;
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.OFKOJOKOOAK> allPlayers = GameData.Instance.AllPlayers;
+            Il2CppSystem.Collections.Generic.List<GameData.LGBOMGHJELL> allPlayers = GameData.Instance.AllPlayers;
             for (int i = 0; i < allPlayers.Count; i++)
             {
-                GameData.OFKOJOKOOAK OFKOJOKOOAK = allPlayers[i];
-                if (!OFKOJOKOOAK.GBPMEHJFECK && OFKOJOKOOAK.GMBAIPNOKLP != PlayerControl.LocalPlayer.PlayerId && !OFKOJOKOOAK.FGNJJFABIHJ && (!onlyCrewmates || !OFKOJOKOOAK.CIDDOFDJHJH))
+                GameData.LGBOMGHJELL LGBOMGHJELL = allPlayers[i];
+                if (!LGBOMGHJELL.GBPMEHJFECK && LGBOMGHJELL.GMBAIPNOKLP != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.FGNJJFABIHJ && (!onlyCrewmates || !LGBOMGHJELL.CIDDOFDJHJH))
                 {
-                    PlayerControl @object = OFKOJOKOOAK.GPBBCHGPABL;
+                    PlayerControl @object = LGBOMGHJELL.GPBBCHGPABL;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
                         // if that player is not targetable: skip check
                         continue;
@@ -181,7 +181,7 @@ namespace TheOtherRoles {
         }
 
         static void impostorSetTarget() {
-            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ||!PlayerControl.LocalPlayer.AMDJMEEHNIG || PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) { // !isImpostor || !canMove || isDead
+            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ||!PlayerControl.LocalPlayer.POECPOEKKNO || PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) { // !isImpostor || !canMove || isDead
                 HudManager.CMJOLNCMAPD.KillButton.SetTarget(null);
                 return;
             }
@@ -342,7 +342,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch
     {
-        static void Postfix(PlayerControl __instance, GameData.OFKOJOKOOAK IGLDJOKKFJE)
+        static void Postfix(PlayerControl __instance, GameData.LGBOMGHJELL IGLDJOKKFJE)
         {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
@@ -509,7 +509,7 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.AMDJMEEHNIG), MethodType.Getter)]
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.POECPOEKKNO), MethodType.Getter)]
     class PlayerControlCanMovePatch {
         public static bool Prefix(PlayerControl __instance, ref bool __result)
         {

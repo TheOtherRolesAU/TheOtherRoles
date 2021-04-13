@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Steam'">
-        <GameVersion>2021.3.31.3s</GameVersion>
+        <GameVersion>2021.4.12s</GameVersion>
         <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(GamePlatform)' == 'Itch'">
-        <GameVersion>2021.3.31i</GameVersion>
+        <GameVersion>2021.4.21i</GameVersion>
         <DefineConstants>$(DefineConstants);ITCH</DefineConstants>
     </PropertyGroup>
 

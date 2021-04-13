@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Hazel;
 using System;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {

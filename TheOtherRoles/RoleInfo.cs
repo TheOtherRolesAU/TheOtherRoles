@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {

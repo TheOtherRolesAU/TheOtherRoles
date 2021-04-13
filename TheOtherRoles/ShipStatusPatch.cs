@@ -3,9 +3,9 @@ using HarmonyLib;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-using SystemTypes = LGBKLKNAINN;
-using SwitchSystem = FNEHFOPHPJO;
-using ISystemType = CBFMKGACLNE;
+using SystemTypes = BCPJLGGNHBC;
+using SwitchSystem = ABIMJJMBJJM;
+using ISystemType = JBBCJFNFOBB;
 
 namespace TheOtherRoles {
 
@@ -14,7 +14,7 @@ namespace TheOtherRoles {
 
 		[HarmonyPostfix]
 		[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
-        public static bool Prefix(ref float __result, ShipStatus __instance, [HarmonyArgument(0)] GameData.OFKOJOKOOAK player) {
+        public static bool Prefix(ref float __result, ShipStatus __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL player) {
             ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.Electrical) ? __instance.Systems[SystemTypes.Electrical] : null;
             if (systemType == null) return true;
             SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();

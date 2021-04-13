@@ -7,7 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using System.Collections.Generic;
 using System.Linq;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {
@@ -294,10 +294,10 @@ namespace TheOtherRoles
             if (Snitch.snitch == null || Snitch.snitch.IDOFAMCIJKE.FGNJJFABIHJ) return;
 
             int numberOfTasks = 0;
-            GameData.OFKOJOKOOAK OFKOJOKOOAK = Snitch.snitch.IDOFAMCIJKE;
-			if (!OFKOJOKOOAK.GBPMEHJFECK && OFKOJOKOOAK.CLLMDIJHALO != null) {
-				for (int i = 0; i < OFKOJOKOOAK.CLLMDIJHALO.Count; i++) {
-					if (!OFKOJOKOOAK.CLLMDIJHALO[i].FNCBODEIJCN)
+            GameData.LGBOMGHJELL LGBOMGHJELL = Snitch.snitch.IDOFAMCIJKE;
+			if (!LGBOMGHJELL.GBPMEHJFECK && LGBOMGHJELL.CLLMDIJHALO != null) {
+				for (int i = 0; i < LGBOMGHJELL.CLLMDIJHALO.Count; i++) {
+					if (!LGBOMGHJELL.CLLMDIJHALO[i].FNCBODEIJCN)
 						numberOfTasks++;
 				}
 			}

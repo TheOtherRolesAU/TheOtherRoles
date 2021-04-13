@@ -47,8 +47,8 @@ namespace TheOtherRoles
             serverManager.GDOLGIJJLBL = regions;
             serverManager.SaveServers();
 
-            IGDMNKLDEPI.OHDJGJFDDDP = IGDMNKLDEPI.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
-            IGDMNKLDEPI.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+            CEIOGGEDKAN.OHDJGJFDDDP = CEIOGGEDKAN.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
+            CEIOGGEDKAN.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
@@ -59,7 +59,7 @@ namespace TheOtherRoles
     }
 
     // Deactivate bans, since I always leave my local testing game and ban myself
-    [HarmonyPatch(typeof(MOJBJJPEFPG), nameof(MOJBJJPEFPG.IJMECJONBHM), MethodType.Getter)]
+    [HarmonyPatch(typeof(IAJICOPDKHA), nameof(IAJICOPDKHA.LEHPLHFNDLM), MethodType.Getter)]
     public static class AmBannedPatch
     {
         public static void Postfix(out bool __result)
@@ -92,7 +92,7 @@ namespace TheOtherRoles
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(GLNPIJPGGNJ.CALCLMEEPGL.Length));
+                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.CALCLMEEPGL.Length));
                 playerControl.SetHat((uint) random.Next(HatManager.CMJOLNCMAPD.AllHats.Count), playerControl.IDOFAMCIJKE.JFHFMIKFHGG);
                 playerControl.SetPet((uint) random.Next(HatManager.CMJOLNCMAPD.AllPets.Count));
                 playerControl.SetSkin((uint) random.Next(HatManager.CMJOLNCMAPD.AllSkins.Count));

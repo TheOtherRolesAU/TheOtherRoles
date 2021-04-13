@@ -11,7 +11,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {

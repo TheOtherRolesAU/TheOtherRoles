@@ -9,11 +9,11 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-using Palette = GLNPIJPGGNJ;
-using DeathReason = KAPJFCMEBJE;
-using SwitchSystem = FNEHFOPHPJO;
-using SystemTypes = LGBKLKNAINN;
-using Effects = HLPCBNMDEHF;
+using Palette = BLMBFIODBKL;
+using DeathReason = EGHDCAKGMKI;
+using SwitchSystem = ABIMJJMBJJM;
+using SystemTypes = BCPJLGGNHBC;
+using Effects = AEOEPNHOJDP;
 
 namespace TheOtherRoles
 {

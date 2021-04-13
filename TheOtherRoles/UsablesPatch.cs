@@ -8,12 +8,12 @@ using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
 
-using SystemTypes = LGBKLKNAINN;
-using Palette = GLNPIJPGGNJ;
-using Constants = NFONDPLFBCP;
-using PhysicsHelpers = IEPBCHBGDOA;
-using TaskTypes = CBFIAGIGOFA;
-using ImageNames = IKHMOFOFDHI;
+using SystemTypes = BCPJLGGNHBC;
+using Palette = BLMBFIODBKL;
+using Constants = LNCOKMACBKP;
+using PhysicsHelpers = FJFJIDCFLDJ;
+using TaskTypes = DMOAGPGAFKM;
+using ImageNames = DLBCMCKGOMN;
 
 namespace TheOtherRoles
 {
@@ -21,7 +21,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.OFKOJOKOOAK pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
             float num = float.MaxValue;
             PlayerControl @object = pc.GPBBCHGPABL;
@@ -57,7 +57,7 @@ namespace TheOtherRoles
                 }
             }
 
-            couldUse = ((@object.inVent || roleCouldUse) && !pc.FGNJJFABIHJ && (@object.AMDJMEEHNIG || @object.inVent));
+            couldUse = ((@object.inVent || roleCouldUse) && !pc.FGNJJFABIHJ && (@object.POECPOEKKNO || @object.inVent));
             canUse = couldUse;
             if (canUse)
             {
@@ -212,7 +212,7 @@ namespace TheOtherRoles
             for (int k = 0; k < __instance.MCCBOPIEOEC.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.MCCBOPIEOEC[k];
-                GameData.OFKOJOKOOAK player = GameData.Instance.AllPlayers[k];
+                GameData.LGBOMGHJELL player = GameData.Instance.AllPlayers[k];
 
                 // Crowded scaling
                 float scale = 10f / Mathf.Max(10, __instance.MCCBOPIEOEC.Length);
@@ -305,11 +305,11 @@ namespace TheOtherRoles
                                 } else {
                                     DeadBody component = collider2D.GetComponent<DeadBody>();
                                     if (component) {
-                                        GameData.OFKOJOKOOAK OFKOJOKOOAK = GameData.Instance.GetPlayerById(component.ParentId);
-                                        if (OFKOJOKOOAK != null) {
-                                            var color = Palette.CALCLMEEPGL[OFKOJOKOOAK.JFHFMIKFHGG];
+                                        GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.GetPlayerById(component.ParentId);
+                                        if (LGBOMGHJELL != null) {
+                                            var color = Palette.CALCLMEEPGL[LGBOMGHJELL.JFHFMIKFHGG];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(OFKOJOKOOAK.JFHFMIKFHGG) ? Palette.CALCLMEEPGL[7] : Palette.CALCLMEEPGL[6];
+                                                color = Helpers.isLighterColor(LGBOMGHJELL.JFHFMIKFHGG) ? Palette.CALCLMEEPGL[7] : Palette.CALCLMEEPGL[6];
                                             roomColors.Add(color);
                                         }
                                     }

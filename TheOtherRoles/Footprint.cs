@@ -4,8 +4,8 @@ using System.Collections;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 
-using Palette = GLNPIJPGGNJ;
-using Effects = HLPCBNMDEHF;
+using Palette = BLMBFIODBKL;
+using Effects = AEOEPNHOJDP;
 
 namespace TheOtherRoles{
     class Footprint {
