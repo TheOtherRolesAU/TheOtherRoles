@@ -126,7 +126,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.FIJFIACMIFB))]
         class MeetingPopulateVotesPatch {
-            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> HIDHPMAKEKH)
+            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> COMOIMMLKHF)
             {
                 // Swapper swap votes
                 PlayerVoteArea swapped1 = null;
@@ -157,7 +157,7 @@ namespace TheOtherRoles
                     for (int j = 0; j < __instance.GBKFCOAKLAH.Length; j++)
                     {
                         PlayerVoteArea playerVoteArea2 = __instance.GBKFCOAKLAH[j];
-                        byte self = HIDHPMAKEKH[(int)playerVoteArea2.GEIOMAPOPKA];
+                        byte self = COMOIMMLKHF[(int)playerVoteArea2.GEIOMAPOPKA];
 
                         if (!((self & 128) > 0))
                         {
@@ -215,7 +215,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BBFDNCCEJHI))]
         class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, byte[] HIDHPMAKEKH, GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMLKEPIBJLK)
+            static void Postfix(MeetingHud __instance, byte[] COMOIMMLKHF, GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMBDDLIPBME)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -326,10 +326,10 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Deserialize))]
         class MeetingDeserializePatch {
-            static void Postfix(MeetingHud __instance, MessageReader DOOILGKLBBF, bool IHJEKEOFMGJ)
+            static void Postfix(MeetingHud __instance, MessageReader JIGFBHFFNFI, bool DNMLJNIADHH)
             {
                 // Add swapper buttons
-                if (IHJEKEOFMGJ) {
+                if (DNMLJNIADHH) {
                     populateButtonsPostfix(__instance);
                 }
             }
@@ -337,13 +337,13 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, GameData.LGBOMGHJELL IGLDJOKKFJE) {
+            public static void Prefix(PlayerControl __instance, GameData.LGBOMGHJELL DGDGDKCCKHJ) {
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings
-                if (IGLDJOKKFJE == null) meetingsCount++;
+                if (DGDGDKCCKHJ == null) meetingsCount++;
                 // Save the meeting target
-                target = IGLDJOKKFJE;
+                target = DGDGDKCCKHJ;
             }
         }
 
@@ -360,7 +360,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
 
-        public static void Prefix(ref GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMLKEPIBJLK) {
+        public static void Prefix(ref GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMBDDLIPBME) {
             // Shifter shift
             if (Shifter.shifter != null && AmongUsClient.Instance.HHBLOCGKFAB && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
@@ -435,12 +435,12 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class MeetingExiledTextPatch
     {
-        static void Postfix(ref string __result, StringNames MKFNKGIBBHP, Il2CppReferenceArray<Il2CppSystem.Object> BPBFAAEIABN)
+        static void Postfix(ref string __result, StringNames AKGLBKHCEMI, Il2CppReferenceArray<Il2CppSystem.Object> FHLKFONKJLH)
         {
             if (ExileController.Instance != null && ExileController.Instance.EAFLJGMBLCH != null)
             {
                 // Exile role text for roles that are being assigned to crewmates
-                if (MKFNKGIBBHP == StringNames.ExileTextPN || MKFNKGIBBHP == StringNames.ExileTextSN)
+                if (AKGLBKHCEMI == StringNames.ExileTextPN || AKGLBKHCEMI == StringNames.ExileTextSN)
                 {
                     if( Jester.jester != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Jester.jester.PlayerId)
                         __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Jester.";
@@ -486,7 +486,7 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was not The Impostor.";
                 }
                 // Exile role text for roles that are being assigned to impostors
-                if (MKFNKGIBBHP == StringNames.ExileTextPP || MKFNKGIBBHP == StringNames.ExileTextSP) {
+                if (AKGLBKHCEMI == StringNames.ExileTextPP || AKGLBKHCEMI == StringNames.ExileTextSP) {
                     if(Godfather.godfather != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Godfather.godfather.PlayerId)
                         __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Godfather.";
                     else if(Mafioso.mafioso != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Mafioso.mafioso.PlayerId)
@@ -510,7 +510,7 @@ namespace TheOtherRoles
                 }
 
                 // Hide number of remaining impostors on Jester win
-                if (MKFNKGIBBHP == StringNames.ImpostorsRemainP || MKFNKGIBBHP == StringNames.ImpostorsRemainS)
+                if (AKGLBKHCEMI == StringNames.ImpostorsRemainP || AKGLBKHCEMI == StringNames.ImpostorsRemainS)
                 {
                     if (Jester.jester != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Jester.jester.PlayerId)
                         __result = "";

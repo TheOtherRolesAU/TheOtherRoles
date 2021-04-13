@@ -594,10 +594,10 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class RPCHandlerPatch
     {
-        static void Postfix(byte GIICFHKILOB, MessageReader DOOILGKLBBF)
+        static void Postfix(byte ONIABIILFGF, MessageReader JIGFBHFFNFI)
         {
-            byte packetId = GIICFHKILOB;
-            MessageReader reader = DOOILGKLBBF;
+            byte packetId = ONIABIILFGF;
+            MessageReader reader = JIGFBHFFNFI;
             switch (packetId) {
 
                 // Main Controls
@@ -606,34 +606,34 @@ namespace TheOtherRoles
                     RPCProcedure.resetVariables();
                     break;
                 case (byte)CustomRPC.ShareOptionSelection:
-                    uint id = DOOILGKLBBF.ReadPackedUInt32();
-                    uint selection = DOOILGKLBBF.ReadPackedUInt32();
+                    uint id = JIGFBHFFNFI.ReadPackedUInt32();
+                    uint selection = JIGFBHFFNFI.ReadPackedUInt32();
                     RPCProcedure.shareOptionSelection(id, selection);
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();
                     break;
                 case (byte)CustomRPC.SetRole:
-                    byte roleId = DOOILGKLBBF.ReadByte();
-                    byte playerId = DOOILGKLBBF.ReadByte();
+                    byte roleId = JIGFBHFFNFI.ReadByte();
+                    byte playerId = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.setRole(roleId, playerId);
                     break;
                 case (byte)CustomRPC.SetUncheckedColor:
-                    byte c = DOOILGKLBBF.ReadByte();
-                    byte p = DOOILGKLBBF.ReadByte();
+                    byte c = JIGFBHFFNFI.ReadByte();
+                    byte p = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.setUncheckedColor(c, p);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
-                    byte major = DOOILGKLBBF.ReadByte();
-                    byte minor = DOOILGKLBBF.ReadByte();
-                    byte patch = DOOILGKLBBF.ReadByte();
-                    byte versionOwnerId = DOOILGKLBBF.ReadByte();
+                    byte major = JIGFBHFFNFI.ReadByte();
+                    byte minor = JIGFBHFFNFI.ReadByte();
+                    byte patch = JIGFBHFFNFI.ReadByte();
+                    byte versionOwnerId = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
-                    int ventId = DOOILGKLBBF.ReadPackedInt32();
-                    byte ventingPlayer = DOOILGKLBBF.ReadByte();
-                    byte isEnter = DOOILGKLBBF.ReadByte();
+                    int ventId = JIGFBHFFNFI.ReadPackedInt32();
+                    byte ventingPlayer = JIGFBHFFNFI.ReadByte();
+                    byte isEnter = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.useUncheckedVent(ventId, ventingPlayer, isEnter);
                     break;
 
@@ -646,10 +646,10 @@ namespace TheOtherRoles
                     RPCProcedure.engineerUsedRepair();
                     break;
                 case (byte)CustomRPC.JanitorClean:
-                    RPCProcedure.janitorClean(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.janitorClean(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffKill:
-                    RPCProcedure.sheriffKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.sheriffKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
@@ -658,65 +658,65 @@ namespace TheOtherRoles
                     RPCProcedure.timeMasterShield();
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
-                    RPCProcedure.medicSetShielded(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.medicSetShielded(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
                     RPCProcedure.shieldedMurderAttempt();
                     break;
                 case (byte)CustomRPC.ShifterShift:
-                    RPCProcedure.shifterShift(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.shifterShift(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SwapperSwap:
-                    byte playerId1 = DOOILGKLBBF.ReadByte();
-                    byte playerId2 = DOOILGKLBBF.ReadByte();
+                    byte playerId1 = JIGFBHFFNFI.ReadByte();
+                    byte playerId2 = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.swapperSwap(playerId1, playerId2);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
-                    RPCProcedure.morphlingMorph(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.morphlingMorph(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
                     break;
                 case (byte)CustomRPC.LoverSuicide:
-                    RPCProcedure.loverSuicide(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.loverSuicide(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.VampireSetBitten:
-                    byte bittenId = DOOILGKLBBF.ReadByte();
-                    byte reset = DOOILGKLBBF.ReadByte();
+                    byte bittenId = JIGFBHFFNFI.ReadByte();
+                    byte reset = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.VampireTryKill:
                     RPCProcedure.vampireTryKill();
                     break;
                 case (byte)CustomRPC.PlaceGarlic:
-                    RPCProcedure.placeGarlic(DOOILGKLBBF.ReadBytesAndSize());
+                    RPCProcedure.placeGarlic(JIGFBHFFNFI.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
-                    RPCProcedure.trackerUsedTracker(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.trackerUsedTracker(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalKill:
-                    RPCProcedure.jackalKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.jackalKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SidekickKill:
-                    RPCProcedure.sidekickKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.sidekickKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
-                    RPCProcedure.jackalCreatesSidekick(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.jackalCreatesSidekick(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
                     break;
                 case (byte)CustomRPC.ErasePlayerRole:
-                    RPCProcedure.erasePlayerRole(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.erasePlayerRole(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureErased:
-                    RPCProcedure.setFutureErased(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.setFutureErased(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
-                    RPCProcedure.setFutureShifted(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.setFutureShifted(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
-                    RPCProcedure.placeJackInTheBox(DOOILGKLBBF.ReadBytesAndSize());
+                    RPCProcedure.placeJackInTheBox(JIGFBHFFNFI.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.LightsOut:
                     RPCProcedure.lightsOut();

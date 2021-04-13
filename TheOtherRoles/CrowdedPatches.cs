@@ -122,14 +122,14 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
     public static class PlayerControlCmdCheckColorPatch {
-        public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
+        public static bool Prefix(PlayerControl __instance, byte CKNNKEMNHAK) {
             if (!Helpers.isCustomServer()) return true;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
-            writer.Write(JAKOFFAIMMM);
+            writer.Write(CKNNKEMNHAK);
             writer.Write(__instance.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setUncheckedColor(JAKOFFAIMMM, __instance.PlayerId);
+            RPCProcedure.setUncheckedColor(CKNNKEMNHAK, __instance.PlayerId);
             return false;
         }
     }
