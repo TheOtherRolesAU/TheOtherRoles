@@ -669,6 +669,7 @@ namespace TheOtherRoles
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
+        public static bool canEraseAnyone = false; 
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -682,6 +683,7 @@ namespace TheOtherRoles
             futureErased = new List<PlayerControl>();
             currentTarget = null;
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
+            canEraseAnyone = CustomOptionHolder.eraserCanEraseAnyone.getBool();
         }
     }
     
