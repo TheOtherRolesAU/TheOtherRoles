@@ -100,7 +100,7 @@ namespace TheOtherRoles
                     int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
                     GameData.LGBOMGHJELL exiled = null;
                     foreach (GameData.LGBOMGHJELL pi in GameData.Instance.AllPlayers) {
-                        if (pi.GMBAIPNOKLP == maxIdx) {
+                        if (pi.FNPNJHNKEBK == maxIdx) {
                             exiled = pi;
                             break;
                         }
@@ -116,7 +116,7 @@ namespace TheOtherRoles
                         __instance.BBFDNCCEJHI(array, exiled, tie);
                     MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
                     messageWriter.WriteBytesAndSize(array);
-                    messageWriter.Write((exiled != null) ? exiled.GMBAIPNOKLP : byte.MaxValue);
+                    messageWriter.Write((exiled != null) ? exiled.FNPNJHNKEBK : byte.MaxValue);
                     messageWriter.Write(tie);
                     messageWriter.EndMessage();
                 }
@@ -224,7 +224,7 @@ namespace TheOtherRoles
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
                 if (KLHCDCKJHKC != null)
-                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == KLHCDCKJHKC.GMBAIPNOKLP) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == KLHCDCKJHKC.GMBAIPNOKLP));
+                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == KLHCDCKJHKC.FNPNJHNKEBK) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == KLHCDCKJHKC.FNPNJHNKEBK));
             }
         }
 
@@ -416,7 +416,7 @@ namespace TheOtherRoles
                         rend.sprite = Seer.getSoulSprite();
                         
                         if(Seer.limitSoulDuration) {
-                            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Seer.soulDuration, new Action<float>((p) => {
+                            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(Seer.soulDuration, new Action<float>((p) => {
                                 if (rend != null) {
                                     var tmp = rend.color;
                                     tmp.a = Mathf.Clamp01(1 - p);
@@ -443,70 +443,70 @@ namespace TheOtherRoles
                 if (MKFNKGIBBHP == StringNames.ExileTextPN || MKFNKGIBBHP == StringNames.ExileTextSN)
                 {
                     if( Jester.jester != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Jester.jester.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Jester.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Jester.";
                     else if(Mayor.mayor != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Mayor.mayor.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Mayor.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Mayor.";
                     else if(Engineer.engineer != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Engineer.engineer.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Engineer.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Engineer.";
                     else if(Sheriff.sheriff != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Sheriff.sheriff.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Sheriff.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Sheriff.";
                     else if(Lighter.lighter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lighter.lighter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lighter.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Lighter.";
                     else if(Detective.detective != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Detective.detective.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Detective.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Detective.";
                     else if(TimeMaster.timeMaster != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == TimeMaster.timeMaster.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Time Master.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Time Master.";
                     else if(Medic.medic != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Medic.medic.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Medic.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Medic.";
                     else if(Shifter.shifter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Shifter.shifter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Shifter.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Shifter.";
                     else if(Swapper.swapper != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Swapper.swapper.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Swapper.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Swapper.";
                     else if(Lovers.lover1 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lover.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Lover.";
                     else if(Lovers.lover2 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lover.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Lover.";
                     else if(Seer.seer != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Seer.seer.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Seer.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Seer.";
                     else if(Hacker.hacker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Hacker.hacker.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Hacker.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Hacker.";
                     else if(Child.child != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Child.child.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Child.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Child.";
                     else if(Tracker.tracker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Tracker.tracker.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Tracker.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Tracker.";
                     else if(Snitch.snitch != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Snitch.snitch.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Snitch.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Snitch.";
                     else if(Jackal.jackal != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Jackal.jackal.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Jackal.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Jackal.";
                     else if(Sidekick.sidekick != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Sidekick.sidekick.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Sidekick.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Sidekick.";
                     else if(Spy.spy != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Spy.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Spy.";
                     else
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was not The Impostor.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was not The Impostor.";
                 }
                 // Exile role text for roles that are being assigned to impostors
                 if (MKFNKGIBBHP == StringNames.ExileTextPP || MKFNKGIBBHP == StringNames.ExileTextSP) {
                     if(Godfather.godfather != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Godfather.godfather.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Godfather.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Godfather.";
                     else if(Mafioso.mafioso != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Mafioso.mafioso.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Mafioso.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Mafioso.";
                     else if(Janitor.janitor != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Janitor.janitor.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Janitor.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Janitor.";
                     else if(Morphling.morphling != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Morphling.morphling.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Morphling.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Morphling.";
                     else if(Camouflager.camouflager != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Camouflager.camouflager.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Camouflager.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Camouflager.";
                     else if(Lovers.lover1 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The ImpLover.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The ImpLover.";
                     else if(Lovers.lover2 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The ImpLover.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The ImpLover.";
                     else if(Vampire.vampire != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Vampire.vampire.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Vampire.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Vampire.";
                     else if (Eraser.eraser != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Eraser.eraser.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Eraser.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Eraser.";
                     else if (Trickster.trickster != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Trickster.trickster.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Trickster.";
+                        __result = ExileController.Instance.KLHCDCKJHKC.PCLLABJCIPC + " was The Trickster.";
                 }
 
                 // Hide number of remaining impostors on Jester win

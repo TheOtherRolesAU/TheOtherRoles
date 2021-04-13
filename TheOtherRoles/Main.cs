@@ -39,7 +39,7 @@ namespace TheOtherRoles
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
             IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
-            ServerManager serverManager = DestroyableSingleton<ServerManager>.CMJOLNCMAPD;
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
             IRegionInfo[] regions = ServerManager.DefaultRegions;
 
             regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
@@ -93,9 +93,9 @@ namespace TheOtherRoles
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
                 playerControl.SetColor((byte) random.Next(BLMBFIODBKL.CALCLMEEPGL.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.CMJOLNCMAPD.AllHats.Count), playerControl.IDOFAMCIJKE.JFHFMIKFHGG);
-                playerControl.SetPet((uint) random.Next(HatManager.CMJOLNCMAPD.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.CMJOLNCMAPD.AllSkins.Count));
+                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.JFHFMIKFHGG);
+                playerControl.SetPet((uint) random.Next(HatManager.CHNDKKBEIDG.AllPets.Count));
+                playerControl.SetSkin((uint) random.Next(HatManager.CHNDKKBEIDG.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 

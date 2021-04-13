@@ -18,7 +18,7 @@ namespace TheOtherRoles
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.Text = player.PPMOEEPBHJO.HGGCLJHCDBM;
+                player.nameText.Text = player.PPMOEEPBHJO.PCLLABJCIPC;
                 if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && player.PPMOEEPBHJO.FDNMBJOAPFL) {
                     player.nameText.Color = Palette.LDCHDOFJPGH;
                 } else {
@@ -29,7 +29,7 @@ namespace TheOtherRoles
                 foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH) {
                     PlayerControl playerControl = playersById.ContainsKey((byte)player.GEIOMAPOPKA) ? playersById[(byte)player.GEIOMAPOPKA] : null;
                     if (playerControl != null) {
-                        player.NameText.Text = playerControl.PPMOEEPBHJO.HGGCLJHCDBM;
+                        player.NameText.Text = playerControl.PPMOEEPBHJO.PCLLABJCIPC;
                         if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && playerControl.PPMOEEPBHJO.FDNMBJOAPFL) {
                             player.NameText.Color = Palette.LDCHDOFJPGH;
                         } else {
@@ -130,19 +130,19 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                     if (Godfather.godfather != null && Godfather.godfather == player)
-                            player.nameText.Text = player.PPMOEEPBHJO.HGGCLJHCDBM + " (G)";
+                            player.nameText.Text = player.PPMOEEPBHJO.PCLLABJCIPC + " (G)";
                     else if (Mafioso.mafioso != null && Mafioso.mafioso == player)
-                            player.nameText.Text = player.PPMOEEPBHJO.HGGCLJHCDBM + " (M)";
+                            player.nameText.Text = player.PPMOEEPBHJO.PCLLABJCIPC + " (M)";
                     else if (Janitor.janitor != null && Janitor.janitor == player)
-                            player.nameText.Text = player.PPMOEEPBHJO.HGGCLJHCDBM + " (J)";
+                            player.nameText.Text = player.PPMOEEPBHJO.PCLLABJCIPC + " (J)";
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH)
                         if (Godfather.godfather != null && Godfather.godfather.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.Text = Godfather.godfather.PPMOEEPBHJO.HGGCLJHCDBM + " (G)";
+                            player.NameText.Text = Godfather.godfather.PPMOEEPBHJO.PCLLABJCIPC + " (G)";
                         else if (Mafioso.mafioso != null && Mafioso.mafioso.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.Text = Mafioso.mafioso.PPMOEEPBHJO.HGGCLJHCDBM + " (M)";
+                            player.NameText.Text = Mafioso.mafioso.PPMOEEPBHJO.PCLLABJCIPC + " (M)";
                         else if (Janitor.janitor != null && Janitor.janitor.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.Text = Janitor.janitor.PPMOEEPBHJO.HGGCLJHCDBM + " (J)";
+                            player.NameText.Text = Janitor.janitor.PPMOEEPBHJO.PCLLABJCIPC + " (J)";
             }
         }
 
@@ -190,13 +190,13 @@ namespace TheOtherRoles
             // Set morphling morphed look
             if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
                 if (Morphling.morphling != null && Morphling.morphTarget != null) {
-                    Morphling.morphling.nameText.Text = Morphling.morphTarget.PPMOEEPBHJO.HGGCLJHCDBM;
-                    Morphling.morphling.KJAENOGGEOK.material.SetColor("_BackColor", Palette.CHIIBPFJACF[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
+                    Morphling.morphling.nameText.Text = Morphling.morphTarget.PPMOEEPBHJO.PCLLABJCIPC;
+                    Morphling.morphling.KJAENOGGEOK.material.SetColor("_BackColor", Palette.PHFOPNDOEMD[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
                     Morphling.morphling.KJAENOGGEOK.material.SetColor("_BodyColor", Palette.AEDCMKGJKAG[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
                     Morphling.morphling.KJAENOGGEOK.material.SetFloat("_Outline",  Morphling.morphTarget.KJAENOGGEOK.material.GetFloat("_Outline"));
                     Morphling.morphling.KJAENOGGEOK.material.SetColor("_OutlineColor", Morphling.morphTarget.KJAENOGGEOK.material.GetColor("_OutlineColor"));
-                    Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.PPMOEEPBHJO.MFIOGLKPMGD, Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC);
-                    Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.PPMOEEPBHJO.MFIOGLKPMGD == 0U) ? 0.7f : 1.05f, -0.5f);
+                    Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.PPMOEEPBHJO.CPGFLBANALE, Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC);
+                    Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.PPMOEEPBHJO.CPGFLBANALE == 0U) ? 0.7f : 1.05f, -0.5f);
 
                     if (Morphling.morphling.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllSkins[(int)Morphling.morphTarget.PPMOEEPBHJO.CGNMKICGLOG].ProdId) {
                         Helpers.setSkinWithAnim(Morphling.morphling.MyPhysics, Morphling.morphTarget.PPMOEEPBHJO.CGNMKICGLOG);

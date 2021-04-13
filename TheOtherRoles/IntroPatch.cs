@@ -48,7 +48,7 @@ namespace TheOtherRoles
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
                 __instance.__4__this.Title.Text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "[FF1919FF]Imp[FC03BEFF]Lover" : "Lover";
                 __instance.__4__this.Title.Color = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? Color.white : Lovers.color;
-                __instance.__4__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.PPMOEEPBHJO?.HGGCLJHCDBM ?? "");
+                __instance.__4__this.ImpostorText.Text = "You are in [FC03BEFF]Love [FFFFFFFF] with [FC03BEFF]" + (otherLover?.PPMOEEPBHJO?.PCLLABJCIPC ?? "");
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
                 __instance.__4__this.BackgroundBar.material.color = Lovers.color;
             }

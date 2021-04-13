@@ -30,7 +30,7 @@ namespace TheOtherRoles{
                 gameObject.transform.localPosition = new Vector3(0, -1.8f, gameObject.transform.localPosition.z);
                 customMessages.Add(this);
 
-                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.LDACHPMFOIF(duration, new Action<float>((p) => {
+                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(duration, new Action<float>((p) => {
                     bool even = ((int)(p * duration / 0.25f)) % 2 == 0; // Bool flips every 0.25 seconds
                     string prefix = "[" + (even ? "FCBA03FF" : "FF0000FF") + "]";
                     text.Text = prefix + message;

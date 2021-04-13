@@ -372,8 +372,8 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             if (morphling == null) return;
-            morphling.SetName(morphling.PPMOEEPBHJO.HGGCLJHCDBM);
-            morphling.SetHat(morphling.PPMOEEPBHJO.MFIOGLKPMGD, (int)morphling.PPMOEEPBHJO.IMMNCAGJJJC);
+            morphling.SetName(morphling.PPMOEEPBHJO.PCLLABJCIPC);
+            morphling.SetHat(morphling.PPMOEEPBHJO.CPGFLBANALE, (int)morphling.PPMOEEPBHJO.IMMNCAGJJJC);
             Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.PPMOEEPBHJO.CGNMKICGLOG);
             morphling.SetPet(morphling.PPMOEEPBHJO.LBHODBKCBKA);
             morphling.CurrentPet.BDBDGFDELMB = morphling.BDBDGFDELMB;
@@ -423,8 +423,8 @@ namespace TheOtherRoles
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
                 if (Morphling.morphling == null || Morphling.morphling != p) {
-                    p.SetName(p.PPMOEEPBHJO.HGGCLJHCDBM);
-                    p.SetHat(p.PPMOEEPBHJO.MFIOGLKPMGD, (int)p.PPMOEEPBHJO.IMMNCAGJJJC);
+                    p.SetName(p.PPMOEEPBHJO.PCLLABJCIPC);
+                    p.SetHat(p.PPMOEEPBHJO.CPGFLBANALE, (int)p.PPMOEEPBHJO.IMMNCAGJJJC);
                     Helpers.setSkinWithAnim(p.MyPhysics, p.PPMOEEPBHJO.CGNMKICGLOG);
                     p.SetPet(p.PPMOEEPBHJO.LBHODBKCBKA);
                     p.CurrentPet.BDBDGFDELMB = p.BDBDGFDELMB;

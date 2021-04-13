@@ -196,7 +196,7 @@ namespace TheOtherRoles
                 for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
                     var vitalsPanel = __instance.MCCBOPIEOEC[i];
                     var player = GameData.Instance.AllPlayers[i];
-                    vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                    vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                 }
             }
         }
@@ -221,14 +221,14 @@ namespace TheOtherRoles
 
                 // Hacker update
                 if (vitalsPanel.IsDead) {
-                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.GMBAIPNOKLP)?.FirstOrDefault();
+                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.FNPNJHNKEBK)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
                         if (showHackerInfo)
                             vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
                         else if (__instance.MCCBOPIEOEC.Length > 10)
-                            vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                            vitalsPanel.Text.Text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
                         else 
                             vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.OCCIKHJPJPK[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }

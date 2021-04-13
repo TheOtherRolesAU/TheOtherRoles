@@ -26,7 +26,7 @@ namespace TheOtherRoles {
                 __result = __instance.MaxLightRadius;
             else if (player.FDNMBJOAPFL) // IsImpostor
                 __result = __instance.MaxLightRadius * PlayerControl.GameOptions.AFGNADFLBDB;
-            else if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.GMBAIPNOKLP && Lighter.lighterTimer > 0f) // if player is Lighter and Lighter has his ability active
+            else if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.FNPNJHNKEBK && Lighter.lighterTimer > 0f) // if player is Lighter and Lighter has his ability active
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, num);
             else if (Trickster.trickster != null && Trickster.lightsOutTimer > 0f) {
                 float lerpValue = 1f;

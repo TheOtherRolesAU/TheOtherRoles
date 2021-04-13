@@ -50,7 +50,7 @@ namespace TheOtherRoles {
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.LGBOMGHJELL LGBOMGHJELL = allPlayers[i];
-                if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.GMBAIPNOKLP != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.IAGJEKLJCCI && (!onlyCrewmates || !LGBOMGHJELL.FDNMBJOAPFL))
+                if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.FNPNJHNKEBK != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.IAGJEKLJCCI && (!onlyCrewmates || !LGBOMGHJELL.FDNMBJOAPFL))
                 {
                     PlayerControl @object = LGBOMGHJELL.GPBBCHGPABL;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -349,7 +349,7 @@ namespace TheOtherRoles {
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
             if (isMedicReport || isDetectiveReport)
             {
-                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == IGLDJOKKFJE?.GMBAIPNOKLP)?.FirstOrDefault();
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == IGLDJOKKFJE?.FNPNJHNKEBK)?.FirstOrDefault();
 
                 if (deadPlayer != null && deadPlayer.killerIfExisting != null) {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
@@ -430,7 +430,7 @@ namespace TheOtherRoles {
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.PPMOEEPBHJO.IAGJEKLJCCI && Seer.seer != IGLDJOKKFJE && Seer.mode <= 1) {
                 HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
-                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.LDACHPMFOIF(1f, new Action<float>((p) => {
+                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(1f, new Action<float>((p) => {
                     var renderer = HudManager.CHNDKKBEIDG.FullScreen;
                     if (p < 0.5) {
                         if (renderer != null)

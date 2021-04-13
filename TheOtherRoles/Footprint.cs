@@ -47,11 +47,11 @@ namespace TheOtherRoles{
             footprint.SetActive(true);
             footprints.Add(this);
 
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(footprintDuration, new Action<float>((p) => {
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(footprintDuration, new Action<float>((p) => {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
                 if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.PPMOEEPBHJO != null)
-                    c = Palette.CHIIBPFJACF[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC];
+                    c = Palette.PHFOPNDOEMD[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC];
                 else if (Camouflager.camouflageTimer > 0)
                     c = Palette.AEDCMKGJKAG[6];
             }

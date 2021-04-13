@@ -111,7 +111,7 @@ namespace TheOtherRoles {
     public static class GameDataGetAvailableIdPatch {
         public static bool Prefix(ref GameData __instance, out sbyte __result) {
             for (sbyte i = 0; i <= 15; i++)
-                if (!__instance.AllPlayers.ToArray().Any(p => p.GMBAIPNOKLP == i)) {
+                if (!__instance.AllPlayers.ToArray().Any(p => p.FNPNJHNKEBK == i)) {
                     __result = i;
                     return false;
                 }

@@ -65,7 +65,7 @@ namespace TheOtherRoles {
             if (Jester.jester != null) {
                 WinningPlayerData jesterWinner = null;
                 foreach (WinningPlayerData winner in  TempData.BDGOKPKHCNB)
-                    if (winner.GEDNCGBDPKC == Jester.jester.PPMOEEPBHJO.HGGCLJHCDBM) jesterWinner = winner;
+                    if (winner.GEDNCGBDPKC == Jester.jester.PPMOEEPBHJO.PCLLABJCIPC) jesterWinner = winner;
                 
                 if (jesterWinner != null) TempData.BDGOKPKHCNB.Remove(jesterWinner);
             }
@@ -73,10 +73,10 @@ namespace TheOtherRoles {
             if (Jackal.jackal != null || Sidekick.sidekick != null) {
                 List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
                 foreach (WinningPlayerData winner in TempData.BDGOKPKHCNB) {
-                    if (winner.GEDNCGBDPKC == Jackal.jackal?.PPMOEEPBHJO?.HGGCLJHCDBM) winnersToRemove.Add(winner);
-                    if (winner.GEDNCGBDPKC == Sidekick.sidekick?.PPMOEEPBHJO?.HGGCLJHCDBM) winnersToRemove.Add(winner);
+                    if (winner.GEDNCGBDPKC == Jackal.jackal?.PPMOEEPBHJO?.PCLLABJCIPC) winnersToRemove.Add(winner);
+                    if (winner.GEDNCGBDPKC == Sidekick.sidekick?.PPMOEEPBHJO?.PCLLABJCIPC) winnersToRemove.Add(winner);
                     foreach(var player in Jackal.formerJackals) {
-                        if (winner.GEDNCGBDPKC == player.PPMOEEPBHJO.HGGCLJHCDBM) {
+                        if (winner.GEDNCGBDPKC == player.PPMOEEPBHJO.PCLLABJCIPC) {
                             winnersToRemove.Add(winner);
                         }
                     }
@@ -396,7 +396,7 @@ namespace TheOtherRoles {
         }
 
         private bool isLover(GameData.LGBOMGHJELL p) {
-            return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.GMBAIPNOKLP) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.GMBAIPNOKLP);
+            return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.FNPNJHNKEBK) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.FNPNJHNKEBK);
         }
 
         private void GetBCFPPIDIMJKs() {
@@ -423,11 +423,11 @@ namespace TheOtherRoles {
                             numImpostorsAlive++;
                             if (lover) impLover = true;
                         }
-                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == LGBOMGHJELL.GMBAIPNOKLP) {
+                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == LGBOMGHJELL.FNPNJHNKEBK) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
-                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == LGBOMGHJELL.GMBAIPNOKLP) {
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == LGBOMGHJELL.FNPNJHNKEBK) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
