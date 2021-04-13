@@ -24,7 +24,7 @@ namespace TheOtherRoles{
         public JackInTheBox(Vector2 p) {
             gameObject = new GameObject("JackInTheBox");
             Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f); 
-            
+            position += (Vector3)PlayerControl.LocalPlayer.Collider.offset; // add Player Collider offset as this gets subtracted again on Vent.DoMove
             // Create the marker
             gameObject.transform.position = position;
             var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
