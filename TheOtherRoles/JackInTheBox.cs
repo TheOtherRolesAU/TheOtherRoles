@@ -39,14 +39,14 @@ namespace TheOtherRoles{
             vent.Center = null;
             vent.EnterVentAnim = null;
             vent.ExitVentAnim = null;
-            vent.GetComponent<PowerTools.SpriteAnim>().Stop();
-            vent.Id = ShipStatus.Instance.GIDPCPOEFBC.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
+            vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
+            vent.Id = ShipStatus.Instance.GJHKPDGJHJN.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = getJackInTheBoxSprite();
-            vent.LNMJKMLHMIM = ventRenderer;
-            var allVentsList = ShipStatus.Instance.GIDPCPOEFBC.ToList();
+            vent.KJAENOGGEOK = ventRenderer;
+            var allVentsList = ShipStatus.Instance.GJHKPDGJHJN.ToList();
             allVentsList.Add(vent);
-            ShipStatus.Instance.GIDPCPOEFBC = allVentsList.ToArray();
+            ShipStatus.Instance.GJHKPDGJHJN = allVentsList.ToArray();
             vent.gameObject.SetActive(false);
             vent.name = "JackInTheBoxVent_" + vent.Id;
 

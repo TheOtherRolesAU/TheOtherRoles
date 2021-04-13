@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 
-using DeathReason = KAPJFCMEBJE;
+using DeathReason = EGHDCAKGMKI;
 
 namespace TheOtherRoles{
     public class DeadPlayer

@@ -11,7 +11,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {
@@ -93,7 +93,7 @@ namespace TheOtherRoles
 
         public static class Godfather {
             public static PlayerControl godfather;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static void clearAndReload() {
                 godfather = null;
@@ -102,7 +102,7 @@ namespace TheOtherRoles
 
         public static class Mafioso {
             public static PlayerControl mafioso;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static void clearAndReload() {
                 mafioso = null;
@@ -112,7 +112,7 @@ namespace TheOtherRoles
 
         public static class Janitor {
             public static PlayerControl janitor;
-            public static Color color = Palette.LDCHDOFJPGH;
+            public static Color color = Palette.JPCHLLEJNEH;
 
             public static float cooldown = 30f;
 
@@ -250,7 +250,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
-            if (shielded?.LNMJKMLHMIM?.material != null) shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+            if (shielded?.KJAENOGGEOK?.material != null) shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
@@ -314,12 +314,12 @@ namespace TheOtherRoles
         public static bool notAckedExiledIsLover = false;
 
         public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.IDOFAMCIJKE.FGNJJFABIHJ && !lover2.IDOFAMCIJKE.FGNJJFABIHJ && !lover1.IDOFAMCIJKE.GBPMEHJFECK && !lover2.IDOFAMCIJKE.GBPMEHJFECK && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+            return lover1 != null && lover2 != null && !lover1.PPMOEEPBHJO.IAGJEKLJCCI && !lover2.PPMOEEPBHJO.IAGJEKLJCCI && !lover1.PPMOEEPBHJO.MFFAGDHDHLO && !lover2.PPMOEEPBHJO.MFFAGDHDHLO && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
         public static bool existingAndCrewLovers() {
-            if (lover1 == null || lover2 == null || lover1.IDOFAMCIJKE.GBPMEHJFECK || lover2.IDOFAMCIJKE.GBPMEHJFECK) return false; // Null or disconnected
-            return !(lover1.IDOFAMCIJKE.CIDDOFDJHJH || lover2.IDOFAMCIJKE.CIDDOFDJHJH || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
+            if (lover1 == null || lover2 == null || lover1.PPMOEEPBHJO.MFFAGDHDHLO || lover2.PPMOEEPBHJO.MFFAGDHDHLO) return false; // Null or disconnected
+            return !(lover1.PPMOEEPBHJO.FDNMBJOAPFL || lover2.PPMOEEPBHJO.FDNMBJOAPFL || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
         }
 
         public static void clearAndReload() {
@@ -357,7 +357,7 @@ namespace TheOtherRoles
 
     public static class Morphling {
         public static PlayerControl morphling;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
         private static Sprite sampleSprite;
         private static Sprite morphSprite;
     
@@ -372,13 +372,13 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             if (morphling == null) return;
-            morphling.SetName(morphling.IDOFAMCIJKE.HGGCLJHCDBM);
-            morphling.SetHat(morphling.IDOFAMCIJKE.MFIOGLKPMGD, (int)morphling.IDOFAMCIJKE.JFHFMIKFHGG);
-            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.IDOFAMCIJKE.LFDAHOFPIAM);
-            morphling.SetPet(morphling.IDOFAMCIJKE.GKFOHNJHFOE);
-            morphling.CurrentPet.FHBHBMIJFID = morphling.FHBHBMIJFID;
-            morphling.SetColor(morphling.IDOFAMCIJKE.JFHFMIKFHGG);
-            morphling.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+            morphling.SetName(morphling.PPMOEEPBHJO.PCLLABJCIPC);
+            morphling.SetHat(morphling.PPMOEEPBHJO.CPGFLBANALE, (int)morphling.PPMOEEPBHJO.IMMNCAGJJJC);
+            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.PPMOEEPBHJO.CGNMKICGLOG);
+            morphling.SetPet(morphling.PPMOEEPBHJO.LBHODBKCBKA);
+            morphling.CurrentPet.BDBDGFDELMB = morphling.BDBDGFDELMB;
+            morphling.SetColor(morphling.PPMOEEPBHJO.IMMNCAGJJJC);
+            morphling.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
@@ -406,7 +406,7 @@ namespace TheOtherRoles
 
     public static class Camouflager {
         public static PlayerControl camouflager;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
     
         public static float cooldown = 30f;
         public static float camouflageTimer = 0f;
@@ -423,12 +423,12 @@ namespace TheOtherRoles
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
                 if (Morphling.morphling == null || Morphling.morphling != p) {
-                    p.SetName(p.IDOFAMCIJKE.HGGCLJHCDBM);
-                    p.SetHat(p.IDOFAMCIJKE.MFIOGLKPMGD, (int)p.IDOFAMCIJKE.JFHFMIKFHGG);
-                    Helpers.setSkinWithAnim(p.MyPhysics, p.IDOFAMCIJKE.LFDAHOFPIAM);
-                    p.SetPet(p.IDOFAMCIJKE.GKFOHNJHFOE);
-                    p.CurrentPet.FHBHBMIJFID = p.FHBHBMIJFID;
-                    p.SetColor(p.IDOFAMCIJKE.JFHFMIKFHGG);
+                    p.SetName(p.PPMOEEPBHJO.PCLLABJCIPC);
+                    p.SetHat(p.PPMOEEPBHJO.CPGFLBANALE, (int)p.PPMOEEPBHJO.IMMNCAGJJJC);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.PPMOEEPBHJO.CGNMKICGLOG);
+                    p.SetPet(p.PPMOEEPBHJO.LBHODBKCBKA);
+                    p.CurrentPet.BDBDGFDELMB = p.BDBDGFDELMB;
+                    p.SetColor(p.PPMOEEPBHJO.IMMNCAGJJJC);
                 }
             }
         }
@@ -537,7 +537,7 @@ namespace TheOtherRoles
 
     public static class Vampire {
         public static PlayerControl vampire;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static float delay = 10f;
         public static float cooldown = 30f;
@@ -664,7 +664,7 @@ namespace TheOtherRoles
 
     public static class Eraser {
         public static PlayerControl eraser;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
@@ -687,7 +687,7 @@ namespace TheOtherRoles
     
     public static class Spy {
         public static PlayerControl spy;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
 
         public static bool impostorsCanKillAnyone = true;
 
@@ -699,7 +699,7 @@ namespace TheOtherRoles
 
     public static class Trickster {
         public static PlayerControl trickster;
-        public static Color color = Palette.LDCHDOFJPGH;
+        public static Color color = Palette.JPCHLLEJNEH;
         public static float placeBoxCooldown = 30f;
         public static float lightsOutCooldown = 30f;
         public static float lightsOutDuration = 10f;

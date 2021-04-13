@@ -122,7 +122,7 @@ namespace TheOtherRoles {
         public static CustomOption allowSkipOnEmergencyMeetings;
 
         public static string cs(Color c, string s) {
-            return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]{4}[]", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
+            return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
  
         private static byte ToByte(float f) {
@@ -133,10 +133,10 @@ namespace TheOtherRoles {
         public static void Load() {
             
             // Role Options
-            presetSelection = CustomOption.Create(0, "[CCCC00FF]Preset[]", presets, null, true);
+            presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
 
-            crewmateRolesCount = CustomOption.Create(1, "[CCCC00FF]Number Of Crewmate/Neutral Roles[]", crewmateRoleCaps, null, true);
-            impostorRolesCount = CustomOption.Create(2, "[CCCC00FF]Number Of Impostor Roles[]", impostorRoleCaps);
+            crewmateRolesCount = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Crewmate/Neutral Roles"), crewmateRoleCaps, null, true);
+            impostorRolesCount = CustomOption.Create(2, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Impostor Roles"), impostorRoleCaps);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -301,14 +301,14 @@ namespace TheOtherRoles {
                 option.entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", option.id.ToString(), option.defaultSelection);
                 option.selection = Mathf.Clamp(option.entry.Value, 0, option.selections.Length - 1);
                 if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption) {
-                    stringOption.IOFLMCGMJBA = stringOption.Value = option.selection;
-                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+                    stringOption.LCDAKOCANPH = stringOption.Value = option.selection;
+                    stringOption.ValueText.text = option.selections[option.selection].ToString();
                 }
             }
         }
 
         public static void ShareOptionSelections() {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.CBKCIKKEJHI == false && PlayerControl.LocalPlayer == null) return;
+            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.HHBLOCGKFAB == false && PlayerControl.LocalPlayer == null) return;
             foreach (CustomOption option in CustomOption.options) {
                 MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
@@ -336,10 +336,10 @@ namespace TheOtherRoles {
         public void updateSelection(int newSelection) {
             selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
             if (optionBehaviour != null && optionBehaviour is StringOption stringOption) {
-                stringOption.IOFLMCGMJBA = stringOption.Value = selection;
-                stringOption.ValueText.Text = selections[selection].ToString();
+                stringOption.LCDAKOCANPH = stringOption.Value = selection;
+                stringOption.ValueText.text = selections[selection].ToString();
 
-                if (AmongUsClient.Instance?.CBKCIKKEJHI == true && PlayerControl.LocalPlayer) {
+                if (AmongUsClient.Instance?.HHBLOCGKFAB == true && PlayerControl.LocalPlayer) {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 
@@ -355,7 +355,7 @@ namespace TheOtherRoles {
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
 
-            List<OptionBehaviour> allOptions = __instance.IGFJIPMAJHF.ToList();
+            List<OptionBehaviour> allOptions = __instance.MCAHCPOHNFI.ToList();
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
@@ -363,15 +363,15 @@ namespace TheOtherRoles {
                     allOptions.Add(stringOption);
 
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
-                    stringOption.TitleText.Text = option.name;
-                    stringOption.Value = stringOption.IOFLMCGMJBA = option.selection;
-                    stringOption.ValueText.Text = option.selections[option.selection].ToString();
+                    stringOption.TitleText.text = option.name;
+                    stringOption.Value = stringOption.LCDAKOCANPH = option.selection;
+                    stringOption.ValueText.text = option.selections[option.selection].ToString();
 
                     option.optionBehaviour = stringOption;
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
-            __instance.IGFJIPMAJHF = allOptions.ToArray();
+            __instance.MCAHCPOHNFI = allOptions.ToArray();
         }
     }
 
@@ -382,9 +382,9 @@ namespace TheOtherRoles {
             if (option == null) return true;
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => {});
-            __instance.TitleText.Text = option.name;
-            __instance.Value = __instance.IOFLMCGMJBA = option.selection;
-            __instance.ValueText.Text = option.selections[option.selection].ToString();
+            __instance.TitleText.text = option.name;
+            __instance.Value = __instance.LCDAKOCANPH = option.selection;
+            __instance.ValueText.text = option.selections[option.selection].ToString();
             
             return false;
         }
@@ -429,7 +429,7 @@ namespace TheOtherRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.IGFJIPMAJHF.Length * 0.55F; 
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.MCAHCPOHNFI.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
@@ -464,7 +464,7 @@ namespace TheOtherRoles {
     class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(IGDMNKLDEPI).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+            return typeof(CEIOGGEDKAN).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
         }
 
         private static void Postfix(ref string __result)
@@ -535,7 +535,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class GameSettingsScalePatch {
         public static void Prefix(HudManager __instance) {
-            __instance.GameSettings.scale = 0.5f; 
+            __instance.GameSettings.fontSize = 1.2f; 
         }
     }
 }

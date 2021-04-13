@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Hazel;
 using System;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
@@ -31,8 +31,8 @@ namespace TheOtherRoles {
             private static string currentText = "";
 
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
-                update = GameData.Instance.BCFPPIDIMJK != __instance.GGIPHNCFKFH;
+                if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
+                update = GameData.Instance.MFDAIFHGKMG != __instance.OBFONKJNJFF;
             }
 
             public static void Postfix(GameStartManager __instance) {
@@ -49,7 +49,7 @@ namespace TheOtherRoles {
                 }
 
                 // Host update with version handshake infos
-                if (AmongUsClient.Instance.CBKCIKKEJHI) {
+                if (AmongUsClient.Instance.HHBLOCGKFAB) {
                     bool blockStart = false;
                     string message = "";
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
@@ -58,33 +58,34 @@ namespace TheOtherRoles {
                             continue;
                         else if (!playerVersions.ContainsKey(player.PlayerId))  {
                             blockStart = true;
-                            message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated or no version of The Other Roles\n";
+                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n</color>";
                         } else if (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"[FF0000FF]{player.IDOFAMCIJKE.HGGCLJHCDBM} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n";
+                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n</color>";
                         }
                     }
                     if (blockStart) {
-                        __instance.StartButton.color = Palette.POCKGPCFGOE;
-                        __instance.GameStartText.Text = message;
+                        __instance.StartButton.color = Palette.ILFJLECIGDB;
+                        __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
-                        __instance.StartButton.color = ((__instance.GGIPHNCFKFH >= __instance.MinPlayers) ? Palette.MKAFGNEBHKC : Palette.POCKGPCFGOE);
+                        __instance.StartButton.color = ((__instance.OBFONKJNJFF >= __instance.MinPlayers) ? Palette.BJENLBHMKAI : Palette.ILFJLECIGDB);
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     }
                 }
 
                 // Lobby timer
-                if (!AmongUsClient.Instance.CBKCIKKEJHI  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.HHBLOCGKFAB || !GameData.Instance) return; // Not host or no instance
 
-                if (update) currentText = __instance.PlayerCounter.Text;
+                if (update) currentText = __instance.PlayerCounter.text;
 
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
                 int minutes = (int)timer / 60;
                 int seconds = (int)timer % 60;
                 string suffix = $" ({minutes:00}:{seconds:00})";
 
-                __instance.PlayerCounter.Text = currentText + suffix;
+                __instance.PlayerCounter.text = currentText + suffix;
+                __instance.PlayerCounter.autoSizeTextContainer = true;
             }
         }
 
@@ -93,7 +94,7 @@ namespace TheOtherRoles {
             public static bool Prefix(GameStartManager __instance) {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
-                if (AmongUsClient.Instance.CBKCIKKEJHI) {
+                if (AmongUsClient.Instance.HHBLOCGKFAB) {
                     uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
                     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                         var dummyComponent = player.GetComponent<DummyBehaviour>();

@@ -11,8 +11,8 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-using Effects = HLPCBNMDEHF;
-using Palette = GLNPIJPGGNJ;
+using Effects = AEOEPNHOJDP;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {
@@ -20,15 +20,15 @@ namespace TheOtherRoles
     class MeetingHudPatch {
         static bool[] selections;
         static SpriteRenderer[] renderers;
-        private static GameData.OFKOJOKOOAK target = null;
+        private static GameData.LGBOMGHJELL target = null;
 
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.KEICNHGALLI))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[__instance.DHCOPOOJCLN.Length + 1];
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                byte[] array = new byte[__instance.GBKFCOAKLAH.Length + 1];
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
-                    PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                    PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                     if (playerVoteArea.didVote)
                     {
                         int num = (int)(playerVoteArea.votedFor + 1);
@@ -37,7 +37,7 @@ namespace TheOtherRoles
                             byte[] array2 = array;
                             int num2 = num;
                             // Mayor count vote twice
-                            if (Mayor.mayor != null && playerVoteArea.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId)
+                            if (Mayor.mayor != null && playerVoteArea.GEIOMAPOPKA == (sbyte)Mayor.mayor.PlayerId)
                                 array2[num2] += 2;
                             else
                                 array2[num2] += 1;
@@ -49,15 +49,15 @@ namespace TheOtherRoles
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
 
-                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
 
-                if (swapped1 != null && swapped2 != null && swapped1.HMPHKKGPLAG + 1 >= 0 && swapped1.HMPHKKGPLAG + 1 < array.Length && swapped2.HMPHKKGPLAG + 1 >= 0 && swapped2.HMPHKKGPLAG + 1 < array.Length) {
-                    byte tmp = array[swapped1.HMPHKKGPLAG + 1];
-                    array[swapped1.HMPHKKGPLAG + 1] = array[swapped2.HMPHKKGPLAG + 1];
-                    array[swapped2.HMPHKKGPLAG + 1] = tmp;
+                if (swapped1 != null && swapped2 != null && swapped1.GEIOMAPOPKA + 1 >= 0 && swapped1.GEIOMAPOPKA + 1 < array.Length && swapped2.GEIOMAPOPKA + 1 >= 0 && swapped2.GEIOMAPOPKA + 1 < array.Length) {
+                    byte tmp = array[swapped1.GEIOMAPOPKA + 1];
+                    array[swapped1.GEIOMAPOPKA + 1] = array[swapped2.GEIOMAPOPKA + 1];
+                    array[swapped2.GEIOMAPOPKA + 1] = tmp;
                 }
                 return array;
             }
@@ -86,37 +86,37 @@ namespace TheOtherRoles
 
             static bool Prefix(MeetingHud __instance)
             {
-                if (__instance.DHCOPOOJCLN.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
+                if (__instance.GBKFCOAKLAH.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
                 {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && !allowSkipOnEmergencyMeetings) {
-                        foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.HMPHKKGPLAG; // TargetPlayerId
+                        foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.GEIOMAPOPKA; // TargetPlayerId
                         }
                     }
 
                     byte[] self = calculateVotes(__instance);
                     bool tie;
                     int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
-                    GameData.OFKOJOKOOAK exiled = null;
-                    foreach (GameData.OFKOJOKOOAK pi in GameData.Instance.AllPlayers) {
-                        if (pi.GMBAIPNOKLP == maxIdx) {
+                    GameData.LGBOMGHJELL exiled = null;
+                    foreach (GameData.LGBOMGHJELL pi in GameData.Instance.AllPlayers) {
+                        if (pi.FNPNJHNKEBK == maxIdx) {
                             exiled = pi;
                             break;
                         }
                     }
-                    byte[] array = new byte[__instance.DHCOPOOJCLN.Length];
-                    for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                    byte[] array = new byte[__instance.GBKFCOAKLAH.Length];
+                    for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                     {
-                        PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
-                        array[(int)playerVoteArea.HMPHKKGPLAG] = playerVoteArea.GetState();
+                        PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
+                        array[(int)playerVoteArea.GEIOMAPOPKA] = playerVoteArea.GetState();
                     }
                     // RPCVotingComplete
-                    if (AmongUsClient.Instance.HNMILJEOEKN)
-                        __instance.MJIJGEBBMAO(array, exiled, tie);
+                    if (AmongUsClient.Instance.BPADAHAOBLM)
+                        __instance.BBFDNCCEJHI(array, exiled, tie);
                     MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(__instance.NetId, 23, Hazel.SendOption.Reliable);
                     messageWriter.WriteBytesAndSize(array);
-                    messageWriter.Write((exiled != null) ? exiled.GMBAIPNOKLP : byte.MaxValue);
+                    messageWriter.Write((exiled != null) ? exiled.FNPNJHNKEBK : byte.MaxValue);
                     messageWriter.Write(tie);
                     messageWriter.EndMessage();
                 }
@@ -124,84 +124,84 @@ namespace TheOtherRoles
             }
         }
 
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.OMFOBKIENPI))]
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.FIJFIACMIFB))]
         class MeetingPopulateVotesPatch {
-            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> HIDHPMAKEKH)
+            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> COMOIMMLKHF)
             {
                 // Swapper swap votes
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
 
-                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
 
                 bool doSwap = swapped1 != null && swapped2 != null;
                 if (doSwap) {
 
-                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
-                    __instance.StartCoroutine(Effects.NFAIFCPOFJK(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
                 }
 
                 // Mayor display vote twice
-                __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                __instance.TitleText.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = doSwap ? 4 : 0; // Delay animaton if swapping
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
-                    PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                    PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                     playerVoteArea.ClearForResults();
                     int num2 = doSwap ? 4 : 0; // Delay animaton if swapping
                     bool mayorFirstVoteDisplayed = false;
 
-                    for (int j = 0; j < __instance.DHCOPOOJCLN.Length; j++)
+                    for (int j = 0; j < __instance.GBKFCOAKLAH.Length; j++)
                     {
-                        PlayerVoteArea playerVoteArea2 = __instance.DHCOPOOJCLN[j];
-                        byte self = HIDHPMAKEKH[(int)playerVoteArea2.HMPHKKGPLAG];
+                        PlayerVoteArea playerVoteArea2 = __instance.GBKFCOAKLAH[j];
+                        byte self = COMOIMMLKHF[(int)playerVoteArea2.GEIOMAPOPKA];
 
                         if (!((self & 128) > 0))
                         {
-                            GameData.OFKOJOKOOAK playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.HMPHKKGPLAG);
+                            GameData.LGBOMGHJELL playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.GEIOMAPOPKA);
                             int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
-                            if (votedFor == (int)playerVoteArea.HMPHKKGPLAG)
+                            if (votedFor == (int)playerVoteArea.GEIOMAPOPKA)
                             {
                                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                                if (PlayerControl.GameOptions.LNMFPEMGKOB)
+                                if (PlayerControl.GameOptions.BBPDJOCPEEJ)
                                 {
-                                    PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer);
+                                    PlayerControl.SetPlayerMaterialColors(Palette.EGHCBLDNCGP, spriteRenderer);
                                 }
                                 else
                                 {
-                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer);
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer);
                                 }
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform);
-                                spriteRenderer.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num2, 0f, 0f);
+                                spriteRenderer.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(__instance.GGHFHCMCJAL.x * (float)num2, 0f, 0f);
                                 spriteRenderer.transform.localScale = Vector3.zero;
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
                                 num2++;
                             }
                             else if (i == 0 && votedFor == -1)
                             {
                                 SpriteRenderer spriteRenderer2 = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                                if (PlayerControl.GameOptions.LNMFPEMGKOB)
+                                if (PlayerControl.GameOptions.BBPDJOCPEEJ)
                                 {
-                                    PlayerControl.SetPlayerMaterialColors(Palette.JMELLHINKGM, spriteRenderer2);
+                                    PlayerControl.SetPlayerMaterialColors(Palette.EGHCBLDNCGP, spriteRenderer2);
                                 }
                                 else
                                 {
-                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer2);
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer2);
                                 }
                                 spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
-                                spriteRenderer2.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num, 0f, 0f);
+                                spriteRenderer2.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(__instance.GGHFHCMCJAL.x * (float)num, 0f, 0f);
                                 spriteRenderer2.transform.localScale = Vector3.zero;
                                 spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.POFLJMGFBEJ((float)num * 0.5f, spriteRenderer2.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num * 0.5f, spriteRenderer2.transform, 1f, 0.5f));
                                 num++;
                             }
 
                             // Major vote, redo this iteration to place a second vote
-                            if (Mayor.mayor != null && playerVoteArea2.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
+                            if (Mayor.mayor != null && playerVoteArea2.GEIOMAPOPKA == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
                                 mayorFirstVoteDisplayed = true;
                                 j--;    
                             }
@@ -213,9 +213,9 @@ namespace TheOtherRoles
             }
         }
 
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.MJIJGEBBMAO))]
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BBFDNCCEJHI))]
         class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, byte[] HIDHPMAKEKH, GameData.OFKOJOKOOAK KLHCDCKJHKC, bool EMLKEPIBJLK)
+            static void Postfix(MeetingHud __instance, byte[] COMOIMMLKHF, GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMBDDLIPBME)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -223,17 +223,17 @@ namespace TheOtherRoles
 
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
-                if (KLHCDCKJHKC != null)
-                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == KLHCDCKJHKC.GMBAIPNOKLP) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == KLHCDCKJHKC.GMBAIPNOKLP));
+                if (EAFLJGMBLCH != null)
+                    Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == EAFLJGMBLCH.FNPNJHNKEBK) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == EAFLJGMBLCH.FNPNJHNKEBK));
             }
         }
 
 
         static void onClick(int i, MeetingHud __instance)
         {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
-            if (__instance.MJMOOPLLNPO == MeetingHud.DDMMMDGMFIK.Results) return;
-            if (__instance.DHCOPOOJCLN[i].isDead) return;
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.PPMOEEPBHJO.IAGJEKLJCCI) return; 
+            if (__instance.FOIGOPKABAA == MeetingHud.MANCENPNMAC.Results) return;
+            if (__instance.GBKFCOAKLAH[i].isDead) return;
 
             int selectedCount = selections.Where(b => b).Count();
             SpriteRenderer renderer = renderers[i];
@@ -254,21 +254,21 @@ namespace TheOtherRoles
                     for (int A = 0; A < selections.Length; A++) {
                         if (selections[A]) {
                             if (firstPlayer != null) {
-                                secondPlayer = __instance.DHCOPOOJCLN[A];
+                                secondPlayer = __instance.GBKFCOAKLAH[A];
                                 break;
                             } else {
-                                firstPlayer = __instance.DHCOPOOJCLN[A];
+                                firstPlayer = __instance.GBKFCOAKLAH[A];
                             }
                         }
                     }
 
                     if (firstPlayer != null && secondPlayer != null) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)firstPlayer.HMPHKKGPLAG);
-                        writer.Write((byte)secondPlayer.HMPHKKGPLAG);
+                        writer.Write((byte)firstPlayer.GEIOMAPOPKA);
+                        writer.Write((byte)secondPlayer.GEIOMAPOPKA);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-                        RPCProcedure.swapperSwap((byte)firstPlayer.HMPHKKGPLAG, (byte)secondPlayer.HMPHKKGPLAG);
+                        RPCProcedure.swapperSwap((byte)firstPlayer.GEIOMAPOPKA, (byte)secondPlayer.GEIOMAPOPKA);
                     }
                 }
             }
@@ -277,9 +277,9 @@ namespace TheOtherRoles
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Reposition button if there are more than 10 players
             float scale = 5f / 8f; // 8 rows are needed instead of 5
-            if (__instance.DHCOPOOJCLN != null && __instance.DHCOPOOJCLN.Length > 10) {
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++) {
-                    PlayerVoteArea area = __instance.DHCOPOOJCLN[i];
+            if (__instance.GBKFCOAKLAH != null && __instance.GBKFCOAKLAH.Length > 10) {
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++) {
+                    PlayerVoteArea area = __instance.GBKFCOAKLAH[i];
                     bool isLeft = i % 2 == 0;
                     int num2 = i / 2;
                     area.transform.localPosition = __instance.VoteOrigin + new Vector3(isLeft ? 1f : 3.9f, __instance.VoteButtonOffsets.y * (float)num2 * scale, area.transform.localPosition.z);
@@ -288,13 +288,13 @@ namespace TheOtherRoles
             }
 
             // Add Swapper Buttons
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
-            selections = new bool[__instance.DHCOPOOJCLN.Length];
-            renderers = new SpriteRenderer[__instance.DHCOPOOJCLN.Length];
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.PPMOEEPBHJO.IAGJEKLJCCI) return; 
+            selections = new bool[__instance.GBKFCOAKLAH.Length];
+            renderers = new SpriteRenderer[__instance.GBKFCOAKLAH.Length];
 
-            for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+            for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
 		    {
-                PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                 GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                 GameObject checkbox = UnityEngine.Object.Instantiate(template);
                 checkbox.transform.SetParent(playerVoteArea.transform);
@@ -326,10 +326,10 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Deserialize))]
         class MeetingDeserializePatch {
-            static void Postfix(MeetingHud __instance, MessageReader DOOILGKLBBF, bool IHJEKEOFMGJ)
+            static void Postfix(MeetingHud __instance, MessageReader JIGFBHFFNFI, bool DNMLJNIADHH)
             {
                 // Add swapper buttons
-                if (IHJEKEOFMGJ) {
+                if (DNMLJNIADHH) {
                     populateButtonsPostfix(__instance);
                 }
             }
@@ -337,13 +337,13 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, GameData.OFKOJOKOOAK IGLDJOKKFJE) {
+            public static void Prefix(PlayerControl __instance, GameData.LGBOMGHJELL DGDGDKCCKHJ) {
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings
-                if (IGLDJOKKFJE == null) meetingsCount++;
+                if (DGDGDKCCKHJ == null) meetingsCount++;
                 // Save the meeting target
-                target = IGLDJOKKFJE;
+                target = DGDGDKCCKHJ;
             }
         }
 
@@ -360,9 +360,9 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
 
-        public static void Prefix(ref GameData.OFKOJOKOOAK KLHCDCKJHKC, bool EMLKEPIBJLK) {
+        public static void Prefix(ref GameData.LGBOMGHJELL EAFLJGMBLCH, bool EMBDDLIPBME) {
             // Shifter shift
-            if (Shifter.shifter != null && AmongUsClient.Instance.CBKCIKKEJHI && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
+            if (Shifter.shifter != null && AmongUsClient.Instance.HHBLOCGKFAB && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
                 writer.Write(Shifter.futureShift.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -371,7 +371,7 @@ namespace TheOtherRoles
             Shifter.futureShift = null;
 
             // Eraser erase
-            if (Eraser.eraser != null && AmongUsClient.Instance.CBKCIKKEJHI && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
+            if (Eraser.eraser != null && AmongUsClient.Instance.HHBLOCGKFAB && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 foreach (PlayerControl target in Eraser.futureErased) {
                     if (target != null) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRole, Hazel.SendOption.Reliable, -1);
@@ -401,9 +401,9 @@ namespace TheOtherRoles
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
                 // Child set adapted cooldown
-                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
                     var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                    Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+                    Child.child.SetKillTimer(PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
                 }
 
                 // Seer spawn souls
@@ -416,7 +416,7 @@ namespace TheOtherRoles
                         rend.sprite = Seer.getSoulSprite();
                         
                         if(Seer.limitSoulDuration) {
-                            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(Seer.soulDuration, new Action<float>((p) => {
+                            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(Seer.soulDuration, new Action<float>((p) => {
                                 if (rend != null) {
                                     var tmp = rend.color;
                                     tmp.a = Mathf.Clamp01(1 - p);
@@ -435,84 +435,84 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class MeetingExiledTextPatch
     {
-        static void Postfix(ref string __result, StringNames MKFNKGIBBHP, Il2CppReferenceArray<Il2CppSystem.Object> BPBFAAEIABN)
+        static void Postfix(ref string __result, StringNames AKGLBKHCEMI, Il2CppReferenceArray<Il2CppSystem.Object> FHLKFONKJLH)
         {
-            if (ExileController.Instance != null && ExileController.Instance.KLHCDCKJHKC != null)
+            if (ExileController.Instance != null && ExileController.Instance.EAFLJGMBLCH != null)
             {
                 // Exile role text for roles that are being assigned to crewmates
-                if (MKFNKGIBBHP == StringNames.ExileTextPN || MKFNKGIBBHP == StringNames.ExileTextSN)
+                if (AKGLBKHCEMI == StringNames.ExileTextPN || AKGLBKHCEMI == StringNames.ExileTextSN)
                 {
-                    if( Jester.jester != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Jester.jester.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Jester.";
-                    else if(Mayor.mayor != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Mayor.mayor.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Mayor.";
-                    else if(Engineer.engineer != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Engineer.engineer.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Engineer.";
-                    else if(Sheriff.sheriff != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Sheriff.sheriff.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Sheriff.";
-                    else if(Lighter.lighter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lighter.lighter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lighter.";
-                    else if(Detective.detective != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Detective.detective.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Detective.";
-                    else if(TimeMaster.timeMaster != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == TimeMaster.timeMaster.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Time Master.";
-                    else if(Medic.medic != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Medic.medic.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Medic.";
-                    else if(Shifter.shifter != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Shifter.shifter.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Shifter.";
-                    else if(Swapper.swapper != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Swapper.swapper.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Swapper.";
-                    else if(Lovers.lover1 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lover.";
-                    else if(Lovers.lover2 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Lover.";
-                    else if(Seer.seer != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Seer.seer.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Seer.";
-                    else if(Hacker.hacker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Hacker.hacker.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Hacker.";
-                    else if(Child.child != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Child.child.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Child.";
-                    else if(Tracker.tracker != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Tracker.tracker.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Tracker.";
-                    else if(Snitch.snitch != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Snitch.snitch.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Snitch.";
-                    else if(Jackal.jackal != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Jackal.jackal.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Jackal.";
-                    else if(Sidekick.sidekick != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Sidekick.sidekick.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Sidekick.";
-                    else if(Spy.spy != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Spy.";
+                    if( Jester.jester != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Jester.jester.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Jester.";
+                    else if(Mayor.mayor != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Mayor.mayor.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Mayor.";
+                    else if(Engineer.engineer != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Engineer.engineer.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Engineer.";
+                    else if(Sheriff.sheriff != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Sheriff.sheriff.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Sheriff.";
+                    else if(Lighter.lighter != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Lighter.lighter.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Lighter.";
+                    else if(Detective.detective != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Detective.detective.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Detective.";
+                    else if(TimeMaster.timeMaster != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == TimeMaster.timeMaster.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Time Master.";
+                    else if(Medic.medic != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Medic.medic.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Medic.";
+                    else if(Shifter.shifter != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Shifter.shifter.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Shifter.";
+                    else if(Swapper.swapper != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Swapper.swapper.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Swapper.";
+                    else if(Lovers.lover1 != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Lovers.lover1.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Lover.";
+                    else if(Lovers.lover2 != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Lovers.lover2.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Lover.";
+                    else if(Seer.seer != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Seer.seer.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Seer.";
+                    else if(Hacker.hacker != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Hacker.hacker.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Hacker.";
+                    else if(Child.child != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Child.child.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Child.";
+                    else if(Tracker.tracker != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Tracker.tracker.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Tracker.";
+                    else if(Snitch.snitch != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Snitch.snitch.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Snitch.";
+                    else if(Jackal.jackal != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Jackal.jackal.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Jackal.";
+                    else if(Sidekick.sidekick != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Sidekick.sidekick.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Sidekick.";
+                    else if(Spy.spy != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Spy.spy.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Spy.";
                     else
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was not The Impostor.";
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was not The Impostor.";
                 }
                 // Exile role text for roles that are being assigned to impostors
-                if (MKFNKGIBBHP == StringNames.ExileTextPP || MKFNKGIBBHP == StringNames.ExileTextSP) {
-                    if(Godfather.godfather != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Godfather.godfather.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Godfather.";
-                    else if(Mafioso.mafioso != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Mafioso.mafioso.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Mafioso.";
-                    else if(Janitor.janitor != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Janitor.janitor.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Janitor.";
-                    else if(Morphling.morphling != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Morphling.morphling.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Morphling.";
-                    else if(Camouflager.camouflager != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Camouflager.camouflager.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Camouflager.";
-                    else if(Lovers.lover1 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The ImpLover.";
-                    else if(Lovers.lover2 != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The ImpLover.";
-                    else if(Vampire.vampire != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Vampire.vampire.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Vampire.";
-                    else if (Eraser.eraser != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Eraser.eraser.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Eraser.";
-                    else if (Trickster.trickster != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Trickster.trickster.PlayerId)
-                        __result = ExileController.Instance.KLHCDCKJHKC.HGGCLJHCDBM + " was The Trickster.";
+                if (AKGLBKHCEMI == StringNames.ExileTextPP || AKGLBKHCEMI == StringNames.ExileTextSP) {
+                    if(Godfather.godfather != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Godfather.godfather.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Godfather.";
+                    else if(Mafioso.mafioso != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Mafioso.mafioso.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Mafioso.";
+                    else if(Janitor.janitor != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Janitor.janitor.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Janitor.";
+                    else if(Morphling.morphling != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Morphling.morphling.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Morphling.";
+                    else if(Camouflager.camouflager != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Camouflager.camouflager.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Camouflager.";
+                    else if(Lovers.lover1 != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Lovers.lover1.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The ImpLover.";
+                    else if(Lovers.lover2 != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Lovers.lover2.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The ImpLover.";
+                    else if(Vampire.vampire != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Vampire.vampire.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Vampire.";
+                    else if (Eraser.eraser != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Eraser.eraser.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Eraser.";
+                    else if (Trickster.trickster != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Trickster.trickster.PlayerId)
+                        __result = ExileController.Instance.EAFLJGMBLCH.PCLLABJCIPC + " was The Trickster.";
                 }
 
                 // Hide number of remaining impostors on Jester win
-                if (MKFNKGIBBHP == StringNames.ImpostorsRemainP || MKFNKGIBBHP == StringNames.ImpostorsRemainS)
+                if (AKGLBKHCEMI == StringNames.ImpostorsRemainP || AKGLBKHCEMI == StringNames.ImpostorsRemainS)
                 {
-                    if (Jester.jester != null && ExileController.Instance.KLHCDCKJHKC.GPBBCHGPABL.PlayerId == Jester.jester.PlayerId)
+                    if (Jester.jester != null && ExileController.Instance.EAFLJGMBLCH.GJPBCGFPMOD.PlayerId == Jester.jester.PlayerId)
                         __result = "";
                 }
             }

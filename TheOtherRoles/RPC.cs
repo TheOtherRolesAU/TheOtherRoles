@@ -9,11 +9,11 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-using Palette = GLNPIJPGGNJ;
-using DeathReason = KAPJFCMEBJE;
-using SwitchSystem = FNEHFOPHPJO;
-using SystemTypes = LGBKLKNAINN;
-using Effects = HLPCBNMDEHF;
+using Palette = BLMBFIODBKL;
+using DeathReason = EGHDCAKGMKI;
+using SwitchSystem = ABIMJJMBJJM;
+using SystemTypes = BCPJLGGNHBC;
+using Effects = AEOEPNHOJDP;
 
 namespace TheOtherRoles
 {
@@ -111,11 +111,11 @@ namespace TheOtherRoles
         public static void forceEnd() {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (!player.IDOFAMCIJKE.CIDDOFDJHJH)
+                if (!player.PPMOEEPBHJO.FDNMBJOAPFL)
                 {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
-                    player.IDOFAMCIJKE.FGNJJFABIHJ = true;
+                    player.PPMOEEPBHJO.IAGJEKLJCCI = true;
                 }
             }
         }
@@ -218,7 +218,7 @@ namespace TheOtherRoles
         }
 
         public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
-            if (AmongUsClient.Instance.CBKCIKKEJHI) { // If lobby host
+            if (AmongUsClient.Instance.HHBLOCGKFAB) { // If lobby host
                 GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
             }
         }
@@ -240,7 +240,7 @@ namespace TheOtherRoles
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
-            switchSystem.GNPBPJHLPAO = switchSystem.KNFBDAFFMGF;
+            switchSystem.BBCFBNPEPIE = switchSystem.FLDLDHLDCLM;
         }
 
         public static void engineerUsedRepair() {
@@ -250,7 +250,7 @@ namespace TheOtherRoles
         public static void janitorClean(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).GMBAIPNOKLP == playerId)
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).FNPNJHNKEBK == playerId)
                     UnityEngine.Object.Destroy(array[i].gameObject);
             }
         }
@@ -271,21 +271,21 @@ namespace TheOtherRoles
             if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
                 resetTimeMasterButton();
             }
-            HudManager.CMJOLNCMAPD.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
-            HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.rewindTime / 2, new Action<float>((p) => {
-                if (p == 1f) HudManager.CMJOLNCMAPD.FullScreen.enabled = false;
+            HudManager.CHNDKKBEIDG.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
+            HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.rewindTime / 2, new Action<float>((p) => {
+                if (p == 1f) HudManager.CHNDKKBEIDG.FullScreen.enabled = false;
             })));
 
             if (TimeMaster.timeMaster == null) return;
 
             PlayerControl lp = PlayerControl.LocalPlayer;
-            if (lp?.IDOFAMCIJKE != null && !lp.IDOFAMCIJKE.FGNJJFABIHJ && lp.inVent) {
+            if (lp?.PPMOEEPBHJO != null && !lp.PPMOEEPBHJO.IAGJEKLJCCI && lp.inVent) {
                 if ((float)(DateTime.UtcNow -localVentEnterTimePoint).TotalMilliseconds < 1000 * TimeMaster.rewindTime) {
-                    foreach (Vent vent in ShipStatus.Instance.GIDPCPOEFBC) {
+                    foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
                         bool canUse;
                         bool couldUse;
-                        vent.CanUse(PlayerControl.LocalPlayer.IDOFAMCIJKE, out canUse, out couldUse);
+                        vent.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out canUse, out couldUse);
                         if (canUse) {
                             PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
 			                vent.SetButtons(false);
@@ -307,7 +307,7 @@ namespace TheOtherRoles
 
         public static void timeMasterShield() {
             TimeMaster.shieldActive = true;
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(TimeMaster.shieldDuration, new Action<float>((p) => {
+            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.shieldDuration, new Action<float>((p) => {
                 if (p == 1f) TimeMaster.shieldActive = false;
             })));
         }
@@ -320,11 +320,11 @@ namespace TheOtherRoles
         }
 
         public static void shieldedMurderAttempt() {
-            if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.CMJOLNCMAPD?.FullScreen != null) {
-                HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
-                HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(0.5f, new Action<float>((p) => {
-                    var renderer = HudManager.CMJOLNCMAPD.FullScreen;
-                    Color c = Palette.LDCHDOFJPGH;
+            if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.CHNDKKBEIDG?.FullScreen != null) {
+                HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
+                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(0.5f, new Action<float>((p) => {
+                    var renderer = HudManager.CHNDKKBEIDG.FullScreen;
+                    Color c = Palette.JPCHLLEJNEH;
                     if (p < 0.5) {
                         if (renderer != null)
                             renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(p * 2 * 0.75f));
@@ -346,17 +346,17 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.IDOFAMCIJKE.CIDDOFDJHJH || player == Jackal.jackal || player == Sidekick.sidekick) {
+            if (player.PPMOEEPBHJO.FDNMBJOAPFL || player == Jackal.jackal || player == Sidekick.sidekick) {
                 oldShifter.Exiled();
                 return;
             }
 
             // Switch shield
             if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
                 Medic.shielded = oldShifter;
             } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded.LNMJKMLHMIM.material.SetFloat("_Outline", 0f);
+                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
                 Medic.shielded = player;
             }
 
@@ -425,9 +425,9 @@ namespace TheOtherRoles
         }
 
         public static void loverSuicide(byte remainingLoverId) {
-            if (Lovers.lover1 != null && !Lovers.lover1.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.lover1.PlayerId == remainingLoverId) {
+            if (Lovers.lover1 != null && !Lovers.lover1.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.lover1.PlayerId == remainingLoverId) {
                 Lovers.lover1.MurderPlayer(Lovers.lover1);
-            } else if (Lovers.lover2 != null && !Lovers.lover2.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.lover2.PlayerId == remainingLoverId) {
+            } else if (Lovers.lover2 != null && !Lovers.lover2.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.lover2.PlayerId == remainingLoverId) {
                 Lovers.lover2.MurderPlayer(Lovers.lover2);
             }
         }
@@ -440,14 +440,14 @@ namespace TheOtherRoles
 
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                if (player.PlayerId == targetId && !player.IDOFAMCIJKE.FGNJJFABIHJ) {
+                if (player.PlayerId == targetId && !player.PPMOEEPBHJO.IAGJEKLJCCI) {
                         Vampire.bitten = player;
                 }
             }
         }
 
         public static void vampireTryKill() {
-            if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ) {
+            if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.IAGJEKLJCCI) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
@@ -494,7 +494,7 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.IDOFAMCIJKE.CIDDOFDJHJH) {
+                    if(!Jackal.canCreateSidekickFromImpostor && player.PPMOEEPBHJO.FDNMBJOAPFL) {
                         Jackal.fakeSidekick = player;
                         return;
                     }
@@ -556,7 +556,7 @@ namespace TheOtherRoles
                 Lovers.clearAndReload(); 
             }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
-                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ) {
+                if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI) {
                     RPCProcedure.sidekickPromotes();
                 } else {
                     Jackal.clearAndReload();
@@ -585,7 +585,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH) {
+            if(PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
@@ -594,10 +594,10 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class RPCHandlerPatch
     {
-        static void Postfix(byte GIICFHKILOB, MessageReader DOOILGKLBBF)
+        static void Postfix(byte ONIABIILFGF, MessageReader JIGFBHFFNFI)
         {
-            byte packetId = GIICFHKILOB;
-            MessageReader reader = DOOILGKLBBF;
+            byte packetId = ONIABIILFGF;
+            MessageReader reader = JIGFBHFFNFI;
             switch (packetId) {
 
                 // Main Controls
@@ -606,34 +606,34 @@ namespace TheOtherRoles
                     RPCProcedure.resetVariables();
                     break;
                 case (byte)CustomRPC.ShareOptionSelection:
-                    uint id = DOOILGKLBBF.ReadPackedUInt32();
-                    uint selection = DOOILGKLBBF.ReadPackedUInt32();
+                    uint id = JIGFBHFFNFI.ReadPackedUInt32();
+                    uint selection = JIGFBHFFNFI.ReadPackedUInt32();
                     RPCProcedure.shareOptionSelection(id, selection);
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();
                     break;
                 case (byte)CustomRPC.SetRole:
-                    byte roleId = DOOILGKLBBF.ReadByte();
-                    byte playerId = DOOILGKLBBF.ReadByte();
+                    byte roleId = JIGFBHFFNFI.ReadByte();
+                    byte playerId = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.setRole(roleId, playerId);
                     break;
                 case (byte)CustomRPC.SetUncheckedColor:
-                    byte c = DOOILGKLBBF.ReadByte();
-                    byte p = DOOILGKLBBF.ReadByte();
+                    byte c = JIGFBHFFNFI.ReadByte();
+                    byte p = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.setUncheckedColor(c, p);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
-                    byte major = DOOILGKLBBF.ReadByte();
-                    byte minor = DOOILGKLBBF.ReadByte();
-                    byte patch = DOOILGKLBBF.ReadByte();
-                    byte versionOwnerId = DOOILGKLBBF.ReadByte();
+                    byte major = JIGFBHFFNFI.ReadByte();
+                    byte minor = JIGFBHFFNFI.ReadByte();
+                    byte patch = JIGFBHFFNFI.ReadByte();
+                    byte versionOwnerId = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
-                    int ventId = DOOILGKLBBF.ReadPackedInt32();
-                    byte ventingPlayer = DOOILGKLBBF.ReadByte();
-                    byte isEnter = DOOILGKLBBF.ReadByte();
+                    int ventId = JIGFBHFFNFI.ReadPackedInt32();
+                    byte ventingPlayer = JIGFBHFFNFI.ReadByte();
+                    byte isEnter = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.useUncheckedVent(ventId, ventingPlayer, isEnter);
                     break;
 
@@ -646,10 +646,10 @@ namespace TheOtherRoles
                     RPCProcedure.engineerUsedRepair();
                     break;
                 case (byte)CustomRPC.JanitorClean:
-                    RPCProcedure.janitorClean(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.janitorClean(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffKill:
-                    RPCProcedure.sheriffKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.sheriffKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
@@ -658,65 +658,65 @@ namespace TheOtherRoles
                     RPCProcedure.timeMasterShield();
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
-                    RPCProcedure.medicSetShielded(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.medicSetShielded(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
                     RPCProcedure.shieldedMurderAttempt();
                     break;
                 case (byte)CustomRPC.ShifterShift:
-                    RPCProcedure.shifterShift(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.shifterShift(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SwapperSwap:
-                    byte playerId1 = DOOILGKLBBF.ReadByte();
-                    byte playerId2 = DOOILGKLBBF.ReadByte();
+                    byte playerId1 = JIGFBHFFNFI.ReadByte();
+                    byte playerId2 = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.swapperSwap(playerId1, playerId2);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
-                    RPCProcedure.morphlingMorph(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.morphlingMorph(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
                     break;
                 case (byte)CustomRPC.LoverSuicide:
-                    RPCProcedure.loverSuicide(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.loverSuicide(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.VampireSetBitten:
-                    byte bittenId = DOOILGKLBBF.ReadByte();
-                    byte reset = DOOILGKLBBF.ReadByte();
+                    byte bittenId = JIGFBHFFNFI.ReadByte();
+                    byte reset = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.VampireTryKill:
                     RPCProcedure.vampireTryKill();
                     break;
                 case (byte)CustomRPC.PlaceGarlic:
-                    RPCProcedure.placeGarlic(DOOILGKLBBF.ReadBytesAndSize());
+                    RPCProcedure.placeGarlic(JIGFBHFFNFI.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
-                    RPCProcedure.trackerUsedTracker(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.trackerUsedTracker(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalKill:
-                    RPCProcedure.jackalKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.jackalKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SidekickKill:
-                    RPCProcedure.sidekickKill(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.sidekickKill(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
-                    RPCProcedure.jackalCreatesSidekick(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.jackalCreatesSidekick(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SidekickPromotes:
                     RPCProcedure.sidekickPromotes();
                     break;
                 case (byte)CustomRPC.ErasePlayerRole:
-                    RPCProcedure.erasePlayerRole(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.erasePlayerRole(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureErased:
-                    RPCProcedure.setFutureErased(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.setFutureErased(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
-                    RPCProcedure.setFutureShifted(DOOILGKLBBF.ReadByte());
+                    RPCProcedure.setFutureShifted(JIGFBHFFNFI.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
-                    RPCProcedure.placeJackInTheBox(DOOILGKLBBF.ReadBytesAndSize());
+                    RPCProcedure.placeJackInTheBox(JIGFBHFFNFI.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.LightsOut:
                     RPCProcedure.lightsOut();

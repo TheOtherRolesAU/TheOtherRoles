@@ -29,9 +29,9 @@ using HarmonyLib;
 using UnityEngine;
 using Hazel;
 
-using Palette = GLNPIJPGGNJ;
-using SaveManager = ALOOOIHKCAC;
-using GameOptionsData = IGDMNKLDEPI;
+using Palette = BLMBFIODBKL;
+using SaveManager = BLCGIFOPMIA;
+using GameOptionsData = CEIOGGEDKAN;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -49,12 +49,9 @@ namespace TheOtherRoles {
                     additionalButtons.Add(nextButton);
                     nextButton.enabled = false;
                     nextButton.gameObject.name = "1" + i;
-                    TextRenderer text = nextButton.gameObject.GetComponentInChildren<TextRenderer>();
-                    text.render = null;
-                    nextButton.GetComponentInChildren<MeshFilter>().mesh = null;
-                    text.Text = "1" + i;
-                    text.RefreshMesh();
-                    text.Color = Helpers.isCustomServer() ? Color.white : Palette.JMELLHINKGM;
+                    TMPro.TMP_Text text = nextButton.gameObject.GetComponentInChildren<TMPro.TMP_Text>();
+                    text.text = "1" + i;
+                    text.color = Helpers.isCustomServer() ? Color.white : Palette.EGHCBLDNCGP;
 
                     nextButton.transform.position = nextButton.transform.position + new Vector3(i * (maxPlayerButtons[1].transform.position.x - maxPlayerButtons[0].transform.position.x), 0, 0);
                     var passiveButton = nextButton.GetComponent<PassiveButton>();
@@ -67,9 +64,9 @@ namespace TheOtherRoles {
 
                         byte value = byte.Parse(nextButton.name);
                         var targetOptions = __instance.GetTargetOptions();
-                        if (value <= targetOptions.PCBBPGNJPJN) {
-                            targetOptions.PCBBPGNJPJN = value - 1;
-                            __instance.ABNOBIOJDEH(targetOptions.PCBBPGNJPJN);
+                        if (value <= targetOptions.DIGMGCJMGDB) {
+                            targetOptions.DIGMGCJMGDB = value - 1;
+                            __instance.SetImpostorButtons(targetOptions.DIGMGCJMGDB);
                         }
                         __instance.SetMaxPlayersButtons(value);
                     }
@@ -85,24 +82,24 @@ namespace TheOtherRoles {
                 foreach (SpriteRenderer renderer in additionalButtons) {
                     if (renderer != null && renderer.gameObject != null) {
                         renderer.enabled = false;
-                        renderer.gameObject.GetComponentInChildren<TextRenderer>().Color = isCustom ? Color.white : Palette.JMELLHINKGM;
+                        renderer.gameObject.GetComponentInChildren<TMPro.TMP_Text>().color = isCustom ? Color.white : Palette.EGHCBLDNCGP;
                     }
                 }
             }
         }
     }
 
-    [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.GJJLFHMDLGA), MethodType.Getter)]
+    [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LCNLLGFAEJE), MethodType.Getter)]
     public static class SaveManagerGetHostOptions
     {
         public static bool Prefix(out GameOptionsData __result)
         {
-            SaveManager.KEEEOKAJAFI ??= SaveManager.OODOOJLHAEC("gameHostOptions");
+            SaveManager.KMHAKICCDOJ ??= SaveManager.DHHFAHODPGO("gameHostOptions");
 
-            SaveManager.KEEEOKAJAFI.PCBBPGNJPJN = Mathf.Clamp(SaveManager.KEEEOKAJAFI.PCBBPGNJPJN, 1, SaveManager.KEEEOKAJAFI.BKOLCIHDBPK - 1);
-            SaveManager.KEEEOKAJAFI.MLLMFMOMIAC = Mathf.Clamp(SaveManager.KEEEOKAJAFI.MLLMFMOMIAC, 0, 2);
+            SaveManager.KMHAKICCDOJ.DIGMGCJMGDB = Mathf.Clamp(SaveManager.KMHAKICCDOJ.DIGMGCJMGDB, 1, SaveManager.KMHAKICCDOJ.OAFCIBONLNJ - 1);
+            SaveManager.KMHAKICCDOJ.OCPGKHJJAHL = Mathf.Clamp(SaveManager.KMHAKICCDOJ.OCPGKHJJAHL, 0, 2);
 
-            __result = SaveManager.KEEEOKAJAFI;
+            __result = SaveManager.KMHAKICCDOJ;
             return false;
         }
     }
@@ -111,7 +108,7 @@ namespace TheOtherRoles {
     public static class GameDataGetAvailableIdPatch {
         public static bool Prefix(ref GameData __instance, out sbyte __result) {
             for (sbyte i = 0; i <= 15; i++)
-                if (!__instance.AllPlayers.ToArray().Any(p => p.GMBAIPNOKLP == i)) {
+                if (!__instance.AllPlayers.ToArray().Any(p => p.FNPNJHNKEBK == i)) {
                     __result = i;
                     return false;
                 }
@@ -122,14 +119,14 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
     public static class PlayerControlCmdCheckColorPatch {
-        public static bool Prefix(PlayerControl __instance, byte JAKOFFAIMMM) {
+        public static bool Prefix(PlayerControl __instance, byte CKNNKEMNHAK) {
             if (!Helpers.isCustomServer()) return true;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
-            writer.Write(JAKOFFAIMMM);
+            writer.Write(CKNNKEMNHAK);
             writer.Write(__instance.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setUncheckedColor(JAKOFFAIMMM, __instance.PlayerId);
+            RPCProcedure.setUncheckedColor(CKNNKEMNHAK, __instance.PlayerId);
             return false;
         }
     }
@@ -139,9 +136,9 @@ namespace TheOtherRoles {
         public static bool Prefix(PlayerTab __instance) {
             if (!Helpers.isCustomServer()) return true;
 
-            PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.IDOFAMCIJKE.JFHFMIKFHGG, __instance.DemoImage);
-            for (int i = 0; i < Palette.CALCLMEEPGL.Length; i++)
-                __instance.BENAMDPPABB.Add(i);
+            PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.PPMOEEPBHJO.IMMNCAGJJJC, __instance.DemoImage);
+            for (int i = 0; i < Palette.AEDCMKGJKAG.Length; i++)
+                __instance.HDGKLGFNEIB.Add(i);
             return false;
         }
     }
@@ -150,7 +147,7 @@ namespace TheOtherRoles {
     public static class SecurityLoggerAwakePatch
     {
         public static void Postfix(SecurityLogger __instance) {
-            __instance.AIECLALEDPN = new float[15];
+            __instance.DLAMJHGNEIF = new float[15];
         }
     }
 
@@ -159,8 +156,8 @@ namespace TheOtherRoles {
     {
         public static bool Prefix(KeyMinigame __instance)
         {
-            __instance.ANIFEEMBMDA = (PlayerControl.LocalPlayer != null) ? PlayerControl.LocalPlayer.PlayerId % 10 : 0;
-            __instance.Slots[__instance.ANIFEEMBMDA].Image.sprite = __instance.Slots[__instance.ANIFEEMBMDA].Highlit;
+            __instance.CKEKJGDMNDB = (PlayerControl.LocalPlayer != null) ? PlayerControl.LocalPlayer.PlayerId % 10 : 0;
+            __instance.Slots[__instance.CKEKJGDMNDB].Image.sprite = __instance.Slots[__instance.CKEKJGDMNDB].Highlit;
             return false;
         }
     }

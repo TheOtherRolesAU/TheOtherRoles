@@ -39,16 +39,16 @@ namespace TheOtherRoles
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
             IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
-            ServerManager serverManager = DestroyableSingleton<ServerManager>.CMJOLNCMAPD;
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
             IRegionInfo[] regions = ServerManager.DefaultRegions;
 
             regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
             ServerManager.DefaultRegions = regions;
-            serverManager.GDOLGIJJLBL = regions;
+            serverManager.AGFAPIKFOFF = regions;
             serverManager.SaveServers();
 
-            IGDMNKLDEPI.OHDJGJFDDDP = IGDMNKLDEPI.AHFOOEHOFNC = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
-            IGDMNKLDEPI.GNPDNKOKIOK = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+            CEIOGGEDKAN.LMADJLEGIMH = CEIOGGEDKAN.IJGNCMMDGDI = Enumerable.Repeat(3, 15).ToArray(); // Max Imp = Recommended Imp = 3
+            CEIOGGEDKAN.JMEMPINECJN = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
@@ -59,7 +59,7 @@ namespace TheOtherRoles
     }
 
     // Deactivate bans, since I always leave my local testing game and ban myself
-    [HarmonyPatch(typeof(MOJBJJPEFPG), nameof(MOJBJJPEFPG.IJMECJONBHM), MethodType.Getter)]
+    [HarmonyPatch(typeof(IAJICOPDKHA), nameof(IAJICOPDKHA.LEHPLHFNDLM), MethodType.Getter)]
     public static class AmBannedPatch
     {
         public static void Postfix(out bool __result)
@@ -86,16 +86,16 @@ namespace TheOtherRoles
 
                 bots.Add(playerControl);
                 GameData.Instance.AddPlayer(playerControl);
-                AmongUsClient.Instance.Spawn(playerControl, -2, EOCEBECJBHG.None);
+                AmongUsClient.Instance.Spawn(playerControl, -2, IDCDPDDALNM.None);
                 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(GLNPIJPGGNJ.CALCLMEEPGL.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.CMJOLNCMAPD.AllHats.Count), playerControl.IDOFAMCIJKE.JFHFMIKFHGG);
-                playerControl.SetPet((uint) random.Next(HatManager.CMJOLNCMAPD.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.CMJOLNCMAPD.AllSkins.Count));
+                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.AEDCMKGJKAG.Length));
+                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.IMMNCAGJJJC);
+                playerControl.SetPet((uint) random.Next(HatManager.CHNDKKBEIDG.AllPets.Count));
+                playerControl.SetSkin((uint) random.Next(HatManager.CHNDKKBEIDG.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
