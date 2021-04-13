@@ -537,7 +537,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class GameSettingsScalePatch {
         public static void Prefix(HudManager __instance) {
-            __instance.GameSettings.fontSize = 1.2f; 
+            if (__instance.GameSettings != null) __instance.GameSettings.fontSize = 1.2f; 
         }
     }
 }
