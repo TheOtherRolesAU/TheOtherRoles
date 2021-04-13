@@ -155,8 +155,8 @@ namespace TheOtherRoles
                 "Hacker to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
-                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "Bad Child" : "Good Child",
-                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Child.color,
+                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "Bad Child" : "Good Child",
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.LDCHDOFJPGH : Child.color,
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
@@ -185,8 +185,8 @@ namespace TheOtherRoles
                 "Help your Jackal to kill everyone"));
             }
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "ImpLover" : "Lover",
-                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Lovers.color,
+                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "ImpLover" : "Lover",
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.LDCHDOFJPGH : Lovers.color,
                 "You are in [FC03BEFF]Love[]",
                 "You are in love"));
             }
@@ -196,7 +196,7 @@ namespace TheOtherRoles
                 "Confuse the [FF1919FF]Impostors[]",
                 "Confuse the Impostors"));
             }
-            if (infos.Count == 0 && p.IDOFAMCIJKE.CIDDOFDJHJH) { // Just Impostor
+            if (infos.Count == 0 && p.PPMOEEPBHJO.FDNMBJOAPFL) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.LDCHDOFJPGH,
                 "",

@@ -34,10 +34,10 @@ namespace TheOtherRoles
                 roleCouldUse = true;
             else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
                 roleCouldUse = true;
-            else if (pc.CIDDOFDJHJH) {
+            else if (pc.FDNMBJOAPFL) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
-                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.IDOFAMCIJKE.FGNJJFABIHJ)
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI)
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
@@ -57,7 +57,7 @@ namespace TheOtherRoles
                 }
             }
 
-            couldUse = ((@object.inVent || roleCouldUse) && !pc.FGNJJFABIHJ && (@object.POECPOEKKNO || @object.inVent));
+            couldUse = ((@object.inVent || roleCouldUse) && !pc.IAGJEKLJCCI && (@object.POECPOEKKNO || @object.inVent));
             canUse = couldUse;
             if (canUse)
             {
@@ -77,7 +77,7 @@ namespace TheOtherRoles
         public static bool Prefix(Vent __instance) {
             bool flag;
             bool flag2;
-            __instance.CanUse(PlayerControl.LocalPlayer.IDOFAMCIJKE, out flag, out flag2);
+            __instance.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out flag, out flag2);
 
             if (!flag) return true;  // Continue with default method
 
@@ -105,9 +105,9 @@ namespace TheOtherRoles
 
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
-            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.IDOFAMCIJKE.FGNJJFABIHJ);
+            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI);
             if (blockSabotageJanitor || blockSabotageMafioso) {
-                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetImage(ImageNames.UseButton);
+                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetImage(ImageNames.UseButton);
                 __instance.UseButton.color = new Color(1f, 1f, 1f, 0.3f);
             }
 
@@ -121,7 +121,7 @@ namespace TheOtherRoles
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
-            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.IDOFAMCIJKE.FGNJJFABIHJ);
+            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI);
             if (blockSabotageJanitor || blockSabotageMafioso) return false;
 
             return true;
@@ -230,7 +230,7 @@ namespace TheOtherRoles
                         else if (__instance.MCCBOPIEOEC.Length > 10)
                             vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
                         else 
-                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(Palette.OCCIKHJPJPK[(int)player.JFHFMIKFHGG], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.OCCIKHJPJPK[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}
@@ -291,14 +291,14 @@ namespace TheOtherRoles
                                 if (!(collider2D.tag == "DeadBody"))
                                 {
                                     PlayerControl component = collider2D.GetComponent<PlayerControl>();
-                                    if (!component || component.IDOFAMCIJKE == null || component.IDOFAMCIJKE.GBPMEHJFECK || component.IDOFAMCIJKE.FGNJJFABIHJ)
+                                    if (!component || component.PPMOEEPBHJO == null || component.PPMOEEPBHJO.MFFAGDHDHLO || component.PPMOEEPBHJO.IAGJEKLJCCI)
                                     {
                                         num2--;
-                                    } else if (component?.LNMJKMLHMIM?.material != null) {
-                                        Color color = component.LNMJKMLHMIM.material.GetColor("_BodyColor");
+                                    } else if (component?.KJAENOGGEOK?.material != null) {
+                                        Color color = component.KJAENOGGEOK.material.GetColor("_BodyColor");
                                         if (Hacker.onlyColorType) {
-                                            var id = Mathf.Max(0, Palette.CALCLMEEPGL.IndexOf(color));
-                                            color = Helpers.isLighterColor((byte)id) ? Palette.CALCLMEEPGL[7] : Palette.CALCLMEEPGL[6];
+                                            var id = Mathf.Max(0, Palette.AEDCMKGJKAG.IndexOf(color));
+                                            color = Helpers.isLighterColor((byte)id) ? Palette.AEDCMKGJKAG[7] : Palette.AEDCMKGJKAG[6];
                                         }
                                         roomColors.Add(color);
                                     }
@@ -307,9 +307,9 @@ namespace TheOtherRoles
                                     if (component) {
                                         GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.GetPlayerById(component.ParentId);
                                         if (LGBOMGHJELL != null) {
-                                            var color = Palette.CALCLMEEPGL[LGBOMGHJELL.JFHFMIKFHGG];
+                                            var color = Palette.AEDCMKGJKAG[LGBOMGHJELL.IMMNCAGJJJC];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(LGBOMGHJELL.JFHFMIKFHGG) ? Palette.CALCLMEEPGL[7] : Palette.CALCLMEEPGL[6];
+                                                color = Helpers.isLighterColor(LGBOMGHJELL.IMMNCAGJJJC) ? Palette.AEDCMKGJKAG[7] : Palette.AEDCMKGJKAG[6];
                                             roomColors.Add(color);
                                         }
                                     }

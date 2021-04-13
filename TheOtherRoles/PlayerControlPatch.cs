@@ -50,7 +50,7 @@ namespace TheOtherRoles {
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.LGBOMGHJELL LGBOMGHJELL = allPlayers[i];
-                if (!LGBOMGHJELL.GBPMEHJFECK && LGBOMGHJELL.GMBAIPNOKLP != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.FGNJJFABIHJ && (!onlyCrewmates || !LGBOMGHJELL.CIDDOFDJHJH))
+                if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.GMBAIPNOKLP != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.IAGJEKLJCCI && (!onlyCrewmates || !LGBOMGHJELL.FDNMBJOAPFL))
                 {
                     PlayerControl @object = LGBOMGHJELL.GPBBCHGPABL;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -106,7 +106,7 @@ namespace TheOtherRoles {
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                    if (player != null && player != PlayerControl.LocalPlayer && !player.IDOFAMCIJKE.FGNJJFABIHJ && !player.inVent) {
+                    if (player != null && player != PlayerControl.LocalPlayer && !player.PPMOEEPBHJO.IAGJEKLJCCI && !player.inVent) {
                         new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
                     }
                 }
@@ -164,15 +164,15 @@ namespace TheOtherRoles {
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH && ShipStatus.Instance?.GIDPCPOEFBC != null) {
+            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && ShipStatus.Instance?.GIDPCPOEFBC != null) {
                 foreach (Vent vent in ShipStatus.Instance.GIDPCPOEFBC) {
                     try {
-                        if (vent?.LNMJKMLHMIM?.material != null) {
+                        if (vent?.KJAENOGGEOK?.material != null) {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
-                                vent.LNMJKMLHMIM.material.SetFloat("_Outline", 1f);
-                                vent.LNMJKMLHMIM.material.SetColor("_OutlineColor", Engineer.color);
-                            } else if (vent.LNMJKMLHMIM.material.GetColor("_AddColor") != Color.red) {
-                                vent.LNMJKMLHMIM.material.SetFloat("_Outline", 0);
+                                vent.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+                                vent.KJAENOGGEOK.material.SetColor("_OutlineColor", Engineer.color);
+                            } else if (vent.KJAENOGGEOK.material.GetColor("_AddColor") != Color.red) {
+                                vent.KJAENOGGEOK.material.SetFloat("_Outline", 0);
                             }
                         }
                     } catch {}
@@ -181,8 +181,8 @@ namespace TheOtherRoles {
         }
 
         static void impostorSetTarget() {
-            if (!PlayerControl.LocalPlayer.IDOFAMCIJKE.CIDDOFDJHJH ||!PlayerControl.LocalPlayer.POECPOEKKNO || PlayerControl.LocalPlayer.IDOFAMCIJKE.FGNJJFABIHJ) { // !isImpostor || !canMove || isDead
-                HudManager.CMJOLNCMAPD.KillButton.SetTarget(null);
+            if (!PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ||!PlayerControl.LocalPlayer.POECPOEKKNO || PlayerControl.LocalPlayer.PPMOEEPBHJO.IAGJEKLJCCI) { // !isImpostor || !canMove || isDead
+                HudManager.CHNDKKBEIDG.KillButton.SetTarget(null);
                 return;
             }
             
@@ -197,7 +197,7 @@ namespace TheOtherRoles {
                 target = setTarget(true, true);
             }
 
-            HudManager.CMJOLNCMAPD.KillButton.SetTarget(target);
+            HudManager.CHNDKKBEIDG.KillButton.SetTarget(target);
         }
 
         static void trackerUpdate() {
@@ -208,11 +208,11 @@ namespace TheOtherRoles {
                 return;
             }
 
-            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.IDOFAMCIJKE.FGNJJFABIHJ) {
+            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.PPMOEEPBHJO.IAGJEKLJCCI) {
                 Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
                 if (Tracker.timeUntilUpdate <= 0f) {
-                    bool trackedOnMap = !Tracker.tracked.IDOFAMCIJKE.FGNJJFABIHJ;
+                    bool trackedOnMap = !Tracker.tracked.PPMOEEPBHJO.IAGJEKLJCCI;
                     Vector3 position = Tracker.tracked.transform.position;
                     if (!trackedOnMap) { // Check for dead body
                         DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
@@ -257,11 +257,11 @@ namespace TheOtherRoles {
         }
 
         public static void Prefix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GCDONLGCMIL.Started) return;
         }
 
         public static void Postfix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.CJDCOJJNIGL.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GCDONLGCMIL.Started) return;
 
             // Update Role Description
             Helpers.refreshRoleDescription(__instance);
@@ -318,7 +318,7 @@ namespace TheOtherRoles {
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.IDOFAMCIJKE.FGNJJFABIHJ && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
+            if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.IAGJEKLJCCI && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();
@@ -361,7 +361,7 @@ namespace TheOtherRoles {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
                             msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.IDOFAMCIJKE.JFHFMIKFHGG) ? "lighter" : "darker";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.PPMOEEPBHJO.IMMNCAGJJJC) ? "lighter" : "darker";
                             msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";
@@ -370,13 +370,13 @@ namespace TheOtherRoles {
 
                     if (!string.IsNullOrWhiteSpace(msg))
                     {   
-                        if (AmongUsClient.Instance.HNMILJEOEKN && DestroyableSingleton<HudManager>.CMJOLNCMAPD)
+                        if (AmongUsClient.Instance.HNMILJEOEKN && DestroyableSingleton<HudManager>.CHNDKKBEIDG)
                         {
-                            DestroyableSingleton<HudManager>.CMJOLNCMAPD.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                            DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                         }
                         if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            DestroyableSingleton<Assets.CoreScripts.Telemetry>.CMJOLNCMAPD.SendWho();
+                            DestroyableSingleton<Assets.CoreScripts.Telemetry>.CHNDKKBEIDG.SendWho();
                         }
                     }
                 }
@@ -393,10 +393,10 @@ namespace TheOtherRoles {
         public static void Prefix(PlayerControl __instance, PlayerControl IGLDJOKKFJE)
         {
             // Allow everyone to murder players
-            resetToCrewmate = !__instance.IDOFAMCIJKE.CIDDOFDJHJH;
-            resetToDead = __instance.IDOFAMCIJKE.FGNJJFABIHJ;
-            __instance.IDOFAMCIJKE.CIDDOFDJHJH = true;
-            __instance.IDOFAMCIJKE.FGNJJFABIHJ = false;
+            resetToCrewmate = !__instance.PPMOEEPBHJO.FDNMBJOAPFL;
+            resetToDead = __instance.PPMOEEPBHJO.IAGJEKLJCCI;
+            __instance.PPMOEEPBHJO.FDNMBJOAPFL = true;
+            __instance.PPMOEEPBHJO.IAGJEKLJCCI = false;
         }
 
         public static void Postfix(PlayerControl __instance, PlayerControl IGLDJOKKFJE)
@@ -406,13 +406,13 @@ namespace TheOtherRoles {
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Reset killer to crewmate if resetToCrewmate
-            if (resetToCrewmate) __instance.IDOFAMCIJKE.CIDDOFDJHJH = false;
-            if (resetToDead) __instance.IDOFAMCIJKE.FGNJJFABIHJ = true;
+            if (resetToCrewmate) __instance.PPMOEEPBHJO.FDNMBJOAPFL = false;
+            if (resetToDead) __instance.PPMOEEPBHJO.IAGJEKLJCCI = true;
 
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && IGLDJOKKFJE == Lovers.lover1) || (Lovers.lover2 != null && IGLDJOKKFJE == Lovers.lover2)) {
                 PlayerControl otherLover = IGLDJOKKFJE == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (PlayerControl.LocalPlayer == IGLDJOKKFJE && otherLover != null && !otherLover.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.bothDie) { // Only the dead lover sends the rpc
+                if (PlayerControl.LocalPlayer == IGLDJOKKFJE && otherLover != null && !otherLover.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.bothDie) { // Only the dead lover sends the rpc
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.Reliable, -1);
                     writer.Write(otherLover.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -421,17 +421,17 @@ namespace TheOtherRoles {
             }
             
             // Sidekick promotion trigger on murder
-            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ && IGLDJOKKFJE == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI && IGLDJOKKFJE == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
 
             // Seer show flash and add dead player position
-            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.IDOFAMCIJKE.FGNJJFABIHJ && Seer.seer != IGLDJOKKFJE && Seer.mode <= 1) {
-                HudManager.CMJOLNCMAPD.FullScreen.enabled = true;
-                HudManager.CMJOLNCMAPD.StartCoroutine(Effects.LDACHPMFOIF(1f, new Action<float>((p) => {
-                    var renderer = HudManager.CMJOLNCMAPD.FullScreen;
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.PPMOEEPBHJO.IAGJEKLJCCI && Seer.seer != IGLDJOKKFJE && Seer.mode <= 1) {
+                HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
+                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.LDACHPMFOIF(1f, new Action<float>((p) => {
+                    var renderer = HudManager.CHNDKKBEIDG.FullScreen;
                     if (p < 0.5) {
                         if (renderer != null)
                             renderer.color = new Color(42f / 255f, 187f / 255f, 245f / 255f, Mathf.Clamp01(p * 2 * 0.75f));
@@ -445,7 +445,7 @@ namespace TheOtherRoles {
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(IGLDJOKKFJE.transform.position);
 
             // Child set adapted kill cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
                 var multiplier = Child.isGrownUp() ? 0.66f : 2f;
                 Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
             }
@@ -457,10 +457,10 @@ namespace TheOtherRoles {
         public static bool Prefix(PlayerControl __instance, float KAIMOLNHDCG) {
             if (PlayerControl.GameOptions.ELBDIKIOHHH <= 0f) return false;
             float multiplier = 1f;
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) multiplier = Child.isGrownUp() ? 0.66f : 2f;
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) multiplier = Child.isGrownUp() ? 0.66f : 2f;
 
             __instance.killTimer = Mathf.Clamp(KAIMOLNHDCG, 0f, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
-            DestroyableSingleton<HudManager>.CMJOLNCMAPD.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
+            DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
             return false;
         }
     }
@@ -478,7 +478,7 @@ namespace TheOtherRoles {
     {
         public static void Prefix(PlayerControl __instance) {
             // Child exile lose condition
-            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
                 Child.triggerChildLose = true;
             }
             // Jester win condition
@@ -496,12 +496,12 @@ namespace TheOtherRoles {
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
                 PlayerControl otherLover = __instance == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (otherLover != null && !otherLover.IDOFAMCIJKE.FGNJJFABIHJ && Lovers.bothDie)
+                if (otherLover != null && !otherLover.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.bothDie)
                     otherLover.Exiled();
             }
             
             // Sidekick promotion trigger on exile
-            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ && __instance == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI && __instance == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
@@ -515,7 +515,7 @@ namespace TheOtherRoles {
         {
             __result = __instance.moveable &&
                 !Minigame.Instance &&
-                (!DestroyableSingleton<HudManager>.JECNDKBIOFO || (!DestroyableSingleton<HudManager>.CMJOLNCMAPD.Chat.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CMJOLNCMAPD.KillOverlay.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CMJOLNCMAPD.GameMenu.LFGAAGECFFO)) &&
+                (!DestroyableSingleton<HudManager>.JECNDKBIOFO || (!DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillOverlay.LFGAAGECFFO && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.GameMenu.LFGAAGECFFO)) &&
                 (!MapBehaviour.Instance || !MapBehaviour.Instance.IPOGMCKNALI) &&
                 !MeetingHud.Instance &&
                 !CustomPlayerMenu.Instance &&

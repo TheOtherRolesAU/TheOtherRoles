@@ -65,7 +65,7 @@ namespace TheOtherRoles {
             if (Jester.jester != null) {
                 WinningPlayerData jesterWinner = null;
                 foreach (WinningPlayerData winner in  TempData.BDGOKPKHCNB)
-                    if (winner.GEDNCGBDPKC == Jester.jester.IDOFAMCIJKE.HGGCLJHCDBM) jesterWinner = winner;
+                    if (winner.GEDNCGBDPKC == Jester.jester.PPMOEEPBHJO.HGGCLJHCDBM) jesterWinner = winner;
                 
                 if (jesterWinner != null) TempData.BDGOKPKHCNB.Remove(jesterWinner);
             }
@@ -73,10 +73,10 @@ namespace TheOtherRoles {
             if (Jackal.jackal != null || Sidekick.sidekick != null) {
                 List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
                 foreach (WinningPlayerData winner in TempData.BDGOKPKHCNB) {
-                    if (winner.GEDNCGBDPKC == Jackal.jackal?.IDOFAMCIJKE?.HGGCLJHCDBM) winnersToRemove.Add(winner);
-                    if (winner.GEDNCGBDPKC == Sidekick.sidekick?.IDOFAMCIJKE?.HGGCLJHCDBM) winnersToRemove.Add(winner);
+                    if (winner.GEDNCGBDPKC == Jackal.jackal?.PPMOEEPBHJO?.HGGCLJHCDBM) winnersToRemove.Add(winner);
+                    if (winner.GEDNCGBDPKC == Sidekick.sidekick?.PPMOEEPBHJO?.HGGCLJHCDBM) winnersToRemove.Add(winner);
                     foreach(var player in Jackal.formerJackals) {
-                        if (winner.GEDNCGBDPKC == player.IDOFAMCIJKE.HGGCLJHCDBM) {
+                        if (winner.GEDNCGBDPKC == player.PPMOEEPBHJO.HGGCLJHCDBM) {
                             winnersToRemove.Add(winner);
                         }
                     }
@@ -90,12 +90,12 @@ namespace TheOtherRoles {
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
             bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.NMINNGMJPML(gameOverReason) && Lovers.existingAndCrewLovers())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
-            bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.IDOFAMCIJKE.FGNJJFABIHJ) || (Sidekick.sidekick != null && !Sidekick.sidekick.IDOFAMCIJKE.FGNJJFABIHJ));
+            bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.PPMOEEPBHJO.IAGJEKLJCCI) || (Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI));
 
             // Child lose
             if (childLose) {
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Child.child.IDOFAMCIJKE);
+                WinningPlayerData wpd = new WinningPlayerData(Child.child.PPMOEEPBHJO);
                 wpd.KCEFGIGGLHM = false; // If "no one is the Child", it will display the Child, but also show defeat to everyone
                 TempData.BDGOKPKHCNB.Add(wpd);
                 AdditionalTempData.winCondition = WinCondition.ChildLose;  
@@ -104,7 +104,7 @@ namespace TheOtherRoles {
             // Jester win
             else if (jesterWin) {
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Jester.jester.IDOFAMCIJKE);
+                WinningPlayerData wpd = new WinningPlayerData(Jester.jester.PPMOEEPBHJO);
                 TempData.BDGOKPKHCNB.Add(wpd);
                 AdditionalTempData.winCondition = WinCondition.JesterWin;
             }
@@ -119,17 +119,17 @@ namespace TheOtherRoles {
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
-                            TempData.BDGOKPKHCNB.Add(new WinningPlayerData(p.IDOFAMCIJKE));
-                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.IDOFAMCIJKE.CIDDOFDJHJH)
-                            TempData.BDGOKPKHCNB.Add(new WinningPlayerData(p.IDOFAMCIJKE));
+                            TempData.BDGOKPKHCNB.Add(new WinningPlayerData(p.PPMOEEPBHJO));
+                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.PPMOEEPBHJO.FDNMBJOAPFL)
+                            TempData.BDGOKPKHCNB.Add(new WinningPlayerData(p.PPMOEEPBHJO));
                     }
                 }
                 // Lovers solo win
                 else {
                     AdditionalTempData.winCondition = WinCondition.LoversSoloWin;
                     TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                    TempData.BDGOKPKHCNB.Add(new WinningPlayerData(Lovers.lover1.IDOFAMCIJKE));
-                    TempData.BDGOKPKHCNB.Add(new WinningPlayerData(Lovers.lover2.IDOFAMCIJKE));
+                    TempData.BDGOKPKHCNB.Add(new WinningPlayerData(Lovers.lover1.PPMOEEPBHJO));
+                    TempData.BDGOKPKHCNB.Add(new WinningPlayerData(Lovers.lover2.PPMOEEPBHJO));
                 }
             }
             
@@ -138,18 +138,18 @@ namespace TheOtherRoles {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 TempData.BDGOKPKHCNB = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Jackal.jackal.IDOFAMCIJKE);
-                wpd.CIDDOFDJHJH = false; 
+                WinningPlayerData wpd = new WinningPlayerData(Jackal.jackal.PPMOEEPBHJO);
+                wpd.FDNMBJOAPFL = false; 
                 TempData.BDGOKPKHCNB.Add(wpd);
                 // If there is a sidekick. The sidekick also wins
                 if (Sidekick.sidekick != null) {
-                    WinningPlayerData wpdSidekick = new WinningPlayerData(Sidekick.sidekick.IDOFAMCIJKE);
-                    wpdSidekick.CIDDOFDJHJH = false; 
+                    WinningPlayerData wpdSidekick = new WinningPlayerData(Sidekick.sidekick.PPMOEEPBHJO);
+                    wpdSidekick.FDNMBJOAPFL = false; 
                     TempData.BDGOKPKHCNB.Add(wpdSidekick);
                 }
                 foreach(var player in Jackal.formerJackals) {
-                    WinningPlayerData wpdFormerJackal = new WinningPlayerData(player.IDOFAMCIJKE);
-                    wpdFormerJackal.CIDDOFDJHJH = false; 
+                    WinningPlayerData wpdFormerJackal = new WinningPlayerData(player.PPMOEEPBHJO);
+                    wpdFormerJackal.FDNMBJOAPFL = false; 
                     TempData.BDGOKPKHCNB.Add(wpdFormerJackal);
                 }
             }
@@ -222,7 +222,7 @@ namespace TheOtherRoles {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.ChildLose, false);
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -236,7 +236,7 @@ namespace TheOtherRoles {
                     __instance.enabled = false;
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.JesterWin, false);
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -286,7 +286,7 @@ namespace TheOtherRoles {
             }
             else if (localCompletedAllTasks)
             {
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 __instance.Begin();
             }
             return false;
@@ -300,7 +300,7 @@ namespace TheOtherRoles {
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.LoversWin, false);
                     return true;
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -315,7 +315,7 @@ namespace TheOtherRoles {
                     ShipStatus.PBKIGLMJEDH((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                     return true;
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -341,7 +341,7 @@ namespace TheOtherRoles {
                     ShipStatus.PBKIGLMJEDH(endReason, false);
                     return true;
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -355,7 +355,7 @@ namespace TheOtherRoles {
                     ShipStatus.PBKIGLMJEDH(GameOverReason.HumansByVote, false);
                     return true;
                 }
-                DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
                 return true;
             }
@@ -377,7 +377,7 @@ namespace TheOtherRoles {
                 ShipStatus.PBKIGLMJEDH(GameOverReason.ImpostorBySabotage, false);
                 return;
             }
-            DestroyableSingleton<HudManager>.CMJOLNCMAPD.ShowPopUp(DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.GameOverSabotage, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
+            DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverSabotage, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
             ReviveEveryone();
         }
 
@@ -410,16 +410,16 @@ namespace TheOtherRoles {
             for (int i = 0; i < GameData.Instance.BCFPPIDIMJK; i++)
             {
                 GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.AllPlayers[i];
-                if (!LGBOMGHJELL.GBPMEHJFECK)
+                if (!LGBOMGHJELL.MFFAGDHDHLO)
                 {
-                    if (!LGBOMGHJELL.FGNJJFABIHJ)
+                    if (!LGBOMGHJELL.IAGJEKLJCCI)
                     {
                         numTotalAlive++;
 
                         bool lover = isLover(LGBOMGHJELL);
                         if (lover) numLoversAlive++;
 
-                        if (LGBOMGHJELL.CIDDOFDJHJH) {
+                        if (LGBOMGHJELL.FDNMBJOAPFL) {
                             numImpostorsAlive++;
                             if (lover) impLover = true;
                         }

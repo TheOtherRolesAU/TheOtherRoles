@@ -25,10 +25,10 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.KEICNHGALLI))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[__instance.DHCOPOOJCLN.Length + 1];
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                byte[] array = new byte[__instance.GBKFCOAKLAH.Length + 1];
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
-                    PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                    PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                     if (playerVoteArea.didVote)
                     {
                         int num = (int)(playerVoteArea.votedFor + 1);
@@ -37,7 +37,7 @@ namespace TheOtherRoles
                             byte[] array2 = array;
                             int num2 = num;
                             // Mayor count vote twice
-                            if (Mayor.mayor != null && playerVoteArea.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId)
+                            if (Mayor.mayor != null && playerVoteArea.GEIOMAPOPKA == (sbyte)Mayor.mayor.PlayerId)
                                 array2[num2] += 2;
                             else
                                 array2[num2] += 1;
@@ -49,15 +49,15 @@ namespace TheOtherRoles
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
 
-                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
 
-                if (swapped1 != null && swapped2 != null && swapped1.HMPHKKGPLAG + 1 >= 0 && swapped1.HMPHKKGPLAG + 1 < array.Length && swapped2.HMPHKKGPLAG + 1 >= 0 && swapped2.HMPHKKGPLAG + 1 < array.Length) {
-                    byte tmp = array[swapped1.HMPHKKGPLAG + 1];
-                    array[swapped1.HMPHKKGPLAG + 1] = array[swapped2.HMPHKKGPLAG + 1];
-                    array[swapped2.HMPHKKGPLAG + 1] = tmp;
+                if (swapped1 != null && swapped2 != null && swapped1.GEIOMAPOPKA + 1 >= 0 && swapped1.GEIOMAPOPKA + 1 < array.Length && swapped2.GEIOMAPOPKA + 1 >= 0 && swapped2.GEIOMAPOPKA + 1 < array.Length) {
+                    byte tmp = array[swapped1.GEIOMAPOPKA + 1];
+                    array[swapped1.GEIOMAPOPKA + 1] = array[swapped2.GEIOMAPOPKA + 1];
+                    array[swapped2.GEIOMAPOPKA + 1] = tmp;
                 }
                 return array;
             }
@@ -86,12 +86,12 @@ namespace TheOtherRoles
 
             static bool Prefix(MeetingHud __instance)
             {
-                if (__instance.DHCOPOOJCLN.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
+                if (__instance.GBKFCOAKLAH.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
                 {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && !allowSkipOnEmergencyMeetings) {
-                        foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.HMPHKKGPLAG; // TargetPlayerId
+                        foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.GEIOMAPOPKA; // TargetPlayerId
                         }
                     }
 
@@ -105,11 +105,11 @@ namespace TheOtherRoles
                             break;
                         }
                     }
-                    byte[] array = new byte[__instance.DHCOPOOJCLN.Length];
-                    for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                    byte[] array = new byte[__instance.GBKFCOAKLAH.Length];
+                    for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                     {
-                        PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
-                        array[(int)playerVoteArea.HMPHKKGPLAG] = playerVoteArea.GetState();
+                        PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
+                        array[(int)playerVoteArea.GEIOMAPOPKA] = playerVoteArea.GetState();
                     }
                     // RPCVotingComplete
                     if (AmongUsClient.Instance.HNMILJEOEKN)
@@ -132,9 +132,9 @@ namespace TheOtherRoles
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
 
-                foreach (PlayerVoteArea playerVoteArea in __instance.DHCOPOOJCLN) {
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.HMPHKKGPLAG == Swapper.playerId2) swapped2 = playerVoteArea;
+                foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.GEIOMAPOPKA == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
 
                 bool doSwap = swapped1 != null && swapped2 != null;
@@ -145,25 +145,25 @@ namespace TheOtherRoles
                 }
 
                 // Mayor display vote twice
-                __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                __instance.TitleText.Text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = doSwap ? 4 : 0; // Delay animaton if swapping
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
-                    PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                    PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                     playerVoteArea.ClearForResults();
                     int num2 = doSwap ? 4 : 0; // Delay animaton if swapping
                     bool mayorFirstVoteDisplayed = false;
 
-                    for (int j = 0; j < __instance.DHCOPOOJCLN.Length; j++)
+                    for (int j = 0; j < __instance.GBKFCOAKLAH.Length; j++)
                     {
-                        PlayerVoteArea playerVoteArea2 = __instance.DHCOPOOJCLN[j];
-                        byte self = HIDHPMAKEKH[(int)playerVoteArea2.HMPHKKGPLAG];
+                        PlayerVoteArea playerVoteArea2 = __instance.GBKFCOAKLAH[j];
+                        byte self = HIDHPMAKEKH[(int)playerVoteArea2.GEIOMAPOPKA];
 
                         if (!((self & 128) > 0))
                         {
-                            GameData.LGBOMGHJELL playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.HMPHKKGPLAG);
+                            GameData.LGBOMGHJELL playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.GEIOMAPOPKA);
                             int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
-                            if (votedFor == (int)playerVoteArea.HMPHKKGPLAG)
+                            if (votedFor == (int)playerVoteArea.GEIOMAPOPKA)
                             {
                                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
                                 if (PlayerControl.GameOptions.LNMFPEMGKOB)
@@ -172,7 +172,7 @@ namespace TheOtherRoles
                                 }
                                 else
                                 {
-                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer);
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer);
                                 }
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform);
                                 spriteRenderer.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num2, 0f, 0f);
@@ -190,7 +190,7 @@ namespace TheOtherRoles
                                 }
                                 else
                                 {
-                                    PlayerControl.SetPlayerMaterialColors((int)playerById.JFHFMIKFHGG, spriteRenderer2);
+                                    PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer2);
                                 }
                                 spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
                                 spriteRenderer2.transform.localPosition = __instance.ALGONDAMLHA + new Vector3(__instance.LKIOFMMBOBJ.x * (float)num, 0f, 0f);
@@ -201,7 +201,7 @@ namespace TheOtherRoles
                             }
 
                             // Major vote, redo this iteration to place a second vote
-                            if (Mayor.mayor != null && playerVoteArea2.HMPHKKGPLAG == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
+                            if (Mayor.mayor != null && playerVoteArea2.GEIOMAPOPKA == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
                                 mayorFirstVoteDisplayed = true;
                                 j--;    
                             }
@@ -231,9 +231,9 @@ namespace TheOtherRoles
 
         static void onClick(int i, MeetingHud __instance)
         {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.PPMOEEPBHJO.IAGJEKLJCCI) return; 
             if (__instance.MJMOOPLLNPO == MeetingHud.DDMMMDGMFIK.Results) return;
-            if (__instance.DHCOPOOJCLN[i].isDead) return;
+            if (__instance.GBKFCOAKLAH[i].isDead) return;
 
             int selectedCount = selections.Where(b => b).Count();
             SpriteRenderer renderer = renderers[i];
@@ -254,21 +254,21 @@ namespace TheOtherRoles
                     for (int A = 0; A < selections.Length; A++) {
                         if (selections[A]) {
                             if (firstPlayer != null) {
-                                secondPlayer = __instance.DHCOPOOJCLN[A];
+                                secondPlayer = __instance.GBKFCOAKLAH[A];
                                 break;
                             } else {
-                                firstPlayer = __instance.DHCOPOOJCLN[A];
+                                firstPlayer = __instance.GBKFCOAKLAH[A];
                             }
                         }
                     }
 
                     if (firstPlayer != null && secondPlayer != null) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)firstPlayer.HMPHKKGPLAG);
-                        writer.Write((byte)secondPlayer.HMPHKKGPLAG);
+                        writer.Write((byte)firstPlayer.GEIOMAPOPKA);
+                        writer.Write((byte)secondPlayer.GEIOMAPOPKA);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-                        RPCProcedure.swapperSwap((byte)firstPlayer.HMPHKKGPLAG, (byte)secondPlayer.HMPHKKGPLAG);
+                        RPCProcedure.swapperSwap((byte)firstPlayer.GEIOMAPOPKA, (byte)secondPlayer.GEIOMAPOPKA);
                     }
                 }
             }
@@ -277,9 +277,9 @@ namespace TheOtherRoles
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Reposition button if there are more than 10 players
             float scale = 5f / 8f; // 8 rows are needed instead of 5
-            if (__instance.DHCOPOOJCLN != null && __instance.DHCOPOOJCLN.Length > 10) {
-                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++) {
-                    PlayerVoteArea area = __instance.DHCOPOOJCLN[i];
+            if (__instance.GBKFCOAKLAH != null && __instance.GBKFCOAKLAH.Length > 10) {
+                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++) {
+                    PlayerVoteArea area = __instance.GBKFCOAKLAH[i];
                     bool isLeft = i % 2 == 0;
                     int num2 = i / 2;
                     area.transform.localPosition = __instance.VoteOrigin + new Vector3(isLeft ? 1f : 3.9f, __instance.VoteButtonOffsets.y * (float)num2 * scale, area.transform.localPosition.z);
@@ -288,13 +288,13 @@ namespace TheOtherRoles
             }
 
             // Add Swapper Buttons
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
-            selections = new bool[__instance.DHCOPOOJCLN.Length];
-            renderers = new SpriteRenderer[__instance.DHCOPOOJCLN.Length];
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.PPMOEEPBHJO.IAGJEKLJCCI) return; 
+            selections = new bool[__instance.GBKFCOAKLAH.Length];
+            renderers = new SpriteRenderer[__instance.GBKFCOAKLAH.Length];
 
-            for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++)
+            for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
 		    {
-                PlayerVoteArea playerVoteArea = __instance.DHCOPOOJCLN[i];
+                PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                 GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                 GameObject checkbox = UnityEngine.Object.Instantiate(template);
                 checkbox.transform.SetParent(playerVoteArea.transform);
@@ -401,7 +401,7 @@ namespace TheOtherRoles
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
                 // Child set adapted cooldown
-                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.IDOFAMCIJKE.CIDDOFDJHJH) {
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
                     var multiplier = Child.isGrownUp() ? 0.66f : 2f;
                     Child.child.SetKillTimer(PlayerControl.GameOptions.ELBDIKIOHHH * multiplier);
                 }

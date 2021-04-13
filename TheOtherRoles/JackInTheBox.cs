@@ -43,7 +43,7 @@ namespace TheOtherRoles{
             vent.Id = ShipStatus.Instance.GIDPCPOEFBC.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = getJackInTheBoxSprite();
-            vent.LNMJKMLHMIM = ventRenderer;
+            vent.KJAENOGGEOK = ventRenderer;
             var allVentsList = ShipStatus.Instance.GIDPCPOEFBC.ToList();
             allVentsList.Add(vent);
             ShipStatus.Instance.GIDPCPOEFBC = allVentsList.ToArray();

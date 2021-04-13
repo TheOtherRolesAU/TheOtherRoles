@@ -27,9 +27,9 @@ namespace TheOtherRoles{
             this.owner = player;
             this.anonymousFootprints = anonymousFootprints;
             if (anonymousFootprints)
-                this.color = Palette.CALCLMEEPGL[6];
+                this.color = Palette.AEDCMKGJKAG[6];
             else
-                this.color = Palette.CALCLMEEPGL[(int) player.IDOFAMCIJKE.JFHFMIKFHGG];
+                this.color = Palette.AEDCMKGJKAG[(int) player.PPMOEEPBHJO.IMMNCAGJJJC];
 
             footprint = new GameObject("Footprint");
             Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
@@ -50,10 +50,10 @@ namespace TheOtherRoles{
             PlayerControl.LocalPlayer.StartCoroutine(Effects.LDACHPMFOIF(footprintDuration, new Action<float>((p) => {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
-                if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.IDOFAMCIJKE != null)
-                    c = Palette.CHIIBPFJACF[Morphling.morphTarget.IDOFAMCIJKE.JFHFMIKFHGG];
+                if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.PPMOEEPBHJO != null)
+                    c = Palette.CHIIBPFJACF[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC];
                 else if (Camouflager.camouflageTimer > 0)
-                    c = Palette.CALCLMEEPGL[6];
+                    c = Palette.AEDCMKGJKAG[6];
             }
 
             if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(1 - p));

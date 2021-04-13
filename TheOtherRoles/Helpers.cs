@@ -57,8 +57,8 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint LFDAHOFPIAM) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.CMJOLNCMAPD.AllSkins[(int)LFDAHOFPIAM];
+        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint CGNMKICGLOG) {
+            SkinData nextSkin = DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllSkins[(int)CGNMKICGLOG];
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
             var anim = spriteAnim.m_animator;
@@ -170,7 +170,7 @@ namespace TheOtherRoles {
         }
 
         public static bool isCustomServer() {
-            return DestroyableSingleton<ServerManager>.CMJOLNCMAPD?.LDHDIAFIPCG == TheOtherRolesPlugin.Ip.Value;
+            return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.LDHDIAFIPCG == TheOtherRolesPlugin.Ip.Value;
         }
     }
 }

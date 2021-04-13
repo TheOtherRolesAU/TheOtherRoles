@@ -28,7 +28,7 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance)
             {
-                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.CJDCOJJNIGL.Started)
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GCDONLGCMIL.Started)
                     __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]";
                 else
                     __instance.text.Text += "\n\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]\nand [FFEB91FF]Thunderstorm584[]\nBalanced with [FFEB91FF]Dhalucard[]\nButton design by [FFEB91FF]Bavari[]";

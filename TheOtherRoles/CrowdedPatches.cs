@@ -139,8 +139,8 @@ namespace TheOtherRoles {
         public static bool Prefix(PlayerTab __instance) {
             if (!Helpers.isCustomServer()) return true;
 
-            PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.IDOFAMCIJKE.JFHFMIKFHGG, __instance.DemoImage);
-            for (int i = 0; i < Palette.CALCLMEEPGL.Length; i++)
+            PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.PPMOEEPBHJO.IMMNCAGJJJC, __instance.DemoImage);
+            for (int i = 0; i < Palette.AEDCMKGJKAG.Length; i++)
                 __instance.BENAMDPPABB.Add(i);
             return false;
         }
