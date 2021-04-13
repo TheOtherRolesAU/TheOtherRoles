@@ -21,7 +21,6 @@ namespace TheOtherRoles
         static bool[] selections;
         static SpriteRenderer[] renderers;
         private static GameData.OFKOJOKOOAK target = null;
-        private static int currentPage = 0;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CDLGIAMFHBH))]
         class MeetingCalculateVotesPatch {
@@ -275,9 +274,21 @@ namespace TheOtherRoles
             }
         }
 
-        static void addSwapperSwapButtons(MeetingHud __instance) {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
+        static void populateButtonsPostfix(MeetingHud __instance) {
+            // Reposition button if there are more than 10 players
+            float scale = 5f / 8f; // 8 rows are needed instead of 5
+            if (__instance.DHCOPOOJCLN != null && __instance.DHCOPOOJCLN.Length > 10) {
+                for (int i = 0; i < __instance.DHCOPOOJCLN.Length; i++) {
+                    PlayerVoteArea area = __instance.DHCOPOOJCLN[i];
+                    bool isLeft = i % 2 == 0;
+                    int num2 = i / 2;
+                    area.transform.localPosition = __instance.VoteOrigin + new Vector3(isLeft ? 1f : 3.9f, __instance.VoteButtonOffsets.y * (float)num2 * scale, area.transform.localPosition.z);
+                    area.transform.localScale = new Vector3(area.transform.localScale.x * scale, area.transform.localScale.y * scale, area.transform.localScale.z);
+                }
+            }
 
+            // Add Swapper Buttons
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.IDOFAMCIJKE.FGNJJFABIHJ) return; 
             selections = new bool[__instance.DHCOPOOJCLN.Length];
             renderers = new SpriteRenderer[__instance.DHCOPOOJCLN.Length];
 
@@ -309,8 +320,7 @@ namespace TheOtherRoles
         class MeetingServerStartPatch {
             static void Postfix(MeetingHud __instance)
             {
-                // Add swapper buttons
-                addSwapperSwapButtons(__instance);
+                populateButtonsPostfix(__instance);
             }
         }
 
@@ -320,7 +330,7 @@ namespace TheOtherRoles
             {
                 // Add swapper buttons
                 if (IHJEKEOFMGJ) {
-                    addSwapperSwapButtons(__instance);
+                    populateButtonsPostfix(__instance);
                 }
             }
         }
@@ -343,25 +353,6 @@ namespace TheOtherRoles
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && !allowSkipOnEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
-                
-                if (!Helpers.isCustomServer()) return;
-                
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-                    currentPage = currentPage == 0 ? 1 : 0;
-
-                PlayerVoteArea[] playerButtons = __instance.DHCOPOOJCLN.OrderBy(x => x.isDead).ToArray();
-                int i = 0;
-                foreach (PlayerVoteArea button in playerButtons) {
-                    if (i >= currentPage * 10 && i < (currentPage + 1) * 10) {
-                        button.gameObject.SetActive(true);
-
-                        int relativeIndex = i % 10;
-                        Vector3 offset = new Vector3(__instance.VoteButtonOffsets.x * (relativeIndex % 2), __instance.VoteButtonOffsets.y * (relativeIndex / 2), -1f);
-                        button.transform.localPosition = __instance.VoteOrigin + offset;
-                    } else
-                        button.gameObject.SetActive(false);
-                    i++;
-                }
             }
         }
     }
