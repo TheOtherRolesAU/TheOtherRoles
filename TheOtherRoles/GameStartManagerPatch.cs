@@ -65,11 +65,11 @@ namespace TheOtherRoles {
                         }
                     }
                     if (blockStart) {
-                        __instance.StartButton.color = Palette.ILFJLECIGDB;
+                        // __instance.StartButton.color = Palette.ILFJLECIGDB; // Allow the start for this version to test the feature, blocking it with the next version
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
-                        __instance.StartButton.color = ((__instance.OBFONKJNJFF >= __instance.MinPlayers) ? Palette.BJENLBHMKAI : Palette.ILFJLECIGDB);
+                        // __instance.StartButton.color = ((__instance.OBFONKJNJFF >= __instance.MinPlayers) ? Palette.BJENLBHMKAI : Palette.ILFJLECIGDB); // Allow the start for this version to test the feature, blocking it with the next version
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     }
                 }
@@ -94,15 +94,17 @@ namespace TheOtherRoles {
             public static bool Prefix(GameStartManager __instance) {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
-                if (AmongUsClient.Instance.HHBLOCGKFAB) {
-                    uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                        var dummyComponent = player.GetComponent<DummyBehaviour>();
-                        if (dummyComponent != null && dummyComponent.enabled) continue;
-                        if (!playerVersions.ContainsKey(player.PlayerId) || (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch))
-                            continueStart = false;
-                    }
-                }
+
+                // Allow the start for this version to test the feature, blocking it with the next version
+                // if (AmongUsClient.Instance.HHBLOCGKFAB) {
+                //     uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
+                //     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                //         var dummyComponent = player.GetComponent<DummyBehaviour>();
+                //         if (dummyComponent != null && dummyComponent.enabled) continue;
+                //         if (!playerVersions.ContainsKey(player.PlayerId) || (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch))
+                //             continueStart = false;
+                //     }
+                // }
                 return continueStart;
             }
         }

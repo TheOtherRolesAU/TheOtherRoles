@@ -35,13 +35,14 @@ using GameOptionsData = CEIOGGEDKAN;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
-    static class CreateOptionsPickerPatch {
+    static class GameOptionsPatch {
         public static List<SpriteRenderer> additionalButtons = new List<SpriteRenderer>();
 
         [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
         public static class CreateOptionsPickerStartPatch {
             public static void Postfix(CreateOptionsPicker __instance) {
                 List<SpriteRenderer> maxPlayerButtons = __instance.MaxPlayerButtons.ToList();
+                if (maxPlayerButtons == null || maxPlayerButtons.Count <= 2) return;
                 additionalButtons = new List<SpriteRenderer>();
 
                 for (int i = 1; i < 6; i++) {
@@ -58,7 +59,15 @@ namespace TheOtherRoles {
                     passiveButton.OnClick.RemoveAllListeners();
 
                     void onClick() {
-                        if (!Helpers.isCustomServer()) return;
+                        bool isCustom = Helpers.isCustomServer();
+                        foreach (SpriteRenderer renderer in additionalButtons) {
+                            if (renderer != null && renderer.gameObject != null) {
+                                renderer.enabled = false;
+                                renderer.gameObject.GetComponentInChildren<TMPro.TMP_Text>().color = isCustom ? Color.white : Palette.EGHCBLDNCGP;
+                            }
+                        }
+
+                        if (!isCustom) return;
 
                         nextButton.enabled = true;                    
 
@@ -75,16 +84,31 @@ namespace TheOtherRoles {
             }
         }
 
-        [HarmonyPatch(typeof(HostGameButton), nameof(HostGameButton.OnClick))]
-        class HostGameButtonOnClickPatch {
-            public static void Postfix() {
-                bool isCustom = Helpers.isCustomServer();
-                foreach (SpriteRenderer renderer in additionalButtons) {
-                    if (renderer != null && renderer.gameObject != null) {
-                        renderer.enabled = false;
-                        renderer.gameObject.GetComponentInChildren<TMPro.TMP_Text>().color = isCustom ? Color.white : Palette.EGHCBLDNCGP;
-                    }
-                }
+        public static void setLegalSettings() {
+            GameOptionsData hostOptions = SaveManager.LCNLLGFAEJE;
+            GameOptionsData searchOptions = SaveManager.HGGNKBMAJLO;
+            if (searchOptions.OKAPDMGFNED == 0) searchOptions.PFOGBKICOHD(0); // ToggleMapFilter
+
+            hostOptions.DIGMGCJMGDB = searchOptions.DIGMGCJMGDB = 1; // NumImpostors
+            hostOptions.OAFCIBONLNJ = searchOptions.OAFCIBONLNJ = 4; // MaxPlayers
+
+            SaveManager.LCNLLGFAEJE = hostOptions;
+            SaveManager.HGGNKBMAJLO = searchOptions;
+        }
+
+        [HarmonyPatch(typeof(FindGameButton), nameof(FindGameButton.OnClick))]
+        class FindGameButtonOnClickPatch {
+            public static void Prefix() {
+                // Set legal settings
+                setLegalSettings();
+            }
+        }
+
+        [HarmonyPatch(typeof(JoinGameButton), nameof(JoinGameButton.OnClick))]
+        class JoinGameButtonOnClickPatch {
+            public static void Prefix() {
+                // Set legal settings
+                setLegalSettings();
             }
         }
     }

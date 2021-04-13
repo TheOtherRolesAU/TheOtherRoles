@@ -36,6 +36,7 @@ namespace TheOtherRoles {
 
         public static CustomOption eraserSpawnRate;
         public static CustomOption eraserCooldown;
+        public static CustomOption eraserCanEraseAnyone;
 
         public static CustomOption childSpawnRate;
         public static CustomOption childGrowingUpDuration;
@@ -154,6 +155,7 @@ namespace TheOtherRoles {
 
             eraserSpawnRate = CustomOption.Create(230, cs(Eraser.color, "Eraser"), rates, null, true);
             eraserCooldown = CustomOption.Create(231, "Eraser Cooldown", 30f, 10f, 120f, 5f, eraserSpawnRate);
+            eraserCanEraseAnyone = CustomOption.Create(232, "Eraser Can Erase Anyone", false, eraserSpawnRate);
 
             tricksterSpawnRate = CustomOption.Create(250, cs(Trickster.color, "Trickster"), rates, null, true);
             tricksterPlaceBoxCooldown = CustomOption.Create(251, "Trickster Box Cooldown", 10f, 0f, 30f, 2.5f, tricksterSpawnRate);
@@ -535,7 +537,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class GameSettingsScalePatch {
         public static void Prefix(HudManager __instance) {
-            __instance.GameSettings.fontSize = 1.2f; 
+            if (__instance.GameSettings != null) __instance.GameSettings.fontSize = 1.2f; 
         }
     }
 }

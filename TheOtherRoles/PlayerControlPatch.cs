@@ -160,7 +160,10 @@ namespace TheOtherRoles {
 
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
-            Eraser.currentTarget = setTarget();
+
+            List<PlayerControl> untargatables = new List<PlayerControl>();
+            if (Spy.spy != null) untargatables.Add(Spy.spy);
+            Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargatables);
         }
 
         static void engineerUpdate() {

@@ -73,6 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
 - Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
+- You can now choose whether the Eraser is able to erase the Spy/Impostors or not
 - Fixed a bug where a Lovers win wasn't displayed properly
 - Fixed the Among Us bug where people were unable to move after meetings
 - We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
@@ -360,6 +361,8 @@ The Eraser is an Impostor that can erase the role of every player.\
 The targeted players will lose their role after the meeting right before a player is exiled.\
 After every erase, the cooldown increases by 10 seconds.\
 The erase will be performed, even if the Eraser or his target die before the next meeting.\
+By default the Eraser can erase everyone but the Spy and other Impostors. Depending on the options
+he can also erase them (Impostors will lose their special Impostor ability).
 \
 **NOTE:**
 - The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
@@ -367,13 +370,13 @@ The erase will be performed, even if the Eraser or his target die before the nex
 - Erasing a Jackal that has a Sidekick, triggers the Sidekick promotion if it's activated in the settings
 - As the erasing is being triggered before the eject of a player, erasing and voting out a Lover in the same round, would result in the
 ex lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
-- The Eraser can erase the role of other Impostors to reveal if they are a real Impostor or a Spy. When erasing a real Impostor, the Impostor loses its special ability.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Eraser Spawn Chance | -
 | Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
+| Eraser Can Erase Anyone | If set to false, he can't erase the Spy and other Impostors
 -----------------------
 
 ## Trickster

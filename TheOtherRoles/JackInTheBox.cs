@@ -14,7 +14,7 @@ namespace TheOtherRoles{
 
         public static Sprite getJackInTheBoxSprite() {
             if (jackInTheBoxSprite) return jackInTheBoxSprite;
-            jackInTheBoxSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.JackInTheBox.png", 300f);
+            jackInTheBoxSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.JackInTheBox.png", 175f);
             return jackInTheBoxSprite;
         }
 
