@@ -75,7 +75,7 @@ namespace TheOtherRoles {
                 }
 
                 // Lobby timer
-                if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.HHBLOCGKFAB || !GameData.Instance) return; // Not host or no instance
 
                 if (update) currentText = __instance.PlayerCounter.text;
 
@@ -85,6 +85,7 @@ namespace TheOtherRoles {
                 string suffix = $" ({minutes:00}:{seconds:00})";
 
                 __instance.PlayerCounter.text = currentText + suffix;
+                __instance.PlayerCounter.autoSizeTextContainer = true;
             }
         }
 
