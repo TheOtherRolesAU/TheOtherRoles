@@ -191,19 +191,20 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
     class VitalsMinigameBeginPatch {
         static void Postfix(VitalsMinigame __instance) {
-            if (!Helpers.isCustomServer()) return;
 
-            for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
-                var vitalsPanel = __instance.MCCBOPIEOEC[i];
-                var player = GameData.Instance.AllPlayers[i];
-                vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 3 ? player.HGGCLJHCDBM.Substring(0, 3).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+            if (__instance.MCCBOPIEOEC.Length > 10) {
+                for (int i = 0; i < __instance.MCCBOPIEOEC.Length; i++) {
+                    var vitalsPanel = __instance.MCCBOPIEOEC[i];
+                    var player = GameData.Instance.AllPlayers[i];
+                    vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                }
             }
         }
     }
     
+
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
     class VitalsMinigameUpdatePatch {
-        private static int currentPage = 0;
 
         static void Postfix(VitalsMinigame __instance) {
             // Hacker show time since death
@@ -211,42 +212,28 @@ namespace TheOtherRoles
             for (int k = 0; k < __instance.MCCBOPIEOEC.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.MCCBOPIEOEC[k];
-                GameData.OFKOJOKOOAK OFKOJOKOOAK = GameData.Instance.AllPlayers[k];
+                GameData.OFKOJOKOOAK player = GameData.Instance.AllPlayers[k];
 
+                // Crowded scaling
+                float scale = 10f / Mathf.Max(10, __instance.MCCBOPIEOEC.Length);
+                vitalsPanel.transform.localPosition = new Vector3((float)k * 0.6f * scale + -2.7f, 0.2f, -1f);
+                vitalsPanel.transform.localScale = new Vector3(scale, scale, vitalsPanel.transform.localScale.z);
+
+                // Hacker update
                 if (vitalsPanel.IsDead) {
-                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == OFKOJOKOOAK?.GMBAIPNOKLP)?.FirstOrDefault();
+                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.GMBAIPNOKLP)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
                         if (showHackerInfo)
                             vitalsPanel.Text.Text = Math.Round(timeSinceDeath / 1000) + "s";
-                        else
-                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(Palette.OCCIKHJPJPK[(int)OFKOJOKOOAK.JFHFMIKFHGG], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                        else if (__instance.MCCBOPIEOEC.Length > 10)
+                            vitalsPanel.Text.Text = player.HGGCLJHCDBM.Length >= 4 ? player.HGGCLJHCDBM.Substring(0, 4).ToUpper() : player.HGGCLJHCDBM.ToUpper();
+                        else 
+                            vitalsPanel.Text.Text = DestroyableSingleton<TranslationController>.CMJOLNCMAPD.GetString(Palette.OCCIKHJPJPK[(int)player.JFHFMIKFHGG], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}
-
-            if (PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer) || !Helpers.isCustomServer()) return;
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-                currentPage = currentPage == 1 ? 0 : 1;
-                
-            VitalsPanel[] vitalsPanels = __instance.MCCBOPIEOEC.OrderBy(x => (x.IsDead ? 0 : 1) + (x.IsDiscon ? 2 : 0)).ToArray();
-            int i = 0;
-            foreach (VitalsPanel panel in vitalsPanels) {
-                if (i >= currentPage * 10 && i < (currentPage + 1) * 10)
-                {
-                    panel.gameObject.SetActive(true);
-                    int relativeIndex = i % 10;
-                    var transform = panel.transform;
-                    var localPosition = transform.localPosition;
-                    localPosition = new Vector3(-2.7f + 0.6f * relativeIndex, localPosition.y, localPosition.z);
-                    transform.localPosition = localPosition;
-                }
-                else
-                    panel.gameObject.SetActive(false);
-                i++;
-            }
         }
     }    
 
