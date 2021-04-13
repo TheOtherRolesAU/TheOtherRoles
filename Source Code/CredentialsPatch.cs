@@ -15,11 +15,11 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance) {
                 string spacer = new String('\n', 21);
-                string fullCredentials = "[FCCE03FF]TheOtherRoles[] v2.1.0:\n- Modded by [FCCE03FF]Eisbison[] and [FFEB91FF]Thunderstorm584[]\n- Balanced with [FFEB91FF]Dhalucard[]\n- Button design by [FFEB91FF]Bavari[]";
-                if (__instance.text.Text.Contains(spacer))
-                    __instance.text.Text += "\n" + fullCredentials;
+                string fullCredentials = $"<color=#FCCE03FF>TheOtherRoles</color> v{TheOtherRolesPlugin.Major}.{TheOtherRolesPlugin.Minor}.{TheOtherRolesPlugin.Patch}:\n- Modded by <color=#FCCE03FF>TheOtherRoles</color> and <color=#FFEB91FF>Thunderstorm584</color>\n- Balanced with <color=#FFEB91FF>Dhalucard</color>\n- Button design by <color=#FFEB91FF>Bavari</color>";
+                if (__instance.text.text.Contains(spacer))
+                    __instance.text.text += "\n" + fullCredentials;
                 else
-                    __instance.text.Text += spacer + fullCredentials;
+                    __instance.text.text += spacer + fullCredentials;
             }
         }
 
@@ -28,10 +28,10 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance)
             {
-                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.CJDCOJJNIGL.Started)
-                    __instance.text.Text += "\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]";
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GCDONLGCMIL.Started)
+                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
                 else
-                    __instance.text.Text += "\n\n[FCCE03FF]TheOtherRoles[]\nModded by [FCCE03FF]Eisbison[]\nand [FFEB91FF]Thunderstorm584[]\nBalanced with [FFEB91FF]Dhalucard[]\nButton design by [FFEB91FF]Bavari[]";
+                    __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>";
             }
         }
     }

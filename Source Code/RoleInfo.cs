@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-using Palette = GLNPIJPGGNJ;
+using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles
 {
@@ -19,15 +19,6 @@ namespace TheOtherRoles
             this.name = name;
             this.introDescription = introDescription;
             this.shortDescription = shortDescription;
-        }
-
-        public string colorHexString() {
-            return string.Format("[{0:X2}{1:X2}{2:X2}{3:X2}]", ToByte(color.r), ToByte(color.g), ToByte(color.b), ToByte(color.a));
-        }
- 
-        private static byte ToByte(float f) {
-            f = Mathf.Clamp01(f);
-            return (byte)(f * 255);
         }
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
@@ -54,7 +45,7 @@ namespace TheOtherRoles
             if (Sheriff.sheriff != null && p == Sheriff.sheriff) {
                 infos.Add(new RoleInfo("Sheriff",
                 Sheriff.color,
-                "Shoot the [FF1919FF]Impostors",
+                "Shoot the <color=#FF1919FF>Impostors</color>",
                 "Shoot the Impostors"));
             }
             if (Lighter.lighter != null && p == Lighter.lighter) {
@@ -73,13 +64,13 @@ namespace TheOtherRoles
             if (Mafioso.mafioso != null && p == Mafioso.mafioso) {
                 infos.Add(new RoleInfo("Mafioso",
                 Mafioso.color,
-                "Work with the [FF1919FF]Mafia[] to kill the Crewmates",
+                "Work with the <color=#FF1919FF>Mafia</color> to kill the Crewmates",
                 "Kill all Crewmates"));
             }
             if (Janitor.janitor != null && p == Janitor.janitor) {
                 infos.Add(new RoleInfo("Janitor",
                 Janitor.color,
-                "Work with the [FF1919FF]Mafia[] by hiding dead bodies",
+                "Work with the <color=#FF1919FF>Mafia</color> by hiding dead bodies",
                 "Hide dead bodies"));
             }
             if (Morphling.morphling != null && p == Morphling.morphling) {
@@ -106,10 +97,16 @@ namespace TheOtherRoles
                 "Kill the Crewmates and erase their roles",
                 "Erase the roles of your enemies"));
             }
+            if (Trickster.trickster != null && p == Trickster.trickster) {
+                infos.Add(new RoleInfo("Trickster",
+                Trickster.color,
+                "Use your jack-in-the-boxes to surprise others",
+                "Surprise your enemies"));
+            }
             if (Detective.detective != null && p == Detective.detective) {
                 infos.Add(new RoleInfo("Detective",
                 Detective.color,
-                "Find the [FF1919FF]Impostors[] by examining footprints",
+                "Find the <color=#FF1919FF>Impostors</color> by examining footprints",
                 "Examine footprints"));
             }
             if (TimeMaster.timeMaster != null && p == TimeMaster.timeMaster) {
@@ -133,7 +130,7 @@ namespace TheOtherRoles
             if (Swapper.swapper != null && p == Swapper.swapper) {
                 infos.Add(new RoleInfo("Swapper",
                 Swapper.color,
-                "Swap votes to exile the [FF1919FF]Impostors",
+                "Swap votes to exile the <color=#FF1919FF>Impostors</color>",
                 "Swap votes"));
             }
             if (Seer.seer != null && p == Seer.seer) { 
@@ -145,31 +142,31 @@ namespace TheOtherRoles
             if (Hacker.hacker != null && p == Hacker.hacker) { 
                 infos.Add(new RoleInfo("Hacker",
                 Hacker.color,
-                "Hacker to find the [FF1919FF]Impostors",
-                "Hacker to find the Impostors"));
+                "Hacke to find the <color=#FF1919FF>Impostors</color>",
+                "Hacke to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
-                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "Bad Child" : "Good Child",
-                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Child.color,
+                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "Bad Child" : "Good Child",
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Child.color,
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
             if (Tracker.tracker != null && p == Tracker.tracker) {
                 infos.Add(new RoleInfo("Tracker",
                 Tracker.color,
-                "Track the [FF1919FF]Impostors[] down",
+                "Track the <color=#FF1919FF>Impostors</color> down",
                 "Track the Impostors down"));
             }
             if (Snitch.snitch != null && p == Snitch.snitch) {
                 infos.Add(new RoleInfo("Snitch",
                 Snitch.color,
-                "Finish your tasks to find the [FF1919FF]Impostors[]",
+                "Finish your tasks to find the <color=#FF1919FF>Impostors</color>",
                 "Finish your tasks"));
             }
             if (Jackal.jackal != null && p == Jackal.jackal) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
-                "Kill all Crewmates and [FF1919FF]Impostors[] to win",
+                "Kill all Crewmates and <color=#FF1919FF>Impostors</color> to win",
                 "Kill everyone"));                
             }
             if (Sidekick.sidekick != null && p == Sidekick.sidekick) {
@@ -179,20 +176,20 @@ namespace TheOtherRoles
                 "Help your Jackal to kill everyone"));
             }
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                infos.Add(new RoleInfo(p.IDOFAMCIJKE.CIDDOFDJHJH ? "ImpLover" : "Lover",
-                p.IDOFAMCIJKE.CIDDOFDJHJH ? Palette.LDCHDOFJPGH : Lovers.color,
-                "You are in [FC03BEFF]Love[]",
+                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "ImpLover" : "Lover",
+                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Lovers.color,
+                "You are in <color=#FC03BEFF>Love</color>",
                 "You are in love"));
             }
             if (Spy.spy != null && p == Spy.spy) {
                 infos.Add(new RoleInfo("Spy",
                 Spy.color,
-                "Confuse the [FF1919FF]Impostors[]",
+                "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
-            if (infos.Count == 0 && p.IDOFAMCIJKE.CIDDOFDJHJH) { // Just Impostor
+            if (infos.Count == 0 && p.PPMOEEPBHJO.FDNMBJOAPFL) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
-                Palette.LDCHDOFJPGH,
+                Palette.JPCHLLEJNEH,
                 "",
                 "Sabotage and kill everyone"));
             } else if (infos.Count == 0) { // Just Crewmate
