@@ -165,33 +165,33 @@ namespace TheOtherRoles {
             GameObject bonusText = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
             bonusText.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y - 0.8f, __instance.WinText.transform.position.z);
             bonusText.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-            TextRenderer textRenderer = bonusText.GetComponent<TextRenderer>();
-            textRenderer.Text = "";
+            TMPro.TMP_Text textRenderer = bonusText.GetComponent<TMPro.TMP_Text>();
+            textRenderer.text = "";
 
             if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
-                textRenderer.Text = "Jester Wins";
-                textRenderer.Color = Jester.color;
+                textRenderer.text = "Jester Wins";
+                textRenderer.color = Jester.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 if (AdditionalTempData.localIsLover) {
                     __instance.WinText.text = "Double Victory";
                 } 
-                textRenderer.Text = "Lovers And Crewmates Win";
-                textRenderer.Color = Lovers.color;
+                textRenderer.text = "Lovers And Crewmates Win";
+                textRenderer.color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
             } 
             else if (AdditionalTempData.winCondition == WinCondition.LoversSoloWin) {
-                textRenderer.Text = "Lovers Win";
-                textRenderer.Color = Lovers.color;
+                textRenderer.text = "Lovers Win";
+                textRenderer.color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
             }
             else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
-                textRenderer.Text = "Team Jackal Wins";
-                textRenderer.Color = Jackal.color;
+                textRenderer.text = "Team Jackal Wins";
+                textRenderer.color = Jackal.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.ChildLose) {
-                textRenderer.Text = "Child died";
-                textRenderer.Color = Child.color;
+                textRenderer.text = "Child died";
+                textRenderer.color = Child.color;
             }
             
             AdditionalTempData.clear();

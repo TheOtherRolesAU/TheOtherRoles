@@ -39,7 +39,7 @@ namespace TheOtherRoles{
             vent.Center = null;
             vent.EnterVentAnim = null;
             vent.ExitVentAnim = null;
-            vent.GetComponent<PowerTools.SpriteAnim>().Stop();
+            vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
             vent.Id = ShipStatus.Instance.GJHKPDGJHJN.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = getJackInTheBoxSprite();

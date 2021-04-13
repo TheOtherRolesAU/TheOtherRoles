@@ -256,7 +256,7 @@ namespace TheOtherRoles
             float scale = growingProgress * 0.35f + 0.35f;
             string suffix = "";
             if (growingProgress != 1f)
-                suffix = " [FAD934FF](" + Mathf.FloorToInt(growingProgress * 18) + ")"; 
+                suffix = " <color=#FAD934FF>(" + Mathf.FloorToInt(growingProgress * 18) + ")</color>"; 
 
             Child.child.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
