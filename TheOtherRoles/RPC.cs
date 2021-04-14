@@ -218,10 +218,8 @@ namespace TheOtherRoles
             if (player != null) player.SetColor(colorId);
         }
 
-        public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
-            if (AmongUsClient.Instance.HHBLOCGKFAB) { // If lobby host
-                GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
-            }
+        public static void versionHandshake(byte major, byte minor, byte patch, int clientId) {
+            GameStartManagerPatch.playerVersions[clientId] = new Tuple<byte, byte, byte>(major, minor, patch);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -634,7 +632,7 @@ namespace TheOtherRoles
                     byte major = JIGFBHFFNFI.ReadByte();
                     byte minor = JIGFBHFFNFI.ReadByte();
                     byte patch = JIGFBHFFNFI.ReadByte();
-                    byte versionOwnerId = JIGFBHFFNFI.ReadByte();
+                    int versionOwnerId = JIGFBHFFNFI.ReadPackedInt32();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
