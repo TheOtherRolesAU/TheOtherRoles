@@ -170,7 +170,9 @@ namespace TheOtherRoles {
         }
 
         public static bool isCustomServer() {
-            return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.KEABFOHAECE == TheOtherRolesPlugin.Ip.Value;
+            var defaultIps = new string[] {"50.116.1.42", "172.105.251.170", "139.162.111.196"}; // Hardcoding official server ips here, as 3rd party server client tools may add servers to the default regions
+            if (DestroyableSingleton<ServerManager>.CHNDKKBEIDG == null) return false;
+            return !defaultIps.Contains(DestroyableSingleton<ServerManager>.CHNDKKBEIDG.KEABFOHAECE);
         }
 
         public static string cs(Color c, string s) {
