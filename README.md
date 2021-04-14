@@ -67,7 +67,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.2.1**
-- Fixed the bug where the Trickster could clip out of bounds when his box was close to a wall
+- Trickster: The vent button now has a custom texture. Fixed a bug where the Trickster could clip out of bounds when his box was close to a wall.
 - Fixed a bug where the Bad Child's kill button went on cooldown when someone else performed a kill
 - Fixed a few bugs with footprints, Seer souls and the Vampire delayed kill
 
