@@ -448,7 +448,7 @@ namespace TheOtherRoles {
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(DGDGDKCCKHJ.transform.position);
 
             // Child set adapted kill cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL && Child.child == __instance) {
                 var multiplier = Child.isGrownUp() ? 0.66f : 2f;
                 Child.child.SetKillTimer(PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
             }
