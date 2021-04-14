@@ -273,7 +273,7 @@ namespace TheOtherRoles
             }
             HudManager.CHNDKKBEIDG.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.rewindTime / 2, new Action<float>((p) => {
+            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.rewindTime / 2, new Action<float>((p) => {
                 if (p == 1f) HudManager.CHNDKKBEIDG.FullScreen.enabled = false;
             })));
 
@@ -307,7 +307,7 @@ namespace TheOtherRoles
 
         public static void timeMasterShield() {
             TimeMaster.shieldActive = true;
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.shieldDuration, new Action<float>((p) => {
+            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(TimeMaster.shieldDuration, new Action<float>((p) => {
                 if (p == 1f) TimeMaster.shieldActive = false;
             })));
         }
