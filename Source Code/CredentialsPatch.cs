@@ -34,18 +34,18 @@ namespace TheOtherRoles
             static void Postfix(VersionShower __instance)
             {
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GCDONLGCMIL.Started)
-                    {
-                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
-                    }
-                    if (!MeetingHud.Instance)
                 {
-                    if (HatCreation.IdToData.ContainsKey(PlayerControl.LocalPlayer.PPMOEEPBHJO.CPGFLBANALE))
+                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
+                    if (!MeetingHud.Instance)
                     {
-                        var data = HatCreation.IdToData[PlayerControl.LocalPlayer.PPMOEEPBHJO.CPGFLBANALE];
-                        __instance.text.m_text += GenerateHatText(data);
+                        if (HatCreation.IdToData.ContainsKey(PlayerControl.LocalPlayer.PPMOEEPBHJO.CPGFLBANALE))
+                        {
+                            var data = HatCreation.IdToData[PlayerControl.LocalPlayer.PPMOEEPBHJO.CPGFLBANALE];
+                            __instance.text.m_text += GenerateHatText(data);
+                        }
+                        else __instance.text.m_text += "\n<color=#ec1919>Custom Hats </color>By <color=#4D0268>MrFawkes1337</color>";
                     }
-                    else __instance.text.m_text += "\n<color=#ec1919>Custom Hats </color>By <color=#4D0268>MrFawkes1337</color>";
-                    }
+                }
                 else
                     __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>";
             }
