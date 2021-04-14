@@ -335,10 +335,19 @@ namespace TheOtherRoles {
         }
     }
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
-    class PerformKillPatch
-    {
+    class PerformKillPatch {
         public static bool Prefix(KillButtonManager __instance) {
-            return Helpers.handleMurderAttempt(__instance.CurrentTarget);
+            if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.PPMOEEPBHJO.IAGJEKLJCCI && PlayerControl.LocalPlayer.POECPOEKKNO) { // Among Us default checks
+                if (Helpers.handleMurderAttempt(__instance.CurrentTarget)) { // Custom checks
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.Write(__instance.CurrentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, __instance.CurrentTarget.PlayerId);
+                    __instance.SetTarget(null);
+                }
+		    }
+            return false;
         }
     }
 
