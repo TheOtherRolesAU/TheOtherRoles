@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which currently adds 25 additional roles and new [Settings](#settings) to the game.
+The **The Other Roles**, is a mod for Amongs Us which adds manny new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -16,6 +16,7 @@ Even more roles are coming soon :)
 - [Camouflager](#camouflager)
 - [Vampire](#vampire)
 - [Eraser](#eraser)
+- [Trickster](#trickster)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -38,14 +39,17 @@ Even more roles are coming soon :)
 - [Snitch](#snitch)
 - [Jackal](#jackal)
 - [Sidekick](#sidekick)
+- [Spy](#spy)
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| **2021.31.3s** | v2.0.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
-| 2021.31.3s | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
+| 2021.4.12s| v2.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.0/TheOtherRoles.zip)
+| 2021.3.31.3s| v2.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.1.0/TheOtherRoles.zip)
+| 2021.3.31.3s| v2.0.1 beta| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
+| 2021.3.31.3s | v2.0.0 beta | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.0/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.2 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.2/TheOtherRoles.zip)
 | 2021.3.5s | v1.8.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8.1/TheOtherRoles.zip)
 | 2021.3.5s | v1.8 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.8/TheOtherRoles.zip)
@@ -60,6 +64,27 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.2.0**
+- **Works with the latest Among Us version (2021.4.12s)**
+- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#Custom-Servers-and-10+-Players) section. During meetings use the up/down keys, on vitals use the left/right keys.
+- **Added a new Impostor role: The Trickster** check the [Trickster](#trickster) section for more infos
+- You can now set how long the Time Master shield lasts
+- The host now sees for how long the lobby will remain open
+- We changed the look/layout of the settings
+- Added a new option that deactivates skipping in meetings (if the player does not vote, he votes himself)
+- You can now choose whether the Eraser is able to erase the Spy/Impostors or not
+- Fixed a bug where a Lovers win wasn't displayed properly
+- Fixed the Among Us bug where people were unable to move after meetings
+- We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
+- Fixed a bug where the Child Impostor had the same cooldowns as normal Impostors
+- Fixed a bug where the Vampire/Janitor/Mafioso would lose their kill button after being erased
+- The Child is now able to use ladders and it can do all the tasks right away
+
+**Version 2.1.0**
+- **New Role:** [Spy](#spy)
+- **Eraser:** The Eraser can now also remove the role of other Impostors. This enables him to reveal the Spy, but might result in removing the special ability of his partner.
+- **Camouflager:** The Child age/size will now also be hidden, to allow the Child Impostor to kill during camouflage
 
 **Hotfix 2.0.1**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
@@ -152,7 +177,7 @@ syncs your game options automatically.
 If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
 
 ## Windows Manual Installation
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip)
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
 2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advise, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
@@ -164,13 +189,55 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 
 **Linux Manual**
 1. Install Among Us via steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.0.1/TheOtherRoles.zip) and extract it to ~/.steam/steam/steamapps/common/Among Us
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
-# Custom Servers
-We recommend you to play on custom servers rather than on the official ones. A guide on how to set up a server will be added soon. In order to make your client able to connect to a custom server we recommend using [Unify](https://github.com/moltenmods/unify). Just add
-the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
+# Custom Servers and 10+ Players
+We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod).
+
+**Setup the Clients:**
+1. Run the game one time after you installed TheOtherRoles to generate the config files
+2. Open the Among Us folder (or the folder containing the TheOtherRoles mod), go to the subfolder BepInEx/config/ and replace the *Custom Server IP* and *Custom Server Port* in the **me.eisbison.theotherroles.cfg** with the ones of your server
+3. Launch the game and select the region *Custom*
+
+**Setup the Server:**
+1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
+2. Follow the steps (using the server release you just downloaded) on the official [Impostor-Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server)
+3. Make sure to set the following values to false in the *config.json* file:
+```
+    ...
+    "AntiCheat": {
+      "Enabled": false,
+      "BanIpFromGame": false
+    }
+```
+4. Make sure to forward the right ports on the hosting machine
+5. Run the server and setup the client
+
+**Setting up Server as Docker Container:** \
+If you want to run the server as a docker container you'll need to use the image
+```
+aeonlucid/impostor:nightly
+```
+(Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
+
+In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+```
+IMPOSTOR_AntiCheat__Enabled=false
+IMPOSTOR_AntiCheat__BanIpFromGame=false
+```
+
+Example to docker run command:
+```
+docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
+Or use to run it in the background
+```
+docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
+```
+
 
 # Credits & Resources
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
@@ -187,14 +254,15 @@ the *.dll* file into your Among Us/BepInEx/plugins folder and you're good to go.
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
+[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- The number of Impostor count be set inside a lobby
-- The map can be changed inside a lobby
-- You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
-
+- **Number of Impostors:** The number of Impostor count be set inside a lobby
+- **Map:** The map can be changed inside a lobby
+- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
+- **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 # Roles
 
 ## Role Assignment
@@ -255,7 +323,7 @@ The camouflage mode lasts for 10s and while it is active, all player names/pets/
 are hidden and all players have the same color.\
 \
 **NOTE**
-- The Child (and Morphling when copying the child) remains small and show its age.
+- The Child will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Spy sees gray icons on the admin table
 - The shield is not visible anymore
@@ -289,10 +357,12 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 
 ## Eraser
 ### **Team: Impostors**
-The Eraser is an Impostor that can erase the role of every player that is not an Impostor.\
+The Eraser is an Impostor that can erase the role of every player.\
 The targeted players will lose their role after the meeting right before a player is exiled.\
 After every erase, the cooldown increases by 10 seconds.\
 The erase will be performed, even if the Eraser or his target die before the next meeting.\
+By default the Eraser can erase everyone but the Spy and other Impostors. Depending on the options
+he can also erase them (Impostors will lose their special Impostor ability).
 \
 **NOTE:**
 - The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
@@ -306,6 +376,26 @@ ex lover surviving as the partnership was erased before. Also a Jester win would
 |----------|:-------------:|
 | Eraser Spawn Chance | -
 | Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
+| Eraser Can Erase Anyone | If set to false, he can't erase the Spy and other Impostors
+-----------------------
+
+## Trickster
+### **Team: Impostors**
+The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players. \
+If the Trickster has placed all of his boxes they will be converted into a vent network usable only by the trickster himself, but the boxes are revealed to the others. \
+If the boxes are converted to a vent network, the trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while. \
+
+\
+**NOTE:**
+- Impostors will get a text indicator at the bottom of the screen to notify them if the lights are out due to the trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Trickster Spawn Chance | -
+| Trickster Box Cooldown | Cooldown for placing jack-in-the-boxes
+| Trickster Lights Out Cooldown | Cooldown for his "lights out" ability
+| Trickster Lights Out Duration | Duration after which the light is automatically restored
 -----------------------
 
 ## Lovers
@@ -317,7 +407,7 @@ You can specify the chance of one Lover being an impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are crewmates, they can achieve a "double victory" but the crewmates then also win.\
-If one Lover is an impostor and one a crewmate, they can get a "Lovers solo win" where only they win (even if there is another impostor alive).\
+If one Lover is an impostor and one a crewmate, they can only get a "Lovers solo win" where only they win (even if there is another impostor alive).\
 \
 **NOTE:**
 - If there is an equal amount of impostors and crewmates left in the game and one of the Lovers is an impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the impostors or Lovers win.
@@ -357,6 +447,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Name | Description |
 |----------|:-------------:|
 | Jester Spawn Chance | -
+| Jester can call emergency meeting | Option to disable the emergency button for the Jester
 -----------------------
 
 ## Seer
@@ -370,6 +461,7 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 |----------|:-------------:|
 | Seer Spawn Chance | - 
 | Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
 | Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
 -----------------------
 
@@ -510,7 +602,7 @@ Otherwise he sees the same information as everyone else.
 The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.\
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
-Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes the new Shifter.\
+Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes a Crewmate.\
 Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
 The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
@@ -530,7 +622,7 @@ can only use them, if the previous player did not used them before)
 
 ## Time Master
 ### **Team: Crewmates**
-The Time Master has a time shield which he can activate. The time shield remains active for 3 seconds.\
+The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
 If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
 time will rewind for a set amount of time.\
 The kill cooldown of the killer won't be reset, so the Time Master
@@ -538,10 +630,11 @@ has to make sure that the game won't result in the same situation.\
 The Time Master won't be affected by the rewind.\
 \
 **NOTE:**
-- Only movement and kills are affected (not cooldowns, meetings, tasks, ...)
+- Only the movement is affected by the rewind
 - A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
 - If the Time Master was bitten and has his shield active before when a meeting is called, he survives but the time won't be rewinded.
 - If the Time Master has a Medic shield, he won't rewind.
+- The shield itself ends immediately when triggered. So the timemaster can be attacked again as soon as the rewind ends.
 
 ### Game Options
 | Name | Description |
@@ -549,19 +642,21 @@ The Time Master won't be affected by the rewind.\
 | Time Master Spawn Chance | - |
 | Time Master Cooldown | - |
 | Rewind Duration | How much time to rewind |
+| Time Master Shield Duration |
 -----------------------
 
 ## Swapper
 ### **Team: Crewmates**
 During meetings the Swapper can exchange votes that two people get (i.e. all votes
 that player A got will be given to player B and vice versa).\
-Because of the Swappers strength in meetings, they can't start emergency meetings
+Because of the Swappers strength in meetings, they might not start emergency meetings
 and can't fix lights and comms.
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Swapper Spawn Chance | -
+| Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
 -----------------------
 
 ## Tracker
@@ -603,13 +698,14 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Jester wins by vote
-2. Team Impostor wins by sabotage
-3. Team Crew wins by tasks (also possible if the whole Crew is deacd)
-4. Lovers among the last three players win
-5. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
-6. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
-7. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
+1. Crewmate Child lose by vote
+2. Jester wins by vote
+3. Team Impostor wins by sabotage
+4. Team Crew wins by tasks (also possible if the whole Crew is dead)
+5. Lovers among the last three players win
+6. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
+7. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
+8. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
@@ -650,6 +746,24 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 | Sidekick can kill | Yes/No |
 | Sidekick can use vents | Yes/No |
 -----------------------
+
+## Spy
+### **Team: Crewmates**
+The Spy is a Crewmate, which has no special abilities.\
+The Spy looks like an additional Impostor to the Impostors, they can't tell the difference.\
+There are two possibilities (depending on the set options):
+- The Impostors can't kill the Spy (because otherwise their kill button would reveal, who the Spy is)
+- The Impostors can kill the Spy but they can also kill their Impostor partner (if they mistake another Impostor for the Spy)
+You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Spy Spawn Chance |
+| Spy Can Die To Sheriff | 
+| Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+-----------------------
+
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.

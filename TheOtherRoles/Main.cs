@@ -11,33 +11,55 @@ using System;
 using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", "2.0.1")]
+    [BepInPlugin(Id, "The Other Roles", Version)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
+        public const string Version = "2.2.0";
+        public const byte Major = 2;
+        public const byte Minor = 2;
+        public const byte Patch = 0;
+
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
 
         public static int optionsPage = 1;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<string> Ip { get; set; }
+        public static ConfigEntry<ushort> Port { get; set; }
 
         public override void Load() {
+            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
+            Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
+            Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
+
+            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
+            IRegionInfo[] regions = ServerManager.DefaultRegions;
+
+            regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
+            ServerManager.DefaultRegions = regions;
+            serverManager.AGFAPIKFOFF = regions;
+            serverManager.SaveServers();
+
+            CEIOGGEDKAN.LMADJLEGIMH = CEIOGGEDKAN.IJGNCMMDGDI = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
+            CEIOGGEDKAN.JMEMPINECJN = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
             CustomOptionHolder.Load();
-
+            
             Harmony.PatchAll();
         }
     }
 
     // Deactivate bans, since I always leave my local testing game and ban myself
-    [HarmonyPatch(typeof(MOJBJJPEFPG), nameof(MOJBJJPEFPG.IJMECJONBHM), MethodType.Getter)]
+    [HarmonyPatch(typeof(IAJICOPDKHA), nameof(IAJICOPDKHA.LEHPLHFNDLM), MethodType.Getter)]
     public static class AmBannedPatch
     {
         public static void Postfix(out bool __result)
@@ -64,16 +86,16 @@ namespace TheOtherRoles
 
                 bots.Add(playerControl);
                 GameData.Instance.AddPlayer(playerControl);
-                AmongUsClient.Instance.Spawn(playerControl, -2, EOCEBECJBHG.None);
+                AmongUsClient.Instance.Spawn(playerControl, -2, IDCDPDDALNM.None);
                 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(GLNPIJPGGNJ.CALCLMEEPGL.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.CMJOLNCMAPD.AllHats.Count), playerControl.IDOFAMCIJKE.JFHFMIKFHGG);
-                playerControl.SetPet((uint) random.Next(HatManager.CMJOLNCMAPD.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.CMJOLNCMAPD.AllSkins.Count));
+                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.AEDCMKGJKAG.Length));
+                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.IMMNCAGJJJC);
+                playerControl.SetPet((uint) random.Next(HatManager.CHNDKKBEIDG.AllPets.Count));
+                playerControl.SetSkin((uint) random.Next(HatManager.CHNDKKBEIDG.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
@@ -92,5 +114,4 @@ namespace TheOtherRoles
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
-
 }
