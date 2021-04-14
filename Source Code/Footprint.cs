@@ -47,7 +47,7 @@ namespace TheOtherRoles{
             footprint.SetActive(true);
             footprints.Add(this);
 
-            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(footprintDuration, new Action<float>((p) => {
+            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(footprintDuration, new Action<float>((p) => {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
                 if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.PPMOEEPBHJO != null)

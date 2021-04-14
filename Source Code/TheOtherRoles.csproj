@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>2.2.0</Version>
+        <Version>2.2.1</Version>
 
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
@@ -33,6 +33,7 @@
         <EmbeddedResource Include="Resources\GarlicButton.png" />
         <EmbeddedResource Include="Resources\LighterButton.png" />
         <EmbeddedResource Include="Resources\EraserButton.png" />
+        <EmbeddedResource Include="Resources\TricksterVentButton.png" />
         <EmbeddedResource Include="Resources\Arrow.png" />
         <EmbeddedResource Include="Resources\Garlic.png" />
         <EmbeddedResource Include="Resources\GarlicBackground.png" />

@@ -101,12 +101,18 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
     class UseButtonSetTargetPatch {
         static void Postfix(UseButtonManager __instance) {
-            if (__instance.LHAKKAAOLLM != null) return;
+            // Trickster render special vent button
+            if (__instance.LHAKKAAOLLM != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
+                Vent possibleVent =  __instance.LHAKKAAOLLM.TryCast<Vent>();
+                if (possibleVent?.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
+                    __instance.UseButton.sprite = Trickster.getTricksterVentButtonSprite();
+                }
+            }
 
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI);
-            if (blockSabotageJanitor || blockSabotageMafioso) {
+            if (__instance.LHAKKAAOLLM == null && (blockSabotageJanitor || blockSabotageMafioso)) {
                 __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetImage(ImageNames.UseButton);
                 __instance.UseButton.color = new Color(1f, 1f, 1f, 0.3f);
             }
