@@ -29,16 +29,16 @@ namespace TheOtherRoles
             RPCProcedure.setRole(roleId, playerId);
         }
 
-        public static void Postfix(Il2CppReferenceArray<GameData.OFKOJOKOOAK> LBJJHLMFDJL)
+        public static void Postfix(Il2CppReferenceArray<GameData.LGBOMGHJELL> BHNEINNHPIJ)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.IDOFAMCIJKE.CIDDOFDJHJH);
+            crewmates.RemoveAll(x => x.PPMOEEPBHJO.FDNMBJOAPFL);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.IDOFAMCIJKE.CIDDOFDJHJH);
+            impostors.RemoveAll(x => !x.PPMOEEPBHJO.FDNMBJOAPFL);
 
             float crewCountSettings = (float)CustomOptionHolder.crewmateRolesCount.getSelection() / 2;
             float impCountSettings = (float)CustomOptionHolder.impostorRolesCount.getSelection() / 2;
@@ -56,6 +56,7 @@ namespace TheOtherRoles
             impSettings.Add((byte)RoleId.Camouflager, CustomOptionHolder.camouflagerSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Vampire, CustomOptionHolder.vampireSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Eraser, CustomOptionHolder.eraserSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Trickster, CustomOptionHolder.tricksterSpawnRate.getSelection());
 
             crewSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Mayor, CustomOptionHolder.mayorSpawnRate.getSelection());
