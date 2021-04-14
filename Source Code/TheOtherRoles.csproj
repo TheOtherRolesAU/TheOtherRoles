@@ -18,32 +18,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\RepairButton.png" />
-        <EmbeddedResource Include="Resources\CleanButton.png" />
-        <EmbeddedResource Include="Resources\TimeShieldButton.png" />
-        <EmbeddedResource Include="Resources\ShieldButton.png" />
-        <EmbeddedResource Include="Resources\ShiftButton.png" />
-        <EmbeddedResource Include="Resources\SeerButton.png" />
-        <EmbeddedResource Include="Resources\MorphButton.png" />
-        <EmbeddedResource Include="Resources\SampleButton.png" />
-        <EmbeddedResource Include="Resources\CamoButton.png" />
-        <EmbeddedResource Include="Resources\HackerButton.png" />
-        <EmbeddedResource Include="Resources\TrackerButton.png" />
-        <EmbeddedResource Include="Resources\VampireButton.png" />
-        <EmbeddedResource Include="Resources\GarlicButton.png" />
-        <EmbeddedResource Include="Resources\LighterButton.png" />
-        <EmbeddedResource Include="Resources\EraserButton.png" />
-        <EmbeddedResource Include="Resources\Arrow.png" />
-        <EmbeddedResource Include="Resources\Garlic.png" />
-        <EmbeddedResource Include="Resources\GarlicBackground.png" />
-        <EmbeddedResource Include="Resources\Footprint.png" />
-        <EmbeddedResource Include="Resources\Soul.png" />
-        <EmbeddedResource Include="Resources\AdminTableIcon.png" />
-        <EmbeddedResource Include="Resources\SwapperCheck.png" />
-        <EmbeddedResource Include="Resources\SidekickButton.png" />
-        <EmbeddedResource Include="Resources\PlaceJackInTheBoxButton.png" />
-        <EmbeddedResource Include="Resources\JackInTheBox.png" />
-        <EmbeddedResource Include="Resources\LightsOutButton.png" />
+        <EmbeddedResource Include="Resources\*" />
+        <EmbeddedResource Include="Resources\Hats\*" />
     </ItemGroup>
 
     <ItemGroup>
@@ -85,6 +61,9 @@
       </Reference>
       <Reference Include="Iced">
         <HintPath>$(AmongUs)\BepInEx\core\Iced.dll</HintPath>
+      </Reference>
+       <Reference Include="Reactor">
+        <HintPath>$(AmongUs)\BepInEx\plugins\Reactor-2021.4.12s.dll</HintPath>
       </Reference>
       <Reference Include="Il2Cpp.TlsAdapter">
         <HintPath>$(AmongUs)\BepInEx\core\Il2Cpp.TlsAdapter.dll</HintPath>
