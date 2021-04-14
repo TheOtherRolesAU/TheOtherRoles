@@ -170,7 +170,9 @@ namespace TheOtherRoles {
         }
 
         public static bool isCustomServer() {
-            return DestroyableSingleton<ServerManager>.CHNDKKBEIDG?.KEABFOHAECE == TheOtherRolesPlugin.Ip.Value;
+            if (DestroyableSingleton<ServerManager>.CHNDKKBEIDG == null) return false;
+            StringNames n = DestroyableSingleton<ServerManager>.CHNDKKBEIDG.HMIJGFFKBNN.TranslateName;
+            return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
         public static string cs(Color c, string s) {

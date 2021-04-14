@@ -9,17 +9,15 @@ using Palette = BLMBFIODBKL;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
-        public static Dictionary<byte, Tuple<byte, byte, byte>> playerVersions = new Dictionary<byte, Tuple<byte, byte, byte>>();
+        public static Dictionary<int, Tuple<byte, byte, byte>> playerVersions = new Dictionary<int, Tuple<byte, byte, byte>>();
         private static float timer = 600f;
         private static bool versionSent = false;
 
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
         public class GameStartManagerStartPatch {
             public static void Postfix() {
-                // Refresh version infos
-                playerVersions = new Dictionary<byte, Tuple<byte, byte, byte>>();
+                // Trigger version refresh
                 versionSent = false;
-
                 // Reset lobby countdown timer
                 timer = 600f; 
             }
@@ -43,25 +41,26 @@ namespace TheOtherRoles {
                     writer.Write(TheOtherRolesPlugin.Major);
                     writer.Write(TheOtherRolesPlugin.Minor);
                     writer.Write(TheOtherRolesPlugin.Patch);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.WritePacked(AmongUsClient.Instance.ClientId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, PlayerControl.LocalPlayer.PlayerId);
+                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, AmongUsClient.Instance.ClientId);
                 }
 
                 // Host update with version handshake infos
                 if (AmongUsClient.Instance.HHBLOCGKFAB) {
                     bool blockStart = false;
                     string message = "";
-                    foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                        var dummyComponent = player.GetComponent<DummyBehaviour>();
+                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                        if (client.Character == null) continue;
+                        var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
                         if (dummyComponent != null && dummyComponent.enabled)
                             continue;
-                        else if (!playerVersions.ContainsKey(player.PlayerId))  {
+                        else if (!playerVersions.ContainsKey(client.Id))  {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n</color>";
-                        } else if (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch) {
+                            message += $"<color=#FF0000FF>{client.Character.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n</color>";
+                        } else if (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{player.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[player.PlayerId].Item1}.{playerVersions[player.PlayerId].Item2}.{playerVersions[player.PlayerId].Item3}) of The Other Roles\n</color>";
+                            message += $"<color=#FF0000FF>{client.Character.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
                         }
                     }
                     if (blockStart) {
@@ -97,11 +96,11 @@ namespace TheOtherRoles {
 
                 // Allow the start for this version to test the feature, blocking it with the next version
                 // if (AmongUsClient.Instance.HHBLOCGKFAB) {
-                //     uint hostVersion = Convert.ToUInt32(TheOtherRolesPlugin.Version.Replace(".", string.Empty));
-                //     foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                //         var dummyComponent = player.GetComponent<DummyBehaviour>();
+                //     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                //         if (client.Character == null) continue;
+                //         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
                 //         if (dummyComponent != null && dummyComponent.enabled) continue;
-                //         if (!playerVersions.ContainsKey(player.PlayerId) || (playerVersions[player.PlayerId].Item1 != TheOtherRolesPlugin.Major || playerVersions[player.PlayerId].Item2 != TheOtherRolesPlugin.Minor || playerVersions[player.PlayerId].Item3 != TheOtherRolesPlugin.Patch))
+                //         if (!playerVersions.ContainsKey(client.Id) || (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch))
                 //             continueStart = false;
                 //     }
                 // }

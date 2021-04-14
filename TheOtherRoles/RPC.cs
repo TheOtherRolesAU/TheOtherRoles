@@ -59,6 +59,7 @@ namespace TheOtherRoles
         SetUncheckedColor,
         VersionHandshake,
         UseUncheckedVent,
+        UncheckedMurderPlayer,
 
         // Role functionality
 
@@ -217,10 +218,8 @@ namespace TheOtherRoles
             if (player != null) player.SetColor(colorId);
         }
 
-        public static void versionHandshake(byte major, byte minor, byte patch, byte playerId) {
-            if (AmongUsClient.Instance.HHBLOCGKFAB) { // If lobby host
-                GameStartManagerPatch.playerVersions[playerId] = new Tuple<byte, byte, byte>(major, minor, patch);
-            }
+        public static void versionHandshake(byte major, byte minor, byte patch, int clientId) {
+            GameStartManagerPatch.playerVersions[clientId] = new Tuple<byte, byte, byte>(major, minor, patch);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -234,6 +233,12 @@ namespace TheOtherRoles
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
+        }
+
+        public static void uncheckedMurderPlayer(byte sourceId, byte targetId) {
+            PlayerControl source = Helpers.playerById(sourceId);
+            PlayerControl target = Helpers.playerById(targetId);
+            if (source != null && target != null) source.MurderPlayer(target);
         }
 
         // Role functionality
@@ -627,7 +632,7 @@ namespace TheOtherRoles
                     byte major = JIGFBHFFNFI.ReadByte();
                     byte minor = JIGFBHFFNFI.ReadByte();
                     byte patch = JIGFBHFFNFI.ReadByte();
-                    byte versionOwnerId = JIGFBHFFNFI.ReadByte();
+                    int versionOwnerId = JIGFBHFFNFI.ReadPackedInt32();
                     RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
@@ -635,6 +640,11 @@ namespace TheOtherRoles
                     byte ventingPlayer = JIGFBHFFNFI.ReadByte();
                     byte isEnter = JIGFBHFFNFI.ReadByte();
                     RPCProcedure.useUncheckedVent(ventId, ventingPlayer, isEnter);
+                    break;
+                case (byte)CustomRPC.UncheckedMurderPlayer:
+                    byte source = JIGFBHFFNFI.ReadByte();
+                    byte target = JIGFBHFFNFI.ReadByte();
+                    RPCProcedure.uncheckedMurderPlayer(source, target);
                     break;
 
                 // Role functionality
