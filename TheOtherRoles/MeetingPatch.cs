@@ -416,7 +416,7 @@ namespace TheOtherRoles
                         rend.sprite = Seer.getSoulSprite();
                         
                         if(Seer.limitSoulDuration) {
-                            PlayerControl.LocalPlayer.StartCoroutine(Effects.DCHLMIDMBHG(Seer.soulDuration, new Action<float>((p) => {
+                            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(Seer.soulDuration, new Action<float>((p) => {
                                 if (rend != null) {
                                     var tmp = rend.color;
                                     tmp.a = Mathf.Clamp01(1 - p);

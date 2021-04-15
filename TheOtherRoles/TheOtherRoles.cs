@@ -709,15 +709,24 @@ namespace TheOtherRoles
 
         private static Sprite placeBoxButtonSprite;
         private static Sprite lightOutButtonSprite;
+        private static Sprite tricksterVentButtonSprite;
+
         public static Sprite getPlaceBoxButtonSprite() {
             if (placeBoxButtonSprite) return placeBoxButtonSprite;
             placeBoxButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
             return placeBoxButtonSprite;
         }
+
         public static Sprite getLightsOutButtonSprite() {
             if (lightOutButtonSprite) return lightOutButtonSprite;
             lightOutButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LightsOutButton.png", 115f);
             return lightOutButtonSprite;
+        }
+
+        public static Sprite getTricksterVentButtonSprite() {
+            if (tricksterVentButtonSprite) return tricksterVentButtonSprite;
+            tricksterVentButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TricksterVentButton.png", 115f);
+            return tricksterVentButtonSprite;
         }
 
         public static void clearAndReload() {
