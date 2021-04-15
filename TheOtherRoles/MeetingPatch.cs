@@ -89,7 +89,7 @@ namespace TheOtherRoles
                 if (__instance.GBKFCOAKLAH.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
                 {
                     // If skipping is disabled, replace skipps/no-votes with self vote
-                    if (target == null && !allowSkipOnEmergencyMeetings) {
+                    if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
                         foreach (PlayerVoteArea playerVoteArea in __instance.GBKFCOAKLAH) {
                             if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.GEIOMAPOPKA; // TargetPlayerId
                         }
@@ -351,7 +351,7 @@ namespace TheOtherRoles
         class MeetingHudUpdatePatch {
             static void Postfix(MeetingHud __instance) {
                 // Deactivate skip Button if skipping on emergency meetings is disabled
-                if (target == null && !allowSkipOnEmergencyMeetings)
+                if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
             }
         }
