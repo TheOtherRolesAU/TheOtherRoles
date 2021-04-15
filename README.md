@@ -69,6 +69,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
+- Improved the block votes on emergency meeting option
 
 **Version 2.2.1**
 - Trickster: The vent button now has a custom texture. Fixed a bug where the Trickster could clip out of bounds when his box was close to a wall.

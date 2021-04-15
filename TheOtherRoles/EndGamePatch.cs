@@ -221,6 +221,7 @@ namespace TheOtherRoles {
                 {
                     __instance.enabled = false;
                     ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.ChildLose, false);
+                    return true;
                 }
                 DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
@@ -235,6 +236,7 @@ namespace TheOtherRoles {
                 {
                     __instance.enabled = false;
                     ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.JesterWin, false);
+                    return true;
                 }
                 DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 ReviveEveryone();
@@ -288,6 +290,7 @@ namespace TheOtherRoles {
             {
                 DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
                 __instance.Begin();
+                return true;
             }
             return false;
         }
