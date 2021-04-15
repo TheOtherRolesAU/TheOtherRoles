@@ -339,11 +339,15 @@ namespace TheOtherRoles {
         public static bool Prefix(KillButtonManager __instance) {
             if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.PPMOEEPBHJO.IAGJEKLJCCI && PlayerControl.LocalPlayer.POECPOEKKNO) { // Among Us default checks
                 if (Helpers.handleMurderAttempt(__instance.CurrentTarget)) { // Custom checks
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                    writer.Write(__instance.CurrentTarget.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, __instance.CurrentTarget.PlayerId);
+                    if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        writer.Write(__instance.CurrentTarget.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, __instance.CurrentTarget.PlayerId);
+                    } else { // Checked by official servers
+                        PlayerControl.LocalPlayer.RpcMurderPlayer(__instance.CurrentTarget);
+                    }
                     __instance.SetTarget(null);
                 }
 		    }
