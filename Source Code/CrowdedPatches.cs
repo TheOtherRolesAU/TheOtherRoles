@@ -144,7 +144,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
     public static class PlayerControlCmdCheckColorPatch {
         public static bool Prefix(PlayerControl __instance, byte CKNNKEMNHAK) {
-            if (!Helpers.isCustomServer()) return true;
+            if (!Helpers.isCustomServer() || BLMBFIODBKL.AEDCMKGJKAG.Count >= PlayerControl.AllPlayerControls.Count) // Palette.PlayerColors
+                return true;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
             writer.Write(CKNNKEMNHAK);
@@ -158,7 +159,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
     public static class PlayerTabUpdateAvailableColorsPatch {
         public static bool Prefix(PlayerTab __instance) {
-            if (!Helpers.isCustomServer()) return true;
+            if (!Helpers.isCustomServer() || BLMBFIODBKL.AEDCMKGJKAG.Count >= PlayerControl.AllPlayerControls.Count) // Palette.PlayerColors
+                return true;
 
             PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.PPMOEEPBHJO.IMMNCAGJJJC, __instance.DemoImage);
             for (int i = 0; i < Palette.AEDCMKGJKAG.Length; i++)
