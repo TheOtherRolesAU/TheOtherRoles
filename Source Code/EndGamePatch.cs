@@ -199,10 +199,11 @@ namespace TheOtherRoles {
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.KMPKPPGPNIH))] 
-    class CheckEndCriteriaPatch{
-
+    class CheckEndCriteriaPatch {
         public static bool Prefix(ShipStatus __instance) {
             if (!GameData.Instance) return false;
+            if (FreePlayFix.isInFreePlay) // if (__instance.DummyLocations != null && __instance.DummyLocations.Count > 0)
+                return true; // I don't know how to get from ShipStatus GameModes.FreePlay
             var statistics = new PlayerStatistics(__instance);
             if (CheckAndEndGameForChildLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
