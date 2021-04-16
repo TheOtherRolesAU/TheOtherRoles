@@ -5,6 +5,7 @@ using UnityEngine;
 using Il2CppSystem;
 using HarmonyLib;
 using UnhollowerBaseLib;
+using Assets.CoreScripts;
 
 namespace TheOtherRoles {
     public class CustomColors {
@@ -84,6 +85,7 @@ namespace TheOtherRoles {
             BLMBFIODBKL.AEDCMKGJKAG = colorlist.ToArray();
             BLMBFIODBKL.PHFOPNDOEMD = shadowlist.ToArray();
             MedScanMinigame.ALHCFFDHINL = BLMBFIODBKL.ALHCFFDHINL; // MedScanMinigame.ColorNames = Palette.ColorNames
+            Telemetry.ALHCFFDHINL = BLMBFIODBKL.ALHCFFDHINL; // Telemetry.ColorNames = Palette.ColorNames
         }
 
         protected internal struct CustomColor {
