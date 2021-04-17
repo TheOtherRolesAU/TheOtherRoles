@@ -11,10 +11,39 @@ using HarmonyLib;
 using Hazel;
 
 using TaskTypes = DMOAGPGAFKM;
+using Object = UnityEngine.Object;
 
 namespace TheOtherRoles {
     public static class Helpers {
+        public static byte[] ReadFully(this Stream input)
+        {
+            using (var ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
 
+        public static T DontDestroy<T>(this T obj) where T : Object
+        {
+            obj.hideFlags |= HideFlags.HideAndDontSave;
+
+            return DontDestroyOnLoad(obj);
+        }
+
+        public static T DontUnload<T>(this T obj) where T : Object
+        {
+            obj.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
+            return obj;
+        }
+
+        public static T DontDestroyOnLoad<T>(this T obj) where T : Object
+        {
+            Object.DontDestroyOnLoad(obj);
+
+            return obj;
+        }
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
             try {
             Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
