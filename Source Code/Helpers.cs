@@ -166,8 +166,6 @@ namespace TheOtherRoles {
 
         private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11 };
         public static bool isLighterColor(int colorId) {
-            if (colorId >= 12) 
-                return CustomColors.lighterColors.Contains(colorId);
             return lighterColors.Contains(colorId);
         }
 
