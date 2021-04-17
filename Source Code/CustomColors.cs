@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Il2CppSystem;
 using HarmonyLib;
@@ -10,8 +11,10 @@ using Assets.CoreScripts;
 namespace TheOtherRoles {
     public class CustomColors {
         protected static Dictionary<int, string> ColorStrings = new Dictionary<int, string>();
-        public static List<int> lighterColors = new List<int>();
+        private static List<int> lighterColors = new List<int>();
         public static void Load() {
+            lighterColors = (List<int>) typeof(Helpers).GetField("lighterColors", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // Get shared Reference
+            
             List<StringNames> longlist = Enumerable.ToList<StringNames>(BLMBFIODBKL.ALHCFFDHINL); // Palette.ColorNames
             List<StringNames> shortlist = Enumerable.ToList<StringNames>(BLMBFIODBKL.MBDDHJCCLBP); // Palette.ShortColorNames
             List<Color32> colorlist = Enumerable.ToList<Color32>(BLMBFIODBKL.AEDCMKGJKAG); // Palette.PlayerColors
