@@ -62,9 +62,6 @@
       <Reference Include="Iced">
         <HintPath>$(AmongUs)\BepInEx\core\Iced.dll</HintPath>
       </Reference>
-       <Reference Include="Reactor">
-        <HintPath>$(AmongUs)\BepInEx\plugins\Reactor-2021.4.12s.dll</HintPath>
-      </Reference>
       <Reference Include="Il2Cpp.TlsAdapter">
         <HintPath>$(AmongUs)\BepInEx\core\Il2Cpp.TlsAdapter.dll</HintPath>
       </Reference>
