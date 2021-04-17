@@ -4,7 +4,6 @@ using HarmonyLib;
 using UnhollowerBaseLib;
 using UnityEngine;
 using System.Reflection;
-using Reactor.Extensions;
 
 namespace TheOtherRoles.Hats
 {
@@ -61,16 +60,16 @@ namespace TheOtherRoles.Hats
             var assembly = Assembly.GetExecutingAssembly();
             Texture2D tex = new Texture2D(2, 2, TextureFormat.ARGB32, false);
             var imageStream = assembly.GetManifestResourceStream(name);
-            var img = imageStream.ReadFully();
+            var img = Helpers.ReadFully(imageStream);
             LoadImage(tex, img, true);
-            tex.DontDestroy();
+            tex = Helpers.DontDestroy(tex);
             var sprite = Sprite.Create(
                     tex,
                     new Rect(0, 0, tex.width, tex.height),
                     new Vector2(0.5f, 0.8f),
                     pixelsPerUnit
                 );
-            sprite.DontDestroy();
+            Helpers.DontDestroy(sprite);
             return sprite;
         }
         private delegate bool DLoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
