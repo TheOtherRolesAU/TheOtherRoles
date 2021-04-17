@@ -202,8 +202,8 @@ namespace TheOtherRoles {
     class CheckEndCriteriaPatch {
         public static bool Prefix(ShipStatus __instance) {
             if (!GameData.Instance) return false;
-            if (FreePlayFix.isInFreePlay) // if (__instance.DummyLocations != null && __instance.DummyLocations.Count > 0)
-                return true; // I don't know how to get from ShipStatus GameModes.FreePlay
+            if (DestroyableSingleton<TutorialManager>.BMHJGNNOGDM) // InstanceExists | Don't check Custom Criteria when in Tutorial
+                return true;
             var statistics = new PlayerStatistics(__instance);
             if (CheckAndEndGameForChildLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
@@ -218,14 +218,8 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForChildLose(ShipStatus __instance) {
             if (Child.triggerChildLose) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.ChildLose, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.ChildLose, false);
                 return true;
             }
             return false;
@@ -233,14 +227,8 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForJesterWin(ShipStatus __instance) {
             if (Jester.triggerJesterWin) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.JesterWin, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.JesterWin, false);
                 return true;
             }
             return false;
@@ -273,24 +261,9 @@ namespace TheOtherRoles {
         }
 
         private static bool CheckAndEndGameForTaskWin(ShipStatus __instance) {
-            bool localCompletedAllTasks = true;
-            foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks) {
-                localCompletedAllTasks = localCompletedAllTasks && t.FDIIBNGHCAK;
-            }
-
-            if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-            {
-                if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL(GameOverReason.HumansByTask, false);
-                    return true;
-                }
-            }
-            else if (localCompletedAllTasks)
-            {
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverTaskWin, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                __instance.Begin();
+            if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks) {
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL(GameOverReason.HumansByTask, false);
                 return true;
             }
             return false;
@@ -298,14 +271,8 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.LoversWin, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.LoversWin, false);
                 return true;
             }
             return false;
@@ -313,14 +280,8 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-                {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                 return true;
             }
             return false;
@@ -328,25 +289,20 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2)) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM) {
-                    __instance.enabled = false;
-                    GameOverReason endReason;
-                    switch (TempData.PJPCCFAPCKJ) {
-                        case DeathReason.Exile:
-                            endReason = GameOverReason.ImpostorByVote;
-                            break;
-                        case DeathReason.Kill:
-                            endReason = GameOverReason.ImpostorByKill;
-                            break;
-                        default:
-                            endReason = GameOverReason.ImpostorByVote;
-                            break;
-                    }
-                    ShipStatus.EABBNOODFGL(endReason, false);
-                    return true;
+                __instance.enabled = false;
+                GameOverReason endReason;
+                switch (TempData.PJPCCFAPCKJ) {
+                    case DeathReason.Exile:
+                        endReason = GameOverReason.ImpostorByVote;
+                        break;
+                    case DeathReason.Kill:
+                        endReason = GameOverReason.ImpostorByKill;
+                        break;
+                    default:
+                        endReason = GameOverReason.ImpostorByVote;
+                        break;
                 }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorKills, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                ShipStatus.EABBNOODFGL(endReason, false);
                 return true;
             }
             return false;
@@ -354,35 +310,17 @@ namespace TheOtherRoles {
 
         private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0) {
-                if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM) {
-                    __instance.enabled = false;
-                    ShipStatus.EABBNOODFGL(GameOverReason.HumansByVote, false);
-                    return true;
-                }
-                DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverImpostorDead, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-                ReviveEveryone();
+                __instance.enabled = false;
+                ShipStatus.EABBNOODFGL(GameOverReason.HumansByVote, false);
                 return true;
             }
             return false;
         }
 
-        private static void ReviveEveryone() {
-            for (int i = 0; i < GameData.Instance.MFDAIFHGKMG; i++)
-                GameData.Instance.AllPlayers[i].GJPBCGFPMOD.Revive();
-            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
-            for (int i = 0; i < array.Length; i++) UnityEngine.Object.Destroy(array[i].gameObject);
-        }
-
-        private static void EndGameForSabotage(ShipStatus __instance)
-        {
-            if (!DestroyableSingleton<TutorialManager>.BMHJGNNOGDM)
-            {
-                __instance.enabled = false;
-                ShipStatus.EABBNOODFGL(GameOverReason.ImpostorBySabotage, false);
-                return;
-            }
-            DestroyableSingleton<HudManager>.CHNDKKBEIDG.ShowPopUp(DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.GameOverSabotage, new Il2CppReferenceArray<Il2CppSystem.Object>(0)));
-            ReviveEveryone();
+        private static void EndGameForSabotage(ShipStatus __instance) {
+            __instance.enabled = false;
+            ShipStatus.EABBNOODFGL(GameOverReason.ImpostorBySabotage, false);
+            return;
         }
 
     }
