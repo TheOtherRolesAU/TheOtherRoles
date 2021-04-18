@@ -26,17 +26,35 @@ namespace TheOtherRoles {
                 if (localPlayerPositions.Count > 0) {
                     // Set position
                     var next = localPlayerPositions[0];
-                    if (!PlayerControl.LocalPlayer.inVent)
+                    if (next.Item2 == true) {
+                        // Exit current vent if necessary
+                        if (PlayerControl.LocalPlayer.inVent) {
+                            foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
+                                bool canUse;
+                                bool couldUse;
+                                vent.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out canUse, out couldUse);
+                                if (canUse) {
+                                    PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
+                                    vent.SetButtons(false);
+                                }
+                            }
+                        }
+                        // Set position
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
+                    } else if (localPlayerPositions.Any(x => x.Item2 == true)) {
+                        PlayerControl.LocalPlayer.transform.position = next.Item1;
+                    }
+                        
                     localPlayerPositions.RemoveAt(0);
-                    if (localPlayerPositions.Count > 0) localPlayerPositions.RemoveAt(0); // Skip every second position to rewinde in half the time
+
+                    if (localPlayerPositions.Count > 1) localPlayerPositions.RemoveAt(0); // Skip every second position to rewinde twice as fast, but never skip the last position
                 } else {
                     TimeMaster.isRewinding = false;
                     PlayerControl.LocalPlayer.moveable = true;
                 }
             } else {
                 while (localPlayerPositions.Count >= Mathf.Round(TimeMaster.rewindTime / Time.fixedDeltaTime)) localPlayerPositions.RemoveAt(localPlayerPositions.Count - 1);
-                localPlayerPositions.Insert(0, new Tuple<Vector3, DateTime>(PlayerControl.LocalPlayer.transform.position, DateTime.UtcNow));
+                localPlayerPositions.Insert(0, new Tuple<Vector3, bool>(PlayerControl.LocalPlayer.transform.position, PlayerControl.LocalPlayer.POECPOEKKNO)); // POECPOEKKNO = CanMove
             }
         }
 

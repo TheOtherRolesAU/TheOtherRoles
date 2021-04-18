@@ -282,24 +282,7 @@ namespace TheOtherRoles
                 if (p == 1f) HudManager.CHNDKKBEIDG.FullScreen.enabled = false;
             })));
 
-            if (TimeMaster.timeMaster == null) return;
-
-            PlayerControl lp = PlayerControl.LocalPlayer;
-            if (lp?.PPMOEEPBHJO != null && !lp.PPMOEEPBHJO.IAGJEKLJCCI && lp.inVent) {
-                if ((float)(DateTime.UtcNow -localVentEnterTimePoint).TotalMilliseconds < 1000 * TimeMaster.rewindTime) {
-                    foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
-                        bool canUse;
-                        bool couldUse;
-                        vent.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out canUse, out couldUse);
-                        if (canUse) {
-                            PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
-			                vent.SetButtons(false);
-                        }
-                    }
-                }
-            }
-
-            if (PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+            if (TimeMaster.timeMaster == null || PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
 
             TimeMaster.isRewinding = true;
 

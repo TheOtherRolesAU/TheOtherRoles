@@ -79,12 +79,9 @@ namespace TheOtherRoles
             bool flag2;
             __instance.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out flag, out flag2);
 
-            if (!flag) return true;  // Continue with default method
+            if (!flag || !__instance.name.StartsWith("JackInTheBoxVent_")) return true;  // Continue with default method
 
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
-            if (isEnter) localVentEnterTimePoint = DateTime.UtcNow;
-            
-            if (!__instance.name.StartsWith("JackInTheBoxVent_")) return true; // Continue with default method
 
             __instance.SetButtons(isEnter);
             MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);

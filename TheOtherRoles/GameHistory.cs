@@ -23,14 +23,12 @@ namespace TheOtherRoles{
     }
 
     static class GameHistory {
-        public static List<Tuple<Vector3, DateTime>> localPlayerPositions = new List<Tuple<Vector3, DateTime>>();
+        public static List<Tuple<Vector3, bool>> localPlayerPositions = new List<Tuple<Vector3, bool>>();
         public static List<DeadPlayer> deadPlayers = new List<DeadPlayer>();
-        public static DateTime localVentEnterTimePoint = DateTime.MinValue;
 
         public static void clearGameHistory() {
-            localPlayerPositions = new List<Tuple<Vector3, DateTime>>();
+            localPlayerPositions = new List<Tuple<Vector3, bool>>();
             deadPlayers = new List<DeadPlayer>();
-            localVentEnterTimePoint = DateTime.MinValue;
         }
     }
 }
