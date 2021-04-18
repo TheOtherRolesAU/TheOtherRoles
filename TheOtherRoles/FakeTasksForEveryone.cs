@@ -34,10 +34,10 @@ namespace TheOtherRoles {
 
         [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
         private static class ConsoleCanUsePatch {
-            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc[HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+                canUse = couldUse = false;
                 if (__instance.AllowImpostor) return true;
                 if (!Helpers.hasFakeTasks(pc.GJPBCGFPMOD)) return true;
-                canUse = couldUse = false;
                 __result = float.MaxValue;
                 return false;
             }
