@@ -1,6 +1,5 @@
 ![eisbison banner](./banner.png)
 ![eisbison infographic](./Preview_v2.0.png)
-[![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 
 
 # The Other Roles
@@ -783,4 +782,5 @@ It's bad I know, this is a side project and my second week of modding. So there 
 You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests
+[![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 If you found any bugs, have an idea for an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)
