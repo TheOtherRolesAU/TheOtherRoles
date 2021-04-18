@@ -14,11 +14,21 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
     {
+        public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
+            if (!MapOptions.hidePlayerNames) return false; // All names are visible
+            else if (source == null || target == null) return true;
+            else if (source == target) return false; // Player sees his own name
+            else if (source.PPMOEEPBHJO.FDNMBJOAPFL && (target.PPMOEEPBHJO.FDNMBJOAPFL || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
+            else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
+            else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
+            return true;
+        }
+
         static void resetNameTagsAndColors() {
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.text = player.PPMOEEPBHJO.PCLLABJCIPC;
+                player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.PPMOEEPBHJO.PCLLABJCIPC;
                 if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && player.PPMOEEPBHJO.FDNMBJOAPFL) {
                     player.nameText.color = Palette.JPCHLLEJNEH;
                 } else {
@@ -190,7 +200,7 @@ namespace TheOtherRoles
             // Set morphling morphed look
             if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
                 if (Morphling.morphling != null && Morphling.morphTarget != null) {
-                    Morphling.morphling.nameText.text = Morphling.morphTarget.PPMOEEPBHJO.PCLLABJCIPC;
+                    Morphling.morphling.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, Morphling.morphling) ? "" : Morphling.morphTarget.PPMOEEPBHJO.PCLLABJCIPC;
                     Morphling.morphling.KJAENOGGEOK.material.SetColor("_BackColor", Palette.PHFOPNDOEMD[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
                     Morphling.morphling.KJAENOGGEOK.material.SetColor("_BodyColor", Palette.AEDCMKGJKAG[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
                     Morphling.morphling.KJAENOGGEOK.material.SetFloat("_Outline",  Morphling.morphTarget.KJAENOGGEOK.material.GetFloat("_Outline"));
