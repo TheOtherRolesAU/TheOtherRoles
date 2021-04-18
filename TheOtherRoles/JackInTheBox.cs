@@ -72,6 +72,7 @@ namespace TheOtherRoles{
             var allVentsList = ShipStatus.Instance.GJHKPDGJHJN.ToList();
             allVentsList.Add(vent);
             ShipStatus.Instance.GJHKPDGJHJN = allVentsList.ToArray();
+            vent.gameObject.SetActive(false);
             vent.name = "JackInTheBoxVent_" + vent.Id;
 
             // Only render the box for the Trickster
