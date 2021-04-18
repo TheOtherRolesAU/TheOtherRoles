@@ -22,7 +22,7 @@ namespace TheOtherRoles {
 
             List<CustomColor> colors = new List<CustomColor>();
 
-            colors.Add(new CustomColor { longname = "Skincolor", shortname = "SKIN", 
+            colors.Add(new CustomColor { longname = "Salmon", shortname = "SALMN", 
                                         color = new Color32(239, 191, 192, byte.MaxValue), 
                                         shadow = new Color32(182, 119, 114, byte.MaxValue),
                                         isLighterColor = true });
