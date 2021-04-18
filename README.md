@@ -71,6 +71,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.3.0**
 - Freeplay is now working again
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
+- Added the option to hide the name of players with an unknown role
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -281,6 +282,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Map:** The map can be changed inside a lobby
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
+- **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
 # Roles
 
 ## Role Assignment
