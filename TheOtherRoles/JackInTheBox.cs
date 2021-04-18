@@ -23,7 +23,7 @@ namespace TheOtherRoles{
         public static List<Sprite> getBoxAnimationSprites() {
             if (boxAnimationSprites != null) return boxAnimationSprites;
             boxAnimationSprites = new List<Sprite>();
-            for (int i = 1; i < 19; i++) boxAnimationSprites.Add(Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.TricksterAnimation.trickster_box_00{i:00}.png", 115f));
+            for (int i = 1; i < 19; i++) boxAnimationSprites.Add(Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.TricksterAnimation.trickster_box_00{i:00}.png", 175f));
             return boxAnimationSprites;
         }
 
@@ -37,7 +37,7 @@ namespace TheOtherRoles{
                 var sprites = getBoxAnimationSprites();
                 if (vent != null && vent.KJAENOGGEOK != null && sprites != null && sprites.Count > 0) {
                     int index = isOpenAnim ? (int)(p * sprites.Count) : sprites.Count - (int)(p * sprites.Count);
-                    vent.KJAENOGGEOK.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count)];
+                    vent.KJAENOGGEOK.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count-1)];
                     if (p == 1f) vent.KJAENOGGEOK.sprite = getBoxSprite();
                 }
             })));
