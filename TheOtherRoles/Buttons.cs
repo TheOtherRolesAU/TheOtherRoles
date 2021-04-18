@@ -61,7 +61,9 @@ namespace TheOtherRoles
             hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
-            lightsOutButton.EffectDuration = Trickster.lightsOutDuration; 
+            lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
+            camouflagerButton.EffectDuration = Camouflager.duration;
+            morphlingButton.EffectDuration = Morphling.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -257,7 +259,7 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.morphlingMorph(Morphling.sampledTarget.PlayerId);
                         Morphling.sampledTarget = null;
-                        morphlingButton.EffectDuration = 10f;
+                        morphlingButton.EffectDuration = Morphling.duration;
                     } else if (Morphling.currentTarget != null) {
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
@@ -277,7 +279,7 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
-                10f,
+                Morphling.duration,
                 () => {
                     if (Morphling.sampledTarget == null) {
                         morphlingButton.Timer = morphlingButton.MaxTimer;
@@ -304,7 +306,7 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
-                10f,
+                Camouflager.duration,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
             );
 

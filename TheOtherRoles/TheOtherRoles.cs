@@ -362,6 +362,7 @@ namespace TheOtherRoles
         private static Sprite morphSprite;
     
         public static float cooldown = 30f;
+        public static float duration = 10f;
 
         public static PlayerControl currentTarget;
         public static PlayerControl sampledTarget;
@@ -389,6 +390,7 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             cooldown = CustomOptionHolder.morphlingCooldown.getFloat();
+            duration = CustomOptionHolder.morphlingDuration.getFloat();
         }
 
         public static Sprite getSampleSprite() {
@@ -409,6 +411,7 @@ namespace TheOtherRoles
         public static Color color = Palette.JPCHLLEJNEH;
     
         public static float cooldown = 30f;
+        public static float duration = 10f;
         public static float camouflageTimer = 0f;
 
         private static Sprite buttonSprite;
@@ -438,6 +441,7 @@ namespace TheOtherRoles
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = CustomOptionHolder.camouflagerCooldown.getFloat();
+            duration = CustomOptionHolder.camouflagerDuration.getFloat();
         }
     }
 
