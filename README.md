@@ -73,6 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
 - Added the option to hide the name of players with an unknown role
 - Fixed a bug where players could get stuck onl ladders/platforms when being rewinded
+- You can now change the custom server ip/port right inside the game
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -217,9 +218,9 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod).
 
 **Setup the Clients:**
-1. Run the game one time after you installed TheOtherRoles to generate the config files
-2. Open the Among Us folder (or the folder containing the TheOtherRoles mod), go to the subfolder BepInEx/config/ and replace the *Custom Server IP* and *Custom Server Port* in the **me.eisbison.theotherroles.cfg** with the ones of your server
-3. Launch the game and select the region *Custom*
+1. Open the region menu where you can choose between the different regions
+2. Select the region *Custom*
+3. Enter the ip/domain and the port of your custom server in the corresponding text fields
 
 **Setup the Server:**
 1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
