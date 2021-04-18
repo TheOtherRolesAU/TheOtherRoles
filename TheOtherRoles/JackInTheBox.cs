@@ -4,14 +4,21 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
+using Effects = AEOEPNHOJDP;
+
 namespace TheOtherRoles{
     
     public class JackInTheBox {
         public static System.Collections.Generic.List<JackInTheBox> AllJackInTheBoxes = new System.Collections.Generic.List<JackInTheBox>();
         public static int JackInTheBoxLimit = 3;
-        private static Sprite jackInTheBoxSprite;
         public static bool boxesConvertedToVents = false;
         private static List<Sprite> boxAnimationSprites;
+
+        public static Sprite getBoxSprite() {
+            List<Sprite> s = getBoxAnimationSprites();
+            if (s.Count > 0) return s.First();
+            return null;
+        }
 
         public static List<Sprite> getBoxAnimationSprites() {
             if (boxAnimationSprites != null) return boxAnimationSprites;
@@ -20,8 +27,23 @@ namespace TheOtherRoles{
             return boxAnimationSprites;
         }
 
+        public static void startAnimation(int ventId, bool isOpen) {
+            JackInTheBox box = AllJackInTheBoxes.FirstOrDefault((x) => x?.vent != null && x.vent.Id == ventId);
+            if (box == null) return;
+            Vent vent = box.vent;
+
+            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(0.6f, new Action<float>((p) => {
+                var sprites = getBoxAnimationSprites();
+                if (vent != null && vent.KJAENOGGEOK != null && sprites != null && sprites.Count > 0) {
+                    int index = Mathf.Max(sprites.Count - 1, (int)(p * sprites.Count));
+                    vent.KJAENOGGEOK.sprite = sprites[index];
+                    if (p == 1f) vent.KJAENOGGEOK.sprite = getBoxSprite();
+                }
+            })));
+        }
+
         private GameObject gameObject;
-        private Vent vent;
+        public Vent vent;
 
         public JackInTheBox(Vector2 p) {
             gameObject = new GameObject("JackInTheBox");
@@ -30,7 +52,7 @@ namespace TheOtherRoles{
             // Create the marker
             gameObject.transform.position = position;
             var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
-            boxRenderer.sprite = getJackInTheBoxSprite();
+            boxRenderer.sprite = getBoxSprite();
 
             // Create the vent
             var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
@@ -44,7 +66,7 @@ namespace TheOtherRoles{
             vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
             vent.Id = ShipStatus.Instance.GJHKPDGJHJN.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
-            ventRenderer.sprite = getJackInTheBoxSprite();
+            ventRenderer.sprite = getBoxSprite();
             vent.KJAENOGGEOK = ventRenderer;
             var allVentsList = ShipStatus.Instance.GJHKPDGJHJN.ToList();
             allVentsList.Add(vent);
