@@ -83,7 +83,6 @@ namespace TheOtherRoles
 
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
 
-            JackInTheBox.startAnimation(__instance.Id);
             __instance.SetButtons(isEnter);
             MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
             writer.WritePacked(__instance.Id);
