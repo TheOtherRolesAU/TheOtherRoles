@@ -70,6 +70,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.3.0**
 - Freeplay is now working again
+- Lovers: Fixed a bug where ImpLovers would hardly spawn
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
