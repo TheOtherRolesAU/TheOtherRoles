@@ -442,7 +442,7 @@ namespace TheOtherRoles {
 
             float offset = -7.85f;
             foreach (CustomOption option in CustomOption.options) {
-                if (option?.optionBehaviour?.gameObject != null) {
+                if (option?.optionBehaviour != null && option.optionBehaviour.gameObject != null) {
                     bool enabled = true;
                     var parent = option.parent;
                     while (parent != null && enabled) {
