@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which adds manny new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+**The Other Roles** is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us/) which adds many new roles, new [lobby settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -778,7 +778,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 -----------------------
 
 
-# Source code
+# [Source code](https://github.com/Eisbison/TheOtherRoles/tree/main/Source%20Code)
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
 You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
