@@ -281,8 +281,16 @@ namespace TheOtherRoles
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Change buttons if there are more than 10 players
             if (__instance.GBKFCOAKLAH != null && __instance.GBKFCOAKLAH.Length > 10) {
-                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++) {
-                    PlayerVoteArea area = __instance.GBKFCOAKLAH[i];
+                PlayerVoteArea[] array = __instance.GBKFCOAKLAH.OrderBy(delegate(PlayerVoteArea p) {
+                    if (!p.isDead)
+                    {
+                        return 0;
+                    }
+                    return 50;
+                }).ThenBy((PlayerVoteArea p) => p.GEIOMAPOPKA).ToArray<PlayerVoteArea>();
+                for (int i = 0; i < array.Length; i++) {
+                    PlayerVoteArea area = array[i];
+
                     int row = i/3, col = i%3;
                     float scale = 0.65f;
 
