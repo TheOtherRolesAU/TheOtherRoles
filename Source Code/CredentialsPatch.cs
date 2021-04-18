@@ -15,7 +15,7 @@ namespace TheOtherRoles
         {
             static void Postfix(VersionShower __instance) {
                 string spacer = new String('\n', 8);
-                string fullCredentials = $"<color=#FCCE03FF>TheOtherRoles</color> v{TheOtherRolesPlugin.Major}.{TheOtherRolesPlugin.Minor}.{TheOtherRolesPlugin.Patch}:\n- Modded by <color=#FCCE03FF>Eisbison</color> and <color=#FFEB91FF>Thunderstorm584</color>\n- Balanced with <color=#FFEB91FF>Dhalucard</color>\n- Button design by <color=#FFEB91FF>Bavari</color>";
+                string fullCredentials = $"<color=#FCCE03FF>TheOtherRoles</color> v{TheOtherRolesPlugin.Major}.{TheOtherRolesPlugin.Minor}.{TheOtherRolesPlugin.Patch}:\n- Modded by <color=#FCCE03FF>Eisbison</color> and <color=#FFEB91FF>Thunderstorm584</color>\n- Balanced with <color=#FFEB91FF>Dhalucard</color>\n- Button design by <color=#FFEB91FF>Bavari</color>" + string.Format("Latency: <color=#00FF00FF>{0}ms</color>", AmongUsClient.Instance.BAPNFCLCLLJ);
                 if (__instance.text.text.Contains(spacer))
                     __instance.text.text = __instance.text.text + "\n" + fullCredentials;
                 else
@@ -32,7 +32,7 @@ namespace TheOtherRoles
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GCDONLGCMIL.Started)
                     __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
                 else
-                    __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>";
+                    __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>" + string.Format("Latency: <color=#00FF00FF>{0}ms</color>", AmongUsClient.Instance.BAPNFCLCLLJ);
             }
         }
     }
