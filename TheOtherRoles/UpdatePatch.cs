@@ -344,8 +344,6 @@ namespace TheOtherRoles
 
             // Mafia
             setMafiaNameTags();
-            // Jester
-            // Helpers.removeTasksFromPlayer(Jester.jester);
             // Impostors
             updateImpostorKillButton(__instance);
             // Timer updates
@@ -356,10 +354,6 @@ namespace TheOtherRoles
             childUpdate();
             // Snitch
             snitchUpdate();
-            // Jackal
-            // Helpers.removeTasksFromPlayer(Jackal.jackal);
-            // Sidekick
-            // Helpers.removeTasksFromPlayer(Sidekick.sidekick);
         }
     }
 }
