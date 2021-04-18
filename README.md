@@ -72,6 +72,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Freeplay is now working again
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
 - Added the option to hide the name of players with an unknown role
+- Fixed a bug where players could get stuck onl ladders/platforms when being rewinded
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
