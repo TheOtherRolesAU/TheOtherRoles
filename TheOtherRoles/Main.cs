@@ -32,17 +32,18 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
+        public static DnsRegionInfo CustomRegion;
 
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
-            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
+            CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value);
             ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
             IRegionInfo[] regions = ServerManager.DefaultRegions;
 
-            regions = regions.Concat(new IRegionInfo[] { customRegion }).ToArray();
+            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AGFAPIKFOFF = regions;
             serverManager.SaveServers();
