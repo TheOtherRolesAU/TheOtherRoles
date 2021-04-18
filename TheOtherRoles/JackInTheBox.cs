@@ -27,16 +27,15 @@ namespace TheOtherRoles{
             return boxAnimationSprites;
         }
 
-        public static void startAnimation(int ventId, bool IsOpening) {
+        public static void startAnimation(int ventId) {
             JackInTheBox box = AllJackInTheBoxes.FirstOrDefault((x) => x?.vent != null && x.vent.Id == ventId);
             if (box == null) return;
             Vent vent = box.vent;
-            bool isOpenAnim = IsOpening;
 
             HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(0.6f, new Action<float>((p) => {
                 var sprites = getBoxAnimationSprites();
                 if (vent != null && vent.KJAENOGGEOK != null && sprites != null && sprites.Count > 0) {
-                    int index = isOpenAnim ? (int)(p * sprites.Count) : sprites.Count - (int)(p * sprites.Count);
+                    int index = (int)(p * sprites.Count);
                     vent.KJAENOGGEOK.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count-1)];
                     if (p == 1f) vent.KJAENOGGEOK.sprite = getBoxSprite();
                 }
