@@ -67,7 +67,7 @@ namespace TheOtherRoles {
                 UnityEngine.Object.DestroyImmediate(portField.transform.FindChild("arrowEnter").gameObject);
 
                 portField.transform.localPosition = new Vector3(0, -1.75f, -100f);
-                portField.characterLimit = 15;
+                portField.characterLimit = 5;
                 portField.SetText(TheOtherRolesPlugin.Port.Value.ToString());
                 __instance.StartCoroutine(AEOEPNHOJDP.DCHLMIDMBHG(0.1f, new Action<float>((p) => {
                     portField.outputText.SetText(TheOtherRolesPlugin.Port.Value.ToString());
