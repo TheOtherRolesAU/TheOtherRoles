@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rewired;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using UnityEngine;
@@ -74,13 +75,43 @@ namespace TheOtherRoles {
         }
 
         static void medicSetTarget() {
-            if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
+            if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer || Medic.usedShield) return;
             Medic.currentTarget = setTarget();
+
+            if(Medic.medic.FIMGDJOCIGD.IAGJEKLJCCI)
+            {
+                Medic.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+                return;
+            }
+            
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Medic.shieldedColor && player != Medic.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Medic.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Medic.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Medic.shieldedColor);
         }
 
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
+            
+            if(Shifter.shifter.FIMGDJOCIGD.IAGJEKLJCCI)
+            {
+                Shifter.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+                return;
+            }
+            
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Color.red && player != Shifter.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Shifter.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Shifter.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Color.red);
         }
 
         
@@ -92,11 +123,41 @@ namespace TheOtherRoles {
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != PlayerControl.LocalPlayer) return;
             Sheriff.currentTarget = setTarget();
+            
+            if(Sheriff.sheriff.FIMGDJOCIGD.IAGJEKLJCCI)            {
+                Sheriff.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+                return;
+            }
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Sheriff.color && player != Sheriff.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Sheriff.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Sheriff.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Sheriff.color);
         }
 
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
+
+            if (Tracker.usedTracker && Tracker.currentTarget == Tracker.tracked || Tracker.tracker.FIMGDJOCIGD.IAGJEKLJCCI)
+            {
+                if(Tracker.currentTarget.KJAENOGGEOK.material.GetColor("_OutlineColor") == Medic.shieldedColor)
+                    Tracker.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+
+                return;
+            }
+            
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Medic.shieldedColor && player != Tracker.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Tracker.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Tracker.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Medic.shieldedColor);
         }
 
         static void detectiveUpdateFootPrints() {            
@@ -142,20 +203,51 @@ namespace TheOtherRoles {
         static void jackalSetTarget() {
             if (Jackal.jackal == null || Jackal.jackal != PlayerControl.LocalPlayer) return;
             var untargetablePlayers = new List<PlayerControl>();
+            
+            if(Jackal.jackal.FIMGDJOCIGD.IAGJEKLJCCI)
+            {
+                Jackal.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+                return;
+            }
             if(Jackal.canCreateSidekickFromImpostor) {
                 // Only exclude sidekick from beeing targeted if the jackal can create sidekicks from impostors
                 if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
             }
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Color.red && player != Jackal.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Jackal.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Jackal.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Color.red);
         }
 
         static void sidekickSetTarget() {
-            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer|| Sidekick.sidekick.FIMGDJOCIGD.IAGJEKLJCCI || !Sidekick.canKill) return;
             var untargetablePlayers = new List<PlayerControl>();
+
+            if (Sidekick.sidekick.FIMGDJOCIGD.IAGJEKLJCCI)
+            {
+                Sidekick.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+                return;
+            }
+            
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.KJAENOGGEOK.material.GetColor("_OutlineColor") == Color.red && player != Sidekick.currentTarget)
+                    player.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            }
+            
+            Sidekick.currentTarget.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
+            Sidekick.currentTarget.KJAENOGGEOK.material.SetColor("_OutlineColor", Color.red);
         }
 
         static void eraserSetTarget() {
