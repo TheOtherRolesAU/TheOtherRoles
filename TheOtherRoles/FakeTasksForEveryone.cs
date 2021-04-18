@@ -36,10 +36,11 @@ namespace TheOtherRoles {
 
         [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
         private static class CanDoTaskPatch {
-            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc) {
+            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc[HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
                 if (__instance.AllowImpostor) return true;
                 PlayerControl player = pc.GJPBCGFPMOD;
                 if (player != Jackal.jackal && player != Sidekick.sidekick && player != Jester.jester) return true;
+                canUse = couldUse = false;
                 __result = float.MaxValue;
                 return false;
             }
