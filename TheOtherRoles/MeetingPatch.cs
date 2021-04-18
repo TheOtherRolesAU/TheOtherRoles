@@ -21,6 +21,7 @@ namespace TheOtherRoles
         static bool[] selections;
         static SpriteRenderer[] renderers;
         private static GameData.LGBOMGHJELL target = null;
+        private const float scale = 0.65f;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.KEICNHGALLI))]
         class MeetingCalculateVotesPatch {
@@ -145,8 +146,12 @@ namespace TheOtherRoles
                     __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
                 }
 
-                float votesDistance = __instance.GBKFCOAKLAH.Length > 10 ? __instance.GGHFHCMCJAL.x / 0.65f : __instance.GGHFHCMCJAL.x;
-                float votesXOffset = __instance.GBKFCOAKLAH.Length > 10 ? 0.1f : 0f;
+                float votesXOffset = 0f;
+                float votesFinalSize = 1f;
+                if (__instance.GBKFCOAKLAH.Length > 10) {
+                    votesXOffset = 0.1f;
+                    votesFinalSize = scale;
+                }
 
                 // Mayor display vote twice
                 __instance.TitleText.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
@@ -179,10 +184,10 @@ namespace TheOtherRoles
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer);
                                 }
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform);
-                                spriteRenderer.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + votesDistance * (float)(num2), 0f, 0f);
+                                spriteRenderer.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + __instance.GGHFHCMCJAL.x * (float)(num2), 0f, 0f);
                                 spriteRenderer.transform.localScale = Vector3.zero;
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)(num2) * 0.5f + delay, spriteRenderer.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)(num2) * 0.5f + delay, spriteRenderer.transform, votesFinalSize, 0.5f));
                                 num2++;
                             }
                             else if (i == 0 && votedFor == -1)
@@ -197,10 +202,10 @@ namespace TheOtherRoles
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer2);
                                 }
                                 spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
-                                spriteRenderer2.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + votesDistance * (float)(num), 0f, 0f);
+                                spriteRenderer2.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + __instance.GGHFHCMCJAL.x * (float)(num), 0f, 0f);
                                 spriteRenderer2.transform.localScale = Vector3.zero;
                                 spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num * 0.5f + delay, spriteRenderer2.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num * 0.5f + delay, spriteRenderer2.transform, votesFinalSize, 0.5f));
                                 num++;
                             }
 
@@ -280,7 +285,7 @@ namespace TheOtherRoles
 
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Change buttons if there are more than 10 players
-            if (__instance.GBKFCOAKLAH != null && __instance.GBKFCOAKLAH.Length > 10) {
+            if (__instance.GBKFCOAKLAH != null) { 
                 PlayerVoteArea[] array = __instance.GBKFCOAKLAH.OrderBy(delegate(PlayerVoteArea p) {
                     if (!p.isDead)
                     {
@@ -292,7 +297,6 @@ namespace TheOtherRoles
                     PlayerVoteArea area = array[i];
 
                     int row = i/3, col = i%3;
-                    float scale = 0.65f;
 
                     // Update scalings
                     area.Overlay.transform.localScale = area.PlayerButton.transform.localScale = new Vector3(1, 1/scale, 1);
@@ -304,6 +308,7 @@ namespace TheOtherRoles
                     area.Megaphone.transform.SetParent(megaphoneWrapper.transform);
 
                     // Update positions
+                    area.Megaphone.transform.localPosition += Vector3.left * 0.1f;
                     area.NameText.transform.localPosition = new Vector3(1.2f, 0.2f, area.NameText.transform.localPosition.z);
                     area.transform.localPosition = new Vector3(-3.63f + 2.43f * col, 1.5f - 0.76f * row, -0.9f - 0.01f * row);
                 }
