@@ -67,7 +67,14 @@ namespace TheOtherRoles
             __result = false;
         }
     }
-
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
+    public static class OnChatAwake {
+        private static void Prefix() {
+            BLCGIFOPMIA.HGHBGBHMEBJ = 1;
+            BLCGIFOPMIA.JIEHGAGHHKN = false;
+        }
+    }
+    
     // Debugging tools
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class DebugManager
