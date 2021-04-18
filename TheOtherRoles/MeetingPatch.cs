@@ -21,6 +21,7 @@ namespace TheOtherRoles
         static bool[] selections;
         static SpriteRenderer[] renderers;
         private static GameData.LGBOMGHJELL target = null;
+        private const float scale = 0.65f;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.KEICNHGALLI))]
         class MeetingCalculateVotesPatch {
@@ -138,20 +139,28 @@ namespace TheOtherRoles
                 }
 
                 bool doSwap = swapped1 != null && swapped2 != null;
+                float delay = 0f;
                 if (doSwap) {
-
+                    delay = 2f;
                     __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
                     __instance.StartCoroutine(Effects.KLAIEICHCNO(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
                 }
 
+                float votesXOffset = 0f;
+                float votesFinalSize = 1f;
+                if (__instance.GBKFCOAKLAH.Length > 10) {
+                    votesXOffset = 0.1f;
+                    votesFinalSize = scale;
+                }
+
                 // Mayor display vote twice
                 __instance.TitleText.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
-                int num = doSwap ? 4 : 0; // Delay animaton if swapping
+                int num = 0;
                 for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.GBKFCOAKLAH[i];
                     playerVoteArea.ClearForResults();
-                    int num2 = doSwap ? 4 : 0; // Delay animaton if swapping
+                    int num2 = 0;
                     bool mayorFirstVoteDisplayed = false;
 
                     for (int j = 0; j < __instance.GBKFCOAKLAH.Length; j++)
@@ -175,10 +184,10 @@ namespace TheOtherRoles
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer);
                                 }
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform);
-                                spriteRenderer.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(__instance.GGHFHCMCJAL.x * (float)num2, 0f, 0f);
+                                spriteRenderer.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + __instance.GGHFHCMCJAL.x * (float)(num2), 0f, 0f);
                                 spriteRenderer.transform.localScale = Vector3.zero;
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num2 * 0.5f, spriteRenderer.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)(num2) * 0.5f + delay, spriteRenderer.transform, votesFinalSize, 0.5f));
                                 num2++;
                             }
                             else if (i == 0 && votedFor == -1)
@@ -193,10 +202,10 @@ namespace TheOtherRoles
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.IMMNCAGJJJC, spriteRenderer2);
                                 }
                                 spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
-                                spriteRenderer2.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(__instance.GGHFHCMCJAL.x * (float)num, 0f, 0f);
+                                spriteRenderer2.transform.localPosition = __instance.FAJKDFHIHDN + new Vector3(votesXOffset + __instance.GGHFHCMCJAL.x * (float)(num), 0f, 0f);
                                 spriteRenderer2.transform.localScale = Vector3.zero;
                                 spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num * 0.5f, spriteRenderer2.transform, 1f, 0.5f));
+                                __instance.StartCoroutine(Effects.JCDLOIMPBFJ((float)num * 0.5f + delay, spriteRenderer2.transform, votesFinalSize, 0.5f));
                                 num++;
                             }
 
@@ -275,15 +284,29 @@ namespace TheOtherRoles
         }
 
         static void populateButtonsPostfix(MeetingHud __instance) {
-            // Reposition button if there are more than 10 players
-            float scale = 5f / 8f; // 8 rows are needed instead of 5
-            if (__instance.GBKFCOAKLAH != null && __instance.GBKFCOAKLAH.Length > 10) {
-                for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++) {
-                    PlayerVoteArea area = __instance.GBKFCOAKLAH[i];
-                    bool isLeft = i % 2 == 0;
-                    int num2 = i / 2;
-                    area.transform.localPosition = __instance.VoteOrigin + new Vector3(isLeft ? 1f : 3.9f, __instance.VoteButtonOffsets.y * (float)num2 * scale, area.transform.localPosition.z);
-                    area.transform.localScale = new Vector3(area.transform.localScale.x * scale, area.transform.localScale.y * scale, area.transform.localScale.z);
+            // Change buttons if there are more than 10 players
+            if (__instance.GBKFCOAKLAH != null) { 
+                PlayerVoteArea[] playerStates = __instance.GBKFCOAKLAH.OrderBy((PlayerVoteArea p) => p.isDead ? 50 : 0)
+						   	       .ThenBy((PlayerVoteArea p) => p.GEIOMAPOPKA) // TargetPlayerId
+						   	       .ToArray<PlayerVoteArea>();
+                for (int i = 0; i < playerStates.Length; i++) {
+                    PlayerVoteArea area = playerStates[i];
+
+                    int row = i/3, col = i%3;
+
+                    // Update scalings
+                    area.Overlay.transform.localScale = area.PlayerButton.transform.localScale = new Vector3(1, 1/scale, 1);
+                    area.NameText.transform.localScale = new Vector3(1/scale, 1/scale, 1);
+                    area.gameObject.transform.localScale = new Vector3(scale, scale, 1);
+                    GameObject megaphoneWrapper = new GameObject();
+                    megaphoneWrapper.transform.SetParent(area.transform);
+                    megaphoneWrapper.transform.localScale = Vector3.one * 1/scale;
+                    area.Megaphone.transform.SetParent(megaphoneWrapper.transform);
+
+                    // Update positions
+                    area.Megaphone.transform.localPosition += Vector3.left * 0.1f;
+                    area.NameText.transform.localPosition = new Vector3(1.2f, 0.2f, area.NameText.transform.localPosition.z);
+                    area.transform.localPosition = new Vector3(-3.63f + 2.43f * col, 1.5f - 0.76f * row, -0.9f - 0.01f * row);
                 }
             }
 
