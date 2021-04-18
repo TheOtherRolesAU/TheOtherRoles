@@ -11,11 +11,13 @@ namespace TheOtherRoles{
         public static int JackInTheBoxLimit = 3;
         private static Sprite jackInTheBoxSprite;
         public static bool boxesConvertedToVents = false;
+        private static List<Sprite> boxAnimationSprites;
 
-        public static Sprite getJackInTheBoxSprite() {
-            if (jackInTheBoxSprite) return jackInTheBoxSprite;
-            jackInTheBoxSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.JackInTheBox.png", 175f);
-            return jackInTheBoxSprite;
+        public static List<Sprite> getBoxAnimationSprites() {
+            if (boxAnimationSprites != null) return boxAnimationSprites;
+            boxAnimationSprites = new List<Sprite>();
+            for (int i = 1; i < 19; i++) boxAnimationSprites.Add(Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.TricksterAnimation.trickster_box_00{i:00}.png", 115f));
+            return boxAnimationSprites;
         }
 
         private GameObject gameObject;

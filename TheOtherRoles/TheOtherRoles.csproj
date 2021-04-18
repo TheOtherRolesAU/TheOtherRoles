@@ -43,26 +43,25 @@
         <EmbeddedResource Include="Resources\SwapperCheck.png" />
         <EmbeddedResource Include="Resources\SidekickButton.png" />
         <EmbeddedResource Include="Resources\PlaceJackInTheBoxButton.png" />
-        <EmbeddedResource Include="Resources\JackInTheBox.png" />
         <EmbeddedResource Include="Resources\LightsOutButton.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0001.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0002.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0003.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0004.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0005.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0006.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0007.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0008.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0009.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0010.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0011.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0012.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0013.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0014.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0015.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0016.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0017.png.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0018.png.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0001.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0002.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0003.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0004.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0005.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0006.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0007.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0008.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0009.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0010.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0011.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0012.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0013.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0014.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0015.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0016.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0017.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0018.png" />
     </ItemGroup>
 
     <ItemGroup>
