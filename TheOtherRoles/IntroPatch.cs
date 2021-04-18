@@ -46,7 +46,7 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "<color=#FF1919FF>Imp</color>Lover" : "Lover";
+                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
                 __instance.__4__this.Title.color = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? Color.white : Lovers.color;
                 __instance.__4__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.PPMOEEPBHJO?.PCLLABJCIPC ?? "") + "</color>";
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
