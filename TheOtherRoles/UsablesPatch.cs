@@ -101,7 +101,7 @@ namespace TheOtherRoles
             // Trickster render special vent button
             if (__instance.LHAKKAAOLLM != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
                 Vent possibleVent =  __instance.LHAKKAAOLLM.TryCast<Vent>();
-                if (possibleVent != null && possibleVent.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
+                if (possibleVent?.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
                     __instance.UseButton.sprite = Trickster.getTricksterVentButtonSprite();
                 }
             }
