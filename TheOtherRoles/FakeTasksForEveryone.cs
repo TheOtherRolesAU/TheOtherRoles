@@ -17,9 +17,7 @@ namespace TheOtherRoles {
                         playerInfo.GJPBCGFPMOD && // Object -> PlayerControl
                         (PlayerControl.GameOptions.AHOIGIPIACJ || !playerInfo.IAGJEKLJCCI) && // GhostsDoTasks | IsDead
                         !playerInfo.FDNMBJOAPFL && // IsImpostor
-                        playerInfo.GJPBCGFPMOD != Jackal.jackal &&
-                        playerInfo.GJPBCGFPMOD != Sidekick.sidekick &&
-                        playerInfo.GJPBCGFPMOD != Jester.jester 
+                        !Helpers.hasFakeTasks(playerInfo.GJPBCGFPMOD)
                         ) {
 
                         for (int j = 0; j < playerInfo.PHGPJMKOKMC.Count; j++) {
@@ -38,8 +36,7 @@ namespace TheOtherRoles {
         private static class CanDoTaskPatch {
             private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc[HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
                 if (__instance.AllowImpostor) return true;
-                PlayerControl player = pc.GJPBCGFPMOD;
-                if (player != Jackal.jackal && player != Sidekick.sidekick && player != Jester.jester) return true;
+                if (!Helpers.hasFakeTasks(pc.GJPBCGFPMOD)) return true;
                 canUse = couldUse = false;
                 __result = float.MaxValue;
                 return false;
