@@ -72,7 +72,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Freeplay is now working again
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
 - Added the option to hide the name of players with an unknown role
-- Fixed a bug where players could get stuck onl ladders/platforms when being rewinded
+- Fixed a bug where players could get stuck on ladders/platforms when being rewinded
+- The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
 
 **Version 2.2.2**

@@ -105,25 +105,6 @@ namespace TheOtherRoles {
             return true;
         }
 
-        public static void removeTasksFromPlayer(PlayerControl player) {
-            if (player == null) return;
-            var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask task in player.myTasks) {
-                if (task.gameObject.GetComponent<ImportantTextTask>() != null)
-                    continue;
-                if (task.TaskType != TaskTypes.FixComms && 
-                    task.TaskType != TaskTypes.FixLights && 
-                    task.TaskType != TaskTypes.ResetReactor && 
-                    task.TaskType != TaskTypes.ResetSeismic && 
-                    task.TaskType != TaskTypes.RestoreOxy &&
-                    task.TaskType != TaskTypes.StopCharles) {
-                    toRemove.Add(task);
-                }
-            }   
-            foreach (PlayerTask task in toRemove) {
-                player.RemoveTask(task);
-            }
-        }
 
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
@@ -175,6 +156,10 @@ namespace TheOtherRoles {
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
+        public static bool hasFakeTasks(PlayerControl player) {
+            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick);
+        }
+        
         public static string cs(Color c, string s) {
             return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
