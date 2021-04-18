@@ -68,7 +68,7 @@ namespace TheOtherRoles
         }
     }
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
-    public static class OnChatAwake {
+    public static class ChatControllerAwakePatch {
         private static void Prefix() {
             BLCGIFOPMIA.HGHBGBHMEBJ = 1;
             BLCGIFOPMIA.JIEHGAGHHKN = false;
