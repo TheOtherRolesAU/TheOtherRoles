@@ -31,21 +31,31 @@ namespace TheOtherRoles
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<string> Ip { get; set; }
+        public static ConfigEntry<string> Name { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<bool> DisableDefaultRegions { get; private set; }
         
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
+            Name = Config.Bind("Custom", "Custom Server Name", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
             DisableDefaultRegions = Config.Bind("Custom", "Disable Default Regions", false);
             
-            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
+            IRegionInfo customRegion = new DnsRegionInfo(Ip.Value, Name.Value, StringNames.NoTranslation, Ip.Value, Port.Value).Cast<IRegionInfo>();
             ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
-            var regions = DisableDefaultRegions.Value ? new IRegionInfo[] {customRegion}.ToArray() : ServerManager.DefaultRegions.Concat(new IRegionInfo[] { customRegion }).ToArray();
             
-            ServerManager.DefaultRegions = regions;
-            serverManager.AGFAPIKFOFF = regions;
+            var regions = new List<IRegionInfo>();
+            
+            if (!DisableDefaultRegions.Value)
+            {
+                regions.AddRange(ServerManager.DefaultRegions);
+            }
+            
+            regions.Add(customRegion);
+            
+            ServerManager.DefaultRegions = regions.ToArray();
+            serverManager.AGFAPIKFOFF = regions.ToArray();
             serverManager.SaveServers();
 
             CEIOGGEDKAN.LMADJLEGIMH = CEIOGGEDKAN.IJGNCMMDGDI = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
