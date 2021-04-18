@@ -490,7 +490,6 @@ namespace TheOtherRoles
                     if (player != Lovers.lover1 && player != Lovers.lover2) erasePlayerRole(player.PlayerId);
                     
                     Sidekick.sidekick = player;
-                    Helpers.removeTasksFromPlayer(player);
                     return;
                 }
             }
