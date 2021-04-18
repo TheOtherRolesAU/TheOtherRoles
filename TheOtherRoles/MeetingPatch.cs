@@ -284,7 +284,6 @@ namespace TheOtherRoles
                 for (int i = 0; i < __instance.GBKFCOAKLAH.Length; i++) {
                     PlayerVoteArea area = __instance.GBKFCOAKLAH[i];
                     int row = i/3, col = i%3;
-                    SpriteRenderer sr = area.Overlay;
                     float scale = 0.65f;
 
                     // Update scalings
