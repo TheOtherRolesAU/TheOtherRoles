@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for Amongs Us which adds manny new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -73,6 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
 - Added the option to hide the name of players with an unknown role
 - Fixed a bug where players could get stuck on ladders/platforms when being rewinded
+- Fixed a bug where players could only use quickchat
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
 
@@ -200,8 +201,8 @@ If you have problems with the AmongUsModUpdater, make sure To [contact us](https
 
 ## Windows Manual Installation
 1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
-2. Find the folder of your game, for steams players you can right click in steam, on the game, a menu will appear proposing you to go to the folders.
-3. Make a copy of your game, it's not obligatory but advise, put it where you want.
+2. Find the folder of your game, for Steam players you can right click in Steam, on the game, a menu will appear proposing you to go to the folders.
+3. Make a copy of your game, it's not obligatory but advised, put it where you want.
 4. Drag or extract the files from the zip into your game, at the .exe level.
 5. Run the game (the first launch might take a while)
 
@@ -210,7 +211,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
 **Linux Manual**
-1. Install Among Us via steam
+1. Install Among Us via Steam
 2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
@@ -790,7 +791,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
-You can use parts of the codes but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
+You can use parts of the code but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests
-If you found any bugs, have an idea for an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)
+If you found any bugs, have an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)
