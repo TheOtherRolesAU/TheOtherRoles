@@ -12,17 +12,17 @@ namespace TheOtherRoles {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
                 for (int i = 0; i < __instance.AllPlayers.Count; i++) {
-                    GameData.LGBOMGHJELL playerInfo = __instance.AllPlayers[i]; // PlayerInfo
-                    if (!playerInfo.MFFAGDHDHLO && playerInfo.PHGPJMKOKMC != null && // Disconnected | // Tasks
-                        playerInfo.GJPBCGFPMOD && // Object -> PlayerControl
-                        (PlayerControl.GameOptions.AHOIGIPIACJ || !playerInfo.IAGJEKLJCCI) && // GhostsDoTasks | IsDead
-                        !playerInfo.FDNMBJOAPFL && // IsImpostor
-                        !Helpers.hasFakeTasks(playerInfo.GJPBCGFPMOD)
+                    GameData.GameData/PlayerInfo playerInfo = __instance.AllPlayers[i]; // PlayerInfo
+                    if (!playerInfo.Disconnected && playerInfo.Tasks != null && // Disconnected | // Tasks
+                        playerInfo.Object && // Object -> PlayerControl
+                        (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) && // GhostsDoTasks | IsDead
+                        !playerInfo.IsImpostor && // IsImpostor
+                        !Helpers.hasFakeTasks(playerInfo.Object)
                         ) {
 
-                        for (int j = 0; j < playerInfo.PHGPJMKOKMC.Count; j++) {
+                        for (int j = 0; j < playerInfo.Tasks.Count; j++) {
                             __instance.TotalTasks++;
-                            if (playerInfo.PHGPJMKOKMC[j].LBBFBHJINJK) { // Complete
+                            if (playerInfo.Tasks[j].Complete) { // Complete
                                 __instance.CompletedTasks++;
                             }
                         }
@@ -34,10 +34,10 @@ namespace TheOtherRoles {
 
         [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
         private static class ConsoleCanUsePatch {
-            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.GameData/PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
                 canUse = couldUse = false;
                 if (__instance.AllowImpostor) return true;
-                if (!Helpers.hasFakeTasks(pc.GJPBCGFPMOD)) return true;
+                if (!Helpers.hasFakeTasks(pc.Object)) return true;
                 __result = float.MaxValue;
                 return false;
             }

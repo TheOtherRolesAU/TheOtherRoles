@@ -25,11 +25,11 @@ namespace TheOtherRoles
             }
 
             // Add the Spy to the Impostor team (for the Impostors)
-            if (Spy.spy != null && PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
                 List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
                 var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 foreach (PlayerControl p in players) {
-                    if (p == Spy.spy || p.PPMOEEPBHJO.FDNMBJOAPFL)
+                    if (p == Spy.spy || p.Data.IsImpostor)
                         fakeImpostorTeam.Add(p);
                 }
                 __instance.yourTeam = fakeImpostorTeam;
@@ -46,9 +46,9 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
-                __instance.__4__this.Title.color = PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ? Color.white : Lovers.color;
-                __instance.__4__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.PPMOEEPBHJO?.PCLLABJCIPC ?? "") + "</color>";
+                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.Data.IsImpostor ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
+                __instance.__4__this.Title.color = PlayerControl.LocalPlayer.Data.IsImpostor ? Color.white : Lovers.color;
+                __instance.__4__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.Data?.PlayerName ?? "") + "</color>";
                 __instance.__4__this.ImpostorText.gameObject.SetActive(true);
                 __instance.__4__this.BackgroundBar.material.color = Lovers.color;
             }
