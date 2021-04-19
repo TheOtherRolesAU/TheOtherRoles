@@ -30,7 +30,7 @@ namespace TheOtherRoles
             static void Postfix(PingTracker __instance)
             {
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GCDONLGCMIL.Started)
-                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\n" + string.Format("Latency: <color=#00FF00FF>{0}ms</color>", AmongUsClient.Instance.BAPNFCLCLLJ;
+                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\n" + string.Format("Latency: <color=#00FF00FF>{0}ms</color>", AmongUsClient.Instance.BAPNFCLCLLJ);
                 else
                     __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>\n\n" + string.Format("Latency: <color=#00FF00FF>{0}ms</color>", AmongUsClient.Instance.BAPNFCLCLLJ);
             }
