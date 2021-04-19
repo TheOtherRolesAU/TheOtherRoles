@@ -44,9 +44,9 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
         private static GameOverReason gameOverReason;
-        public static void Prefix(AmongUsClient __instance, ref GameOverReason gameOverReason, bool showAd) {
-            gameOverReason = gameOverReason;
-            if ((int)gameOverReason >= 10) gameOverReason = GameOverReason.ImpostorByKill;
+        public static void Prefix(AmongUsClient __instance, ref GameOverReason reason, bool showAd) {
+            gameOverReason = reason;
+            if ((int)reason >= 10) reason = GameOverReason.ImpostorByKill;
         }
 
         public static void Postfix(AmongUsClient __instance, GameOverReason gameOverReason, bool showAd) {

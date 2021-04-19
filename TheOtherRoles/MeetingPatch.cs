@@ -238,7 +238,7 @@ namespace TheOtherRoles
         static void onClick(int i, MeetingHud __instance)
         {
             if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.Data.IsDead) return; 
-            if (__instance.state == MeetingHud.MeetingHud/VoteStates.Results) return;
+            if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (__instance.playerStates[i].isDead) return;
 
             int selectedCount = selections.Where(b => b).Count();
@@ -357,13 +357,13 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, GameData.PlayerInfo target) {
+            public static void Prefix(PlayerControl __instance, GameData.PlayerInfo meetingTarget) {
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings
-                if (target == null) meetingsCount++;
+                if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
-                target = target;
+                target = meetingTarget;
             }
         }
 

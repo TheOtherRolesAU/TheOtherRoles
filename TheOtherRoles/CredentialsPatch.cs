@@ -29,7 +29,7 @@ namespace TheOtherRoles
         {
             static void Postfix(PingTracker __instance)
             {
-                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.InnerNet.InnerNetClient/GameStates.Started)
+                if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
                     __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
                 else
                     __instance.text.text += "\n\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>";

@@ -333,7 +333,7 @@ namespace TheOtherRoles
 
         static void Postfix(HudManager __instance)
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.InnerNet.InnerNetClient/GameStates.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
             CustomButton.HudUpdate();
             resetNameTagsAndColors();

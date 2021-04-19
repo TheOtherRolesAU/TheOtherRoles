@@ -578,7 +578,6 @@ namespace TheOtherRoles
         static void Postfix(byte callId, MessageReader reader)
         {
             byte packetId = callId;
-            MessageReader reader = reader;
             switch (packetId) {
 
                 // Main Controls
