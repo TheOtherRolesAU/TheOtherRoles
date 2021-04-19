@@ -17,7 +17,7 @@ namespace TheOtherRoles
     class MeetingHudPatch {
         static bool[] selections;
         static SpriteRenderer[] renderers;
-        private static GameData.GameData/PlayerInfo target = null;
+        private static GameData.PlayerInfo target = null;
         private const float scale = 0.65f;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
@@ -96,8 +96,8 @@ namespace TheOtherRoles
                     byte[] self = calculateVotes(__instance);
                     bool tie;
                     int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
-                    GameData.GameData/PlayerInfo exiled = null;
-                    foreach (GameData.GameData/PlayerInfo pi in GameData.Instance.AllPlayers) {
+                    GameData.PlayerInfo exiled = null;
+                    foreach (GameData.PlayerInfo pi in GameData.Instance.AllPlayers) {
                         if (pi.PlayerId == maxIdx) {
                             exiled = pi;
                             break;
@@ -167,7 +167,7 @@ namespace TheOtherRoles
 
                         if (!((self & 128) > 0))
                         {
-                            GameData.GameData/PlayerInfo playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.TargetPlayerId);
+                            GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.TargetPlayerId);
                             int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
                             if (votedFor == (int)playerVoteArea.TargetPlayerId)
                             {
@@ -221,7 +221,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
         class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, byte[] states, GameData.GameData/PlayerInfo exiled, bool tie)
+            static void Postfix(MeetingHud __instance, byte[] states, GameData.PlayerInfo exiled, bool tie)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -357,7 +357,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, GameData.GameData/PlayerInfo target) {
+            public static void Prefix(PlayerControl __instance, GameData.PlayerInfo target) {
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings
@@ -380,7 +380,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
 
-        public static void Prefix(ref GameData.GameData/PlayerInfo exiled, bool tie) {
+        public static void Prefix(ref GameData.PlayerInfo exiled, bool tie) {
             // Shifter shift
             if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);

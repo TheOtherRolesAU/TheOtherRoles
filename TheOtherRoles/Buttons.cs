@@ -125,12 +125,12 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    GameData.GameData/PlayerInfo GameData/PlayerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JanitorClean, Hazel.SendOption.Reliable, -1);
-                                    writer.Write(GameData/PlayerInfo.PlayerId);
+                                    writer.Write(playerInfo.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                                    RPCProcedure.janitorClean(GameData/PlayerInfo.PlayerId);
+                                    RPCProcedure.janitorClean(playerInfo.PlayerId);
                                     janitorCleanButton.Timer = janitorCleanButton.MaxTimer;
 
                                     break;

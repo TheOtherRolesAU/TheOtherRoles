@@ -328,7 +328,7 @@ namespace TheOtherRoles {
             GetPlayerCounts();
         }
 
-        private bool isLover(GameData.GameData/PlayerInfo p) {
+        private bool isLover(GameData.PlayerInfo p) {
             return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.PlayerId);
         }
 
@@ -342,25 +342,25 @@ namespace TheOtherRoles {
 
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
-                GameData.GameData/PlayerInfo GameData/PlayerInfo = GameData.Instance.AllPlayers[i];
-                if (!GameData/PlayerInfo.Disconnected)
+                GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
+                if (!playerInfo.Disconnected)
                 {
-                    if (!GameData/PlayerInfo.IsDead)
+                    if (!playerInfo.IsDead)
                     {
                         numTotalAlive++;
 
-                        bool lover = isLover(GameData/PlayerInfo);
+                        bool lover = isLover(playerInfo);
                         if (lover) numLoversAlive++;
 
-                        if (GameData/PlayerInfo.IsImpostor) {
+                        if (playerInfo.IsImpostor) {
                             numImpostorsAlive++;
                             if (lover) impLover = true;
                         }
-                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == GameData/PlayerInfo.PlayerId) {
+                        if (Jackal.jackal != null && Jackal.jackal.PlayerId == playerInfo.PlayerId) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
-                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == GameData/PlayerInfo.PlayerId) {
+                        if (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == playerInfo.PlayerId) {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }

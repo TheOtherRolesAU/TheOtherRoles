@@ -15,7 +15,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.GameData/PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
@@ -209,7 +209,7 @@ namespace TheOtherRoles
             for (int k = 0; k < __instance.vitals.Length; k++)
             {
                 VitalsPanel vitalsPanel = __instance.vitals[k];
-                GameData.GameData/PlayerInfo player = GameData.Instance.AllPlayers[k];
+                GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
 
                 // Crowded scaling
                 float scale = 10f / Mathf.Max(10, __instance.vitals.Length);
@@ -302,11 +302,11 @@ namespace TheOtherRoles
                                 } else {
                                     DeadBody component = collider2D.GetComponent<DeadBody>();
                                     if (component) {
-                                        GameData.GameData/PlayerInfo GameData/PlayerInfo = GameData.Instance.GetPlayerById(component.ParentId);
-                                        if (GameData/PlayerInfo != null) {
-                                            var color = Palette.PlayerColors[GameData/PlayerInfo.ColorId];
+                                        GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                        if (playerInfo != null) {
+                                            var color = Palette.PlayerColors[playerInfo.ColorId];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(GameData/PlayerInfo.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                                color = Helpers.isLighterColor(playerInfo.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                             roomColors.Add(color);
                                         }
                                     }

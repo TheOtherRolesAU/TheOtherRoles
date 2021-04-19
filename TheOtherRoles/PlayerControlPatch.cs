@@ -56,13 +56,13 @@ namespace TheOtherRoles {
             if (!ShipStatus.Instance) return result;
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.GameData/PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
             for (int i = 0; i < allPlayers.Count; i++)
             {
-                GameData.GameData/PlayerInfo GameData/PlayerInfo = allPlayers[i];
-                if (!GameData/PlayerInfo.Disconnected && GameData/PlayerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !GameData/PlayerInfo.IsDead && (!onlyCrewmates || !GameData/PlayerInfo.IsImpostor))
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
-                    PlayerControl @object = GameData/PlayerInfo.Object;
+                    PlayerControl @object = playerInfo.Object;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
                         // if that player is not targetable: skip check
                         continue;
@@ -368,7 +368,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch
     {
-        static void Postfix(PlayerControl __instance, GameData.GameData/PlayerInfo target)
+        static void Postfix(PlayerControl __instance, GameData.PlayerInfo target)
         {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;

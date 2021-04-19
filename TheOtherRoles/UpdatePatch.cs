@@ -302,10 +302,10 @@ namespace TheOtherRoles
             if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
-            GameData.GameData/PlayerInfo GameData/PlayerInfo = Snitch.snitch.Data;
-			if (!GameData/PlayerInfo.Disconnected && GameData/PlayerInfo.Tasks != null) {
-				for (int i = 0; i < GameData/PlayerInfo.Tasks.Count; i++) {
-					if (!GameData/PlayerInfo.Tasks[i].Complete)
+            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
+			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
+				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
+					if (!playerInfo.Tasks[i].Complete)
 						numberOfTasks++;
 				}
 			}

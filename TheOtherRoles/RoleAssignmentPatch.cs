@@ -29,7 +29,7 @@ namespace TheOtherRoles
             RPCProcedure.setRole(roleId, playerId);
         }
 
-        public static void Postfix(Il2CppReferenceArray<GameData.GameData/PlayerInfo> infected)
+        public static void Postfix(Il2CppReferenceArray<GameData.PlayerInfo> infected)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);

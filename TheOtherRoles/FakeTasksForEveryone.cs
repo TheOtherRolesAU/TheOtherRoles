@@ -12,7 +12,7 @@ namespace TheOtherRoles {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
                 for (int i = 0; i < __instance.AllPlayers.Count; i++) {
-                    GameData.GameData/PlayerInfo playerInfo = __instance.AllPlayers[i]; // PlayerInfo
+                    GameData.PlayerInfo playerInfo = __instance.AllPlayers[i]; // PlayerInfo
                     if (!playerInfo.Disconnected && playerInfo.Tasks != null && // Disconnected | // Tasks
                         playerInfo.Object && // Object -> PlayerControl
                         (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) && // GhostsDoTasks | IsDead
@@ -34,7 +34,7 @@ namespace TheOtherRoles {
 
         [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
         private static class ConsoleCanUsePatch {
-            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.GameData/PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
                 canUse = couldUse = false;
                 if (__instance.AllowImpostor) return true;
                 if (!Helpers.hasFakeTasks(pc.Object)) return true;
