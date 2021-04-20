@@ -57,21 +57,23 @@ namespace TheOtherRoles {
 
         // Update functions
 
-        static void setPlayerBaseOutline(PlayerControl target) {
-            if (target == null || target.myRend == null) return;
-            
-            bool hasVisibleShield = false;
-            if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
-                hasVisibleShield = Medic.showShielded == 0 // Everyone
-                    || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
-                    || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
-            }
+        static void setBasePlayerOutlines() {
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
+                if (target == null || target.myRend == null) continue;
+                
+                bool hasVisibleShield = false;
+                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
+                    hasVisibleShield = Medic.showShielded == 0 // Everyone
+                        || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
+                        || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
+                }
 
-            if (hasVisibleShield) {
-                target.myRend.material.SetFloat("_Outline", 1f);
-                target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
-            } else {
-                target.myRend.material.SetFloat("_Outline", 0f);
+                if (hasVisibleShield) {
+                    target.myRend.material.SetFloat("_Outline", 1f);
+                    target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                } else {
+                    target.myRend.material.SetFloat("_Outline", 0f);
+                }
             }
         }
 
@@ -307,14 +309,6 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void Prefix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
-
-            // Update player outline
-            setPlayerBaseOutline(__instance);
-        }
-
-
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -322,6 +316,9 @@ namespace TheOtherRoles {
             playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
+                // Update player outlines
+                setBasePlayerOutlines();
+
                 // Update Role Description
                 Helpers.refreshRoleDescription(__instance);
 
