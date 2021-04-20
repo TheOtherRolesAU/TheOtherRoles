@@ -76,6 +76,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where players could only use quickchat
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
+- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility

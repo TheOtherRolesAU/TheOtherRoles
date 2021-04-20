@@ -282,9 +282,9 @@ namespace TheOtherRoles
 
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Change buttons if there are more than 10 players
-            if (__instance.playerStates != null) { 
+            if (__instance.playerStates != null && __instance.playerStates.Length > 10) { 
                 PlayerVoteArea[] playerStates = __instance.playerStates.OrderBy((PlayerVoteArea p) => p.isDead ? 50 : 0)
-						   	       .ThenBy((PlayerVoteArea p) => p.TargetPlayerId) // TargetPlayerId
+						   	       .ThenBy((PlayerVoteArea p) => p.TargetPlayerId)
 						   	       .ToArray<PlayerVoteArea>();
                 for (int i = 0; i < playerStates.Length; i++) {
                     PlayerVoteArea area = playerStates[i];
