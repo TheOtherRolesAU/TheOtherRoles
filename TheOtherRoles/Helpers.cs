@@ -143,9 +143,8 @@ namespace TheOtherRoles {
             }
         }
 
-        private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
         public static bool isLighterColor(int colorId) {
-            return lighterColors.Contains(colorId);
+            return CustomColors.lighterColors.Contains(colorId);
         }
 
         public static bool isCustomServer() {

@@ -11,12 +11,10 @@ using Assets.CoreScripts;
 namespace TheOtherRoles {
     public class CustomColors {
         protected static Dictionary<int, string> ColorStrings = new Dictionary<int, string>();
-        private static List<int> lighterColors = new List<int>();
+        public static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
         public static int pickableColors = 12;
 
         public static void Load() {
-            lighterColors = (List<int>) typeof(Helpers).GetField("lighterColors", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // Get shared Reference
-
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
             List<StringNames> shortlist = Enumerable.ToList<StringNames>(Palette.ShortColorNames);
             List<Color32> colorlist = Enumerable.ToList<Color32>(Palette.PlayerColors);
@@ -102,6 +100,8 @@ namespace TheOtherRoles {
             Palette.ShadowColors = shadowlist.ToArray();
             MedScanMinigame.ColorNames = Palette.ColorNames;
             Telemetry.ColorNames = Palette.ColorNames;
+
+            foreach (int i in lighterColors) System.Console.WriteLine(i);
         }
 
         protected internal struct CustomColor {
