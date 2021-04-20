@@ -337,10 +337,8 @@ namespace TheOtherRoles
 
             // Switch shield
             if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
                 Medic.shielded = oldShifter;
             } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
                 Medic.shielded = player;
             }
 

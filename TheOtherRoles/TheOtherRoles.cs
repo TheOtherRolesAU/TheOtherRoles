@@ -248,7 +248,6 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
-            if (shielded?.myRend?.material != null) shielded.myRend.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
@@ -376,7 +375,6 @@ namespace TheOtherRoles
             morphling.SetPet(morphling.Data.PetId);
             morphling.CurrentPet.Visible = morphling.Visible;
             morphling.SetColor(morphling.Data.ColorId);
-            morphling.myRend.material.SetFloat("_Outline", 0f);
         }
 
         public static void clearAndReload() {
