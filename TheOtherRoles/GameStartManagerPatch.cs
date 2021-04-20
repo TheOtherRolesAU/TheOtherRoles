@@ -10,8 +10,7 @@ namespace TheOtherRoles {
         public static Dictionary<int, Tuple<byte, byte, byte>> playerVersions = new Dictionary<int, Tuple<byte, byte, byte>>();
         private static float timer = 600f;
         private static bool versionSent = false;
-        private static string lobbyCode = "";
-
+        
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
         public class GameStartManagerStartPatch {
             public static void Postfix(GameStartManager __instance) {
@@ -20,7 +19,7 @@ namespace TheOtherRoles {
                 // Reset lobby countdown timer
                 timer = 600f; 
                 // Copy lobby code
-                GUIUtility.systemCopyBuffer = lobbyCode = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
+                GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
             }
         }
 
@@ -88,9 +87,11 @@ namespace TheOtherRoles {
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
                 // Lobby code replacement
-                Color c = Color.white;
-                ColorUtility.TryParseHtmlString(TheOtherRolesPlugin.StreamerModeReplacementColor.Value, out c);
-                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? Helpers.cs(c, TheOtherRolesPlugin.StreamerModeReplacementText.Value) : lobbyCode;
+                if (TheOtherRolesPlugin.StreamerMode.Value) {
+                    Color c = Color.white;
+                    // ColorUtility.TryParseHtmlString(TheOtherRolesPlugin.StreamerModeReplacementColor.Value, out c);
+                    __instance.GameRoomName.text = Helpers.cs(c, TheOtherRolesPlugin.StreamerModeReplacementText.Value);
+                }
             }
         }
 

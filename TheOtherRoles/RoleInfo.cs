@@ -101,6 +101,12 @@ namespace TheOtherRoles
                 "Use your jack-in-the-boxes to surprise others",
                 "Surprise your enemies"));
             }
+            if (Cleaner.cleaner != null && p == Cleaner.cleaner) {
+                infos.Add(new RoleInfo("Cleaner",
+                Cleaner.color,
+                "Kill everyone and leave no traces",
+                "Clean up dead bodies"));
+            }
             if (Detective.detective != null && p == Detective.detective) {
                 infos.Add(new RoleInfo("Detective",
                 Detective.color,

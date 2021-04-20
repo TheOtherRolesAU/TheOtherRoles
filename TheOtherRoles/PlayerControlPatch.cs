@@ -363,6 +363,12 @@ namespace TheOtherRoles {
 		    }
             return false;
         }
+
+        public static void Postfix(KillButtonManager __instance) {
+            if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) {
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]

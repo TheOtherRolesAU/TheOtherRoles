@@ -39,7 +39,8 @@ namespace TheOtherRoles
         Sidekick,
         Eraser,
         Spy,
-        Trickster
+        Trickster,
+        Cleaner
     }
 
     enum CustomRPC
@@ -202,6 +203,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Trickster:
                         Trickster.trickster = player;
+                        break;
+                    case RoleId.Cleaner:
+                        Cleaner.cleaner = player;
                         break;
                     }
                 }
@@ -398,14 +402,14 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (Morphling.morphling == null || target == null) return;
 
-            Morphling.morphTimer = Morphling.duration;
+            Morphling.morphTimer = 10f;
             Morphling.morphTarget = target;
         }
 
         public static void camouflagerCamouflage() {
             if (Camouflager.camouflager == null) return;
 
-            Camouflager.camouflageTimer = Camouflager.duration;
+            Camouflager.camouflageTimer = 10f;
         }
 
         public static void loverSuicide(byte remainingLoverId) {
@@ -532,6 +536,7 @@ namespace TheOtherRoles
             if (player == Vampire.vampire) Vampire.clearAndReload();
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
+            if (player == Cleaner.cleaner) Cleaner.clearAndReload();
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();

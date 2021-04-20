@@ -46,6 +46,7 @@ namespace TheOtherRoles
             Eraser.clearAndReload();
             Spy.clearAndReload();
             Trickster.clearAndReload();
+            Cleaner.clearAndReload();
         }
 
         public static class Jester {
@@ -360,7 +361,6 @@ namespace TheOtherRoles
         private static Sprite morphSprite;
     
         public static float cooldown = 30f;
-        public static float duration = 10f;
 
         public static PlayerControl currentTarget;
         public static PlayerControl sampledTarget;
@@ -388,7 +388,6 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             cooldown = CustomOptionHolder.morphlingCooldown.getFloat();
-            duration = CustomOptionHolder.morphlingDuration.getFloat();
         }
 
         public static Sprite getSampleSprite() {
@@ -409,7 +408,6 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
     
         public static float cooldown = 30f;
-        public static float duration = 10f;
         public static float camouflageTimer = 0f;
 
         private static Sprite buttonSprite;
@@ -439,7 +437,6 @@ namespace TheOtherRoles
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = CustomOptionHolder.camouflagerCooldown.getFloat();
-            duration = CustomOptionHolder.camouflagerDuration.getFloat();
         }
     }
 
@@ -740,5 +737,24 @@ namespace TheOtherRoles
             JackInTheBox.UpdateStates(); // if the role is erased, we might have to update the state of the created objects
         }
 
+    }
+
+    public static class Cleaner {
+        public static PlayerControl cleaner;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CleanButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            cleaner = null;
+            cooldown = CustomOptionHolder.janitorCooldown.getFloat();
+        }
     }
 }
