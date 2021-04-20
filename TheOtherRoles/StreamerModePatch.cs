@@ -25,7 +25,8 @@ namespace TheOtherRoles {
         public static void Postfix(OptionsMenuBehaviour __instance) {
             if ((streamerModeButton == null || streamerModeButton.gameObject == null) && __instance.CensorChatButton != null) {
                 streamerModeButton = UnityEngine.Object.Instantiate(__instance.CensorChatButton, __instance.CensorChatButton.transform.parent);
-                streamerModeButton.transform.localPosition += Vector3.down * 0.5f;
+                streamerModeButton.transform.localPosition += Vector3.down * 0.25f;
+                __instance.CensorChatButton.transform.localPosition += Vector3.up * 0.25f;
                 PassiveButton button = streamerModeButton.GetComponent<PassiveButton>();
                 button.OnClick = new Button.ButtonClickedEvent();
                 button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClick);
