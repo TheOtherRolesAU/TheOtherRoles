@@ -62,6 +62,7 @@
         <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0016.png" />
         <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0017.png" />
         <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0018.png" />
+        <EmbeddedResource Include="Resources\CustomHats\*.png" />
     </ItemGroup>
 
     <ItemGroup>
