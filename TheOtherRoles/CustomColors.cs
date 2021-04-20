@@ -12,6 +12,8 @@ namespace TheOtherRoles {
     public class CustomColors {
         protected static Dictionary<int, string> ColorStrings = new Dictionary<int, string>();
         private static List<int> lighterColors = new List<int>();
+        public static int pickableColors = 12;
+
         public static void Load() {
             lighterColors = (List<int>) typeof(Helpers).GetField("lighterColors", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // Get shared Reference
 
@@ -54,9 +56,9 @@ namespace TheOtherRoles {
                                         color = new Color32(255, 164, 119, byte.MaxValue), 
                                         shadow = new Color32(238, 128, 100, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Neon Green", shortname = "NEON", // CHANGE THIS
-                                        color = new Color32(51, 255, 119, byte.MaxValue), 
-                                        shadow = new Color32(0, 234, 77, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "Wasabi", shortname = "WSBI", 
+                                        color = new Color32(112, 143, 46, byte.MaxValue), 
+                                        shadow = new Color32(72, 92, 29, byte.MaxValue),
                                         isLighterColor = true });
             colors.Add(new CustomColor { longname = "Hot Pink", shortname = "HTPNK", 
                                         color = new Color32(255, 51, 102, byte.MaxValue), 
@@ -70,7 +72,18 @@ namespace TheOtherRoles {
                                         color = new Color32(0, 99, 105, byte.MaxValue), 
                                         shadow = new Color32(0, 61, 54, byte.MaxValue),
                                         isLighterColor = false });
-                                        
+
+            pickableColors += colors.Count; // Colors to show in Tab
+            /** Hidden Colors **/
+            colors.Add(new CustomColor { longname = "Panda", shortname = "PANDA", 
+                                        color = new Color32(255, 255, 255, 0), 
+                                        shadow = new Color32(12, 12, 12, 0),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "Midnight", shortname = "MDNT", 
+                                        color = new Color32(64, 8, 71, 0), 
+                                        shadow = new Color32(24, 32, 116, 0),
+                                        isLighterColor = false });
+            /** Add Colors **/
             int id = 50000;
             foreach (CustomColor cc in colors) {
                 longlist.Add((StringNames)id);
@@ -127,6 +140,9 @@ namespace TheOtherRoles {
                         int row = i / cols, col = i % cols; // Dynamically do the positioning
                         chip.transform.localPosition = new Vector3(1.46f + (col * 0.6f), -0.43f - (row * 0.55f), chip.transform.localPosition.z);
                         chip.transform.localScale *= 0.9f;
+
+                        if (i >= pickableColors) 
+                            chip.transform.localScale *= 0f; // Needs to exist for PlayerTab
                     }
                 }
             }
