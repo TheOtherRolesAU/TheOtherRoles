@@ -15,10 +15,10 @@ namespace TheOtherRoles {
         public static void Load() {
             lighterColors = (List<int>) typeof(Helpers).GetField("lighterColors", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null); // Get shared Reference
 
-            List<StringNames> longlist = Enumerable.ToList<StringNames>(BLMBFIODBKL.ALHCFFDHINL); // Palette.ColorNames
-            List<StringNames> shortlist = Enumerable.ToList<StringNames>(BLMBFIODBKL.MBDDHJCCLBP); // Palette.ShortColorNames
-            List<Color32> colorlist = Enumerable.ToList<Color32>(BLMBFIODBKL.AEDCMKGJKAG); // Palette.PlayerColors
-            List<Color32> shadowlist = Enumerable.ToList<Color32>(BLMBFIODBKL.PHFOPNDOEMD); // Palette.ShadowColors
+            List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
+            List<StringNames> shortlist = Enumerable.ToList<StringNames>(Palette.ShortColorNames);
+            List<Color32> colorlist = Enumerable.ToList<Color32>(Palette.PlayerColors);
+            List<Color32> shadowlist = Enumerable.ToList<Color32>(Palette.ShadowColors);
 
             List<CustomColor> colors = new List<CustomColor>();
 
@@ -83,12 +83,12 @@ namespace TheOtherRoles {
                     lighterColors.Add(colorlist.Count - 1);
             }
 
-            BLMBFIODBKL.MBDDHJCCLBP = shortlist.ToArray();
-            BLMBFIODBKL.ALHCFFDHINL = longlist.ToArray();
-            BLMBFIODBKL.AEDCMKGJKAG = colorlist.ToArray();
-            BLMBFIODBKL.PHFOPNDOEMD = shadowlist.ToArray();
-            MedScanMinigame.ALHCFFDHINL = BLMBFIODBKL.ALHCFFDHINL; // MedScanMinigame.ColorNames = Palette.ColorNames
-            Telemetry.ALHCFFDHINL = BLMBFIODBKL.ALHCFFDHINL; // Telemetry.ColorNames = Palette.ColorNames
+            Palette.ShortColorNames = shortlist.ToArray();
+            Palette.ColorNames = longlist.ToArray();
+            Palette.PlayerColors = colorlist.ToArray();
+            Palette.ShadowColors = shadowlist.ToArray();
+            MedScanMinigame.ColorNames = Palette.ColorNames;
+            Telemetry.ColorNames = Palette.ColorNames;
         }
 
         protected internal struct CustomColor {
