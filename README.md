@@ -69,6 +69,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.3.0**
+- We added new player colors
+- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 - Freeplay is now working again
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
 - Added the option to hide the name of players with an unknown role
@@ -76,7 +78,6 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where players could only use quickchat
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
-- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -514,8 +515,12 @@ The Detective can see footprints that other players leave behind.
 The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
 **NOTE**
-- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
-- **Darker Colors:** Red, blue, green, grey, purple, brown
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime, salmon, mint, lavender, peach, wasabi, hot pink
+
+![](./LighterColors.png)
+- **Darker Colors:** Red, blue, green, grey, purple, brown, bordeaux, olive, turqoise, nougat, gray, petrol
+
+![](./DarkerColors.png)
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The detective does not see footprints of players that sit in vents
 
@@ -610,8 +615,12 @@ Otherwise he sees the same information as everyone else.
 \
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
-- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime
-- **Darker Colors:** Red, blue, green, grey, purple, brown
+- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime, salmon, mint, lavender, peach, wasabi, hot pink
+
+![](./LighterColors.png)
+- **Darker Colors:** Red, blue, green, grey, purple, brown, bordeaux, olive, turqoise, nougat, gray, petrol
+
+![](./DarkerColors.png)
 
 ### Game Options
 | Name | Description |
