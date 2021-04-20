@@ -585,8 +585,7 @@ namespace TheOtherRoles
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                                     RPCProcedure.janitorClean(playerInfo.PlayerId);
 
-                                    cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer;
-                                    __instance.KillButton.SetCoolDown(cleanerCleanButton.Timer, cleanerCleanButton.MaxTimer);
+                                    Cleaner.cleaner.killTimer = cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer;
                                     break;
                                 }
                             }

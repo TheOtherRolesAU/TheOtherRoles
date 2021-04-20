@@ -455,7 +455,7 @@ namespace TheOtherRoles {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = PlayerControl.GameOptions.KillCooldown;
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
 
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
