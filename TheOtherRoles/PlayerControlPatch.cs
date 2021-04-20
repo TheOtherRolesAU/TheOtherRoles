@@ -115,13 +115,13 @@ namespace TheOtherRoles {
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
             Medic.currentTarget = setTarget();
-            setPlayerOutline(Medic.currentTarget, Medic.color);
+            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.color);
         }
 
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
-            setPlayerOutline(Shifter.currentTarget, Shifter.color);
+            if (Shifter.futureShift == null) setPlayerOutline(Shifter.currentTarget, Shifter.color);
         }
 
         
@@ -140,7 +140,7 @@ namespace TheOtherRoles {
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
-            setPlayerOutline(Tracker.currentTarget, Tracker.color);
+            if (!Tracker.usedTracker) setPlayerOutline(Tracker.currentTarget, Tracker.color);
         }
 
         static void detectiveUpdateFootPrints() {            
@@ -202,7 +202,7 @@ namespace TheOtherRoles {
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
-            setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
+            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
         }
 
         static void eraserSetTarget() {
@@ -307,11 +307,16 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void Postfix(PlayerControl __instance) {
+        public static void Prefix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
             // Update player outline
             setPlayerBaseOutline(__instance);
+        }
+
+
+        public static void Postfix(PlayerControl __instance) {
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
             // Child and Morphling shrink
             playerSizeUpdate(__instance);
