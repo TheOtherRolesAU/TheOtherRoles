@@ -29,16 +29,16 @@ namespace TheOtherRoles
             RPCProcedure.setRole(roleId, playerId);
         }
 
-        public static void Postfix(Il2CppReferenceArray<GameData.LGBOMGHJELL> BHNEINNHPIJ)
+        public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.PPMOEEPBHJO.FDNMBJOAPFL);
+            crewmates.RemoveAll(x => x.Data.IsImpostor);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.PPMOEEPBHJO.FDNMBJOAPFL);
+            impostors.RemoveAll(x => !x.Data.IsImpostor);
 
             float crewCountSettings = (float)CustomOptionHolder.crewmateRolesCount.getSelection() / 2;
             float impCountSettings = (float)CustomOptionHolder.impostorRolesCount.getSelection() / 2;

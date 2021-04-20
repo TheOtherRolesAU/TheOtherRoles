@@ -307,14 +307,14 @@ namespace TheOtherRoles {
                 option.entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", option.id.ToString(), option.defaultSelection);
                 option.selection = Mathf.Clamp(option.entry.Value, 0, option.selections.Length - 1);
                 if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption) {
-                    stringOption.LCDAKOCANPH = stringOption.Value = option.selection;
+                    stringOption.oldValue = stringOption.Value = option.selection;
                     stringOption.ValueText.text = option.selections[option.selection].ToString();
                 }
             }
         }
 
         public static void ShareOptionSelections() {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.HHBLOCGKFAB == false && PlayerControl.LocalPlayer == null) return;
+            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null) return;
             foreach (CustomOption option in CustomOption.options) {
                 MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
@@ -342,10 +342,10 @@ namespace TheOtherRoles {
         public void updateSelection(int newSelection) {
             selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
             if (optionBehaviour != null && optionBehaviour is StringOption stringOption) {
-                stringOption.LCDAKOCANPH = stringOption.Value = selection;
+                stringOption.oldValue = stringOption.Value = selection;
                 stringOption.ValueText.text = selections[selection].ToString();
 
-                if (AmongUsClient.Instance?.HHBLOCGKFAB == true && PlayerControl.LocalPlayer) {
+                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer) {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 
@@ -361,7 +361,7 @@ namespace TheOtherRoles {
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
 
-            List<OptionBehaviour> allOptions = __instance.MCAHCPOHNFI.ToList();
+            List<OptionBehaviour> allOptions = __instance.Children.ToList();
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
@@ -370,14 +370,14 @@ namespace TheOtherRoles {
 
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
                     stringOption.TitleText.text = option.name;
-                    stringOption.Value = stringOption.LCDAKOCANPH = option.selection;
+                    stringOption.Value = stringOption.oldValue = option.selection;
                     stringOption.ValueText.text = option.selections[option.selection].ToString();
 
                     option.optionBehaviour = stringOption;
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
-            __instance.MCAHCPOHNFI = allOptions.ToArray();
+            __instance.Children = allOptions.ToArray();
         }
     }
 
@@ -389,7 +389,7 @@ namespace TheOtherRoles {
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => {});
             __instance.TitleText.text = option.name;
-            __instance.Value = __instance.LCDAKOCANPH = option.selection;
+            __instance.Value = __instance.oldValue = option.selection;
             __instance.ValueText.text = option.selections[option.selection].ToString();
             
             return false;
@@ -435,7 +435,7 @@ namespace TheOtherRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.MCAHCPOHNFI.Length * 0.55F; 
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
@@ -470,7 +470,7 @@ namespace TheOtherRoles {
     class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(CEIOGGEDKAN).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+            return typeof(GameOptionsData).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
         }
 
         private static void Postfix(ref string __result)

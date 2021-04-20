@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-using Palette = BLMBFIODBKL;
-
 namespace TheOtherRoles
 {
     public class RoleInfo {
@@ -146,8 +144,8 @@ namespace TheOtherRoles
                 "Hacke to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
-                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "Bad Child" : "Good Child",
-                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Child.color,
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",
+                p.Data.IsImpostor ? Palette.ImpostorRed : Child.color,
                 "No one will harm you until you grow up",
                 "No one will harm you"));
             }
@@ -176,8 +174,8 @@ namespace TheOtherRoles
                 "Help your Jackal to kill everyone"));
             }
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                infos.Add(new RoleInfo(p.PPMOEEPBHJO.FDNMBJOAPFL ? "ImpLover" : "Lover",
-                p.PPMOEEPBHJO.FDNMBJOAPFL ? Palette.JPCHLLEJNEH : Lovers.color,
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpLover" : "Lover",
+                p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color,
                 "You are in <color=#FC03BEFF>Love</color>",
                 "You are in love"));
             }
@@ -187,9 +185,9 @@ namespace TheOtherRoles
                 "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
-            if (infos.Count == 0 && p.PPMOEEPBHJO.FDNMBJOAPFL) { // Just Impostor
+            if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
-                Palette.JPCHLLEJNEH,
+                Palette.ImpostorRed,
                 "",
                 "Sabotage and kill everyone"));
             } else if (infos.Count == 0) { // Just Crewmate

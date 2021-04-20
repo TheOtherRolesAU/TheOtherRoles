@@ -7,8 +7,6 @@ using static TheOtherRoles.TheOtherRoles;
 using System.Collections.Generic;
 using System.Linq;
 
-using Palette = BLMBFIODBKL;
-
 namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
@@ -18,7 +16,7 @@ namespace TheOtherRoles
             if (!MapOptions.hidePlayerNames) return false; // All names are visible
             else if (source == null || target == null) return true;
             else if (source == target) return false; // Player sees his own name
-            else if (source.PPMOEEPBHJO.FDNMBJOAPFL && (target.PPMOEEPBHJO.FDNMBJOAPFL || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
+            else if (source.Data.IsImpostor && (target.Data.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
             else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
             else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
             return true;
@@ -28,36 +26,36 @@ namespace TheOtherRoles
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.PPMOEEPBHJO.PCLLABJCIPC;
-                if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && player.PPMOEEPBHJO.FDNMBJOAPFL) {
-                    player.nameText.color = Palette.JPCHLLEJNEH;
+                player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
+                if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
+                    player.nameText.color = Palette.ImpostorRed;
                 } else {
                     player.nameText.color = Color.white;
                 }
             }
             if (MeetingHud.Instance != null) {
-                foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH) {
-                    PlayerControl playerControl = playersById.ContainsKey((byte)player.GEIOMAPOPKA) ? playersById[(byte)player.GEIOMAPOPKA] : null;
+                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                    PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
                     if (playerControl != null) {
-                        player.NameText.text = playerControl.PPMOEEPBHJO.PCLLABJCIPC;
-                        if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && playerControl.PPMOEEPBHJO.FDNMBJOAPFL) {
-                            player.NameText.color = Palette.JPCHLLEJNEH;
+                        player.NameText.text = playerControl.Data.PlayerName;
+                        if (PlayerControl.LocalPlayer.Data.IsImpostor && playerControl.Data.IsImpostor) {
+                            player.NameText.color = Palette.ImpostorRed;
                         } else {
                             player.NameText.color = Color.white;
                         }
                     }
                 }
             }
-            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !x.PPMOEEPBHJO.FDNMBJOAPFL);
+                impostors.RemoveAll(x => !x.Data.IsImpostor);
                 foreach (PlayerControl player in impostors)
-                    player.nameText.color = Palette.JPCHLLEJNEH;
+                    player.nameText.color = Palette.ImpostorRed;
                 if (MeetingHud.Instance != null)
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH) {
-                        PlayerControl playerControl = Helpers.playerById((byte)player.GEIOMAPOPKA);
-                        if (playerControl != null && playerControl.PPMOEEPBHJO.FDNMBJOAPFL)
-                            player.NameText.color =  Palette.JPCHLLEJNEH;
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                        PlayerControl playerControl = Helpers.playerById((byte)player.TargetPlayerId);
+                        if (playerControl != null && playerControl.Data.IsImpostor)
+                            player.NameText.color =  Palette.ImpostorRed;
                     }
             }
 
@@ -66,8 +64,8 @@ namespace TheOtherRoles
         static void setPlayerNameColor(PlayerControl p, Color color) {
             p.nameText.color = color;
             if (MeetingHud.Instance != null)
-                foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH)
-                    if (player.NameText != null && p.PlayerId == player.GEIOMAPOPKA)
+                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                    if (player.NameText != null && p.PlayerId == player.TargetPlayerId)
                         player.NameText.color = color;
         }
 
@@ -128,7 +126,7 @@ namespace TheOtherRoles
             }
 
             // No else if here, as the Impostors need the Spy name to be colored
-            if (Spy.spy != null && PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
@@ -137,22 +135,22 @@ namespace TheOtherRoles
         }
 
         static void setMafiaNameTags() {
-            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                     if (Godfather.godfather != null && Godfather.godfather == player)
-                            player.nameText.text = player.PPMOEEPBHJO.PCLLABJCIPC + " (G)";
+                            player.nameText.text = player.Data.PlayerName + " (G)";
                     else if (Mafioso.mafioso != null && Mafioso.mafioso == player)
-                            player.nameText.text = player.PPMOEEPBHJO.PCLLABJCIPC + " (M)";
+                            player.nameText.text = player.Data.PlayerName + " (M)";
                     else if (Janitor.janitor != null && Janitor.janitor == player)
-                            player.nameText.text = player.PPMOEEPBHJO.PCLLABJCIPC + " (J)";
+                            player.nameText.text = player.Data.PlayerName + " (J)";
                 if (MeetingHud.Instance != null)
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH)
-                        if (Godfather.godfather != null && Godfather.godfather.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.text = Godfather.godfather.PPMOEEPBHJO.PCLLABJCIPC + " (G)";
-                        else if (Mafioso.mafioso != null && Mafioso.mafioso.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.text = Mafioso.mafioso.PPMOEEPBHJO.PCLLABJCIPC + " (M)";
-                        else if (Janitor.janitor != null && Janitor.janitor.PlayerId == player.GEIOMAPOPKA)
-                            player.NameText.text = Janitor.janitor.PPMOEEPBHJO.PCLLABJCIPC + " (J)";
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                        if (Godfather.godfather != null && Godfather.godfather.PlayerId == player.TargetPlayerId)
+                            player.NameText.text = Godfather.godfather.Data.PlayerName + " (G)";
+                        else if (Mafioso.mafioso != null && Mafioso.mafioso.PlayerId == player.TargetPlayerId)
+                            player.NameText.text = Mafioso.mafioso.Data.PlayerName + " (M)";
+                        else if (Janitor.janitor != null && Janitor.janitor.PlayerId == player.TargetPlayerId)
+                            player.NameText.text = Janitor.janitor.Data.PlayerName + " (J)";
             }
         }
 
@@ -161,23 +159,23 @@ namespace TheOtherRoles
 
             if(Medic.showShielded == 0) // Everyone
             {
-                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline",  1f);
-                Medic.shielded.KJAENOGGEOK.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                Medic.shielded.myRend.material.SetFloat("_Outline",  1f);
+                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
             }
             else if (Medic.showShielded == 1 && PlayerControl.LocalPlayer == Medic.shielded) // Shielded + Medic
             {
-                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
-                Medic.shielded.KJAENOGGEOK.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                Medic.shielded.myRend.material.SetFloat("_Outline", 1f);
+                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
             }
             else if(PlayerControl.LocalPlayer == Medic.medic) // Medic
             {
-                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline",  1f);
-                Medic.shielded.KJAENOGGEOK.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                Medic.shielded.myRend.material.SetFloat("_Outline",  1f);
+                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
             }
 
             // Break shield
-            if (Medic.shielded.PPMOEEPBHJO.IAGJEKLJCCI || Medic.medic == null || Medic.medic.PPMOEEPBHJO.IAGJEKLJCCI) {
-                Medic.shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            if (Medic.shielded.Data.IsDead || Medic.medic == null || Medic.medic.Data.IsDead) {
+                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
                 Medic.shielded = null;
             }
         }
@@ -200,26 +198,26 @@ namespace TheOtherRoles
             // Set morphling morphed look
             if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
                 if (Morphling.morphling != null && Morphling.morphTarget != null) {
-                    Morphling.morphling.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, Morphling.morphling) ? "" : Morphling.morphTarget.PPMOEEPBHJO.PCLLABJCIPC;
-                    Morphling.morphling.KJAENOGGEOK.material.SetColor("_BackColor", Palette.PHFOPNDOEMD[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
-                    Morphling.morphling.KJAENOGGEOK.material.SetColor("_BodyColor", Palette.AEDCMKGJKAG[Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC]);
-                    Morphling.morphling.KJAENOGGEOK.material.SetFloat("_Outline",  Morphling.morphTarget.KJAENOGGEOK.material.GetFloat("_Outline"));
-                    Morphling.morphling.KJAENOGGEOK.material.SetColor("_OutlineColor", Morphling.morphTarget.KJAENOGGEOK.material.GetColor("_OutlineColor"));
-                    Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.PPMOEEPBHJO.CPGFLBANALE, Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC);
-                    Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.PPMOEEPBHJO.CPGFLBANALE == 0U) ? 0.7f : 1.05f, -0.5f);
+                    Morphling.morphling.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, Morphling.morphling) ? "" : Morphling.morphTarget.Data.PlayerName;
+                    Morphling.morphling.myRend.material.SetColor("_BackColor", Palette.ShadowColors[Morphling.morphTarget.Data.ColorId]);
+                    Morphling.morphling.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[Morphling.morphTarget.Data.ColorId]);
+                    Morphling.morphling.myRend.material.SetFloat("_Outline",  Morphling.morphTarget.myRend.material.GetFloat("_Outline"));
+                    Morphling.morphling.myRend.material.SetColor("_OutlineColor", Morphling.morphTarget.myRend.material.GetColor("_OutlineColor"));
+                    Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.Data.HatId, Morphling.morphTarget.Data.ColorId);
+                    Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.Data.HatId == 0U) ? 0.7f : 1.05f, -0.5f);
 
-                    if (Morphling.morphling.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllSkins[(int)Morphling.morphTarget.PPMOEEPBHJO.CGNMKICGLOG].ProdId) {
-                        Helpers.setSkinWithAnim(Morphling.morphling.MyPhysics, Morphling.morphTarget.PPMOEEPBHJO.CGNMKICGLOG);
+                    if (Morphling.morphling.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins[(int)Morphling.morphTarget.Data.SkinId].ProdId) {
+                        Helpers.setSkinWithAnim(Morphling.morphling.MyPhysics, Morphling.morphTarget.Data.SkinId);
                     }
-                    if (Morphling.morphling.CurrentPet == null || Morphling.morphling.CurrentPet.OPADMIKFGHK != DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllPets[(int)Morphling.morphTarget.PPMOEEPBHJO.LBHODBKCBKA].OPADMIKFGHK) {
+                    if (Morphling.morphling.CurrentPet == null || Morphling.morphling.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[(int)Morphling.morphTarget.Data.PetId].ProdId) {
                         if (Morphling.morphling.CurrentPet) UnityEngine.Object.Destroy(Morphling.morphling.CurrentPet.gameObject);
-                        Morphling.morphling.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllPets[(int)Morphling.morphTarget.PPMOEEPBHJO.LBHODBKCBKA]);
+                        Morphling.morphling.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[(int)Morphling.morphTarget.Data.PetId]);
                         Morphling.morphling.CurrentPet.transform.position = Morphling.morphling.transform.position;
                         Morphling.morphling.CurrentPet.Source = Morphling.morphling;
-                        Morphling.morphling.CurrentPet.BDBDGFDELMB = Morphling.morphling.BDBDGFDELMB;
-                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC, Morphling.morphling.CurrentPet.rend);
+                        Morphling.morphling.CurrentPet.Visible = Morphling.morphling.Visible;
+                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.Data.ColorId, Morphling.morphling.CurrentPet.rend);
                     } else if (Morphling.morphling.CurrentPet) {
-                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.PPMOEEPBHJO.IMMNCAGJJJC, Morphling.morphling.CurrentPet.rend);
+                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.Data.ColorId, Morphling.morphling.CurrentPet.rend);
                     }
                 }
             }
@@ -228,20 +226,20 @@ namespace TheOtherRoles
             if (Camouflager.camouflageTimer > 0f) {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     p.nameText.text = "";
-                    p.KJAENOGGEOK.material.SetColor("_BackColor", Palette.AEDCMKGJKAG[6]);
-                    p.KJAENOGGEOK.material.SetColor("_BodyColor", Palette.AEDCMKGJKAG[6]);
-                    p.KJAENOGGEOK.material.SetFloat("_Outline",  0f);
+                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
+                    p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
                     bool spawnPet = false;
                     if (p.CurrentPet == null) spawnPet = true;
-                    else if (p.CurrentPet.OPADMIKFGHK != DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllPets[0].OPADMIKFGHK) {
+                    else if (p.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[0].ProdId) {
                         UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
                         spawnPet = true;
                     }
 
                     if (spawnPet) {
-                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllPets[0]);
+                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[0]);
                         p.CurrentPet.transform.position = p.transform.position;
                         p.CurrentPet.Source = p;
                     }
@@ -270,8 +268,8 @@ namespace TheOtherRoles
 
             Child.child.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
-                foreach (PlayerVoteArea player in MeetingHud.Instance.GBKFCOAKLAH)
-                    if (player.NameText != null && Child.child.PlayerId == player.GEIOMAPOPKA)
+                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                    if (player.NameText != null && Child.child.PlayerId == player.TargetPlayerId)
                         player.NameText.text += suffix;
             }
 
@@ -280,11 +278,11 @@ namespace TheOtherRoles
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
-            if (!PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL) return;
+            if (!PlayerControl.LocalPlayer.Data.IsImpostor) return;
             bool enabled = true;
             if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer)
                 enabled = false;
-            else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI)
+            else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
                 enabled = false;
             else if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                 enabled = false;
@@ -301,18 +299,18 @@ namespace TheOtherRoles
 
             foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
 
-            if (Snitch.snitch == null || Snitch.snitch.PPMOEEPBHJO.IAGJEKLJCCI) return;
+            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
             int numberOfTasks = 0;
-            GameData.LGBOMGHJELL LGBOMGHJELL = Snitch.snitch.PPMOEEPBHJO;
-			if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.PHGPJMKOKMC != null) {
-				for (int i = 0; i < LGBOMGHJELL.PHGPJMKOKMC.Count; i++) {
-					if (!LGBOMGHJELL.PHGPJMKOKMC[i].LBBFBHJINJK)
+            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
+			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
+				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
+					if (!playerInfo.Tasks[i].Complete)
 						numberOfTasks++;
 				}
 			}
 
-            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && numberOfTasks <= Snitch.taskCountForImpostors) {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
                     Snitch.localArrows[0].arrow.SetActive(true);
@@ -321,7 +319,7 @@ namespace TheOtherRoles
             } else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0) { 
                 int arrowIndex = 0;
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (p.PPMOEEPBHJO.FDNMBJOAPFL && !p.PPMOEEPBHJO.IAGJEKLJCCI) {
+                    if (p.Data.IsImpostor && !p.Data.IsDead) {
                         if (arrowIndex >= Snitch.localArrows.Count) Snitch.localArrows.Add(new Arrow(Color.blue));
                         if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
                             Snitch.localArrows[arrowIndex].arrow.SetActive(true);
@@ -335,7 +333,7 @@ namespace TheOtherRoles
 
         static void Postfix(HudManager __instance)
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GCDONLGCMIL.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
             CustomButton.HudUpdate();
             resetNameTagsAndColors();

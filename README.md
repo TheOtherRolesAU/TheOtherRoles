@@ -76,6 +76,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where players could only use quickchat
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
+- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -263,6 +264,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 
 
 # Credits & Resources
+[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all versions above v2.3.0, we're using the OxygenFilter for automatic deobfuscation\
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
