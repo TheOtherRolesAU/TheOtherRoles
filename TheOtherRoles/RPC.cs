@@ -396,14 +396,14 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (Morphling.morphling == null || target == null) return;
 
-            Morphling.morphTimer = 10f;
+            Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
         }
 
         public static void camouflagerCamouflage() {
             if (Camouflager.camouflager == null) return;
 
-            Camouflager.camouflageTimer = 10f;
+            Camouflager.camouflageTimer = Camouflager.duration;
         }
 
         public static void loverSuicide(byte remainingLoverId) {
