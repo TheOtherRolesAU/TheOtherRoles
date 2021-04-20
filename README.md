@@ -80,6 +80,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - You can now change the custom server ip/port right inside the game
 - Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 - Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#settings) for more details.
+- We added some outlines, that show who you're focusing with your special abilities. [Sihaack](https://github.com/sihaack) suggested and coded a part of the feature.
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
