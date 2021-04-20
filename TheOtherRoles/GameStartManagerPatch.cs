@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using Hazel;
 using System;
 
-using Palette = BLMBFIODBKL;
-
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
         public static Dictionary<int, Tuple<byte, byte, byte>> playerVersions = new Dictionary<int, Tuple<byte, byte, byte>>();
@@ -29,8 +27,8 @@ namespace TheOtherRoles {
             private static string currentText = "";
 
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.HHBLOCGKFAB  || !GameData.Instance) return; // Not host or no instance
-                update = GameData.Instance.MFDAIFHGKMG != __instance.OBFONKJNJFF;
+                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance) return; // Not host or no instance
+                update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
             }
 
             public static void Postfix(GameStartManager __instance) {
@@ -47,7 +45,7 @@ namespace TheOtherRoles {
                 }
 
                 // Host update with version handshake infos
-                if (AmongUsClient.Instance.HHBLOCGKFAB) {
+                if (AmongUsClient.Instance.AmHost) {
                     bool blockStart = false;
                     string message = "";
                     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
@@ -57,24 +55,24 @@ namespace TheOtherRoles {
                             continue;
                         else if (!playerVersions.ContainsKey(client.Id))  {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.PPMOEEPBHJO.PCLLABJCIPC} has an outdated or no version of The Other Roles\n</color>";
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an outdated or no version of The Other Roles\n</color>";
                         } else if (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.PPMOEEPBHJO.PCLLABJCIPC} has an outdated version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an outdated version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
                         }
                     }
                     if (blockStart) {
-                        // __instance.StartButton.color = Palette.ILFJLECIGDB; // Allow the start for this version to test the feature, blocking it with the next version
+                        // __instance.StartButton.color = Palette.DisabledClear; // Allow the start for this version to test the feature, blocking it with the next version
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
-                        // __instance.StartButton.color = ((__instance.OBFONKJNJFF >= __instance.MinPlayers) ? Palette.BJENLBHMKAI : Palette.ILFJLECIGDB); // Allow the start for this version to test the feature, blocking it with the next version
+                        // __instance.StartButton.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear); // Allow the start for this version to test the feature, blocking it with the next version
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     }
                 }
 
                 // Lobby timer
-                if (!AmongUsClient.Instance.HHBLOCGKFAB || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.AmHost || !GameData.Instance) return; // Not host or no instance
 
                 if (update) currentText = __instance.PlayerCounter.text;
 
@@ -95,7 +93,7 @@ namespace TheOtherRoles {
                 bool continueStart = true;
 
                 // Allow the start for this version to test the feature, blocking it with the next version
-                // if (AmongUsClient.Instance.HHBLOCGKFAB) {
+                // if (AmongUsClient.Instance.AmHost) {
                 //     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
                 //         if (client.Character == null) continue;
                 //         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();

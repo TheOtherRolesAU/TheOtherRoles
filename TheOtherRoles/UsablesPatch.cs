@@ -8,12 +8,6 @@ using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
 
-using SystemTypes = BCPJLGGNHBC;
-using Palette = BLMBFIODBKL;
-using Constants = LNCOKMACBKP;
-using PhysicsHelpers = FJFJIDCFLDJ;
-using TaskTypes = DMOAGPGAFKM;
-using ImageNames = DLBCMCKGOMN;
 
 namespace TheOtherRoles
 {
@@ -21,10 +15,10 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.LGBOMGHJELL pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
             float num = float.MaxValue;
-            PlayerControl @object = pc.GJPBCGFPMOD;
+            PlayerControl @object = pc.Object;
 
 
             bool roleCouldUse = false;
@@ -34,16 +28,16 @@ namespace TheOtherRoles
                 roleCouldUse = true;
             else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
                 roleCouldUse = true;
-            else if (pc.FDNMBJOAPFL) {
+            else if (pc.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
-                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI)
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
             }
 
-            var usableDistance = __instance.KNKPIDOGFFC;
+            var usableDistance = __instance.UsableDistance;
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
                 if(Trickster.trickster != PlayerControl.LocalPlayer) {
                     // Only the Trickster can use the Jack-In-The-Boxes!
@@ -57,7 +51,7 @@ namespace TheOtherRoles
                 }
             }
 
-            couldUse = ((@object.inVent || roleCouldUse) && !pc.IAGJEKLJCCI && (@object.POECPOEKKNO || @object.inVent));
+            couldUse = ((@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent));
             canUse = couldUse;
             if (canUse)
             {
@@ -65,7 +59,7 @@ namespace TheOtherRoles
                 Vector3 position = __instance.transform.position;
                 num = Vector2.Distance(truePosition, position);
                 
-                canUse &= (num <= usableDistance && !PhysicsHelpers.DOAHONIIFJD(truePosition, position, Constants.KOMPKLHCHJI, false));
+                canUse &= (num <= usableDistance && !PhysicsHelpers.AnythingBetween(truePosition, position, Constants.ShipOnlyMask, false));
             }
             __result = num;
             return false;
@@ -77,7 +71,7 @@ namespace TheOtherRoles
         public static bool Prefix(Vent __instance) {
             bool flag;
             bool flag2;
-            __instance.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out flag, out flag2);
+            __instance.CanUse(PlayerControl.LocalPlayer.Data, out flag, out flag2);
 
             if (!flag || !__instance.name.StartsWith("JackInTheBoxVent_")) return true;  // Continue with default method
 
@@ -99,8 +93,8 @@ namespace TheOtherRoles
     class UseButtonSetTargetPatch {
         static void Postfix(UseButtonManager __instance) {
             // Trickster render special vent button
-            if (__instance.LHAKKAAOLLM != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                Vent possibleVent =  __instance.LHAKKAAOLLM.TryCast<Vent>();
+            if (__instance.currentTarget != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
+                Vent possibleVent =  __instance.currentTarget.TryCast<Vent>();
                 if (possibleVent != null && possibleVent.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
                     __instance.UseButton.sprite = Trickster.getTricksterVentButtonSprite();
                 }
@@ -108,9 +102,9 @@ namespace TheOtherRoles
 
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
-            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI);
-            if (__instance.LHAKKAAOLLM == null && (blockSabotageJanitor || blockSabotageMafioso)) {
-                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetImage(ImageNames.UseButton);
+            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
+            if (__instance.currentTarget == null && (blockSabotageJanitor || blockSabotageMafioso)) {
+                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
                 __instance.UseButton.color = new Color(1f, 1f, 1f, 0.3f);
             }
 
@@ -120,11 +114,11 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
-            if (__instance.LHAKKAAOLLM != null) return true;
+            if (__instance.currentTarget != null) return true;
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
-            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.PPMOEEPBHJO.IAGJEKLJCCI);
+            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (blockSabotageJanitor || blockSabotageMafioso) return false;
 
             return true;
@@ -158,7 +152,7 @@ namespace TheOtherRoles
             }
 
             // Handle max number of meetings
-            if (__instance.FOIGOPKABAA == 1) {
+            if (__instance.state == 1) {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
@@ -195,11 +189,11 @@ namespace TheOtherRoles
     class VitalsMinigameBeginPatch {
         static void Postfix(VitalsMinigame __instance) {
 
-            if (__instance.PMKNJGLKGDD.Length > 10) {
-                for (int i = 0; i < __instance.PMKNJGLKGDD.Length; i++) {
-                    var vitalsPanel = __instance.PMKNJGLKGDD[i];
+            if (__instance.vitals.Length > 10) {
+                for (int i = 0; i < __instance.vitals.Length; i++) {
+                    var vitalsPanel = __instance.vitals[i];
                     var player = GameData.Instance.AllPlayers[i];
-                    vitalsPanel.Text.text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
+                    vitalsPanel.Text.text = player.PlayerName.Length >= 4 ? player.PlayerName.Substring(0, 4).ToUpper() : player.PlayerName.ToUpper();
                 }
             }
         }
@@ -212,28 +206,28 @@ namespace TheOtherRoles
         static void Postfix(VitalsMinigame __instance) {
             // Hacker show time since death
             bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
-            for (int k = 0; k < __instance.PMKNJGLKGDD.Length; k++)
+            for (int k = 0; k < __instance.vitals.Length; k++)
             {
-                VitalsPanel vitalsPanel = __instance.PMKNJGLKGDD[k];
-                GameData.LGBOMGHJELL player = GameData.Instance.AllPlayers[k];
+                VitalsPanel vitalsPanel = __instance.vitals[k];
+                GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
 
                 // Crowded scaling
-                float scale = 10f / Mathf.Max(10, __instance.PMKNJGLKGDD.Length);
+                float scale = 10f / Mathf.Max(10, __instance.vitals.Length);
                 vitalsPanel.transform.localPosition = new Vector3((float)k * 0.6f * scale + -2.7f, 0.2f, -1f);
                 vitalsPanel.transform.localScale = new Vector3(scale, scale, vitalsPanel.transform.localScale.z);
 
                 // Hacker update
                 if (vitalsPanel.IsDead) {
-                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.FNPNJHNKEBK)?.FirstOrDefault();
+                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.PlayerId)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
                         if (showHackerInfo)
                             vitalsPanel.Text.text = Math.Round(timeSinceDeath / 1000) + "s";
-                        else if (__instance.PMKNJGLKGDD.Length > 10)
-                            vitalsPanel.Text.text = player.PCLLABJCIPC.Length >= 4 ? player.PCLLABJCIPC.Substring(0, 4).ToUpper() : player.PCLLABJCIPC.ToUpper();
+                        else if (__instance.vitals.Length > 10)
+                            vitalsPanel.Text.text = player.PlayerName.Length >= 4 ? player.PlayerName.Substring(0, 4).ToUpper() : player.PlayerName.ToUpper();
                         else 
-                            vitalsPanel.Text.text = DestroyableSingleton<TranslationController>.CHNDKKBEIDG.GetString(Palette.MBDDHJCCLBP[(int)player.IMMNCAGJJJC], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                            vitalsPanel.Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(Palette.ShortColorNames[(int)player.ColorId], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
                     }
                 }
 	    	}
@@ -248,28 +242,28 @@ namespace TheOtherRoles
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
                 // Save colors for the Hacker
-                __instance.PPKFBIONLAL += Time.deltaTime;
-                if (__instance.PPKFBIONLAL < 0.1f)
+                __instance.timer += Time.deltaTime;
+                if (__instance.timer < 0.1f)
                 {
                     return false;
                 }
-                __instance.PPKFBIONLAL = 0f;
+                __instance.timer = 0f;
                 players = new Dictionary<SystemTypes, List<Color>>();
                 bool commsActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
                         if (task.TaskType == TaskTypes.FixComms) commsActive = true;       
 
 
-                if (!__instance.PIMGCOPFDBG && commsActive)
+                if (!__instance.isSab && commsActive)
                 {
-                    __instance.PIMGCOPFDBG = true;
-                    __instance.BackgroundColor.SetColor(Palette.EGHCBLDNCGP);
+                    __instance.isSab = true;
+                    __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                     __instance.SabotageText.gameObject.SetActive(true);
                     return false;
                 }
-                if (__instance.PIMGCOPFDBG && !commsActive)
+                if (__instance.isSab && !commsActive)
                 {
-                    __instance.PIMGCOPFDBG = false;
+                    __instance.isSab = false;
                     __instance.BackgroundColor.SetColor(Color.green);
                     __instance.SabotageText.gameObject.SetActive(false);
                 }
@@ -282,37 +276,37 @@ namespace TheOtherRoles
 
                     if (!commsActive)
                     {
-                        PlainShipRoom plainShipRoom = ShipStatus.Instance.DFAAPCDKCCO[counterArea.RoomType];
+                        PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
 
                         if (plainShipRoom != null && plainShipRoom.roomArea)
                         {
-                            int num = plainShipRoom.roomArea.OverlapCollider(__instance.CMCPAKBKLDP, __instance.HMNBGCJAGLM);
+                            int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
                             int num2 = num;
                             for (int j = 0; j < num; j++)
                             {
-                                Collider2D collider2D = __instance.HMNBGCJAGLM[j];
+                                Collider2D collider2D = __instance.buffer[j];
                                 if (!(collider2D.tag == "DeadBody"))
                                 {
                                     PlayerControl component = collider2D.GetComponent<PlayerControl>();
-                                    if (!component || component.PPMOEEPBHJO == null || component.PPMOEEPBHJO.MFFAGDHDHLO || component.PPMOEEPBHJO.IAGJEKLJCCI)
+                                    if (!component || component.Data == null || component.Data.Disconnected || component.Data.IsDead)
                                     {
                                         num2--;
-                                    } else if (component?.KJAENOGGEOK?.material != null) {
-                                        Color color = component.KJAENOGGEOK.material.GetColor("_BodyColor");
+                                    } else if (component?.myRend?.material != null) {
+                                        Color color = component.myRend.material.GetColor("_BodyColor");
                                         if (Hacker.onlyColorType) {
-                                            var id = Mathf.Max(0, Palette.AEDCMKGJKAG.IndexOf(color));
-                                            color = Helpers.isLighterColor((byte)id) ? Palette.AEDCMKGJKAG[7] : Palette.AEDCMKGJKAG[6];
+                                            var id = Mathf.Max(0, Palette.PlayerColors.IndexOf(color));
+                                            color = Helpers.isLighterColor((byte)id) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                         }
                                         roomColors.Add(color);
                                     }
                                 } else {
                                     DeadBody component = collider2D.GetComponent<DeadBody>();
                                     if (component) {
-                                        GameData.LGBOMGHJELL LGBOMGHJELL = GameData.Instance.GetPlayerById(component.ParentId);
-                                        if (LGBOMGHJELL != null) {
-                                            var color = Palette.AEDCMKGJKAG[LGBOMGHJELL.IMMNCAGJJJC];
+                                        GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                        if (playerInfo != null) {
+                                            var color = Palette.PlayerColors[playerInfo.ColorId];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(LGBOMGHJELL.IMMNCAGJJJC) ? Palette.AEDCMKGJKAG[7] : Palette.AEDCMKGJKAG[6];
+                                                color = Helpers.isLighterColor(playerInfo.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                             roomColors.Add(color);
                                         }
                                     }
@@ -344,8 +338,8 @@ namespace TheOtherRoles
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
 
-                    for (int i = 0; i < __instance.OHFFOMPLFLL.Count; i++) {
-                        PoolableBehavior icon = __instance.OHFFOMPLFLL[i];
+                    for (int i = 0; i < __instance.myIcons.Count; i++) {
+                        PoolableBehavior icon = __instance.myIcons[i];
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {
