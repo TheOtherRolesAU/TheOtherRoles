@@ -330,7 +330,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 \
 **NOTE:**
 - They shrink to the size of the child when they copies its look.
-- The Spy sees their new color on the admin table.
+- The Spy sees the new color on the admin table.
 - The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other impostor still sees that they are an impostor (the name remains red).
 - The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
@@ -638,7 +638,7 @@ The Shifter can take over the role of another Crewmate or Neutral, the other pla
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
 Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes a Crewmate.\
-Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide (there won't be a body after the meeting).\
+Swapping roles with an impostor or a custom impostor role fails and the Shifter commits suicide after the next meeting (there won't be any body).\
 The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
