@@ -78,6 +78,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where players could only use quickchat
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - You can now change the custom server ip/port right inside the game
+- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
+- Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#settings) for more details.
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -285,6 +287,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
+- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the *BepInEx\config\me.eisbison.theotherroles.cfg* file.
 - **Number of Impostors:** The number of Impostor count be set inside a lobby
 - **Map:** The map can be changed inside a lobby
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 

@@ -100,8 +100,6 @@ namespace TheOtherRoles {
             Palette.ShadowColors = shadowlist.ToArray();
             MedScanMinigame.ColorNames = Palette.ColorNames;
             Telemetry.ColorNames = Palette.ColorNames;
-
-            foreach (int i in lighterColors) System.Console.WriteLine(i);
         }
 
         protected internal struct CustomColor {
