@@ -13,6 +13,70 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
+        // Helpers
+
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
+            PlayerControl result = null;
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
+            if (!ShipStatus.Instance) return result;
+
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
+                        // if that player is not targetable: skip check
+                        continue;
+                    }
+
+                    if (@object && (!@object.inVent || targetPlayersInVents))
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            result = @object;
+                            num = magnitude;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        static void setPlayerOutline(PlayerControl target, Color color) {
+            if (target == null || target.myRend == null) return;
+            
+            target.myRend.material.SetFloat("_Outline", 1f);
+            target.myRend.material.SetColor("_OutlineColor", color);
+        }
+
+        // Update functions
+
+        static void setBasePlayerOutlines() {
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
+                if (target == null || target.myRend == null) continue;
+                
+                bool hasVisibleShield = false;
+                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
+                    hasVisibleShield = Medic.showShielded == 0 // Everyone
+                        || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
+                        || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
+                }
+
+                if (hasVisibleShield) {
+                    target.myRend.material.SetFloat("_Outline", 1f);
+                    target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                } else {
+                    target.myRend.material.SetFloat("_Outline", 0f);
+                }
+            }
+        }
+
         public static void bendTimeUpdate() {
             if (TimeMaster.isRewinding) {
                 if (localPlayerPositions.Count > 0) {
@@ -50,63 +114,35 @@ namespace TheOtherRoles {
             }
         }
 
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
-            PlayerControl result = null;
-            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
-            if (!ShipStatus.Instance) return result;
-
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
-                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
-                        // if that player is not targetable: skip check
-                        continue;
-                    }
-
-                    if (@object && (!@object.inVent || targetPlayersInVents))
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
             Medic.currentTarget = setTarget();
+            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.color);
         }
 
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
+            if (Shifter.futureShift == null) setPlayerOutline(Shifter.currentTarget, Shifter.color);
         }
 
         
         static void morphlingSetTarget() {
             if (Morphling.morphling == null || Morphling.morphling != PlayerControl.LocalPlayer) return;
             Morphling.currentTarget = setTarget();
+            setPlayerOutline(Morphling.currentTarget, Morphling.color);
         }
         
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != PlayerControl.LocalPlayer) return;
             Sheriff.currentTarget = setTarget();
+            setPlayerOutline(Sheriff.currentTarget, Sheriff.color);
         }
 
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
+            if (!Tracker.usedTracker) setPlayerOutline(Tracker.currentTarget, Tracker.color);
         }
 
         static void detectiveUpdateFootPrints() {            
@@ -147,6 +183,7 @@ namespace TheOtherRoles {
             }
             Vampire.targetNearGarlic = targetNearGarlic;
             Vampire.currentTarget = target;
+            setPlayerOutline(Vampire.currentTarget, Vampire.color);
         }
 
         static void jackalSetTarget() {
@@ -158,6 +195,7 @@ namespace TheOtherRoles {
             }
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            setPlayerOutline(Jackal.currentTarget, Jackal.color);
         }
 
         static void sidekickSetTarget() {
@@ -166,6 +204,7 @@ namespace TheOtherRoles {
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
         }
 
         static void eraserSetTarget() {
@@ -174,6 +213,7 @@ namespace TheOtherRoles {
             List<PlayerControl> untargatables = new List<PlayerControl>();
             if (Spy.spy != null) untargatables.Add(Spy.spy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargatables);
+            setPlayerOutline(Eraser.currentTarget, Eraser.color);
         }
 
         static void engineerUpdate() {
@@ -210,7 +250,7 @@ namespace TheOtherRoles {
                 target = setTarget(true, true);
             }
 
-            HudManager.Instance.KillButton.SetTarget(target);
+            HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
 
         static void trackerUpdate() {
@@ -269,19 +309,19 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void Prefix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
-        }
-
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
-            // Update Role Description
-            Helpers.refreshRoleDescription(__instance);
             // Child and Morphling shrink
             playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
+                // Update player outlines
+                setBasePlayerOutlines();
+
+                // Update Role Description
+                Helpers.refreshRoleDescription(__instance);
+
                 // Time Master
                 bendTimeUpdate();
                 // Morphling

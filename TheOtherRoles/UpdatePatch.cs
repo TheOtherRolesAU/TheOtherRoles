@@ -157,25 +157,7 @@ namespace TheOtherRoles
         static void updateShielded() {
             if (Medic.shielded == null) return;
 
-            if(Medic.showShielded == 0) // Everyone
-            {
-                Medic.shielded.myRend.material.SetFloat("_Outline",  1f);
-                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
-            }
-            else if (Medic.showShielded == 1 && PlayerControl.LocalPlayer == Medic.shielded) // Shielded + Medic
-            {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 1f);
-                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
-            }
-            else if(PlayerControl.LocalPlayer == Medic.medic) // Medic
-            {
-                Medic.shielded.myRend.material.SetFloat("_Outline",  1f);
-                Medic.shielded.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
-            }
-
-            // Break shield
             if (Medic.shielded.Data.IsDead || Medic.medic == null || Medic.medic.Data.IsDead) {
-                Medic.shielded.myRend.material.SetFloat("_Outline", 0f);
                 Medic.shielded = null;
             }
         }
@@ -228,7 +210,6 @@ namespace TheOtherRoles
                     p.nameText.text = "";
                     p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
                     p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
-                    p.myRend.material.SetFloat("_Outline",  0f);
                     p.HatRenderer.SetHat(0, 0);
                     Helpers.setSkinWithAnim(p.MyPhysics, 0);
                     bool spawnPet = false;
