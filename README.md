@@ -334,7 +334,7 @@ The Morphling is an impostor which can additionally scan the appearance of a pla
 \
 **NOTE:**
 - They shrink to the size of the child when they copies its look.
-- The Spy sees the new color on the admin table.
+- The Hacker sees the new color on the admin table.
 - The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other impostor still sees that they are an impostor (the name remains red).
 - The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
@@ -356,7 +356,7 @@ are hidden and all players have the same color.\
 **NOTE**
 - The Child will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
-- The Spy sees gray icons on the admin table
+- The Hacker sees gray icons on the admin table
 - The shield is not visible anymore
 - Tracker and Snitch arrows keep working
 
