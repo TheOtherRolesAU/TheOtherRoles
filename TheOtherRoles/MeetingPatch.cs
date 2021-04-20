@@ -124,7 +124,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
         class MeetingPopulateVotesPatch {
-            static bool Prefix(MeetingHud __instance, Il2CppStructArray<byte> states)
+            static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]Il2CppStructArray<byte> states)
             {
                 // Swapper swap votes
                 PlayerVoteArea swapped1 = null;
@@ -221,7 +221,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
         class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, byte[] states, GameData.PlayerInfo exiled, bool tie)
+            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)]byte[] states, [HarmonyArgument(1)]GameData.PlayerInfo exiled, [HarmonyArgument(2)]bool tie)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -346,7 +346,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Deserialize))]
         class MeetingDeserializePatch {
-            static void Postfix(MeetingHud __instance, MessageReader reader, bool initialState)
+            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)]MessageReader reader, [HarmonyArgument(1)]bool initialState)
             {
                 // Add swapper buttons
                 if (initialState) {
@@ -357,7 +357,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, GameData.PlayerInfo meetingTarget) {
+            public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings
@@ -379,8 +379,7 @@ namespace TheOtherRoles
 
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileBeginPatch {
-
-        public static void Prefix(ref GameData.PlayerInfo exiled, bool tie) {
+        public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
             // Shifter shift
             if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterShift, Hazel.SendOption.Reliable, -1);
@@ -455,7 +454,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class MeetingExiledTextPatch
     {
-        static void Postfix(ref string __result, StringNames id, Il2CppReferenceArray<Il2CppSystem.Object> parts)
+        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts)
         {
             if (ExileController.Instance != null && ExileController.Instance.exiled != null)
             {
