@@ -41,7 +41,7 @@ namespace TheOtherRoles
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode  = Config.Bind("Custom", "Enable Streamer Mode", false);
-            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "The Other Roles");
+            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
 
