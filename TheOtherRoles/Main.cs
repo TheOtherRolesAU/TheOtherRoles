@@ -32,6 +32,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<bool> StreamerMode { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
+        public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
 
@@ -41,6 +42,7 @@ namespace TheOtherRoles
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode  = Config.Bind("Custom", "Enable Streamer Mode", false);
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "The Other Roles");
+            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");

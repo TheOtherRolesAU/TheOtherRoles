@@ -88,7 +88,9 @@ namespace TheOtherRoles {
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
                 // Lobby code replacement
-                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? $"<color=#87AAF5FF>{TheOtherRolesPlugin.StreamerModeReplacementText.Value}</color>" : lobbyCode;
+                Color c = Color.white;
+                ColorUtility.TryParseHtmlString(TheOtherRolesPlugin.StreamerModeReplacementColor.Value, out c);
+                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? Helpers.cs(c, TheOtherRolesPlugin.StreamerModeReplacementText.Value) : lobbyCode;
             }
         }
 
