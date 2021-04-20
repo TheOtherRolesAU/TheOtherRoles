@@ -143,7 +143,7 @@ namespace TheOtherRoles
                 },
                 () => { return Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
-                () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer;},
+                () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer; },
                 Janitor.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance
@@ -584,6 +584,9 @@ namespace TheOtherRoles
                                     writer.Write(playerInfo.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                                     RPCProcedure.janitorClean(playerInfo.PlayerId);
+
+                                    cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer;
+                                    __instance.KillButton.SetCoolDown(cleanerCleanButton.Timer, cleanerCleanButton.MaxTimer);
                                     break;
                                 }
                             }
@@ -591,8 +594,8 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Cleaner.cleaner != null && Cleaner.cleaner == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
-                () => { cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer; __instance.KillButton.SetCoolDown(cleanerCleanButton.Timer, cleanerCleanButton.MaxTimer); },
+                () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
+                () => { cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer; },
                 Cleaner.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance

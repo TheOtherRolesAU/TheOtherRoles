@@ -363,12 +363,6 @@ namespace TheOtherRoles {
 		    }
             return false;
         }
-
-        public static void Postfix(KillButtonManager __instance) {
-            if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) {
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
-            }
-        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
@@ -458,6 +452,10 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
+
+            // Cleaner Button Sync
+            if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
+                HudManagerStartPatch.cleanerCleanButton.Timer = PlayerControl.GameOptions.KillCooldown;
 
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
