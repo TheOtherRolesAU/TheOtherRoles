@@ -4,13 +4,15 @@ using UnityEngine;
 using System.Collections.Generic;
 using Hazel;
 using System;
+using UnhollowerBaseLib;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
         public static Dictionary<int, Tuple<byte, byte, byte>> playerVersions = new Dictionary<int, Tuple<byte, byte, byte>>();
         private static float timer = 600f;
         private static bool versionSent = false;
-        
+        private static string lobbyCodeText = "";
+
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
         public class GameStartManagerStartPatch {
             public static void Postfix(GameStartManager __instance) {
@@ -19,7 +21,9 @@ namespace TheOtherRoles {
                 // Reset lobby countdown timer
                 timer = 600f; 
                 // Copy lobby code
-                GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
+                string code = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
+                GUIUtility.systemCopyBuffer = code;
+                lobbyCodeText = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.RoomCode, new Il2CppReferenceArray<Il2CppSystem.Object>(0)) + "\r\n" + code;
             }
         }
 
@@ -87,11 +91,7 @@ namespace TheOtherRoles {
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
                 // Lobby code replacement
-                if (TheOtherRolesPlugin.StreamerMode.Value) {
-                    Color c = Color.white;
-                    // ColorUtility.TryParseHtmlString(TheOtherRolesPlugin.StreamerModeReplacementColor.Value, out c);
-                    __instance.GameRoomName.text = Helpers.cs(c, TheOtherRolesPlugin.StreamerModeReplacementText.Value);
-                }
+                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? $"<color={TheOtherRolesPlugin.StreamerModeReplacementColor.Value}>{TheOtherRolesPlugin.StreamerModeReplacementText.Value}</color>" : lobbyCodeText;
             }
         }
 
