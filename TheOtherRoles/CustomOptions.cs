@@ -499,10 +499,12 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 19;
             int roleSettingsLines = defaultSettingsLines + 28;
-            int detailedSettingsLines = roleSettingsLines + 37;
+            int detailedSettingsP1 = roleSettingsLines + 37;
+            int detailedSettingsP2 = detailedSettingsP1 + 38;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
@@ -524,10 +526,12 @@ namespace TheOtherRoles {
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1, end3 - end2);
             } else if (counter == 3) {
-                hudString = hudString.Substring(end3 + 1);
+                hudString = hudString.Substring(end3 + 1, end4 - end3);
+            } else if (counter == 4) {
+                hudString = hudString.Substring(end4 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/4)";
+            hudString += $"\n Press tab for more... ({counter+1}/5)";
             __result = hudString;
         }
     }
@@ -538,7 +542,7 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance)
         {
             if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 4;
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 5;
             }
         }
     }
