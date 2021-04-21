@@ -60,7 +60,7 @@ namespace TheOtherRoles
 
         EngineerFixLights = 81,
         EngineerUsedRepair,
-        JanitorClean,
+        CleanBody,
         SheriffKill,
         MedicSetShielded,
         ShieldedMurderAttempt,
@@ -252,7 +252,7 @@ namespace TheOtherRoles
             Engineer.usedRepair = true;
         }
 
-        public static void janitorClean(byte playerId) {
+        public static void cleanBody(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
@@ -400,14 +400,14 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (Morphling.morphling == null || target == null) return;
 
-            Morphling.morphTimer = 10f;
+            Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
         }
 
         public static void camouflagerCamouflage() {
             if (Camouflager.camouflager == null) return;
 
-            Camouflager.camouflageTimer = 10f;
+            Camouflager.camouflageTimer = Camouflager.duration;
         }
 
         public static void loverSuicide(byte remainingLoverId) {
@@ -635,8 +635,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.EngineerUsedRepair:
                     RPCProcedure.engineerUsedRepair();
                     break;
-                case (byte)CustomRPC.JanitorClean:
-                    RPCProcedure.janitorClean(reader.ReadByte());
+                case (byte)CustomRPC.CleanBody:
+                    RPCProcedure.cleanBody(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffKill:
                     RPCProcedure.sheriffKill(reader.ReadByte());

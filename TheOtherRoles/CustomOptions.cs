@@ -25,9 +25,11 @@ namespace TheOtherRoles {
 
         public static CustomOption morphlingSpawnRate;
         public static CustomOption morphlingCooldown;
+        public static CustomOption morphlingDuration;
 
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
+        public static CustomOption camouflagerDuration;
 
         public static CustomOption vampireSpawnRate;
         public static CustomOption vampireKillDelay;
@@ -149,9 +151,11 @@ namespace TheOtherRoles {
 
             morphlingSpawnRate = CustomOption.Create(20, cs(Morphling.color, "Morphling"), rates, null, true);
             morphlingCooldown = CustomOption.Create(21, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
+            morphlingDuration = CustomOption.Create(22, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
 
             camouflagerSpawnRate = CustomOption.Create(30, cs(Camouflager.color, "Camouflager"), rates, null, true);
             camouflagerCooldown = CustomOption.Create(31, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
+            camouflagerDuration = CustomOption.Create(32, "Camo Duration", 10f, 1f, 20f, 0.5f, camouflagerSpawnRate);
 
             vampireSpawnRate = CustomOption.Create(40, cs(Vampire.color, "Vampire"), rates, null, true);
             vampireKillDelay = CustomOption.Create(41, "Vampire Kill Delay", 10f, 1f, 20f, 1f, vampireSpawnRate);
@@ -499,8 +503,8 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 19;
             int roleSettingsLines = defaultSettingsLines + 28;
-            int detailedSettingsP1 = roleSettingsLines + 37;
-            int detailedSettingsP2 = detailedSettingsP1 + 38;
+            int detailedSettingsP1 = roleSettingsLines + 34;
+            int detailedSettingsP2 = detailedSettingsP1 + 34;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();

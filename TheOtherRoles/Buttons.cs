@@ -56,6 +56,8 @@ namespace TheOtherRoles
             hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
+            camouflagerButton.EffectDuration = Camouflager.duration;
+            morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration; 
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
@@ -129,10 +131,10 @@ namespace TheOtherRoles
                                 {
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
-                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JanitorClean, Hazel.SendOption.Reliable, -1);
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                                    RPCProcedure.janitorClean(playerInfo.PlayerId);
+                                    RPCProcedure.cleanBody(playerInfo.PlayerId);
                                     janitorCleanButton.Timer = janitorCleanButton.MaxTimer;
 
                                     break;
@@ -252,7 +254,7 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.morphlingMorph(Morphling.sampledTarget.PlayerId);
                         Morphling.sampledTarget = null;
-                        morphlingButton.EffectDuration = 10f;
+                        morphlingButton.EffectDuration = Morphling.duration;
                     } else if (Morphling.currentTarget != null) {
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
@@ -272,7 +274,7 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
-                10f,
+                Morphling.duration,
                 () => {
                     if (Morphling.sampledTarget == null) {
                         morphlingButton.Timer = morphlingButton.MaxTimer;
@@ -299,7 +301,7 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 true,
-                10f,
+                Camouflager.duration,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
             );
 
@@ -580,10 +582,10 @@ namespace TheOtherRoles
                                 {
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
-                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JanitorClean, Hazel.SendOption.Reliable, -1);
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                                    RPCProcedure.janitorClean(playerInfo.PlayerId);
+                                    RPCProcedure.cleanBody(playerInfo.PlayerId);
 
                                     Cleaner.cleaner.killTimer = cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer;
                                     break;
