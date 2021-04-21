@@ -34,7 +34,7 @@ namespace TheOtherRoles {
 
             for (int i = 0; i < hats.Length; i++) {
                 System.Console.WriteLine(hats[i]);
-                string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1) : hats[i].Split('.')[3];
+                string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[1] : hats[i].Split('.')[3];
                     System.Console.WriteLine(s);
                 string[] p = s.Split('_');
 
@@ -128,13 +128,18 @@ namespace TheOtherRoles {
         private static class HatParentSetHatPatch {
             static void Postfix(HatParent __instance, [HarmonyArgument(0)]uint hatId, [HarmonyArgument(1)]int color) {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
-                    string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
-                    DirectoryInfo d = new DirectoryInfo(filePath);
-                    string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
-                    List<CustomHat> customHats = createCustomHatDetails(filePaths, true);
-                    if (customHats.Count > 0) {
-                        __instance.Hat = CreateHatBehaviour(customHats[0], true);
-                        __instance.SetHat(color);
+                    try {
+                        string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
+                        DirectoryInfo d = new DirectoryInfo(filePath);
+                        string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
+                        List<CustomHat> customHats = createCustomHatDetails(filePaths, true);
+                        if (customHats.Count > 0) {
+                            __instance.Hat = CreateHatBehaviour(customHats[0], true);
+                            __instance.SetHat(color);
+                        }
+                    } catch (Exception e) {
+                        System.Console.WriteLine("Unable to create test hat\n" + e);
+                        return false;
                     }
                 }
             }     
