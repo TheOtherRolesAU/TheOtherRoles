@@ -69,6 +69,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.3.1**
+- Fixed the bug that the streamer mode did only work for the lobby host
+
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
 - Added 12 new [Colors](#colors)

@@ -32,9 +32,9 @@ namespace TheOtherRoles
             {
                 __instance.transform.localPosition = new Vector3(__instance.transform.localPosition.x, 2.675f, __instance.transform.localPosition.z);
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
-                    __instance.text.text += "<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>";
+                    __instance.text.text = "<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\n" + __instance.text.text;
                 else
-                    __instance.text.text += "\n<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>";
+                __instance.text.text = "<color=#FCCE03FF>TheOtherRoles</color>\nModded by <color=#FCCE03FF>Eisbison</color>\nand <color=#FFEB91FF>Thunderstorm584</color>\nBalanced with <color=#FFEB91FF>Dhalucard</color>\nButton design by <color=#FFEB91FF>Bavari</color>\n"  + __instance.text.text;
             }
         }
     }
