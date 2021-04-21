@@ -26,7 +26,7 @@ namespace TheOtherRoles {
         public static CustomOption morphlingSpawnRate;
         public static CustomOption morphlingCooldown;
         public static CustomOption morphlingDuration;
-        
+
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
         public static CustomOption camouflagerDuration;
@@ -121,6 +121,9 @@ namespace TheOtherRoles {
         public static CustomOption tricksterLightsOutCooldown;
         public static CustomOption tricksterLightsOutDuration;
 
+        public static CustomOption cleanerSpawnRate;
+        public static CustomOption cleanerCooldown;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -167,6 +170,9 @@ namespace TheOtherRoles {
             tricksterPlaceBoxCooldown = CustomOption.Create(251, "Trickster Box Cooldown", 10f, 0f, 30f, 2.5f, tricksterSpawnRate);
             tricksterLightsOutCooldown = CustomOption.Create(252, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f, tricksterSpawnRate);
             tricksterLightsOutDuration = CustomOption.Create(253, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
+
+            cleanerSpawnRate = CustomOption.Create(260, cs(Cleaner.color, "Cleaner"), rates, null, true);
+            cleanerCooldown = CustomOption.Create(261, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
 
             childSpawnRate = CustomOption.Create(180, cs(Child.color, "Child"), rates, null, true);
             childGrowingUpDuration = CustomOption.Create(181, "Child Growing Up Duration", 400f, 100f, 1500f, 100f, childSpawnRate);
@@ -496,11 +502,13 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 27;
-            int detailedSettingsLines = 19 + 27 + 37;
+            int roleSettingsLines = defaultSettingsLines + 28;
+            int detailedSettingsP1 = roleSettingsLines + 34;
+            int detailedSettingsP2 = detailedSettingsP1 + 34;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
@@ -513,19 +521,21 @@ namespace TheOtherRoles {
                 gap = 4;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 11;
+                gap = 12;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 15;
+                gap = 16;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1, end3 - end2);
             } else if (counter == 3) {
-                hudString = hudString.Substring(end3 + 1);
+                hudString = hudString.Substring(end3 + 1, end4 - end3);
+            } else if (counter == 4) {
+                hudString = hudString.Substring(end4 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/4)";
+            hudString += $"\n Press tab for more... ({counter+1}/5)";
             __result = hudString;
         }
     }
@@ -536,7 +546,7 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance)
         {
             if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 4;
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 5;
             }
         }
     }

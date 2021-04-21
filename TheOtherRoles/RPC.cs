@@ -39,7 +39,8 @@ namespace TheOtherRoles
         Sidekick,
         Eraser,
         Spy,
-        Trickster
+        Trickster,
+        Cleaner
     }
 
     enum CustomRPC
@@ -59,7 +60,7 @@ namespace TheOtherRoles
 
         EngineerFixLights = 81,
         EngineerUsedRepair,
-        JanitorClean,
+        CleanBody,
         SheriffKill,
         MedicSetShielded,
         ShieldedMurderAttempt,
@@ -203,6 +204,9 @@ namespace TheOtherRoles
                     case RoleId.Trickster:
                         Trickster.trickster = player;
                         break;
+                    case RoleId.Cleaner:
+                        Cleaner.cleaner = player;
+                        break;
                     }
                 }
         }
@@ -248,7 +252,7 @@ namespace TheOtherRoles
             Engineer.usedRepair = true;
         }
 
-        public static void janitorClean(byte playerId) {
+        public static void cleanBody(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
@@ -530,6 +534,7 @@ namespace TheOtherRoles
             if (player == Vampire.vampire) Vampire.clearAndReload();
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
+            if (player == Cleaner.cleaner) Cleaner.clearAndReload();
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -630,8 +635,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.EngineerUsedRepair:
                     RPCProcedure.engineerUsedRepair();
                     break;
-                case (byte)CustomRPC.JanitorClean:
-                    RPCProcedure.janitorClean(reader.ReadByte());
+                case (byte)CustomRPC.CleanBody:
+                    RPCProcedure.cleanBody(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffKill:
                     RPCProcedure.sheriffKill(reader.ReadByte());
