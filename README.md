@@ -301,7 +301,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 We're awaiting your creative hat designs and we'll integrate all the good ones in our mod.
 Here are a few instructions, on how to create a custom hat:
 
-- A hat consists of up to three textures. The aspect ratio of the textures has to be `4:5`, we recommend `300px:375px`:
+- **Creation:** A hat consists of up to three textures. The aspect ratio of the textures has to be `4:5`, we recommend `300px:375px`:
   - `Main texture (required)`:
     - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
@@ -314,8 +314,9 @@ Here are a few instructions, on how to create a custom hat:
   - `Climb texture (optional)`:
     - This texture will be rendered in front of the player, when he's climbing.
     - The name of the texture needs to follow the pattern *hatname_climb.png*.
-- Testing: You can test your hat design by putting all the files in the *\TheOtherHats\Test* subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
+- **Testing:** You can test your hat design by putting all the files in the *\TheOtherHats\Test* subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
 
+- **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Roles
 
@@ -832,4 +833,4 @@ It's bad I know, this is a side project and my second week of modding. So there 
 You can use parts of the code but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests
-If you found any bugs, have an idea for a new role or any other request, join my [Discord server](https://discord.gg/77RkMJHWsM)
+If you found any bugs, have an idea for a new role or any other request, join our [Discord server](https://discord.gg/77RkMJHWsM)
