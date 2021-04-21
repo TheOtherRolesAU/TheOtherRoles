@@ -33,9 +33,7 @@ namespace TheOtherRoles {
             Dictionary<string, string> climbs = new Dictionary<string, string>();
 
             for (int i = 0; i < hats.Length; i++) {
-                System.Console.WriteLine(hats[i]);
                 string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[1] : hats[i].Split('.')[3];
-                    System.Console.WriteLine(s);
                 string[] p = s.Split('_');
 
                 HashSet<string> options = new HashSet<string>();
