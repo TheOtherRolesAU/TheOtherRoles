@@ -62,6 +62,8 @@ namespace TheOtherRoles {
                 CustomHat hat = fronts[k];
                 backs.TryGetValue(k, out hat.backresource);
                 climbs.TryGetValue(k, out hat.climbresource);
+                if (hat.backresource != null)
+                    hat.behind = true;
                 customhats.Add(hat);
             }
 
@@ -137,7 +139,6 @@ namespace TheOtherRoles {
                         }
                     } catch (Exception e) {
                         System.Console.WriteLine("Unable to create test hat\n" + e);
-                        return false;
                     }
                 }
             }     
