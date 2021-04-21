@@ -11,8 +11,6 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
-using Palette = BLMBFIODBKL;
-
 namespace TheOtherRoles
 {
     [HarmonyPatch]
@@ -48,6 +46,7 @@ namespace TheOtherRoles
             Eraser.clearAndReload();
             Spy.clearAndReload();
             Trickster.clearAndReload();
+            Cleaner.clearAndReload();
         }
 
         public static class Jester {
@@ -93,7 +92,7 @@ namespace TheOtherRoles
 
         public static class Godfather {
             public static PlayerControl godfather;
-            public static Color color = Palette.JPCHLLEJNEH;
+            public static Color color = Palette.ImpostorRed;
 
             public static void clearAndReload() {
                 godfather = null;
@@ -102,7 +101,7 @@ namespace TheOtherRoles
 
         public static class Mafioso {
             public static PlayerControl mafioso;
-            public static Color color = Palette.JPCHLLEJNEH;
+            public static Color color = Palette.ImpostorRed;
 
             public static void clearAndReload() {
                 mafioso = null;
@@ -112,7 +111,7 @@ namespace TheOtherRoles
 
         public static class Janitor {
             public static PlayerControl janitor;
-            public static Color color = Palette.JPCHLLEJNEH;
+            public static Color color = Palette.ImpostorRed;
 
             public static float cooldown = 30f;
 
@@ -250,7 +249,6 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             medic = null;
-            if (shielded?.KJAENOGGEOK?.material != null) shielded.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
             shielded = null;
             currentTarget = null;
             usedShield = false;
@@ -314,12 +312,12 @@ namespace TheOtherRoles
         public static bool notAckedExiledIsLover = false;
 
         public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.PPMOEEPBHJO.IAGJEKLJCCI && !lover2.PPMOEEPBHJO.IAGJEKLJCCI && !lover1.PPMOEEPBHJO.MFFAGDHDHLO && !lover2.PPMOEEPBHJO.MFFAGDHDHLO && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !lover1.Data.Disconnected && !lover2.Data.Disconnected && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
         }
 
         public static bool existingAndCrewLovers() {
-            if (lover1 == null || lover2 == null || lover1.PPMOEEPBHJO.MFFAGDHDHLO || lover2.PPMOEEPBHJO.MFFAGDHDHLO) return false; // Null or disconnected
-            return !(lover1.PPMOEEPBHJO.FDNMBJOAPFL || lover2.PPMOEEPBHJO.FDNMBJOAPFL || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
+            if (lover1 == null || lover2 == null || lover1.Data.Disconnected || lover2.Data.Disconnected) return false; // Null or disconnected
+            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
         }
 
         public static void clearAndReload() {
@@ -357,11 +355,12 @@ namespace TheOtherRoles
 
     public static class Morphling {
         public static PlayerControl morphling;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
         private static Sprite sampleSprite;
         private static Sprite morphSprite;
     
         public static float cooldown = 30f;
+        public static float duration = 10f;
 
         public static PlayerControl currentTarget;
         public static PlayerControl sampledTarget;
@@ -372,13 +371,12 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             if (morphling == null) return;
-            morphling.SetName(morphling.PPMOEEPBHJO.PCLLABJCIPC);
-            morphling.SetHat(morphling.PPMOEEPBHJO.CPGFLBANALE, (int)morphling.PPMOEEPBHJO.IMMNCAGJJJC);
-            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.PPMOEEPBHJO.CGNMKICGLOG);
-            morphling.SetPet(morphling.PPMOEEPBHJO.LBHODBKCBKA);
-            morphling.CurrentPet.BDBDGFDELMB = morphling.BDBDGFDELMB;
-            morphling.SetColor(morphling.PPMOEEPBHJO.IMMNCAGJJJC);
-            morphling.KJAENOGGEOK.material.SetFloat("_Outline", 0f);
+            morphling.SetName(morphling.Data.PlayerName);
+            morphling.SetHat(morphling.Data.HatId, (int)morphling.Data.ColorId);
+            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.Data.SkinId);
+            morphling.SetPet(morphling.Data.PetId);
+            morphling.CurrentPet.Visible = morphling.Visible;
+            morphling.SetColor(morphling.Data.ColorId);
         }
 
         public static void clearAndReload() {
@@ -389,6 +387,7 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             cooldown = CustomOptionHolder.morphlingCooldown.getFloat();
+            duration = CustomOptionHolder.morphlingDuration.getFloat();
         }
 
         public static Sprite getSampleSprite() {
@@ -406,9 +405,10 @@ namespace TheOtherRoles
 
     public static class Camouflager {
         public static PlayerControl camouflager;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
     
         public static float cooldown = 30f;
+        public static float duration = 10f;
         public static float camouflageTimer = 0f;
 
         private static Sprite buttonSprite;
@@ -423,12 +423,12 @@ namespace TheOtherRoles
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == null) continue;
                 if (Morphling.morphling == null || Morphling.morphling != p) {
-                    p.SetName(p.PPMOEEPBHJO.PCLLABJCIPC);
-                    p.SetHat(p.PPMOEEPBHJO.CPGFLBANALE, (int)p.PPMOEEPBHJO.IMMNCAGJJJC);
-                    Helpers.setSkinWithAnim(p.MyPhysics, p.PPMOEEPBHJO.CGNMKICGLOG);
-                    p.SetPet(p.PPMOEEPBHJO.LBHODBKCBKA);
-                    p.CurrentPet.BDBDGFDELMB = p.BDBDGFDELMB;
-                    p.SetColor(p.PPMOEEPBHJO.IMMNCAGJJJC);
+                    p.SetName(p.Data.PlayerName);
+                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
+                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
+                    p.SetPet(p.Data.PetId);
+                    p.CurrentPet.Visible = p.Visible;
+                    p.SetColor(p.Data.ColorId);
                 }
             }
         }
@@ -438,6 +438,7 @@ namespace TheOtherRoles
             camouflager = null;
             camouflageTimer = 0f;
             cooldown = CustomOptionHolder.camouflagerCooldown.getFloat();
+            duration = CustomOptionHolder.camouflagerDuration.getFloat();
         }
     }
 
@@ -537,7 +538,7 @@ namespace TheOtherRoles
 
     public static class Vampire {
         public static PlayerControl vampire;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
 
         public static float delay = 10f;
         public static float cooldown = 30f;
@@ -618,7 +619,7 @@ namespace TheOtherRoles
         }
 
         public static void removeCurrentJackal() {
-            formerJackals.Add(jackal);
+            if (!formerJackals.Contains(jackal)) formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
@@ -664,7 +665,7 @@ namespace TheOtherRoles
 
     public static class Eraser {
         public static PlayerControl eraser;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
 
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
@@ -689,7 +690,7 @@ namespace TheOtherRoles
     
     public static class Spy {
         public static PlayerControl spy;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
 
         public static bool impostorsCanKillAnyone = true;
 
@@ -701,7 +702,7 @@ namespace TheOtherRoles
 
     public static class Trickster {
         public static PlayerControl trickster;
-        public static Color color = Palette.JPCHLLEJNEH;
+        public static Color color = Palette.ImpostorRed;
         public static float placeBoxCooldown = 30f;
         public static float lightsOutCooldown = 30f;
         public static float lightsOutDuration = 10f;
@@ -738,5 +739,24 @@ namespace TheOtherRoles
             JackInTheBox.UpdateStates(); // if the role is erased, we might have to update the state of the created objects
         }
 
+    }
+
+    public static class Cleaner {
+        public static PlayerControl cleaner;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CleanButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            cleaner = null;
+            cooldown = CustomOptionHolder.janitorCooldown.getFloat();
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace TheOtherRoles{
         public static int maxNumberOfMeetings = 10;
         public static bool blockSkippingInEmergencyMeetings = false;
         public static bool noVoteIsSelfVote = false;
+        public static bool hidePlayerNames = false;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -20,6 +21,7 @@ namespace TheOtherRoles{
             maxNumberOfMeetings = Mathf.RoundToInt(CustomOptionHolder.maxNumberOfMeetings.getSelection());
             blockSkippingInEmergencyMeetings = CustomOptionHolder.blockSkippingInEmergencyMeetings.getBool();
             noVoteIsSelfVote = CustomOptionHolder.noVoteIsSelfVote.getBool();
+            hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
         }
     }
 } 

@@ -25,9 +25,11 @@ namespace TheOtherRoles {
 
         public static CustomOption morphlingSpawnRate;
         public static CustomOption morphlingCooldown;
+        public static CustomOption morphlingDuration;
 
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
+        public static CustomOption camouflagerDuration;
 
         public static CustomOption vampireSpawnRate;
         public static CustomOption vampireKillDelay;
@@ -119,9 +121,13 @@ namespace TheOtherRoles {
         public static CustomOption tricksterLightsOutCooldown;
         public static CustomOption tricksterLightsOutDuration;
 
+        public static CustomOption cleanerSpawnRate;
+        public static CustomOption cleanerCooldown;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
+        public static CustomOption hidePlayerNames;
 
         public static string cs(Color c, string s) {
             return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
@@ -145,9 +151,11 @@ namespace TheOtherRoles {
 
             morphlingSpawnRate = CustomOption.Create(20, cs(Morphling.color, "Morphling"), rates, null, true);
             morphlingCooldown = CustomOption.Create(21, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
+            morphlingDuration = CustomOption.Create(22, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
 
             camouflagerSpawnRate = CustomOption.Create(30, cs(Camouflager.color, "Camouflager"), rates, null, true);
             camouflagerCooldown = CustomOption.Create(31, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
+            camouflagerDuration = CustomOption.Create(32, "Camo Duration", 10f, 1f, 20f, 0.5f, camouflagerSpawnRate);
 
             vampireSpawnRate = CustomOption.Create(40, cs(Vampire.color, "Vampire"), rates, null, true);
             vampireKillDelay = CustomOption.Create(41, "Vampire Kill Delay", 10f, 1f, 20f, 1f, vampireSpawnRate);
@@ -163,11 +171,14 @@ namespace TheOtherRoles {
             tricksterLightsOutCooldown = CustomOption.Create(252, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f, tricksterSpawnRate);
             tricksterLightsOutDuration = CustomOption.Create(253, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
 
+            cleanerSpawnRate = CustomOption.Create(260, cs(Cleaner.color, "Cleaner"), rates, null, true);
+            cleanerCooldown = CustomOption.Create(261, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
+
             childSpawnRate = CustomOption.Create(180, cs(Child.color, "Child"), rates, null, true);
             childGrowingUpDuration = CustomOption.Create(181, "Child Growing Up Duration", 400f, 100f, 1500f, 100f, childSpawnRate);
 
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
-            loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", 30f, 0f, 100f, 10f, loversSpawnRate);
+            loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
@@ -244,6 +255,7 @@ namespace TheOtherRoles {
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", false);
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
+            hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
         }
     }
 
@@ -305,14 +317,14 @@ namespace TheOtherRoles {
                 option.entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", option.id.ToString(), option.defaultSelection);
                 option.selection = Mathf.Clamp(option.entry.Value, 0, option.selections.Length - 1);
                 if (option.optionBehaviour != null && option.optionBehaviour is StringOption stringOption) {
-                    stringOption.LCDAKOCANPH = stringOption.Value = option.selection;
+                    stringOption.oldValue = stringOption.Value = option.selection;
                     stringOption.ValueText.text = option.selections[option.selection].ToString();
                 }
             }
         }
 
         public static void ShareOptionSelections() {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.HHBLOCGKFAB == false && PlayerControl.LocalPlayer == null) return;
+            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null) return;
             foreach (CustomOption option in CustomOption.options) {
                 MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
@@ -340,10 +352,10 @@ namespace TheOtherRoles {
         public void updateSelection(int newSelection) {
             selection = Mathf.Clamp((newSelection + selections.Length) % selections.Length, 0, selections.Length - 1);
             if (optionBehaviour != null && optionBehaviour is StringOption stringOption) {
-                stringOption.LCDAKOCANPH = stringOption.Value = selection;
+                stringOption.oldValue = stringOption.Value = selection;
                 stringOption.ValueText.text = selections[selection].ToString();
 
-                if (AmongUsClient.Instance?.HHBLOCGKFAB == true && PlayerControl.LocalPlayer) {
+                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer) {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 
@@ -359,7 +371,7 @@ namespace TheOtherRoles {
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
 
-            List<OptionBehaviour> allOptions = __instance.MCAHCPOHNFI.ToList();
+            List<OptionBehaviour> allOptions = __instance.Children.ToList();
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
@@ -368,14 +380,14 @@ namespace TheOtherRoles {
 
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
                     stringOption.TitleText.text = option.name;
-                    stringOption.Value = stringOption.LCDAKOCANPH = option.selection;
+                    stringOption.Value = stringOption.oldValue = option.selection;
                     stringOption.ValueText.text = option.selections[option.selection].ToString();
 
                     option.optionBehaviour = stringOption;
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
-            __instance.MCAHCPOHNFI = allOptions.ToArray();
+            __instance.Children = allOptions.ToArray();
         }
     }
 
@@ -387,7 +399,7 @@ namespace TheOtherRoles {
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => {});
             __instance.TitleText.text = option.name;
-            __instance.Value = __instance.LCDAKOCANPH = option.selection;
+            __instance.Value = __instance.oldValue = option.selection;
             __instance.ValueText.text = option.selections[option.selection].ToString();
             
             return false;
@@ -433,14 +445,14 @@ namespace TheOtherRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.MCAHCPOHNFI.Length * 0.55F; 
+            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
 
             float offset = -7.85f;
             foreach (CustomOption option in CustomOption.options) {
-                if (option?.optionBehaviour?.gameObject != null) {
+                if (option?.optionBehaviour != null && option.optionBehaviour.gameObject != null) {
                     bool enabled = true;
                     var parent = option.parent;
                     while (parent != null && enabled) {
@@ -468,7 +480,7 @@ namespace TheOtherRoles {
     class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(CEIOGGEDKAN).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+            return typeof(GameOptionsData).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
         }
 
         private static void Postfix(ref string __result)
@@ -490,11 +502,13 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = 19 + 27;
-            int detailedSettingsLines = 19 + 27 + 37;
+            int roleSettingsLines = defaultSettingsLines + 28;
+            int detailedSettingsP1 = roleSettingsLines + 34;
+            int detailedSettingsP2 = detailedSettingsP1 + 34;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end3 = hudString.TakeWhile(c => (detailedSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
@@ -507,19 +521,21 @@ namespace TheOtherRoles {
                 gap = 4;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 11;
+                gap = 12;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 15;
+                gap = 16;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1, end3 - end2);
             } else if (counter == 3) {
-                hudString = hudString.Substring(end3 + 1);
+                hudString = hudString.Substring(end3 + 1, end4 - end3);
+            } else if (counter == 4) {
+                hudString = hudString.Substring(end4 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/4)";
+            hudString += $"\n Press tab for more... ({counter+1}/5)";
             __result = hudString;
         }
     }
@@ -530,7 +546,7 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance)
         {
             if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 4;
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 5;
             }
         }
     }
