@@ -14,6 +14,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="Resources\*.png" />
+        <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
     </ItemGroup>
 
     <ItemGroup>
