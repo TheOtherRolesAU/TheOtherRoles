@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
-    public class CustomHatPatch { 
+    public class CustomHats { 
         private static bool LOADED = false;
         public static Material hatShader;
 
