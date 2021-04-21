@@ -27,20 +27,13 @@ namespace TheOtherRoles {
             public bool behind;
         }
 
-        private static List<CustomHat> getAllCustomHats() {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            string hatres = $"{assembly.GetName().Name}.Resources.CustomHats";
-
-			string[] hats = (from r in assembly.GetManifestResourceNames()
-			                     where r.StartsWith(hatres) && r.EndsWith(".png")
-			                     select r).ToArray<string>();
-
+        private static List<CustomHat> createCustomHatDetails(string[] hats, bool fromDisk = false) {
             Dictionary<string, CustomHat> fronts = new Dictionary<string, CustomHat>();
             Dictionary<string, string> backs = new Dictionary<string, string>();
             Dictionary<string, string> climbs = new Dictionary<string, string>();
 
             for (int i = 0; i < hats.Length; i++) {
-                string s = hats[i].Split('.')[3];
+                string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[1] : hats[i].Split('.')[3];
                 string[] p = s.Split('_');
 
                 HashSet<string> options = new HashSet<string>();
@@ -69,7 +62,6 @@ namespace TheOtherRoles {
                 CustomHat hat = fronts[k];
                 backs.TryGetValue(k, out hat.backresource);
                 climbs.TryGetValue(k, out hat.climbresource);
-
                 if (hat.backresource != null)
                     hat.behind = true;
                 customhats.Add(hat);
@@ -78,22 +70,18 @@ namespace TheOtherRoles {
             return customhats;
         }
 
-        private static Sprite CreateHatSprite(string resource) {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream(resource);
-            byte[] data = stream.ReadFully();
-            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, false);
-            SpriteLoader.LoadImage(texture, data, true);
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
+        private static Sprite CreateHatSprite(string path, bool fromDisk = false) {
+            Texture2D texture = fromDisk ? Helpers.loadTextureFromDisk(path) : Helpers.loadTextureFromResources(path);
+            return texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
         }
 
-        private static HatBehaviour CreateHat(CustomHat ch) {
+        private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false) {
             HatBehaviour hat = new HatBehaviour();
-            hat.MainImage = CreateHatSprite(ch.resource);
+            hat.MainImage = CreateHatSprite(ch.resource, fromDisk);
             if (ch.backresource != null)
-                hat.BackImage = CreateHatSprite(ch.backresource);
+                hat.BackImage = CreateHatSprite(ch.backresource, fromDisk);
             if (ch.climbresource != null)
-                hat.ClimbImage = CreateHatSprite(ch.climbresource);
+                hat.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
             hat.name = ch.name;
             hat.Order = 99;
             hat.ProductId = "hat_" + ch.name.Replace(' ', '_');
@@ -116,9 +104,15 @@ namespace TheOtherRoles {
 							if (__instance.AllHats[i].AltShader != null)
 								hatShader = __instance.AllHats[i].AltShader; // Grab Original Shader
 
-                        List<CustomHat> customhats = getAllCustomHats();
+                        Assembly assembly = Assembly.GetExecutingAssembly();
+                        string hatres = $"{assembly.GetName().Name}.Resources.CustomHats";
+                        string[] hats = (from r in assembly.GetManifestResourceNames()
+                                            where r.StartsWith(hatres) && r.EndsWith(".png")
+                                            select r).ToArray<string>();
+
+                        List<CustomHat> customhats = createCustomHatDetails(hats);
                         foreach (CustomHat ch in customhats)
-                            __instance.AllHats.Add(CreateHat(ch));
+                            __instance.AllHats.Add(CreateHatBehaviour(ch));
 
                         LOADED = true;
                     }
@@ -128,27 +122,26 @@ namespace TheOtherRoles {
                     return false;
                 }
             }
-        } 
-    }
+        }
 
-    public static class SpriteLoader {
-        private static DLoadImage _DLoadImage;
-        private delegate bool DLoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
-
-		public static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable) {
-            if (_DLoadImage == null)
-                _DLoadImage = IL2CPP.ResolveICall<DLoadImage>("UnityEngine.ImageConversion::LoadImage");
-			Il2CppStructArray<byte> il2CppStructArray = data;
-			return _DLoadImage(tex.Pointer, il2CppStructArray.Pointer, markNonReadable);
-		}
-
-        public static byte[] ReadFully(this Stream s) {
-            using (MemoryStream ms = new MemoryStream()) {
-                s.CopyTo(ms);
-                return ms.ToArray();
-            }
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new Type[] { typeof(uint), typeof(int) })]
+        private static class HatParentSetHatPatch {
+            static void Postfix(HatParent __instance, [HarmonyArgument(0)]uint hatId, [HarmonyArgument(1)]int color) {
+                if (DestroyableSingleton<TutorialManager>.InstanceExists) {
+                    try {
+                        string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
+                        DirectoryInfo d = new DirectoryInfo(filePath);
+                        string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
+                        List<CustomHat> customHats = createCustomHatDetails(filePaths, true);
+                        if (customHats.Count > 0) {
+                            __instance.Hat = CreateHatBehaviour(customHats[0], true);
+                            __instance.SetHat(color);
+                        }
+                    } catch (Exception e) {
+                        System.Console.WriteLine("Unable to create test hat\n" + e);
+                    }
+                }
+            }     
         }
     }
 }
-
-
