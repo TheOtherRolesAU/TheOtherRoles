@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
-![eisbison banner](./Banner.png)
-![eisbison infographic](./Preview_v2.0.png)
+![eisbison banner](./Images/Banner.png)
+![eisbison infographic](./Images/Preview_v2.0.png)
 
 
 # The Other Roles
@@ -318,14 +318,14 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 - Cyan, Lime, Salmon, Mint
 - Lavender, Peach, Wasabi, Hot Pink
 
-![](./LighterColors.png)
+![](./Images/LighterColors.png)
 
 ### **Darker Colors:** 
 - Red, Blue, Green, Black
 - Purple, Brown, Bordeaux, Olive
 - Turqoise, Nougat, Gray, Petrol
 
-![](./DarkerColors.png)
+![](./Images/DarkerColors.png)
 
 
 ## Mafia
