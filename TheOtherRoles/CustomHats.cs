@@ -33,7 +33,8 @@ namespace TheOtherRoles {
             Dictionary<string, string> climbs = new Dictionary<string, string>();
 
             for (int i = 0; i < hats.Length; i++) {
-                string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[1] : hats[i].Split('.')[3];
+                string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[0] : hats[i].Split('.')[3];
+                System.Console.WriteLine(s);
                 string[] p = s.Split('_');
 
                 HashSet<string> options = new HashSet<string>();
@@ -95,14 +96,23 @@ namespace TheOtherRoles {
             return hat;
         }
 
+        private static void loadHatShader() {
+            if (hatShader != null || !DestroyableSingleton<HatManager>.InstanceExists) return;
+
+            foreach (HatBehaviour hat in DestroyableSingleton<HatManager>.Instance.AllHats) {
+                if (hat.AltShader != null) {
+                    hatShader = hat.AltShader;
+                    break;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
         private static class HatManagerPatch {
             static bool Prefix(HatManager __instance) {
                 try {
                     if (!LOADED) {
-						for (int i = 0; i < __instance.AllHats.Count && hatShader == null; i++)
-							if (__instance.AllHats[i].AltShader != null)
-								hatShader = __instance.AllHats[i].AltShader; // Grab Original Shader
+                        loadHatShader();
 
                         Assembly assembly = Assembly.GetExecutingAssembly();
                         string hatres = $"{assembly.GetName().Name}.Resources.CustomHats";
@@ -134,6 +144,7 @@ namespace TheOtherRoles {
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> customHats = createCustomHatDetails(filePaths, true);
                         if (customHats.Count > 0) {
+                            loadHatShader();
                             __instance.Hat = CreateHatBehaviour(customHats[0], true);
                             __instance.SetHat(color);
                         }
