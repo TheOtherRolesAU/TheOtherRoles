@@ -34,7 +34,6 @@ namespace TheOtherRoles {
 
             for (int i = 0; i < hats.Length; i++) {
                 string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[0] : hats[i].Split('.')[3];
-                System.Console.WriteLine(s);
                 string[] p = s.Split('_');
 
                 HashSet<string> options = new HashSet<string>();
