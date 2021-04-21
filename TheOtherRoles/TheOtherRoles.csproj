@@ -15,7 +15,6 @@
     <ItemGroup>
         <EmbeddedResource Include="Resources\CustomHats\*.png" />
         <EmbeddedResource Include="Resources\*.png" />
-        <EmbeddedResource Include="Resources\CustomHats\*.png" />
         <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
     </ItemGroup>
 
