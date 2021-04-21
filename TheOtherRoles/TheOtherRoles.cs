@@ -46,6 +46,7 @@ namespace TheOtherRoles
             Eraser.clearAndReload();
             Spy.clearAndReload();
             Trickster.clearAndReload();
+            Cleaner.clearAndReload();
         }
 
         public static class Jester {
@@ -738,5 +739,24 @@ namespace TheOtherRoles
             JackInTheBox.UpdateStates(); // if the role is erased, we might have to update the state of the created objects
         }
 
+    }
+
+    public static class Cleaner {
+        public static PlayerControl cleaner;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CleanButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            cleaner = null;
+            cooldown = CustomOptionHolder.janitorCooldown.getFloat();
+        }
     }
 }
