@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 - [Mafia](#mafia)
@@ -70,6 +70,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.3.0**
 - We added new player colors
+- We added support for [Custom Hats](#custom-hats). New hats are coming soon, you can submit your own hats on [Discord](https://discord.gg/77RkMJHWsM).
 - Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
 - Freeplay is now working again
 - Lovers: Fixed a bug where ImpLovers would hardly spawn
@@ -294,6 +295,28 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
+
+# Custom Hats
+## Create and submit new hat designs
+We're awaiting your creative hat designs and we'll integrate all the good ones in our mod.
+Here are a few instructions, on how to create a custom hat:
+
+- A hat consists of up to three textures. The aspect ratio of the textures has to be `4:5`, we recommend `300px:375px`:
+  - `Main texture (required)`:
+    - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
+    - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
+    - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
+    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png/revision/latest?cb=20210106045508) to see how this feature should be used.
+    - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
+  - `Back texture (optional)`:
+    - This texture will be rendered behind the player.
+    - The name of the texture needs to follow the pattern *hatname_back.png*.
+  - `Climb texture (optional)`:
+    - This texture will be rendered in front of the player, when he's climbing.
+    - The name of the texture needs to follow the pattern *hatname_climb.png*.
+- Testing: You can test your hat design by putting all the files in the *\TheOtherHats\Test* subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
+
+
 # Roles
 
 ## Role Assignment
