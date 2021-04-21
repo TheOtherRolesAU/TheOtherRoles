@@ -77,6 +77,9 @@ namespace TheOtherRoles {
                     }
                 }
 
+                // Lobby code replacement
+                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? $"<color={TheOtherRolesPlugin.StreamerModeReplacementColor.Value}>{TheOtherRolesPlugin.StreamerModeReplacementText.Value}</color>" : lobbyCodeText;
+
                 // Lobby timer
                 if (!AmongUsClient.Instance.AmHost || !GameData.Instance) return; // Not host or no instance
 
@@ -90,8 +93,6 @@ namespace TheOtherRoles {
                 __instance.PlayerCounter.text = currentText + suffix;
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
-                // Lobby code replacement
-                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? $"<color={TheOtherRolesPlugin.StreamerModeReplacementColor.Value}>{TheOtherRolesPlugin.StreamerModeReplacementText.Value}</color>" : lobbyCodeText;
             }
         }
 
