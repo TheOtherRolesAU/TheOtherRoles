@@ -17,6 +17,7 @@ Even more roles are coming soon :)
 - [Vampire](#vampire)
 - [Eraser](#eraser)
 - [Trickster](#trickster)
+- [Cleaner](#cleaner)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -296,21 +297,6 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
-# Roles
-
-## Role Assignment
-We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
-if you're using it right.
-
-First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
-The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
-- First all roles that are set to 100% are being assigned to arbitrary players
-- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
-
-**Example:**\
-Settings: 2 special crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
-Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
-Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
 ## Colors
 ### **Lighter Colors:** 
@@ -326,6 +312,22 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 - Turqoise, Nougat, Gray, Petrol
 
 ![](./Images/DarkerColors.png)
+
+# Roles
+
+## Role Assignment
+We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
+if you're using it right.
+
+First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
+The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
+- First all roles that are set to 100% are being assigned to arbitrary players
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+
+**Example:**\
+Settings: 2 special crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
+Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
+Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
 
 ## Mafia
