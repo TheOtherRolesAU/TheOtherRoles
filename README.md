@@ -69,18 +69,20 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.3.0**
-- We added new player colors
-- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
-- Freeplay is now working again
-- Lovers: Fixed a bug where ImpLovers would hardly spawn
+- **New Role:** [Cleaner](#cleaner)
+- Added 12 new [Colors](#colors)
 - Added the option to hide the name of players with an unknown role
+- Added Trickster Box vent animation. Thanks to [Drakoni](https://twitter.com/Drakoni13)
+- You can now change the custom server ip/port right inside the game
+- The Jackal, the Sidekick and the Jester now have fake tasks
+- Added outlines, to show who you're targetting with your ability. Thanks to [Sihaack](https://github.com/sihaack) for part of the code.
+- Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#settings) for more details.
+- Changed Meeting Hud Layout when playing with more than 10 players
+- Fixed a bug where **ImpLovers** would hardly spawn
 - Fixed a bug where players could get stuck on ladders/platforms when being rewinded
 - Fixed a bug where players could only use quickchat
-- The Jackal, the Sidekick and the Jester now have fake tasks
-- You can now change the custom server ip/port right inside the game
-- Thanks to [Drakoni](https://twitter.com/Drakoni13) the Trickster box now has a vent animation
-- Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#settings) for more details.
-- We added some outlines, that show who you're focusing with your special abilities. [Sihaack](https://github.com/sihaack) suggested and coded a part of the feature.
+- Fixed a bug which prevented to play in Freeplay mode
+- Fixed a bug which moved the Ping info off-screen
 
 **Version 2.2.2**
 - Among Us version 2021.4.14s compatibility
@@ -310,6 +312,21 @@ Settings: 2 special crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
 Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
 Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
+## Colors
+### **Lighter Colors:** 
+- Pink, Orange, Yellow, White
+- Cyan, Lime, Salmon, Mint
+- Lavender, Peach, Wasabi, Hot Pink
+
+![](./LighterColors.png)
+
+### **Darker Colors:** 
+- Red, Blue, Green, Black
+- Purple, Brown, Bordeaux, Olive
+- Turqoise, Nougat, Gray, Petrol
+
+![](./DarkerColors.png)
+
 
 ## Mafia
 ### **Team: Impostors**
@@ -429,6 +446,21 @@ If the boxes are converted to a vent network, the trickster gains a new ability 
 | Trickster Lights Out Duration | Duration after which the light is automatically restored
 -----------------------
 
+## Cleaner
+### **Team: Impostors**
+The Cleaner is an Impostor who has the ability to clean up dead bodies. \
+
+\
+**NOTE:**
+- The Kill and Clean cooldown are shared, preventing him from immediately cleaning his own kills.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Cleaner Spawn Chance | -
+| Cleaner Cooldown | Cooldown for cleaning dead bodies
+-----------------------
+
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
 There are always two lovers which are linked together.\
@@ -519,14 +551,9 @@ The Detective can see footprints that other players leave behind.
 The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
 **NOTE**
-- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime, salmon, mint, lavender, peach, wasabi, hot pink
-
-![](./LighterColors.png)
-- **Darker Colors:** Red, blue, green, grey, purple, brown, bordeaux, olive, turqoise, nougat, gray, petrol
-
-![](./DarkerColors.png)
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The detective does not see footprints of players that sit in vents
+- More information about the [colors](#colors)
 
 ### Game Options
 | Name | Description |
@@ -619,12 +646,7 @@ Otherwise he sees the same information as everyone else.
 \
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
-- **Lighter Colors:** Pink, orange, yellow, white, cyan, lime, salmon, mint, lavender, peach, wasabi, hot pink
-
-![](./LighterColors.png)
-- **Darker Colors:** Red, blue, green, grey, purple, brown, bordeaux, olive, turqoise, nougat, gray, petrol
-
-![](./DarkerColors.png)
+- More information about the [colors](#colors)
 
 ### Game Options
 | Name | Description |
