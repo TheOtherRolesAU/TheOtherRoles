@@ -13,55 +13,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-<<<<<<< HEAD
-        <EmbeddedResource Include="Resources\RepairButton.png" />
-        <EmbeddedResource Include="Resources\CleanButton.png" />
-        <EmbeddedResource Include="Resources\TimeShieldButton.png" />
-        <EmbeddedResource Include="Resources\ShieldButton.png" />
-        <EmbeddedResource Include="Resources\ShiftButton.png" />
-        <EmbeddedResource Include="Resources\SeerButton.png" />
-        <EmbeddedResource Include="Resources\MorphButton.png" />
-        <EmbeddedResource Include="Resources\SampleButton.png" />
-        <EmbeddedResource Include="Resources\CamoButton.png" />
-        <EmbeddedResource Include="Resources\HackerButton.png" />
-        <EmbeddedResource Include="Resources\TrackerButton.png" />
-        <EmbeddedResource Include="Resources\VampireButton.png" />
-        <EmbeddedResource Include="Resources\GarlicButton.png" />
-        <EmbeddedResource Include="Resources\LighterButton.png" />
-        <EmbeddedResource Include="Resources\EraserButton.png" />
-        <EmbeddedResource Include="Resources\TricksterVentButton.png" />
-        <EmbeddedResource Include="Resources\Arrow.png" />
-        <EmbeddedResource Include="Resources\Garlic.png" />
-        <EmbeddedResource Include="Resources\GarlicBackground.png" />
-        <EmbeddedResource Include="Resources\Footprint.png" />
-        <EmbeddedResource Include="Resources\Soul.png" />
-        <EmbeddedResource Include="Resources\AdminTableIcon.png" />
-        <EmbeddedResource Include="Resources\SwapperCheck.png" />
-        <EmbeddedResource Include="Resources\SidekickButton.png" />
-        <EmbeddedResource Include="Resources\PlaceJackInTheBoxButton.png" />
-        <EmbeddedResource Include="Resources\LightsOutButton.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0001.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0002.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0003.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0004.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0005.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0006.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0007.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0008.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0009.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0010.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0011.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0012.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0013.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0014.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0015.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0016.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0017.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\trickster_box_0018.png" />
         <EmbeddedResource Include="Resources\CustomHats\*.png" />
-=======
         <EmbeddedResource Include="Resources\*.png" />
->>>>>>> development
     </ItemGroup>
 
     <ItemGroup>
