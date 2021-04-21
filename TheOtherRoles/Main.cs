@@ -30,37 +30,47 @@ namespace TheOtherRoles
         public static int optionsPage = 1;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<bool> StreamerMode { get; set; }
+        public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
+        public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
+
         public static DnsRegionInfo CustomRegion;
 
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
+            StreamerMode  = Config.Bind("Custom", "Enable Streamer Mode", false);
+            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
+            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
+            
+
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
 
             CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value);
-            ServerManager serverManager = DestroyableSingleton<ServerManager>.CHNDKKBEIDG;
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = ServerManager.DefaultRegions;
 
             regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
-            serverManager.AGFAPIKFOFF = regions;
+            serverManager.AvailableRegions = regions;
             serverManager.SaveServers();
 
-            CEIOGGEDKAN.LMADJLEGIMH = CEIOGGEDKAN.IJGNCMMDGDI = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
-            CEIOGGEDKAN.JMEMPINECJN = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
+            GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
+            GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             Instance = this;
             CustomOptionHolder.Load();
-            
+            CustomColors.Load();
+
             Harmony.PatchAll();
         }
     }
 
     // Deactivate bans, since I always leave my local testing game and ban myself
-    [HarmonyPatch(typeof(IAJICOPDKHA), nameof(IAJICOPDKHA.LEHPLHFNDLM), MethodType.Getter)]
+    [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
     public static class AmBannedPatch
     {
         public static void Postfix(out bool __result)
@@ -71,8 +81,8 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
     public static class ChatControllerAwakePatch {
         private static void Prefix() {
-            BLCGIFOPMIA.HGHBGBHMEBJ = 1;
-            BLCGIFOPMIA.JIEHGAGHHKN = false;
+            SaveManager.chatModeType = 1;
+            SaveManager.isGuest = false;
         }
     }
     
@@ -94,16 +104,16 @@ namespace TheOtherRoles
 
                 bots.Add(playerControl);
                 GameData.Instance.AddPlayer(playerControl);
-                AmongUsClient.Instance.Spawn(playerControl, -2, IDCDPDDALNM.None);
+                AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
                 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(BLMBFIODBKL.AEDCMKGJKAG.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.CHNDKKBEIDG.AllHats.Count), playerControl.PPMOEEPBHJO.IMMNCAGJJJC);
-                playerControl.SetPet((uint) random.Next(HatManager.CHNDKKBEIDG.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.CHNDKKBEIDG.AllSkins.Count));
+                playerControl.SetColor((byte) random.Next(Palette.PlayerColors.Length));
+                playerControl.SetHat((uint) random.Next(HatManager.Instance.AllHats.Count), playerControl.Data.ColorId);
+                playerControl.SetPet((uint) random.Next(HatManager.Instance.AllPets.Count));
+                playerControl.SetSkin((uint) random.Next(HatManager.Instance.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 

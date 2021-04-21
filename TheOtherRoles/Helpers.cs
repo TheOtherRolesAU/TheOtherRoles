@@ -10,8 +10,6 @@ using static TheOtherRoles.TheOtherRoles;
 using HarmonyLib;
 using Hazel;
 
-using TaskTypes = DMOAGPGAFKM;
-
 namespace TheOtherRoles {
     public static class Helpers {
 
@@ -57,14 +55,14 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint CGNMKICGLOG) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.CHNDKKBEIDG.AllSkins[(int)CGNMKICGLOG];
+        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint SkinId) {
+            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)SkinId];
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
             var anim = spriteAnim.m_animator;
             var skinLayer = playerPhysics.Skin;
 
-            var currentPhysicsAnim = playerPhysics.NIKGMJIKBMP.GetCurrentAnimation();
+            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
             if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
             else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
             else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
@@ -72,7 +70,7 @@ namespace TheOtherRoles {
             else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
             else clip = nextSkin.IdleAnim;
 
-            float progress = playerPhysics.NIKGMJIKBMP.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             skinLayer.skin = nextSkin;
 
             spriteAnim.Play(clip, 1f);
@@ -145,14 +143,13 @@ namespace TheOtherRoles {
             }
         }
 
-        private static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
         public static bool isLighterColor(int colorId) {
-            return lighterColors.Contains(colorId);
+            return CustomColors.lighterColors.Contains(colorId);
         }
 
         public static bool isCustomServer() {
-            if (DestroyableSingleton<ServerManager>.CHNDKKBEIDG == null) return false;
-            StringNames n = DestroyableSingleton<ServerManager>.CHNDKKBEIDG.HMIJGFFKBNN.TranslateName;
+            if (DestroyableSingleton<ServerManager>.Instance == null) return false;
+            StringNames n = DestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 

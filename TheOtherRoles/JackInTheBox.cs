@@ -4,8 +4,6 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-using Effects = AEOEPNHOJDP;
-
 namespace TheOtherRoles{
     
     public class JackInTheBox {
@@ -32,12 +30,12 @@ namespace TheOtherRoles{
             if (box == null) return;
             Vent vent = box.vent;
 
-            HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(0.6f, new Action<float>((p) => {
+            HudManager.Instance.StartCoroutine(Effects.Lerp(0.6f, new Action<float>((p) => {
                 var sprites = getBoxAnimationSprites();
-                if (vent != null && vent.KJAENOGGEOK != null && sprites != null && sprites.Count > 0) {
+                if (vent != null && vent.myRend != null && sprites != null && sprites.Count > 0) {
                     int index = (int)(p * sprites.Count);
-                    vent.KJAENOGGEOK.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count-1)];
-                    if (p == 1f) vent.KJAENOGGEOK.sprite = getBoxSprite();
+                    vent.myRend.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count-1)];
+                    if (p == 1f) vent.myRend.sprite = getBoxSprite();
                 }
             })));
         }
@@ -65,13 +63,13 @@ namespace TheOtherRoles{
             vent.ExitVentAnim = null;
             vent.Offset = new Vector3(0f, 0.25f, 0f);
             vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
-            vent.Id = ShipStatus.Instance.GJHKPDGJHJN.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
+            vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = getBoxSprite();
-            vent.KJAENOGGEOK = ventRenderer;
-            var allVentsList = ShipStatus.Instance.GJHKPDGJHJN.ToList();
+            vent.myRend = ventRenderer;
+            var allVentsList = ShipStatus.Instance.AllVents.ToList();
             allVentsList.Add(vent);
-            ShipStatus.Instance.GJHKPDGJHJN = allVentsList.ToArray();
+            ShipStatus.Instance.AllVents = allVentsList.ToArray();
             vent.gameObject.SetActive(false);
             vent.name = "JackInTheBoxVent_" + vent.Id;
 

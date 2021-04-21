@@ -9,18 +9,74 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using UnityEngine;
 
-using SystemTypes = BCPJLGGNHBC;
-using Palette = BLMBFIODBKL;
-using Constants = LNCOKMACBKP;
-using PhysicsHelpers = FJFJIDCFLDJ;
-using DeathReason = EGHDCAKGMKI;
-using GameOptionsData = CEIOGGEDKAN;
-using Effects = AEOEPNHOJDP;
-
 namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
+        // Helpers
+
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
+            PlayerControl result = null;
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
+            if (!ShipStatus.Instance) return result;
+
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
+                        // if that player is not targetable: skip check
+                        continue;
+                    }
+
+                    if (@object && (!@object.inVent || targetPlayersInVents))
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            result = @object;
+                            num = magnitude;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        static void setPlayerOutline(PlayerControl target, Color color) {
+            if (target == null || target.myRend == null) return;
+            
+            target.myRend.material.SetFloat("_Outline", 1f);
+            target.myRend.material.SetColor("_OutlineColor", color);
+        }
+
+        // Update functions
+
+        static void setBasePlayerOutlines() {
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
+                if (target == null || target.myRend == null) continue;
+                
+                bool hasVisibleShield = false;
+                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
+                    hasVisibleShield = Medic.showShielded == 0 // Everyone
+                        || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
+                        || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
+                }
+
+                if (hasVisibleShield) {
+                    target.myRend.material.SetFloat("_Outline", 1f);
+                    target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                } else {
+                    target.myRend.material.SetFloat("_Outline", 0f);
+                }
+            }
+        }
+
         public static void bendTimeUpdate() {
             if (TimeMaster.isRewinding) {
                 if (localPlayerPositions.Count > 0) {
@@ -29,10 +85,10 @@ namespace TheOtherRoles {
                     if (next.Item2 == true) {
                         // Exit current vent if necessary
                         if (PlayerControl.LocalPlayer.inVent) {
-                            foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
+                            foreach (Vent vent in ShipStatus.Instance.AllVents) {
                                 bool canUse;
                                 bool couldUse;
-                                vent.CanUse(PlayerControl.LocalPlayer.PPMOEEPBHJO, out canUse, out couldUse);
+                                vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
                                 if (canUse) {
                                     PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
                                     vent.SetButtons(false);
@@ -54,67 +110,39 @@ namespace TheOtherRoles {
                 }
             } else {
                 while (localPlayerPositions.Count >= Mathf.Round(TimeMaster.rewindTime / Time.fixedDeltaTime)) localPlayerPositions.RemoveAt(localPlayerPositions.Count - 1);
-                localPlayerPositions.Insert(0, new Tuple<Vector3, bool>(PlayerControl.LocalPlayer.transform.position, PlayerControl.LocalPlayer.POECPOEKKNO)); // POECPOEKKNO = CanMove
+                localPlayerPositions.Insert(0, new Tuple<Vector3, bool>(PlayerControl.LocalPlayer.transform.position, PlayerControl.LocalPlayer.CanMove)); // CanMove = CanMove
             }
-        }
-
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
-            PlayerControl result = null;
-            float num = GameOptionsData.DCAJHEGBLDD[Mathf.Clamp(PlayerControl.GameOptions.OCPGKHJJAHL, 0, 2)];
-            if (!ShipStatus.Instance) return result;
-
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.LGBOMGHJELL> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.LGBOMGHJELL LGBOMGHJELL = allPlayers[i];
-                if (!LGBOMGHJELL.MFFAGDHDHLO && LGBOMGHJELL.FNPNJHNKEBK != PlayerControl.LocalPlayer.PlayerId && !LGBOMGHJELL.IAGJEKLJCCI && (!onlyCrewmates || !LGBOMGHJELL.FDNMBJOAPFL))
-                {
-                    PlayerControl @object = LGBOMGHJELL.GJPBCGFPMOD;
-                    if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
-                        // if that player is not targetable: skip check
-                        continue;
-                    }
-
-                    if (@object && (!@object.inVent || targetPlayersInVents))
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num && !PhysicsHelpers.HLIEDNLNBBH(truePosition, vector.normalized, magnitude, Constants.LEOCDMEJGPA))
-                        {
-                            result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-            return result;
         }
 
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
             Medic.currentTarget = setTarget();
+            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.color);
         }
 
         static void shifterSetTarget() {
             if (Shifter.shifter == null || Shifter.shifter != PlayerControl.LocalPlayer) return;
             Shifter.currentTarget = setTarget();
+            if (Shifter.futureShift == null) setPlayerOutline(Shifter.currentTarget, Shifter.color);
         }
 
         
         static void morphlingSetTarget() {
             if (Morphling.morphling == null || Morphling.morphling != PlayerControl.LocalPlayer) return;
             Morphling.currentTarget = setTarget();
+            setPlayerOutline(Morphling.currentTarget, Morphling.color);
         }
         
         static void sheriffSetTarget() {
             if (Sheriff.sheriff == null || Sheriff.sheriff != PlayerControl.LocalPlayer) return;
             Sheriff.currentTarget = setTarget();
+            setPlayerOutline(Sheriff.currentTarget, Sheriff.color);
         }
 
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
+            if (!Tracker.usedTracker) setPlayerOutline(Tracker.currentTarget, Tracker.color);
         }
 
         static void detectiveUpdateFootPrints() {            
@@ -124,7 +152,7 @@ namespace TheOtherRoles {
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                    if (player != null && player != PlayerControl.LocalPlayer && !player.PPMOEEPBHJO.IAGJEKLJCCI && !player.inVent) {
+                    if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) {
                         new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
                     }
                 }
@@ -155,6 +183,7 @@ namespace TheOtherRoles {
             }
             Vampire.targetNearGarlic = targetNearGarlic;
             Vampire.currentTarget = target;
+            setPlayerOutline(Vampire.currentTarget, Vampire.color);
         }
 
         static void jackalSetTarget() {
@@ -166,6 +195,7 @@ namespace TheOtherRoles {
             }
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            setPlayerOutline(Jackal.currentTarget, Jackal.color);
         }
 
         static void sidekickSetTarget() {
@@ -174,6 +204,7 @@ namespace TheOtherRoles {
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
+            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
         }
 
         static void eraserSetTarget() {
@@ -182,18 +213,19 @@ namespace TheOtherRoles {
             List<PlayerControl> untargatables = new List<PlayerControl>();
             if (Spy.spy != null) untargatables.Add(Spy.spy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargatables);
+            setPlayerOutline(Eraser.currentTarget, Eraser.color);
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL && ShipStatus.Instance?.GJHKPDGJHJN != null) {
-                foreach (Vent vent in ShipStatus.Instance.GJHKPDGJHJN) {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
+                foreach (Vent vent in ShipStatus.Instance.AllVents) {
                     try {
-                        if (vent?.KJAENOGGEOK?.material != null) {
+                        if (vent?.myRend?.material != null) {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
-                                vent.KJAENOGGEOK.material.SetFloat("_Outline", 1f);
-                                vent.KJAENOGGEOK.material.SetColor("_OutlineColor", Engineer.color);
-                            } else if (vent.KJAENOGGEOK.material.GetColor("_AddColor") != Color.red) {
-                                vent.KJAENOGGEOK.material.SetFloat("_Outline", 0);
+                                vent.myRend.material.SetFloat("_Outline", 1f);
+                                vent.myRend.material.SetColor("_OutlineColor", Engineer.color);
+                            } else if (vent.myRend.material.GetColor("_AddColor") != Color.red) {
+                                vent.myRend.material.SetFloat("_Outline", 0);
                             }
                         }
                     } catch {}
@@ -202,8 +234,8 @@ namespace TheOtherRoles {
         }
 
         static void impostorSetTarget() {
-            if (!PlayerControl.LocalPlayer.PPMOEEPBHJO.FDNMBJOAPFL ||!PlayerControl.LocalPlayer.POECPOEKKNO || PlayerControl.LocalPlayer.PPMOEEPBHJO.IAGJEKLJCCI) { // !isImpostor || !canMove || isDead
-                HudManager.CHNDKKBEIDG.KillButton.SetTarget(null);
+            if (!PlayerControl.LocalPlayer.Data.IsImpostor ||!PlayerControl.LocalPlayer.CanMove || PlayerControl.LocalPlayer.Data.IsDead) { // !isImpostor || !canMove || isDead
+                HudManager.Instance.KillButton.SetTarget(null);
                 return;
             }
             
@@ -218,7 +250,7 @@ namespace TheOtherRoles {
                 target = setTarget(true, true);
             }
 
-            HudManager.CHNDKKBEIDG.KillButton.SetTarget(target);
+            HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
 
         static void trackerUpdate() {
@@ -229,11 +261,11 @@ namespace TheOtherRoles {
                 return;
             }
 
-            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.PPMOEEPBHJO.IAGJEKLJCCI) {
+            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead) {
                 Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
                 if (Tracker.timeUntilUpdate <= 0f) {
-                    bool trackedOnMap = !Tracker.tracked.PPMOEEPBHJO.IAGJEKLJCCI;
+                    bool trackedOnMap = !Tracker.tracked.Data.IsDead;
                     Vector3 position = Tracker.tracked.transform.position;
                     if (!trackedOnMap) { // Check for dead body
                         DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
@@ -277,19 +309,19 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void Prefix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GCDONLGCMIL.Started) return;
-        }
-
         public static void Postfix(PlayerControl __instance) {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GCDONLGCMIL.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
-            // Update Role Description
-            Helpers.refreshRoleDescription(__instance);
             // Child and Morphling shrink
             playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
+                // Update player outlines
+                setBasePlayerOutlines();
+
+                // Update Role Description
+                Helpers.refreshRoleDescription(__instance);
+
                 // Time Master
                 bendTimeUpdate();
                 // Morphling
@@ -327,10 +359,10 @@ namespace TheOtherRoles {
     class PlayerPhysicsWalkPlayerToPatch {
         private static Vector2 offset = Vector2.zero;
         public static void Prefix(PlayerPhysics __instance) {
-            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.EMHCBDEIOLO == Child.child ||  (Morphling.morphling != null && __instance.EMHCBDEIOLO == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
+            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.myPlayer == Child.child ||  (Morphling.morphling != null && __instance.myPlayer == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
             if (correctOffset) {
                 float currentScaling = (Child.growingProgress() + 1) * 0.5f;
-                __instance.EMHCBDEIOLO.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
+                __instance.myPlayer.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
             }
         }
     }
@@ -339,7 +371,7 @@ namespace TheOtherRoles {
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.PPMOEEPBHJO.IAGJEKLJCCI && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();
@@ -355,7 +387,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
     class PerformKillPatch {
         public static bool Prefix(KillButtonManager __instance) {
-            if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.PPMOEEPBHJO.IAGJEKLJCCI && PlayerControl.LocalPlayer.POECPOEKKNO) { // Among Us default checks
+            if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) { // Among Us default checks
                 if (Helpers.handleMurderAttempt(__instance.CurrentTarget)) { // Custom checks
                     if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
@@ -376,14 +408,14 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch
     {
-        static void Postfix(PlayerControl __instance, GameData.LGBOMGHJELL DGDGDKCCKHJ)
+        static void Postfix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo target)
         {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
             if (isMedicReport || isDetectiveReport)
             {
-                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == DGDGDKCCKHJ?.FNPNJHNKEBK)?.FirstOrDefault();
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == target?.PlayerId)?.FirstOrDefault();
 
                 if (deadPlayer != null && deadPlayer.killerIfExisting != null) {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
@@ -395,7 +427,7 @@ namespace TheOtherRoles {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
                             msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.PPMOEEPBHJO.IMMNCAGJJJC) ? "lighter" : "darker";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
                             msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";
@@ -404,13 +436,13 @@ namespace TheOtherRoles {
 
                     if (!string.IsNullOrWhiteSpace(msg))
                     {   
-                        if (AmongUsClient.Instance.BPADAHAOBLM && DestroyableSingleton<HudManager>.CHNDKKBEIDG)
+                        if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
                         {
-                            DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                         }
                         if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            DestroyableSingleton<Assets.CoreScripts.Telemetry>.CHNDKKBEIDG.SendWho();
+                            DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
                         }
                     }
                 }
@@ -424,29 +456,29 @@ namespace TheOtherRoles {
         public static bool resetToCrewmate = false;
         public static bool resetToDead = false;
 
-        public static void Prefix(PlayerControl __instance, PlayerControl DGDGDKCCKHJ)
+        public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target)
         {
             // Allow everyone to murder players
-            resetToCrewmate = !__instance.PPMOEEPBHJO.FDNMBJOAPFL;
-            resetToDead = __instance.PPMOEEPBHJO.IAGJEKLJCCI;
-            __instance.PPMOEEPBHJO.FDNMBJOAPFL = true;
-            __instance.PPMOEEPBHJO.IAGJEKLJCCI = false;
+            resetToCrewmate = !__instance.Data.IsImpostor;
+            resetToDead = __instance.Data.IsDead;
+            __instance.Data.IsImpostor = true;
+            __instance.Data.IsDead = false;
         }
 
-        public static void Postfix(PlayerControl __instance, PlayerControl DGDGDKCCKHJ)
+        public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target)
         {
             // Collect dead player info
-            DeadPlayer deadPlayer = new DeadPlayer(DGDGDKCCKHJ, DateTime.UtcNow, DeathReason.Kill, __instance);
+            DeadPlayer deadPlayer = new DeadPlayer(target, DateTime.UtcNow, DeathReason.Kill, __instance);
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Reset killer to crewmate if resetToCrewmate
-            if (resetToCrewmate) __instance.PPMOEEPBHJO.FDNMBJOAPFL = false;
-            if (resetToDead) __instance.PPMOEEPBHJO.IAGJEKLJCCI = true;
+            if (resetToCrewmate) __instance.Data.IsImpostor = false;
+            if (resetToDead) __instance.Data.IsDead = true;
 
             // Lover suicide trigger on murder
-            if ((Lovers.lover1 != null && DGDGDKCCKHJ == Lovers.lover1) || (Lovers.lover2 != null && DGDGDKCCKHJ == Lovers.lover2)) {
-                PlayerControl otherLover = DGDGDKCCKHJ == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (PlayerControl.LocalPlayer == DGDGDKCCKHJ && otherLover != null && !otherLover.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.bothDie) { // Only the dead lover sends the rpc
+            if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
+                PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                if (PlayerControl.LocalPlayer == target && otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) { // Only the dead lover sends the rpc
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LoverSuicide, Hazel.SendOption.Reliable, -1);
                     writer.Write(otherLover.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -455,17 +487,17 @@ namespace TheOtherRoles {
             }
             
             // Sidekick promotion trigger on murder
-            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI && DGDGDKCCKHJ == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && target == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
 
             // Seer show flash and add dead player position
-            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.PPMOEEPBHJO.IAGJEKLJCCI && Seer.seer != DGDGDKCCKHJ && Seer.mode <= 1) {
-                HudManager.CHNDKKBEIDG.FullScreen.enabled = true;
-                HudManager.CHNDKKBEIDG.StartCoroutine(Effects.DCHLMIDMBHG(1f, new Action<float>((p) => {
-                    var renderer = HudManager.CHNDKKBEIDG.FullScreen;
+            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
+                HudManager.Instance.FullScreen.enabled = true;
+                HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
+                    var renderer = HudManager.Instance.FullScreen;
                     if (p < 0.5) {
                         if (renderer != null)
                             renderer.color = new Color(42f / 255f, 187f / 255f, 245f / 255f, Mathf.Clamp01(p * 2 * 0.75f));
@@ -476,34 +508,34 @@ namespace TheOtherRoles {
                     if (p == 1f && renderer != null) renderer.enabled = false;
                 })));
             }
-            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(DGDGDKCCKHJ.transform.position);
+            if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
 
             // Child set adapted kill cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL && Child.child == __instance) {
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor && Child.child == __instance) {
                 var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                Child.child.SetKillTimer(PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
+                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
             }
         }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
     class PlayerControlSetCoolDownPatch {
-        public static bool Prefix(PlayerControl __instance, float IHIOFAHBJKK) {
-            if (PlayerControl.GameOptions.DGOPNLEEAAJ <= 0f) return false;
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)]float time) {
+            if (PlayerControl.GameOptions.KillCooldown <= 0f) return false;
             float multiplier = 1f;
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.PPMOEEPBHJO.FDNMBJOAPFL) multiplier = Child.isGrownUp() ? 0.66f : 2f;
+            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) multiplier = Child.isGrownUp() ? 0.66f : 2f;
 
-            __instance.killTimer = Mathf.Clamp(IHIOFAHBJKK, 0f, PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
-            DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.DGOPNLEEAAJ * multiplier);
+            __instance.killTimer = Mathf.Clamp(time, 0f, PlayerControl.GameOptions.KillCooldown * multiplier);
+            DestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.KillCooldown * multiplier);
             return false;
         }
     }
 
     [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
     class KillAnimationCoPerformKillPatch {
-        public static void Prefix(KillAnimation __instance, ref PlayerControl KIJHPICDEAD, ref PlayerControl DGDGDKCCKHJ) {
-            if (Vampire.vampire != null && Vampire.vampire == KIJHPICDEAD && Vampire.bitten != null && Vampire.bitten == DGDGDKCCKHJ)
-                KIJHPICDEAD = DGDGDKCCKHJ;
+        public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
+            if (Vampire.vampire != null && Vampire.vampire == source && Vampire.bitten != null && Vampire.bitten == target)
+                source = target;
         }
     }
 
@@ -512,7 +544,7 @@ namespace TheOtherRoles {
     {
         public static void Prefix(PlayerControl __instance) {
             // Child exile lose condition
-            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.PPMOEEPBHJO.FDNMBJOAPFL) {
+            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
                 Child.triggerChildLose = true;
             }
             // Jester win condition
@@ -530,12 +562,12 @@ namespace TheOtherRoles {
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
                 PlayerControl otherLover = __instance == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (otherLover != null && !otherLover.PPMOEEPBHJO.IAGJEKLJCCI && Lovers.bothDie)
+                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie)
                     otherLover.Exiled();
             }
             
             // Sidekick promotion trigger on exile
-            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.PPMOEEPBHJO.IAGJEKLJCCI && __instance == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
+            if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
@@ -543,14 +575,14 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.POECPOEKKNO), MethodType.Getter)]
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CanMove), MethodType.Getter)]
     class PlayerControlCanMovePatch {
         public static bool Prefix(PlayerControl __instance, ref bool __result)
         {
             __result = __instance.moveable &&
                 !Minigame.Instance &&
-                (!DestroyableSingleton<HudManager>.BMHJGNNOGDM || (!DestroyableSingleton<HudManager>.CHNDKKBEIDG.Chat.ENPNFFCCKON && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.KillOverlay.ENPNFFCCKON && !DestroyableSingleton<HudManager>.CHNDKKBEIDG.GameMenu.ENPNFFCCKON)) &&
-                (!MapBehaviour.Instance || !MapBehaviour.Instance.FLLAHBDIMHD) &&
+                (!DestroyableSingleton<HudManager>.InstanceExists || (!DestroyableSingleton<HudManager>.Instance.Chat.IsOpen && !DestroyableSingleton<HudManager>.Instance.KillOverlay.IsOpen && !DestroyableSingleton<HudManager>.Instance.GameMenu.IsOpen)) &&
+                (!MapBehaviour.Instance || !MapBehaviour.Instance.IsOpenStopped) &&
                 !MeetingHud.Instance &&
                 !CustomPlayerMenu.Instance &&
                 !ExileController.Instance &&

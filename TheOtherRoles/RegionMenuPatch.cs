@@ -38,19 +38,20 @@ namespace TheOtherRoles {
 
         public static void Postfix(RegionMenu __instance)
         {
-            var template = DestroyableSingleton<JoinGameButton>.CHNDKKBEIDG;
+            var template = DestroyableSingleton<JoinGameButton>.Instance;
 
             if (ipField == null || ipField.gameObject == null) {
                 ipField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
+                ipField.gameObject.name = "IpTextBox";
                 UnityEngine.Object.DestroyImmediate(ipField.transform.FindChild("arrowEnter").gameObject);
 
                 ipField.transform.localPosition = new Vector3(0, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.SetText(TheOtherRolesPlugin.Ip.Value);
-                __instance.StartCoroutine(AEOEPNHOJDP.DCHLMIDMBHG(0.1f, new Action<float>((p) => {
+                __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
                     ipField.outputText.SetText(TheOtherRolesPlugin.Ip.Value);
-                    ipField.outputText.ForceMeshUpdate(true, true);      
+                    ipField.SetText(TheOtherRolesPlugin.Ip.Value);
                 })));
 
                 ipField.ClearOnFocus = false; 
@@ -64,14 +65,15 @@ namespace TheOtherRoles {
             }
             if (portField == null || portField.gameObject == null) {
                 portField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
+                portField.gameObject.name = "PortTextBox";
                 UnityEngine.Object.DestroyImmediate(portField.transform.FindChild("arrowEnter").gameObject);
 
                 portField.transform.localPosition = new Vector3(0, -1.75f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(TheOtherRolesPlugin.Port.Value.ToString());
-                __instance.StartCoroutine(AEOEPNHOJDP.DCHLMIDMBHG(0.1f, new Action<float>((p) => {
+                __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
                     portField.outputText.SetText(TheOtherRolesPlugin.Port.Value.ToString());
-                    portField.outputText.ForceMeshUpdate(true, true);      
+                    portField.SetText(TheOtherRolesPlugin.Port.Value.ToString()); 
                 })));
 
 
