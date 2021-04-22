@@ -326,19 +326,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-### **Lighter Colors:** 
-- Pink, Orange, Yellow, White
-- Cyan, Lime, Salmon, Mint
-- Lavender, Peach, Wasabi, Hot Pink
-
-![](./Images/LighterColors.png)
-
-### **Darker Colors:** 
-- Red, Blue, Green, Black
-- Purple, Brown, Bordeaux, Olive
-- Turqoise, Nougat, Gray, Petrol
-
-![](./Images/DarkerColors.png)
+<img src="./Images/Colors.png" alt="drawing" width="300px"/>
 
 # Roles
 
