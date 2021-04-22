@@ -31,16 +31,5 @@ namespace TheOtherRoles {
                 return false;
             }
         }
-
-        [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
-        private static class ConsoleCanUsePatch {
-            private static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
-                canUse = couldUse = false;
-                if (__instance.AllowImpostor) return true;
-                if (!Helpers.hasFakeTasks(pc.Object)) return true;
-                __result = float.MaxValue;
-                return false;
-            }
-        }
     }
 }
