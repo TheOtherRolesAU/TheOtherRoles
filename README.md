@@ -18,6 +18,7 @@ Even more roles are coming soon :)
 - [Eraser](#eraser)
 - [Trickster](#trickster)
 - [Cleaner](#cleaner)
+- [Warlock](#warlock)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -421,6 +422,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 **NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
+- If there is a Vampire in the game, there can't be a Warlock
 
 ### Game Options
 | Name | Description |
@@ -487,6 +489,24 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 |----------|:-------------:|
 | Cleaner Spawn Chance | -
 | Cleaner Cooldown | Cooldown for cleaning dead bodies
+-----------------------
+
+
+## Warlock
+### **Team: Impostors**
+The Warlock is an Impostor, that can curse another player. After cursing another player he can kill through the victim of the curse a player near them. \
+If he kills through the victim of the curse, the Warlock is rooted in place for a certain amount of time.
+
+\
+**NOTE:**
+- If there is a Warlock in the game, there can't be a Vampire
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Warlock Spawn Chance | -
+| Warlock Cooldown | Cooldown for using the Curse and curse Kill
+| Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
 
 ## Lovers
