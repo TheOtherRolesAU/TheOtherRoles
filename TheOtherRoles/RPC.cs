@@ -40,7 +40,8 @@ namespace TheOtherRoles
         Eraser,
         Spy,
         Trickster,
-        Cleaner
+        Cleaner,
+        Warlock
     }
 
     enum CustomRPC
@@ -83,7 +84,8 @@ namespace TheOtherRoles
         SetFutureErased,
         SetFutureShifted,
         PlaceJackInTheBox,
-        LightsOut
+        LightsOut,
+        WarlockCurseKill
     }
 
     public static class RPCProcedure {
@@ -206,6 +208,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Cleaner:
                         Cleaner.cleaner = player;
+                        break;
+                    case RoleId.Warlock:
+                        Warlock.warlock = player;
                         break;
                     }
                 }
@@ -575,6 +580,16 @@ namespace TheOtherRoles
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
+
+        public static void warlockCurseKill(byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId) {
+                    Warlock.curseKillTarget = player;
+                    Warlock.warlock.MurderPlayer(player);
+                    return;
+                }
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -710,6 +725,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.LightsOut:
                     RPCProcedure.lightsOut();
+                    break;
+                case (byte)CustomRPC.WarlockCurseKill:
+                    RPCProcedure.warlockCurseKill(reader.ReadByte());
                     break;
             }
         }

@@ -58,6 +58,7 @@ namespace TheOtherRoles
             impSettings.Add((byte)RoleId.Eraser, CustomOptionHolder.eraserSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Trickster, CustomOptionHolder.tricksterSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Cleaner, CustomOptionHolder.cleanerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Warlock, CustomOptionHolder.warlockSpawnRate.getSelection());
 
             crewSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Mayor, CustomOptionHolder.mayorSpawnRate.getSelection());
@@ -118,6 +119,16 @@ namespace TheOtherRoles
                     if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
                         setRoleToRandomPlayer(entry.Key, crewmates);
                         maxCrewmateRoles--;
+                        if(CustomOptionHolder.blockedRolePairings.ContainsKey(entry.Key)) {
+                            foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[entry.Key]) {
+                                if(impSettings.ContainsKey(blockedRoleId)) {
+                                    impSettings[blockedRoleId] = 0; // Set Chance to Never for that role
+                                }
+                                if(crewSettings.ContainsKey(blockedRoleId)) {
+                                    crewSettings[blockedRoleId] = 0; // Set Chance to Never for that role
+                                }
+                            }
+                        }
                     }
                 } else { // Other
                     for (int i = 0; i < entry.Value; i++) crewTickets.Add(entry.Key);
@@ -129,6 +140,16 @@ namespace TheOtherRoles
                 } else if (entry.Value == 10) { // Always
                     if (impostors.Count > 0 && maxImpostorRoles > 0) {
                         setRoleToRandomPlayer(entry.Key, impostors);
+                        if(CustomOptionHolder.blockedRolePairings.ContainsKey(entry.Key)) {
+                            foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[entry.Key]) {
+                                if(impSettings.ContainsKey(blockedRoleId)) {
+                                    impSettings[blockedRoleId] = 0; // Set Chance to Never for that role
+                                }
+                                if(crewSettings.ContainsKey(blockedRoleId)) {
+                                    crewSettings[blockedRoleId] = 0; // Set Chance to Never for that role
+                                }
+                            }
+                        }
                         maxImpostorRoles--;
                     }
                 } else { // Other
@@ -144,6 +165,13 @@ namespace TheOtherRoles
                     byte roleId = crewTickets[index];
                     crewTickets.RemoveAll(x => x == roleId);
                     setRoleToRandomPlayer(roleId, crewmates);
+
+                    if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
+                        foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
+                            crewTickets.RemoveAll(x => x == blockedRoleId);
+                            impTickets.RemoveAll(x => x == blockedRoleId);
+                        }
+                    }
                 }
             }
 
@@ -153,6 +181,13 @@ namespace TheOtherRoles
                     byte roleId = impTickets[index];
                     impTickets.RemoveAll(x => x == roleId);
                     setRoleToRandomPlayer(roleId, impostors);
+
+                    if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
+                        foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
+                            crewTickets.RemoveAll(x => x == blockedRoleId);
+                            impTickets.RemoveAll(x => x == blockedRoleId);
+                        }
+                    }
                 }
             }
         }
