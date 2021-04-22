@@ -10,19 +10,14 @@ namespace TheOtherRoles{
         public static System.Collections.Generic.List<JackInTheBox> AllJackInTheBoxes = new System.Collections.Generic.List<JackInTheBox>();
         public static int JackInTheBoxLimit = 3;
         public static bool boxesConvertedToVents = false;
-        private static List<Sprite> boxAnimationSprites;
+        public static Sprite[] boxAnimationSprites = new Sprite[18];
 
-        public static Sprite getBoxSprite() {
-            List<Sprite> s = getBoxAnimationSprites();
-            if (s.Count > 0) return s.First();
-            return null;
-        }
-
-        public static List<Sprite> getBoxAnimationSprites() {
-            if (boxAnimationSprites != null) return boxAnimationSprites;
-            boxAnimationSprites = new List<Sprite>();
-            for (int i = 1; i < 19; i++) boxAnimationSprites.Add(Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.TricksterAnimation.trickster_box_00{i:00}.png", 175f));
-            return boxAnimationSprites;
+        public static Sprite getBoxAnimationSprite(int index) {
+            if (boxAnimationSprites == null || boxAnimationSprites.Length == 0) return null;
+            index = Mathf.Clamp(index, 0, boxAnimationSprites.Length - 1);
+            if (boxAnimationSprites[index] == null)
+                boxAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.TricksterAnimation.trickster_box_00{(index + 1):00}.png", 175f));
+            return boxAnimationSprites[index];
         }
 
         public static void startAnimation(int ventId) {
@@ -31,11 +26,9 @@ namespace TheOtherRoles{
             Vent vent = box.vent;
 
             HudManager.Instance.StartCoroutine(Effects.Lerp(0.6f, new Action<float>((p) => {
-                var sprites = getBoxAnimationSprites();
-                if (vent != null && vent.myRend != null && sprites != null && sprites.Count > 0) {
-                    int index = (int)(p * sprites.Count);
-                    vent.myRend.sprite = sprites[Mathf.Clamp(index, 0, sprites.Count-1)];
-                    if (p == 1f) vent.myRend.sprite = getBoxSprite();
+                if (vent != null && vent.myRend != null) {
+                    vent.myRend.sprite = getBoxAnimationSprite((int)(p * boxAnimationSprites.Length));
+                    if (p == 1f) vent.myRend.sprite = getBoxAnimationSprite(0);
                 }
             })));
         }
@@ -50,7 +43,7 @@ namespace TheOtherRoles{
             // Create the marker
             gameObject.transform.position = position;
             var boxRenderer = gameObject.AddComponent<SpriteRenderer>();
-            boxRenderer.sprite = getBoxSprite();
+            boxRenderer.sprite = getBoxAnimationSprite(0);
 
             // Create the vent
             var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
@@ -65,7 +58,7 @@ namespace TheOtherRoles{
             vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
             vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1; // Make sure we have a unique id
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
-            ventRenderer.sprite = getBoxSprite();
+            ventRenderer.sprite = getBoxAnimationSprite(0);
             vent.myRend = ventRenderer;
             var allVentsList = ShipStatus.Instance.AllVents.ToList();
             allVentsList.Add(vent);
