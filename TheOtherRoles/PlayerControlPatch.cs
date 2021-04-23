@@ -327,21 +327,32 @@ namespace TheOtherRoles {
 
         public static void updateGhostInfo() {
             if (!PlayerControl.LocalPlayer.Data.IsDead || !MapOptions.showGhostInfo) return;
-                    System.Console.WriteLine("bbb");
+
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                Transform transform = p.transform.FindChild("GhostInfo");
-                TMPro.TextMeshPro ghostInfo = transform != null ? transform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (ghostInfo == null) {
-                    System.Console.WriteLine("aaaa");
-                    ghostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
-                    ghostInfo.transform.localPosition += Vector3.up * 0.25f;
-                    ghostInfo.fontSize *= 0.75f;
-                    ghostInfo.gameObject.name = "GhostInfo";
+                Transform playerGhostInfoTransform = p.transform.FindChild("GhostInfo");
+                TMPro.TextMeshPro playerGhostInfo = playerGhostInfoTransform != null ? playerGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerGhostInfo == null) {
+                    playerGhostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                    playerGhostInfo.transform.localPosition += Vector3.up * 0.25f;
+                    playerGhostInfo.fontSize *= 0.75f;
+                    playerGhostInfo.gameObject.name = "GhostInfo";
+                }
+
+                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
+                Transform meetingGhostInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("GhostInfo") : null;
+                TMPro.TextMeshPro meetingGhostInfo = meetingGhostInfoTransform != null ? meetingGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (meetingGhostInfo == null && playerVoteArea != null) {
+                    meetingGhostInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                    playerGhostInfo.transform.localPosition += Vector3.down * 0.25f;
+                    playerGhostInfo.fontSize *= 0.75f;
+                    meetingGhostInfo.gameObject.name = "GhostInfo";
                 }
                 
-                String roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
-                ghostInfo.text = roleNames + $" <color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>";
+                string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+                string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
+                playerGhostInfo.text = $"{roleNames} {taskInfo}";
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}";
             }
         }
 
