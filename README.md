@@ -47,6 +47,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.2/TheOtherRoles.zip)
 | 2021.4.12s| v2.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.1/TheOtherRoles.zip)
@@ -325,19 +326,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-### **Lighter Colors:** 
-- Pink, Orange, Yellow, White
-- Cyan, Lime, Salmon, Mint
-- Lavender, Peach, Wasabi, Hot Pink
-
-![](./Images/LighterColors.png)
-
-### **Darker Colors:** 
-- Red, Blue, Green, Black
-- Purple, Brown, Bordeaux, Olive
-- Turqoise, Nougat, Gray, Petrol
-
-![](./Images/DarkerColors.png)
+<img src="./Images/Colors.png" alt="drawing" width="300px"/>
 
 # Roles
 
