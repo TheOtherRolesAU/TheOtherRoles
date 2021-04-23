@@ -355,6 +355,13 @@ namespace TheOtherRoles
             }
         }
 
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CreateButton))]
+        class MeethingHudCreateButtonPatch {
+            static void Postfix(PlayerVoteArea __result) {
+                __result.NameText.autoSizeTextContainer = true;
+            }
+        }
+
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {

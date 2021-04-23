@@ -326,9 +326,11 @@ namespace TheOtherRoles {
         }
 
         public static void updateGhostInfo() {
-            if (!PlayerControl.LocalPlayer.Data.IsDead || !MapOptions.showGhostInfo) return;
+            if (!MapOptions.showGhostInfo) return;
 
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
+
                 Transform playerGhostInfoTransform = p.transform.FindChild("GhostInfo");
                 TMPro.TextMeshPro playerGhostInfo = playerGhostInfoTransform != null ? playerGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (playerGhostInfo == null) {
@@ -343,8 +345,7 @@ namespace TheOtherRoles {
                 TMPro.TextMeshPro meetingGhostInfo = meetingGhostInfoTransform != null ? meetingGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (meetingGhostInfo == null && playerVoteArea != null) {
                     meetingGhostInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                    playerGhostInfo.transform.localPosition += Vector3.down * 0.25f;
-                    playerGhostInfo.fontSize *= 0.75f;
+                    meetingGhostInfo.transform.localPosition += Vector3.down * 0.3f;
                     meetingGhostInfo.gameObject.name = "GhostInfo";
                 }
                 
