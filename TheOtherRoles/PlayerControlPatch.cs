@@ -325,6 +325,39 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void updateGhostInfo() {
+            if (!MapOptions.showGhostInfo) return;
+
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
+
+                Transform playerGhostInfoTransform = p.transform.FindChild("GhostInfo");
+                TMPro.TextMeshPro playerGhostInfo = playerGhostInfoTransform != null ? playerGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerGhostInfo == null) {
+                    playerGhostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                    playerGhostInfo.transform.localPosition += Vector3.up * 0.25f;
+                    playerGhostInfo.fontSize *= 0.75f;
+                    playerGhostInfo.gameObject.name = "GhostInfo";
+                }
+
+                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
+                Transform meetingGhostInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("GhostInfo") : null;
+                TMPro.TextMeshPro meetingGhostInfo = meetingGhostInfoTransform != null ? meetingGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (meetingGhostInfo == null && playerVoteArea != null) {
+                    meetingGhostInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                    meetingGhostInfo.transform.localPosition += Vector3.down * 0.4f;
+                    meetingGhostInfo.fontSize *= 0.75f;
+                    meetingGhostInfo.gameObject.name = "GhostInfo";
+                }
+                
+                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
+                string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+                string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
+                playerGhostInfo.text = $"{roleNames} {taskInfo}".Trim();
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}".Trim();
+            }
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -337,6 +370,9 @@ namespace TheOtherRoles {
 
                 // Update Role Description
                 Helpers.refreshRoleDescription(__instance);
+
+                // Update Ghost Info
+                updateGhostInfo();
 
                 // Time Master
                 bendTimeUpdate();
