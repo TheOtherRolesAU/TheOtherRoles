@@ -325,6 +325,25 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void updateGhostInfo() {
+            if (!PlayerControl.LocalPlayer.Data.IsDead || !MapOptions.showGhostInfo) return;
+
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                Transform transform = p.transform.FindChild("GhostInfo");
+                TMPro.TextMeshPro ghostInfo = transform != null ? transform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (ghostInfo == null) {
+                    ghostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                    ghostInfo.transform.localPosition += Vector3.up * 0.25f;
+                    ghostInfo.fontSize *= 0.75f;
+                    ghostInfo.gameObject.name = "GhostInfo";
+                }
+                
+                String roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
+                ghostInfo.text = roleNames + $" <color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>";
+            }
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -337,6 +356,9 @@ namespace TheOtherRoles {
 
                 // Update Role Description
                 Helpers.refreshRoleDescription(__instance);
+
+                // Update Ghost Info
+
 
                 // Time Master
                 bendTimeUpdate();
