@@ -209,6 +209,17 @@ namespace TheOtherRoles {
             if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
         }
 
+        static void sidekickCheckPromotion() {
+            // If LocalPlayer is Sidekick, the Jackal is disconnected and Sidekick promotion is enabled, then trigger promotion
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            if (Sidekick.sidekick.Data.IsDead == true || !Sidekick.promotesToJackal) return;
+            if (Jackal.jackal == null || Jackal.jackal?.Data?.Disconnected == true) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes(); 
+            }
+        }
+
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
 
@@ -370,6 +381,8 @@ namespace TheOtherRoles {
                 impostorSetTarget();
                 // Warlock
                 warlockSetTarget();
+                // Check for sidekick promotion on Jackal disconnect
+                sidekickCheckPromotion();
             } 
         }
     }
