@@ -74,7 +74,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.3.1**
 - **New Role:** [Warlock](#warlock)
 - Fixed the bug that the streamer mode did only work for the lobby host
-- Fixed the bug where the Trickster box was invisible
+- Fixed a bug where the Trickster box was invisible
+- Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
