@@ -110,8 +110,8 @@ namespace TheOtherRoles
             if (Warlock.warlock != null && p == Warlock.warlock) {
                 infos.Add(new RoleInfo("Warlock",
                 Warlock.color,
-                "Curse a victim and let them kill for you",
-                "Curse and kill through others"));
+                "Curse other players and kill everyone",
+                "Curse and kill everyone"));
             }
             if (Detective.detective != null && p == Detective.detective) {
                 infos.Add(new RoleInfo("Detective",
