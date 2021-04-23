@@ -353,8 +353,8 @@ namespace TheOtherRoles {
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                 string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
-                playerGhostInfo.text = $"{roleNames} {taskInfo}";
-                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}";
+                playerGhostInfo.text = $"{roleNames} {taskInfo}".Trim();
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}".Trim();
             }
         }
 
