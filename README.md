@@ -18,6 +18,7 @@ Even more roles are coming soon :)
 - [Eraser](#eraser)
 - [Trickster](#trickster)
 - [Cleaner](#cleaner)
+- [Warlock](#warlock)
 - [Lovers](#lovers)
   - Lover
   - ImpLover
@@ -71,7 +72,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.3.1**
+- **New Role:** [Warlock](#warlock)
 - Fixed the bug that the streamer mode did only work for the lobby host
+- Fixed the bug where the Trickster box was invisible
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
@@ -410,6 +413,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 **NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
+- If there is a Vampire in the game, there can't be a Warlock
 
 ### Game Options
 | Name | Description |
@@ -476,6 +480,28 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 |----------|:-------------:|
 | Cleaner Spawn Chance | -
 | Cleaner Cooldown | Cooldown for cleaning dead bodies
+-----------------------
+
+
+## Warlock
+### **Team: Impostors**
+The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
+If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
+Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
+The Warlock can still perform normal kills, but the two buttons share the same cooldown.
+
+\
+**NOTE:**
+- The Warlock can always kill his Impostor mates (and even himselfs) using the "cursed kill"
+- If there is a Warlock in the game, there can't be a Vampire
+- Performing a normal kill, doesn't lift the curse
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Warlock Spawn Chance | -
+| Warlock Cooldown | Cooldown for using the Curse and curse Kill
+| Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
 
 ## Lovers

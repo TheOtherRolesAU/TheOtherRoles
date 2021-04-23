@@ -147,7 +147,7 @@ public class CustomButton
         if (Timer >= 0) {
             if (HasEffect && isEffectActive)
                 Timer -= Time.deltaTime;
-            else if (!PlayerControl.LocalPlayer.inVent)
+            else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
                 Timer -= Time.deltaTime;
         }
         

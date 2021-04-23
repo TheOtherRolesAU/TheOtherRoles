@@ -29,6 +29,7 @@ namespace TheOtherRoles
         private static CustomButton placeJackInTheBoxButton;        
         private static CustomButton lightsOutButton;
         public static CustomButton cleanerCleanButton;
+        public static CustomButton warlockCurseButton;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -51,6 +52,7 @@ namespace TheOtherRoles
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
+            warlockCurseButton.MaxTimer = Warlock.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -601,6 +603,51 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance
             );
+            // Warlock curse
+            warlockCurseButton = new CustomButton(
+                () => {
+                    if (Warlock.curseVictim == null) {
+                        // Apply Curse
+                        Warlock.curseVictim = Warlock.currentTarget;
+                        warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
+                        warlockCurseButton.Timer = 1f;
+                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.handleMurderAttempt(Warlock.curseVictimTarget)) {
+                        // Curse Kill
+                        Warlock.curseKillTarget = Warlock.curseVictimTarget;
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
+                        writer.Write(Warlock.curseKillTarget.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.warlockCurseKill(Warlock.curseKillTarget.PlayerId);
+
+                        Warlock.curseVictim = null;
+                        Warlock.curseVictimTarget = null;
+                        warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
+                        Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
+
+                        if(Warlock.rootTime > 0) {
+                            PlayerControl.LocalPlayer.moveable = false;
+                            HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
+                                if (p == 1f) {
+                                    PlayerControl.LocalPlayer.moveable = true;
+                                }
+                            })));
+                        }
+                    }
+                },
+                () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove; },
+                () => { 
+                    warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
+                    warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
+                    Warlock.curseVictim = null;
+                    Warlock.curseVictimTarget = null;
+                },
+                Warlock.getCurseButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                 __instance
+            );
+
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

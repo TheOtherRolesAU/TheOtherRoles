@@ -15,17 +15,18 @@ namespace TheOtherRoles {
     {
         // Helpers
 
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
+            if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Vector2 truePosition = targetingPlayer.GetTruePosition();
             Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
-                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -253,6 +254,21 @@ namespace TheOtherRoles {
             HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
 
+        static void warlockSetTarget() {
+            if (Warlock.warlock == null || Warlock.warlock != PlayerControl.LocalPlayer) return;
+            if (Warlock.curseVictim != null && (Warlock.curseVictim.Data.Disconnected || Warlock.curseVictim.Data.IsDead)) {
+                // If the cursed victim is disconnected or dead reset the curse so a new curse can be applied
+                Warlock.resetCurse();
+            }
+            if (Warlock.curseVictim == null) {
+                Warlock.currentTarget = setTarget();
+                setPlayerOutline(Warlock.currentTarget, Warlock.color);
+            } else {
+                Warlock.curseVictimTarget = setTarget(targetingPlayer: Warlock.curseVictim);
+                setPlayerOutline(Warlock.curseVictimTarget, Warlock.color);
+            }
+        }
+
         static void trackerUpdate() {
             if (Tracker.arrow?.arrow == null) return;
 
@@ -351,6 +367,8 @@ namespace TheOtherRoles {
                 sidekickSetTarget();
                 // Impostor
                 impostorSetTarget();
+                // Warlock
+                warlockSetTarget();
             } 
         }
     }
@@ -495,7 +513,14 @@ namespace TheOtherRoles {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer; 
+            
+            // Warlock Button Sync
+            if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
+                if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
+                    HudManagerStartPatch.warlockCurseButton.Timer = Warlock.warlock.killTimer;
+                }
+            }
 
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
@@ -540,6 +565,11 @@ namespace TheOtherRoles {
         public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
             if (Vampire.vampire != null && Vampire.vampire == source && Vampire.bitten != null && Vampire.bitten == target)
                 source = target;
+            
+            if (Warlock.warlock != null && Warlock.warlock == source && Warlock.curseKillTarget != null && Warlock.curseKillTarget == target) {
+                source = target;
+                Warlock.curseKillTarget = null; // Reset here
+            }
         }
     }
 
