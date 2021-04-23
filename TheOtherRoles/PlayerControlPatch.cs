@@ -62,8 +62,9 @@ namespace TheOtherRoles {
             foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
                 if (target == null || target.myRend == null) continue;
                 
+                bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
-                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
+                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
                         || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
