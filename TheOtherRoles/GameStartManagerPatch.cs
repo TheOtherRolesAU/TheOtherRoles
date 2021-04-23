@@ -54,7 +54,7 @@ namespace TheOtherRoles {
                 if (AmongUsClient.Instance.AmHost) {
                     bool blockStart = false;
                     string message = "";
-                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray()) {
                         if (client.Character == null) continue;
                         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
                         if (dummyComponent != null && dummyComponent.enabled)

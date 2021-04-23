@@ -280,14 +280,8 @@ namespace TheOtherRoles
 
             if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
-            int numberOfTasks = 0;
-            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
-			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
-				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
-					if (!playerInfo.Tasks[i].Complete)
-						numberOfTasks++;
-				}
-			}
+            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+            int numberOfTasks = playerTotal - playerCompleted;
 
             if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));

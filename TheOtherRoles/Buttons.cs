@@ -627,6 +627,7 @@ namespace TheOtherRoles
 
                         if(Warlock.rootTime > 0) {
                             PlayerControl.LocalPlayer.moveable = false;
+                            PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
                             HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
                                 if (p == 1f) {
                                     PlayerControl.LocalPlayer.moveable = true;
