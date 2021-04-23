@@ -113,7 +113,8 @@ namespace TheOtherRoles
             List<byte> crewTickets = new List<byte>();
             List<byte> impTickets = new List<byte>();
 
-            foreach (KeyValuePair<byte, int> entry in crewSettings) {
+            for (int i = 0; i < crewSettings.Count; i++) {
+                var entry = crewSettings.ElementAt(i);
                 if (entry.Value == 0) { // Never
                 } else if (entry.Value == 10) { // Always
                     if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
@@ -131,11 +132,12 @@ namespace TheOtherRoles
                         }
                     }
                 } else { // Other
-                    for (int i = 0; i < entry.Value; i++) crewTickets.Add(entry.Key);
+                    for (int j = 0; j < entry.Value; j++) crewTickets.Add(entry.Key);
                 }
             }
 
-            foreach (KeyValuePair<byte, int> entry in impSettings) {
+            for (int i = 0; i < impSettings.Count; i++) {
+                var entry = impSettings.ElementAt(i);
                 if (entry.Value == 0) { // Never
                 } else if (entry.Value == 10) { // Always
                     if (impostors.Count > 0 && maxImpostorRoles > 0) {
@@ -153,7 +155,7 @@ namespace TheOtherRoles
                         maxImpostorRoles--;
                     }
                 } else { // Other
-                    for (int i = 0; i < entry.Value; i++) impTickets.Add(entry.Key);
+                    for (int j = 0; j < entry.Value; j++) impTickets.Add(entry.Key);
                 }
             }
 
