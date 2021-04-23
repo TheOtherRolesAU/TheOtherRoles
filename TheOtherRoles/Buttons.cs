@@ -611,7 +611,7 @@ namespace TheOtherRoles
                         Warlock.curseVictim = Warlock.currentTarget;
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
-                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null) {
+                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.handleMurderAttempt(Warlock.curseVictimTarget)) {
                         // Curse Kill
                         Warlock.curseKillTarget = Warlock.curseVictimTarget;
 

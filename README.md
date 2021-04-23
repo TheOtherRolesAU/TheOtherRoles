@@ -71,7 +71,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.3.1**
+- **New Role:** [Warlock](#warlock)
 - Fixed the bug that the streamer mode did only work for the lobby host
+- Fixed the bug where the Trickster box was invisible
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
@@ -494,12 +496,16 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 
 ## Warlock
 ### **Team: Impostors**
-The Warlock is an Impostor, that can curse another player. After cursing another player he can kill through the victim of the curse a player near them. \
-If he kills through the victim of the curse, the Warlock is rooted in place for a certain amount of time.
+The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
+If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
+Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
+The Warlock can still perform normal kills, but the two buttons share the same cooldown.
 
 \
 **NOTE:**
+- The Warlock can always kill his Impostor mates (and even himselfs) using the "cursed kill"
 - If there is a Warlock in the game, there can't be a Vampire
+- Performing a normal kill, doesn't lift the curse
 
 ### Game Options
 | Name | Description |

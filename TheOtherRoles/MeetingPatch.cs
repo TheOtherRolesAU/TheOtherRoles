@@ -528,6 +528,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Trickster.";
                     else if (Cleaner.cleaner != null && ExileController.Instance.exiled.Object.PlayerId == Cleaner.cleaner.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Cleaner.";
+                    else if (Warlock.warlock != null && ExileController.Instance.exiled.Object.PlayerId == Warlock.warlock.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Warlock.";
                 }
 
                 // Hide number of remaining impostors on Jester win

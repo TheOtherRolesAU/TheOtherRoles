@@ -540,6 +540,7 @@ namespace TheOtherRoles
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
+            if (player == Warlock.warlock) Warlock.clearAndReload();
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
