@@ -11,7 +11,7 @@ namespace TheOtherRoles{
         public static bool blockSkippingInEmergencyMeetings = false;
         public static bool noVoteIsSelfVote = false;
         public static bool hidePlayerNames = false;
-        public static bool showGhostInfo = false;
+        public static bool showGhostInfo = true;
 
         // Updating values
         public static int meetingsCount = 0;

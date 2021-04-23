@@ -327,11 +327,12 @@ namespace TheOtherRoles {
 
         public static void updateGhostInfo() {
             if (!PlayerControl.LocalPlayer.Data.IsDead || !MapOptions.showGhostInfo) return;
-
+                    System.Console.WriteLine("bbb");
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 Transform transform = p.transform.FindChild("GhostInfo");
                 TMPro.TextMeshPro ghostInfo = transform != null ? transform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (ghostInfo == null) {
+                    System.Console.WriteLine("aaaa");
                     ghostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
                     ghostInfo.transform.localPosition += Vector3.up * 0.25f;
                     ghostInfo.fontSize *= 0.75f;
@@ -358,7 +359,7 @@ namespace TheOtherRoles {
                 Helpers.refreshRoleDescription(__instance);
 
                 // Update Ghost Info
-
+                updateGhostInfo();
 
                 // Time Master
                 bendTimeUpdate();
