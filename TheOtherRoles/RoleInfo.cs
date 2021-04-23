@@ -152,8 +152,8 @@ namespace TheOtherRoles
             if (Hacker.hacker != null && p == Hacker.hacker) { 
                 infos.Add(new RoleInfo("Hacker",
                 Hacker.color,
-                "Hacke to find the <color=#FF1919FF>Impostors</color>",
-                "Hacke to find the Impostors"));
+                "Hack to find the <color=#FF1919FF>Impostors</color>",
+                "Hack to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
                 infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",

@@ -48,6 +48,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.2/TheOtherRoles.zip)
 | 2021.4.12s| v2.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.1/TheOtherRoles.zip)
@@ -315,7 +316,7 @@ Here are a few instructions, on how to create a custom hat:
     - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
-    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png/revision/latest?cb=20210106045508) to see how this feature should be used.
+    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
@@ -328,19 +329,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-### **Lighter Colors:** 
-- Pink, Orange, Yellow, White
-- Cyan, Lime, Salmon, Mint
-- Lavender, Peach, Wasabi, Hot Pink
-
-![](./Images/LighterColors.png)
-
-### **Darker Colors:** 
-- Red, Blue, Green, Black
-- Purple, Brown, Bordeaux, Olive
-- Turqoise, Nougat, Gray, Petrol
-
-![](./Images/DarkerColors.png)
+<img src="./Images/Colors.png" alt="drawing" width="300px"/>
 
 # Roles
 

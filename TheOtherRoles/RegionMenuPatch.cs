@@ -48,6 +48,7 @@ namespace TheOtherRoles {
                 ipField.transform.localPosition = new Vector3(0, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
+                ipField.ForceUppercase = false;
                 ipField.SetText(TheOtherRolesPlugin.Ip.Value);
                 __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
                     ipField.outputText.SetText(TheOtherRolesPlugin.Ip.Value);
