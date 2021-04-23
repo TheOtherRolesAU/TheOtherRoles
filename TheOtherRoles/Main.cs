@@ -36,7 +36,17 @@ namespace TheOtherRoles
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
 
-        public static DnsRegionInfo CustomRegion;
+        public static IRegionInfo[] defaultRegions;
+
+        public static void UpdateRegions() {
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
+            IRegionInfo[] regions = defaultRegions;
+
+            var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value);
+            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
+            ServerManager.DefaultRegions = regions;
+            serverManager.AvailableRegions = regions;
+        }
 
         public override void Load() {
             DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
@@ -47,15 +57,9 @@ namespace TheOtherRoles
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
+            defaultRegions = ServerManager.DefaultRegions;
 
-            CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value);
-            ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
-            IRegionInfo[] regions = ServerManager.DefaultRegions;
-
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
-            ServerManager.DefaultRegions = regions;
-            serverManager.AvailableRegions = regions;
-            serverManager.SaveServers();
+            UpdateRegions();
 
             GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
