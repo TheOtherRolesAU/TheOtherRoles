@@ -616,9 +616,8 @@ namespace TheOtherRoles
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
             camera.CamName = $"Mechanic Camera {Mechanic.placedCameras}";
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
-            var allCameras = ShipStatus.Instance.AllCameras.ToList();
-            allCameras.Add(camera);
-            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            camera.gameObject.SetActive(false);
+            MapOptions.camerasToAdd.Add(camera);
         }
 
         public static void sealVent(int ventId) {
@@ -626,11 +625,7 @@ namespace TheOtherRoles
             if (vent == null) return;
 
             Mechanic.remainingScrews -= Mechanic.ventPrice;
-
-            PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
-            animator?.Stop();
-            vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : Mechanic.getAnimatedVentSealedSprite();
-            vent.name = "SealedVent_" + vent.name;
+            MapOptions.ventsToSeal.Add(vent);
         }
     }
 

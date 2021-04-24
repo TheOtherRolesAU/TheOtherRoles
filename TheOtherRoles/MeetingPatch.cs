@@ -406,6 +406,21 @@ namespace TheOtherRoles
             if (Trickster.trickster != null && JackInTheBox.hasJackInTheBoxLimitReached()) {
                 JackInTheBox.convertToVents();
             }
+
+            // Mechanic vents and cameras
+            MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
+            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            allCameras.AddRange(MapOptions.camerasToAdd);
+            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            MapOptions.camerasToAdd = new List<SurvCamera>();
+
+            foreach (Vent vent in MapOptions.ventsToSeal) {
+                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+                animator?.Stop();
+                vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : Mechanic.getAnimatedVentSealedSprite();
+                vent.name = "SealedVent_" + vent.name;
+            }
+            MapOptions.ventsToSeal = new List<Vent>();
         }
     }
 

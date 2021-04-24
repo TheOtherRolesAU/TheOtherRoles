@@ -15,9 +15,13 @@ namespace TheOtherRoles{
 
         // Updating values
         public static int meetingsCount = 0;
+        public static List<SurvCamera> camerasToAdd = new List<SurvCamera>();
+        public static List<Vent> ventsToSeal = new List<Vent>();
 
         public static void clearAndReloadMapOptions() {
             meetingsCount = 0;
+            camerasToAdd = new List<SurvCamera>();
+            ventsToSeal = new List<Vent>();
 
             maxNumberOfMeetings = Mathf.RoundToInt(CustomOptionHolder.maxNumberOfMeetings.getSelection());
             blockSkippingInEmergencyMeetings = CustomOptionHolder.blockSkippingInEmergencyMeetings.getBool();
