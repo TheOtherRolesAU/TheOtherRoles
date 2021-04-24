@@ -48,7 +48,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.4.14s| v2.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.1/TheOtherRoles.zip)
+| 2021.4.14s| v2.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.4.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.2/TheOtherRoles.zip)
 | 2021.4.12s| v2.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.1/TheOtherRoles.zip)
@@ -71,7 +71,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
-**Version 2.3.1**
+**Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
