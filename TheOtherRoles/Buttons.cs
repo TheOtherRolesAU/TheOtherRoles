@@ -688,12 +688,14 @@ namespace TheOtherRoles
                         MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SealVent, Hazel.SendOption.Reliable);
                         writer.WritePacked(Mechanic.ventTarget.Id);
                         writer.EndMessage();
+                        RPCProcedure.sealVent(Mechanic.ventTarget.Id);
+                        Mechanic.ventTarget = null;
                     }
                 },
                 () => { return Mechanic.mechanic != null && Mechanic.mechanic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     mechanicButton.killButtonManager.renderer.sprite = (Mechanic.ventTarget == null) ? Mechanic.getPlaceCameraButtonSprite() : Mechanic.getCloseVentButtonSprite(); 
-                    return Mechanic.remainingScrews > (Mechanic.ventTarget == null ? 2 : 1) && PlayerControl.LocalPlayer.CanMove;
+                    return Mechanic.remainingScrews >= (Mechanic.ventTarget == null ? 2 : 1) && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { mechanicButton.Timer = mechanicButton.MaxTimer; },
                 Mechanic.getPlaceCameraButtonSprite(),

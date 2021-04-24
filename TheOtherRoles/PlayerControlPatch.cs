@@ -371,21 +371,18 @@ namespace TheOtherRoles {
         }
 
         public static void mechanicSetTarget(PlayerControl __instance) {
-            if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer) return;
+            if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
 
             Vent target = null;
             Vector2 truePosition = __instance.GetTruePosition();
-            Collider2D[] itemsInRange = new Collider2D[20];
-            int itemsCount = Physics2D.OverlapCircleNonAlloc(truePosition, __instance.MaxReportDistance, itemsInRange, Constants.Usables);
-            for (int i = 0; i < itemsCount; i++) {
-                IUsable usable = itemsInRange[i].GetComponent<IUsable>();
-                if (usable != null) {
-                    Vent possibleVent = usable.TryCast<Vent>();
-                    if (possibleVent != null && possibleVent.gameObject != null && !possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_") && !possibleVent.gameObject.name.StartsWith("SealedVent_")) {
-                        Vector3 ventPosition = possibleVent.transform.position;
-                        float distance = Vector2.Distance(truePosition, ventPosition);
-                        if (distance <= possibleVent.UsableDistance) target = possibleVent;
-                    }
+            float closestDistance = float.MaxValue;
+            for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
+                Vent vent = ShipStatus.Instance.AllVents[i];
+                if (vent == null || vent.transform == null) continue;
+                float distance = Vector2.Distance(vent.transform.position, truePosition);
+                if (distance <= vent.UsableDistance && distance < closestDistance) {
+                    closestDistance = distance;
+                    target = vent;
                 }
             }
             Mechanic.ventTarget = target;
