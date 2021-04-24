@@ -268,7 +268,7 @@ namespace TheOtherRoles {
 
             mechanicSpawnRate = CustomOption.Create(280, cs(Mechanic.color, "Mechanic"), rates, null, true);
             mechanicCooldown = CustomOption.Create(281, "Mechanic Cooldown", 30f, 10f, 60f, 2.5f, mechanicSpawnRate);
-            mechanicTotalScrews = CustomOption.Create(282, "Mechanic Total Screws", 7f, 1f, 15f, 1f, mechanicSpawnRate);
+            mechanicTotalScrews = CustomOption.Create(282, "Mechanic Number Of Screws", 7f, 1f, 15f, 1f, mechanicSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

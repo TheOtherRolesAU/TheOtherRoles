@@ -73,6 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.3.1**
 - **New Role:** [Warlock](#warlock)
+- **New Role:** [Mechanic](#mechanic)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Fixed the bug that the streamer mode did only work for the lobby host
 - Fixed a bug where the Trickster box was invisible
@@ -869,6 +870,22 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Spy Spawn Chance |
 | Spy Can Die To Sheriff | 
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+-----------------------
+
+## Mechanic
+### **Team: Crewmates**
+The Mechanic is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
+Placing a new camera costs 2 screws.\
+Sealing a vent costs 1 screw.\
+The new camera will be visible after the next meeting and accessible by everyone.\
+The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Mechanic Spawn Chance |
+| Mechanic Cooldown | 
+| Mechanic Number Of Screws | The number of screws that a Mechanic can use in a game
 -----------------------
 
 
