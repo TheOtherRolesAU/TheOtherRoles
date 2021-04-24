@@ -606,6 +606,7 @@ namespace TheOtherRoles
             if (referenceCamera == null) return; // Mira HQ
 
             Mechanic.remainingScrews -= 2;
+            Mechanic.camerasPlaced++;
 
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -613,6 +614,7 @@ namespace TheOtherRoles
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
+            camera.CamName = $"Mechanic Camera {Mechanic.camerasPlaced}";
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             allCameras.Add(camera);

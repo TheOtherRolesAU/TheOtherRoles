@@ -817,6 +817,7 @@ namespace TheOtherRoles
 
         public static float cooldown = 30f;
         public static int remainingScrews = 7;
+        public static int camerasPlaced = 0;
         public static int totalScrews = 7;
         public static Vent ventTarget = null;
 
@@ -851,6 +852,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             mechanic = null;
             ventTarget = null;
+            camerasPlaced = 0;
             cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
         }
