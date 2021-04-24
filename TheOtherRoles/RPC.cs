@@ -87,7 +87,8 @@ namespace TheOtherRoles
         PlaceJackInTheBox,
         LightsOut,
         WarlockCurseKill,
-        PlaceCamera
+        PlaceCamera,
+        SealVent
     }
 
     public static class RPCProcedure {
@@ -617,6 +618,18 @@ namespace TheOtherRoles
             allCameras.Add(camera);
             ShipStatus.Instance.AllCameras = allCameras.ToArray();
         }
+
+        public static void sealVent(int ventId) {
+            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x?.vent != null && x.vent.Id == ventId);
+            if (vent == null) return;
+
+            Mechanic.remainingScrews--;
+
+            PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+            animator?.Stop();
+            vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : getAnimatedVentSealedSprite();
+            vent.name = "SealedVent_" + vent.name;
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -759,6 +772,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.PlaceCamera:
                     RPCProcedure.placeCamera(reader.ReadBytesAndSize());
                     break;
+                case (byte)CustomRPC.SealVent:
+                    RPCProcedure.sealVent(reader.ReadPackedInt32());
             }
         }
     }
