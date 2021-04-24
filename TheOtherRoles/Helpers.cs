@@ -175,8 +175,17 @@ namespace TheOtherRoles {
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
-        public static bool hasFakeTasks(PlayerControl player) {
+        public static bool hasFakeTasks(this PlayerControl player) {
             return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick);
+        }
+
+        public static void clearAllTasks(this PlayerControl player) {
+            for (int i = 0; i < player.myTasks.Count; i++) {
+                PlayerTask playerTask = player.myTasks[i];
+                playerTask.OnRemove();
+                UnityEngine.Object.Destroy(playerTask.gameObject);
+            }
+            player.myTasks.Clear();
         }
 
         public static string cs(Color c, string s) {

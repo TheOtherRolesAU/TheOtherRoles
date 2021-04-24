@@ -543,6 +543,10 @@ namespace TheOtherRoles {
             if (resetToCrewmate) __instance.Data.IsImpostor = false;
             if (resetToDead) __instance.Data.IsDead = true;
 
+            // Remove fake tasks when player dies
+            if (target.hasFakeTasks())
+                target.clearAllTasks();
+
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
@@ -642,6 +646,10 @@ namespace TheOtherRoles {
             // Collect dead player info
             DeadPlayer deadPlayer = new DeadPlayer(__instance, DateTime.UtcNow, DeathReason.Exile, null);
             GameHistory.deadPlayers.Add(deadPlayer);
+
+            // Remove fake tasks when player dies
+            if (__instance.hasFakeTasks())
+                __instance.clearAllTasks();
 
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
