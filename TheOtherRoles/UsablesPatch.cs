@@ -183,7 +183,6 @@ namespace TheOtherRoles
         }
     }
 
-
     [HarmonyPatch(typeof(TuneRadioMinigame), nameof(TuneRadioMinigame.Begin))]
     class CommsMinigameBeginPatch {
         static void Postfix(TuneRadioMinigame __instance) {
@@ -373,6 +372,74 @@ namespace TheOtherRoles
                         } 
                     }
                 }
+            }
+        }
+    }
+
+    [HarmonyPatch]
+    class SurveillanceMinigamePatch {
+        private static int page = 0;
+        private static float timer = 0f;
+        [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
+        class SurveillanceMinigameBeginPatch {
+            public static void Postfix(SurveillanceMinigame __instance) {
+                // Add mechanic cameras
+                page = 0;
+                timer = 0;
+                if (Mechanic.cameras != null && Mechanic.cameras.Count > 0 && __instance.FilteredRooms.Length > 0) {
+                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[Mechanic.cameras.Count]).ToArray();
+                    for (int i = 0; i < Mechanic.cameras.Count; i++) {
+                        SurvCamera surv = Mechanic.cameras[i];
+                        Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
+                        camera.transform.SetParent(__instance.transform);
+                        camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
+                        camera.orthographicSize = 2.35f;
+                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, 0);
+                        __instance.textures[i + 4] = temporary;
+                        camera.targetTexture = temporary;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Update))]
+        class SurveillanceMinigameUpdatePatch {
+
+            public static bool Prefix(SurveillanceMinigame __instance) {
+                // Update normal and mechanic cameras
+                timer += Time.deltaTime;
+                int numberOfPages = Mathf.CeilToInt((4 + Mechanic.cameras.Count) / 4f);
+
+                bool update = false;
+
+                if (timer > 3f || Input.GetKeyDown(KeyCode.RightArrow)) {
+                    update = true;
+                    timer = 0f;
+                    page = (page + 1) % numberOfPages;
+                } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    page = (page + numberOfPages - 1) % numberOfPages;
+                    update = true;
+                    timer = 0f;
+                }
+
+                if ((__instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer)) {
+                    __instance.isStatic = false;
+                    for (int i = 0; i < __instance.ViewPorts.Length; i++) {
+                        __instance.ViewPorts[i].sharedMaterial = __instance.DefaultMaterial;
+                        __instance.SabText[i].gameObject.SetActive(false);
+                        if (page * 4 + i < __instance.textures.Length)
+                            __instance.ViewPorts[i].material.SetTexture("_MainTex", __instance.textures[page * 4 + i]);
+                        else
+                            __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
+                    }
+                } else if (!__instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer)) {
+                    __instance.isStatic = true;
+                    for (int j = 0; j < __instance.ViewPorts.Length; j++) {
+                        __instance.ViewPorts[j].sharedMaterial = __instance.StaticMaterial;
+                        __instance.SabText[j].gameObject.SetActive(true);
+                    }
+                }
+                return false;
             }
         }
     }
