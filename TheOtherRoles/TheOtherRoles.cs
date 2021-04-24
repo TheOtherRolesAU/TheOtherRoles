@@ -48,6 +48,7 @@ namespace TheOtherRoles
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
+            Mechanic.clearAndReload();
         }
 
         public static class Jester {
@@ -620,7 +621,7 @@ namespace TheOtherRoles
         }
 
         public static void removeCurrentJackal() {
-            if (jackal != null && !formerJackals.Contains(jackal)) formerJackals.Add(jackal);
+            if (!formerJackals.Contains(jackal)) formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
@@ -808,7 +809,33 @@ namespace TheOtherRoles
             curseVictimTarget = null;
             curseKillTarget = null;
         }
-        
     }
 
+    public static class Mechanic {
+        public static PlayerControl mechanic;
+        public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
+
+        public static float cooldown = 30f;
+        public static int remainingScrews = 6;
+
+        private static Sprite closeVentButtonSprite;
+        public static Sprite getCloseVentButtonSprite() {
+            if (closeVentButtonSprite) return closeVentButtonSprite;
+            closeVentButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CloseVentButton.png", 115f);
+            return closeVentButtonSprite;
+        }
+
+        private static Sprite placeCameraButtonSprite;
+        public static Sprite getPlaceCameraButtonSprite() {
+            if (placeCameraButtonSprite) return placeCameraButtonSprite;
+            placeCameraButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceCameraButton.png", 115f);
+            return placeCameraButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            mechanic = null;
+            cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
+            remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
+        }
+    }
 }
