@@ -370,6 +370,25 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void mechanicSetTarget(PlayerControl __instance) {
+            if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer) return;
+
+            Vent target = null;
+            for (int i = 0; i < __instance.hitBuffer[i].Length; i++) {
+                IUsable usable = __instance.hitBuffer[i].GetComponent<IUsable>();
+                if (usable != null) {
+                    Vent possibleVent = usable.TryCast<Vent>();
+                    if (possibleVent != null && possibleVent.gameObject != null && !possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_") && !possibleVent.gameObject.name.StartsWith("SealedVent_")) {
+                        Vector2 truePosition = __instance.GetTruePosition();
+                        Vector3 ventPosition = possibleVent.transform.position;
+                        float distance = Vector2.Distance(truePosition, ventPosition);
+                        if (distance <= possibleVent.UsableDistance) target = possibleVent;
+                    }
+                }
+            }
+            Mechanic.ventTarget = target;
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -419,6 +438,8 @@ namespace TheOtherRoles {
                 warlockSetTarget();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
+                // Mechanic
+                mechanicSetTarget(__instance);
             } 
         }
     }

@@ -816,7 +816,8 @@ namespace TheOtherRoles
         public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
 
         public static float cooldown = 30f;
-        public static int remainingScrews = 6;
+        public static int remainingScrews = 7;
+        public static Vent ventTarget = null;
 
         private static Sprite closeVentButtonSprite;
         public static Sprite getCloseVentButtonSprite() {
@@ -848,6 +849,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             mechanic = null;
+            ventTarget = null;
             cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
             remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
         }
