@@ -374,12 +374,14 @@ namespace TheOtherRoles {
             if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer) return;
 
             Vent target = null;
-            for (int i = 0; i < __instance.hitBuffer.Length; i++) {
-                IUsable usable = __instance.hitBuffer[i].GetComponent<IUsable>();
+            Vector2 truePosition = __instance.GetTruePosition();
+            Collider2D[] itemsInRange = new Collider2D[20];
+            int itemsCount = Physics2D.OverlapCircleNonAlloc(truePosition, __instance.MaxReportDistance, itemsInRange, Constants.Usables);
+            for (int i = 0; i < itemsCount; i++) {
+                IUsable usable = itemsInRange[i].GetComponent<IUsable>();
                 if (usable != null) {
                     Vent possibleVent = usable.TryCast<Vent>();
                     if (possibleVent != null && possibleVent.gameObject != null && !possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_") && !possibleVent.gameObject.name.StartsWith("SealedVent_")) {
-                        Vector2 truePosition = __instance.GetTruePosition();
                         Vector3 ventPosition = possibleVent.transform.position;
                         float distance = Vector2.Distance(truePosition, ventPosition);
                         if (distance <= possibleVent.UsableDistance) target = possibleVent;
