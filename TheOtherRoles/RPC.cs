@@ -86,7 +86,8 @@ namespace TheOtherRoles
         SetFutureShifted,
         PlaceJackInTheBox,
         LightsOut,
-        WarlockCurseKill
+        WarlockCurseKill,
+        PlaceCamera
     }
 
     public static class RPCProcedure {
@@ -598,6 +599,21 @@ namespace TheOtherRoles
                 }
             }
         }
+
+        public static void placeCamera(byte[] buff) {
+            Mechanic.remainingScrews--;
+
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+
+            var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
+            var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
+            camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
+            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            allCameras.Add(camera);
+            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -736,6 +752,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.WarlockCurseKill:
                     RPCProcedure.warlockCurseKill(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.PlaceCamera:
+                    RPCProcedure.placeCamera(reader.ReadBytesAndSize());
                     break;
             }
         }
