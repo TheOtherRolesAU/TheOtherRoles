@@ -75,6 +75,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **New Role:** [Warlock](#warlock)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
+- Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
 - Fixed an oversight which made StreamerMode only work as host
 - Fixed a bug where the Trickster box was invisible
 - Fixed a bug where changes to the server ip and port would only be applied if the game was restarted

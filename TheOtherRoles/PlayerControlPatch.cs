@@ -119,7 +119,7 @@ namespace TheOtherRoles {
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
             Medic.currentTarget = setTarget();
-            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.color);
+            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
 
         static void shifterSetTarget() {
@@ -197,7 +197,7 @@ namespace TheOtherRoles {
             }
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
-            setPlayerOutline(Jackal.currentTarget, Jackal.color);
+            setPlayerOutline(Jackal.currentTarget, Palette.ImpostorRed);
         }
 
         static void sidekickSetTarget() {
@@ -206,7 +206,7 @@ namespace TheOtherRoles {
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
-            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
+            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Palette.ImpostorRed);
         }
 
         static void sidekickCheckPromotion() {
