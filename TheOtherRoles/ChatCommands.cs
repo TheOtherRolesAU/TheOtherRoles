@@ -32,7 +32,6 @@ namespace TheOtherRoles {
                 if (handled) {
                     __instance.TextArea.Clear();
                     __instance.quickChatMenu.ResetGlyphs();
-                    System.Console.WriteLine("Chat Clear");
                 }
                 return !handled;
             }
