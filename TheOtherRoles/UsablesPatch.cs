@@ -386,16 +386,16 @@ namespace TheOtherRoles
                 // Add mechanic cameras
                 page = 0;
                 timer = 0;
-                if (Mechanic.cameras != null && Mechanic.cameras.Count > 0 && __instance.FilteredRooms.Length > 0) {
-                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[Mechanic.cameras.Count]).ToArray();
-                    for (int i = 0; i < Mechanic.cameras.Count; i++) {
-                        SurvCamera surv = Mechanic.cameras[i];
+                if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
+                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+                    for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++) {
+                        SurvCamera surv = ShipStatus.Instance.AllCameras[i];
                         Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
                         camera.orthographicSize = 2.35f;
                         RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, 0);
-                        __instance.textures[i + 4] = temporary;
+                        __instance.textures[i] = temporary;
                         camera.targetTexture = temporary;
                     }
                 }
@@ -408,7 +408,7 @@ namespace TheOtherRoles
             public static bool Prefix(SurveillanceMinigame __instance) {
                 // Update normal and mechanic cameras
                 timer += Time.deltaTime;
-                int numberOfPages = Mathf.CeilToInt((4 + Mechanic.cameras.Count) / 4f);
+                int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
 
                 bool update = false;
 

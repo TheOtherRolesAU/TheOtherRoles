@@ -815,12 +815,12 @@ namespace TheOtherRoles
         public static PlayerControl mechanic;
         public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
 
-        public static List<SurvCamera> cameras = new List<SurvCamera>();
         public static float cooldown = 30f;
         public static int remainingScrews = 7;
         public static int totalScrews = 7;
         public static int ventPrice = 1;
         public static int camPrice = 2;
+        public static int placedCameras = 0;
         public static Vent ventTarget = null;
 
         private static Sprite closeVentButtonSprite;
@@ -854,7 +854,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             mechanic = null;
             ventTarget = null;
-            cameras = new List<SurvCamera>();
+            placedCameras = 0;
             cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
             camPrice = Mathf.RoundToInt(CustomOptionHolder.mechanicCamPrice.getFloat());
