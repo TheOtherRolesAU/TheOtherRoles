@@ -74,6 +74,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.3.1**
 - **New Role:** [Warlock](#warlock)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
+- Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
 - Fixed the bug that the streamer mode did only work for the lobby host
 - Fixed the bug where the Trickster box was invisible
 
