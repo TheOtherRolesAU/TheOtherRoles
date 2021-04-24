@@ -115,7 +115,8 @@ namespace TheOtherRoles
                 () => {},
                 Engineer.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             // Janitor Clean
@@ -150,7 +151,8 @@ namespace TheOtherRoles
                 () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer; },
                 Janitor.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             // Sheriff Kill
@@ -187,7 +189,8 @@ namespace TheOtherRoles
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             // Time Master Rewind Time
@@ -206,7 +209,8 @@ namespace TheOtherRoles
                 },
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance, 
+                __instance,
+                KeyCode.Q, 
                 true,
                 TimeMaster.shieldDuration,
                 () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer; }
@@ -227,7 +231,8 @@ namespace TheOtherRoles
                 () => {},
                 Medic.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             
@@ -244,7 +249,8 @@ namespace TheOtherRoles
                 () => { },
                 Shifter.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             // Morphling morph
@@ -273,8 +279,9 @@ namespace TheOtherRoles
                     Morphling.sampledTarget = null;
                 },
                 Morphling.getSampleSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
+                KeyCode.F,
                 true,
                 Morphling.duration,
                 () => {
@@ -300,8 +307,9 @@ namespace TheOtherRoles
                     camouflagerButton.killButtonManager.TimerText.color = Palette.EnabledColor;
                 },
                 Camouflager.getButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
+                KeyCode.F,
                 true,
                 Camouflager.duration,
                 () => { camouflagerButton.Timer = camouflagerButton.MaxTimer; }
@@ -322,6 +330,7 @@ namespace TheOtherRoles
                 Hacker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance,
+                KeyCode.Q,
                 true,
                 0f,
                 () => {
@@ -342,7 +351,8 @@ namespace TheOtherRoles
                 () => { },
                 Tracker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             vampireKillButton = new CustomButton(
@@ -401,6 +411,7 @@ namespace TheOtherRoles
                 Vampire.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance,
+                KeyCode.Q,
                 false,
                 0f,
                 () => {
@@ -427,6 +438,7 @@ namespace TheOtherRoles
                 Vampire.getGarlicButtonSprite(),
                 Vector3.zero,
                 __instance,
+                null,
                 true
             );
 
@@ -444,7 +456,8 @@ namespace TheOtherRoles
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
                 Jackal.getSidekickButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
-                __instance
+                __instance,
+                KeyCode.F
             );
 
             // Jackal Kill
@@ -464,7 +477,8 @@ namespace TheOtherRoles
                 () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
             
             // Sidekick Kill
@@ -485,7 +499,8 @@ namespace TheOtherRoles
                 () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
-                __instance
+                __instance,
+                KeyCode.Q
             );
 
             // Lighter light
@@ -503,6 +518,7 @@ namespace TheOtherRoles
                 Lighter.getButtonSprite(),
                 new Vector3(-1.3f, 0f, 0f),
                 __instance,
+                KeyCode.Q,
                 true,
                 Lighter.duration,
                 () => { lighterButton.Timer = lighterButton.MaxTimer; }
@@ -524,7 +540,8 @@ namespace TheOtherRoles
                 () => { eraserButton.Timer = eraserButton.MaxTimer;},
                 Eraser.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
-                __instance
+                __instance,
+                KeyCode.F
             );
 
             placeJackInTheBoxButton = new CustomButton(
@@ -546,7 +563,8 @@ namespace TheOtherRoles
                 () => { placeJackInTheBoxButton.Timer = placeJackInTheBoxButton.MaxTimer;},
                 Trickster.getPlaceBoxButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
-                __instance
+                __instance,
+                KeyCode.F
             );
             
             lightsOutButton = new CustomButton(
@@ -563,8 +581,9 @@ namespace TheOtherRoles
                     lightsOutButton.killButtonManager.TimerText.color = Palette.EnabledColor;
                 },
                 Trickster.getLightsOutButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
+                KeyCode.F,
                 true,
                 Trickster.lightsOutDuration,
                 () => { lightsOutButton.Timer = lightsOutButton.MaxTimer; }
@@ -601,7 +620,8 @@ namespace TheOtherRoles
                 () => { cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer; },
                 Cleaner.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
-                __instance
+                __instance,
+                KeyCode.F
             );
             // Warlock curse
             warlockCurseButton = new CustomButton(
@@ -646,7 +666,8 @@ namespace TheOtherRoles
                 },
                 Warlock.getCurseButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
-                 __instance
+                __instance,
+                KeyCode.F
             );
 
 
