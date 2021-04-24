@@ -165,6 +165,21 @@ namespace TheOtherRoles
         }
     }
 
+
+    [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
+    public static class ConsoleCanUsePatch {
+        public static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+            canUse = couldUse = false;
+            if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
+                return !__instance.TaskTypes.Any(x => x == TaskTypes.FixLights || x == TaskTypes.FixComms);
+            if (__instance.AllowImpostor) return true;
+            if (!Helpers.hasFakeTasks(pc.Object)) return true;
+            __result = float.MaxValue;
+            return false;
+        }
+    }
+
+
     [HarmonyPatch(typeof(TuneRadioMinigame), nameof(TuneRadioMinigame.Begin))]
     class CommsMinigameBeginPatch {
         static void Postfix(TuneRadioMinigame __instance) {

@@ -8,45 +8,31 @@
 The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
-- [Mafia](#mafia)
-  - Godfather
-  - Janitor
-  - Mafioso
-- [Morphling](#morphling)
-- [Camouflager](#camouflager)
-- [Vampire](#vampire)
-- [Eraser](#eraser)
-- [Trickster](#trickster)
-- [Cleaner](#cleaner)
-- [Lovers](#lovers)
-  - Lover
-  - ImpLover
-- [Child](#child)
-  - Child Impostor
-  - Child Crewmate
-- [Jackal](#jackal)
-- [Sidekick](#sidekick)
-- [Jester](#jester)
-- [Sheriff](#sheriff)
-- [Seer](#seer)
-- [Engineer](#engineer)
-- [Detective](#detective)
-- [Lighter](#lighter)
-- [Medic](#medic)
-- [Mayor](#mayor)
-- [Hacker](#hacker)
-- [Shifter](#shifter)
-- [Time Master](#time-master)
-- [Swapper](#swapper)
-- [Tracker](#tracker)
-- [Snitch](#snitch)
-- [Spy](#spy)
+| Impostors | Crewmates | Neutral |
+|----------|-------------|-----------------|
+| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
+| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
+| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
+| [Eraser](#eraser) | [Hacker](#hacker) |  |
+| [ImpLover](#lovers) | [Lover](#lovers) |  |
+| [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
+| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
+| [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
+| [Morphling](#morphling) | [Seer](#seer) |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
+| [Vampire](#vampire) | [Shifter](#shifter) |  |
+| [Warlock](#warlock) | [Snitch](#snitch) |  |
+|  | [Spy](#spy) |  |
+|  | [Swapper](#swapper) |  |
+|  | [Time Master](#time-master) |  |
+|  |  [Tracker](#tracker) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.4.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.2/TheOtherRoles.zip)
 | 2021.4.12s| v2.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.1/TheOtherRoles.zip)
@@ -68,6 +54,18 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.4.0**
+- **New Role:** [Warlock](#warlock)
+- Added an option that allows ghosts to see the roles and remaining tasks of other players
+- Added options to configure Morph & Camo duration
+- Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
+- Fixed an oversight which made StreamerMode only work as host
+- Fixed an oversight which required Jackals to finish Tasks, after Sidekick was promoted
+- Fixed an oversight which made Sidekicks not promote, if the Jackal disconnected
+- Fixed a bug where the Trickster box was invisible
+- Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
+- Added a way to get the 2 Hidden [Colors](#colors)
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
@@ -298,6 +296,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
+- **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
 
 # Custom Hats
 ## Create and submit new hat designs
@@ -309,7 +308,7 @@ Here are a few instructions, on how to create a custom hat:
     - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
-    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png/revision/latest?cb=20210106045508) to see how this feature should be used.
+    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
@@ -322,19 +321,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-### **Lighter Colors:** 
-- Pink, Orange, Yellow, White
-- Cyan, Lime, Salmon, Mint
-- Lavender, Peach, Wasabi, Hot Pink
-
-![](./Images/LighterColors.png)
-
-### **Darker Colors:** 
-- Red, Blue, Green, Black
-- Purple, Brown, Bordeaux, Olive
-- Turqoise, Nougat, Gray, Petrol
-
-![](./Images/DarkerColors.png)
+<img src="./Images/Colors.png" alt="drawing" width="300px"/>
 
 # Roles
 
@@ -387,6 +374,7 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 |----------|:-------------:|
 | Morphling Spawn Chance | -
 | Morphling Cooldown | -
+| Morph Duration | Time the Morphling stays morphed
 -----------------------
 
 ## Camouflager
@@ -407,6 +395,7 @@ are hidden and all players have the same color.\
 |----------|:-------------:|
 | Camouflager Spawn Chance | -
 | Camouflager Cooldown | -
+| Camo Duration | Time players stay camouflaged
 -----------------------
 
 ## Vampire
@@ -418,6 +407,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 **NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
+- If there is a Vampire in the game, there can't be a Warlock
 
 ### Game Options
 | Name | Description |
@@ -484,6 +474,28 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 |----------|:-------------:|
 | Cleaner Spawn Chance | -
 | Cleaner Cooldown | Cooldown for cleaning dead bodies
+-----------------------
+
+
+## Warlock
+### **Team: Impostors**
+The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
+If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
+Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
+The Warlock can still perform normal kills, but the two buttons share the same cooldown.
+
+\
+**NOTE:**
+- The Warlock can always kill his Impostor mates (and even himselfs) using the "cursed kill"
+- If there is a Warlock in the game, there can't be a Vampire
+- Performing a normal kill, doesn't lift the curse
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Warlock Spawn Chance | -
+| Warlock Cooldown | Cooldown for using the Curse and curse Kill
+| Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
 
 ## Lovers

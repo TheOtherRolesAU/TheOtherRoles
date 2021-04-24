@@ -302,7 +302,7 @@ namespace TheOtherRoles
 
                     // Update positions
                     area.Megaphone.transform.localPosition += Vector3.left * 0.1f;
-                    area.NameText.transform.localPosition = new Vector3(1.2f, 0.2f, area.NameText.transform.localPosition.z);
+                    area.NameText.transform.localPosition += new Vector3(0.25f, 0.043f, 0f);
                     area.transform.localPosition = new Vector3(-3.63f + 2.43f * col, 1.5f - 0.76f * row, -0.9f - 0.01f * row);
                 }
             }
@@ -528,6 +528,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Trickster.";
                     else if (Cleaner.cleaner != null && ExileController.Instance.exiled.Object.PlayerId == Cleaner.cleaner.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Cleaner.";
+                    else if (Warlock.warlock != null && ExileController.Instance.exiled.Object.PlayerId == Warlock.warlock.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Warlock.";
                 }
 
                 // Hide number of remaining impostors on Jester win

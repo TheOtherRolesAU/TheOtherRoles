@@ -107,6 +107,12 @@ namespace TheOtherRoles
                 "Kill everyone and leave no traces",
                 "Clean up dead bodies"));
             }
+            if (Warlock.warlock != null && p == Warlock.warlock) {
+                infos.Add(new RoleInfo("Warlock",
+                Warlock.color,
+                "Curse other players and kill everyone",
+                "Curse and kill everyone"));
+            }
             if (Detective.detective != null && p == Detective.detective) {
                 infos.Add(new RoleInfo("Detective",
                 Detective.color,
@@ -146,8 +152,8 @@ namespace TheOtherRoles
             if (Hacker.hacker != null && p == Hacker.hacker) { 
                 infos.Add(new RoleInfo("Hacker",
                 Hacker.color,
-                "Hacke to find the <color=#FF1919FF>Impostors</color>",
-                "Hacke to find the Impostors"));
+                "Hack to find the <color=#FF1919FF>Impostors</color>",
+                "Hack to find the Impostors"));
             }
             if (Child.child != null && p == Child.child) { 
                 infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",

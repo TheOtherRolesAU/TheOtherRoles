@@ -15,17 +15,18 @@ namespace TheOtherRoles {
     {
         // Helpers
 
-        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null) {
+        static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
+            if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Vector2 truePosition = targetingPlayer.GetTruePosition();
             Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
-                if (!playerInfo.Disconnected && playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -61,8 +62,9 @@ namespace TheOtherRoles {
             foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
                 if (target == null || target.myRend == null) continue;
                 
+                bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
-                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && (target == Medic.shielded || (target == Morphling.morphling && Morphling.morphTarget == Medic.shielded && Morphling.morphTimer > 0f))) {
+                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
                         || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
@@ -117,7 +119,7 @@ namespace TheOtherRoles {
         static void medicSetTarget() {
             if (Medic.medic == null || Medic.medic != PlayerControl.LocalPlayer) return;
             Medic.currentTarget = setTarget();
-            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.color);
+            if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
 
         static void shifterSetTarget() {
@@ -195,7 +197,7 @@ namespace TheOtherRoles {
             }
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
-            setPlayerOutline(Jackal.currentTarget, Jackal.color);
+            setPlayerOutline(Jackal.currentTarget, Palette.ImpostorRed);
         }
 
         static void sidekickSetTarget() {
@@ -204,7 +206,18 @@ namespace TheOtherRoles {
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
             if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
-            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Sidekick.color);
+            if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Palette.ImpostorRed);
+        }
+
+        static void sidekickCheckPromotion() {
+            // If LocalPlayer is Sidekick, the Jackal is disconnected and Sidekick promotion is enabled, then trigger promotion
+            if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
+            if (Sidekick.sidekick.Data.IsDead == true || !Sidekick.promotesToJackal) return;
+            if (Jackal.jackal == null || Jackal.jackal?.Data?.Disconnected == true) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sidekickPromotes(); 
+            }
         }
 
         static void eraserSetTarget() {
@@ -251,6 +264,21 @@ namespace TheOtherRoles {
             }
 
             HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
+        }
+
+        static void warlockSetTarget() {
+            if (Warlock.warlock == null || Warlock.warlock != PlayerControl.LocalPlayer) return;
+            if (Warlock.curseVictim != null && (Warlock.curseVictim.Data.Disconnected || Warlock.curseVictim.Data.IsDead)) {
+                // If the cursed victim is disconnected or dead reset the curse so a new curse can be applied
+                Warlock.resetCurse();
+            }
+            if (Warlock.curseVictim == null) {
+                Warlock.currentTarget = setTarget();
+                setPlayerOutline(Warlock.currentTarget, Warlock.color);
+            } else {
+                Warlock.curseVictimTarget = setTarget(targetingPlayer: Warlock.curseVictim);
+                setPlayerOutline(Warlock.curseVictimTarget, Warlock.color);
+            }
         }
 
         static void trackerUpdate() {
@@ -309,6 +337,39 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void updateGhostInfo() {
+            if (!MapOptions.showGhostInfo) return;
+
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
+
+                Transform playerGhostInfoTransform = p.transform.FindChild("GhostInfo");
+                TMPro.TextMeshPro playerGhostInfo = playerGhostInfoTransform != null ? playerGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerGhostInfo == null) {
+                    playerGhostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                    playerGhostInfo.transform.localPosition += Vector3.up * 0.25f;
+                    playerGhostInfo.fontSize *= 0.75f;
+                    playerGhostInfo.gameObject.name = "GhostInfo";
+                }
+
+                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
+                Transform meetingGhostInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("GhostInfo") : null;
+                TMPro.TextMeshPro meetingGhostInfo = meetingGhostInfoTransform != null ? meetingGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (meetingGhostInfo == null && playerVoteArea != null) {
+                    meetingGhostInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                    meetingGhostInfo.transform.localPosition += Vector3.down * (MeetingHud.Instance.playerStates.Length > 10 ? 0.4f : 0.25f);
+                    meetingGhostInfo.fontSize *= 0.75f;
+                    meetingGhostInfo.gameObject.name = "GhostInfo";
+                }
+                
+                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
+                string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+                string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
+                playerGhostInfo.text = $"{roleNames} {taskInfo}".Trim();
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}".Trim();
+            }
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -321,6 +382,9 @@ namespace TheOtherRoles {
 
                 // Update Role Description
                 Helpers.refreshRoleDescription(__instance);
+
+                // Update Ghost Info
+                updateGhostInfo();
 
                 // Time Master
                 bendTimeUpdate();
@@ -351,6 +415,10 @@ namespace TheOtherRoles {
                 sidekickSetTarget();
                 // Impostor
                 impostorSetTarget();
+                // Warlock
+                warlockSetTarget();
+                // Check for sidekick promotion on Jackal disconnect
+                sidekickCheckPromotion();
             } 
         }
     }
@@ -475,6 +543,10 @@ namespace TheOtherRoles {
             if (resetToCrewmate) __instance.Data.IsImpostor = false;
             if (resetToDead) __instance.Data.IsDead = true;
 
+            // Remove fake tasks when player dies
+            if (target.hasFakeTasks())
+                target.clearAllTasks();
+
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
@@ -495,7 +567,14 @@ namespace TheOtherRoles {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer; 
+            
+            // Warlock Button Sync
+            if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
+                if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
+                    HudManagerStartPatch.warlockCurseButton.Timer = Warlock.warlock.killTimer;
+                }
+            }
 
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
@@ -540,6 +619,11 @@ namespace TheOtherRoles {
         public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
             if (Vampire.vampire != null && Vampire.vampire == source && Vampire.bitten != null && Vampire.bitten == target)
                 source = target;
+            
+            if (Warlock.warlock != null && Warlock.warlock == source && Warlock.curseKillTarget != null && Warlock.curseKillTarget == target) {
+                source = target;
+                Warlock.curseKillTarget = null; // Reset here
+            }
         }
     }
 
@@ -562,6 +646,10 @@ namespace TheOtherRoles {
             // Collect dead player info
             DeadPlayer deadPlayer = new DeadPlayer(__instance, DateTime.UtcNow, DeathReason.Exile, null);
             GameHistory.deadPlayers.Add(deadPlayer);
+
+            // Remove fake tasks when player dies
+            if (__instance.hasFakeTasks())
+                __instance.clearAllTasks();
 
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
