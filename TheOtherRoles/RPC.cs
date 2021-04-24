@@ -41,7 +41,8 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
-        Warlock
+        Warlock,
+        Mechanic
     }
 
     enum CustomRPC
@@ -211,6 +212,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
+                        break;
+                    case RoleId.Mechanic:
+                        Mechanic.mechanic = player;
                         break;
                     }
                 }
@@ -386,6 +390,8 @@ namespace TheOtherRoles
                 Snitch.snitch = oldShifter;
             } else if (Spy.spy != null && Spy.spy == player) {
                 Spy.spy = oldShifter;
+            } else if (Mechanic.mechanic != null && Mechanic.mechanic == player) {
+                Mechanic.mechanic = oldShifter;
             } else { // Crewmate
             }
             
@@ -529,6 +535,7 @@ namespace TheOtherRoles
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
+            if (player == Mechanic.mechanic) Mechanic.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();

@@ -128,6 +128,10 @@ namespace TheOtherRoles {
         public static CustomOption warlockCooldown;
         public static CustomOption warlockRootTime;
 
+        public static CustomOption mechanicSpawnRate;
+        public static CustomOption mechanicCooldown;
+        public static CustomOption mechanicTotalScrews;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -261,6 +265,10 @@ namespace TheOtherRoles {
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "Spy"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false, spySpawnRate);
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true, spySpawnRate);
+
+            mechanicSpawnRate = CustomOption.Create(280, cs(Mechanic.color, "Mechanic"), rates, null, true);
+            mechanicCooldown = CustomOption.Create(281, "Mechanic Cooldown", 30f, 10f, 60f, 2.5f, mechanicSpawnRate);
+            mechanicTotalScrews = CustomOption.Create(282, "Mechanic Total Screws", 7f, 1f, 15f, 1f, mechanicSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

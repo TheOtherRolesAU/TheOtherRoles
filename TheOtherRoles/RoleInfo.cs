@@ -197,6 +197,13 @@ namespace TheOtherRoles
                 "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
+            if (Mechanic.mechanic != null && p == Mechanic.mechanic) {
+                infos.Add(new RoleInfo("Mechanic",
+                Mechanic.color,
+                "Seal vents and place cameras",
+                "Seal vents and place cameras"));
+            }
+
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.ImpostorRed,

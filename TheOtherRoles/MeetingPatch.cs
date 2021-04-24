@@ -501,6 +501,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
                     else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
+                    else if(Mechanic.mechanic != null && ExileController.Instance.exiled.Object.PlayerId == Mechanic.mechanic.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Mechanic.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }
