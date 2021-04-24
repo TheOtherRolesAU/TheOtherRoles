@@ -605,7 +605,7 @@ namespace TheOtherRoles
             var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             if (referenceCamera == null) return; // Mira HQ
 
-            Mechanic.remainingScrews -= 2;
+            Mechanic.remainingScrews -= Mechanic.camPrice;
 
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -625,7 +625,7 @@ namespace TheOtherRoles
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
-            Mechanic.remainingScrews--;
+            Mechanic.remainingScrews -= Mechanic.ventPrice;
 
             PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
             animator?.Stop();

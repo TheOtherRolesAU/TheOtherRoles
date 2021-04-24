@@ -131,6 +131,8 @@ namespace TheOtherRoles {
         public static CustomOption mechanicSpawnRate;
         public static CustomOption mechanicCooldown;
         public static CustomOption mechanicTotalScrews;
+        public static CustomOption mechanicCamPrice;
+        public static CustomOption mechanicVentPrice;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -269,6 +271,8 @@ namespace TheOtherRoles {
             mechanicSpawnRate = CustomOption.Create(280, cs(Mechanic.color, "Mechanic"), rates, null, true);
             mechanicCooldown = CustomOption.Create(281, "Mechanic Cooldown", 30f, 10f, 60f, 2.5f, mechanicSpawnRate);
             mechanicTotalScrews = CustomOption.Create(282, "Mechanic Number Of Screws", 7f, 1f, 15f, 1f, mechanicSpawnRate);
+            mechanicCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, mechanicSpawnRate);
+            mechanicVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, mechanicSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

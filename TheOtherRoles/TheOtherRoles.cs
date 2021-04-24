@@ -819,6 +819,8 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static int remainingScrews = 7;
         public static int totalScrews = 7;
+        public static int ventPrice = 1;
+        public static int camPrice = 2;
         public static Vent ventTarget = null;
 
         private static Sprite closeVentButtonSprite;
@@ -855,6 +857,8 @@ namespace TheOtherRoles
             cameras = new List<SurvCamera>();
             cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
+            camPrice = Mathf.RoundToInt(CustomOptionHolder.mechanicCamPrice.getFloat());
+            ventPrice = Mathf.RoundToInt(CustomOptionHolder.mechanicVentPrice.getFloat());
         }
     }
 }

@@ -700,7 +700,7 @@ namespace TheOtherRoles
                 () => {
                     mechanicButton.killButtonManager.renderer.sprite = (Mechanic.ventTarget == null) ? Mechanic.getPlaceCameraButtonSprite() : Mechanic.getCloseVentButtonSprite(); 
                     if (mechanicButtonScrewsText != null) mechanicButtonScrewsText.text = $"{Mechanic.remainingScrews}/{Mechanic.totalScrews}";
-                    return Mechanic.remainingScrews >= (Mechanic.ventTarget == null ? 2 : 1) && PlayerControl.LocalPlayer.CanMove;
+                    return Mechanic.remainingScrews >= (Mechanic.ventTarget == null ? Mechanic.camPrice : Mechanic.ventPrice) && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { mechanicButton.Timer = mechanicButton.MaxTimer; },
                 Mechanic.getPlaceCameraButtonSprite(),
