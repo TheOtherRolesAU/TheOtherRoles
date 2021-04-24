@@ -162,7 +162,7 @@ public class CustomButton
     
         killButtonManager.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
-        // Trigger OnClick if hotkey is triggered
+        // Trigger OnClickEvent if the hotkey is being pressed down
         if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
     }
 }
