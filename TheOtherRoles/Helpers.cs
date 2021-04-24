@@ -179,11 +179,11 @@ namespace TheOtherRoles {
             return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick);
         }
 
-        public static bool clearAllTasks(this PlayerControl player) {
+        public static void clearAllTasks(this PlayerControl player) {
             for (int i = 0; i < player.myTasks.Count; i++) {
                 PlayerTask playerTask = player.myTasks[i];
                 playerTask.OnRemove();
-                Object.Destroy(playerTask.gameObject);
+                UnityEngine.Object.Destroy(playerTask.gameObject);
             }
             player.myTasks.Clear();
         }

@@ -634,8 +634,8 @@ namespace TheOtherRoles {
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Remove fake tasks when player dies
-            if (target.hasFakeTasks())
-                target.clearAllTasks();
+            if (__instance.hasFakeTasks())
+                __instance.clearAllTasks();
 
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
