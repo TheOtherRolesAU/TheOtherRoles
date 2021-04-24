@@ -817,6 +817,7 @@ namespace TheOtherRoles
 
         public static float cooldown = 30f;
         public static int remainingScrews = 7;
+        public static int totalScrews = 7;
         public static Vent ventTarget = null;
 
         private static Sprite closeVentButtonSprite;
@@ -851,7 +852,7 @@ namespace TheOtherRoles
             mechanic = null;
             ventTarget = null;
             cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
-            remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
+            totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
         }
     }
 }

@@ -31,6 +31,7 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton mechanicButton;
+        public static TMPro.TMP_Text mechanicButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -625,6 +626,7 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F
             );
+
             // Warlock curse
             warlockCurseButton = new CustomButton(
                 () => {
@@ -672,6 +674,7 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
+            // Mechanic button
             mechanicButton = new CustomButton(
                 () => {
                     if (Mechanic.ventTarget == null) { // Place camera
@@ -696,6 +699,7 @@ namespace TheOtherRoles
                 () => { return Mechanic.mechanic != null && Mechanic.mechanic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     mechanicButton.killButtonManager.renderer.sprite = (Mechanic.ventTarget == null) ? Mechanic.getPlaceCameraButtonSprite() : Mechanic.getCloseVentButtonSprite(); 
+                    if (mechanicButtonScrewsText != null) mechanicButtonScrewsText.text = $"{Mechanic.remainingScrews}/{Mechanic.totalScrews}";
                     return Mechanic.remainingScrews >= (Mechanic.ventTarget == null ? 2 : 1) && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { mechanicButton.Timer = mechanicButton.MaxTimer; },
@@ -704,6 +708,13 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.Q
             );
+
+            // Mechanic button screws counter
+            mechanicButtonScrewsText = GameObject.Instantiate(mechanicButton.killButtonManager.TimerText, mechanicButton.killButtonManager.TimerText.transform.parent);
+            mechanicButtonScrewsText.text = "";
+            mechanicButtonScrewsText.enableWordWrapping = false;
+            mechanicButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
+            mechanicButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();
