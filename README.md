@@ -77,8 +77,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added options to configure Morph & Camo duration
 - Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
 - Fixed an oversight which made StreamerMode only work as host
+- Fixed an oversight which required Jackals to finish Tasks, after Sidekick was promoted
+- Fixed an oversight which made Sidekicks not promote, if the Jackal disconnected
 - Fixed a bug where the Trickster box was invisible
 - Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
+- Added a way to get the 2 Hidden [Colors](#colors)
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)
