@@ -605,7 +605,7 @@ namespace TheOtherRoles
             var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             if (referenceCamera == null) return; // Mira HQ
 
-            Mechanic.remainingScrews--;
+            Mechanic.remainingScrews -= 2;
 
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -620,14 +620,14 @@ namespace TheOtherRoles
         }
 
         public static void sealVent(int ventId) {
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x?.vent != null && x.vent.Id == ventId);
+            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
             Mechanic.remainingScrews--;
 
             PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
             animator?.Stop();
-            vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : getAnimatedVentSealedSprite();
+            vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : Mechanic.getAnimatedVentSealedSprite();
             vent.name = "SealedVent_" + vent.name;
         }
     }
@@ -774,6 +774,7 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    break;
             }
         }
     }

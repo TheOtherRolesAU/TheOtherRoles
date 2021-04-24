@@ -374,7 +374,7 @@ namespace TheOtherRoles {
             if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer) return;
 
             Vent target = null;
-            for (int i = 0; i < __instance.hitBuffer[i].Length; i++) {
+            for (int i = 0; i < __instance.hitBuffer.Length; i++) {
                 IUsable usable = __instance.hitBuffer[i].GetComponent<IUsable>();
                 if (usable != null) {
                     Vent possibleVent = usable.TryCast<Vent>();
