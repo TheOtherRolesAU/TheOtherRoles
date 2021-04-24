@@ -613,7 +613,7 @@ namespace TheOtherRoles
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
-            camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
+            if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             allCameras.Add(camera);
             ShipStatus.Instance.AllCameras = allCameras.ToArray();
