@@ -370,11 +370,11 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void mechanicSetTarget(PlayerControl __instance) {
+        public static void mechanicSetTarget() {
             if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
 
             Vent target = null;
-            Vector2 truePosition = __instance.GetTruePosition();
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             float closestDistance = float.MaxValue;
             for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
                 Vent vent = ShipStatus.Instance.AllVents[i];
@@ -438,7 +438,7 @@ namespace TheOtherRoles {
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
                 // Mechanic
-                mechanicSetTarget(__instance);
+                mechanicSetTarget();
             } 
         }
     }
