@@ -22,8 +22,9 @@ public class CustomButton
     public Sprite Sprite;
     private HudManager hudManager;
     private bool mirror;
+    private KeyCode? hotkey;
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
     {
         this.hudManager = hudManager;
         this.OnClick = OnClick;
@@ -36,6 +37,7 @@ public class CustomButton
         this.OnEffectEnds = OnEffectEnds;
         this.Sprite = Sprite;
         this.mirror = mirror;
+        this.hotkey = hotkey;
         Timer = 16.2f;
         buttons.Add(this);
         killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
@@ -60,8 +62,8 @@ public class CustomButton
         setActive(false);
     }
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool mirror = false)
-    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror) { }
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false)
+    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror) { }
 
     public static void HudUpdate()
     {
