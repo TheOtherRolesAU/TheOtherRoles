@@ -74,7 +74,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.3.1**
 - **New Role:** [Warlock](#warlock)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
-- Fixed the bug that the streamer mode did only work for the lobby host
+- Added options to configure Morph & Camo duration
+- Fixed an oversight which made StreamerMode only work as host
 - Fixed a bug where the Trickster box was invisible
 - Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
 
@@ -385,6 +386,7 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 |----------|:-------------:|
 | Morphling Spawn Chance | -
 | Morphling Cooldown | -
+| Morph Duration | Time the Morphling stays morphed
 -----------------------
 
 ## Camouflager
@@ -405,6 +407,7 @@ are hidden and all players have the same color.\
 |----------|:-------------:|
 | Camouflager Spawn Chance | -
 | Camouflager Cooldown | -
+| Camo Duration | Time players stay camouflaged
 -----------------------
 
 ## Vampire
