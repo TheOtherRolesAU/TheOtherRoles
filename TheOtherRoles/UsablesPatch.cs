@@ -49,9 +49,13 @@ namespace TheOtherRoles
                     // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
                     usableDistance = 0.4f; 
                 }
+            } else if (__instance.name.StartsWith("SealedVent_")) {
+                canUse = couldUse = false;
+                __result = num;
+                return false;
             }
 
-            couldUse = ((@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent));
+            couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
             canUse = couldUse;
             if (canUse)
             {

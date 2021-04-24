@@ -378,7 +378,7 @@ namespace TheOtherRoles {
             float closestDistance = float.MaxValue;
             for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
                 Vent vent = ShipStatus.Instance.AllVents[i];
-                if (vent == null || vent.transform == null) continue;
+                if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_")) continue;
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;

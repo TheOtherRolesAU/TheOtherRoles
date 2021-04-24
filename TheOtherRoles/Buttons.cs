@@ -691,6 +691,7 @@ namespace TheOtherRoles
                         RPCProcedure.sealVent(Mechanic.ventTarget.Id);
                         Mechanic.ventTarget = null;
                     }
+                    mechanicButton.Timer = mechanicButton.MaxTimer;
                 },
                 () => { return Mechanic.mechanic != null && Mechanic.mechanic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
