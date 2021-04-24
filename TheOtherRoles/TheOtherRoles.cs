@@ -620,7 +620,7 @@ namespace TheOtherRoles
         }
 
         public static void removeCurrentJackal() {
-            if (!formerJackals.Contains(jackal)) formerJackals.Add(jackal);
+            if (jackal != null && !formerJackals.Contains(jackal)) formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
