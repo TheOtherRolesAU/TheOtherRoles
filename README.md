@@ -8,40 +8,24 @@
 The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
-- [Mafia](#mafia)
-  - Godfather
-  - Janitor
-  - Mafioso
-- [Morphling](#morphling)
-- [Camouflager](#camouflager)
-- [Vampire](#vampire)
-- [Eraser](#eraser)
-- [Trickster](#trickster)
-- [Cleaner](#cleaner)
-- [Warlock](#warlock)
-- [Lovers](#lovers)
-  - Lover
-  - ImpLover
-- [Child](#child)
-  - Child Impostor
-  - Child Crewmate
-- [Jackal](#jackal)
-- [Sidekick](#sidekick)
-- [Jester](#jester)
-- [Sheriff](#sheriff)
-- [Seer](#seer)
-- [Engineer](#engineer)
-- [Detective](#detective)
-- [Lighter](#lighter)
-- [Medic](#medic)
-- [Mayor](#mayor)
-- [Hacker](#hacker)
-- [Shifter](#shifter)
-- [Time Master](#time-master)
-- [Swapper](#swapper)
-- [Tracker](#tracker)
-- [Snitch](#snitch)
-- [Spy](#spy)
+| Impostors | Crewmates | Neutral |
+|----------|-------------|-----------------|
+| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
+| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
+| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
+| [Eraser](#eraser) | [Hacker](#hacker) |  |
+| [ImpLover](#lovers) | [Lover](#lovers) |  |
+| [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
+| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
+| [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
+| [Morphling](#morphling) | [Seer](#seer) |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
+| [Vampire](#vampire) | [Shifter](#shifter) |  |
+| [Warlock](#warlock) | [Snitch](#snitch) |  |
+|  | [Spy](#spy) |  |
+|  | [Swapper](#swapper) |  |
+|  | [Time Master](#time-master) |  |
+|  |  [Tracker](#tracker) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
