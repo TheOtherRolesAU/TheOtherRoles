@@ -22,8 +22,9 @@ public class CustomButton
     public Sprite Sprite;
     private HudManager hudManager;
     private bool mirror;
+    private KeyCode? hotkey;
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
     {
         this.hudManager = hudManager;
         this.OnClick = OnClick;
@@ -36,32 +37,34 @@ public class CustomButton
         this.OnEffectEnds = OnEffectEnds;
         this.Sprite = Sprite;
         this.mirror = mirror;
+        this.hotkey = hotkey;
         Timer = 16.2f;
         buttons.Add(this);
         killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
         PassiveButton button = killButtonManager.GetComponent<PassiveButton>();
         button.OnClick.RemoveAllListeners();
-        button.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
+        button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
-        void listener()
-        {
-            if (this.Timer < 0f && HasButton() && CouldUse())
-            {
-                killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
-                this.OnClick();
-
-                if (this.HasEffect && !this.isEffectActive) {
-                    this.Timer = this.EffectDuration;
-                    killButtonManager.TimerText.color = new Color(0F, 0.8F, 0F);
-                    this.isEffectActive = true;
-                }
-            }
-        }
         setActive(false);
     }
 
-    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool mirror = false)
-    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror) { }
+    public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false)
+    : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror) { }
+
+    void onClickEvent()
+    {
+        if (this.Timer < 0f && HasButton() && CouldUse())
+        {
+            killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
+            this.OnClick();
+
+            if (this.HasEffect && !this.isEffectActive) {
+                this.Timer = this.EffectDuration;
+                killButtonManager.TimerText.color = new Color(0F, 0.8F, 0F);
+                this.isEffectActive = true;
+            }
+        }
+    }
 
     public static void HudUpdate()
     {
@@ -147,7 +150,7 @@ public class CustomButton
         if (Timer >= 0) {
             if (HasEffect && isEffectActive)
                 Timer -= Time.deltaTime;
-            else if (!PlayerControl.LocalPlayer.inVent)
+            else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
                 Timer -= Time.deltaTime;
         }
         
@@ -158,5 +161,8 @@ public class CustomButton
         }
     
         killButtonManager.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
+
+        // Trigger OnClickEvent if the hotkey is being pressed down
+        if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
     }
 }

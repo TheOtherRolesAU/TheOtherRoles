@@ -48,6 +48,7 @@ namespace TheOtherRoles {
                 ipField.transform.localPosition = new Vector3(0, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
+                ipField.ForceUppercase = false;
                 ipField.SetText(TheOtherRolesPlugin.Ip.Value);
                 __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
                     ipField.outputText.SetText(TheOtherRolesPlugin.Ip.Value);
@@ -55,12 +56,18 @@ namespace TheOtherRoles {
                 })));
 
                 ipField.ClearOnFocus = false; 
-                ipField.OnFocusLost = ipField.OnEnter = ipField.OnChange = new Button.ButtonClickedEvent();
-                ipField.OnChange.AddListener((UnityAction)ipEvent);
+                ipField.OnEnter = ipField.OnChange = new Button.ButtonClickedEvent();
+                ipField.OnFocusLost = new Button.ButtonClickedEvent();
+                ipField.OnChange.AddListener((UnityAction)onEnterOrIpChange);
+                ipField.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
-                void ipEvent() {
+                void onEnterOrIpChange() {
                     TheOtherRolesPlugin.Ip.Value = ipField.text;
-                    TheOtherRolesPlugin.CustomRegion.DefaultIp = ipField.text;
+                }
+
+                void onFocusLost() {
+                    TheOtherRolesPlugin.UpdateRegions();
+                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
                 }
             }
             if (portField == null || portField.gameObject == null) {
@@ -78,18 +85,24 @@ namespace TheOtherRoles {
 
 
                 portField.ClearOnFocus = false;
-                portField.OnFocusLost = portField.OnEnter = portField.OnChange = new Button.ButtonClickedEvent();
-                portField.OnChange.AddListener((UnityAction)portEvent);
+                portField.OnEnter = portField.OnChange = new Button.ButtonClickedEvent();
+                portField.OnFocusLost = new Button.ButtonClickedEvent();
+                portField.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
+                portField.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
-                void portEvent() {
+                void onEnterOrPortFieldChange() {
                     ushort port = 0;
                     if (ushort.TryParse(portField.text, out port)) {
                         TheOtherRolesPlugin.Port.Value = port;
-                        TheOtherRolesPlugin.CustomRegion.Port = port;
                         portField.outputText.color = Color.white;
                     } else {
                         portField.outputText.color = Color.red;
                     }
+                }
+                
+                void onFocusLost() {
+                    TheOtherRolesPlugin.UpdateRegions();
+                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
                 }
             }
         }

@@ -183,8 +183,6 @@ namespace TheOtherRoles
                     Morphling.morphling.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, Morphling.morphling) ? "" : Morphling.morphTarget.Data.PlayerName;
                     Morphling.morphling.myRend.material.SetColor("_BackColor", Palette.ShadowColors[Morphling.morphTarget.Data.ColorId]);
                     Morphling.morphling.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[Morphling.morphTarget.Data.ColorId]);
-                    Morphling.morphling.myRend.material.SetFloat("_Outline",  Morphling.morphTarget.myRend.material.GetFloat("_Outline"));
-                    Morphling.morphling.myRend.material.SetColor("_OutlineColor", Morphling.morphTarget.myRend.material.GetColor("_OutlineColor"));
                     Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.Data.HatId, Morphling.morphTarget.Data.ColorId);
                     Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, (Morphling.morphTarget.Data.HatId == 0U) ? 0.7f : 1.05f, -0.5f);
 
@@ -282,14 +280,8 @@ namespace TheOtherRoles
 
             if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
 
-            int numberOfTasks = 0;
-            GameData.PlayerInfo playerInfo = Snitch.snitch.Data;
-			if (!playerInfo.Disconnected && playerInfo.Tasks != null) {
-				for (int i = 0; i < playerInfo.Tasks.Count; i++) {
-					if (!playerInfo.Tasks[i].Complete)
-						numberOfTasks++;
-				}
-			}
+            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+            int numberOfTasks = playerTotal - playerCompleted;
 
             if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
