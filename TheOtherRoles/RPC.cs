@@ -601,15 +601,18 @@ namespace TheOtherRoles
         }
 
         public static void placeCamera(byte[] buff) {
+            var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
+            if (referenceCamera == null) return; // Mira HQ
+
             Mechanic.remainingScrews--;
 
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
             position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
 
-            var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
+            camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             allCameras.Add(camera);
             ShipStatus.Instance.AllCameras = allCameras.ToArray();
