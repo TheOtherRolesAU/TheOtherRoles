@@ -43,27 +43,28 @@ public class CustomButton
         killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
         PassiveButton button = killButtonManager.GetComponent<PassiveButton>();
         button.OnClick.RemoveAllListeners();
-        button.OnClick.AddListener((UnityEngine.Events.UnityAction)listener);
+        button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
-        void listener()
-        {
-            if (this.Timer < 0f && HasButton() && CouldUse())
-            {
-                killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
-                this.OnClick();
-
-                if (this.HasEffect && !this.isEffectActive) {
-                    this.Timer = this.EffectDuration;
-                    killButtonManager.TimerText.color = new Color(0F, 0.8F, 0F);
-                    this.isEffectActive = true;
-                }
-            }
-        }
         setActive(false);
     }
 
     public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false)
     : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror) { }
+
+    void onClickEvent()
+    {
+        if (this.Timer < 0f && HasButton() && CouldUse())
+        {
+            killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
+            this.OnClick();
+
+            if (this.HasEffect && !this.isEffectActive) {
+                this.Timer = this.EffectDuration;
+                killButtonManager.TimerText.color = new Color(0F, 0.8F, 0F);
+                this.isEffectActive = true;
+            }
+        }
+    }
 
     public static void HudUpdate()
     {
@@ -160,5 +161,8 @@ public class CustomButton
         }
     
         killButtonManager.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
+
+        // Trigger OnClick if hotkey is triggered
+        if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
     }
 }
