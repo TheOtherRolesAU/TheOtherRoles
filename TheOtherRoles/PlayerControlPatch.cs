@@ -460,23 +460,20 @@ namespace TheOtherRoles {
             }
         }
     }
-    [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
-    class PerformKillPatch {
-        public static bool Prefix(KillButtonManager __instance) {
-            if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) { // Among Us default checks
-                if (Helpers.handleMurderAttempt(__instance.CurrentTarget)) { // Custom checks
-                    if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                        writer.Write(__instance.CurrentTarget.PlayerId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, __instance.CurrentTarget.PlayerId);
-                    } else { // Checked by official servers
-                        PlayerControl.LocalPlayer.RpcMurderPlayer(__instance.CurrentTarget);
-                    }
-                    __instance.SetTarget(null);
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcMurderPlayer))]
+    class RpcMurderPlayer {
+        public static bool Prefix([HarmonyArgument(0)]PlayerControl target) {
+            if (Helpers.handleMurderAttempt(target)) { // Custom checks
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, target.PlayerId);
+                } else { // Checked by official servers
+                    return true;
                 }
-		    }
+            }
             return false;
         }
     }

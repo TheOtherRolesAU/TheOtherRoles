@@ -58,6 +58,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.5.0**
 - Fixed a bug where the game would stop after the first meeting
+- Fixed a bug where killing with the hotkey Q ignored shields
 
 **Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
