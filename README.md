@@ -9,23 +9,8 @@ The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com
 Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
-|----------|-------------|-----------------|
-| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
-| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
-| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
-| [Eraser](#eraser) | [Hacker](#hacker) |  |
-| [ImpLover](#lovers) | [Lover](#lovers) |  |
-| [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
-| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
-| [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
-| [Morphling](#morphling) | [Seer](#seer) |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
-| [Vampire](#vampire) | [Shifter](#shifter) |  |
-| [Warlock](#warlock) | [Snitch](#snitch) |  |
-|  | [Spy](#spy) |  |
-|  | [Swapper](#swapper) |  |
-|  | [Time Master](#time-master) |  |
-|  |  [Tracker](#tracker) |  |
+|-|-|-|
+| [Bad Child](#child)<br>[Camouflager](#camouflager)<br>[Cleaner](#cleaner)<br>[Eraser](#eraser)<br>[ImpLover](#lovers)<br>[Godfather (Mafia)](#mafia)<br>[Mafioso (Mafia)](#mafia)<br>[Janitor (Mafia)](#mafia)<br>[Morphling](#morphling)<br>[Trickster](#trickster)<br>[Vampire](#vampire)<br>[Warlock](#warlock)<br><br><br><br> | <br>[Child](#child)<br>[Detective](#detective)<br>[Engineer](#engineer)<br>[Hacker](#hacker)<br>[Lover](#lovers)<br>[Lighter](#lighter)<br>[Mayor](#mayor)<br>[Medic](#medic)<br>[Seer](#seer)<br>[Sheriff](#sheriff)<br>[Shifter](#shifter)<br>[Snitch](#snitch)<br>[Spy](#spy)<br>[Swapper](#swapper)<br>[Time Master](#time-master)<br>[Tracker](#tracker) | [Jester](#jester)<br>[Jackal](#jackal)<br>[Sidekick](#sidekick)<br><br><br><br><br><br><br><br><br><br><br><br><br> |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
