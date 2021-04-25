@@ -339,8 +339,6 @@ namespace TheOtherRoles {
         }
 
         public static void updateGhostInfo() {
-            if (!MapOptions.showGhostInfo) return;
-
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
 
@@ -366,8 +364,17 @@ namespace TheOtherRoles {
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                 string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
-                playerGhostInfo.text = $"{roleNames} {taskInfo}".Trim();
-                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}".Trim();
+                
+                string info = "";
+                if (p == PlayerControl.LocalPlayer || MapOptions.ghostInfoType == 3)
+                    info = $"{roleNames} {taskInfo}".Trim();
+                else if (MapOptions.ghostInfoType == 1)
+                    info = $"{taskInfo}".Trim();
+                else if (MapOptions.ghostInfoType == 2)
+                    info = $"{roleNames}";
+
+                playerGhostInfo.text = info;
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : info;
             }
         }
 
