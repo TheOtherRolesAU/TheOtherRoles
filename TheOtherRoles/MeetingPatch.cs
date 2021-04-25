@@ -23,7 +23,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[__instance.playerStates.Length + 1];
+                byte[] array = new byte[16];
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -101,11 +101,12 @@ namespace TheOtherRoles
                             break;
                         }
                     }
-                    byte[] array = new byte[__instance.playerStates.Length];
+                    byte[] array = new byte[15];
                     for (int i = 0; i < __instance.playerStates.Length; i++) {
                         PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                         array[(int)playerVoteArea.TargetPlayerId] = playerVoteArea.GetState();
                     }
+
                     // RPCVotingComplete
                     if (AmongUsClient.Instance.AmClient)
                         __instance.VotingComplete(array, exiled, tie);
