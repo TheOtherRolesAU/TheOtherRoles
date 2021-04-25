@@ -19,9 +19,9 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string Version = "2.4.0";
+        public const string Version = "2.5.0";
         public const byte Major = 2;
-        public const byte Minor = 4;
+        public const byte Minor = 5;
         public const byte Patch = 0;
 
         public Harmony Harmony { get; } = new Harmony(Id);
