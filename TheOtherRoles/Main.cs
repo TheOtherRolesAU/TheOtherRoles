@@ -85,8 +85,10 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
     public static class ChatControllerAwakePatch {
         private static void Prefix() {
-            SaveManager.chatModeType = 1;
-            SaveManager.isGuest = false;
+            if (!EOSManager.Instance.IsMinor()) {
+                SaveManager.chatModeType = 1;
+                SaveManager.isGuest = false;
+            }
         }
     }
     
