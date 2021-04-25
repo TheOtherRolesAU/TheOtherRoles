@@ -57,6 +57,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.5.0**
+- Fixed a bug where the game would stop after the first meeting
 
 **Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
