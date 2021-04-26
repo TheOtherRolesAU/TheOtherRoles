@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.3.0.png)
+![eisbison infographic](./Images/Preview_2.5.0.png)
 
 
 # The Other Roles
@@ -884,6 +884,7 @@ The new camera will be visible after the next meeting and accessible by everyone
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**
 - Tickster boxes can't be sealed
+- The remaining number of screws can be seen above his special button
 - On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
 
