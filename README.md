@@ -8,47 +8,31 @@
 The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
-- [Mafia](#mafia)
-  - Godfather
-  - Janitor
-  - Mafioso
-- [Morphling](#morphling)
-- [Camouflager](#camouflager)
-- [Vampire](#vampire)
-- [Eraser](#eraser)
-- [Trickster](#trickster)
-- [Cleaner](#cleaner)
-- [Warlock](#warlock)
-- [Lovers](#lovers)
-  - Lover
-  - ImpLover
-- [Child](#child)
-  - Child Impostor
-  - Child Crewmate
-- [Jackal](#jackal)
-- [Sidekick](#sidekick)
-- [Jester](#jester)
-- [Sheriff](#sheriff)
-- [Seer](#seer)
-- [Engineer](#engineer)
-- [Detective](#detective)
-- [Lighter](#lighter)
-- [Medic](#medic)
-- [Mayor](#mayor)
-- [Hacker](#hacker)
-- [Shifter](#shifter)
-- [Time Master](#time-master)
-- [Swapper](#swapper)
-- [Tracker](#tracker)
-- [Snitch](#snitch)
-- [Spy](#spy)
+| Impostors | Crewmates | Neutral |
+|----------|-------------|-----------------|
+| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
+| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
+| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
+| [Eraser](#eraser) | [Hacker](#hacker) |  |
+| [ImpLover](#lovers) | [Lover](#lovers) |  |
+| [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
+| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
+| [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
+| [Morphling](#morphling) | [Seer](#seer) |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
+| [Vampire](#vampire) | [Shifter](#shifter) |  |
+| [Warlock](#warlock) | [Snitch](#snitch) |  |
+|  | [Spy](#spy) |  |
+|  | [Swapper](#swapper) |  |
+|  | [Time Master](#time-master) |  |
+|  |  [Tracker](#tracker) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.4.14s| v2.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.1/TheOtherRoles.zip)
+| 2021.4.14s| v2.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.4.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.2/TheOtherRoles.zip)
 | 2021.4.12s| v2.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.2.1/TheOtherRoles.zip)
@@ -71,15 +55,18 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
-**Version 2.3.1**
+**Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
 - **New Role:** [Security Guard](#security-guard)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
 - Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
 - Fixed an oversight which made StreamerMode only work as host
+- Fixed an oversight which required Jackals to finish Tasks, after Sidekick was promoted
+- Fixed an oversight which made Sidekicks not promote, if the Jackal disconnected
 - Fixed a bug where the Trickster box was invisible
 - Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
+- Added a way to get the 2 Hidden [Colors](#colors)
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#cleaner)

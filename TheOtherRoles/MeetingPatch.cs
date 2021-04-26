@@ -82,10 +82,8 @@ namespace TheOtherRoles
                 return result;
             }
 
-            static bool Prefix(MeetingHud __instance)
-            {
-                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
-                {
+            static bool Prefix(MeetingHud __instance) {
+                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote)) {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
                         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
@@ -104,8 +102,7 @@ namespace TheOtherRoles
                         }
                     }
                     byte[] array = new byte[__instance.playerStates.Length];
-                    for (int i = 0; i < __instance.playerStates.Length; i++)
-                    {
+                    for (int i = 0; i < __instance.playerStates.Length; i++) {
                         PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                         array[(int)playerVoteArea.TargetPlayerId] = playerVoteArea.GetState();
                     }
