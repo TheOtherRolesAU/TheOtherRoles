@@ -374,6 +374,7 @@ namespace TheOtherRoles {
                     info = $"{roleNames}";
 
                 playerGhostInfo.text = info;
+                playerGhostInfo.gameObject.SetActive(p.Visible);
                 if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : info;
             }
         }
