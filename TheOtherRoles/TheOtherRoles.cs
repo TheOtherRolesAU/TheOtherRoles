@@ -840,14 +840,14 @@ namespace TheOtherRoles
         private static Sprite animatedVentSealedSprite;
         public static Sprite getAnimatedVentSealedSprite() {
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 115f); // Change sprite and pixelPerUnit
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f); // Change sprite and pixelPerUnit
             return animatedVentSealedSprite;
         }
 
         private static Sprite staticVentSealedSprite;
         public static Sprite getStaticVentSealedSprite() {
             if (staticVentSealedSprite) return staticVentSealedSprite;
-            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 115f); // Change sprite and pixelPerUnit
+            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f); // Change sprite and pixelPerUnit
             return staticVentSealedSprite;
         }
 
