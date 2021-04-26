@@ -49,7 +49,7 @@ namespace TheOtherRoles {
 
                 void streamerModeToggle() {
                     TheOtherRolesPlugin.StreamerMode.Value = !TheOtherRolesPlugin.StreamerMode.Value;
-                    updateToggle(streamerModeButton, "Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value );
+                    updateToggle(streamerModeButton, "Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value);
                 }
             }
 
@@ -58,7 +58,8 @@ namespace TheOtherRoles {
 
                 void ghostsSeeTaskToggle() {
                     TheOtherRolesPlugin.GhostsSeeTasks.Value = !TheOtherRolesPlugin.GhostsSeeTasks.Value;
-                    updateToggle(ghostsSeeTasksButton, "Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value );
+                    MapOptions.ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value; 
+                    updateToggle(ghostsSeeTasksButton, "Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value);
                 }
             }
 
@@ -67,7 +68,8 @@ namespace TheOtherRoles {
 
                 void ghostsSeeRolesToggle() {
                     TheOtherRolesPlugin.GhostsSeeRoles.Value = !TheOtherRolesPlugin.GhostsSeeRoles.Value;
-                    updateToggle(ghostsSeeRolesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value );
+                    MapOptions.ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value; 
+                    updateToggle(ghostsSeeRolesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value);
                 }
             }
         }

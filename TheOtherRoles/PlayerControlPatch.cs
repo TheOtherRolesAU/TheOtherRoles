@@ -366,11 +366,11 @@ namespace TheOtherRoles {
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
                 
                 string info = "";
-                if (p == PlayerControl.LocalPlayer || MapOptions.ghostInfoType == 3)
+                if (p == PlayerControl.LocalPlayer || (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks))
                     info = $"{roleNames} {taskInfo}".Trim();
-                else if (MapOptions.ghostInfoType == 1)
+                else if (MapOptions.ghostsSeeTasks)
                     info = $"{taskInfo}".Trim();
-                else if (MapOptions.ghostInfoType == 2)
+                else if (MapOptions.ghostsSeeRoles)
                     info = $"{roleNames}";
 
                 playerGhostInfo.text = info;

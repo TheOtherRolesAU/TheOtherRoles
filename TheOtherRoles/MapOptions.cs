@@ -11,7 +11,8 @@ namespace TheOtherRoles{
         public static bool blockSkippingInEmergencyMeetings = false;
         public static bool noVoteIsSelfVote = false;
         public static bool hidePlayerNames = false;
-        public static int ghostInfoType = 0;
+        public static bool ghostsSeeRoles = true;
+        public static bool ghostsSeeTasks = true;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -23,7 +24,8 @@ namespace TheOtherRoles{
             blockSkippingInEmergencyMeetings = CustomOptionHolder.blockSkippingInEmergencyMeetings.getBool();
             noVoteIsSelfVote = CustomOptionHolder.noVoteIsSelfVote.getBool();
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
-            ghostInfoType = CustomOptionHolder.ghostInfoType.getSelection();
+            ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value;
+            ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
         }
     }
 } 
