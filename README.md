@@ -57,12 +57,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.5.0**
+- **New Role:** [Security Guard](#security-guard)
 - Fixed a bug where the game would stop after the first meeting
 - Fixed a bug where killing with the hotkey Q ignored shields
 
 **Version 2.4.0**
 - **New Role:** [Warlock](#warlock)
-- **New Role:** [Security Guard](#security-guard)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
 - Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
