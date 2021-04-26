@@ -128,11 +128,11 @@ namespace TheOtherRoles {
         public static CustomOption warlockCooldown;
         public static CustomOption warlockRootTime;
 
-        public static CustomOption mechanicSpawnRate;
-        public static CustomOption mechanicCooldown;
-        public static CustomOption mechanicTotalScrews;
-        public static CustomOption mechanicCamPrice;
-        public static CustomOption mechanicVentPrice;
+        public static CustomOption securityGuardSpawnRate;
+        public static CustomOption securityGuardCooldown;
+        public static CustomOption securityGuardTotalScrews;
+        public static CustomOption securityGuardCamPrice;
+        public static CustomOption securityGuardVentPrice;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -268,11 +268,11 @@ namespace TheOtherRoles {
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false, spySpawnRate);
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true, spySpawnRate);
 
-            mechanicSpawnRate = CustomOption.Create(280, cs(Mechanic.color, "Mechanic"), rates, null, true);
-            mechanicCooldown = CustomOption.Create(281, "Mechanic Cooldown", 30f, 10f, 60f, 2.5f, mechanicSpawnRate);
-            mechanicTotalScrews = CustomOption.Create(282, "Mechanic Number Of Screws", 7f, 1f, 15f, 1f, mechanicSpawnRate);
-            mechanicCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, mechanicSpawnRate);
-            mechanicVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, mechanicSpawnRate);
+            securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "Security Guard"), rates, null, true);
+            securityGuardCooldown = CustomOption.Create(281, "Security Guard Cooldown", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);
+            securityGuardTotalScrews = CustomOption.Create(282, "Security Guard Number Of Screws", 7f, 1f, 15f, 1f, securityGuardSpawnRate);
+            securityGuardCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, securityGuardSpawnRate);
+            securityGuardVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

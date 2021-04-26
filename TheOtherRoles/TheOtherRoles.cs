@@ -48,7 +48,7 @@ namespace TheOtherRoles
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
-            Mechanic.clearAndReload();
+            SecurityGuard.clearAndReload();
         }
 
         public static class Jester {
@@ -811,8 +811,8 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Mechanic {
-        public static PlayerControl mechanic;
+    public static class SecurityGuard {
+        public static PlayerControl securityGuard;
         public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
 
         public static float cooldown = 30f;
@@ -852,13 +852,13 @@ namespace TheOtherRoles
         }
 
         public static void clearAndReload() {
-            mechanic = null;
+            securityGuard = null;
             ventTarget = null;
             placedCameras = 0;
-            cooldown = CustomOptionHolder.mechanicCooldown.getFloat();
-            totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.mechanicTotalScrews.getFloat());
-            camPrice = Mathf.RoundToInt(CustomOptionHolder.mechanicCamPrice.getFloat());
-            ventPrice = Mathf.RoundToInt(CustomOptionHolder.mechanicVentPrice.getFloat());
+            cooldown = CustomOptionHolder.securityGuardCooldown.getFloat();
+            totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
+            camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
+            ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
         }
     }
 }

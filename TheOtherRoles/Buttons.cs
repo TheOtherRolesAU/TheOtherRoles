@@ -30,8 +30,8 @@ namespace TheOtherRoles
         private static CustomButton lightsOutButton;
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
-        public static CustomButton mechanicButton;
-        public static TMPro.TMP_Text mechanicButtonScrewsText;
+        public static CustomButton securityGuardButton;
+        public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -55,7 +55,7 @@ namespace TheOtherRoles
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
-            mechanicButton.MaxTimer = Mechanic.cooldown;
+            securityGuardButton.MaxTimer = SecurityGuard.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -674,10 +674,10 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
-            // Mechanic button
-            mechanicButton = new CustomButton(
+            // SecurityGuard button
+            securityGuardButton = new CustomButton(
                 () => {
-                    if (Mechanic.ventTarget == null) { // Place camera
+                    if (SecurityGuard.ventTarget == null) { // Place camera
                         var pos = PlayerControl.LocalPlayer.transform.position;
                         byte[] buff = new byte[sizeof(float) * 2];
                         Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
@@ -689,32 +689,32 @@ namespace TheOtherRoles
                         RPCProcedure.placeCamera(buff); 
                     } else { // Seal vent
                         MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SealVent, Hazel.SendOption.Reliable);
-                        writer.WritePacked(Mechanic.ventTarget.Id);
+                        writer.WritePacked(SecurityGuard.ventTarget.Id);
                         writer.EndMessage();
-                        RPCProcedure.sealVent(Mechanic.ventTarget.Id);
-                        Mechanic.ventTarget = null;
+                        RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
+                        SecurityGuard.ventTarget = null;
                     }
-                    mechanicButton.Timer = mechanicButton.MaxTimer;
+                    securityGuardButton.Timer = securityGuardButton.MaxTimer;
                 },
-                () => { return Mechanic.mechanic != null && Mechanic.mechanic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    mechanicButton.killButtonManager.renderer.sprite = (Mechanic.ventTarget == null) ? Mechanic.getPlaceCameraButtonSprite() : Mechanic.getCloseVentButtonSprite(); 
-                    if (mechanicButtonScrewsText != null) mechanicButtonScrewsText.text = $"{Mechanic.remainingScrews}/{Mechanic.totalScrews}";
-                    return Mechanic.remainingScrews >= (Mechanic.ventTarget == null ? Mechanic.camPrice : Mechanic.ventPrice) && PlayerControl.LocalPlayer.CanMove;
+                    securityGuardButton.killButtonManager.renderer.sprite = (SecurityGuard.ventTarget == null) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
+                    if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
+                    return SecurityGuard.remainingScrews >= (SecurityGuard.ventTarget == null ? SecurityGuard.camPrice : SecurityGuard.ventPrice) && PlayerControl.LocalPlayer.CanMove;
                 },
-                () => { mechanicButton.Timer = mechanicButton.MaxTimer; },
-                Mechanic.getPlaceCameraButtonSprite(),
+                () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
+                SecurityGuard.getPlaceCameraButtonSprite(),
                 new Vector3(-1.3f, 0f, 0f),
                 __instance,
                 KeyCode.Q
             );
 
-            // Mechanic button screws counter
-            mechanicButtonScrewsText = GameObject.Instantiate(mechanicButton.killButtonManager.TimerText, mechanicButton.killButtonManager.TimerText.transform.parent);
-            mechanicButtonScrewsText.text = "";
-            mechanicButtonScrewsText.enableWordWrapping = false;
-            mechanicButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
-            mechanicButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+            // SecurityGuard button screws counter
+            securityGuardButtonScrewsText = GameObject.Instantiate(securityGuardButton.killButtonManager.TimerText, securityGuardButton.killButtonManager.TimerText.transform.parent);
+            securityGuardButtonScrewsText.text = "";
+            securityGuardButtonScrewsText.enableWordWrapping = false;
+            securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
+            securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

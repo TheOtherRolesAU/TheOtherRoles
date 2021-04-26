@@ -370,8 +370,8 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void mechanicSetTarget() {
-            if (Mechanic.mechanic == null || Mechanic.mechanic != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
+        public static void securityGuardSetTarget() {
+            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
 
             Vent target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
@@ -385,7 +385,7 @@ namespace TheOtherRoles {
                     target = vent;
                 }
             }
-            Mechanic.ventTarget = target;
+            SecurityGuard.ventTarget = target;
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -437,8 +437,8 @@ namespace TheOtherRoles {
                 warlockSetTarget();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
-                // Mechanic
-                mechanicSetTarget();
+                // SecurityGuard
+                securityGuardSetTarget();
             } 
         }
     }

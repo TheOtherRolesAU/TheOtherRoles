@@ -73,7 +73,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.3.1**
 - **New Role:** [Warlock](#warlock)
-- **New Role:** [Mechanic](#mechanic)
+- **New Role:** [Security Guard](#security-guard)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
 - Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
@@ -876,10 +876,10 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
 -----------------------
 
-## Mechanic
+## Security Guard
 ### **Team: Crewmates**
-The Mechanic is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
-Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Mechanic has can also be configured.\
+The Security Guard is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
+Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a SecurityGuard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**
@@ -890,9 +890,9 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Mechanic Spawn Chance |
-| Mechanic Cooldown | 
-| Mechanic Number Of Screws | The number of screws that a Mechanic can use in a game
+| Security Guard Spawn Chance |
+| Security Guard Cooldown | 
+| Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
 -----------------------

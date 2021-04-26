@@ -383,7 +383,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
         class SurveillanceMinigameBeginPatch {
             public static void Postfix(SurveillanceMinigame __instance) {
-                // Add mechanic cameras
+                // Add securityGuard cameras
                 page = 0;
                 timer = 0;
                 if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
@@ -406,7 +406,7 @@ namespace TheOtherRoles
         class SurveillanceMinigameUpdatePatch {
 
             public static bool Prefix(SurveillanceMinigame __instance) {
-                // Update normal and mechanic cameras
+                // Update normal and securityGuard cameras
                 timer += Time.deltaTime;
                 int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
 

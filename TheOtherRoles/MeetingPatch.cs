@@ -407,7 +407,7 @@ namespace TheOtherRoles
                 JackInTheBox.convertToVents();
             }
 
-            // Mechanic vents and cameras
+            // SecurityGuard vents and cameras
             MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             allCameras.AddRange(MapOptions.camerasToAdd);
@@ -417,7 +417,7 @@ namespace TheOtherRoles
             foreach (Vent vent in MapOptions.ventsToSeal) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
-                vent.myRend.sprite = animator == null ? Mechanic.getStaticVentSealedSprite() : Mechanic.getAnimatedVentSealedSprite();
+                vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
                 vent.name = "SealedVent_" + vent.name;
             }
             MapOptions.ventsToSeal = new List<Vent>();
@@ -516,8 +516,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
                     else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
-                    else if(Mechanic.mechanic != null && ExileController.Instance.exiled.Object.PlayerId == Mechanic.mechanic.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Mechanic.";
+                    else if(SecurityGuard.securityGuard != null && ExileController.Instance.exiled.Object.PlayerId == SecurityGuard.securityGuard.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The SecurityGuard.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }

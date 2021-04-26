@@ -42,7 +42,7 @@ namespace TheOtherRoles
         Trickster,
         Cleaner,
         Warlock,
-        Mechanic
+        SecurityGuard
     }
 
     enum CustomRPC
@@ -215,8 +215,8 @@ namespace TheOtherRoles
                     case RoleId.Warlock:
                         Warlock.warlock = player;
                         break;
-                    case RoleId.Mechanic:
-                        Mechanic.mechanic = player;
+                    case RoleId.SecurityGuard:
+                        SecurityGuard.securityGuard = player;
                         break;
                     }
                 }
@@ -392,8 +392,8 @@ namespace TheOtherRoles
                 Snitch.snitch = oldShifter;
             } else if (Spy.spy != null && Spy.spy == player) {
                 Spy.spy = oldShifter;
-            } else if (Mechanic.mechanic != null && Mechanic.mechanic == player) {
-                Mechanic.mechanic = oldShifter;
+            } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
+                SecurityGuard.securityGuard = oldShifter;
             } else { // Crewmate
             }
             
@@ -537,7 +537,7 @@ namespace TheOtherRoles
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
-            if (player == Mechanic.mechanic) Mechanic.clearAndReload();
+            if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -605,8 +605,8 @@ namespace TheOtherRoles
             var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             if (referenceCamera == null) return; // Mira HQ
 
-            Mechanic.remainingScrews -= Mechanic.camPrice;
-            Mechanic.placedCameras++;
+            SecurityGuard.remainingScrews -= SecurityGuard.camPrice;
+            SecurityGuard.placedCameras++;
 
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -614,7 +614,7 @@ namespace TheOtherRoles
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z - 1f);
-            camera.CamName = $"Mechanic Camera {Mechanic.placedCameras}";
+            camera.CamName = $"Security Guard Camera {SecurityGuard.placedCameras}";
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
             camera.gameObject.SetActive(false);
             MapOptions.camerasToAdd.Add(camera);
@@ -624,7 +624,7 @@ namespace TheOtherRoles
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
-            Mechanic.remainingScrews -= Mechanic.ventPrice;
+            SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
             MapOptions.ventsToSeal.Add(vent);
         }
     }

@@ -197,9 +197,9 @@ namespace TheOtherRoles
                 "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
-            if (Mechanic.mechanic != null && p == Mechanic.mechanic) {
-                infos.Add(new RoleInfo("Mechanic",
-                Mechanic.color,
+            if (SecurityGuard.securityGuard != null && p == SecurityGuard.securityGuard) {
+                infos.Add(new RoleInfo("Security Guard",
+                SecurityGuard.color,
                 "Seal vents and place cameras",
                 "Seal vents and place cameras"));
             }
