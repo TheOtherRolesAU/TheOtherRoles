@@ -40,7 +40,7 @@ namespace TheOtherRoles {
 
         public static void Postfix(OptionsMenuBehaviour __instance) {
             if (__instance.CensorChatButton != null) {
-                if (origin == null) origin = __instance.CensorChatButton.transform.localPosition;
+                if (origin == null) origin = __instance.CensorChatButton.transform.localPosition + Vector3.up * 0.25f;
                 __instance.CensorChatButton.transform.localPosition = origin.Value + Vector3.left * 1.3f;
             }
 
