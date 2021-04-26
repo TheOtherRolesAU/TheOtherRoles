@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomButton
 {
@@ -42,7 +43,7 @@ public class CustomButton
         buttons.Add(this);
         killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
         PassiveButton button = killButtonManager.GetComponent<PassiveButton>();
-        button.OnClick.RemoveAllListeners();
+        button.OnClick = new Button.ButtonClickedEvent();
         button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
         setActive(false);

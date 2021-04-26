@@ -138,7 +138,6 @@ namespace TheOtherRoles {
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
-        public static CustomOption showGhostInfo;
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
 
@@ -279,7 +278,6 @@ namespace TheOtherRoles {
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", false);
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
-            showGhostInfo = CustomOption.Create(7, "Ghosts Can See Roles And Remaining Tasks", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

@@ -362,7 +362,12 @@ namespace TheOtherRoles
                 () => {
                     if (Helpers.handleMurderAttempt(Vampire.currentTarget)) {
                         if (Vampire.targetNearGarlic) {
-			                PlayerControl.LocalPlayer.RpcMurderPlayer(Vampire.currentTarget);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                            writer.Write(Vampire.vampire.PlayerId);
+                            writer.Write(Vampire.currentTarget.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.uncheckedMurderPlayer(Vampire.vampire.PlayerId, Vampire.currentTarget.PlayerId);
+
                             vampireKillButton.HasEffect = false; // Block effect on this click
                             vampireKillButton.Timer = vampireKillButton.MaxTimer;
                         } else {

@@ -173,7 +173,7 @@ namespace TheOtherRoles
                 "Finish your tasks to find the <color=#FF1919FF>Impostors</color>",
                 "Finish your tasks"));
             }
-            if (Jackal.jackal != null && p == Jackal.jackal) {
+            if ((Jackal.jackal != null && p == Jackal.jackal) || (Jackal.formerJackals != null && Jackal.formerJackals.Contains(p))) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
                 "Kill all Crewmates and <color=#FF1919FF>Impostors</color> to win",

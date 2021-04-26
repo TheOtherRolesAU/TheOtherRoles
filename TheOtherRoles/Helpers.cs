@@ -180,12 +180,16 @@ namespace TheOtherRoles {
         }
 
         public static void clearAllTasks(this PlayerControl player) {
+            if (player == null) return;
             for (int i = 0; i < player.myTasks.Count; i++) {
                 PlayerTask playerTask = player.myTasks[i];
                 playerTask.OnRemove();
                 UnityEngine.Object.Destroy(playerTask.gameObject);
             }
             player.myTasks.Clear();
+            
+            if (player.Data != null && player.Data.Tasks != null)
+                player.Data.Tasks.Clear();
         }
 
         public static string cs(Color c, string s) {
