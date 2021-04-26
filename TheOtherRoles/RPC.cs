@@ -613,7 +613,7 @@ namespace TheOtherRoles
             position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
-            camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z);
+            camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z - 1f);
             camera.CamName = $"Mechanic Camera {Mechanic.placedCameras}";
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
             camera.gameObject.SetActive(false);
