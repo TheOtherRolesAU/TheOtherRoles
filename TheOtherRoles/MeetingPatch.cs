@@ -373,6 +373,26 @@ namespace TheOtherRoles
                     __instance.SkipVoteButton.gameObject.SetActive(false);
             }
         }
+
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CastVote))]
+        class MeetingHudCastVotePatch {
+            static void Postfix([HarmonyArgument(0)]byte srcPlayerId, [HarmonyArgument(1)]sbyte suspectPlayerId) {
+                var source = Helpers.playerById(srcPlayerId);
+                if (source != null && source.Data != null && AmongUsClient.Instance.AmHost && TheOtherRolesPlugin.HostSeesVotesLog.Value) {
+                    string target = null;
+                    if (suspectPlayerId == -2) target = "didn't vote";
+                    else if (suspectPlayerId == -1) target = "skipped";
+                    else if (suspectPlayerId >= 0) {
+                        System.Console.WriteLine(suspectPlayerId);
+                        System.Console.WriteLine((byte)suspectPlayerId);
+                        var targetPlayer = Helpers.playerById((byte)suspectPlayerId);
+                        if (targetPlayer != null && targetPlayer.Data != null) target = $"voted {targetPlayer.Data.PlayerName}";
+                    }                    
+                    
+                    if (target != null) System.Console.WriteLine($"{source.Data.PlayerName} {target}");
+                }
+            }
+        }
     }
 
     [HarmonyPatch(typeof(ExileController), "Begin")]
