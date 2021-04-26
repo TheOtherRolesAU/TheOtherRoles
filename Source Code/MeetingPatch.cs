@@ -23,7 +23,7 @@ namespace TheOtherRoles
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[__instance.playerStates.Length + 1];
+                byte[] array = new byte[16];
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -82,10 +82,8 @@ namespace TheOtherRoles
                 return result;
             }
 
-            static bool Prefix(MeetingHud __instance)
-            {
-                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote))
-                {
+            static bool Prefix(MeetingHud __instance) {
+                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote)) {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
                         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
@@ -103,12 +101,12 @@ namespace TheOtherRoles
                             break;
                         }
                     }
-                    byte[] array = new byte[__instance.playerStates.Length];
-                    for (int i = 0; i < __instance.playerStates.Length; i++)
-                    {
+                    byte[] array = new byte[15];
+                    for (int i = 0; i < __instance.playerStates.Length; i++) {
                         PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                         array[(int)playerVoteArea.TargetPlayerId] = playerVoteArea.GetState();
                     }
+
                     // RPCVotingComplete
                     if (AmongUsClient.Instance.AmClient)
                         __instance.VotingComplete(array, exiled, tie);
@@ -375,6 +373,26 @@ namespace TheOtherRoles
                     __instance.SkipVoteButton.gameObject.SetActive(false);
             }
         }
+
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CastVote))]
+        class MeetingHudCastVotePatch {
+            static void Postfix([HarmonyArgument(0)]byte srcPlayerId, [HarmonyArgument(1)]sbyte suspectPlayerId) {
+                var source = Helpers.playerById(srcPlayerId);
+                if (source != null && source.Data != null && AmongUsClient.Instance.AmHost && TheOtherRolesPlugin.HostSeesVotesLog.Value) {
+                    string target = null;
+                    if (suspectPlayerId == -2) target = "didn't vote";
+                    else if (suspectPlayerId == -1) target = "skipped";
+                    else if (suspectPlayerId >= 0) {
+                        System.Console.WriteLine(suspectPlayerId);
+                        System.Console.WriteLine((byte)suspectPlayerId);
+                        var targetPlayer = Helpers.playerById((byte)suspectPlayerId);
+                        if (targetPlayer != null && targetPlayer.Data != null) target = $"voted {targetPlayer.Data.PlayerName}";
+                    }                    
+                    
+                    if (target != null) System.Console.WriteLine($"{source.Data.PlayerName} {target}");
+                }
+            }
+        }
     }
 
     [HarmonyPatch(typeof(ExileController), "Begin")]
@@ -406,6 +424,21 @@ namespace TheOtherRoles
             if (Trickster.trickster != null && JackInTheBox.hasJackInTheBoxLimitReached()) {
                 JackInTheBox.convertToVents();
             }
+
+            // SecurityGuard vents and cameras
+            MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
+            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            allCameras.AddRange(MapOptions.camerasToAdd);
+            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            MapOptions.camerasToAdd = new List<SurvCamera>();
+
+            foreach (Vent vent in MapOptions.ventsToSeal) {
+                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+                animator?.Stop();
+                vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                vent.name = "SealedVent_" + vent.name;
+            }
+            MapOptions.ventsToSeal = new List<Vent>();
         }
     }
 
@@ -501,6 +534,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
                     else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
+                    else if(SecurityGuard.securityGuard != null && ExileController.Instance.exiled.Object.PlayerId == SecurityGuard.securityGuard.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The SecurityGuard.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }

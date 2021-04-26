@@ -30,6 +30,8 @@ namespace TheOtherRoles
         private static CustomButton lightsOutButton;
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
+        public static CustomButton securityGuardButton;
+        public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -53,6 +55,7 @@ namespace TheOtherRoles
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
+            securityGuardButton.MaxTimer = SecurityGuard.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -359,7 +362,12 @@ namespace TheOtherRoles
                 () => {
                     if (Helpers.handleMurderAttempt(Vampire.currentTarget)) {
                         if (Vampire.targetNearGarlic) {
-			                PlayerControl.LocalPlayer.RpcMurderPlayer(Vampire.currentTarget);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                            writer.Write(Vampire.vampire.PlayerId);
+                            writer.Write(Vampire.currentTarget.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.uncheckedMurderPlayer(Vampire.vampire.PlayerId, Vampire.currentTarget.PlayerId);
+
                             vampireKillButton.HasEffect = false; // Block effect on this click
                             vampireKillButton.Timer = vampireKillButton.MaxTimer;
                         } else {
@@ -623,6 +631,7 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F
             );
+
             // Warlock curse
             warlockCurseButton = new CustomButton(
                 () => {
@@ -670,6 +679,47 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
+            // SecurityGuard button
+            securityGuardButton = new CustomButton(
+                () => {
+                    if (SecurityGuard.ventTarget == null) { // Place camera
+                        var pos = PlayerControl.LocalPlayer.transform.position;
+                        byte[] buff = new byte[sizeof(float) * 2];
+                        Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
+                        Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1*sizeof(float), sizeof(float));
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceCamera, Hazel.SendOption.Reliable);
+                        writer.WriteBytesAndSize(buff);
+                        writer.EndMessage();
+                        RPCProcedure.placeCamera(buff); 
+                    } else { // Seal vent
+                        MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SealVent, Hazel.SendOption.Reliable);
+                        writer.WritePacked(SecurityGuard.ventTarget.Id);
+                        writer.EndMessage();
+                        RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
+                        SecurityGuard.ventTarget = null;
+                    }
+                    securityGuardButton.Timer = securityGuardButton.MaxTimer;
+                },
+                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    securityGuardButton.killButtonManager.renderer.sprite = (SecurityGuard.ventTarget == null) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
+                    if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
+                    return SecurityGuard.remainingScrews >= (SecurityGuard.ventTarget == null ? SecurityGuard.camPrice : SecurityGuard.ventPrice) && PlayerControl.LocalPlayer.CanMove;
+                },
+                () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
+                SecurityGuard.getPlaceCameraButtonSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q
+            );
+
+            // SecurityGuard button screws counter
+            securityGuardButtonScrewsText = GameObject.Instantiate(securityGuardButton.killButtonManager.TimerText, securityGuardButton.killButtonManager.TimerText.transform.parent);
+            securityGuardButtonScrewsText.text = "";
+            securityGuardButtonScrewsText.enableWordWrapping = false;
+            securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
+            securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

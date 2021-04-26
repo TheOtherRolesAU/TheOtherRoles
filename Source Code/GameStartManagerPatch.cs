@@ -61,10 +61,10 @@ namespace TheOtherRoles {
                             continue;
                         else if (!playerVersions.ContainsKey(client.Id))  {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an outdated or no version of The Other Roles\n</color>";
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different or no version of The Other Roles\n</color>";
                         } else if (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch) {
                             blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an outdated version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
                         }
                     }
                     if (blockStart) {
