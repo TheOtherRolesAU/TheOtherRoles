@@ -48,6 +48,7 @@ namespace TheOtherRoles
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
+            SecurityGuard.clearAndReload();
         }
 
         public static class Jester {
@@ -620,7 +621,7 @@ namespace TheOtherRoles
         }
 
         public static void removeCurrentJackal() {
-            if (jackal != null && !formerJackals.Contains(jackal)) formerJackals.Add(jackal);
+            if (!formerJackals.Contains(jackal)) formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
@@ -808,7 +809,56 @@ namespace TheOtherRoles
             curseVictimTarget = null;
             curseKillTarget = null;
         }
-        
     }
 
+    public static class SecurityGuard {
+        public static PlayerControl securityGuard;
+        public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
+
+        public static float cooldown = 30f;
+        public static int remainingScrews = 7;
+        public static int totalScrews = 7;
+        public static int ventPrice = 1;
+        public static int camPrice = 2;
+        public static int placedCameras = 0;
+        public static Vent ventTarget = null;
+
+        private static Sprite closeVentButtonSprite;
+        public static Sprite getCloseVentButtonSprite() {
+            if (closeVentButtonSprite) return closeVentButtonSprite;
+            closeVentButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CloseVentButton.png", 115f);
+            return closeVentButtonSprite;
+        }
+
+        private static Sprite placeCameraButtonSprite;
+        public static Sprite getPlaceCameraButtonSprite() {
+            if (placeCameraButtonSprite) return placeCameraButtonSprite;
+            placeCameraButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceCameraButton.png", 115f);
+            return placeCameraButtonSprite;
+        }
+
+        private static Sprite animatedVentSealedSprite;
+        public static Sprite getAnimatedVentSealedSprite() {
+            if (animatedVentSealedSprite) return animatedVentSealedSprite;
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            return animatedVentSealedSprite;
+        }
+
+        private static Sprite staticVentSealedSprite;
+        public static Sprite getStaticVentSealedSprite() {
+            if (staticVentSealedSprite) return staticVentSealedSprite;
+            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            return staticVentSealedSprite;
+        }
+
+        public static void clearAndReload() {
+            securityGuard = null;
+            ventTarget = null;
+            placedCameras = 0;
+            cooldown = CustomOptionHolder.securityGuardCooldown.getFloat();
+            totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
+            camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
+            ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
+        }
+    }
 }

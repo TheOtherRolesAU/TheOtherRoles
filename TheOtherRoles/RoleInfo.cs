@@ -173,7 +173,7 @@ namespace TheOtherRoles
                 "Finish your tasks to find the <color=#FF1919FF>Impostors</color>",
                 "Finish your tasks"));
             }
-            if (Jackal.jackal != null && p == Jackal.jackal) {
+            if ((Jackal.jackal != null && p == Jackal.jackal) || (Jackal.formerJackals != null && Jackal.formerJackals.Contains(p))) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
                 "Kill all Crewmates and <color=#FF1919FF>Impostors</color> to win",
@@ -197,6 +197,13 @@ namespace TheOtherRoles
                 "Confuse the <color=#FF1919FF>Impostors</color>",
                 "Confuse the Impostors"));
             }
+            if (SecurityGuard.securityGuard != null && p == SecurityGuard.securityGuard) {
+                infos.Add(new RoleInfo("Security Guard",
+                SecurityGuard.color,
+                "Seal vents and place cameras",
+                "Seal vents and place cameras"));
+            }
+
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.ImpostorRed,
