@@ -322,6 +322,16 @@ namespace TheOtherRoles
             return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
         }
 
+        public static bool hasAliveKillingLover(this PlayerControl player) {
+            if (!Lovers.existingAndAlive())
+                return false;
+            if (player != null && player != lover1 && player != lover2) // Is Player a Lover?
+                return false;
+            return (lover1 == Jackal.jackal     || lover2 == Jackal.jackal 
+                 || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick 
+                 || lover1.Data.IsImpostor      || lover2.Data.IsImpostor); // Either of the lovers is a killer
+        }
+
         public static void clearAndReload() {
             lover1 = null;
             lover2 = null;

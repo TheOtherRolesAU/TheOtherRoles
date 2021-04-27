@@ -28,10 +28,10 @@ namespace TheOtherRoles{
             garlic = new GameObject("Garlic");
             background = new GameObject("Background");
             background.transform.SetParent(garlic.transform);
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
+            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
             garlic.transform.position = position;
             garlic.transform.localPosition = position;
-            background.transform.localPosition = new Vector3(0 , 0, 0.01f);
+            background.transform.localPosition = new Vector3(0 , 0, -0.01f); // before player
 
             var garlicRenderer = garlic.AddComponent<SpriteRenderer>();
             garlicRenderer.sprite = getGarlicSprite();
