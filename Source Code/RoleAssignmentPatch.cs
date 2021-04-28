@@ -131,6 +131,12 @@ namespace TheOtherRoles
                                 }
                             }
                         }
+                        if (CustomOptionHolder.allowMultipleCrewmateRoleAssignment.getBool() == true) {
+                            // Allow more than one for 100% roles. Add 20% more to achieve that. 
+                            crewTickets.Add(entry.Key);
+                            crewTickets.Add(entry.Key);
+                        }
+
                     }
                 } else { // Other
                     for (int j = 0; j < entry.Value; j++) crewTickets.Add(entry.Key);
@@ -166,7 +172,9 @@ namespace TheOtherRoles
                 if (crewTickets.Count > 0 && crewmates.Count > 0) {
                     var index = rnd.Next(0, crewTickets.Count);
                     byte roleId = crewTickets[index];
-                    crewTickets.RemoveAll(x => x == roleId);
+                    if (CustomOptionHolder.allowMultipleCrewmateRoleAssignment.getBool() == false) {
+                        crewTickets.RemoveAll(x => x == roleId);
+                    }
                     setRoleToRandomPlayer(roleId, crewmates);
 
                     if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
