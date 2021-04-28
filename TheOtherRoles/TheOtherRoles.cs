@@ -768,7 +768,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             cleaner = null;
-            cooldown = CustomOptionHolder.janitorCooldown.getFloat();
+            cooldown = CustomOptionHolder.cleanerCooldown.getFloat();
         }
     }
 
