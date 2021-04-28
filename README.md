@@ -337,8 +337,8 @@ if you're using it right.
 
 First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
 The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
-- First all roles that are set to 100% are being assigned to arbitrary players
-- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more Crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+- First all roles that are set to 100% are being assigned to arbitrary players. 
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). When multiple role assignment option is activated, 2 tickets are added to the ticket pool for roles that are set to 100%. Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more Crewmates or until there are no more tickets). If a role is selected from the pool, all the tickets of that role are being removed unless multiple role assignment option is activated.   
 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
