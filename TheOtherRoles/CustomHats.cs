@@ -36,7 +36,7 @@ namespace TheOtherRoles {
             public string condition { get; set;}
 
             public bool isUnlocked() {
-                if (condition.ToLower() == "none") 
+                if (condition == null || condition.ToLower() == "none") 
                     return true;
                 return false;
             }
@@ -62,7 +62,6 @@ namespace TheOtherRoles {
 
             for (int i = 0; i < hats.Length; i++) {
                 string s = fromDisk ? hats[i].Substring(hats[i].LastIndexOf("\\") + 1).Split('.')[0] : hats[i].Split('.')[3];
-                // System.Console.WriteLine(s);
                 string[] p = s.Split('_');
 
                 HashSet<string> options = new HashSet<string>();
@@ -123,12 +122,12 @@ namespace TheOtherRoles {
                 hat.BackImage = CreateHatSprite(ch.backresource, fromDisk);
             if (ch.climbresource != null)
                 hat.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
-            hat.name = ch.name;//$"{ch.name}\n{ch.author}";
+            hat.name = ch.name;
             hat.Order = 99;
             hat.ProductId = "hat_" + ch.name.Replace(' ', '_');
             hat.InFront = !ch.behind;
             hat.NoBounce = !ch.bounce;
-            hat.ChipOffset = new Vector2(0f, 0.35f);
+            hat.ChipOffset = new Vector2(0f, 0.2f);
 
             if (ch.adaptive && hatShader != null)
                 hat.AltShader = hatShader;
@@ -203,6 +202,8 @@ namespace TheOtherRoles {
             }     
         }
 
+        private static List<TMPro.TMP_Text> hatsTabCustomTexts = new List<TMPro.TMP_Text>();
+
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
         public class HatsTabOnEnablePatch {
             public static string innerslothPackageName = "Innersloth Hats";
@@ -218,6 +219,7 @@ namespace TheOtherRoles {
                     title.transform.localScale = Vector3.one * 1.5f;
                     __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { title.SetText(packageName); })));
                     offset -= __instance.YOffset;
+                    hatsTabCustomTexts.Add(title);
                 }
 
                 for (int i = 0; i < hats.Count; i++) {
@@ -237,13 +239,14 @@ namespace TheOtherRoles {
                         }
                         if (foreground != null) {
                             foreground.localPosition = Vector3.down * 0.243f;
-                        }   
-                    
+                        }
+                
                         if (textTemplate != null) {
                             TMPro.TMP_Text description = UnityEngine.Object.Instantiate<TMPro.TMP_Text>(textTemplate, colorChip.transform);
                             description.transform.localPosition = new Vector3(0f, -0.75f, -1f);
                             description.transform.localScale = Vector3.one * 0.7f;
                             __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { description.SetText($"{hat.name}\nby {ext.author}"); })));
+                            hatsTabCustomTexts.Add(description);
                         }
 
                         if (!ext.isUnlocked()) { // Hat is locked
@@ -271,9 +274,9 @@ namespace TheOtherRoles {
 
                 HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>>();
+                hatsTabCustomTexts = new List<TMPro.TMP_Text>();
 
                 foreach (HatBehaviour hatBehaviour in unlockedHats) {
-                    //CustomHat customHat = CustomHatLoader.hatdetails.FirstOrDefault(x => x.hatBehaviour.ProdId == hatBehaviour.ProdId);
                     HatExtension ext = hatBehaviour.getHatExtension();
 
                     if (ext != null) {
@@ -303,6 +306,20 @@ namespace TheOtherRoles {
 
                 __instance.scroller.YBounds.max = -0.75f * YOffset;
                 return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.Update))]
+        public class HatsTabUpdatePatch {
+            public static void Postfix(HatsTab __instance) {
+                // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
+                foreach (TMPro.TMP_Text customText in hatsTabCustomTexts) {
+                    if (customText != null && customText.transform != null && customText.gameObject != null) {
+                        bool active = customText.transform.position.y <= 3.75f && customText.transform.position.y >= 0.3f;
+                        float epsilon = Mathf.Min(Mathf.Abs(customText.transform.position.y - 3.75f), Mathf.Abs(customText.transform.position.y - 0.35f));
+                        if (active != customText.gameObject.active && epsilon > 0.1f) customText.gameObject.SetActive(active);
+                    }
+                }
             }
         }
     }
