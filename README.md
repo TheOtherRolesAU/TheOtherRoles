@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.5.0.png)
+![eisbison infographic](./Images/Preview_2.5.1.png)
 
 
 # The Other Roles
@@ -18,10 +18,11 @@ Even more roles are coming soon :)
 | [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
 | [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
 | [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
-| [Morphling](#morphling) | [Seer](#seer) |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
-| [Vampire](#vampire) | [Shifter](#shifter) |  |
-| [Warlock](#warlock) | [Snitch](#snitch) |  |
+| [Morphling](#morphling) | [Security Guard](#security-guard) |  |
+| [Trickster](#trickster) | [Seer](#seer) |  |
+| [Vampire](#vampire) | [Sheriff](#sheriff) |  |
+| [Warlock](#warlock) | [Shifter](#shifter) |  |
+|  | [Snitch](#snitch) |  |
 |  | [Spy](#spy) |  |
 |  | [Swapper](#swapper) |  |
 |  | [Time Master](#time-master) |  |
@@ -32,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.5.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.4.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.3.0/TheOtherRoles.zip)
@@ -55,6 +57,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.5.1**
+- **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
+- Changed Lovers to ignore Lover's Tasks for Taskwin, while an ImpLover is alive
+- Fixed a bug where garlic was not visible in some places
+- The Security Guard can't place cameras on MiraHQ anymore
+- Fixed a bug on there Airship, where the view of the cameras that the Security Guard placed wasn't centered on the camera.
 
 **Version 2.5.0**
 - **New Role:** [Security Guard](#security-guard)
@@ -514,6 +523,7 @@ The Lovers never know the role of their partner, they only see who their partner
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are Crewmates, they can achieve a "double victory" but the Crewmates then also win.\
 If one Lover is an Impostor and one a Crewmate, they can only get a "Lovers solo win" where only they win (even if there is another Impostor alive).\
+If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
 - If there is an equal amount of Impostors and Crewmates left in the game and one of the Lovers is an Impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
@@ -876,6 +886,7 @@ The new camera will be visible after the next meeting and accessible by everyone
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**
 - Tickster boxes can't be sealed
+- The Security Guard can't place Cameras on MiraHQ
 - The remaining number of screws can be seen above his special button
 - On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
