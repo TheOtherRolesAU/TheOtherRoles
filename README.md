@@ -61,6 +61,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
 - Changed Lovers to ignore Lover's Tasks for Taskwin, while an ImpLover is alive
+- Fixed a bug where garlic was not visible in some places
 - The Security Guard can't place cameras on MiraHQ anymore
 - Fixed a bug on Airship, where the view of the cameras that the Security Guard placed wasn't centered on the camera.
 
