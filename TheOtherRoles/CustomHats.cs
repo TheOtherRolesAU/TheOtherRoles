@@ -83,7 +83,7 @@ namespace TheOtherRoles {
                 }
             }
 
-            List<CustomHat> newHats = new List<CustomHat>();
+            List<CustomHat> customhats = new List<CustomHat>();
 
             foreach (string k in fronts.Keys) {
                 CustomHat hat = fronts[k];
@@ -96,9 +96,11 @@ namespace TheOtherRoles {
                     hat.climbresource = cr;
                 if (hat.backresource != null)
                     hat.behind = true;
+
+                customhats.Add(hat);
             }
 
-            return newHats;
+            return customhats;
         }
 
         private static Sprite CreateHatSprite(string path, bool fromDisk = false) {
@@ -106,7 +108,7 @@ namespace TheOtherRoles {
             return texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
         }
 
-        private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false) {
+        private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
             if (hatShader == null && DestroyableSingleton<HatManager>.InstanceExists) {
                 foreach (HatBehaviour h in DestroyableSingleton<HatManager>.Instance.AllHats) {
                     if (h.AltShader != null) {
@@ -118,8 +120,10 @@ namespace TheOtherRoles {
 
             HatBehaviour hat = new HatBehaviour();
             hat.MainImage = CreateHatSprite(ch.resource, fromDisk);
-            if (ch.backresource != null)
+            if (ch.backresource != null) {
                 hat.BackImage = CreateHatSprite(ch.backresource, fromDisk);
+                ch.behind = true; // Required to view backresource
+            }
             if (ch.climbresource != null)
                 hat.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
             hat.name = ch.name;
@@ -132,12 +136,14 @@ namespace TheOtherRoles {
             if (ch.adaptive && hatShader != null)
                 hat.AltShader = hatShader;
 
-            HatExtension extend = new HatExtension();
-            extend.author = ch.author != null ? ch.author : "Unknown";
-            extend.package = ch.package != null ? ch.package : "Misc.";
-            extend.condition = ch.condition != null ? ch.condition : "none";
+            if (!testOnly) {
+                HatExtension extend = new HatExtension();
+                extend.author = ch.author != null ? ch.author : "Unknown";
+                extend.package = ch.package != null ? ch.package : "Misc.";
+                extend.condition = ch.condition != null ? ch.condition : "none";
 
-            CustomHatRegistry.Add(hat.name, extend);
+                CustomHatRegistry.Add(hat.name, extend);
+            }
 
             return hat;
         }
@@ -192,7 +198,7 @@ namespace TheOtherRoles {
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
                         if (hats.Count > 0) {
-                            __instance.Hat = CreateHatBehaviour(hats[0], true);;
+                            __instance.Hat = CreateHatBehaviour(hats[0], true, true);;
                             __instance.SetHat(color);
                         }
                     } catch (System.Exception e) {
@@ -327,7 +333,7 @@ namespace TheOtherRoles {
 
     public class CustomHatLoader {
         public bool running = false;
-        private const string REPO = "https://raw.githubusercontent.com/EoF-1141/TheOtherHats/master";
+        private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
 
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
 
