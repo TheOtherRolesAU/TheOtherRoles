@@ -61,7 +61,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
 - Changed Lovers to ignore Lover's Tasks for Taskwin, while an ImpLover is alive
-- Fixed a bug where garlic was not visible in some places
+- The Security Guard can't place cameras on MiraHQ anymore
+- Fixed a bug on Airship, where the view of the cameras that the Security Guard placed wasn't centered on the camera.
 
 **Version 2.5.0**
 - **New Role:** [Security Guard](#security-guard)
@@ -884,6 +885,7 @@ The new camera will be visible after the next meeting and accessible by everyone
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**
 - Tickster boxes can't be sealed
+- The Security Guard can't place Cameras on MiraHQ
 - The remaining number of screws can be seen above his special button
 - On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
