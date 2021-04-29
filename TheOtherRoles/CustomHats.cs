@@ -198,7 +198,7 @@ namespace TheOtherRoles {
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
                         if (hats.Count > 0) {
-                            __instance.Hat = CreateHatBehaviour(hats[0], true, true);;
+                            __instance.Hat = CreateHatBehaviour(hats[0], true, true);
                             __instance.SetHat(color);
                         }
                     } catch (System.Exception e) {

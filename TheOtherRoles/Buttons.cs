@@ -682,7 +682,13 @@ namespace TheOtherRoles
             // SecurityGuard button
             securityGuardButton = new CustomButton(
                 () => {
-                    if (SecurityGuard.ventTarget == null) { // Place camera
+                    if (SecurityGuard.ventTarget != null) { // Seal vent
+                        MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SealVent, Hazel.SendOption.Reliable);
+                        writer.WritePacked(SecurityGuard.ventTarget.Id);
+                        writer.EndMessage();
+                        RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
+                        SecurityGuard.ventTarget = null;
+                    } else if (PlayerControl.GameOptions.MapId != 1) { // Place camera if there's no vent and it's not MiraHQ
                         var pos = PlayerControl.LocalPlayer.transform.position;
                         byte[] buff = new byte[sizeof(float) * 2];
                         Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
@@ -692,20 +698,17 @@ namespace TheOtherRoles
                         writer.WriteBytesAndSize(buff);
                         writer.EndMessage();
                         RPCProcedure.placeCamera(buff); 
-                    } else { // Seal vent
-                        MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SealVent, Hazel.SendOption.Reliable);
-                        writer.WritePacked(SecurityGuard.ventTarget.Id);
-                        writer.EndMessage();
-                        RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
-                        SecurityGuard.ventTarget = null;
                     }
                     securityGuardButton.Timer = securityGuardButton.MaxTimer;
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    securityGuardButton.killButtonManager.renderer.sprite = (SecurityGuard.ventTarget == null) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
+                    securityGuardButton.killButtonManager.renderer.sprite = (SecurityGuard.ventTarget == null && PlayerControl.GameOptions.MapId != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
                     if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
-                    return SecurityGuard.remainingScrews >= (SecurityGuard.ventTarget == null ? SecurityGuard.camPrice : SecurityGuard.ventPrice) && PlayerControl.LocalPlayer.CanMove;
+
+                    if (SecurityGuard.ventTarget != null)
+                        return SecurityGuard.remainingScrews >= SecurityGuard.ventPrice && PlayerControl.LocalPlayer.CanMove;
+                    return PlayerControl.GameOptions.MapId != 1 && SecurityGuard.remainingScrews >= SecurityGuard.camPrice && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
                 SecurityGuard.getPlaceCameraButtonSprite(),
