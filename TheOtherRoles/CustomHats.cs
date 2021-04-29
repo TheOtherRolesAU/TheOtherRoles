@@ -1,15 +1,26 @@
+extern alias Il2CppNewtonsoft;
 using System;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
+using Il2CppSystem;
 using HarmonyLib;
 using UnityEngine;
-using System.Collections.Generic;
+using UnhollowerBaseLib;
 using System.IO;
 using System.Reflection;
 using System.Collections;
-using UnhollowerBaseLib;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
+using Il2CppNewtonsoft::Newtonsoft.Json.Linq;
+using Il2CppNewtonsoft::Newtonsoft.Json;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -17,14 +28,31 @@ namespace TheOtherRoles {
         private static bool LOADED = false;
         public static Material hatShader;
 
-        protected internal struct CustomHat { 
-            public string name;
-            public string resource;
-            public string backresource;
-            public string climbresource;
-            public bool bounce;
-            public bool adaptive;
-            public bool behind;
+        public static Dictionary<string, HatExtension> CustomHatRegistry = new Dictionary<string, HatExtension>();
+
+        public class HatExtension {
+            public string author { get; set;}
+            public string package { get; set;}
+            public string condition { get; set;}
+
+            public bool isUnlocked() {
+                if (condition == null || condition.ToLower() == "none") 
+                    return true;
+                return false;
+            }
+        }
+
+        public class CustomHat { 
+            public string author { get; set;}
+            public string package { get; set;}
+            public string condition { get; set;}
+            public string name { get; set;}
+            public string resource { get; set;}
+            public string backresource { get; set;}
+            public string climbresource { get; set;}
+            public bool bounce { get; set;}
+            public bool adaptive { get; set;}
+            public bool behind { get; set;}
         }
 
         private static List<CustomHat> createCustomHatDetails(string[] hats, bool fromDisk = false) {
@@ -44,7 +72,6 @@ namespace TheOtherRoles {
                     climbs.Add(p[0], hats[i]);
                 if (options.Contains("back"))
                     backs.Add(p[0], hats[i]);
-                
                 if (!options.Contains("back") && !options.Contains("climb")) {
                     CustomHat custom = new CustomHat { resource = hats[i] };
                     custom.name = p[0].Replace('-', ' ');
@@ -60,10 +87,16 @@ namespace TheOtherRoles {
 
             foreach (string k in fronts.Keys) {
                 CustomHat hat = fronts[k];
-                backs.TryGetValue(k, out hat.backresource);
-                climbs.TryGetValue(k, out hat.climbresource);
+                string br, cr;
+                backs.TryGetValue(k, out br);
+                climbs.TryGetValue(k, out cr);
+                if (br != null)
+                    hat.backresource = br;
+                if (cr != null)
+                    hat.climbresource = cr;
                 if (hat.backresource != null)
                     hat.behind = true;
+
                 customhats.Add(hat);
             }
 
@@ -75,11 +108,22 @@ namespace TheOtherRoles {
             return texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
         }
 
-        private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false) {
+        private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
+            if (hatShader == null && DestroyableSingleton<HatManager>.InstanceExists) {
+                foreach (HatBehaviour h in DestroyableSingleton<HatManager>.Instance.AllHats) {
+                    if (h.AltShader != null) {
+                        hatShader = h.AltShader;
+                        break;
+                    }
+                }
+            }
+
             HatBehaviour hat = new HatBehaviour();
             hat.MainImage = CreateHatSprite(ch.resource, fromDisk);
-            if (ch.backresource != null)
+            if (ch.backresource != null) {
                 hat.BackImage = CreateHatSprite(ch.backresource, fromDisk);
+                ch.behind = true; // Required to view backresource
+            }
             if (ch.climbresource != null)
                 hat.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
             hat.name = ch.name;
@@ -87,23 +131,31 @@ namespace TheOtherRoles {
             hat.ProductId = "hat_" + ch.name.Replace(' ', '_');
             hat.InFront = !ch.behind;
             hat.NoBounce = !ch.bounce;
-            hat.ChipOffset = new Vector2(0f, 0.35f);
+            hat.ChipOffset = new Vector2(0f, 0.2f);
 
             if (ch.adaptive && hatShader != null)
                 hat.AltShader = hatShader;
 
+            if (!testOnly) {
+                HatExtension extend = new HatExtension();
+                extend.author = ch.author != null ? ch.author : "Unknown";
+                extend.package = ch.package != null ? ch.package : "Misc.";
+                extend.condition = ch.condition != null ? ch.condition : "none";
+
+                CustomHatRegistry.Add(hat.name, extend);
+            }
+
             return hat;
         }
 
-        private static void loadHatShader() {
-            if (hatShader != null || !DestroyableSingleton<HatManager>.InstanceExists) return;
-
-            foreach (HatBehaviour hat in DestroyableSingleton<HatManager>.Instance.AllHats) {
-                if (hat.AltShader != null) {
-                    hatShader = hat.AltShader;
-                    break;
-                }
-            }
+        private static HatBehaviour CreateHatBehaviour(CustomHatLoader.CustomHatOnline chd) {
+            string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\";
+            chd.resource = filePath + chd.resource;
+            if (chd.backresource != null)
+                chd.backresource = filePath + chd.backresource;
+            if (chd.climbresource != null)
+                chd.climbresource = filePath + chd.climbresource;
+            return CreateHatBehaviour(chd, true);
         }
 
         [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
@@ -111,8 +163,6 @@ namespace TheOtherRoles {
             static bool Prefix(HatManager __instance) {
                 try {
                     if (!LOADED) {
-                        loadHatShader();
-
                         Assembly assembly = Assembly.GetExecutingAssembly();
                         string hatres = $"{assembly.GetName().Name}.Resources.CustomHats";
                         string[] hats = (from r in assembly.GetManifestResourceNames()
@@ -123,17 +173,22 @@ namespace TheOtherRoles {
                         foreach (CustomHat ch in customhats)
                             __instance.AllHats.Add(CreateHatBehaviour(ch));
 
+                        while (CustomHatLoader.hatdetails.Count > 0) {
+                            __instance.AllHats.Add(CreateHatBehaviour(CustomHatLoader.hatdetails[0]));
+                            CustomHatLoader.hatdetails.RemoveAt(0);
+                        }
+
                         LOADED = true;
                     }
                     return true;
-                } catch (Exception e) {
+                } catch (System.Exception e) {
                     System.Console.WriteLine("Unable to add Custom Hats\n" + e);
                     return false;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new Type[] { typeof(uint), typeof(int) })]
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(uint), typeof(int) })]
         private static class HatParentSetHatPatch {
             static void Postfix(HatParent __instance, [HarmonyArgument(0)]uint hatId, [HarmonyArgument(1)]int color) {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
@@ -141,13 +196,12 @@ namespace TheOtherRoles {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
                         DirectoryInfo d = new DirectoryInfo(filePath);
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
-                        List<CustomHat> customHats = createCustomHatDetails(filePaths, true);
-                        if (customHats.Count > 0) {
-                            loadHatShader();
-                            __instance.Hat = CreateHatBehaviour(customHats[0], true);
+                        List<CustomHat> hats = createCustomHatDetails(filePaths, true);
+                        if (hats.Count > 0) {
+                            __instance.Hat = CreateHatBehaviour(hats[0], true, true);
                             __instance.SetHat(color);
                         }
-                    } catch (Exception e) {
+                    } catch (System.Exception e) {
                         System.Console.WriteLine("Unable to create test hat\n" + e);
                     }
                 }
@@ -280,6 +334,7 @@ namespace TheOtherRoles {
     public class CustomHatLoader {
         public bool running = false;
         private const string REPO = "https://raw.githubusercontent.com/thunderstorm584/TheOtherHats/master";
+        //private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
 
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
 
