@@ -305,7 +305,6 @@ namespace TheOtherRoles {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
                     YOffset += createHatPackage(value, key, YOffset, __instance);
                 }
-                System.Console.WriteLine(__instance.YOffset);
                 __instance.scroller.YBounds.max = (YOffset - 0.6f) * -0.75f;
                 return false;
             }
