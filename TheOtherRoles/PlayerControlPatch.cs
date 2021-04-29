@@ -20,7 +20,8 @@ namespace TheOtherRoles {
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
             if (!ShipStatus.Instance) return result;
             if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
-
+            if (targetingPlayer.Data.IsDead) return result;
+		
             Vector2 truePosition = targetingPlayer.GetTruePosition();
             Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
             for (int i = 0; i < allPlayers.Count; i++)
@@ -338,8 +339,6 @@ namespace TheOtherRoles {
         }
 
         public static void updateGhostInfo() {
-            if (!MapOptions.showGhostInfo) return;
-
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
 
@@ -365,9 +364,37 @@ namespace TheOtherRoles {
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                 string roleNames = String.Join(", ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
-                playerGhostInfo.text = $"{roleNames} {taskInfo}".Trim();
-                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : $"{roleNames} {taskInfo}".Trim();
+                
+                string info = "";
+                if (p == PlayerControl.LocalPlayer || (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks))
+                    info = $"{roleNames} {taskInfo}".Trim();
+                else if (MapOptions.ghostsSeeTasks)
+                    info = $"{taskInfo}".Trim();
+                else if (MapOptions.ghostsSeeRoles)
+                    info = $"{roleNames}";
+
+                playerGhostInfo.text = info;
+                playerGhostInfo.gameObject.SetActive(p.Visible);
+                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : info;
             }
+        }
+
+        public static void securityGuardSetTarget() {
+            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
+
+            Vent target = null;
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            float closestDistance = float.MaxValue;
+            for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
+                Vent vent = ShipStatus.Instance.AllVents[i];
+                if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_")) continue;
+                float distance = Vector2.Distance(vent.transform.position, truePosition);
+                if (distance <= vent.UsableDistance && distance < closestDistance) {
+                    closestDistance = distance;
+                    target = vent;
+                }
+            }
+            SecurityGuard.ventTarget = target;
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -419,6 +446,8 @@ namespace TheOtherRoles {
                 warlockSetTarget();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
+                // SecurityGuard
+                securityGuardSetTarget();
             } 
         }
     }
@@ -452,23 +481,20 @@ namespace TheOtherRoles {
             }
         }
     }
-    [HarmonyPatch(typeof(KillButtonManager), nameof(KillButtonManager.PerformKill))]
-    class PerformKillPatch {
-        public static bool Prefix(KillButtonManager __instance) {
-            if (__instance.isActiveAndEnabled && __instance.CurrentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) { // Among Us default checks
-                if (Helpers.handleMurderAttempt(__instance.CurrentTarget)) { // Custom checks
-                    if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
-                        writer.Write(__instance.CurrentTarget.PlayerId);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, __instance.CurrentTarget.PlayerId);
-                    } else { // Checked by official servers
-                        PlayerControl.LocalPlayer.RpcMurderPlayer(__instance.CurrentTarget);
-                    }
-                    __instance.SetTarget(null);
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcMurderPlayer))]
+    class RpcMurderPlayer {
+        public static bool Prefix([HarmonyArgument(0)]PlayerControl target) {
+            if (Helpers.handleMurderAttempt(target)) { // Custom checks
+                if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, target.PlayerId);
+                } else { // Checked by official servers
+                    return true;
                 }
-		    }
+            }
             return false;
         }
     }

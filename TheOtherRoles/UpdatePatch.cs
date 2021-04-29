@@ -114,6 +114,8 @@ namespace TheOtherRoles
             }
             else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Spy.spy, Spy.color);
+            } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
             }
             
             // No else if here, as a Lover of team Jackal needs the colors
@@ -131,7 +133,7 @@ namespace TheOtherRoles
             }
 
             // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock and Mafioso
         }
 
         static void setMafiaNameTags() {

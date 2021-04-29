@@ -19,10 +19,10 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string Version = "2.4.0";
+        public const string Version = "2.5.1";
         public const byte Major = 2;
-        public const byte Minor = 4;
-        public const byte Patch = 0;
+        public const byte Minor = 5;
+        public const byte Patch = 1;
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
@@ -31,6 +31,9 @@ namespace TheOtherRoles
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<bool> StreamerMode { get; set; }
+        public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
+        public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
+        public static ConfigEntry<bool> HostSeesVotesLog { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
@@ -49,8 +52,13 @@ namespace TheOtherRoles
         }
 
         public override void Load() {
-            DebugMode  = Config.Bind("Custom", "Enable Debug Mode", false);
-            StreamerMode  = Config.Bind("Custom", "Enable Streamer Mode", false);
+            new CustomHatLoader().LaunchHatFetcher();
+        
+            DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
+            StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
+            GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
+            GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
+            HostSeesVotesLog = Config.Bind("Custom", "Host Sees Votes Log", false);
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
@@ -85,8 +93,10 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
     public static class ChatControllerAwakePatch {
         private static void Prefix() {
-            SaveManager.chatModeType = 1;
-            SaveManager.isGuest = false;
+            if (!EOSManager.Instance.IsMinor()) {
+                SaveManager.chatModeType = 1;
+                SaveManager.isGuest = false;
+            }
         }
     }
     
