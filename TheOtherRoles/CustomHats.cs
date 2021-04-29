@@ -217,17 +217,19 @@ namespace TheOtherRoles {
                     TMPro.TMP_Text title = UnityEngine.Object.Instantiate<TMPro.TMP_Text>(textTemplate, __instance.scroller.Inner);
                     title.transform.localPosition = new Vector3(2.25f, YStart, -1f);
                     title.transform.localScale = Vector3.one * 1.5f;
+                    // title.currentFontSize
+                    title.fontSize *= 0.5f;
+                    title.enableAutoSizing = false;
                     __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { title.SetText(packageName); })));
-                    offset -= __instance.YOffset;
+                    offset -= 0.8f * __instance.YOffset;
                     hatsTabCustomTexts.Add(title);
                 }
-
                 for (int i = 0; i < hats.Count; i++) {
                     HatBehaviour hat = hats[i].Item1;
                     HatExtension ext = hats[i].Item2;
 
-                    float num = __instance.XRange.Lerp((float)(i % __instance.NumPerRow) / ((float)__instance.NumPerRow - 1f));
-                    float num2 = offset - (float)(i / __instance.NumPerRow) * __instance.YOffset * (isDefaultPackage ? 1f : 1.5f);
+                    float xpos = __instance.XRange.Lerp((i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
+                    float ypos = offset - i / __instance.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
                     if (ext != null) {
                         Transform background = colorChip.transform.FindChild("Background");
@@ -256,14 +258,14 @@ namespace TheOtherRoles {
                         }
                     }
                     
-                    colorChip.transform.localPosition = new Vector3(num, num2, -1f);
+                    colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
                     colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => { __instance.SelectHat(hat); }));
                     colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.ColorId);
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
                     __instance.ColorChips.Add(colorChip);
                 }
-                return offset - (float)(1 + (hats.Count - 1) / __instance.NumPerRow) * __instance.YOffset * (isDefaultPackage ? 1f : 1.5f);
+                return offset - ((hats.Count - 1) / __instance.NumPerRow * (isDefaultPackage ? 1f : 1.5f) + 0.7f) * __instance.YOffset;
             }
 
             public static bool Prefix(HatsTab __instance) {
@@ -303,8 +305,8 @@ namespace TheOtherRoles {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
                     YOffset += createHatPackage(value, key, YOffset, __instance);
                 }
-
-                __instance.scroller.YBounds.max = -0.75f * YOffset;
+                System.Console.WriteLine(__instance.YOffset);
+                __instance.scroller.YBounds.max = (YOffset - 0.6f) * -0.75f;
                 return false;
             }
         }
