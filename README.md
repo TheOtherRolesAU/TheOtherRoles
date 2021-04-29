@@ -61,6 +61,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
 - Fixed a bug where garlics where not visible in some places
+- Changed garlic rendering to fix an issue, where garlic was not visible
+- Changed Lovers to ignore Lover's Tasks for Taskwin, while an ImpLover is alive
 
 **Version 2.5.0**
 - **New Role:** [Security Guard](#security-guard)
@@ -520,6 +522,7 @@ The Lovers never know the role of their partner, they only see who their partner
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are Crewmates, they can achieve a "double victory" but the Crewmates then also win.\
 If one Lover is an Impostor and one a Crewmate, they can only get a "Lovers solo win" where only they win (even if there is another Impostor alive).\
+If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
 - If there is an equal amount of Impostors and Crewmates left in the game and one of the Lovers is an Impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
