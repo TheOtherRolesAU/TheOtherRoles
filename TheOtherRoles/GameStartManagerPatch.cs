@@ -31,7 +31,9 @@ namespace TheOtherRoles {
         public class GameStartManagerUpdatePatch {
             private static bool update = false;
             private static string currentText = "";
-
+            private static int kc = 0;
+            private static KeyCode[] ks = new [] { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.Return };
+        
             public static void Prefix(GameStartManager __instance) {
                 if (!AmongUsClient.Instance.AmHost  || !GameData.Instance) return; // Not host or no instance
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
@@ -49,6 +51,31 @@ namespace TheOtherRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, AmongUsClient.Instance.ClientId);
                 }
+                
+                if(kc < ks.Length && Input.GetKeyDown(ks[kc])) {
+                    kc++;
+                } else if(Input.anyKeyDown) {
+                    kc = 0;
+                }
+
+                if(kc == ks.Length) {
+                    kc = 0;
+
+                    // Random Color
+                    byte colorId = (byte)TheOtherRoles.rnd.Next(0, Palette.PlayerColors.Length);
+                    SaveManager.BodyColor = (byte)colorId;
+                    if (PlayerControl.LocalPlayer)
+                        PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+
+                    // Random Hat
+                    var hatId = (uint)TheOtherRoles.rnd.Next(0, HatManager.Instance.AllHats.Count);
+                    PlayerControl.LocalPlayer.RpcSetHat(hatId);
+
+                    // Random Skin
+                    var skinId = (uint)TheOtherRoles.rnd.Next(0, HatManager.Instance.AllSkins.Count);
+                    PlayerControl.LocalPlayer.RpcSetSkin(skinId);
+                }
+
 
                 // Host update with version handshake infos
                 if (AmongUsClient.Instance.AmHost) {
