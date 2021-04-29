@@ -60,6 +60,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
+- Changed Lovers to ignore Lover's Tasks for Taskwin, while an ImpLover is alive
 - Fixed a bug where garlics where not visible in some places
 
 **Version 2.5.0**
