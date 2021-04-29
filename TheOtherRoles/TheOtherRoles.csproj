@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>2.5.0</Version>
+        <Version>2.3.0</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
     </PropertyGroup>
@@ -10,6 +10,7 @@
         <GameVersion>2021.4.14s</GameVersion>
         <Mappings>EoF-1141/Mappings:0.4.1</Mappings>
         <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,4 +26,11 @@
     <Target Name="Copy" AfterTargets="Reobfuscate">
         <Copy SourceFiles="$(OutputPath)reobfuscated/$(AssemblyName)-$(GameVersion).dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
     </Target>
+    <!-- il2cpp newtonsoft -->
+	<ItemGroup>
+		<Reference Include="Newtonsoft.Json, Version=3.7.1.6">
+			<HintPath>$(AmongUs)\BepInEx\unhollowed\Newtonsoft.Json.dll</HintPath>
+			<Aliases>Il2CppNewtonsoft</Aliases>
+		</Reference>
+	</ItemGroup>
 </Project>

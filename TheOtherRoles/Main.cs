@@ -52,6 +52,8 @@ namespace TheOtherRoles
         }
 
         public override void Load() {
+            new CustomHatLoader().LaunchHatFetcher();
+        
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
