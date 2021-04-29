@@ -614,7 +614,7 @@ namespace TheOtherRoles
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z - 1f);
-            camera.CamName = $"Security Guard Camera {SecurityGuard.placedCameras}";
+            camera.CamName = $"Security Camera {SecurityGuard.placedCameras}";
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
             camera.gameObject.SetActive(false);
             MapOptions.camerasToAdd.Add(camera);
