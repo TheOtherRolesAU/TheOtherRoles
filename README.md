@@ -18,10 +18,11 @@ Even more roles are coming soon :)
 | [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
 | [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
 | [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
-| [Morphling](#morphling) | [Seer](#seer) |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) |  |
-| [Vampire](#vampire) | [Shifter](#shifter) |  |
-| [Warlock](#warlock) | [Snitch](#snitch) |  |
+| [Morphling](#morphling) | [Security Guard](#security-guard) |  |
+| [Trickster](#trickster) | [Seer](#seer) |  |
+| [Vampire](#vampire) | [Sheriff](#sheriff) |  |
+| [Warlock](#warlock) | [Shifter](#shifter) |  |
+|  | [Snitch](#snitch) |  |
 |  | [Spy](#spy) |  |
 |  | [Swapper](#swapper) |  |
 |  | [Time Master](#time-master) |  |
