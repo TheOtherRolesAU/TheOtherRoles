@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.5.0.png)
+![eisbison infographic](./Images/Preview_2.5.1.png)
 
 
 # The Other Roles
