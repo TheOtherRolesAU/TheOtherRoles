@@ -336,15 +336,15 @@ namespace TheOtherRoles {
         private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
 
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
-
+        private static Task hatFetchTask = null;
         public static void LaunchHatFetcher() {
             if (running)
                 return;
             running = true;
-            LaunchHatFetcherAsync();
+            hatFetchTask = LaunchHatFetcherAsync();
         }
 
-        private static async void LaunchHatFetcherAsync() {
+        private static async Task LaunchHatFetcherAsync() {
             try {
                 HttpStatusCode status = await FetchHats();
                 if (status != HttpStatusCode.OK)
@@ -369,22 +369,16 @@ namespace TheOtherRoles {
         public static async Task<HttpStatusCode> FetchHats() {
             HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue{ NoCache = true };
-			var got = http.GetAsync(new System.Uri($"{REPO}/CustomHats.json"), HttpCompletionOption.ResponseContentRead);
-			HttpResponseMessage res = got.Result;
+			var response = await http.GetAsync(new System.Uri($"{REPO}/CustomHats.json"), HttpCompletionOption.ResponseContentRead);
             try {
-                if (res.Content == null) {
-                    System.Console.WriteLine("Server returned no data: " + res.StatusCode.ToString());
+                if (response.StatusCode != HttpStatusCode.OK) return response.StatusCode;
+                if (response.Content == null) {
+                    System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
                     return HttpStatusCode.ExpectationFailed;
                 }
-                if (res.StatusCode != HttpStatusCode.OK) 
-                    return res.StatusCode;
-
-                string json = await res.Content.ReadAsStringAsync();
-                // System.Console.WriteLine(json);
-
+                string json = await response.Content.ReadAsStringAsync();
                 JToken jobj = JObject.Parse(json)["hats"];
-                if (!jobj.HasValues) 
-                    return HttpStatusCode.ExpectationFailed;
+                if (!jobj.HasValues) return HttpStatusCode.ExpectationFailed;
 
                 List<CustomHatOnline> hatdatas = new List<CustomHatOnline>();
 
@@ -424,21 +418,20 @@ namespace TheOtherRoles {
                         markedfordownload.Add(data.climbresource);
                 }
                 
-                markedfordownload.AsParallel().ForAll(file => {
-                    System.Uri url = new System.Uri($"{REPO}/hats/{file}");
-                    // System.Console.WriteLine($"Downloading {file}");
-                    var fres = http.GetAsync(url, HttpCompletionOption.ResponseContentRead);
-                    if (fres.Result.StatusCode != HttpStatusCode.OK)
-                        return;
-                    using (var resStream = fres.Result.Content.ReadAsStreamAsync().Result) {
+                foreach(var file in markedfordownload) {
+                    
+                    var hatFileResponse = await http.GetAsync($"{REPO}/hats/{file}", HttpCompletionOption.ResponseContentRead);
+                    if (hatFileResponse.StatusCode != HttpStatusCode.OK) continue;
+                    using (var responseStream = await hatFileResponse.Content.ReadAsStreamAsync()) {
                         using (var fileStream = File.Create($"{filePath}\\{file}")) {
-                            resStream.CopyTo(fileStream);
+                            responseStream.CopyTo(fileStream);
                         }
                     }
-                });
+                }
 
                 hatdetails = hatdatas;
             } catch (System.Exception ex) {
+                TheOtherRolesPlugin.Instance.Log.LogError(ex.ToString());
                 System.Console.WriteLine(ex);
             }
             return HttpStatusCode.OK;
