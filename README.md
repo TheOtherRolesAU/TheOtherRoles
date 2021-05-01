@@ -881,7 +881,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 ## Security Guard
 ### **Team: Crewmates**
 The Security Guard is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
-Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a SecurityGuard has can also be configured.\
+Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**
