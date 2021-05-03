@@ -333,8 +333,8 @@ namespace TheOtherRoles {
 
     public class CustomHatLoader {
         public bool running = false;
-        private const string REPO = "https://raw.githubusercontent.com/thunderstorm584/TheOtherHats/master";
-        //private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
+        
+        private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
 
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
 
