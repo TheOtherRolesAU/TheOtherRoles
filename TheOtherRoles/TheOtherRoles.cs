@@ -898,8 +898,8 @@ namespace TheOtherRoles
             return igniteSprite;
         }
 
-        public static bool douseEveryoneAlive() {
-            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsionist.arsionist || Arsionist.dousedPlayers.Contains(x) || x.Data.IsDead; });
+        public static bool dousedEveryoneAlive() {
+            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsionist.arsionist || x.Data.IsDead || Arsionist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
         }
 
         public static void clearAndReload() {

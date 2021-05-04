@@ -400,7 +400,7 @@ namespace TheOtherRoles {
         public static void arsionistSetTarget() {
             if (Arsionist.arsionist == null || Arsionist.arsionist != PlayerControl.LocalPlayer) return;
             Arsionist.currentTarget = setTarget();
-            if (!Arsionist.dousedPlayers.Contains(Arsionist.currentTarget)) setPlayerOutline(Arsionist.currentTarget, Arsionist.color);
+            if (Arsionist.currentTarget != null && !Arsionist.dousedPlayers.Any(x => x.PlayerId == Arsionist.currentTarget.PlayerId)) setPlayerOutline(Arsionist.currentTarget, Arsionist.color);
         }
 
         public static void Postfix(PlayerControl __instance) {

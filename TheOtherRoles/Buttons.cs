@@ -730,7 +730,7 @@ namespace TheOtherRoles
             // Arsionist button
             arsionistButton = new CustomButton(
                 () => {
-                    bool dousedEveryoneAlive = Arsionist.douseEveryoneAlive();
+                    bool dousedEveryoneAlive = Arsionist.dousedEveryoneAlive();
                     if (dousedEveryoneAlive) {
                         // TODO: Trigger win
                         arsionistButton.HasEffect = false;
@@ -741,7 +741,7 @@ namespace TheOtherRoles
                 },
                 () => { return Arsionist.arsionist != null && Arsionist.arsionist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    bool dousedEveryoneAlive = Arsionist.douseEveryoneAlive();
+                    bool dousedEveryoneAlive = Arsionist.dousedEveryoneAlive();
                     if (dousedEveryoneAlive) arsionistButton.killButtonManager.renderer.sprite = Arsionist.getIgniteSprite();
                     
                     if (arsionistButton.isEffectActive && Arsionist.douseTarget != Arsionist.currentTarget) {
@@ -766,7 +766,7 @@ namespace TheOtherRoles
                 () => {
                     if (Arsionist.douseTarget != null) Arsionist.dousedPlayers.Add(Arsionist.douseTarget);
                     Arsionist.douseTarget = null;
-                    arsionistButton.Timer = arsionistButton.MaxTimer;
+                    arsionistButton.Timer = Arsionist.dousedEveryoneAlive() ? 0 : arsionistButton.MaxTimer;
                 }
             );
 
