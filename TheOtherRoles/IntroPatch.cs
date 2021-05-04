@@ -7,12 +7,39 @@ using System.Linq;
 
 namespace TheOtherRoles
 {
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+    class IntroCutsceneOnDestroyPatch {
+        public static void Prefix(IntroCutscene __instance) {
+            // Arsionist generate player icons
+            if (PlayerControl.LocalPlayer == Arsionist.arsionist && HudManager.Instance != null) {
+                int playerCounter = 0;
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                    if (player != PlayerControl.LocalPlayer) {
+                        GameData.PlayerInfo data = player.Data;
+                        PoolablePlayer poolablePlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, null);
+                        poolablePlayer.transform.localPosition = new Vector3(playerCounter * -0.5f, 0f, 1f);
+                        poolablePlayer.transform.localScale = Vector3.one * 0.5f;
+                        PlayerControl.SetPlayerMaterialColors(data.ColorId, poolablePlayer.Body);
+                        DestroyableSingleton<HatManager>.Instance.SetSkin(poolablePlayer.SkinSlot, data.SkinId);
+                        poolablePlayer.HatSlot.SetHat(data.HatId, data.ColorId);
+                        PlayerControl.SetPetImage(data.PetId, data.ColorId, poolablePlayer.PetSlot);
+                        poolablePlayer.NameText.text = "";
+                        poolablePlayer.SetFlipX(true);
+
+                        Arsionist.remainingIcons[player.PlayerId] = poolablePlayer;
+                        playerCounter++;
+                    }
+                }
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(IntroCutscene.Nested_0), nameof(IntroCutscene.Nested_0.MoveNext))]
     class IntroPatch
     {
-        // Intro special teams
         static void Prefix(IntroCutscene.Nested_0 __instance)
         {
+            // Intro solo teams
             if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsionist.arsionist) {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(PlayerControl.LocalPlayer);
