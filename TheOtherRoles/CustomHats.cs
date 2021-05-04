@@ -332,30 +332,30 @@ namespace TheOtherRoles {
     }
 
     public class CustomHatLoader {
-        public bool running = false;
+        public static bool running = false;
         private const string REPO = "https://raw.githubusercontent.com/Eisbison/TheOtherHats/master";
 
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
-
-        public void LaunchHatFetcher() {
-            if (this.running)
+        private static Task hatFetchTask = null;
+        public static void LaunchHatFetcher() {
+            if (running)
                 return;
-            this.running = true;
-            this.LaunchHatFetcherAsync();
+            running = true;
+            hatFetchTask = LaunchHatFetcherAsync();
         }
 
-        private async void LaunchHatFetcherAsync() {
+        private static async Task LaunchHatFetcherAsync() {
             try {
-                HttpStatusCode status = await this.FetchHats();
+                HttpStatusCode status = await FetchHats();
                 if (status != HttpStatusCode.OK)
                     System.Console.WriteLine("Custom Hats could not be loaded\n");
             } catch (System.Exception e) {
                 System.Console.WriteLine("Unable to fetch hats\n" + e.Message);
             }
-            this.running = false;
+            running = false;
         }
 
-        private string sanitizeResourcePath(string res) {
+        private static string sanitizeResourcePath(string res) {
             if (res == null || !res.EndsWith(".png")) 
                 return null;
 
@@ -366,91 +366,78 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public async Task<HttpStatusCode> FetchHats() {
-            using (HttpClient http = new HttpClient()) {
-                http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue{ NoCache = true };
-                using (HttpRequestMessage msg = new HttpRequestMessage()) {
-                    msg.Method = HttpMethod.Get;
-                    msg.RequestUri = new System.Uri($"{REPO}/CustomHats.json");
-                    HttpResponseMessage httpResponseMessage = await http.SendAsync(msg);
-                    using (HttpResponseMessage res = httpResponseMessage) {
-                        try {
-                            if (res.Content == null) {
-                                System.Console.WriteLine("Server returned no data: " + res.StatusCode.ToString());
-                                return HttpStatusCode.ExpectationFailed;
-                            }
-                            if (res.StatusCode != HttpStatusCode.OK) 
-                                return res.StatusCode;
+        public static async Task<HttpStatusCode> FetchHats() {
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue{ NoCache = true };
+			var response = await http.GetAsync(new System.Uri($"{REPO}/CustomHats.json"), HttpCompletionOption.ResponseContentRead);
+            try {
+                if (response.StatusCode != HttpStatusCode.OK) return response.StatusCode;
+                if (response.Content == null) {
+                    System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
+                    return HttpStatusCode.ExpectationFailed;
+                }
+                string json = await response.Content.ReadAsStringAsync();
+                JToken jobj = JObject.Parse(json)["hats"];
+                if (!jobj.HasValues) return HttpStatusCode.ExpectationFailed;
 
-                            string json = await res.Content.ReadAsStringAsync();
-                            // System.Console.WriteLine(json);
+                List<CustomHatOnline> hatdatas = new List<CustomHatOnline>();
 
-                            JToken jobj = JObject.Parse(json)["hats"];
-                            if (!jobj.HasValues) 
-                                return HttpStatusCode.ExpectationFailed;
+                for (JToken current = jobj.First; current != null; current = current.Next) {
+                    if (current.HasValues) {
+                        CustomHatOnline info = new CustomHatOnline();
 
-                            List<CustomHatOnline> hatdatas = new List<CustomHatOnline>();
+                        info.name = current["name"]?.ToString();
+                        info.resource = sanitizeResourcePath(current["resource"]?.ToString());
+                        if (info.resource == null || info.name == null) // required
+                            continue;
+                        info.reshasha = current["reshasha"]?.ToString();
+                        info.backresource = sanitizeResourcePath(current["backresource"]?.ToString());
+                        info.reshashb = current["reshashb"]?.ToString();
+                        info.climbresource = sanitizeResourcePath(current["climbresource"]?.ToString());
+                        info.reshashc = current["reshashc"]?.ToString();
+                        info.author = current["author"]?.ToString();
+                        info.package = current["package"]?.ToString();
+                        info.condition = current["condition"]?.ToString();
+                        info.bounce = current["bounce"] != null;
+                        info.adaptive = current["adaptive"] != null;
+                        info.behind = current["behind"] != null;
+                        hatdatas.Add(info);
+                    }
+                }
 
-                            for (JToken current = jobj.First; current != null; current = current.Next) {
-                                if (current.HasValues) {
-                                    CustomHatOnline info = new CustomHatOnline();
+                List<string> markedfordownload = new List<string>();
 
-                                    info.name = current["name"]?.ToString();
-                                    info.resource = sanitizeResourcePath(current["resource"]?.ToString());
-                                    if (info.resource == null || info.name == null) // required
-                                        continue;
-                                    info.reshasha = current["reshasha"]?.ToString();
-                                    info.backresource = sanitizeResourcePath(current["backresource"]?.ToString());
-                                    info.reshashb = current["reshashb"]?.ToString();
-                                    info.climbresource = sanitizeResourcePath(current["climbresource"]?.ToString());
-                                    info.reshashc = current["reshashc"]?.ToString();
-                                    info.author = current["author"]?.ToString();
-                                    info.package = current["package"]?.ToString();
-                                    info.condition = current["condition"]?.ToString();
-                                    info.bounce = current["bounce"] != null;
-                                    info.adaptive = current["adaptive"] != null;
-                                    info.behind = current["behind"] != null;
-                                    hatdatas.Add(info);
-                                }
-                            }
-
-                            List<string> markedfordownload = new List<string>();
-
-                            string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\";
-                            using (MD5 md5 = MD5.Create()) {
-                                foreach (CustomHatOnline data in hatdatas) {
-    	                            if (doesResourceRequireDownload(filePath + data.resource, data.reshasha, md5))
-                                        markedfordownload.Add(data.resource);
-    	                            if (data.backresource != null && doesResourceRequireDownload(filePath + data.backresource, data.reshashb, md5))
-                                        markedfordownload.Add(data.backresource);
-    	                            if (data.climbresource != null && doesResourceRequireDownload(filePath + data.climbresource, data.reshashc, md5))
-                                        markedfordownload.Add(data.climbresource);
-                                }
-                            }
-                            markedfordownload.AsParallel().ForAll(file => {
-                                System.Uri url = new System.Uri($"{REPO}/hats/{file}");
-                                // System.Console.WriteLine($"Downloading {file}");
-                                var fres = http.GetAsync(url, HttpCompletionOption.ResponseContentRead);
-                                if (fres.Result.StatusCode != HttpStatusCode.OK)
-                                    return;
-                                using (var resStream = fres.Result.Content.ReadAsStreamAsync().Result) {
-                                    using (var fileStream = File.Create($"{filePath}\\{file}")) {
-                                        resStream.CopyTo(fileStream);
-                                    }
-                                }
-                            });
-
-                            hatdetails = hatdatas;
-                        } catch (System.Exception ex) {
-                            System.Console.WriteLine(ex);
+                string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\";
+                MD5 md5 = MD5.Create();
+                foreach (CustomHatOnline data in hatdatas) {
+    	            if (doesResourceRequireDownload(filePath + data.resource, data.reshasha, md5))
+                        markedfordownload.Add(data.resource);
+    	            if (data.backresource != null && doesResourceRequireDownload(filePath + data.backresource, data.reshashb, md5))
+                        markedfordownload.Add(data.backresource);
+    	            if (data.climbresource != null && doesResourceRequireDownload(filePath + data.climbresource, data.reshashc, md5))
+                        markedfordownload.Add(data.climbresource);
+                }
+                
+                foreach(var file in markedfordownload) {
+                    
+                    var hatFileResponse = await http.GetAsync($"{REPO}/hats/{file}", HttpCompletionOption.ResponseContentRead);
+                    if (hatFileResponse.StatusCode != HttpStatusCode.OK) continue;
+                    using (var responseStream = await hatFileResponse.Content.ReadAsStreamAsync()) {
+                        using (var fileStream = File.Create($"{filePath}\\{file}")) {
+                            responseStream.CopyTo(fileStream);
                         }
                     }
                 }
+
+                hatdetails = hatdatas;
+            } catch (System.Exception ex) {
+                TheOtherRolesPlugin.Instance.Log.LogError(ex.ToString());
+                System.Console.WriteLine(ex);
             }
             return HttpStatusCode.OK;
         }
 
-        private bool doesResourceRequireDownload(string respath, string reshash, MD5 md5) {
+        private static bool doesResourceRequireDownload(string respath, string reshash, MD5 md5) {
             if (reshash == null || !File.Exists(respath))
                 return true;
 
