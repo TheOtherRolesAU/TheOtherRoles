@@ -42,7 +42,8 @@ namespace TheOtherRoles
         Trickster,
         Cleaner,
         Warlock,
-        SecurityGuard
+        SecurityGuard,
+        Arsionist
     }
 
     enum CustomRPC
@@ -217,6 +218,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.SecurityGuard:
                         SecurityGuard.securityGuard = player;
+                        break;
+                    case RoleId.Arsionist:
+                        Arsionist.arsionist = player;
                         break;
                     }
                 }
@@ -394,6 +398,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
                 SecurityGuard.securityGuard = oldShifter;
+            } else if (Arsionist.arsionist != null && Arsionist.arsionist == player) {
+                Arsionist.arsionist = oldShifter;
             } else { // Crewmate
             }
             
@@ -553,6 +559,7 @@ namespace TheOtherRoles
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Arsionist.arsionist) Arsionist.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }

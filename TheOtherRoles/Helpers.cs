@@ -176,7 +176,7 @@ namespace TheOtherRoles {
         }
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick);
+            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsionist.arsionist);
         }
 
         public static void clearAllTasks(this PlayerControl player) {

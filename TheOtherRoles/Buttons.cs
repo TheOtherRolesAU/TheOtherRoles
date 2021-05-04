@@ -31,6 +31,7 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
+        public static CustomButton arsionistButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -56,6 +57,7 @@ namespace TheOtherRoles
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
+            arsionistButton.MaxTimer = Arsionist.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -63,7 +65,8 @@ namespace TheOtherRoles
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
-            lightsOutButton.EffectDuration = Trickster.lightsOutDuration; 
+            lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
+            arsionistButton.EffectDuration = Arsionist.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -716,13 +719,56 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.Q
             );
-
+            
             // SecurityGuard button screws counter
             securityGuardButtonScrewsText = GameObject.Instantiate(securityGuardButton.killButtonManager.TimerText, securityGuardButton.killButtonManager.TimerText.transform.parent);
             securityGuardButtonScrewsText.text = "";
             securityGuardButtonScrewsText.enableWordWrapping = false;
             securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
             securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
+            // Arsionist button
+            arsionistButton = new CustomButton(
+                () => {
+                    bool dousedEveryoneAlive = Arsionist.douseEveryoneAlive();
+                    if (dousedEveryoneAlive) {
+                        // TODO: Trigger win
+                        arsionistButton.HasEffect = false;
+                    } else if (Arsionist.currentTarget != null) {
+                        Arsionist.douseTarget = Arsionist.currentTarget;
+                        arsionistButton.HasEffect = true;              
+                    }
+                },
+                () => { return Arsionist.arsionist != null && Arsionist.arsionist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    bool dousedEveryoneAlive = Arsionist.douseEveryoneAlive();
+                    if (dousedEveryoneAlive) arsionistButton.killButtonManager.renderer.sprite = Arsionist.getIgniteSprite();
+                    
+                    if (arsionistButton.isEffectActive && Arsionist.douseTarget != Arsionist.currentTarget) {
+                        Arsionist.douseTarget = null;
+                        arsionistButton.Timer = 0f;
+                        arsionistButton.isEffectActive = false;
+                    }
+
+                    return PlayerControl.LocalPlayer.CanMove && (dousedEveryoneAlive || Arsionist.currentTarget != null);
+                },
+                () => {
+                    arsionistButton.Timer = arsionistButton.MaxTimer;
+                    arsionistButton.isEffectActive = false;
+                    Arsionist.douseTarget = null;
+                },
+                Arsionist.getDouseSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q,
+                true,
+                Arsionist.duration,
+                () => {
+                    if (Arsionist.douseTarget != null) Arsionist.dousedPlayers.Add(Arsionist.douseTarget);
+                    Arsionist.douseTarget = null;
+                    arsionistButton.Timer = arsionistButton.MaxTimer;
+                }
+            );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

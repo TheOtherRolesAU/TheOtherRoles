@@ -13,15 +13,10 @@ namespace TheOtherRoles
         // Intro special teams
         static void Prefix(IntroCutscene.Nested_0 __instance)
         {
-            if (PlayerControl.LocalPlayer == Jester.jester)
-            {
-                var jesterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                jesterTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = jesterTeam;
-            } else if (PlayerControl.LocalPlayer == Jackal.jackal) {
-                var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                jackalTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = jackalTeam;
+            if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsionist.arsionist) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(PlayerControl.LocalPlayer);
+                __instance.yourTeam = soloTeam;
             }
 
             // Add the Spy to the Impostor team (for the Impostors)

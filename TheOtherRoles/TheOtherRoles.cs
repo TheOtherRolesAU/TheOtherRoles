@@ -49,6 +49,7 @@ namespace TheOtherRoles
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
+            Arsionist.clearAndReload();
         }
 
         public static class Jester {
@@ -850,14 +851,14 @@ namespace TheOtherRoles
         private static Sprite animatedVentSealedSprite;
         public static Sprite getAnimatedVentSealedSprite() {
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f);
             return animatedVentSealedSprite;
         }
 
         private static Sprite staticVentSealedSprite;
         public static Sprite getStaticVentSealedSprite() {
             if (staticVentSealedSprite) return staticVentSealedSprite;
-            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f);
             return staticVentSealedSprite;
         }
 
@@ -869,6 +870,45 @@ namespace TheOtherRoles
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
             camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
             ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
+        }
+    }
+
+    public static class Arsionist {
+        public static PlayerControl arsionist;
+        public static Color color = new Color(1, 200f/255f, 0, 1f);
+
+        public static float cooldown = 30f;
+        public static float duration = 3f;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl douseTarget;
+        public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
+
+        private static Sprite douseSprite;
+        public static Sprite getDouseSprite() {
+            if (douseSprite) return douseSprite;
+            douseSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DouseButton.png", 115f);
+            return douseSprite;
+        }
+
+        private static Sprite igniteSprite;
+        public static Sprite getIgniteSprite() {
+            if (igniteSprite) return igniteSprite;
+            igniteSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.IgniteButton.png", 115f);
+            return igniteSprite;
+        }
+
+        public static bool douseEveryoneAlive() {
+            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsionist.arsionist || Arsionist.dousedPlayers.Contains(x) || x.Data.IsDead; });
+        }
+
+        public static void clearAndReload() {
+            arsionist = null;
+            currentTarget = null;
+            douseTarget = null;
+            dousedPlayers = new List<PlayerControl>();
+            cooldown = CustomOptionHolder.arsionistCooldown.getFloat();
+            duration = CustomOptionHolder.arsionistDuration.getFloat();
         }
     }
 }

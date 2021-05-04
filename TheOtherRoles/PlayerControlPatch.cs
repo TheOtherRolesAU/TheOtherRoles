@@ -397,6 +397,12 @@ namespace TheOtherRoles {
             SecurityGuard.ventTarget = target;
         }
 
+        public static void arsionistSetTarget() {
+            if (Arsionist.arsionist == null || Arsionist.arsionist != PlayerControl.LocalPlayer) return;
+            Arsionist.currentTarget = setTarget();
+            if (!Arsionist.dousedPlayers.Contains(Arsionist.currentTarget)) setPlayerOutline(Arsionist.currentTarget, Arsionist.color);
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -448,6 +454,8 @@ namespace TheOtherRoles {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
+                // Arsionist
+                arsionistSetTarget();
             } 
         }
     }

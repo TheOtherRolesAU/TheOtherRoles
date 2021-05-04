@@ -50,6 +50,10 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
 
+        public static CustomOption arsionistSpawnRate;
+        public static CustomOption arsionistCooldown;
+        public static CustomOption arsionistDuration;
+
         public static CustomOption shifterSpawnRate;
 
         public static CustomOption mayorSpawnRate;
@@ -199,6 +203,10 @@ namespace TheOtherRoles {
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
+
+            arsionistSpawnRate = CustomOption.Create(290, cs(Arsionist.color, "Arsionist"), rates, null, true);
+            arsionistCooldown = CustomOption.Create(291, "Arsionist Cooldown", 30f, 5f, 60f, 2.5f, arsionistSpawnRate);
+            arsionistDuration = CustomOption.Create(292, "Arsionist Douse Duration", 3f, 1f, 10f, 1f, arsionistSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 
@@ -528,7 +536,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 30;
+            int roleSettingsLines = defaultSettingsLines + 31;
             int detailedSettingsP1 = roleSettingsLines + 34;
             int detailedSettingsP2 = detailedSettingsP1 + 36;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
