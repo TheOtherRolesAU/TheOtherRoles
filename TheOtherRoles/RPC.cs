@@ -617,7 +617,13 @@ namespace TheOtherRoles
             camera.CamName = $"Security Camera {SecurityGuard.placedCameras}";
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
-            camera.gameObject.SetActive(false);
+
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+                camera.gameObject.SetActive(true);
+                camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+            } else {
+                camera.gameObject.SetActive(false);
+            }
             MapOptions.camerasToAdd.Add(camera);
         }
 

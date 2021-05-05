@@ -426,9 +426,12 @@ namespace TheOtherRoles
             }
 
             // SecurityGuard vents and cameras
-            MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
-            allCameras.AddRange(MapOptions.camerasToAdd);
+            MapOptions.camerasToAdd.ForEach(camera => {
+                camera.gameObject.SetActive(true)
+                camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                allCameras.Add(camera);
+            });
             ShipStatus.Instance.AllCameras = allCameras.ToArray();
             MapOptions.camerasToAdd = new List<SurvCamera>();
 
