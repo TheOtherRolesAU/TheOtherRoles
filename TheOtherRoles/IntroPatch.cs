@@ -11,7 +11,7 @@ namespace TheOtherRoles
     class IntroCutsceneOnDestroyPatch {
         public static void Prefix(IntroCutscene __instance) {
             // Arsionist generate player icons
-            if (PlayerControl.LocalPlayer == Arsionist.arsionist && HudManager.Instance != null) {
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Arsionist.arsionist && HudManager.Instance != null) {
                 int playerCounter = 0;
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                 bottomLeft += new Vector3(-0.25f, -0.25f, 0);
