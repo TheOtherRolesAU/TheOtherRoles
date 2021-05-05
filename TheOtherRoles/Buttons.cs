@@ -767,6 +767,17 @@ namespace TheOtherRoles
                     if (Arsionist.douseTarget != null) Arsionist.dousedPlayers.Add(Arsionist.douseTarget);
                     Arsionist.douseTarget = null;
                     arsionistButton.Timer = Arsionist.dousedEveryoneAlive() ? 0 : arsionistButton.MaxTimer;
+
+                    int playerCounter = 0;
+                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                    bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                    foreach (PlayerControl p in Arsionist.dousedPlayers) {
+                        if (Arsionist.dousedIcons.ContainsKey(p.PlayerId)) {
+                            Arsionist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
+                            Arsionist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
+                            playerCounter++;
+                        }
+                    }
                 }
             );
 

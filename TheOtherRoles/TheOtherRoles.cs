@@ -883,7 +883,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
-        public static Dictionary<byte, PoolablePlayer> remainingIcons = new Dictionary<byte, PoolablePlayer>();
+        public static Dictionary<byte, PoolablePlayer> dousedIcons = new Dictionary<byte, PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -908,7 +908,7 @@ namespace TheOtherRoles
             currentTarget = null;
             douseTarget = null;
             dousedPlayers = new List<PlayerControl>();
-            remainingIcons = new Dictionary<byte, PoolablePlayer>();
+            dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsionistCooldown.getFloat();
             duration = CustomOptionHolder.arsionistDuration.getFloat();
         }
