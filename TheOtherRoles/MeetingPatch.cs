@@ -428,7 +428,7 @@ namespace TheOtherRoles
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {
-                camera.gameObject.SetActive(true)
+                camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
@@ -438,7 +438,9 @@ namespace TheOtherRoles
             foreach (Vent vent in MapOptions.ventsToSeal) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
+                vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
             MapOptions.ventsToSeal = new List<Vent>();

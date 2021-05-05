@@ -632,6 +632,15 @@ namespace TheOtherRoles
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+                animator?.Stop();
+                vent.EnterVentAnim = vent.ExitVentAnim = null;
+                vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                vent.myRend.color = new Color(1f, 1f, 1f, 0.5f);
+                vent.name = "FutureSealedVent_" + vent.name;
+            }
+
             MapOptions.ventsToSeal.Add(vent);
         }
     }
