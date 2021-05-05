@@ -43,7 +43,7 @@ namespace TheOtherRoles
         Cleaner,
         Warlock,
         SecurityGuard,
-        Arsionist
+        Arsonist
     }
 
     enum CustomRPC
@@ -90,7 +90,7 @@ namespace TheOtherRoles
         WarlockCurseKill,
         PlaceCamera,
         SealVent,
-        ArsionistWin
+        ArsonistWin
     }
 
     public static class RPCProcedure {
@@ -220,8 +220,8 @@ namespace TheOtherRoles
                     case RoleId.SecurityGuard:
                         SecurityGuard.securityGuard = player;
                         break;
-                    case RoleId.Arsionist:
-                        Arsionist.arsionist = player;
+                    case RoleId.Arsonist:
+                        Arsonist.arsonist = player;
                         break;
                     }
                 }
@@ -350,7 +350,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsionist.arsionist) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist) {
                 oldShifter.Exiled();
                 return;
             }
@@ -399,8 +399,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
                 SecurityGuard.securityGuard = oldShifter;
-            } else if (Arsionist.arsionist != null && Arsionist.arsionist == player) {
-                Arsionist.arsionist = oldShifter;
+            } else if (Arsonist.arsonist != null && Arsonist.arsonist == player) {
+                Arsonist.arsonist = oldShifter;
             } else { // Crewmate
             }
             
@@ -560,7 +560,7 @@ namespace TheOtherRoles
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
-            if (player == Arsionist.arsionist) Arsionist.clearAndReload();
+            if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -637,8 +637,8 @@ namespace TheOtherRoles
             MapOptions.ventsToSeal.Add(vent);
         }
 
-        public static void arsionistWin() {
-            Arsionist.triggerArsionistWin = true;
+        public static void arsonistWin() {
+            Arsonist.triggerArsonistWin = true;
         }
     }
 
@@ -785,8 +785,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
                     break;
-                case (byte)CustomRPC.ArsionistWin:
-                    RPCProcedure.arsionistWin();
+                case (byte)CustomRPC.ArsonistWin:
+                    RPCProcedure.arsonistWin();
                     break;
             }
         }

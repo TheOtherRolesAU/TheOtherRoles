@@ -10,8 +10,8 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     class IntroCutsceneOnDestroyPatch {
         public static void Prefix(IntroCutscene __instance) {
-            // Arsionist generate player icons
-            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Arsionist.arsionist && HudManager.Instance != null) {
+            // Arsonist generate player icons
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Arsonist.arsonist && HudManager.Instance != null) {
                 int playerCounter = 0;
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                 bottomLeft += new Vector3(-0.25f, -0.25f, 0);
@@ -29,7 +29,7 @@ namespace TheOtherRoles
                         poolablePlayer.SetFlipX(true);
                         poolablePlayer.gameObject.SetActive(false);
 
-                        Arsionist.dousedIcons[player.PlayerId] = poolablePlayer;
+                        Arsonist.dousedIcons[player.PlayerId] = poolablePlayer;
                         playerCounter++;
                     }
                 }
@@ -43,7 +43,7 @@ namespace TheOtherRoles
         static void Prefix(IntroCutscene.Nested_0 __instance)
         {
             // Intro solo teams
-            if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsionist.arsionist) {
+            if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist) {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 __instance.yourTeam = soloTeam;

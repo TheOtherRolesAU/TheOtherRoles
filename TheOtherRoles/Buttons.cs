@@ -31,7 +31,7 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
-        public static CustomButton arsionistButton;
+        public static CustomButton arsonistButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -57,7 +57,7 @@ namespace TheOtherRoles
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
-            arsionistButton.MaxTimer = Arsionist.cooldown;
+            arsonistButton.MaxTimer = Arsonist.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -66,7 +66,7 @@ namespace TheOtherRoles
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
-            arsionistButton.EffectDuration = Arsionist.duration;
+            arsonistButton.EffectDuration = Arsonist.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -725,56 +725,56 @@ namespace TheOtherRoles
             securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
             securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
-            // Arsionist button
-            arsionistButton = new CustomButton(
+            // Arsonist button
+            arsonistButton = new CustomButton(
                 () => {
-                    bool dousedEveryoneAlive = Arsionist.dousedEveryoneAlive();
+                    bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
                     if (dousedEveryoneAlive) {
-                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ArsionistWin, Hazel.SendOption.Reliable, -1);
+                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ArsonistWin, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(winWriter);
-                        RPCProcedure.arsionistWin();
-                        arsionistButton.HasEffect = false;
-                    } else if (Arsionist.currentTarget != null) {
-                        Arsionist.douseTarget = Arsionist.currentTarget;
-                        arsionistButton.HasEffect = true;              
+                        RPCProcedure.arsonistWin();
+                        arsonistButton.HasEffect = false;
+                    } else if (Arsonist.currentTarget != null) {
+                        Arsonist.douseTarget = Arsonist.currentTarget;
+                        arsonistButton.HasEffect = true;              
                     }
                 },
-                () => { return Arsionist.arsionist != null && Arsionist.arsionist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    bool dousedEveryoneAlive = Arsionist.dousedEveryoneAlive();
-                    if (dousedEveryoneAlive) arsionistButton.killButtonManager.renderer.sprite = Arsionist.getIgniteSprite();
+                    bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
+                    if (dousedEveryoneAlive) arsonistButton.killButtonManager.renderer.sprite = Arsonist.getIgniteSprite();
                     
-                    if (arsionistButton.isEffectActive && Arsionist.douseTarget != Arsionist.currentTarget) {
-                        Arsionist.douseTarget = null;
-                        arsionistButton.Timer = 0f;
-                        arsionistButton.isEffectActive = false;
+                    if (arsonistButton.isEffectActive && Arsonist.douseTarget != Arsonist.currentTarget) {
+                        Arsonist.douseTarget = null;
+                        arsonistButton.Timer = 0f;
+                        arsonistButton.isEffectActive = false;
                     }
 
-                    return PlayerControl.LocalPlayer.CanMove && (dousedEveryoneAlive || Arsionist.currentTarget != null);
+                    return PlayerControl.LocalPlayer.CanMove && (dousedEveryoneAlive || Arsonist.currentTarget != null);
                 },
                 () => {
-                    arsionistButton.Timer = arsionistButton.MaxTimer;
-                    arsionistButton.isEffectActive = false;
-                    Arsionist.douseTarget = null;
+                    arsonistButton.Timer = arsonistButton.MaxTimer;
+                    arsonistButton.isEffectActive = false;
+                    Arsonist.douseTarget = null;
                 },
-                Arsionist.getDouseSprite(),
+                Arsonist.getDouseSprite(),
                 new Vector3(-1.3f, 0f, 0f),
                 __instance,
                 KeyCode.Q,
                 true,
-                Arsionist.duration,
+                Arsonist.duration,
                 () => {
-                    if (Arsionist.douseTarget != null) Arsionist.dousedPlayers.Add(Arsionist.douseTarget);
-                    Arsionist.douseTarget = null;
-                    arsionistButton.Timer = Arsionist.dousedEveryoneAlive() ? 0 : arsionistButton.MaxTimer;
+                    if (Arsonist.douseTarget != null) Arsonist.dousedPlayers.Add(Arsonist.douseTarget);
+                    Arsonist.douseTarget = null;
+                    arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
 
                     int playerCounter = 0;
                     Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                     bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-                    foreach (PlayerControl p in Arsionist.dousedPlayers) {
-                        if (Arsionist.dousedIcons.ContainsKey(p.PlayerId)) {
-                            Arsionist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
-                            Arsionist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
+                    foreach (PlayerControl p in Arsonist.dousedPlayers) {
+                        if (Arsonist.dousedIcons.ContainsKey(p.PlayerId)) {
+                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
+                            Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
                             playerCounter++;
                         }
                     }

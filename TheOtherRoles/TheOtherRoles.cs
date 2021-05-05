@@ -49,7 +49,7 @@ namespace TheOtherRoles
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
-            Arsionist.clearAndReload();
+            Arsonist.clearAndReload();
         }
 
         public static class Jester {
@@ -873,13 +873,13 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Arsionist {
-        public static PlayerControl arsionist;
+    public static class Arsonist {
+        public static PlayerControl arsonist;
         public static Color color = new Color(1, 200f/255f, 0, 1f);
 
         public static float cooldown = 30f;
         public static float duration = 3f;
-        public static bool triggerArsionistWin = false;
+        public static bool triggerArsonistWin = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
@@ -901,14 +901,14 @@ namespace TheOtherRoles
         }
 
         public static bool dousedEveryoneAlive() {
-            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsionist.arsionist || x.Data.IsDead || Arsionist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
+            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
         }
 
         public static void clearAndReload() {
-            arsionist = null;
+            arsonist = null;
             currentTarget = null;
             douseTarget = null;
-            triggerArsionistWin = false;
+            triggerArsonistWin = false;
             dousedPlayers = new List<PlayerControl>();
             foreach (PoolablePlayer p in dousedIcons.Values) {
                 if (p != null && p.gameObject != null) { 
@@ -916,8 +916,8 @@ namespace TheOtherRoles
                 }
             }
             dousedIcons = new Dictionary<byte, PoolablePlayer>();
-            cooldown = CustomOptionHolder.arsionistCooldown.getFloat();
-            duration = CustomOptionHolder.arsionistDuration.getFloat();
+            cooldown = CustomOptionHolder.arsonistCooldown.getFloat();
+            duration = CustomOptionHolder.arsonistDuration.getFloat();
         }
     }
 }

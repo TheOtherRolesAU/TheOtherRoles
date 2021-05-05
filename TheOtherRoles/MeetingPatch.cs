@@ -536,8 +536,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
                     else if(SecurityGuard.securityGuard != null && ExileController.Instance.exiled.Object.PlayerId == SecurityGuard.securityGuard.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Security Guard.";
-                    else if(Arsionist.arsionist != null && ExileController.Instance.exiled.Object.PlayerId == Arsionist.arsionist.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Arsionist.";
+                    else if(Arsonist.arsonist != null && ExileController.Instance.exiled.Object.PlayerId == Arsonist.arsonist.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Arsonist.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }

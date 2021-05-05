@@ -203,9 +203,9 @@ namespace TheOtherRoles
                 "Seal vents and place cameras",
                 "Seal vents and place cameras"));
             }
-            if (Arsionist.arsionist != null && p == Arsionist.arsionist) {
-                infos.Add(new RoleInfo("Arsionist",
-                Arsionist.color,
+            if (Arsonist.arsonist != null && p == Arsonist.arsonist) {
+                infos.Add(new RoleInfo("Arsonist",
+                Arsonist.color,
                 "Let them burn",
                 "Let them burn"));
             }

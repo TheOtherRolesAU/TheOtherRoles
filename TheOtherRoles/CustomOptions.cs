@@ -51,9 +51,9 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
 
-        public static CustomOption arsionistSpawnRate;
-        public static CustomOption arsionistCooldown;
-        public static CustomOption arsionistDuration;
+        public static CustomOption arsonistSpawnRate;
+        public static CustomOption arsonistCooldown;
+        public static CustomOption arsonistDuration;
 
         public static CustomOption jackalSpawnRate;
         public static CustomOption jackalKillCooldown;
@@ -206,9 +206,9 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
-            arsionistSpawnRate = CustomOption.Create(290, cs(Arsionist.color, "Arsionist"), rates, null, true);
-            arsionistCooldown = CustomOption.Create(291, "Arsionist Cooldown", 30f, 5f, 60f, 2.5f, arsionistSpawnRate);
-            arsionistDuration = CustomOption.Create(292, "Arsionist Douse Duration", 3f, 1f, 10f, 1f, arsionistSpawnRate);
+            arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
+            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 30f, 5f, 60f, 2.5f, arsonistSpawnRate);
+            arsonistDuration = CustomOption.Create(292, "Arsonist Douse Duration", 3f, 1f, 10f, 1f, arsonistSpawnRate);
 
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates, null, true);
             jackalKillCooldown = CustomOption.Create(221, "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);

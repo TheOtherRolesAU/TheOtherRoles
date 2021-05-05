@@ -397,10 +397,10 @@ namespace TheOtherRoles {
             SecurityGuard.ventTarget = target;
         }
 
-        public static void arsionistSetTarget() {
-            if (Arsionist.arsionist == null || Arsionist.arsionist != PlayerControl.LocalPlayer) return;
-            Arsionist.currentTarget = setTarget();
-            if (Arsionist.currentTarget != null && !Arsionist.dousedPlayers.Any(x => x.PlayerId == Arsionist.currentTarget.PlayerId)) setPlayerOutline(Arsionist.currentTarget, Arsionist.color);
+        public static void arsonistSetTarget() {
+            if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
+            Arsonist.currentTarget = setTarget();
+            if (Arsonist.currentTarget != null && !Arsonist.dousedPlayers.Any(x => x.PlayerId == Arsonist.currentTarget.PlayerId)) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -454,8 +454,8 @@ namespace TheOtherRoles {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
-                // Arsionist
-                arsionistSetTarget();
+                // Arsonist
+                arsonistSetTarget();
             } 
         }
     }

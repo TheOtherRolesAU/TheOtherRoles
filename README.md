@@ -13,7 +13,7 @@ Even more roles are coming soon :)
 | [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
 | [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
 | [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
-| [Eraser](#eraser) | [Hacker](#hacker) | [Arsionist](#arsionist) |
+| [Eraser](#eraser) | [Hacker](#hacker) | [Arsonist](#arsonist) |
 | [ImpLover](#lovers) | [Lover](#lovers) |  |
 | [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
 | [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
@@ -60,8 +60,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.0**
-- **New Role:** [Arsionist](#arsionist)
-- The Shifter now also dies when he shifts a neutral role (Jester, Arsionist, Jackal, ...)
+- **New Role:** [Arsonist](#arsonist)
+- The Shifter now also dies when he shifts a neutral role (Jester, Arsonist, Jackal, ...)
 - We changed the option "Jester Can Die To Sheriff" to "Neutrals Can Die To Sheriff"
 - We changed the role assignment system. You can now set how many neutral roles you want in your game.
 
@@ -309,7 +309,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
-[Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsionist role comes from  **AJMix**
+[Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
@@ -575,19 +575,19 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Jester can call emergency meeting | Option to disable the emergency button for the Jester
 -----------------------
 
-## Arsionist
+## Arsonist
 ### **Team: Neutral**
-The Arsionist does not have any tasks, he has to win the game as a solo.\
-The Arsionist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
-If the player that the Arsionist douses walks out of range, the cooldown will reset to 0.\
-After dousing everyone alive the Arsionist can ignite all the players which results in an Arsionist win.
+The Arsonist does not have any tasks, he has to win the game as a solo.\
+The Arsonist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
+If the player that the Arsonist douses walks out of range, the cooldown will reset to 0.\
+After dousing everyone alive the Arsonist can ignite all the players which results in an Arsonist win.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Arsionist Spawn Chance | -
-| Arsionist Countdown | -
-| Arsionist Douse Duration | The time it takes to douse a player
+| Arsonist Spawn Chance | -
+| Arsonist Countdown | -
+| Arsonist Douse Duration | The time it takes to douse a player
 -----------------------
 
 ## Seer
@@ -837,7 +837,7 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 The priority of the win conditions is the following:
 1. Crewmate Child lose by vote
 2. Jester wins by vote
-3. Arsionist win
+3. Arsonist win
 4. Team Impostor wins by sabotage
 5. Team Crew wins by tasks (also possible if the whole Crew is dead)
 6. Lovers among the last three players win
