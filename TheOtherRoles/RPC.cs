@@ -89,7 +89,8 @@ namespace TheOtherRoles
         LightsOut,
         WarlockCurseKill,
         PlaceCamera,
-        SealVent
+        SealVent,
+        ArsionistWin
     }
 
     public static class RPCProcedure {
@@ -635,6 +636,10 @@ namespace TheOtherRoles
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
             MapOptions.ventsToSeal.Add(vent);
         }
+
+        public static void arsionistWin() {
+            Arsionist.triggerArsionistWin = true;
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -779,6 +784,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    break;
+                case (byte)CustomRPC.ArsionistWin:
+                    RPCProcedure.arsionistWin();
                     break;
             }
         }

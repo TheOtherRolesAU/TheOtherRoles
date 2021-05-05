@@ -732,7 +732,9 @@ namespace TheOtherRoles
                 () => {
                     bool dousedEveryoneAlive = Arsionist.dousedEveryoneAlive();
                     if (dousedEveryoneAlive) {
-                        // TODO: Trigger win
+                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ArsionistWin, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(winWriter);
+                        RPCProcedure.arsionistWin();
                         arsionistButton.HasEffect = false;
                     } else if (Arsionist.currentTarget != null) {
                         Arsionist.douseTarget = Arsionist.currentTarget;

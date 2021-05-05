@@ -879,6 +879,7 @@ namespace TheOtherRoles
 
         public static float cooldown = 30f;
         public static float duration = 3f;
+        public static bool triggerArsionistWin = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
@@ -907,6 +908,7 @@ namespace TheOtherRoles
             arsionist = null;
             currentTarget = null;
             douseTarget = null;
+            triggerArsionistWin = false;
             dousedPlayers = new List<PlayerControl>();
             dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsionistCooldown.getFloat();

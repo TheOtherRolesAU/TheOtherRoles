@@ -16,7 +16,8 @@ namespace TheOtherRoles {
         LoversWin = 10,
         TeamJackalWin = 11,
         ChildLose = 12,
-        JesterWin = 13
+        JesterWin = 13,
+        ArsionistWin = 14
     }
 
     enum WinCondition {
@@ -25,7 +26,8 @@ namespace TheOtherRoles {
         LoversSoloWin,
         JesterWin,
         JackalWin,
-        ChildLose
+        ChildLose,
+        ArsionistWin
     }
 
     static class AdditionalTempData {
@@ -52,33 +54,22 @@ namespace TheOtherRoles {
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref GameOverReason reason, [HarmonyArgument(1)]bool showAd) {
             AdditionalTempData.clear();
 
-            // Remove Jester from winners (on Jester win he will be added again, see below)
-            if (Jester.jester != null) {
-                WinningPlayerData jesterWinner = null;
-                foreach (WinningPlayerData winner in  TempData.winners)
-                    if (winner.Name == Jester.jester.Data.PlayerName) jesterWinner = winner;
-                
-                if (jesterWinner != null) TempData.winners.Remove(jesterWinner);
+            // Remove Jester, Arsionist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
+            List<PlayerControl> notWinners = new List<PlayerControl>();
+            if (Jester.jester != null) notWinners.Add(Jester.jester);
+            if (Sidekick.sidekick != null) notWinners.Add(Sidekick.sidekick);
+            if (Jackal.jackal != null) notWinners.Add(Jackal.jackal);
+            if (Arsionist.arsionist != null) notWinners.Add(Arsionist.arsionist);
+            notWinners.AddRange(Jackal.formerJackals);
+
+            List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
+            foreach (WinningPlayerData winner in TempData.winners) {
+                if (notWinners.Any(x => x.Data.PlayerName == winner.Name)) winnersToRemove.Add(winner);
             }
-            // Remove Jackal and Sidekick from winners (on Jackal win he will be added again, see below)
-            if (Jackal.jackal != null || Sidekick.sidekick != null) {
-                List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
-                foreach (WinningPlayerData winner in TempData.winners) {
-                    if (winner.Name == Jackal.jackal?.Data?.PlayerName) winnersToRemove.Add(winner);
-                    if (winner.Name == Sidekick.sidekick?.Data?.PlayerName) winnersToRemove.Add(winner);
-                    foreach(var player in Jackal.formerJackals) {
-                        if (winner.Name == player.Data.PlayerName) {
-                            winnersToRemove.Add(winner);
-                        }
-                    }
-                }
-                
-                foreach (var winner in winnersToRemove) {
-                    TempData.winners.Remove(winner);
-                }
-            }
+            foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
 
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
+            bool arsionistWin = Arsionist.arsionist != null && gameOverReason == (GameOverReason)CustomGameOverReason.ArsionistWin;
             bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.DidHumansWin(gameOverReason) && Lovers.existingAndCrewLovers())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead) || (Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead));
@@ -100,6 +91,14 @@ namespace TheOtherRoles {
                 AdditionalTempData.winCondition = WinCondition.JesterWin;
             }
 
+            // Arsionist win
+            else if (arsionistWin) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Arsionist.arsionist.Data);
+                TempData.winners.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.ArsionistWin;
+            }
+
             // Lovers win conditions
             else if (loversWin) {
                 AdditionalTempData.localIsLover = (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2);
@@ -111,7 +110,7 @@ namespace TheOtherRoles {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
-                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && !p.Data.IsImpostor)
+                        else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && p != Arsionist.arsionist && !Jackal.formerJackals.Contains(p) && !p.Data.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                     }
                 }
@@ -163,6 +162,10 @@ namespace TheOtherRoles {
                 textRenderer.text = "Jester Wins";
                 textRenderer.color = Jester.color;
             }
+            else if (AdditionalTempData.winCondition == WinCondition.ArsionistWin) {
+                textRenderer.text = "Arsionist Wins";
+                textRenderer.color = Arsionist.color;
+            }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 if (AdditionalTempData.localIsLover) {
                     __instance.WinText.text = "Double Victory";
@@ -198,6 +201,7 @@ namespace TheOtherRoles {
             var statistics = new PlayerStatistics(__instance);
             if (CheckAndEndGameForChildLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
+            if (CheckAndEndGameForArsionistWin(__instance)) return false;
             if (CheckAndEndGameForSabotageWin(__instance)) return false;
             if (CheckAndEndGameForTaskWin(__instance)) return false;
             if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
@@ -220,6 +224,15 @@ namespace TheOtherRoles {
             if (Jester.triggerJesterWin) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.JesterWin, false);
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForArsionistWin(ShipStatus __instance) {
+            if (Arsionist.triggerArsionistWin) {
+                __instance.enabled = false;
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ArsionistWin, false);
                 return true;
             }
             return false;
