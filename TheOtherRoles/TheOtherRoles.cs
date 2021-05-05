@@ -910,6 +910,11 @@ namespace TheOtherRoles
             douseTarget = null;
             triggerArsionistWin = false;
             dousedPlayers = new List<PlayerControl>();
+            foreach (PoolablePlayer p in dousedIcons.Values) {
+                if (p != null && p.gameObject != null) { 
+                    UnityEngine.Object.Destroy(p.gameObject);
+                }
+            }
             dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsionistCooldown.getFloat();
             duration = CustomOptionHolder.arsionistDuration.getFloat();
