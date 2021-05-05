@@ -306,7 +306,11 @@ namespace TheOtherRoles {
                     textTemplate = hatButton.transform.FindChild("ButtonText_TMP").GetComponent<TMPro.TMP_Text>();
                 }
 
-                var orderedKeys = packages.Keys.OrderBy((string x) => x == innerslothPackageName ? 1000 : 0);
+                var orderedKeys = packages.Keys.OrderBy((string x) => {
+                    if (x == innerslothPackageName) return 1000;
+                    if (x == "Developer Hats") return 0;
+                    return 500;
+                });
                 foreach (string key in orderedKeys) {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
                     YOffset = createHatPackage(value, key, YOffset, __instance);
