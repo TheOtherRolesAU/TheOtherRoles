@@ -136,7 +136,7 @@ namespace TheOtherRoles
             public static Color color = new Color(255f / 255f, 204f / 255f, 0f / 255f, 1);
 
             public static float cooldown = 30f;
-            public static bool jesterCanDieToSheriff = false;
+            public static bool neutralsCanDieToSheriff = false;
             public static bool spyCanDieToSheriff = false;
 
             public static PlayerControl currentTarget;
@@ -145,7 +145,7 @@ namespace TheOtherRoles
                 sheriff = null;
                 currentTarget = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
-                jesterCanDieToSheriff = CustomOptionHolder.jesterCanDieToSheriff.getBool();
+                neutralsCanDieToSheriff = CustomOptionHolder.neutralsCanDieToSheriff.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
             }
         }
