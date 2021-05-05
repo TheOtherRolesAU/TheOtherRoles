@@ -425,7 +425,7 @@ namespace TheOtherRoles
                 JackInTheBox.convertToVents();
             }
 
-            // SecurityGuard vents and cameras
+            // Security Guard vents and cameras
             MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             allCameras.AddRange(MapOptions.camerasToAdd);

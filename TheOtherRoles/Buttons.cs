@@ -174,7 +174,7 @@ namespace TheOtherRoles
                     byte targetId = 0;
                     if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
-                        (Sheriff.neutralsCanDieToSheriff && (Jester.jester == Sheriff.currentTarget || Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
+                        (Sheriff.canKillNeutrals && (Jester.jester == Sheriff.currentTarget || Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
                     else {
@@ -680,7 +680,7 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
-            // SecurityGuard button
+            // Security Guard button
             securityGuardButton = new CustomButton(
                 () => {
                     if (SecurityGuard.ventTarget != null) { // Seal vent
@@ -718,7 +718,7 @@ namespace TheOtherRoles
                 KeyCode.Q
             );
             
-            // SecurityGuard button screws counter
+            // Security Guard button screws counter
             securityGuardButtonScrewsText = GameObject.Instantiate(securityGuardButton.killButtonManager.TimerText, securityGuardButton.killButtonManager.TimerText.transform.parent);
             securityGuardButtonScrewsText.text = "";
             securityGuardButtonScrewsText.enableWordWrapping = false;
