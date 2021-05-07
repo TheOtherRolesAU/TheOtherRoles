@@ -30,4 +30,14 @@ namespace TheOtherRoles {
             }
         }
     }
+
+    [HarmonyPatch(typeof(NotificationPopper), nameof(NotificationPopper.Update))]
+    public static class NotificationPopperUpdatePatch { // Reactor Region Fix
+        public static void Postfix(NotificationPopper __instance) {
+            if (__instance.alphaTimer > 0f) {
+                var pos = __instance.transform.localPosition;
+                __instance.transform.localPosition = new Vector3(pos.x + 0.5f, pos.y, pos.z);
+            }
+        }
+    }
 }
