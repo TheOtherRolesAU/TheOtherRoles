@@ -8,7 +8,7 @@ using UnhollowerBaseLib;
 
 namespace TheOtherRoles {
     public class GameStartManagerPatch  {
-        public static Dictionary<int, Tuple<byte, byte, byte>> playerVersions = new Dictionary<int, Tuple<byte, byte, byte>>();
+        public static Dictionary<int, System.Version> playerVersions = new Dictionary<int, System.Version>();
         private static float timer = 600f;
         private static bool versionSent = false;
         private static string lobbyCodeText = "";
@@ -42,12 +42,12 @@ namespace TheOtherRoles {
                 if (PlayerControl.LocalPlayer != null && !versionSent) {
                     versionSent = true;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
-                    writer.Write(TheOtherRolesPlugin.Major);
-                    writer.Write(TheOtherRolesPlugin.Minor);
-                    writer.Write(TheOtherRolesPlugin.Patch);
+                    writer.Write((byte)TheOtherRolesPlugin.Version.Major);
+                    writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
+                    writer.Write((byte)TheOtherRolesPlugin.Version.Build);
                     writer.WritePacked(AmongUsClient.Instance.ClientId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, AmongUsClient.Instance.ClientId);
+                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, AmongUsClient.Instance.ClientId);
                 }
 
                 // Host update with version handshake infos
@@ -62,9 +62,15 @@ namespace TheOtherRoles {
                         else if (!playerVersions.ContainsKey(client.Id))  {
                             blockStart = true;
                             message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different or no version of The Other Roles\n</color>";
-                        } else if (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch) {
-                            blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different version (v{playerVersions[client.Id].Item1}.{playerVersions[client.Id].Item2}.{playerVersions[client.Id].Item3}) of The Other Roles\n</color>";
+                        } else {
+                            int diff = TheOtherRolesPlugin.Version.CompareTo(playerVersions[client.Id]);
+                            if (diff > 0) {
+                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an older version of The Other Roles (v{playerVersions[client.Id].ToString()})\n</color>";
+                                blockStart = true;
+                            } else if (diff > 0) {
+                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a newer version of The Other Roles (v{playerVersions[client.Id].ToString()}) \n</color>";
+                                blockStart = true;
+                            }
                         }
                     }
                     if (blockStart) {

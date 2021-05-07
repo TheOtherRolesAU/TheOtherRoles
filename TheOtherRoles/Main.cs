@@ -14,15 +14,13 @@ using UnityEngine;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", Version)]
+    [BepInPlugin(Id, "The Other Roles", VersionString)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string Version = "2.6.0";
-        public const byte Major = 2;
-        public const byte Minor = 6;
-        public const byte Patch = 0;
+        public const string VersionString = "2.6.0";
+        public static System.Version Version = System.Version.Parse(VersionString);
 
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
@@ -53,6 +51,7 @@ namespace TheOtherRoles
 
         public override void Load() {
             CustomHatLoader.LaunchHatFetcher();
+            ModUpdater.LaunchUpdater();
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
