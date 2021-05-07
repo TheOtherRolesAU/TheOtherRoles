@@ -42,7 +42,8 @@ namespace TheOtherRoles
         Trickster,
         Cleaner,
         Warlock,
-        SecurityGuard
+        SecurityGuard,
+        Arsonist
     }
 
     enum CustomRPC
@@ -88,7 +89,8 @@ namespace TheOtherRoles
         LightsOut,
         WarlockCurseKill,
         PlaceCamera,
-        SealVent
+        SealVent,
+        ArsonistWin
     }
 
     public static class RPCProcedure {
@@ -218,6 +220,9 @@ namespace TheOtherRoles
                     case RoleId.SecurityGuard:
                         SecurityGuard.securityGuard = player;
                         break;
+                    case RoleId.Arsonist:
+                        Arsonist.arsonist = player;
+                        break;
                     }
                 }
         }
@@ -345,7 +350,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist) {
                 oldShifter.Exiled();
                 return;
             }
@@ -394,6 +399,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
                 SecurityGuard.securityGuard = oldShifter;
+            } else if (Arsonist.arsonist != null && Arsonist.arsonist == player) {
+                Arsonist.arsonist = oldShifter;
             } else { // Crewmate
             }
             
@@ -553,6 +560,7 @@ namespace TheOtherRoles
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -642,6 +650,10 @@ namespace TheOtherRoles
             }
 
             MapOptions.ventsToSeal.Add(vent);
+        }
+
+        public static void arsonistWin() {
+            Arsonist.triggerArsonistWin = true;
         }
     }
 
@@ -787,6 +799,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    break;
+                case (byte)CustomRPC.ArsonistWin:
+                    RPCProcedure.arsonistWin();
                     break;
             }
         }

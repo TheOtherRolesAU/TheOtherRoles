@@ -204,6 +204,12 @@ namespace TheOtherRoles
                 "Seal vents and place cameras",
                 "Seal vents and place cameras"));
             }
+            if (Arsonist.arsonist != null && p == Arsonist.arsonist) {
+                infos.Add(new RoleInfo("Arsonist",
+                Arsonist.color,
+                "Let them burn",
+                "Let them burn"));
+            }
 
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",

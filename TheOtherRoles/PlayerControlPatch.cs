@@ -403,6 +403,12 @@ namespace TheOtherRoles {
             SecurityGuard.ventTarget = target;
         }
 
+        public static void arsonistSetTarget() {
+            if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
+            Arsonist.currentTarget = setTarget();
+            if (Arsonist.currentTarget != null && !Arsonist.dousedPlayers.Any(x => x.PlayerId == Arsonist.currentTarget.PlayerId)) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -454,6 +460,8 @@ namespace TheOtherRoles {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
+                // Arsonist
+                arsonistSetTarget();
             } 
         }
     }

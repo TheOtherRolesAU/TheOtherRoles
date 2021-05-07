@@ -12,12 +12,13 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
-        public static string[] crewmateRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10", "10-11", "11", "11-12", "12", "12-13", "13", "13-14", "14", "14-15", "15"};
+        public static string[] crewmateAndNeutralRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10", "10-11", "11", "11-12", "12", "12-13", "13", "13-14", "14", "14-15", "15"};
         public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
         public static CustomOption crewmateRolesCount;
+        public static CustomOption neutralRolesCount;
         public static CustomOption impostorRolesCount;
 
         public static CustomOption mafiaSpawnRate;
@@ -50,6 +51,21 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
 
+        public static CustomOption arsonistSpawnRate;
+        public static CustomOption arsonistCooldown;
+        public static CustomOption arsonistDuration;
+
+        public static CustomOption jackalSpawnRate;
+        public static CustomOption jackalKillCooldown;
+        public static CustomOption jackalCreateSidekickCooldown;
+        public static CustomOption jackalCanUseVents;
+        public static CustomOption jackalCanCreateSidekick;
+        public static CustomOption sidekickPromotesToJackal;
+        public static CustomOption sidekickCanKill;
+        public static CustomOption sidekickCanUseVents;
+        public static CustomOption jackalPromotedFromSidekickCanCreateSidekick;
+        public static CustomOption jackalCanCreateSidekickFromImpostor;
+
         public static CustomOption shifterSpawnRate;
 
         public static CustomOption mayorSpawnRate;
@@ -58,7 +74,7 @@ namespace TheOtherRoles {
 
         public static CustomOption sheriffSpawnRate;
         public static CustomOption sheriffCooldown;
-        public static CustomOption jesterCanDieToSheriff;
+        public static CustomOption sheriffCanKillNeutrals;
 
         public static CustomOption lighterSpawnRate;
         public static CustomOption lighterModeLightsOnVision;
@@ -100,17 +116,6 @@ namespace TheOtherRoles {
 
         public static CustomOption snitchSpawnRate;
         public static CustomOption snitchLeftTasksForImpostors;
-
-        public static CustomOption jackalSpawnRate;
-        public static CustomOption jackalKillCooldown;
-        public static CustomOption jackalCreateSidekickCooldown;
-        public static CustomOption jackalCanUseVents;
-        public static CustomOption jackalCanCreateSidekick;
-        public static CustomOption sidekickPromotesToJackal;
-        public static CustomOption sidekickCanKill;
-        public static CustomOption sidekickCanUseVents;
-        public static CustomOption jackalPromotedFromSidekickCanCreateSidekick;
-        public static CustomOption jackalCanCreateSidekickFromImpostor;
 
         public static CustomOption spySpawnRate;
         public static CustomOption spyCanDieToSheriff;
@@ -155,7 +160,8 @@ namespace TheOtherRoles {
             // Role Options
             presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
 
-            crewmateRolesCount = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Crewmate/Neutral Roles"), crewmateRoleCaps, null, true);
+            crewmateRolesCount = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Crewmate Roles"), crewmateAndNeutralRoleCaps, null, true);
+            neutralRolesCount = CustomOption.Create(7, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Neutral Roles"), crewmateAndNeutralRoleCaps);
             impostorRolesCount = CustomOption.Create(2, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Impostor Roles"), impostorRoleCaps);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
@@ -200,6 +206,21 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
+            arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
+            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 30f, 5f, 60f, 2.5f, arsonistSpawnRate);
+            arsonistDuration = CustomOption.Create(292, "Arsonist Douse Duration", 3f, 1f, 10f, 1f, arsonistSpawnRate);
+
+            jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates, null, true);
+            jackalKillCooldown = CustomOption.Create(221, "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
+            jackalCreateSidekickCooldown = CustomOption.Create(222, "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
+            jackalCanUseVents = CustomOption.Create(223, "Jackal Can Use Vents", true, jackalSpawnRate);
+            jackalCanCreateSidekick = CustomOption.Create(224, "Jackal Can Create A Sidekick", false, jackalSpawnRate);
+            sidekickPromotesToJackal = CustomOption.Create(225, "Sidekick Gets Promoted To Jackal On Jackal Death", false, jackalSpawnRate);
+            sidekickCanKill = CustomOption.Create(226, "Sidekick Can Kill", false, jackalSpawnRate);
+            sidekickCanUseVents = CustomOption.Create(227, "Sidekick Can Use Vents", true, jackalSpawnRate);
+            jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true, jackalSpawnRate);
+            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true, jackalSpawnRate);
+
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
@@ -208,7 +229,7 @@ namespace TheOtherRoles {
 
             sheriffSpawnRate = CustomOption.Create(100, cs(Sheriff.color, "Sheriff"), rates, null, true);
             sheriffCooldown = CustomOption.Create(101, "Sheriff Cooldown", 30f, 10f, 60f, 2.5f, sheriffSpawnRate);
-            jesterCanDieToSheriff = CustomOption.Create(102, "Sheriff Can Kill The Jester", false, sheriffSpawnRate);
+            sheriffCanKillNeutrals = CustomOption.Create(102, "Neutrals Can Kill The Jester", false, sheriffSpawnRate);
 
 
             lighterSpawnRate = CustomOption.Create(110, cs(Lighter.color, "Lighter"), rates, null, true);
@@ -251,17 +272,6 @@ namespace TheOtherRoles {
 
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "Snitch"), rates, null, true);
             snitchLeftTasksForImpostors = CustomOption.Create(211, "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f, snitchSpawnRate);
-
-            jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates, null, true);
-            jackalKillCooldown = CustomOption.Create(221, "Jackal/Sidekick Kill Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
-            jackalCreateSidekickCooldown = CustomOption.Create(222, "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
-            jackalCanUseVents = CustomOption.Create(223, "Jackal Can Use Vents", true, jackalSpawnRate);
-            jackalCanCreateSidekick = CustomOption.Create(224, "Jackal Can Create A Sidekick", false, jackalSpawnRate);
-            sidekickPromotesToJackal = CustomOption.Create(225, "Sidekick Gets Promoted To Jackal On Jackal Death", false, jackalSpawnRate);
-            sidekickCanKill = CustomOption.Create(226, "Sidekick Can Kill", false, jackalSpawnRate);
-            sidekickCanUseVents = CustomOption.Create(227, "Sidekick Can Use Vents", true, jackalSpawnRate);
-            jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true, jackalSpawnRate);
-            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true, jackalSpawnRate);
 
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "Spy"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false, spySpawnRate);
@@ -528,7 +538,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 30;
+            int roleSettingsLines = defaultSettingsLines + 32;
             int detailedSettingsP1 = roleSettingsLines + 34;
             int detailedSettingsP2 = detailedSettingsP1 + 36;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -544,13 +554,13 @@ namespace TheOtherRoles {
                 int gap = 1;
                 int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 4;
+                gap = 5;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 13;
+                gap = 16;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 16;
+                gap = 20;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
