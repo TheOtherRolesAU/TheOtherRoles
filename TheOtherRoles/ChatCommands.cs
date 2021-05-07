@@ -32,7 +32,7 @@ namespace TheOtherRoles {
                             if (PlayerControl.LocalPlayer)
                                 PlayerControl.LocalPlayer.CmdCheckColor(colorId);
                         }
-                        System.Console.WriteLine(hash);
+                        // System.Console.WriteLine(hash);
                     }
                 }
                 if (handled) {
