@@ -426,16 +426,21 @@ namespace TheOtherRoles
             }
 
             // SecurityGuard vents and cameras
-            MapOptions.camerasToAdd.ForEach(x => x.gameObject.SetActive(true));
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
-            allCameras.AddRange(MapOptions.camerasToAdd);
+            MapOptions.camerasToAdd.ForEach(camera => {
+                camera.gameObject.SetActive(true);
+                camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                allCameras.Add(camera);
+            });
             ShipStatus.Instance.AllCameras = allCameras.ToArray();
             MapOptions.camerasToAdd = new List<SurvCamera>();
 
             foreach (Vent vent in MapOptions.ventsToSeal) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
+                vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
             MapOptions.ventsToSeal = new List<Vent>();
@@ -535,7 +540,9 @@ namespace TheOtherRoles
                     else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
                     else if(SecurityGuard.securityGuard != null && ExileController.Instance.exiled.Object.PlayerId == SecurityGuard.securityGuard.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The SecurityGuard.";
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Security Guard.";
+                    else if(Arsonist.arsonist != null && ExileController.Instance.exiled.Object.PlayerId == Arsonist.arsonist.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The Arsonist.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }

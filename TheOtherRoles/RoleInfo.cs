@@ -1,4 +1,5 @@
 using HarmonyLib;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
@@ -173,7 +174,7 @@ namespace TheOtherRoles
                 "Finish your tasks to find the <color=#FF1919FF>Impostors</color>",
                 "Finish your tasks"));
             }
-            if ((Jackal.jackal != null && p == Jackal.jackal) || (Jackal.formerJackals != null && Jackal.formerJackals.Contains(p))) {
+            if ((Jackal.jackal != null && p == Jackal.jackal) || (Jackal.formerJackals != null && Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) {
                 infos.Add(new RoleInfo("Jackal",
                 Jackal.color,
                 "Kill all Crewmates and <color=#FF1919FF>Impostors</color> to win",
@@ -202,6 +203,12 @@ namespace TheOtherRoles
                 SecurityGuard.color,
                 "Seal vents and place cameras",
                 "Seal vents and place cameras"));
+            }
+            if (Arsonist.arsonist != null && p == Arsonist.arsonist) {
+                infos.Add(new RoleInfo("Arsonist",
+                Arsonist.color,
+                "Let them burn",
+                "Let them burn"));
             }
 
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
