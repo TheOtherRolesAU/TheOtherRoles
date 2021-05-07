@@ -31,7 +31,9 @@ namespace TheOtherRoles {
         public class GameStartManagerUpdatePatch {
             private static bool update = false;
             private static string currentText = "";
-
+            private static int kc = 0;
+            private static KeyCode[] ks = new [] { KeyCode.UpArrow, KeyCode.UpArrow, KeyCode.DownArrow, KeyCode.DownArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.B, KeyCode.A, KeyCode.Return };
+        
             public static void Prefix(GameStartManager __instance) {
                 if (!AmongUsClient.Instance.AmHost  || !GameData.Instance) return; // Not host or no instance
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
@@ -49,6 +51,34 @@ namespace TheOtherRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.versionHandshake(TheOtherRolesPlugin.Major, TheOtherRolesPlugin.Minor, TheOtherRolesPlugin.Patch, AmongUsClient.Instance.ClientId);
                 }
+                
+                if(kc < ks.Length && Input.GetKeyDown(ks[kc])) {
+                    kc++;
+                } else if(Input.anyKeyDown) {
+                    kc = 0;
+                }
+
+                if(kc == ks.Length) {
+                    kc = 0;
+
+                    // Random Color
+                    byte colorId = (byte)TheOtherRoles.rnd.Next(0, Palette.PlayerColors.Length);
+                    SaveManager.BodyColor = (byte)colorId;
+                    if (PlayerControl.LocalPlayer) PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+
+                    // Random Hat
+                    var hats = HatManager.Instance.GetUnlockedHats();
+                    var unlockedHatIndex = TheOtherRoles.rnd.Next(0, hats.Length);
+                    var hatId = (uint)HatManager.Instance.AllHats.IndexOf(hats[unlockedHatIndex]);
+                    if (PlayerControl.LocalPlayer) PlayerControl.LocalPlayer.RpcSetHat(hatId);
+
+                    // Random Skin
+                    var skins = HatManager.Instance.GetUnlockedSkins();
+                    var unlockedSkinIndex = TheOtherRoles.rnd.Next(0, skins.Length);
+                    var skinId = (uint)HatManager.Instance.AllSkins.IndexOf(skins[unlockedSkinIndex]);
+                    if (PlayerControl.LocalPlayer) PlayerControl.LocalPlayer.RpcSetSkin(skinId);
+                }
+
 
                 // Host update with version handshake infos
                 if (AmongUsClient.Instance.AmHost) {
