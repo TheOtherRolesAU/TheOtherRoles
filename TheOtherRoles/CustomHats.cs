@@ -235,7 +235,7 @@ namespace TheOtherRoles {
                     HatExtension ext = hats[i].Item2;
 
                     float xpos = __instance.XRange.Lerp((i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
-                    float ypos = offset - i / __instance.NumPerRow * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
+                    float ypos = offset - (i / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
                     if (ext != null) {
                         Transform background = colorChip.transform.FindChild("Background");
@@ -271,7 +271,7 @@ namespace TheOtherRoles {
                     colorChip.Tag = hat;
                     __instance.ColorChips.Add(colorChip);
                 }
-                return offset - ((hats.Count - 1) / __instance.NumPerRow * (isDefaultPackage ? 1f : 1.5f) + 0.7f) * __instance.YOffset;
+                return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 0.85f;
             }
 
             public static bool Prefix(HatsTab __instance) {
@@ -306,10 +306,14 @@ namespace TheOtherRoles {
                     textTemplate = hatButton.transform.FindChild("ButtonText_TMP").GetComponent<TMPro.TMP_Text>();
                 }
 
-                var orderedKeys = packages.Keys.OrderBy((string x) => x == innerslothPackageName ? 1000 : 0);
+                var orderedKeys = packages.Keys.OrderBy((string x) => {
+                    if (x == innerslothPackageName) return 1000;
+                    if (x == "Developer Hats") return 0;
+                    return 500;
+                });
                 foreach (string key in orderedKeys) {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
-                    YOffset += createHatPackage(value, key, YOffset, __instance);
+                    YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
                 __instance.scroller.YBounds.max = (YOffset - 0.6f) * -0.75f;
                 return false;
