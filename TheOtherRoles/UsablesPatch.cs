@@ -348,8 +348,8 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(CounterArea), nameof(CounterArea.UpdateCount))]
         class CounterAreaUpdateCountPatch {
-            private static Sprite defaultIcon;
-
+            private static Material defaultMat;
+            private static Material newMat;
             static void Postfix(CounterArea __instance) {
                 // Hacker display saved colors on the admin panel
                 bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
@@ -361,15 +361,23 @@ namespace TheOtherRoles
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {
-                            if (defaultIcon == null) defaultIcon = renderer.sprite;
-                            if (showHackerInfo && colors.Count > i && Hacker.getAdminTableIconSprite() != null) {
-                                renderer.sprite = Hacker.getAdminTableIconSprite();
-                                renderer.color = colors[i];
+                            if (defaultMat == null) defaultMat = renderer.material;
+                            if (newMat == null) newMat = UnityEngine.Object.Instantiate<Material>(defaultMat);
+                            if (showHackerInfo && colors.Count > i) {
+                                renderer.material = newMat;
+                                var color = colors[i];
+                                renderer.material.SetColor("_BodyColor", color);
+                                var id = Palette.PlayerColors.IndexOf(color);
+                                if (id < 0) {
+                                    renderer.material.SetColor("_BackColor", color);
+                                } else {
+                                    renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
+                                }
+                                renderer.material.SetColor("_VisorColor", Palette.VisorColor);
                             } else {
-                                renderer.sprite = defaultIcon;
-                                renderer.color = Color.white;
+                                renderer.material = defaultMat;
                             }
-                        } 
+                        }
                     }
                 }
             }

@@ -31,6 +31,7 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
+        public static CustomButton arsonistButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -56,6 +57,7 @@ namespace TheOtherRoles
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
+            arsonistButton.MaxTimer = Arsonist.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -63,7 +65,8 @@ namespace TheOtherRoles
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
-            lightsOutButton.EffectDuration = Trickster.lightsOutDuration; 
+            lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
+            arsonistButton.EffectDuration = Arsonist.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -170,10 +173,8 @@ namespace TheOtherRoles
 
                     byte targetId = 0;
                     if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
-                        Sheriff.currentTarget == Jackal.jackal || 
-                        Sheriff.currentTarget == Sidekick.sidekick || 
-                        (Sheriff.spyCanDieToSheriff && Spy.spy != null && Spy.spy == Sheriff.currentTarget) ||
-                        (Sheriff.jesterCanDieToSheriff && Jester.jester != null && Jester.jester == Sheriff.currentTarget)) {
+                        (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
+                        (Sheriff.canKillNeutrals && (Jester.jester == Sheriff.currentTarget || Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
                     else {
@@ -679,7 +680,7 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
-            // SecurityGuard button
+            // Security Guard button
             securityGuardButton = new CustomButton(
                 () => {
                     if (SecurityGuard.ventTarget != null) { // Seal vent
@@ -701,7 +702,7 @@ namespace TheOtherRoles
                     }
                     securityGuardButton.Timer = securityGuardButton.MaxTimer;
                 },
-                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
                     securityGuardButton.killButtonManager.renderer.sprite = (SecurityGuard.ventTarget == null && PlayerControl.GameOptions.MapId != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
                     if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
@@ -716,13 +717,69 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.Q
             );
-
-            // SecurityGuard button screws counter
+            
+            // Security Guard button screws counter
             securityGuardButtonScrewsText = GameObject.Instantiate(securityGuardButton.killButtonManager.TimerText, securityGuardButton.killButtonManager.TimerText.transform.parent);
             securityGuardButtonScrewsText.text = "";
             securityGuardButtonScrewsText.enableWordWrapping = false;
             securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
             securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
+            // Arsonist button
+            arsonistButton = new CustomButton(
+                () => {
+                    bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
+                    if (dousedEveryoneAlive) {
+                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ArsonistWin, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(winWriter);
+                        RPCProcedure.arsonistWin();
+                        arsonistButton.HasEffect = false;
+                    } else if (Arsonist.currentTarget != null) {
+                        Arsonist.douseTarget = Arsonist.currentTarget;
+                        arsonistButton.HasEffect = true;              
+                    }
+                },
+                () => { return Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
+                    if (dousedEveryoneAlive) arsonistButton.killButtonManager.renderer.sprite = Arsonist.getIgniteSprite();
+                    
+                    if (arsonistButton.isEffectActive && Arsonist.douseTarget != Arsonist.currentTarget) {
+                        Arsonist.douseTarget = null;
+                        arsonistButton.Timer = 0f;
+                        arsonistButton.isEffectActive = false;
+                    }
+
+                    return PlayerControl.LocalPlayer.CanMove && (dousedEveryoneAlive || Arsonist.currentTarget != null);
+                },
+                () => {
+                    arsonistButton.Timer = arsonistButton.MaxTimer;
+                    arsonistButton.isEffectActive = false;
+                    Arsonist.douseTarget = null;
+                },
+                Arsonist.getDouseSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q,
+                true,
+                Arsonist.duration,
+                () => {
+                    if (Arsonist.douseTarget != null) Arsonist.dousedPlayers.Add(Arsonist.douseTarget);
+                    Arsonist.douseTarget = null;
+                    arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
+
+                    int playerCounter = 0;
+                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                    bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                    foreach (PlayerControl p in Arsonist.dousedPlayers) {
+                        if (Arsonist.dousedIcons.ContainsKey(p.PlayerId)) {
+                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
+                            Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
+                            playerCounter++;
+                        }
+                    }
+                }
+            );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

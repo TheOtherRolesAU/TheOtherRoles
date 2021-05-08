@@ -42,7 +42,8 @@ namespace TheOtherRoles
         Trickster,
         Cleaner,
         Warlock,
-        SecurityGuard
+        SecurityGuard,
+        Arsonist
     }
 
     enum CustomRPC
@@ -57,7 +58,7 @@ namespace TheOtherRoles
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
-
+        OpenToiletDoor,
         // Role functionality
 
         EngineerFixLights = 81,
@@ -88,7 +89,8 @@ namespace TheOtherRoles
         LightsOut,
         WarlockCurseKill,
         PlaceCamera,
-        SealVent
+        SealVent,
+        ArsonistWin
     }
 
     public static class RPCProcedure {
@@ -218,6 +220,9 @@ namespace TheOtherRoles
                     case RoleId.SecurityGuard:
                         SecurityGuard.securityGuard = player;
                         break;
+                    case RoleId.Arsonist:
+                        Arsonist.arsonist = player;
+                        break;
                     }
                 }
         }
@@ -227,8 +232,8 @@ namespace TheOtherRoles
             if (player != null) player.SetColor(colorId);
         }
 
-        public static void versionHandshake(byte major, byte minor, byte patch, int clientId) {
-            GameStartManagerPatch.playerVersions[clientId] = new Tuple<byte, byte, byte>(major, minor, patch);
+        public static void versionHandshake(int major, int minor, int build, int clientId) {
+            GameStartManagerPatch.playerVersions[clientId] = new System.Version(major, minor, build);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -345,7 +350,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist) {
                 oldShifter.Exiled();
                 return;
             }
@@ -394,6 +399,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
                 SecurityGuard.securityGuard = oldShifter;
+            } else if (Arsonist.arsonist != null && Arsonist.arsonist == player) {
+                Arsonist.arsonist = oldShifter;
             } else { // Crewmate
             }
             
@@ -553,6 +560,7 @@ namespace TheOtherRoles
         
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
+            if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -617,7 +625,13 @@ namespace TheOtherRoles
             camera.CamName = $"Security Camera {SecurityGuard.placedCameras}";
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
-            camera.gameObject.SetActive(false);
+
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+                camera.gameObject.SetActive(true);
+                camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
+            } else {
+                camera.gameObject.SetActive(false);
+            }
             MapOptions.camerasToAdd.Add(camera);
         }
 
@@ -626,7 +640,20 @@ namespace TheOtherRoles
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+                animator?.Stop();
+                vent.EnterVentAnim = vent.ExitVentAnim = null;
+                vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                vent.myRend.color = new Color(1f, 1f, 1f, 0.5f);
+                vent.name = "FutureSealedVent_" + vent.name;
+            }
+
             MapOptions.ventsToSeal.Add(vent);
+        }
+
+        public static void arsonistWin() {
+            Arsonist.triggerArsonistWin = true;
         }
     }
 
@@ -678,6 +705,14 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
+                    break;
+
+                // Fixes
+
+                case (byte)CustomRPC.OpenToiletDoor:
+                    int doorId = reader.ReadInt32();
+                    PlainDoor door = UnityEngine.Object.FindObjectsOfType<PlainDoor>().FirstOrDefault(door => door.Id == doorId);
+                    door.SetDoorway(true);
                     break;
 
                 // Role functionality
@@ -772,6 +807,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    break;
+                case (byte)CustomRPC.ArsonistWin:
+                    RPCProcedure.arsonistWin();
                     break;
             }
         }

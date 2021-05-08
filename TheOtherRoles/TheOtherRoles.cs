@@ -49,6 +49,7 @@ namespace TheOtherRoles
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
+            Arsonist.clearAndReload();
         }
 
         public static class Jester {
@@ -135,7 +136,7 @@ namespace TheOtherRoles
             public static Color color = new Color(255f / 255f, 204f / 255f, 0f / 255f, 1);
 
             public static float cooldown = 30f;
-            public static bool jesterCanDieToSheriff = false;
+            public static bool canKillNeutrals = false;
             public static bool spyCanDieToSheriff = false;
 
             public static PlayerControl currentTarget;
@@ -144,7 +145,7 @@ namespace TheOtherRoles
                 sheriff = null;
                 currentTarget = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
-                jesterCanDieToSheriff = CustomOptionHolder.jesterCanDieToSheriff.getBool();
+                canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
             }
         }
@@ -456,20 +457,12 @@ namespace TheOtherRoles
 
     public static class Hacker {
         public static PlayerControl hacker;
-        private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
         public static float cooldown = 30f;
         public static float duration = 10f;
         public static bool onlyColorType = false;
-
         public static float hackerTimer = 0f;
-
-        public static Sprite getAdminTableIconSprite() {
-            if (adminTableIcon) return adminTableIcon;
-            adminTableIcon = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AdminTableIcon.png", 350f);
-            return adminTableIcon;
-        }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -631,7 +624,7 @@ namespace TheOtherRoles
         }
 
         public static void removeCurrentJackal() {
-            if (!formerJackals.Contains(jackal)) formerJackals.Add(jackal);
+            if (!formerJackals.Any(x => x.PlayerId == jackal.PlayerId)) formerJackals.Add(jackal);
             jackal = null;
             currentTarget = null;
             fakeSidekick = null;
@@ -850,14 +843,14 @@ namespace TheOtherRoles
         private static Sprite animatedVentSealedSprite;
         public static Sprite getAnimatedVentSealedSprite() {
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f);
             return animatedVentSealedSprite;
         }
 
         private static Sprite staticVentSealedSprite;
         public static Sprite getStaticVentSealedSprite() {
             if (staticVentSealedSprite) return staticVentSealedSprite;
-            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f); // Change sprite and pixelPerUnit
+            staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f);
             return staticVentSealedSprite;
         }
 
@@ -869,6 +862,54 @@ namespace TheOtherRoles
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
             camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
             ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
+        }
+    }
+
+    public static class Arsonist {
+        public static PlayerControl arsonist;
+        public static Color color = new Color(1, 200f/255f, 0, 1f);
+
+        public static float cooldown = 30f;
+        public static float duration = 3f;
+        public static bool triggerArsonistWin = false;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl douseTarget;
+        public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
+        public static Dictionary<byte, PoolablePlayer> dousedIcons = new Dictionary<byte, PoolablePlayer>();
+
+        private static Sprite douseSprite;
+        public static Sprite getDouseSprite() {
+            if (douseSprite) return douseSprite;
+            douseSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DouseButton.png", 115f);
+            return douseSprite;
+        }
+
+        private static Sprite igniteSprite;
+        public static Sprite getIgniteSprite() {
+            if (igniteSprite) return igniteSprite;
+            igniteSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.IgniteButton.png", 115f);
+            return igniteSprite;
+        }
+
+        public static bool dousedEveryoneAlive() {
+            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
+        }
+
+        public static void clearAndReload() {
+            arsonist = null;
+            currentTarget = null;
+            douseTarget = null;
+            triggerArsonistWin = false;
+            dousedPlayers = new List<PlayerControl>();
+            foreach (PoolablePlayer p in dousedIcons.Values) {
+                if (p != null && p.gameObject != null) { 
+                    UnityEngine.Object.Destroy(p.gameObject);
+                }
+            }
+            dousedIcons = new Dictionary<byte, PoolablePlayer>();
+            cooldown = CustomOptionHolder.arsonistCooldown.getFloat();
+            duration = CustomOptionHolder.arsonistDuration.getFloat();
         }
     }
 }
