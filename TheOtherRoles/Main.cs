@@ -50,8 +50,6 @@ namespace TheOtherRoles
         }
 
         public override void Load() {
-            CustomHatLoader.LaunchHatFetcher();
-            ModUpdater.LaunchUpdater();
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
