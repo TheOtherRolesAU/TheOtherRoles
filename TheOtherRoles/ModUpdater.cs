@@ -30,6 +30,8 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public class ModUpdaterButton {
         private static void Prefix(MainMenuManager __instance) {
+            CustomHatLoader.LaunchHatFetcher();
+            ModUpdater.LaunchUpdater();
             if (!ModUpdater.hasUpdate) return; // TODO: Insert a boolean that stores whether a new version is available
             var template = GameObject.Find("ExitGameButton");
             if (template == null) return;
@@ -55,15 +57,17 @@ namespace TheOtherRoles {
     }
 
     public class ModUpdater { 
+        public static bool running = false;
         public static bool hasUpdate = false;
         public static string updateurl = null;
-        private static Task checkerTask = null;
         private static Task updateTask = null;
+
         public static void LaunchUpdater() {
-            if (checkerTask == null) {
-                checkerTask = checkForUpdate();
-                clearOldVersions();
-            }
+            if (running) return;
+            running = true;
+            checkForUpdate().GetAwaiter().GetResult();
+            clearOldVersions();
+            
         }
         public static void ExecuteUpdate() {
             if (updateTask == null) {
