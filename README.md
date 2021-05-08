@@ -1,6 +1,6 @@
 [![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
 ![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.5.1.png)
+![eisbison infographic](./Images/Preview_2.6.0.png)
 
 
 # The Other Roles
@@ -10,10 +10,10 @@ Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
 |----------|-------------|-----------------|
-| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
-| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
-| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
-| [Eraser](#eraser) | [Hacker](#hacker) |  |
+| [Bad Child](#child) | [Child](#child) | [Arsonist](#arsonist) |
+| [Camouflager](#camouflager) | [Detective](#detective) | [Jester](#jester) |
+| [Cleaner](#cleaner) | [Engineer](#engineer) | [Jackal](#jackal) |
+| [Eraser](#eraser) | [Hacker](#hacker) | [Sidekick](#sidekick) |
 | [ImpLover](#lovers) | [Lover](#lovers) |  |
 | [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
 | [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
@@ -33,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.6.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.4.0/TheOtherRoles.zip)
@@ -57,6 +58,19 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.6.0**
+- **New Role:** [Arsonist](#arsonist)
+- Added an Ingame Updater, to make it easier to update the Mod
+- Added synchronization for Airship toilet doors. Doors now open/close for everyone
+- Changed Shifter to also die when shifting a neutral role (Jester, Arsonist, Jackal, ...)
+- Changed the option "Jester Can Die To Sheriff" to "Neutrals Can Die To Sheriff"
+- Changed the role assignment system. You can now set how many neutral roles you want in your game
+- Changed Hacker to see colors more clearly on Admin Table
+- Changed version handshake to give more clear info
+- Fixed a problem with the Hat Tab leaving too much space between categories
+- Fixed an Among Us bug, which made the selected region always show "North America"
+- Fixed an Among Us bug, which made the disconnect info be off-screen. (hopefully)
 
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
@@ -301,7 +315,8 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
-[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
+[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
+[Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
@@ -344,10 +359,11 @@ Here are a few instructions, on how to create a custom hat:
 We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
 if you're using it right.
 
-First you need to choose how many special roles you want in the game (one option for Impostor roles and one option for the rest).
+First you need to choose how many special roles of each kind (Impostor/Neutral/Crewmate) you want in the game.
 The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
 - First all roles that are set to 100% are being assigned to arbitrary players
-- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (one pool for Impostors, one for Crewmates). Then the roles will be selected randomly from that pool as long as possible (until the selected number is reached, until there are no more Crewmates or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and Impostors). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/Impostors or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+- The Mafia, Lovers and Child are being selected independently (without using the ticket system) according to the spawn chance you selected. After that all Neutral roles are being selected, then all Crewmate roles and in the very end all Impostor roles.
 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
@@ -552,7 +568,7 @@ If they try to kill a Crewmate, they die instead.
 |----------|:-------------:|
 | Sheriff Spawn Chance | -
 | Sheriff Cooldown | -
-| Jester Can Die To Sheriff | -
+| Neutrals Can Die To Sheriff | -
 -----------------------
 
 ## Jester
@@ -564,6 +580,21 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 |----------|:-------------:|
 | Jester Spawn Chance | -
 | Jester can call emergency meeting | Option to disable the emergency button for the Jester
+-----------------------
+
+## Arsonist
+### **Team: Neutral**
+The Arsonist does not have any tasks, he has to win the game as a solo.\
+The Arsonist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
+If the player that the Arsonist douses walks out of range, the cooldown will reset to 0.\
+After dousing everyone alive the Arsonist can ignite all the players which results in an Arsonist win.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Arsonist Spawn Chance | -
+| Arsonist Countdown | -
+| Arsonist Douse Duration | The time it takes to douse a player
 -----------------------
 
 ## Seer
@@ -713,11 +744,10 @@ Otherwise he sees the same information as everyone else.
 
 ## Shifter
 ### **Team: Crewmates**
-The Shifter can take over the role of another Crewmate or Neutral, the other player will transform into a Crewmate.\
+The Shifter can take over the role of another Crewmate, the other player will transform into a Crewmate.\
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
-Swapping roles with a Crewmate or Neutral gives them their role, the other player becomes a Crewmate.\
-Swapping roles with an Impostor or a custom Impostor role fails and the Shifter commits suicide after the next meeting (there won't be any body).\
+Swapping roles with an Impostor or Neutral fails and the Shifter commits suicide after the next meeting (there won't be any body).\
 The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
@@ -814,12 +844,13 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 The priority of the win conditions is the following:
 1. Crewmate Child lose by vote
 2. Jester wins by vote
-3. Team Impostor wins by sabotage
-4. Team Crew wins by tasks (also possible if the whole Crew is dead)
-5. Lovers among the last three players win
-6. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
-7. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
-8. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
+3. Arsonist win
+4. Team Impostor wins by sabotage
+5. Team Crew wins by tasks (also possible if the whole Crew is dead)
+6. Lovers among the last three players win
+7. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
+8. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
+9. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
@@ -881,7 +912,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 ## Security Guard
 ### **Team: Crewmates**
 The Security Guard is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
-Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a SecurityGuard has can also be configured.\
+Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
 **NOTE:**

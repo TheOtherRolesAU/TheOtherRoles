@@ -81,6 +81,25 @@ namespace TheOtherRoles {
                                         color = new Color32(64, 8, 71, 0), 
                                         shadow = new Color32(24, 32, 116, 0),
                                         isLighterColor = false });
+
+            /** Batch 2 **/
+            colors.Add(new CustomColor { longname = "Electric", shortname = "ELEC", 
+                                        color = new Color32(0xDB, 0xFD, 0x2F, 0), 
+                                        shadow = new Color32(0x89, 0x9E, 0x1E, 0),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "Signal Orange", shortname = "SIGN", 
+                                        color = new Color32(0xF7, 0x44, 0x17, 0), 
+                                        shadow = new Color32(0x9B, 0x2E, 0x0F, 0),
+                                        isLighterColor = true });        
+            colors.Add(new CustomColor { longname = "Navy Blue", shortname = "NAVY", 
+                                        color = new Color32(0x35, 0x7B, 0x9E, 0), 
+                                        shadow = new Color32(0x16, 0x2B, 0x62, 0),
+                                        isLighterColor = false });      
+            colors.Add(new CustomColor { longname = "Eisbison", shortname = "EIS", 
+                                        color = new Color32(0xA8, 0xDF, 0xFF, 0), 
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, 0),
+                                        isLighterColor = true });                         
+
             /** Add Colors **/
             int id = 50000;
             foreach (CustomColor cc in colors) {

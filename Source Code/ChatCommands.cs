@@ -18,21 +18,44 @@ namespace TheOtherRoles {
                 bool handled = false;
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     using(MD5 md5 = MD5.Create()) {
-                        string hash = System.BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes(text.ToLower()))).Replace("-", "").ToLowerInvariant();
-                        if (hash.Equals("f92af861c8b7aa5f2d05165abc9ba04f")) {
+                        string hash = System.BitConverter.ToString(md5.ComputeHash(Encoding.UTF8.GetBytes("tor@" + text.ToLower() + "§eof"))).Replace("-", "").ToLowerInvariant();
+                        if (hash.Equals("a4eb05314008537d2832e32fa1f33b2e")) { // i am a cheater
                             handled = true;
                             byte colorId = (byte)CustomColors.pickableColors;
                             SaveManager.BodyColor = (byte)colorId;
                             if (PlayerControl.LocalPlayer)
                                 PlayerControl.LocalPlayer.CmdCheckColor(colorId);
-                        } else if (hash.Equals("5a2ee6de2e42d2b326556640f838b0d7")) {
+                        } else if (hash.Equals("80cc70dc5f21bc321b84ce984abd511b")) { // i dont understand hashes
                             handled = true;
                             byte colorId = (byte)(CustomColors.pickableColors + 1);
                             SaveManager.BodyColor = (byte)colorId;
                             if (PlayerControl.LocalPlayer)
                                 PlayerControl.LocalPlayer.CmdCheckColor(colorId);
-                        }
-                        System.Console.WriteLine(hash);
+                        } else if (hash.Equals("3359ffcd0b14ffa39d476a5c96632032")) { // Batch 2
+                            handled = true;
+                            byte colorId = (byte)(CustomColors.pickableColors + 2);
+                            SaveManager.BodyColor = (byte)colorId;
+                            if (PlayerControl.LocalPlayer)
+                                PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+                        } else if (hash.Equals("14056e0b9e53bc91f0c6a8b1fd5ce8b5")) {
+                            handled = true;
+                            byte colorId = (byte)(CustomColors.pickableColors + 3);
+                            SaveManager.BodyColor = (byte)colorId;
+                            if (PlayerControl.LocalPlayer)
+                                PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+                        } else if (hash.Equals("fb00fb81b0be5177af908576e144d788")) {
+                            handled = true;
+                            byte colorId = (byte)(CustomColors.pickableColors + 4);
+                            SaveManager.BodyColor = (byte)colorId;
+                            if (PlayerControl.LocalPlayer)
+                                PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+                        } else if (hash.Equals("a79e2bd7c9cdc723924bd4d7734ae5da")) { // Eisbison Color
+                            handled = true;
+                            byte colorId = (byte)(CustomColors.pickableColors + 5);
+                            SaveManager.BodyColor = (byte)colorId;
+                            if (PlayerControl.LocalPlayer)
+                                PlayerControl.LocalPlayer.CmdCheckColor(colorId);
+                        } 
                     }
                 }
                 if (handled) {

@@ -224,9 +224,9 @@ namespace TheOtherRoles {
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
 
-            List<PlayerControl> untargatables = new List<PlayerControl>();
-            if (Spy.spy != null) untargatables.Add(Spy.spy);
-            Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargatables);
+            List<PlayerControl> untargetables = new List<PlayerControl>();
+            if (Spy.spy != null) untargetables.Add(Spy.spy);
+            Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
         }
 
@@ -338,27 +338,27 @@ namespace TheOtherRoles {
             }
         }
 
-        public static void updateGhostInfo() {
+        public static void updatePlayerInfo() {
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
 
-                Transform playerGhostInfoTransform = p.transform.FindChild("GhostInfo");
-                TMPro.TextMeshPro playerGhostInfo = playerGhostInfoTransform != null ? playerGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (playerGhostInfo == null) {
-                    playerGhostInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
-                    playerGhostInfo.transform.localPosition += Vector3.up * 0.25f;
-                    playerGhostInfo.fontSize *= 0.75f;
-                    playerGhostInfo.gameObject.name = "GhostInfo";
+                Transform playerInfoTransform = p.transform.FindChild("Info");
+                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerInfo == null) {
+                    playerInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                    playerInfo.transform.localPosition += Vector3.up * 0.25f;
+                    playerInfo.fontSize *= 0.75f;
+                    playerInfo.gameObject.name = "Info";
                 }
 
                 PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
-                Transform meetingGhostInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("GhostInfo") : null;
-                TMPro.TextMeshPro meetingGhostInfo = meetingGhostInfoTransform != null ? meetingGhostInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (meetingGhostInfo == null && playerVoteArea != null) {
-                    meetingGhostInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                    meetingGhostInfo.transform.localPosition += Vector3.down * (MeetingHud.Instance.playerStates.Length > 10 ? 0.4f : 0.25f);
-                    meetingGhostInfo.fontSize *= 0.75f;
-                    meetingGhostInfo.gameObject.name = "GhostInfo";
+                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("Info") : null;
+                TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (meetingInfo == null && playerVoteArea != null) {
+                    meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                    meetingInfo.transform.localPosition += Vector3.down * (MeetingHud.Instance.playerStates.Length > 10 ? 0.4f : 0.25f);
+                    meetingInfo.fontSize *= 0.75f;
+                    meetingInfo.gameObject.name = "Info";
                 }
                 
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
@@ -366,16 +366,22 @@ namespace TheOtherRoles {
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
                 
                 string info = "";
-                if (p == PlayerControl.LocalPlayer || (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks))
+                if (p == PlayerControl.LocalPlayer) {
+                    info = $"{roleNames}";
+                    if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
+                        TMPro.TextMeshPro tabText = DestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                        tabText.SetText($"Tasks {taskInfo}");
+                    }
+                } else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks)
                     info = $"{roleNames} {taskInfo}".Trim();
                 else if (MapOptions.ghostsSeeTasks)
                     info = $"{taskInfo}".Trim();
                 else if (MapOptions.ghostsSeeRoles)
                     info = $"{roleNames}";
 
-                playerGhostInfo.text = info;
-                playerGhostInfo.gameObject.SetActive(p.Visible);
-                if (meetingGhostInfo != null) meetingGhostInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : info;
+                playerInfo.text = info;
+                playerInfo.gameObject.SetActive(p.Visible);
+                if (meetingInfo != null) meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : info;
             }
         }
 
@@ -387,7 +393,7 @@ namespace TheOtherRoles {
             float closestDistance = float.MaxValue;
             for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
                 Vent vent = ShipStatus.Instance.AllVents[i];
-                if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_")) continue;
+                if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_") || vent.gameObject.name.StartsWith("FutureSealedVent_")) continue;
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;
@@ -395,6 +401,17 @@ namespace TheOtherRoles {
                 }
             }
             SecurityGuard.ventTarget = target;
+        }
+
+        public static void arsonistSetTarget() {
+            if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
+            List<PlayerControl> untargetables;
+            if (Arsonist.douseTarget != null)
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Arsonist.douseTarget.PlayerId).ToList();
+            else
+                untargetables = Arsonist.dousedPlayers;
+            Arsonist.currentTarget = setTarget(untargetablePlayers: untargetables);
+            if (Arsonist.currentTarget != null) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -410,8 +427,8 @@ namespace TheOtherRoles {
                 // Update Role Description
                 Helpers.refreshRoleDescription(__instance);
 
-                // Update Ghost Info
-                updateGhostInfo();
+                // Update Player Info
+                updatePlayerInfo();
 
                 // Time Master
                 bendTimeUpdate();
@@ -448,6 +465,8 @@ namespace TheOtherRoles {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
+                // Arsonist
+                arsonistSetTarget();
             } 
         }
     }

@@ -7,21 +7,46 @@ using System.Linq;
 
 namespace TheOtherRoles
 {
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+    class IntroCutsceneOnDestroyPatch {
+        public static void Prefix(IntroCutscene __instance) {
+            // Arsonist generate player icons
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Arsonist.arsonist && HudManager.Instance != null) {
+                int playerCounter = 0;
+                Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                    if (player != PlayerControl.LocalPlayer) {
+                        GameData.PlayerInfo data = player.Data;
+                        PoolablePlayer poolablePlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
+                        poolablePlayer.transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
+                        poolablePlayer.transform.localScale = Vector3.one * 0.3f;
+                        PlayerControl.SetPlayerMaterialColors(data.ColorId, poolablePlayer.Body);
+                        DestroyableSingleton<HatManager>.Instance.SetSkin(poolablePlayer.SkinSlot, data.SkinId);
+                        poolablePlayer.HatSlot.SetHat(data.HatId, data.ColorId);
+                        PlayerControl.SetPetImage(data.PetId, data.ColorId, poolablePlayer.PetSlot);
+                        poolablePlayer.NameText.text = data.PlayerName;
+                        poolablePlayer.SetFlipX(true);
+                        poolablePlayer.gameObject.SetActive(false);
+
+                        Arsonist.dousedIcons[player.PlayerId] = poolablePlayer;
+                        playerCounter++;
+                    }
+                }
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(IntroCutscene.Nested_0), nameof(IntroCutscene.Nested_0.MoveNext))]
     class IntroPatch
     {
-        // Intro special teams
         static void Prefix(IntroCutscene.Nested_0 __instance)
         {
-            if (PlayerControl.LocalPlayer == Jester.jester)
-            {
-                var jesterTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                jesterTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = jesterTeam;
-            } else if (PlayerControl.LocalPlayer == Jackal.jackal) {
-                var jackalTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                jackalTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = jackalTeam;
+            // Intro solo teams
+            if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(PlayerControl.LocalPlayer);
+                __instance.yourTeam = soloTeam;
             }
 
             // Add the Spy to the Impostor team (for the Impostors)
