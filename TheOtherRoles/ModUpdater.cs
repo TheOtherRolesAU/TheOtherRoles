@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Il2CppNewtonsoft::Newtonsoft.Json.Linq;
 using Il2CppNewtonsoft::Newtonsoft.Json;
-
+using Twitch;
 
 namespace TheOtherRoles {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
@@ -32,13 +32,12 @@ namespace TheOtherRoles {
         private static void Prefix(MainMenuManager __instance) {
             CustomHatLoader.LaunchHatFetcher();
             ModUpdater.LaunchUpdater();
-            if (!ModUpdater.hasUpdate) return; // TODO: Insert a boolean that stores whether a new version is available
+            if (!ModUpdater.hasUpdate) return;
             var template = GameObject.Find("ExitGameButton");
             if (template == null) return;
 
             var button = UnityEngine.Object.Instantiate(template, null);
             button.transform.localPosition = new Vector3(button.transform.localPosition.x, button.transform.localPosition.y + 0.6f, button.transform.localPosition.z);
-            // button.transform.localScale = Vector3.one * 1.5f;
 
             PassiveButton passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
@@ -49,9 +48,16 @@ namespace TheOtherRoles {
                 text.SetText("Update\nThe Other Roles");
             })));
 
+            TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+            ModUpdater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
+
             void onClick() {
                 ModUpdater.ExecuteUpdate();
                 button.SetActive(false);
+                ModUpdater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
+                ModUpdater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
+                ModUpdater.InfoPopup.Show("Updating The Other Roles\nPlease wait...");
+                __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { ModUpdater.setPopupText("Updating The Other Roles\nPlease wait..."); })));
             }
         }
     }
@@ -61,20 +67,21 @@ namespace TheOtherRoles {
         public static bool hasUpdate = false;
         public static string updateurl = null;
         private static Task updateTask = null;
+        public static GenericPopup InfoPopup;
 
         public static void LaunchUpdater() {
             if (running) return;
             running = true;
             checkForUpdate().GetAwaiter().GetResult();
-            clearOldVersions();
-            
+            clearOldVersions();   
         }
+
         public static void ExecuteUpdate() {
             if (updateTask == null) {
                 if (updateurl != null) {
                     updateTask = downloadUpdate();
                 } else {
-                    // Update needs to be done manually
+                    showPopup("This update has to be done manually");
                 }
             }
         }
@@ -108,13 +115,10 @@ namespace TheOtherRoles {
                     return false; // Something went wrong
                 }
                 // check version
-                // tagname.Split(".");
                 System.Version ver = System.Version.Parse(tagname.Replace("v", ""));
                 int diff = TheOtherRolesPlugin.Version.CompareTo(ver);
-                //System.Console.WriteLine($"Online Version {ver.ToString()} | {diff}");
                 if (diff < 0) { // Update required
                     hasUpdate = true;
-                    //System.Console.WriteLine($"Update required from {TheOtherRolesPlugin.Version.ToString()}");
                     JToken assets = data["assets"];
                     if (!assets.HasValues)
                         return false;
@@ -125,7 +129,6 @@ namespace TheOtherRoles {
                             if (current["content_type"].ToString().Equals("application/x-msdownload") &&
                                 browser_download_url.EndsWith(".dll")) {
                                 updateurl = browser_download_url;
-                                //System.Console.WriteLine(updateurl);
                                 return true;
                             }
                         }
@@ -142,7 +145,6 @@ namespace TheOtherRoles {
             try {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-                // var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/Eisbison/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
                 var response = await http.GetAsync(new System.Uri(updateurl), HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK || response.Content == null) {
                     System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
@@ -151,23 +153,39 @@ namespace TheOtherRoles {
                 string codeBase = Assembly.GetExecutingAssembly().CodeBase;
                 System.UriBuilder uri = new System.UriBuilder(codeBase);
                 string fullname = System.Uri.UnescapeDataString(uri.Path);
-                //System.Console.WriteLine(fullname);
                 if (File.Exists(fullname + ".old")) // Clear old file in case it wasnt;
                     File.Delete(fullname + ".old");
 
                 File.Move(fullname, fullname + ".old"); // rename current executable to old
 
                 using (var responseStream = await response.Content.ReadAsStreamAsync()) {
-                    using (var fileStream = File.Create(fullname)) {
-                        responseStream.CopyTo(fileStream);
+                    using (var fileStream = File.Create(fullname)) { // probably want to have proper name here
+                        responseStream.CopyTo(fileStream); 
                     }
                 }
+                showPopup("The Other Roles\nupdated successfully\nPlease restart the game.");
                 return true;
             } catch (System.Exception ex) {
                 TheOtherRolesPlugin.Instance.Log.LogError(ex.ToString());
                 System.Console.WriteLine(ex);
             }
+            showPopup("Update wasn't successful\nTry again later,\nor update manually.");
             return false;
+        }
+        private static void showPopup(string message) {
+            setPopupText(message);
+            InfoPopup.gameObject.SetActive(true);
+        }
+
+        public static void setPopupText(string message) {
+            if (InfoPopup == null)
+                return;
+            if (InfoPopup.TextArea != null) {
+                InfoPopup.TextArea.Text = message;
+            }
+            if (InfoPopup.TextAreaTMP != null) {
+                InfoPopup.TextAreaTMP.text = message;
+            }
         }
     }
 }

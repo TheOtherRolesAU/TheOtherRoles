@@ -33,4 +33,7 @@
 			<Aliases>Il2CppNewtonsoft</Aliases>
 		</Reference>
 	</ItemGroup>
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);MSB3243</NoWarn>
+    </PropertyGroup>
 </Project>
