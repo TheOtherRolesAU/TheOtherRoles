@@ -224,9 +224,9 @@ namespace TheOtherRoles {
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != PlayerControl.LocalPlayer) return;
 
-            List<PlayerControl> untargatables = new List<PlayerControl>();
-            if (Spy.spy != null) untargatables.Add(Spy.spy);
-            Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargatables);
+            List<PlayerControl> untargetables = new List<PlayerControl>();
+            if (Spy.spy != null) untargetables.Add(Spy.spy);
+            Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
         }
 
@@ -405,8 +405,13 @@ namespace TheOtherRoles {
 
         public static void arsonistSetTarget() {
             if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
-            Arsonist.currentTarget = setTarget();
-            if (Arsonist.currentTarget != null && !Arsonist.dousedPlayers.Any(x => x.PlayerId == Arsonist.currentTarget.PlayerId)) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
+            List<PlayerControl> untargetables;
+            if (Arsonist.douseTarget != null)
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Arsonist.douseTarget.PlayerId).ToList();
+            else
+                untargetables = Arsonist.dousedPlayers;
+            Arsonist.currentTarget = setTarget(untargetablePlayers: untargetables);
+            if (Arsonist.currentTarget != null) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
         }
 
         public static void Postfix(PlayerControl __instance) {
