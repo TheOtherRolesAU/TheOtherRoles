@@ -62,13 +62,14 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
 - Added an Ingame Updater, to make it easier to update the Mod
-- Added syncrhonization for Airship toilet doors. Doors now open/close for everyone.
+- Added synchronization for Airship toilet doors. Doors now open/close for everyone
 - Changed Shifter to also die when shifting a neutral role (Jester, Arsonist, Jackal, ...)
 - Changed the option "Jester Can Die To Sheriff" to "Neutrals Can Die To Sheriff"
-- Changed the role assignment system. You can now set how many neutral roles you want in your game.
+- Changed the role assignment system. You can now set how many neutral roles you want in your game
 - Changed Hacker to see colors more clearly on Admin Table
+- Changed version handshake to give more clear info
 - Fixed a problem with the Hat Tab leaving too much space between categories
-- Fixed an Among Us bug, which always showed "North America" as selected region
+- Fixed an Among Us bug, which made the selected region always show "North America"
 - Fixed an Among Us bug, which made the disconnect info be off-screen. (hopefully)
 
 **Version 2.5.1**
