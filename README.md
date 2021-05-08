@@ -10,10 +10,10 @@ Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
 |----------|-------------|-----------------|
-| [Bad Child](#child) | [Child](#child) | [Jester](#jester) |
-| [Camouflager](#camouflager) | [Detective](#detective) | [Jackal](#jackal) |
-| [Cleaner](#cleaner) | [Engineer](#engineer) | [Sidekick](#sidekick) |
-| [Eraser](#eraser) | [Hacker](#hacker) | [Arsonist](#arsonist) |
+| [Bad Child](#child) | [Child](#child) | [Arsonist](#arsonist) |
+| [Camouflager](#camouflager) | [Detective](#detective) | [Jester](#jester) |
+| [Cleaner](#cleaner) | [Engineer](#engineer) | [Jackal](#jackal) |
+| [Eraser](#eraser) | [Hacker](#hacker) | [Sidekick](#sidekick) |
 | [ImpLover](#lovers) | [Lover](#lovers) |  |
 | [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
 | [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
@@ -61,9 +61,15 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
-- The Shifter now also dies when he shifts a neutral role (Jester, Arsonist, Jackal, ...)
-- We changed the option "Jester Can Die To Sheriff" to "Neutrals Can Die To Sheriff"
-- We changed the role assignment system. You can now set how many neutral roles you want in your game.
+- Added an Ingame Updater, to make it easier to update the Mod
+- Added syncrhonization for Airship toilet doors. Doors now open/close for everyone.
+- Changed Shifter to also die when shifting a neutral role (Jester, Arsonist, Jackal, ...)
+- Changed the option "Jester Can Die To Sheriff" to "Neutrals Can Die To Sheriff"
+- Changed the role assignment system. You can now set how many neutral roles you want in your game.
+- Changed Hacker to see colors more clearly on Admin Table
+- Fixed a problem with the Hat Tab leaving too much space between categories
+- Fixed an Among Us bug, which always showed "North America" as selected region
+- Fixed an Among Us bug, which made the disconnect info be off-screen. (hopefully)
 
 **Version 2.5.1**
 - **New Hats:** We added the support for custom hats and there are already a few hats inside the game. We can add new hats without updating the mod and we're awaiting your hat designs on our discord server.
@@ -308,7 +314,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
-[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
+[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
 [Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
 
 # Settings
