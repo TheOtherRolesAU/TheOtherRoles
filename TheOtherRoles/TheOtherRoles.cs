@@ -457,20 +457,12 @@ namespace TheOtherRoles
 
     public static class Hacker {
         public static PlayerControl hacker;
-        private static Sprite adminTableIcon;
         public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
 
         public static float cooldown = 30f;
         public static float duration = 10f;
         public static bool onlyColorType = false;
-
         public static float hackerTimer = 0f;
-
-        public static Sprite getAdminTableIconSprite() {
-            if (adminTableIcon) return adminTableIcon;
-            adminTableIcon = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AdminTableIcon.png", 350f);
-            return adminTableIcon;
-        }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {

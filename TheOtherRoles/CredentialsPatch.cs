@@ -11,7 +11,7 @@ namespace TheOtherRoles
     [HarmonyPatch]
     public static class CredentialsPatch {
         public static string fullCredentials = 
-$@"<color=#FCCE03FF>TheOtherRoles</color> v{TheOtherRolesPlugin.Major}.{TheOtherRolesPlugin.Minor}.{TheOtherRolesPlugin.Patch}:
+$@"<color=#FCCE03FF>TheOtherRoles</color> v{TheOtherRolesPlugin.Version.ToString()}:
 - Modded by <color=#FCCE03FF>Eisbison</color>,
   <color=#FFEB91FF>Thunderstorm584</color> and <color=#FFEB91FF>EndOfFile</color>
 - Balanced with <color=#FFEB91FF>Dhalucard</color>

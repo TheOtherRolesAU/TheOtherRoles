@@ -58,7 +58,7 @@ namespace TheOtherRoles
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
-
+        OpenToiletDoor,
         // Role functionality
 
         EngineerFixLights = 81,
@@ -232,8 +232,8 @@ namespace TheOtherRoles
             if (player != null) player.SetColor(colorId);
         }
 
-        public static void versionHandshake(byte major, byte minor, byte patch, int clientId) {
-            GameStartManagerPatch.playerVersions[clientId] = new Tuple<byte, byte, byte>(major, minor, patch);
+        public static void versionHandshake(int major, int minor, int build, int clientId) {
+            GameStartManagerPatch.playerVersions[clientId] = new System.Version(major, minor, build);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -705,6 +705,14 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
+                    break;
+
+                // Fixes
+
+                case (byte)CustomRPC.OpenToiletDoor:
+                    int doorId = reader.ReadInt32();
+                    PlainDoor door = UnityEngine.Object.FindObjectsOfType<PlainDoor>().FirstOrDefault(door => door.Id == doorId);
+                    door.SetDoorway(true);
                     break;
 
                 // Role functionality
