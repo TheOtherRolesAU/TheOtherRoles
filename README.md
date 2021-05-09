@@ -62,6 +62,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.1**
 - Fixed a bug where the Sheriff was unable to kill the Arsonist
+- Fixed a bug in the role assignment system
 
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
