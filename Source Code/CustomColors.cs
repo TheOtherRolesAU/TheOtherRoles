@@ -163,6 +163,39 @@ namespace TheOtherRoles {
                     }
                 }
             }
+            [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadPlayerPrefs))]
+            private static class LoadPlayerPrefsPatch { // Fix Potential issues with broken colors
+                private static bool needsPatch = false;
+                public static void Prefix([HarmonyArgument(0)] bool overrideLoad) {
+                    if (!SaveManager.loaded || overrideLoad)
+                        needsPatch = true;
+                }
+                public static void Postfix() {
+                    if (!needsPatch) return;
+                    SaveManager.colorConfig %= (uint)CustomColors.pickableColors;
+                    needsPatch = false;
+                }
+            }
+            [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
+            private static class PlayerControlCheckColorPatch {
+                private static bool isTaken(PlayerControl player, uint color) {
+                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers)
+                        if (!p.Disconnected && p.PlayerId != player.PlayerId && p.ColorId == color)
+                            return true;
+                    return false;
+                }
+                public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor) { // Fix incorrect color assignment
+                    uint color = (uint)bodyColor;
+                   if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length) {
+                        int num = 0;
+                        while (num++ < 50 && (color >= CustomColors.pickableColors || isTaken(__instance, color))) {
+                            color = (color + 1) % (uint)CustomColors.pickableColors;
+                        }
+                    }
+                    __instance.RpcSetColor((byte)color);
+                    return false;
+                }
+            }
         }
     }
 }

@@ -485,6 +485,22 @@ namespace TheOtherRoles
                     }
                     Seer.deadBodyPositions = new List<Vector3>();
                 }
+
+                // Arsonist deactivate dead poolable players
+                if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
+                    int visibleCounter = 0;
+                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                    bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                        if (!Arsonist.dousedIcons.ContainsKey(p.PlayerId)) continue;
+                        if (p.Data.IsDead || p.Data.Disconnected) {
+                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
+                        } else {
+                            Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
+                            visibleCounter++;
+                        }                        
+                    }
+                }
             }
         }
     }

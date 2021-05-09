@@ -229,7 +229,7 @@ namespace TheOtherRoles {
 
             sheriffSpawnRate = CustomOption.Create(100, cs(Sheriff.color, "Sheriff"), rates, null, true);
             sheriffCooldown = CustomOption.Create(101, "Sheriff Cooldown", 30f, 10f, 60f, 2.5f, sheriffSpawnRate);
-            sheriffCanKillNeutrals = CustomOption.Create(102, "Neutrals Can Kill The Jester", false, sheriffSpawnRate);
+            sheriffCanKillNeutrals = CustomOption.Create(102, "Sheriff Can Kill Neutrals", false, sheriffSpawnRate);
 
 
             lighterSpawnRate = CustomOption.Create(110, cs(Lighter.color, "Lighter"), rates, null, true);
@@ -509,6 +509,29 @@ namespace TheOtherRoles {
     class GameSettingMenuPatch {
         public static void Prefix(GameSettingMenu __instance) {
             __instance.HideForOnline = new Transform[]{};
+        }
+
+        public static void Postfix(GameSettingMenu __instance) {
+            var mapNameTransform = __instance.AllItems.FirstOrDefault(x => x.gameObject.activeSelf && x.name.Equals("MapName", StringComparison.OrdinalIgnoreCase));
+            if (mapNameTransform == null) return;
+
+            var options = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.KeyValuePair<string, int>>();
+            for (int i = 0; i < GameOptionsData.MapNames.Length; i++) {
+                var kvp = new Il2CppSystem.Collections.Generic.KeyValuePair<string, int>();
+                kvp.key = GameOptionsData.MapNames[i];
+                kvp.value = i;
+                options.Add(kvp);
+            }
+            mapNameTransform.GetComponent<KeyValueOption>().Values = options;
+        }
+    }
+
+    [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldFlipSkeld))]
+    class ConstantsShouldFlipSkeldPatch {
+        public static bool Prefix(ref bool __result) {
+            if (PlayerControl.GameOptions == null) return true;
+            __result = PlayerControl.GameOptions.MapId == 3;
+            return false;
         }
     }
 
