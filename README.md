@@ -64,6 +64,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the Sheriff was unable to kill the Arsonist
 - Fixed a bug in the role assignment system
 - Added the option to select the Dleks map
+- Improved the overlay of the Arsonist
 
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
