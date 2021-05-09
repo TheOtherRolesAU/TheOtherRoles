@@ -33,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.4.14s| v2.6.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.6.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.0/TheOtherRoles.zip)
@@ -58,6 +59,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.6.1**
+- Fixed a bug where the Sheriff was unable to kill the Arsonist
+- Fixed a bug in the role assignment system
+- Added the option to select the Dleks map
+- Improved the overlay of the Arsonist
 
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
@@ -327,6 +334,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
 - **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
+- **Dleks:** You are now able to select the Dleks map. 
 
 # Custom Hats
 ## Create and submit new hat designs

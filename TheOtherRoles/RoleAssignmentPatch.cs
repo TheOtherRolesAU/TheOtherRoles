@@ -81,7 +81,6 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Hacker, CustomOptionHolder.hackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
-            crewSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
             if (impostors.Count > 1) // Spy is useless with less than 2 Impostors
                 crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.getSelection());
@@ -139,7 +138,7 @@ namespace TheOtherRoles
                         }
                     }
                 } else { // Other
-                    for (int j = 0; j < entry.Value; j++) crewTickets.Add(entry.Key);
+                    for (int j = 0; j < entry.Value; j++) neutralTickets.Add(entry.Key);
                 }
             }
 
