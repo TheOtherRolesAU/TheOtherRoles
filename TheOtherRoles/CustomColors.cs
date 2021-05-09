@@ -186,7 +186,7 @@ namespace TheOtherRoles {
                 }
                 public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor) { // Fix incorrect color assignment
                     uint color = (uint)bodyColor;
-                    if (isTaken(__instance, color)) {
+                   if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length) {
                         int num = 0;
                         while (num++ < 50 && (color >= CustomColors.pickableColors || isTaken(__instance, color))) {
                             color = (color + 1) % CustomColors.pickableColors;
