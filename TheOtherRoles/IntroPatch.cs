@@ -27,8 +27,7 @@ namespace TheOtherRoles
                         PlayerControl.SetPetImage(data.PetId, data.ColorId, poolablePlayer.PetSlot);
                         poolablePlayer.NameText.text = data.PlayerName;
                         poolablePlayer.SetFlipX(true);
-                        poolablePlayer.gameObject.SetActive(false);
-
+                        poolablePlayer.setSemiTransparent(true);
                         Arsonist.dousedIcons[player.PlayerId] = poolablePlayer;
                         playerCounter++;
                     }
