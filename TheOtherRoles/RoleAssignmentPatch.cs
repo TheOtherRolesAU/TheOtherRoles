@@ -178,7 +178,7 @@ namespace TheOtherRoles
                         maxImpostorRoles--;
                     }
                 } else { // Other
-                    for (int j = 0; j < entry.Value; j++) impTickets.Add(entry.Key);
+                    for (int j = 0; j < entry.Value; j++) neutralTickets.Add(entry.Key);
                 }
             }
 
