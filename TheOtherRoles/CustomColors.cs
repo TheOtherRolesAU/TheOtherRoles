@@ -172,7 +172,7 @@ namespace TheOtherRoles {
                 }
                 public static void Postfix() {
                     if (!needsPatch) return;
-                    SaveManager.colorConfig %= CustomColors.pickableColors;
+                    SaveManager.colorConfig %= (uint)CustomColors.pickableColors;
                     needsPatch = false;
                 }
             }
@@ -189,7 +189,7 @@ namespace TheOtherRoles {
                    if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length) {
                         int num = 0;
                         while (num++ < 50 && (color >= CustomColors.pickableColors || isTaken(__instance, color))) {
-                            color = (color + 1) % CustomColors.pickableColors;
+                            color = (color + 1) % (uint)CustomColors.pickableColors;
                         }
                     }
                     __instance.RpcSetColor((byte)color);
