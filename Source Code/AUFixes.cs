@@ -40,4 +40,11 @@ namespace TheOtherRoles {
             }
         }
     }
+
+    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
+        public class GameStartManagerUpdatePatch {
+            public static void Postfix(GameStartManager __instance) {
+                __instance.GameRoomName.transform.localPosition = new Vector3(0.0f, -0.95f);
+        }
+    }
 }

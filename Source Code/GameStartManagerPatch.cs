@@ -126,7 +126,8 @@ namespace TheOtherRoles {
                 int seconds = (int)timer % 60;
                 string suffix = $" ({minutes:00}:{seconds:00})";
 
-                __instance.PlayerCounter.text = currentText + suffix;
+                __instance.PlayerCounter.text = " " + currentText + "\n" + suffix;
+                __instance.PlayerCounter.alignment = TMPro.TextAlignmentOptions.Center;
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
             }

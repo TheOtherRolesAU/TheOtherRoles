@@ -56,7 +56,7 @@ namespace TheOtherRoles
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             HostSeesVotesLog = Config.Bind("Custom", "Host Sees Votes Log", false);
-            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
+            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "The Other\nRoles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
 
