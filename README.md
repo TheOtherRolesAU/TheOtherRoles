@@ -62,6 +62,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.2**
+- Added a chat command to kick players as the host of a lobby (/kick playerName)
+- 
 
 **Version 2.6.1**
 - Fixed a bug where the Sheriff was unable to kill the Arsonist
