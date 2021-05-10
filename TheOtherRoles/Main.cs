@@ -78,6 +78,16 @@ namespace TheOtherRoles
         }
     }
 
+    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    public class BannerPatch {
+        private static void Postfix(MainMenuManager __instance) {
+            var template = GameObject.Find("bannerLogo_AmongUs");
+            GameObject banner = UnityEngine.Object.Instantiate(template, template.transform.parent);
+            banner.transform.localPosition += Vector3.down;
+            banner.GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
+        }
+    }
+
     // Deactivate bans, since I always leave my local testing game and ban myself
     [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
     public static class AmBannedPatch
