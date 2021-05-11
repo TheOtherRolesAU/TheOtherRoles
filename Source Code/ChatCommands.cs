@@ -6,6 +6,7 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using UnityEngine;
+using System.Linq;
 using UnhollowerBaseLib;
 
 namespace TheOtherRoles {
@@ -55,7 +56,17 @@ namespace TheOtherRoles {
                             SaveManager.BodyColor = (byte)colorId;
                             if (PlayerControl.LocalPlayer)
                                 PlayerControl.LocalPlayer.CmdCheckColor(colorId);
-                        } 
+                        } else if (text.ToLower().StartsWith("/kick ")) {
+                            string playerName = text.Substring(6);
+                            PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                            if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan()) {
+                                var client = AmongUsClient.Instance.GetClient(target.OwnerId);
+                                if (client != null) {
+                                    AmongUsClient.Instance.KickPlayer(client.Id, false);
+                                    handled = true;
+                                }
+                            }
+                        }
                     }
                 }
                 if (handled) {

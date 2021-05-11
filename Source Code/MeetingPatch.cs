@@ -494,7 +494,7 @@ namespace TheOtherRoles
                     foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                         if (!Arsonist.dousedIcons.ContainsKey(p.PlayerId)) continue;
                         if (p.Data.IsDead || p.Data.Disconnected) {
-                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
+                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(false);
                         } else {
                             Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
                             visibleCounter++;
