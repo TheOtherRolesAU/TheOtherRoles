@@ -13,40 +13,35 @@ namespace TheOtherRoles
     class SetInfectedPatch
     {
 
-        private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
-            var index = rnd.Next(0, playerList.Count);
-            byte playerId = playerList[index].PlayerId;
-            playerList.RemoveAt(index);
-
-            setRoleToPlayer(roleId, playerId);
-        }
-
-        private static void setRoleToPlayer(byte roleId, byte playerId) {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
-            writer.Write(roleId);
-            writer.Write(playerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId);
-        }
-
         public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
+            assignRoles();
+        }
+
+        private static void assignRoles() {
+            var data = getRoleAssignmentData();
+            assignSpecialRoles(data);
+            assignEnsuredRoles(data);
+            assignChanceRoles(data);
+        }
+
+        private static RoleAssignmentData getRoleAssignmentData() {
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             crewmates.RemoveAll(x => x.Data.IsImpostor);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
-            int maxCrewmateRoles = rnd.Next((int)CustomOptionHolder.crewmateRolesCountMin.getSelection(), (int)CustomOptionHolder.crewmateRolesCountMax.getSelection() + 1);
-            int maxNeutralRoles = rnd.Next((int)CustomOptionHolder.neutralRolesCountMin.getSelection(), (int)CustomOptionHolder.neutralRolesCountMax.getSelection() + 1);
-            int maxImpostorRoles = rnd.Next((int)CustomOptionHolder.impostorRolesCountMin.getSelection(), (int)CustomOptionHolder.impostorRolesCountMax.getSelection() + 1);
+            int crewCountSettings = rnd.Next((int)CustomOptionHolder.crewmateRolesCountMin.getSelection(), (int)CustomOptionHolder.crewmateRolesCountMax.getSelection() + 1);
+            int neutralCountSettings = rnd.Next((int)CustomOptionHolder.neutralRolesCountMin.getSelection(), (int)CustomOptionHolder.neutralRolesCountMax.getSelection() + 1);
+            int impCountSettings = rnd.Next((int)CustomOptionHolder.impostorRolesCountMin.getSelection(), (int)CustomOptionHolder.impostorRolesCountMax.getSelection() + 1);
 
-            maxCrewmateRoles = Mathf.Min(crewmates.Count, maxCrewmateRoles);
-            maxNeutralRoles = Mathf.Min(crewmates.Count, maxNeutralRoles);
-            maxImpostorRoles = Mathf.Min(impostors.Count, maxImpostorRoles);
+            int maxCrewmateRoles = Mathf.Min(crewmates.Count, crewCountSettings);
+            int maxNeutralRoles = Mathf.Min(crewmates.Count, neutralCountSettings);
+            int maxImpostorRoles = Mathf.Min(impostors.Count, impCountSettings);
 
             Dictionary<byte, int> impSettings = new Dictionary<byte, int>();
             Dictionary<byte, int> neutralSettings = new Dictionary<byte, int>();
@@ -77,159 +72,179 @@ namespace TheOtherRoles
             crewSettings.Add((byte)RoleId.Hacker, CustomOptionHolder.hackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
-            if (impostors.Count > 1) // Spy is useless with less than 2 Impostors
+            if (impostors.Count > 1) {// Spy is useless with less than 2 Impostors
                 crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
+            }
             crewSettings.Add((byte)RoleId.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.getSelection());
 
+            var data = new RoleAssignmentData {
+                crewmates = crewmates,
+                impostors = impostors,
+                crewSettings = crewSettings,
+                neutralSettings = neutralSettings,
+                impSettings = impSettings,
+                maxCrewmateRoles = maxCrewmateRoles,
+                maxNeutralRoles = maxNeutralRoles,
+                maxImpostorRoles = maxImpostorRoles
+            };
+            return data;
+        }
+
+        private static void assignSpecialRoles(RoleAssignmentData data) { 
             // Set special roles
-            if (impostors.Count >= 3 && maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
-                setRoleToRandomPlayer((byte)RoleId.Godfather, impostors);
-                setRoleToRandomPlayer((byte)RoleId.Janitor, impostors);
-                setRoleToRandomPlayer((byte)RoleId.Mafioso, impostors);
-                maxImpostorRoles -= 3;
+            if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
+                setRoleToRandomPlayer((byte)RoleId.Godfather, data.impostors);
+                setRoleToRandomPlayer((byte)RoleId.Janitor, data.impostors);
+                setRoleToRandomPlayer((byte)RoleId.Mafioso, data.impostors);
+                data.maxImpostorRoles -= 3;
             }
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
-                if (impostors.Count > 0 && crewmates.Count > 0 && maxCrewmateRoles > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, impostors); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates);
-                    maxCrewmateRoles--;
-                    maxImpostorRoles--;
-                } else if (crewmates.Count >= 2 && maxCrewmateRoles >= 2) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, crewmates); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, crewmates); 
-                    maxCrewmateRoles -= 2; 
+                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.impostors); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates);
+                    data.maxCrewmateRoles--;
+                    data.maxImpostorRoles--;
+                } else if (crewmates.Count >= 2 && data.maxCrewmateRoles >= 2) {
+                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.crewmates); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates); 
+                    data.maxCrewmateRoles -= 2; 
                 }
             }
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.childSpawnRate.getSelection() * 10) {
-                if (impostors.Count > 0 && maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
-                    setRoleToRandomPlayer((byte)RoleId.Child, impostors); 
-                    maxImpostorRoles--;
-                } else if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
-                    setRoleToRandomPlayer((byte)RoleId.Child, crewmates);
-                    maxCrewmateRoles--;
-                }
-            }
-
-            // Set tickets and always active roles
-
-            List<byte> crewTickets = new List<byte>();
-            List<byte> neutralTickets = new List<byte>();
-            List<byte> impTickets = new List<byte>();
-
-            for (int i = 0; i < neutralSettings.Count; i++) {
-                var entry = neutralSettings.ElementAt(i);
-                if (entry.Value == 0) { // Never
-                } else if (entry.Value == 10) { // Always
-                    if (crewmates.Count > 0 && maxNeutralRoles > 0) {
-                        setRoleToRandomPlayer(entry.Key, crewmates);
-                        maxNeutralRoles--;
-                        if (CustomOptionHolder.blockedRolePairings.ContainsKey(entry.Key)) {
-                            foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[entry.Key]) {
-                                if(impSettings.ContainsKey(blockedRoleId)) impSettings[blockedRoleId] = 0;
-                                if (neutralSettings.ContainsKey(blockedRoleId)) neutralSettings[blockedRoleId] = 0;
-                                if(crewSettings.ContainsKey(blockedRoleId)) crewSettings[blockedRoleId] = 0;
-                            }
-                        }
-                    }
-                } else { // Other
-                    for (int j = 0; j < entry.Value; j++) neutralTickets.Add(entry.Key);
-                }
-            }
-
-            for (int i = 0; i < crewSettings.Count; i++) {
-                var entry = crewSettings.ElementAt(i);
-                if (entry.Value == 0) { // Never
-                } else if (entry.Value == 10) { // Always
-                    if (crewmates.Count > 0 && maxCrewmateRoles > 0) {
-                        setRoleToRandomPlayer(entry.Key, crewmates);
-                        maxCrewmateRoles--;
-                        if(CustomOptionHolder.blockedRolePairings.ContainsKey(entry.Key)) {
-                            foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[entry.Key]) {
-                                if (impSettings.ContainsKey(blockedRoleId)) impSettings[blockedRoleId] = 0;
-                                if (neutralSettings.ContainsKey(blockedRoleId)) neutralSettings[blockedRoleId] = 0;
-                                if (crewSettings.ContainsKey(blockedRoleId)) crewSettings[blockedRoleId] = 0;
-                            }
-                        }
-                    }
-                } else { // Other
-                    for (int j = 0; j < entry.Value; j++) crewTickets.Add(entry.Key);
-                }
-            }
-
-            for (int i = 0; i < impSettings.Count; i++) {
-                var entry = impSettings.ElementAt(i);
-                if (entry.Value == 0) { // Never
-                } else if (entry.Value == 10) { // Always
-                    if (impostors.Count > 0 && maxImpostorRoles > 0) {
-                        setRoleToRandomPlayer(entry.Key, impostors);
-                        if(CustomOptionHolder.blockedRolePairings.ContainsKey(entry.Key)) {
-                            foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[entry.Key]) {
-                                if (impSettings.ContainsKey(blockedRoleId)) impSettings[blockedRoleId] = 0;
-                                if (neutralSettings.ContainsKey(blockedRoleId)) neutralSettings[blockedRoleId] = 0;
-                                if (crewSettings.ContainsKey(blockedRoleId)) crewSettings[blockedRoleId] = 0;
-                            }
-                        }
-                        maxImpostorRoles--;
-                    }
-                } else { // Other
-                    for (int j = 0; j < entry.Value; j++) impTickets.Add(entry.Key);
-                }
-            }
-
-            // Set solo player roles
-
-            for (int i = 0; i < maxNeutralRoles; i++) {
-                if (neutralTickets.Count > 0 && crewmates.Count > 0) {
-                    var index = rnd.Next(0, neutralTickets.Count);
-                    byte roleId = neutralTickets[index];
-                    neutralTickets.RemoveAll(x => x == roleId);
-                    setRoleToRandomPlayer(roleId, crewmates);
-
-                    if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
-                        foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
-                            crewTickets.RemoveAll(x => x == blockedRoleId);
-                            neutralTickets.RemoveAll(x => x == blockedRoleId);
-                            impTickets.RemoveAll(x => x == blockedRoleId);
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < maxCrewmateRoles; i++) {
-                if (crewTickets.Count > 0 && crewmates.Count > 0) {
-                    var index = rnd.Next(0, crewTickets.Count);
-                    byte roleId = crewTickets[index];
-                    crewTickets.RemoveAll(x => x == roleId);
-                    setRoleToRandomPlayer(roleId, crewmates);
-
-                    if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
-                        foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
-                            crewTickets.RemoveAll(x => x == blockedRoleId);
-                            neutralTickets.RemoveAll(x => x == blockedRoleId);
-                            impTickets.RemoveAll(x => x == blockedRoleId);
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < maxImpostorRoles; i++) {
-                if (impTickets.Count > 0 && impostors.Count > 0) {
-                    var index = rnd.Next(0, impTickets.Count);
-                    byte roleId = impTickets[index];
-                    impTickets.RemoveAll(x => x == roleId);
-                    setRoleToRandomPlayer(roleId, impostors);
-
-                    if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
-                        foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
-                            crewTickets.RemoveAll(x => x == blockedRoleId);
-                            neutralTickets.RemoveAll(x => x == blockedRoleId);
-                            impTickets.RemoveAll(x => x == blockedRoleId);
-                        }
-                    }
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, data.impostors); 
+                    data.maxImpostorRoles--;
+                } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
+                    setRoleToRandomPlayer((byte)RoleId.Child, data.crewmates);
+                    data.maxCrewmateRoles--;
                 }
             }
         }
+
+        private static void assignEnsuredRoles(RoleAssignmentData data) {
+            List<byte> ensuredCrewmateRoles = data.crewSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+            List<byte> ensuredNeutralRoles = data.neutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+            List<byte> ensuredImpostorRoles = data.impSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
+
+            while (
+                (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) || 
+                (data.crewmates.Count > 0 && (
+                    (data.maxCrewmateRoles > 0 && ensuredCrewmateRoles.Count > 0) || 
+                    (data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0)
+                ))) {
+                    
+                Dictionary<RoleType, List<byte>> rolesToAssign = new Dictionary<RoleType, List<byte>>();
+                if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && ensuredCrewmateRoles.Count > 0) rolesToAssign.Add(RoleType.Crewmate, ensuredCrewmateRoles);
+                if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && ensuredNeutralRoles.Count > 0) rolesToAssign.Add(RoleType.Neutral, ensuredNeutralRoles);
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) rolesToAssign.Add(RoleType.Impostor, ensuredImpostorRoles);
+                
+                var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count()));
+                var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral ? data.crewmates : data.impostors;
+                var index = rnd.Next(0, rolesToAssign[roleType].Count);
+                var roleId = rolesToAssign[roleType][index];
+                setRoleToRandomPlayer(rolesToAssign[roleType][index], players);
+
+                rolesToAssign[roleType].RemoveAt(index);
+
+                if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
+                    foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
+                        // Set chance for the blocked roles to 0 for chances less than 100%
+                        if (data.impSettings.ContainsKey(blockedRoleId)) data.impSettings[blockedRoleId] = 0;
+                        if (data.neutralSettings.ContainsKey(blockedRoleId)) data.neutralSettings[blockedRoleId] = 0;
+                        if (data.crewSettings.ContainsKey(blockedRoleId)) data.crewSettings[blockedRoleId] = 0;
+                        // Remove blocked roles even if the chance was 100%
+                        foreach(var ensuredRolesList in rolesToAssign.Values) {
+                            ensuredRolesList.RemoveAll(x => x == blockedRoleId);
+                        }
+                    }
+                }
+
+                // Adjust limit
+                switch (roleType) {
+                    case RoleType.Crewmate: data.maxCrewmateRoles--; break;
+                    case RoleType.Neutral: data.maxNeutralRoles--;break;
+                    case RoleType.Impostor: data.maxImpostorRoles--;break;
+                }
+            }
+        }
+
+        
+        private static void assignChanceRoles(RoleAssignmentData data) {
+            List<byte> crewmateTickets = data.crewSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
+            List<byte> neutralTickets = data.neutralSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
+            List<byte> impostorTickets = data.impSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
+
+            while (
+                (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) || 
+                (data.crewmates.Count > 0 && (
+                    (data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0) || 
+                    (data.maxNeutralRoles > 0 && neutralTickets.Count > 0)
+                ))) {
+                
+                Dictionary<RoleType, List<byte>> rolesToAssign = new Dictionary<RoleType, List<byte>>();
+                if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && crewmateTickets.Count > 0) rolesToAssign.Add(RoleType.Crewmate, crewmateTickets);
+                if (data.crewmates.Count > 0 && data.maxNeutralRoles > 0 && neutralTickets.Count > 0) rolesToAssign.Add(RoleType.Neutral, neutralTickets);
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) rolesToAssign.Add(RoleType.Impostor, impostorTickets);
+                
+                var roleType = rolesToAssign.Keys.ElementAt(rnd.Next(0, rolesToAssign.Keys.Count()));
+                var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral ? data.crewmates : data.impostors;
+                var index = rnd.Next(0, rolesToAssign[roleType].Count);
+                var roleId = rolesToAssign[roleType][index];
+                setRoleToRandomPlayer(rolesToAssign[roleType][index], players);
+                rolesToAssign[roleType].RemoveAll(x => x == roleId);
+
+                if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
+                    foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
+                        crewmateTickets.RemoveAll(x => x == blockedRoleId);
+                        neutralTickets.RemoveAll(x => x == blockedRoleId);
+                        impostorTickets.RemoveAll(x => x == blockedRoleId);
+                    }
+                }
+
+                // Adjust limit
+                switch (roleType) {
+                    case RoleType.Crewmate: data.maxCrewmateRoles--; break;
+                    case RoleType.Neutral: data.maxNeutralRoles--;break;
+                    case RoleType.Impostor: data.maxImpostorRoles--;break;
+                }
+            }
+        }
+
+        private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
+            var index = rnd.Next(0, playerList.Count);
+            byte playerId = playerList[index].PlayerId;
+            playerList.RemoveAt(index);
+
+            setRoleToPlayer(roleId, playerId);
+        }
+
+        private static void setRoleToPlayer(byte roleId, byte playerId) {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
+            writer.Write(roleId);
+            writer.Write(playerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.setRole(roleId, playerId);
+        }
+
+        private class RoleAssignmentData {
+            public List<PlayerControl> crewmates {get;set;}
+            public List<PlayerControl> impostors {get;set;}
+            public Dictionary<byte, int> impSettings = new Dictionary<byte, int>();
+            public Dictionary<byte, int> neutralSettings = new Dictionary<byte, int>();
+            public Dictionary<byte, int> crewSettings = new Dictionary<byte, int>();
+
+            public int maxCrewmateRoles {get;set;}
+            public int maxNeutralRoles {get;set;}
+            public int maxImpostorRoles {get;set;}
+        }
+        
+        private enum RoleType {
+            Crewmate = 0,
+            Neutral = 1,
+            Impostor = 2
+        }
+
     }
 }
