@@ -40,17 +40,13 @@ namespace TheOtherRoles
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
-            float crewCountSettings = (float)CustomOptionHolder.crewmateRolesCount.getSelection() / 2;
-            float neutralCountSettings = (float)CustomOptionHolder.neutralRolesCount.getSelection() / 2;
-            float impCountSettings = (float)CustomOptionHolder.impostorRolesCount.getSelection() / 2;
+            int maxCrewmateRoles = rnd.Next((int)CustomOptionHolder.crewmateRolesCountMin.getSelection(), (int)CustomOptionHolder.crewmateRolesCountMax.getSelection() + 1);
+            int maxNeutralRoles = rnd.Next((int)CustomOptionHolder.neutralRolesCountMin.getSelection(), (int)CustomOptionHolder.neutralRolesCountMax.getSelection() + 1);
+            int maxImpostorRoles = rnd.Next((int)CustomOptionHolder.impostorRolesCountMin.getSelection(), (int)CustomOptionHolder.impostorRolesCountMax.getSelection() + 1);
 
-            if (crewCountSettings % 1 == 0.5f) crewCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
-            if (neutralCountSettings % 1 == 0.5f) neutralCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
-            if (impCountSettings % 1 == 0.5f) impCountSettings += 0.5f * (rnd.Next(2) * 2 - 1);
-
-            int maxCrewmateRoles = Mathf.Min(crewmates.Count, Mathf.RoundToInt(crewCountSettings));
-            int maxNeutralRoles = Mathf.Min(crewmates.Count, Mathf.RoundToInt(neutralCountSettings));
-            int maxImpostorRoles = Mathf.Min(impostors.Count, Mathf.RoundToInt(impCountSettings));
+            maxCrewmateRoles = Mathf.Min(crewmates.Count, maxCrewmateRoles);
+            maxNeutralRoles = Mathf.Min(crewmates.Count, maxNeutralRoles);
+            maxImpostorRoles = Mathf.Min(impostors.Count, maxImpostorRoles);
 
             Dictionary<byte, int> impSettings = new Dictionary<byte, int>();
             Dictionary<byte, int> neutralSettings = new Dictionary<byte, int>();
