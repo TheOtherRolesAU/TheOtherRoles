@@ -36,10 +36,10 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(IntroCutscene.Nested_0), nameof(IntroCutscene.Nested_0.MoveNext))]
+    [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__11), nameof(IntroCutscene._CoBegin_d__11.MoveNext))]
     class IntroPatch
     {
-        static void Prefix(IntroCutscene.Nested_0 __instance)
+        static void Prefix(IntroCutscene._CoBegin_d__11 __instance)
         {
             // Intro solo teams
             if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist) {
@@ -61,7 +61,7 @@ namespace TheOtherRoles
         }
 
         // Intro display role
-        static void Postfix(IntroCutscene.Nested_0 __instance)
+        static void Postfix(IntroCutscene._CoBegin_d__11 __instance)
         {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
             if (infos.Count == 0) return;
@@ -70,19 +70,19 @@ namespace TheOtherRoles
             if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
             {
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__this.Title.text = PlayerControl.LocalPlayer.Data.IsImpostor ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
-                __instance.__this.Title.color = PlayerControl.LocalPlayer.Data.IsImpostor ? Color.white : Lovers.color;
-                __instance.__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.Data?.PlayerName ?? "") + "</color>";
-                __instance.__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__this.BackgroundBar.material.color = Lovers.color;
+                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.Data.IsImpostor ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
+                __instance.__4__this.Title.color = PlayerControl.LocalPlayer.Data.IsImpostor ? Color.white : Lovers.color;
+                __instance.__4__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.Data?.PlayerName ?? "") + "</color>";
+                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
+                __instance.__4__this.BackgroundBar.material.color = Lovers.color;
             }
             else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
             else {
-                __instance.__this.Title.text = roleInfo.name;
-                __instance.__this.Title.color = roleInfo.color;
-                __instance.__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__this.ImpostorText.text = roleInfo.introDescription;
-                __instance.__this.BackgroundBar.material.color = roleInfo.color;
+                __instance.__4__this.Title.text = roleInfo.name;
+                __instance.__4__this.Title.color = roleInfo.color;
+                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
+                __instance.__4__this.ImpostorText.text = roleInfo.introDescription;
+                __instance.__4__this.BackgroundBar.material.color = roleInfo.color;
             }
         }
     }
