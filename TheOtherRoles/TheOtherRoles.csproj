@@ -25,7 +25,7 @@
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\Debug\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
     </Target>
 
     <!-- il2cpp newtonsoft -->
