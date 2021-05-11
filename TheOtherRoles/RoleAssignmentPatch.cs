@@ -105,7 +105,7 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates);
                     data.maxCrewmateRoles--;
                     data.maxImpostorRoles--;
-                } else if (crewmates.Count >= 2 && data.maxCrewmateRoles >= 2) {
+                } else if (data.crewmates.Count >= 2 && data.maxCrewmateRoles >= 2) {
                     setRoleToRandomPlayer((byte)RoleId.Lover1, data.crewmates); 
                     setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates); 
                     data.maxCrewmateRoles -= 2; 
