@@ -36,10 +36,22 @@ namespace TheOtherRoles
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
+            var crewmateMin = (int)CustomOptionHolder.crewmateRolesCountMin.getSelection();
+            var crewmateMax = (int)CustomOptionHolder.crewmateRolesCountMax.getSelection();
+            var neutralMin = (int)CustomOptionHolder.neutralRolesCountMin.getSelection();
+            var neutralMax = (int)CustomOptionHolder.neutralRolesCountMax.getSelection();
+            var impostorMin = (int)CustomOptionHolder.impostorRolesCountMin.getSelection();
+            var impostorMax = (int)CustomOptionHolder.impostorRolesCountMax.getSelection();
+            
+            // Make sure min is less or equal to max
+            if (crewmateMin > crewmateMax) crewmateMin = crewmateMax;
+            if (neutralMin > neutralMax) neutralMin = neutralMax;
+            if (impostorMin > impostorMax) impostorMin = impostorMax;
+
             // Get the maximum allowed count of each role type based on the minimum and maximum option
-            int crewCountSettings = rnd.Next((int)CustomOptionHolder.crewmateRolesCountMin.getSelection(), (int)CustomOptionHolder.crewmateRolesCountMax.getSelection() + 1);
-            int neutralCountSettings = rnd.Next((int)CustomOptionHolder.neutralRolesCountMin.getSelection(), (int)CustomOptionHolder.neutralRolesCountMax.getSelection() + 1);
-            int impCountSettings = rnd.Next((int)CustomOptionHolder.impostorRolesCountMin.getSelection(), (int)CustomOptionHolder.impostorRolesCountMax.getSelection() + 1);
+            int crewCountSettings = rnd.Next(crewmateMin, crewmateMax + 1);
+            int neutralCountSettings = rnd.Next(neutralMin, neutralMax + 1);
+            int impCountSettings = rnd.Next(impostorMin, impostorMax + 1);
 
             // Potentially lower the actual maximum to the assignable players
             int maxCrewmateRoles = Mathf.Min(crewmates.Count, crewCountSettings);

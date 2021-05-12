@@ -550,9 +550,37 @@ namespace TheOtherRoles {
         private static void Postfix(ref string __result)
         {
             StringBuilder sb = new StringBuilder(__result);
-            foreach (CustomOption option in CustomOption.options)
-                if (option.parent == null)
-                    sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+            foreach (CustomOption option in CustomOption.options) {
+                if (option.parent == null) {
+                    if (option == CustomOptionHolder.crewmateRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
+                        var min = (int)CustomOptionHolder.crewmateRolesCountMin.getSelection();
+                        var max = (int)CustomOptionHolder.crewmateRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if (option == CustomOptionHolder.neutralRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
+                        var min = (int)CustomOptionHolder.neutralRolesCountMin.getSelection();
+                        var max = (int)CustomOptionHolder.neutralRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if (option == CustomOptionHolder.impostorRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
+                        var min = (int)CustomOptionHolder.impostorRolesCountMin.getSelection();
+                        var max = (int)CustomOptionHolder.impostorRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax)) {
+                        continue;
+                    } else {
+                        sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    }
+                    
+                }
+            }
             CustomOption parent = null;
             foreach (CustomOption option in CustomOption.options)
                 if (option.parent != null) {
@@ -566,7 +594,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 35;
+            int roleSettingsLines = defaultSettingsLines + 32;
             int detailedSettingsP1 = roleSettingsLines + 34;
             int detailedSettingsP2 = detailedSettingsP1 + 36;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -582,13 +610,13 @@ namespace TheOtherRoles {
                 int gap = 1;
                 int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 8;
+                gap = 5;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 19;
+                gap = 16;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 23;
+                gap = 20;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
