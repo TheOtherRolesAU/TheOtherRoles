@@ -554,22 +554,22 @@ namespace TheOtherRoles {
                 if (option.parent == null) {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
-                        var min = (int)CustomOptionHolder.crewmateRolesCountMin.getSelection();
-                        var max = (int)CustomOptionHolder.crewmateRolesCountMax.getSelection();
+                        var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
                     } else if (option == CustomOptionHolder.neutralRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
-                        var min = (int)CustomOptionHolder.neutralRolesCountMin.getSelection();
-                        var max = (int)CustomOptionHolder.neutralRolesCountMax.getSelection();
+                        var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
                     } else if (option == CustomOptionHolder.impostorRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
-                        var min = (int)CustomOptionHolder.impostorRolesCountMin.getSelection();
-                        var max = (int)CustomOptionHolder.impostorRolesCountMax.getSelection();
+                        var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");

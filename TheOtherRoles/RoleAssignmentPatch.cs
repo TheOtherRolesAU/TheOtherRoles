@@ -36,12 +36,12 @@ namespace TheOtherRoles
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
-            var crewmateMin = (int)CustomOptionHolder.crewmateRolesCountMin.getSelection();
-            var crewmateMax = (int)CustomOptionHolder.crewmateRolesCountMax.getSelection();
-            var neutralMin = (int)CustomOptionHolder.neutralRolesCountMin.getSelection();
-            var neutralMax = (int)CustomOptionHolder.neutralRolesCountMax.getSelection();
-            var impostorMin = (int)CustomOptionHolder.impostorRolesCountMin.getSelection();
-            var impostorMax = (int)CustomOptionHolder.impostorRolesCountMax.getSelection();
+            var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
+            var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();
+            var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
+            var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
+            var impostorMin = CustomOptionHolder.impostorRolesCountMin.getSelection();
+            var impostorMax = CustomOptionHolder.impostorRolesCountMax.getSelection();
             
             // Make sure min is less or equal to max
             if (crewmateMin > crewmateMax) crewmateMin = crewmateMax;
