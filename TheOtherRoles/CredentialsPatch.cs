@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +11,14 @@ namespace TheOtherRoles
     [HarmonyPatch]
     public static class CredentialsPatch {
         public static string fullCredentials = 
-$@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}:
+$@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}
 <size=80%>Modded by <color=#FCCE03FF>Eisbison</color>,
-<color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>EndOfFile</color>
-Balanced with <color=#FCCE03FF>Dhalucard</color>
-Button design by <color=#FCCE03FF>Bavari</color></size>";
+<color=#FFEB91FF>Thunderstorm584</color> & <color=#FFEB91FF>EndOfFile</color>
+Balanced with <color=#6B31B9>Dhalucard</color>
+Button design by <color=#FF5B00>Bavari</color></size>";
 
     public static string mainMenuCredentials = 
-$@"Modded by <color=#FFFF00>Eisbison, Thunderstorm584</color> & <color=#FFFF00>EndOfFile</color>
+$@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FFEB91FF>Thunderstorm584</color> & <color=#FFEB91FF>EndOfFile</color>
 Balanced with <color=#6B31B9>Dhalucard</color>      Design by <color=#FF5B00>Bavari</color>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
@@ -50,10 +50,14 @@ Balanced with <color=#6B31B9>Dhalucard</color>      Design by <color=#FF5B00>Bav
                 __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
                     __instance.text.text = $"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}\n" + __instance.text.text;
-                    __instance.transform.localPosition = new Vector3(3f, 2.675f, __instance.transform.localPosition.z);
+                    if (PlayerControl.LocalPlayer.Data.IsDead) {
+                        __instance.transform.localPosition = new Vector3(3.45f, 2.675f, __instance.transform.localPosition.z);
+                    } else {
+                        __instance.transform.localPosition = new Vector3(4.2f, 2.675f, __instance.transform.localPosition.z);
+                    }
                 } else {
                     __instance.text.text = $"{fullCredentials}\n{__instance.text.text}";
-                    __instance.transform.localPosition = new Vector3(3f, 2.675f, __instance.transform.localPosition.z);
+                    __instance.transform.localPosition = new Vector3(3.5f, 2.675f, __instance.transform.localPosition.z);
                 }
             }
         }
