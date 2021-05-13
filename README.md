@@ -5,7 +5,7 @@
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles** is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
@@ -31,6 +31,7 @@ Even more roles are coming soon :)
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
+
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
 | 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
@@ -59,6 +60,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 
 # Changelog
+
 <details>
   <summary>Click to show the Changelog</summary>
 
@@ -69,7 +71,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.2**
 - The Other Roles now supports the new Among Us version **2021.5.10s**
-- Added a chat command to kick players as the host of a lobby (/kick playerName)
+- Added a chat command to kick players as the host of a lobby (`/kick playerName`)
 
 **Version 2.6.1**
 - Fixed a bug where the Sheriff was unable to kill the Arsonist
@@ -244,101 +246,102 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 </details>
 
 # Installation
+
 ## Windows Auto Installation/Updating Using The AmongUsModUpdater
+
 This tool was made by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). It automatically installs/updates the TheOtherRoles mod to the newest version, runs the game and
 syncs your game options automatically.
 
 1. Simply get the newest [release](https://github.com/Narua2010/AmongUsModUpdater/releases/latest) of the [AmongUsModUpdater](https://github.com/Narua2010/AmongUsModUpdater)
-2. Unzip the folder and run the **setup.exe**
+2. Unzip the folder and run **setup.exe**.
 
-If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
+If you have problems with the AmongUsModUpdater, make sure to [contact us](https://discord.gg/csa3pHYdPU).
 
 ## Windows Manual Installation
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
-2. Find the folder of your game, for Steam players you can right click in Steam, on the game, a menu will appear proposing you to go to the folders.
-3. Make a copy of your game, it's not obligatory but advised, put it where you want.
-4. Drag or extract the files from the zip into your game, at the .exe level.
-5. Run the game (the first launch might take a while)
+
+1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest).
+2. Find the folder of your game. For Steam players: you can right click in Steam on the game and a menu will appear, proposing you to go to the folders.
+3. Make a copy of your game. It's not obligatory but advised. Put it where you want.
+4. Drag or extract the files from the ZIP archive into your game, at the `.exe` level.
+5. Run the game. (The first launch might take a while.)
 
 Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
-**Linux Manual**
-1. Install Among Us via Steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
-3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
-4. Launch the game via Steam
+## Linux Manual Installation
+
+1. Install Among Us via Steam.
+2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to `~/.steam/steam/steamapps/common/Among Us`.
+3. Enable `winhttp.dll` via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine).
+4. Launch the game via Steam.
 
 # Custom Servers and 10+ Players
-We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod).
+
+We always recommend to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of [CrowdedMod](https://github.com/CrowdedMods/CrowdedMod).
 
 **Setup the Clients:**
-1. Open the region menu where you can choose between the different regions
-2. Select the region *Custom*
-3. Enter the ip/domain and the port of your custom server in the corresponding text fields
+1. Open the region menu where you can choose between the different regions.
+2. Select the region *Custom*.
+3. Enter the IP address/domain and the port of your custom server in the corresponding text fields.
 
 **Setup the Server:**
-1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
-2. Follow the steps (using the server release you just downloaded) on the official [Impostor-Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server)
-3. Make sure to set the following values to false in the *config.json* file:
-```
+1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**.
+2. Follow the steps (using the server release you just downloaded) on the official [Impostor Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server).
+3. Make sure to set the following values to false in the `config.json` file:
+```json
     ...
     "AntiCheat": {
       "Enabled": false,
       "BanIpFromGame": false
     }
 ```
-4. Make sure to forward the right ports on the hosting machine
-5. Run the server and setup the client
+4. Make sure to forward the right ports on the hosting machine.
+5. Run the server and setup the client.
 
 **Setting up Server as Docker Container:** \
-If you want to run the server as a docker container you'll need to use the image
-```
-aeonlucid/impostor:nightly
-```
-(Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
+If you want to run the server as a docker container you'll need to use the image `aeonlucid/impostor:nightly` (currently only the "nightly" tag is starting a server supporting 2021.3.31 or later).
 
-In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+In addition to running it, set the environment variables to disable the AntiCheat feature.
 ```
 IMPOSTOR_AntiCheat__Enabled=false
 IMPOSTOR_AntiCheat__BanIpFromGame=false
 ```
 
-Example to docker run command:
+Example `docker run` command:
 ```
 docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
 ```
 
-Or use to run it in the background
+Or use to run it in the background:
 ```
 docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
 ```
 
-
 # Credits & Resources
-[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all versions above v2.3.0, we're using the OxygenFilter for automatic deobfuscation\
-[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
-[BepInEx](https://github.com/BepInEx) - Used to hook game functions\
-[Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
-- Before v1.6: We used the default Essentials release
-- v1.6-v1.8: We slightly changed the default Essentials. The changes can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of our fork.
-- v2.0.0 and later: As we're not using Reactor anymore, we are using our own implementation, inspired by the one from **DorCoMaNdO**
 
-[Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**\
-[Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
-[Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
-[ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
-[Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
-[TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
-[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
-[Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
-[Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
+- [OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all versions above v2.3.0, we're using the OxygenFilter for automatic deobfuscation
+- [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0
+- [BepInEx](https://github.com/BepInEx) - Used to hook game functions
+- [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
+  - Before v1.6: We used the default Essentials release
+  - v1.6-v1.8: We slightly changed the default Essentials. The changes can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of our fork.
+  - v2.0.0 and later: As we're not using Reactor anymore, we are using our own implementation, inspired by the one from **DorCoMaNdO**
+- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**
+- [Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**
+- [Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**
+- [ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.
+- [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.
+- [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**
+- [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**
+- [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**
+- [Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
 
 # Settings
+
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the *BepInEx\config\me.eisbison.theotherroles.cfg* file.
+- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server IP address and the custom server port. You can set a custom lobby code replacement text by changing the *Streamer Mode Replacement Text* in file `BepInEx\config\me.eisbison.theotherroles.cfg`.
 - **Number of Impostors:** The number of Impostor count be set inside a lobby
 - **Map:** The map can be changed inside a lobby
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
@@ -348,8 +351,11 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Dleks:** You are now able to select the Dleks map. 
 
 # Custom Hats
+
 ## Create and submit new hat designs
+
 We're awaiting your creative hat designs and we'll integrate all the good ones in our mod.
+
 Here are a few instructions, on how to create a custom hat:
 
 - **Creation:** A hat consists of up to three textures. The aspect ratio of the textures has to be `4:5`, we recommend `300px:375px`:
@@ -357,30 +363,31 @@ Here are a few instructions, on how to create a custom hat:
     - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
-    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
+    - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (`#ff0000`) will be replaced with the primary color of your player and the color blue (`#0000ff`) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
   - `Flipped texture (optional)`:
     - This texture will be rendered instead of the Main texture, when facing the left.
-    - The name of the texture needs to follow the pattern *hatname_flip.png*.
+    - The name of the texture needs to follow the pattern `hatname_flip.png`.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
-    - The name of the texture needs to follow the pattern *hatname_back.png*.
+    - The name of the texture needs to follow the pattern `hatname_back.png`.
   - `Flipped Back texture (optional)`:
     - This texture will be rendered instead of the Back texture, when facing the left.
-    - The name of the texture needs to follow the pattern *hatname_back_flip.png*.
+    - The name of the texture needs to follow the pattern `hatname_back_flip.png`.
   - `Climb texture (optional)`:
     - This texture will be rendered in front of the player, when he's climbing.
-    - The name of the texture needs to follow the pattern *hatname_climb.png*.
-- **Testing:** You can test your hat design by putting all the files in the *\TheOtherHats\Test* subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
+    - The name of the texture needs to follow the pattern `hatname_climb.png`.
+- **Testing:** You can test your hat design by putting all the files in the `\TheOtherHats\Test` subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
 
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-<img src="./Images/Colors.png" alt="drawing" width="300px"/>
+<img src="./Images/Colors.png" alt="drawing" width="300px">
 
 # Roles
 
 ## Role Assignment
+
 We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
 if you're using it right.
 
@@ -395,18 +402,19 @@ Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
 Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
 Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
 
-
 ## Mafia
 ### **Team: Impostors**
+
 The Mafia are a group of three Impostors.\
 The Godfather works like a normal Impostor.\
 The Mafioso is an Impostor who cannot kill nor sabotage until the Godfather is dead.\
-The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
-\
+The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead bodies instead.
+
 **NOTE:**
 - There have to be 3 Impostors activated for the mafia to spawn.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Mafia Spawn Chance | -
@@ -415,8 +423,9 @@ The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead 
 
 ## Morphling
 ### **Team: Impostors**
+
 The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
-\
+
 **NOTE:**
 - They shrink to the size of the Child when they copies its look.
 - The Hacker sees the new color on the admin table.
@@ -426,6 +435,7 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 - Tracker and Snitch arrows keep working.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Morphling Spawn Chance | -
@@ -435,11 +445,12 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 
 ## Camouflager
 ### **Team: Impostors**
+
 The Camouflager is an Impostor which can additionally activate a camouflage mode.
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
-are hidden and all players have the same color.\
-\
-**NOTE**
+are hidden and all players have the same color.
+
+**NOTE:**
 - The Child will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Hacker sees gray icons on the admin table
@@ -447,6 +458,7 @@ are hidden and all players have the same color.\
 - Tracker and Snitch arrows keep working
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Camouflager Spawn Chance | -
@@ -456,16 +468,18 @@ are hidden and all players have the same color.\
 
 ## Vampire
 ### **Team: Impostors**
+
 The Vampire is an Impostor, that can bite other player. Bitten players die after a configurable amount of time.\
 If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
-If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
-\
+If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.
+
 **NOTE:**
 - If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
 - If there is a Vampire in the game, there can't be a Warlock
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Vampire Spawn Chance | -
@@ -476,13 +490,14 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 
 ## Eraser
 ### **Team: Impostors**
+
 The Eraser is an Impostor that can erase the role of every player.\
 The targeted players will lose their role after the meeting right before a player is exiled.\
 After every erase, the cooldown increases by 10 seconds.\
 The erase will be performed, even if the Eraser or his target die before the next meeting.\
 By default the Eraser can erase everyone but the Spy and other Impostors. Depending on the options
 he can also erase them (Impostors will lose their special Impostor ability).
-\
+
 **NOTE:**
 - The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
 - Erasing a Lover automatically erases the other Lover as well (if the second Lover is an ImpLover, he will turn into an Impostor)
@@ -491,6 +506,7 @@ he can also erase them (Impostors will lose their special Impostor ability).
 ex Lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Eraser Spawn Chance | -
@@ -500,15 +516,16 @@ ex Lover surviving as the partnership was erased before. Also a Jester win would
 
 ## Trickster
 ### **Team: Impostors**
+
 The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players. \
 If the Trickster has placed all of his boxes they will be converted into a vent network usable only by the Trickster himself, but the boxes are revealed to the others. \
-If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while. \
+If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while.
 
-\
 **NOTE:**
 - Impostors will get a text indicator at the bottom of the screen to notify them if the lights are out due to the Trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Trickster Spawn Chance | -
@@ -519,13 +536,14 @@ If the boxes are converted to a vent network, the Trickster gains a new ability 
 
 ## Cleaner
 ### **Team: Impostors**
-The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 
-\
+The Cleaner is an Impostor who has the ability to clean up dead bodies.
+
 **NOTE:**
 - The Kill and Clean cooldown are shared, preventing him from immediately cleaning his own kills.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Cleaner Spawn Chance | -
@@ -535,18 +553,19 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 
 ## Warlock
 ### **Team: Impostors**
+
 The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
 If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
 Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
 The Warlock can still perform normal kills, but the two buttons share the same cooldown.
 
-\
 **NOTE:**
 - The Warlock can always kill his Impostor mates (and even himselfs) using the "cursed kill"
 - If there is a Warlock in the game, there can't be a Vampire
 - Performing a normal kill, doesn't lift the curse
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Warlock Spawn Chance | -
@@ -556,6 +575,7 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 
 ## Lovers
 ### **Team: Either Crewmates or Impostors**
+
 There are always two Lovers which are linked together.\
 Their goal is it to stay alive together until the end of the game.\
 If one Lover dies (and the option is activated), the other Lover suicides.\
@@ -564,13 +584,14 @@ The Lovers never know the role of their partner, they only see who their partner
 The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
 If both Lovers are Crewmates, they can achieve a "double victory" but the Crewmates then also win.\
 If one Lover is an Impostor and one a Crewmate, they can only get a "Lovers solo win" where only they win (even if there is another Impostor alive).\
-If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
-\
+If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.
+
 **NOTE:**
 - If there is an equal amount of Impostors and Crewmates left in the game and one of the Lovers is an Impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
 - The Lovers can change if the Shifter takes the role of a Lovers
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Lovers Spawn Chance | -
@@ -578,17 +599,18 @@ If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be cou
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
 -----------------------
 
-
 ## Sheriff
 ### **Team: Crewmates**
+
 The Sheriff has the ability to kill Impostors.
 If they try to kill a Crewmate, they die instead.
 
-**NOTE**
+**NOTE:**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
 - If the Sheriff shoots a Child Impostor, the Sheriff dies if the Child is still growing up. If it's 18, the Child Impostor dies.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Sheriff Spawn Chance | -
@@ -598,9 +620,11 @@ If they try to kill a Crewmate, they die instead.
 
 ## Jester
 ### **Team: Neutral**
+
 The Jester does not have any tasks. They win the game as a solo, if they get voted out during a meeting.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Jester Spawn Chance | -
@@ -609,12 +633,14 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 
 ## Arsonist
 ### **Team: Neutral**
+
 The Arsonist does not have any tasks, he has to win the game as a solo.\
 The Arsonist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
 If the player that the Arsonist douses walks out of range, the cooldown will reset to 0.\
 After dousing everyone alive the Arsonist can ignite all the players which results in an Arsonist win.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Arsonist Spawn Chance | -
@@ -624,11 +650,13 @@ After dousing everyone alive the Arsonist can ignite all the players which resul
 
 ## Seer
 ### **Team: Crewmates**
+
 The Seer has two abilities (one can activate one of them or both in the options).
 The Seer sees the souls of players that died a round earlier, the souls slowy fade away.
 The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Seer Spawn Chance | - 
@@ -639,16 +667,18 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ## Engineer
 ### **Team: Crewmates**
+
 The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
 The Engineer can use vents. If the Engineer is inside a vent, the Impostors will see a blue outline
 around all vents on the map (in order to warn them).
 Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
 you can double click on the tasks instead.
-\
+
 **NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Engineer Spawn Chance | -
@@ -656,15 +686,17 @@ you can double click on the tasks instead.
 
 ## Detective
 ### **Team: Crewmates**
+
 The Detective can see footprints that other players leave behind.
 The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
-\
+
 **NOTE**
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Detective Spawn Chance | -
@@ -677,9 +709,11 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 
 ## Lighter
 ### **Team: Crewmates**
+
 The Lighter can turn on his Lighter every now and then, which increases his vision by a costumizable amount.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Lighter Spawn Chance | -
@@ -691,6 +725,7 @@ The Lighter can turn on his Lighter every now and then, which increases his visi
 
 ## Child
 ### **Team: Crewmates or Impostors**
+
 The Child can be a Crewmate (67% chance) or an Impostor (33% chance).\
 The Child's character is smaller and hence visible to everyone in the game.\
 The Child cannot be killed until it turns 18 years old, however it can be voted out.\
@@ -707,6 +742,7 @@ The Child cannot be killed until it turns 18 years old, however it can be voted 
 - The Sheriff can kill the Impostor Child, but only if it's fully grown up
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Child Spawn Chance | -
@@ -715,19 +751,20 @@ The Child cannot be killed until it turns 18 years old, however it can be voted 
 
 ## Medic
 ### **Team: Crewmates**
+
 The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
 The shielded player can still be voted out and might also be an Impostor.\
 If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
 If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
 The Medic's other feature shows when they report a corpse: they will see how long ago the player died
-\
+
 **NOTE**
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
 
-
 ### Game Options
+
 | Name | Description | Options |
 |----------|:-------------:|:-------------:|
 | Medic Spawn Chance | - | -
@@ -737,10 +774,12 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 
 ## Mayor
 ### **Team: Crewmates**
+
 The Mayor leades the Crewmates by having a vote that counts twice.\
 The Mayor can always use his meeting, even if the maximum number of meetings was reached.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Mayor Spawn Chance | -
@@ -748,16 +787,18 @@ The Mayor can always use his meeting, even if the maximum number of meetings was
 
 ## Hacker
 ### **Team: Crewmates**
+
 If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
 Otherwise he sees the same information as everyone else.
 **Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
-**Vitals**: The Hacker can see how long dead players have been dead for.\
-\
+**Vitals**: The Hacker can see how long dead players have been dead for.
+
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Hacker Spawn Chance | -
@@ -766,17 +807,17 @@ Otherwise he sees the same information as everyone else.
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors) 
 -----------------------
 
-
 ## Shifter
 ### **Team: Crewmates**
+
 The Shifter can take over the role of another Crewmate, the other player will transform into a Crewmate.\
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
 Swapping roles with an Impostor or Neutral fails and the Shifter commits suicide after the next meeting (there won't be any body).\
 The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
-The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
-\
+The **special interactions** with the Shifter are noted in the chapters of the respective roles.
+
 **NOTE:**
 - The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
 - If the Shifter takes over a role, their new cooldowns will start at the maximum cooldown of the ability
@@ -784,6 +825,7 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 can only use them, if the previous player did not used them before)
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
@@ -791,13 +833,14 @@ can only use them, if the previous player did not used them before)
 
 ## Time Master
 ### **Team: Crewmates**
+
 The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
 If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
 time will rewind for a set amount of time.\
 The kill cooldown of the killer won't be reset, so the Time Master
 has to make sure that the game won't result in the same situation.\
-The Time Master won't be affected by the rewind.\
-\
+The Time Master won't be affected by the rewind.
+
 **NOTE:**
 - Only the movement is affected by the rewind
 - A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, he can still shield the kill which happens a few seconds later.
@@ -806,6 +849,7 @@ The Time Master won't be affected by the rewind.\
 - The shield itself ends immediately when triggered. So the timemaster can be attacked again as soon as the rewind ends.
 
 ### Game Options
+
 | Name | Description |
 |----------|:-------------:|
 | Time Master Spawn Chance | - |
@@ -816,12 +860,14 @@ The Time Master won't be affected by the rewind.\
 
 ## Swapper
 ### **Team: Crewmates**
+
 During meetings the Swapper can exchange votes that two people get (i.e. all votes
 that player A got will be given to player B and vice versa).\
 Because of the Swappers strength in meetings, they might not start emergency meetings
 and can't fix lights and comms.
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Swapper Spawn Chance | -
@@ -830,11 +876,13 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
+
 The Tracker can select one player in a game and tracks this player for the rest of the game.
 An arrow points to the last tracked position of the player.
 The arrow updates it's position every few seconds (configurable).
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Tracker Spawn Chance | -
@@ -843,10 +891,12 @@ The arrow updates it's position every few seconds (configurable).
 
 ## Snitch
 ### **Team: Crewmates**
+
 When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors.
 When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors, also with an arrow.
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Snitch Spawn Chance | -
@@ -855,13 +905,14 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 
 ## Jackal
 ### **Team: Jackal**
+
 The Jackal is part of an extra team, that tries to eliminate all the other players.\
 The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
 The Jackal (if allowed by the options) can select another player to be his Sidekick.
 Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses his current role (except if he's a Lover, then he plays in two teams).
 The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
-The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.\
-\
+The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.
+
 The team Jackal enables multiple new outcomes of the game, listing some examples here:
 - The Impostors could be eliminated and then the crew plays against the team Jackal.
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
@@ -884,9 +935,8 @@ The priority of the win conditions is the following:
 
 If both Impostors and Jackals are in the game the game continues even if all Crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
 
-
-
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Jackal Spawn Chance | - |
@@ -900,15 +950,17 @@ If both Impostors and Jackals are in the game the game continues even if all Cre
 
 ## Sidekick
 ### **Team: Jackal**
+
 Gets assigned to a player during the game by the "Create Sidekick Action" of the Jackal and joins the Jackal in his quest to eliminate all other players.\
 Upon the death of the Jackal (depending on the options), he might get promoted to Jackal himself and potentially even assign a Sidekick of his own.
-\
+
 **NOTE:**
 - A player that converts into a Sidekick loses his previous role and tasks (if he had one), except the Lover role.
 - The Sidekick may be killed by a Sheriff.
 - The Sidekick cannot target the Child, while it's growing up.
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
@@ -919,6 +971,7 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 
 ## Spy
 ### **Team: Crewmates**
+
 The Spy is a Crewmate, which has no special abilities.\
 The Spy looks like an additional Impostor to the Impostors, they can't tell the difference.\
 There are two possibilities (depending on the set options):
@@ -927,6 +980,7 @@ There are two possibilities (depending on the set options):
 You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
 
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Spy Spawn Chance |
@@ -936,18 +990,20 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 
 ## Security Guard
 ### **Team: Crewmates**
+
 The Security Guard is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
 Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
-The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
+The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.
+
 **NOTE:**
 - Tickster boxes can't be sealed
 - The Security Guard can't place Cameras on MiraHQ
 - The remaining number of screws can be seen above his special button
 - On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
-
 ### Game Options
+
 | Name | Description
 |----------|:-------------:|
 | Security Guard Spawn Chance |
@@ -957,10 +1013,12 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
 -----------------------
 
-
 # Source code
+
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
+
 You can use parts of the code but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests
-If you found any bugs, have an idea for a new role or any other request, join our [Discord server](https://discord.gg/77RkMJHWsM)
+
+If you found any bugs, have an idea for a new role or any other request, [join our Discord server](https://discord.gg/77RkMJHWsM).
