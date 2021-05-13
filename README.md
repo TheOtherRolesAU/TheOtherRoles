@@ -65,6 +65,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
 - Changed the role assignment to be more random when assigning roles (previously assigned the neutral roles before assigning the crewmate roles)
+- Added new `flip` option to [Custom Hats](#custom-hats)
 
 **Version 2.6.2**
 - The Other Roles now supports the new Among Us version **2021.5.10s**
@@ -358,9 +359,15 @@ Here are a few instructions, on how to create a custom hat:
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
     - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
+  - `Flipped texture (optional)`:
+    - This texture will be rendered instead of the Main texture, when facing the left.
+    - The name of the texture needs to follow the pattern *hatname_flip.png*.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname_back.png*.
+  - `Flipped Back texture (optional)`:
+    - This texture will be rendered instead of the Back texture, when facing the left.
+    - The name of the texture needs to follow the pattern *hatname_back_flip.png*.
   - `Climb texture (optional)`:
     - This texture will be rendered in front of the player, when he's climbing.
     - The name of the texture needs to follow the pattern *hatname_climb.png*.
