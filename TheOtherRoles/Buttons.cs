@@ -174,7 +174,7 @@ namespace TheOtherRoles
                     byte targetId = 0;
                     if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Child.child || Child.isGrownUp())) || 
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
-                        (Sheriff.canKillNeutrals && (Jester.jester == Sheriff.currentTarget || Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
                     else {
@@ -768,14 +768,9 @@ namespace TheOtherRoles
                     Arsonist.douseTarget = null;
                     arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
 
-                    int playerCounter = 0;
-                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                    bottomLeft += new Vector3(-0.25f, -0.25f, 0);
                     foreach (PlayerControl p in Arsonist.dousedPlayers) {
                         if (Arsonist.dousedIcons.ContainsKey(p.PlayerId)) {
-                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(true);
-                            Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
-                            playerCounter++;
+                            Arsonist.dousedIcons[p.PlayerId].setSemiTransparent(false);
                         }
                     }
                 }

@@ -33,6 +33,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
+| 2021.5.10s| v2.6.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.2/TheOtherRoles.zip)
+| 2021.4.14s| v2.6.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.6.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.0/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.1/TheOtherRoles.zip)
 | 2021.4.14s| v2.5.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.5.0/TheOtherRoles.zip)
@@ -58,6 +61,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.6.3**
+- Changed the role limits options to allow for minimum and maximum bounds
+- Changed the role assignment to be more random when assigning roles (previously assigned the neutral roles before assigning the crewmate roles)
+- Added new `flip` option to [Custom Hats](#custom-hats)
+
+**Version 2.6.2**
+- The Other Roles now supports the new Among Us version **2021.5.10s**
+- Added a chat command to kick players as the host of a lobby (/kick playerName)
+
+**Version 2.6.1**
+- Fixed a bug where the Sheriff was unable to kill the Arsonist
+- Fixed a bug in the role assignment system
+- Added the option to select the Dleks map
+- Improved the overlay of the Arsonist
 
 **Version 2.6.0**
 - **New Role:** [Arsonist](#arsonist)
@@ -327,6 +345,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
 - **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
+- **Dleks:** You are now able to select the Dleks map. 
 
 # Custom Hats
 ## Create and submit new hat designs
@@ -340,9 +359,15 @@ Here are a few instructions, on how to create a custom hat:
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
     - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
+  - `Flipped texture (optional)`:
+    - This texture will be rendered instead of the Main texture, when facing the left.
+    - The name of the texture needs to follow the pattern *hatname_flip.png*.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
     - The name of the texture needs to follow the pattern *hatname_back.png*.
+  - `Flipped Back texture (optional)`:
+    - This texture will be rendered instead of the Back texture, when facing the left.
+    - The name of the texture needs to follow the pattern *hatname_back_flip.png*.
   - `Climb texture (optional)`:
     - This texture will be rendered in front of the player, when he's climbing.
     - The name of the texture needs to follow the pattern *hatname_climb.png*.
@@ -363,7 +388,7 @@ First you need to choose how many special roles of each kind (Impostor/Neutral/C
 The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
 - First all roles that are set to 100% are being assigned to arbitrary players
 - After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and Impostors). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/Impostors or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
-- The Mafia, Lovers and Child are being selected independently (without using the ticket system) according to the spawn chance you selected. After that all Neutral roles are being selected, then all Crewmate roles and in the very end all Impostor roles.
+- The Mafia, Lovers and Child are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and Impostor roles are selected and assigned in a random order.
 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\

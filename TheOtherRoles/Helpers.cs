@@ -192,6 +192,13 @@ namespace TheOtherRoles {
                 player.Data.Tasks.Clear();
         }
 
+        public static void setSemiTransparent(this PoolablePlayer player, bool value) {
+            float alpha = value ? 0.25f : 1f;
+            foreach (SpriteRenderer r in player.gameObject.GetComponentsInChildren<SpriteRenderer>())
+                r.color = new Color(r.color.r, r.color.g, r.color.b, alpha);
+            player.NameText.color = new Color(player.NameText.color.r, player.NameText.color.g, player.NameText.color.b, alpha);
+        }
+
         public static string cs(Color c, string s) {
             return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }

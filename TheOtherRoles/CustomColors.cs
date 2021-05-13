@@ -12,7 +12,7 @@ namespace TheOtherRoles {
     public class CustomColors {
         protected static Dictionary<int, string> ColorStrings = new Dictionary<int, string>();
         public static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11};
-        public static int pickableColors = 12;
+        public static uint pickableColors = 12;
 
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
@@ -71,7 +71,7 @@ namespace TheOtherRoles {
                                         shadow = new Color32(0, 61, 54, byte.MaxValue),
                                         isLighterColor = false });
 
-            pickableColors += colors.Count; // Colors to show in Tab
+            pickableColors += (uint)colors.Count; // Colors to show in Tab
             /** Hidden Colors **/
             colors.Add(new CustomColor { longname = "Panda", shortname = "PANDA", 
                                         color = new Color32(255, 255, 255, 0), 
@@ -161,6 +161,39 @@ namespace TheOtherRoles {
                         if (i >= pickableColors) 
                             chip.transform.localScale *= 0f; // Needs to exist for PlayerTab
                     }
+                }
+            }
+            [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadPlayerPrefs))]
+            private static class LoadPlayerPrefsPatch { // Fix Potential issues with broken colors
+                private static bool needsPatch = false;
+                public static void Prefix([HarmonyArgument(0)] bool overrideLoad) {
+                    if (!SaveManager.loaded || overrideLoad)
+                        needsPatch = true;
+                }
+                public static void Postfix() {
+                    if (!needsPatch) return;
+                    SaveManager.colorConfig %= CustomColors.pickableColors;
+                    needsPatch = false;
+                }
+            }
+            [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
+            private static class PlayerControlCheckColorPatch {
+                private static bool isTaken(PlayerControl player, uint color) {
+                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers)
+                        if (!p.Disconnected && p.PlayerId != player.PlayerId && p.ColorId == color)
+                            return true;
+                    return false;
+                }
+                public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor) { // Fix incorrect color assignment
+                    uint color = (uint)bodyColor;
+                   if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length) {
+                        int num = 0;
+                        while (num++ < 50 && (color >= CustomColors.pickableColors || isTaken(__instance, color))) {
+                            color = (color + 1) % CustomColors.pickableColors;
+                        }
+                    }
+                    __instance.RpcSetColor((byte)color);
+                    return false;
                 }
             }
         }
