@@ -1,4 +1,3 @@
-extern alias Il2CppNewtonsoft;
 using System;
 using BepInEx;
 using BepInEx.Configuration;
@@ -22,8 +21,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using Il2CppNewtonsoft::Newtonsoft.Json.Linq;
-using Il2CppNewtonsoft::Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using Twitch;
 
 namespace TheOtherRoles {

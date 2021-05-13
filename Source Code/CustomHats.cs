@@ -1,4 +1,3 @@
-extern alias Il2CppNewtonsoft;
 using System;
 using BepInEx;
 using BepInEx.Configuration;
@@ -19,8 +18,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using Il2CppNewtonsoft::Newtonsoft.Json.Linq;
-using Il2CppNewtonsoft::Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -29,11 +28,14 @@ namespace TheOtherRoles {
         public static Material hatShader;
 
         public static Dictionary<string, HatExtension> CustomHatRegistry = new Dictionary<string, HatExtension>();
+        public static HatExtension TestExt = null;
 
         public class HatExtension {
             public string author { get; set;}
             public string package { get; set;}
             public string condition { get; set;}
+            public Sprite FlipImage { get; set;}
+            public Sprite BackFlipImage { get; set;}
 
             public bool isUnlocked() {
                 if (condition == null || condition.ToLower() == "none") 
@@ -48,6 +50,8 @@ namespace TheOtherRoles {
             public string condition { get; set;}
             public string name { get; set;}
             public string resource { get; set;}
+            public string flipresource { get; set;}
+            public string backflipresource { get; set;}
             public string backresource { get; set;}
             public string climbresource { get; set;}
             public bool bounce { get; set;}
@@ -58,6 +62,8 @@ namespace TheOtherRoles {
         private static List<CustomHat> createCustomHatDetails(string[] hats, bool fromDisk = false) {
             Dictionary<string, CustomHat> fronts = new Dictionary<string, CustomHat>();
             Dictionary<string, string> backs = new Dictionary<string, string>();
+            Dictionary<string, string> flips = new Dictionary<string, string>();
+            Dictionary<string, string> backflips = new Dictionary<string, string>();
             Dictionary<string, string> climbs = new Dictionary<string, string>();
 
             for (int i = 0; i < hats.Length; i++) {
@@ -68,11 +74,15 @@ namespace TheOtherRoles {
                 for (int j = 1; j < p.Length; j++) 
                     options.Add(p[j]);
 
-                if (options.Contains("climb")) 
+                if (options.Contains("back") && options.Contains("flip"))
+                    backflips.Add(p[0], hats[i]);
+                else if (options.Contains("climb")) 
                     climbs.Add(p[0], hats[i]);
-                if (options.Contains("back"))
+                else if (options.Contains("back"))
                     backs.Add(p[0], hats[i]);
-                if (!options.Contains("back") && !options.Contains("climb")) {
+                else if (options.Contains("flip"))
+                    flips.Add(p[0], hats[i]);
+                else {
                     CustomHat custom = new CustomHat { resource = hats[i] };
                     custom.name = p[0].Replace('-', ' ');
                     custom.bounce = options.Contains("bounce");
@@ -87,13 +97,19 @@ namespace TheOtherRoles {
 
             foreach (string k in fronts.Keys) {
                 CustomHat hat = fronts[k];
-                string br, cr;
+                string br, cr, fr, bfr;
                 backs.TryGetValue(k, out br);
                 climbs.TryGetValue(k, out cr);
+                flips.TryGetValue(k, out fr);
+                backflips.TryGetValue(k, out bfr);
                 if (br != null)
                     hat.backresource = br;
                 if (cr != null)
                     hat.climbresource = cr;
+                if (fr != null)
+                    hat.flipresource = fr;
+                if (bfr != null)
+                    hat.backflipresource = bfr;
                 if (hat.backresource != null)
                     hat.behind = true;
 
@@ -136,12 +152,20 @@ namespace TheOtherRoles {
             if (ch.adaptive && hatShader != null)
                 hat.AltShader = hatShader;
 
-            if (!testOnly) {
-                HatExtension extend = new HatExtension();
-                extend.author = ch.author != null ? ch.author : "Unknown";
-                extend.package = ch.package != null ? ch.package : "Misc.";
-                extend.condition = ch.condition != null ? ch.condition : "none";
+            HatExtension extend = new HatExtension();
+            extend.author = ch.author != null ? ch.author : "Unknown";
+            extend.package = ch.package != null ? ch.package : "Misc.";
+            extend.condition = ch.condition != null ? ch.condition : "none";
 
+            if (ch.flipresource != null)
+                 extend.FlipImage = CreateHatSprite(ch.flipresource, fromDisk);
+            if (ch.backflipresource != null)
+                 extend.BackFlipImage = CreateHatSprite(ch.backflipresource, fromDisk);
+
+            if (testOnly) {
+                TestExt = extend;
+                TestExt.condition = hat.name;
+            } else {
                 CustomHatRegistry.Add(hat.name, extend);
             }
 
@@ -155,6 +179,10 @@ namespace TheOtherRoles {
                 chd.backresource = filePath + chd.backresource;
             if (chd.climbresource != null)
                 chd.climbresource = filePath + chd.climbresource;
+            if (chd.flipresource != null)
+                chd.flipresource = filePath + chd.flipresource;
+            if (chd.backflipresource != null)
+                chd.backflipresource = filePath + chd.backflipresource;
             return CreateHatBehaviour(chd, true);
         }
 
@@ -184,6 +212,32 @@ namespace TheOtherRoles {
                 } catch (System.Exception e) {
                     System.Console.WriteLine("Unable to add Custom Hats\n" + e);
                     return false;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
+        private static class PlayerPhysicsHandleAnimationPatch {
+            private static void Postfix(PlayerPhysics __instance) {
+                AnimationClip currentAnimation = __instance.Animator.GetCurrentAnimation();
+                if (currentAnimation == __instance.ClimbAnim || currentAnimation == __instance.ClimbDownAnim) return;
+                HatParent hp = __instance.myPlayer.HatRenderer;
+                if (hp.Hat == null) return;
+                HatExtension extend = hp.Hat.getHatExtension();
+                if (extend == null) return;
+                if (extend.FlipImage != null) {
+                    if (__instance.rend.flipX) {
+                        hp.FrontLayer.sprite = extend.FlipImage;
+                    } else {
+                        hp.FrontLayer.sprite = hp.Hat.MainImage;
+                    }
+                }
+                if (extend.BackFlipImage != null) {
+                    if (__instance.rend.flipX) {
+                        hp.BackLayer.sprite = extend.BackFlipImage;
+                    } else {
+                        hp.BackLayer.sprite = hp.Hat.BackImage;
+                    }
                 }
             }
         }
@@ -315,7 +369,10 @@ namespace TheOtherRoles {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
                     YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
-                __instance.scroller.YBounds.max = YOffset * -0.875f; // probably needs to fix up the entire messed math to solve this correctly
+
+                // __instance.scroller.YBounds.max = -(__instance.YStart - (float)(unlockedHats.Length / this.NumPerRow) * this.YOffset) - 3f;
+                // __instance.scroller.YBounds.max = YOffset * -0.875f; // probably needs to fix up the entire messed math to solve this correctly
+                __instance.scroller.YBounds.max = -(YOffset + 4.1f); 
                 return false;
             }
         }
@@ -399,6 +456,11 @@ namespace TheOtherRoles {
                         info.reshashb = current["reshashb"]?.ToString();
                         info.climbresource = sanitizeResourcePath(current["climbresource"]?.ToString());
                         info.reshashc = current["reshashc"]?.ToString();
+                        info.flipresource = sanitizeResourcePath(current["flipresource"]?.ToString());
+                        info.reshashf = current["reshashf"]?.ToString();
+                        info.backflipresource = sanitizeResourcePath(current["backflipresource"]?.ToString());
+                        info.reshashbf = current["reshashbf"]?.ToString();
+
                         info.author = current["author"]?.ToString();
                         info.package = current["package"]?.ToString();
                         info.condition = current["condition"]?.ToString();
@@ -420,6 +482,10 @@ namespace TheOtherRoles {
                         markedfordownload.Add(data.backresource);
     	            if (data.climbresource != null && doesResourceRequireDownload(filePath + data.climbresource, data.reshashc, md5))
                         markedfordownload.Add(data.climbresource);
+    	            if (data.flipresource != null && doesResourceRequireDownload(filePath + data.flipresource, data.reshashf, md5))
+                        markedfordownload.Add(data.flipresource);
+    	            if (data.backflipresource != null && doesResourceRequireDownload(filePath + data.backflipresource, data.reshashbf, md5))
+                        markedfordownload.Add(data.backflipresource);
                 }
                 
                 foreach(var file in markedfordownload) {
@@ -455,11 +521,16 @@ namespace TheOtherRoles {
             public string reshasha { get; set;}
             public string reshashb { get; set;}
             public string reshashc { get; set;}
+            public string reshashf { get; set;}
+            public string reshashbf { get; set;}
         }   
     }
     public static class CustomHatExtensions {
         public static CustomHats.HatExtension getHatExtension(this HatBehaviour hat) {
             CustomHats.HatExtension ret = null;
+            if (CustomHats.TestExt != null && CustomHats.TestExt.condition.Equals(hat.name)) {
+                return CustomHats.TestExt;
+            }
             CustomHats.CustomHatRegistry.TryGetValue(hat.name, out ret);
             return ret;
         }

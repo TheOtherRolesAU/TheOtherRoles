@@ -12,14 +12,15 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
-        public static string[] crewmateAndNeutralRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3", "3-4", "4", "4-5", "5", "5-6", "6", "6-7", "7", "7-8", "8", "8-9", "9", "9-10", "10", "10-11", "11", "11-12", "12", "12-13", "13", "13-14", "14", "14-15", "15"};
-        public static string[] impostorRoleCaps = new string[]{"0", "0-1", "1", "1-2", "2", "2-3", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
-        public static CustomOption crewmateRolesCount;
-        public static CustomOption neutralRolesCount;
-        public static CustomOption impostorRolesCount;
+        public static CustomOption crewmateRolesCountMin;
+        public static CustomOption crewmateRolesCountMax;
+        public static CustomOption neutralRolesCountMin;
+        public static CustomOption neutralRolesCountMax;
+        public static CustomOption impostorRolesCountMin;
+        public static CustomOption impostorRolesCountMax;
 
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -160,9 +161,13 @@ namespace TheOtherRoles {
             // Role Options
             presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
 
-            crewmateRolesCount = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Crewmate Roles"), crewmateAndNeutralRoleCaps, null, true);
-            neutralRolesCount = CustomOption.Create(7, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Neutral Roles"), crewmateAndNeutralRoleCaps);
-            impostorRolesCount = CustomOption.Create(2, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Number Of Impostor Roles"), impostorRoleCaps);
+            // Using new id's for the options to not break compatibilty with older versions
+            crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
+            crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), 0f, 0f, 15f, 1f);
+            neutralRolesCountMin = CustomOption.Create(302, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), 0f, 0f, 15f, 1f);
+            neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
+            impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
+            impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -545,9 +550,37 @@ namespace TheOtherRoles {
         private static void Postfix(ref string __result)
         {
             StringBuilder sb = new StringBuilder(__result);
-            foreach (CustomOption option in CustomOption.options)
-                if (option.parent == null)
-                    sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+            foreach (CustomOption option in CustomOption.options) {
+                if (option.parent == null) {
+                    if (option == CustomOptionHolder.crewmateRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
+                        var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if (option == CustomOptionHolder.neutralRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
+                        var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if (option == CustomOptionHolder.impostorRolesCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
+                        var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
+                        var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax)) {
+                        continue;
+                    } else {
+                        sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    }
+                    
+                }
+            }
             CustomOption parent = null;
             foreach (CustomOption option in CustomOption.options)
                 if (option.parent != null) {
