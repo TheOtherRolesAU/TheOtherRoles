@@ -12,10 +12,10 @@ namespace TheOtherRoles
     public static class CredentialsPatch {
         public static string fullCredentials = 
 $@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}:
-- Modded by <color=#FCCE03FF>Eisbison</color>,
-  <color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>EndOfFile</color>
-- Balanced with <color=#FCCE03FF>Dhalucard</color>
-- Button design by <color=#FCCE03FF>Bavari</color>";
+Modded by <color=#FCCE03FF>Eisbison</color>,
+<color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>EndOfFile</color>
+Balanced with <color=#FCCE03FF>Dhalucard</color>
+Button design by <color=#FCCE03FF>Bavari</color>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FFFF00>Eisbison, Thunderstorm584</color> & <color=#FFFF00>EndOfFile</color>
@@ -46,14 +46,14 @@ Balanced with <color=#6B31B9>Dhalucard</color>      Design by <color=#FF5B00>Bav
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         private static class PingTrackerPatch
         {
-            static void Postfix(PingTracker __instance)
-            {
+            static void Postfix(PingTracker __instance){
+                __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
                     __instance.text.text = $"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}\n" + __instance.text.text;
-                    __instance.transform.localPosition = new Vector3(2.583f, 2.675f, __instance.transform.localPosition.z);
+                    __instance.transform.localPosition = new Vector3(3f, 2.675f, __instance.transform.localPosition.z);
                 } else {
                     __instance.text.text = $"{fullCredentials}\n{__instance.text.text}";
-                    __instance.transform.localPosition = new Vector3(1.25f, 2.675f, __instance.transform.localPosition.z);
+                    __instance.transform.localPosition = new Vector3(3f, 2.675f, __instance.transform.localPosition.z);
                 }
             }
         }
