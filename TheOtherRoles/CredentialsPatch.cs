@@ -12,10 +12,10 @@ namespace TheOtherRoles
     public static class CredentialsPatch {
         public static string fullCredentials = 
 $@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}:
-- Modded by <color=#FFFF00>Eisbison</color>,
-  <color=#FFFF00>Thunderstorm584</color> & <color=#FFFF00>EndOfFile</color>
-- Balanced with <color=#FFFF00>Dhalucard</color>
-- Button design by <color=#FFFF00>Bavari</color>";
+- Modded by <color=#FCCE03FF>Eisbison</color>,
+  <color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>EndOfFile</color>
+- Balanced with <color=#FCCE03FF>Dhalucard</color>
+- Button design by <color=#FCCE03FF>Bavari</color>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FFFF00>Eisbison, Thunderstorm584</color> & <color=#FFFF00>EndOfFile</color>
