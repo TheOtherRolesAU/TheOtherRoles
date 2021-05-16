@@ -233,9 +233,7 @@ namespace TheOtherRoles
         }
 
 
-        static void onClick(int i, MeetingHud __instance)
-        {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.Data.IsDead) return; 
+        static void onClick(int i, MeetingHud __instance) {
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (__instance.playerStates[i].isDead) return;
 
@@ -310,9 +308,10 @@ namespace TheOtherRoles
             selections = new bool[__instance.playerStates.Length];
             renderers = new SpriteRenderer[__instance.playerStates.Length];
 
-            for (int i = 0; i < __instance.playerStates.Length; i++)
-		    {
+            for (int i = 0; i < __instance.playerStates.Length; i++) {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.isDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+
                 GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                 GameObject checkbox = UnityEngine.Object.Instantiate(template);
                 checkbox.transform.SetParent(playerVoteArea.transform);

@@ -64,6 +64,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.4**
+- New option: Swapper can only swap others
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
