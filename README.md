@@ -830,6 +830,7 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 | Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
+| Swapper can only swap others | Sets whether the Swapper can swap himself or not
 -----------------------
 
 ## Tracker
