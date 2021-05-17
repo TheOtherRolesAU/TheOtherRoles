@@ -25,6 +25,7 @@ namespace TheOtherRoles
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
             List<RoleInfo> infos = new List<RoleInfo>();
 
+            // Special roles
             if (Jester.jester != null && p == Jester.jester) {
                 infos.Add(new RoleInfo("Jester",
                 Jester.color,
@@ -215,13 +216,6 @@ namespace TheOtherRoles
                 "Help your Jackal to kill everyone",
                 RoleId.Sidekick));
             }
-            if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
-                infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpLover" : "Lover",
-                p.Data.IsImpostor ? Palette.ImpostorRed : Lovers.color,
-                "You are in <color=#FC03BEFF>Love</color>",
-                "You are in love",
-                RoleId.Lover));
-            }
             if (Spy.spy != null && p == Spy.spy) {
                 infos.Add(new RoleInfo("Spy",
                 Spy.color,
@@ -244,6 +238,7 @@ namespace TheOtherRoles
                 RoleId.Arsonist));
             }
 
+            // Default roles
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
                 Palette.ImpostorRed,
@@ -256,6 +251,15 @@ namespace TheOtherRoles
                 "Find the Impostors",
                 "Find the Impostors",
                 RoleId.Crewmate));
+            }
+
+            // Modifier
+            if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
+                infos.Add(new RoleInfo("Lover",
+                Lovers.color,
+                "You are in <color=#FC03BEFF>Love</color>",
+                "You are in love",
+                RoleId.Lover));
             }
 
             return infos;
