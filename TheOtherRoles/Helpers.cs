@@ -175,8 +175,12 @@ namespace TheOtherRoles {
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
-        public static bool hasFakeTasks(this PlayerControl player) {
+        public static bool isNeutral(this PlayerControl player) {
             return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist);
+        }
+
+        public static bool hasFakeTasks(this PlayerControl player) {
+            return player.isNeutral();
         }
 
         public static void clearAllTasks(this PlayerControl player) {

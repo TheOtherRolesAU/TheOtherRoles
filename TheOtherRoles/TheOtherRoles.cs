@@ -322,7 +322,7 @@ namespace TheOtherRoles
 
         public static bool existingAndCrewLovers() {
             if (lover1 == null || lover2 == null || lover1.Data.Disconnected || lover2.Data.Disconnected) return false; // Null or disconnected
-            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
+            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1.isNeutral() || lover2.isNeutral()); // Not Impostor or Neutral
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
