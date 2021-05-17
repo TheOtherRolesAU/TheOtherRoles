@@ -75,7 +75,6 @@ namespace TheOtherRoles
         MorphlingMorph,
         CamouflagerCamouflage,
         TrackerUsedTracker,
-        LoverSuicide,
         VampireSetBitten,
         VampireTryKill,
         PlaceGarlic,
@@ -427,14 +426,6 @@ namespace TheOtherRoles
             Camouflager.camouflageTimer = Camouflager.duration;
         }
 
-        public static void loverSuicide(byte remainingLoverId) {
-            if (Lovers.lover1 != null && !Lovers.lover1.Data.IsDead && Lovers.lover1.PlayerId == remainingLoverId) {
-                Lovers.lover1.MurderPlayer(Lovers.lover1);
-            } else if (Lovers.lover2 != null && !Lovers.lover2.Data.IsDead && Lovers.lover2.PlayerId == remainingLoverId) {
-                Lovers.lover2.MurderPlayer(Lovers.lover2);
-            }
-        }
-
         public static void vampireSetBitten(byte targetId, byte reset) {
             if (reset != 0) {
                 Vampire.bitten = null;
@@ -752,9 +743,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
-                    break;
-                case (byte)CustomRPC.LoverSuicide:
-                    RPCProcedure.loverSuicide(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = reader.ReadByte();
