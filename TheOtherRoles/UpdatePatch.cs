@@ -90,10 +90,6 @@ namespace TheOtherRoles
                 setPlayerNameColor(Shifter.shifter, Shifter.color);
             else if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Swapper.swapper, Swapper.color);
-            else if (Lovers.lover1 != null && Lovers.lover2 != null && (Lovers.lover1 == PlayerControl.LocalPlayer || Lovers.lover2 == PlayerControl.LocalPlayer)) {             
-                setPlayerNameColor(Lovers.lover1, Lovers.color);
-                setPlayerNameColor(Lovers.lover2, Lovers.color);
-            }
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Seer.seer, Seer.color);  
             else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
@@ -138,7 +134,8 @@ namespace TheOtherRoles
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock and Mafioso
         }
 
-        static void setMafiaNameTags() {
+        static void setNameTags() {
+            // Mafia
             if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                     if (Godfather.godfather != null && Godfather.godfather == player)
@@ -155,6 +152,18 @@ namespace TheOtherRoles
                             player.NameText.text = Mafioso.mafioso.Data.PlayerName + " (M)";
                         else if (Janitor.janitor != null && Janitor.janitor.PlayerId == player.TargetPlayerId)
                             player.NameText.text = Janitor.janitor.Data.PlayerName + " (J)";
+            }
+
+            // Lovers
+            if (Lovers.lover1 != null && Lovers.lover2 != null && (Lovers.lover1 == PlayerControl.LocalPlayer || Lovers.lover2 == PlayerControl.LocalPlayer)) {
+                string suffix = Helpers.cs(Lovers.color, " ❤");
+                Lovers.lover1.nameText.text += suffix;
+                Lovers.lover2.nameText.text += suffix;
+
+                if (MeetingHud.Instance != null)
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                        if (Lovers.lover1.PlayerId == player.TargetPlayerId || Lovers.lover2.PlayerId == player.TargetPlayerId)
+                            player.NameText.text += suffix;
             }
         }
 
@@ -316,9 +325,8 @@ namespace TheOtherRoles
             resetNameTagsAndColors();
             setNameColors();
             updateShielded();
+            setNameTags();
 
-            // Mafia
-            setMafiaNameTags();
             // Impostors
             updateImpostorKillButton(__instance);
             // Timer updates

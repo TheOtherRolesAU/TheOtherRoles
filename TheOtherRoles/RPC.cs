@@ -25,8 +25,7 @@ namespace TheOtherRoles
         Medic,
         Shifter,
         Swapper,
-        Lover1,
-        Lover2,
+        Lover,
         Seer,
         Morphling,
         Camouflager,
@@ -43,7 +42,9 @@ namespace TheOtherRoles
         Cleaner,
         Warlock,
         SecurityGuard,
-        Arsonist
+        Arsonist,
+        Crewmate,
+        Impostor
     }
 
     enum CustomRPC
@@ -123,7 +124,7 @@ namespace TheOtherRoles
             }
         }
 
-        public static void setRole(byte roleId, byte playerId) {
+        public static void setRole(byte roleId, byte playerId, byte flag) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
@@ -166,11 +167,9 @@ namespace TheOtherRoles
                     case RoleId.Swapper:
                         Swapper.swapper = player;
                         break;
-                    case RoleId.Lover1:
-                        Lovers.lover1 = player;
-                        break;
-                    case RoleId.Lover2:
-                        Lovers.lover2 = player;
+                    case RoleId.Lover:
+                        if (flag == 0) Lovers.lover1 = player;
+                        else Lovers.lover2 = player;
                         break;
                     case RoleId.Seer:
                         Seer.seer = player;
@@ -681,7 +680,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
-                    RPCProcedure.setRole(roleId, playerId);
+                    byte flag = reader.ReadByte();
+                    RPCProcedure.setRole(roleId, playerId, flag);
                     break;
                 case (byte)CustomRPC.SetUncheckedColor:
                     byte c = reader.ReadByte();

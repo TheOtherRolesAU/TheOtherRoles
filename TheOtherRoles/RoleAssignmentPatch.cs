@@ -118,13 +118,13 @@ namespace TheOtherRoles
             // Assign Lovers
             if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
                 if (data.impostors.Count > 0 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.impostors); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates);
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.impostors, 0); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1);
                     data.maxCrewmateRoles--;
                     data.maxImpostorRoles--;
                 } else if (data.crewmates.Count >= 2 && data.maxCrewmateRoles >= 2) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.crewmates); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 0); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1); 
                     data.maxCrewmateRoles -= 2; 
                 }
             }
@@ -240,21 +240,20 @@ namespace TheOtherRoles
             }
         }
 
-        private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
+        private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, byte flag = 0) {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
             playerList.RemoveAt(index);
 
-            setRoleToPlayer(roleId, playerId);
-        }
-
-        private static void setRoleToPlayer(byte roleId, byte playerId) {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
+            writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId);
+            RPCProcedure.setRole(roleId, playerId, flag);
         }
+
+
 
         private class RoleAssignmentData {
             public List<PlayerControl> crewmates {get;set;}
