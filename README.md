@@ -33,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.10s| v2.6.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.4/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.2/TheOtherRoles.zip)
 | 2021.4.14s| v2.6.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.1/TheOtherRoles.zip)
@@ -61,6 +62,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.6.4**
+- New option: Swapper can only swap others
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -317,7 +321,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 
 
 # Credits & Resources
-[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all versions above v2.3.0, we're using the OxygenFilter for automatic deobfuscation\
+[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all the version v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation\
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
@@ -826,6 +830,7 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 | Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
+| Swapper can only swap others | Sets whether the Swapper can swap himself or not
 -----------------------
 
 ## Tracker
