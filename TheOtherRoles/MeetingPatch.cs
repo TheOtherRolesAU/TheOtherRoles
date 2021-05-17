@@ -559,6 +559,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Security Guard.";
                     else if(Arsonist.arsonist != null && ExileController.Instance.exiled.Object.PlayerId == Arsonist.arsonist.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Arsonist.";
+                    else if (Hunter.hunter != null && ExileController.Instance.exiled.Object.PlayerId == Hunter.hunter.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The CrewHunter.";
                     else
                         __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
                 }
@@ -588,6 +590,8 @@ namespace TheOtherRoles
                         __result = ExileController.Instance.exiled.PlayerName + " was The Cleaner.";
                     else if (Warlock.warlock != null && ExileController.Instance.exiled.Object.PlayerId == Warlock.warlock.PlayerId)
                         __result = ExileController.Instance.exiled.PlayerName + " was The Warlock.";
+                    else if (Hunter.hunter != null && ExileController.Instance.exiled.Object.PlayerId == Hunter.hunter.PlayerId)
+                        __result = ExileController.Instance.exiled.PlayerName + " was The ImpHunter.";
                 }
 
                 // Hide number of remaining impostors on Jester win

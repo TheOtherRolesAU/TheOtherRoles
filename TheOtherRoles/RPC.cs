@@ -43,7 +43,8 @@ namespace TheOtherRoles
         Cleaner,
         Warlock,
         SecurityGuard,
-        Arsonist
+        Arsonist,
+        Hunter
     }
 
     enum CustomRPC
@@ -223,6 +224,9 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
+                    case RoleId.Hunter:
+                        Hunter.hunter = player;
+                        break;
                     }
                 }
         }
@@ -363,9 +367,7 @@ namespace TheOtherRoles
             }
 
             // Shift role
-            if (Jester.jester != null && Jester.jester == player) {
-                Jester.jester = oldShifter;
-            } else if (Mayor.mayor != null && Mayor.mayor == player) {
+            if (Mayor.mayor != null && Mayor.mayor == player) {
                 Mayor.mayor = oldShifter;
             } else if (Engineer.engineer != null && Engineer.engineer == player) {
                 Engineer.engineer = oldShifter;
@@ -399,8 +401,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player) {
                 SecurityGuard.securityGuard = oldShifter;
-            } else if (Arsonist.arsonist != null && Arsonist.arsonist == player) {
-                Arsonist.arsonist = oldShifter;
+            } else if (Hunter.hunter != null && Hunter.hunter == player) {
+                Hunter.hunter = oldShifter;
             } else { // Crewmate
             }
             
@@ -561,6 +563,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
+            if (player == Hunter.hunter) Hunter.clearAndReload();
             if (player == Lovers.lover1 || player == Lovers.lover2) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }

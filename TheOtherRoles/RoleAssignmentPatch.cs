@@ -139,6 +139,17 @@ namespace TheOtherRoles
                     data.maxCrewmateRoles--;
                 }
             }
+
+            // Assign Hunter
+            if (rnd.Next(1, 101) <= CustomOptionHolder.hunterSpawnRate.getSelection() * 10) {
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.hunterIsImpHunterRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Hunter, data.impostors); 
+                    data.maxImpostorRoles--;
+                } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
+                    setRoleToRandomPlayer((byte)RoleId.Hunter, data.crewmates);
+                    data.maxCrewmateRoles--;
+                }
+            }
         }
 
         private static void assignEnsuredRoles(RoleAssignmentData data) {

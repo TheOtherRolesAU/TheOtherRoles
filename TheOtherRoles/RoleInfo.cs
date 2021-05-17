@@ -210,6 +210,12 @@ namespace TheOtherRoles
                 "Let them burn",
                 "Let them burn"));
             }
+            if (Hunter.hunter != null && p == Hunter.hunter) {
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpHunter" : "CrewHunter",
+                Arsonist.color,
+                "Guess and shoot",
+                "Guess and shoot"));
+            }
 
             if (infos.Count == 0 && p.Data.IsImpostor) { // Just Impostor
                 infos.Add(new RoleInfo("Impostor",
