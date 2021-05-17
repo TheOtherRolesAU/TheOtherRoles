@@ -13,6 +13,7 @@ namespace TheOtherRoles
     class SetInfectedPatch
     {
 
+    private static List<byte> AssignedRoles = new List<byte>{};
         public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
@@ -23,6 +24,7 @@ namespace TheOtherRoles
         }
 
         private static void assignRoles() {
+            AssignedRoles.Clear();
             var data = getRoleAssignmentData();
             assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
@@ -241,10 +243,20 @@ namespace TheOtherRoles
         }
 
         private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
+            
+            if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
+                foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
+                    if (AssignedRoles.Contains((byte)blockedRoleId) && roleId.Equals(roleId)) {
+                        return;
+                    }      
+                }
+            }
+            
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
             playerList.RemoveAt(index);
-
+            
+            AssignedRoles.Add(roleId);
             setRoleToPlayer(roleId, playerId);
         }
 
