@@ -66,7 +66,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.4**
 - New option: Swapper can only swap others
 - New option: Ghosts can see votes
-- **Seer:** The issue with the Seer souls and Seer flash has finally be fixed 
+- **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally be fixed
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
