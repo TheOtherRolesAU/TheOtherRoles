@@ -14,6 +14,10 @@ namespace TheOtherRoles {
         private static ToggleButtonBehaviour streamerModeButton;
         private static ToggleButtonBehaviour ghostsSeeTasksButton;
         private static ToggleButtonBehaviour ghostsSeeRolesButton;
+        private static ToggleButtonBehaviour ghostsSeeVotesButton;
+
+        public static float xOffset = 1.75f;
+        public static float yOffset = -0.5f;
 
         private static void updateToggle(ToggleButtonBehaviour button, string text, bool on) {
             if (button == null || button.gameObject == null) return;
@@ -41,11 +45,12 @@ namespace TheOtherRoles {
         public static void Postfix(OptionsMenuBehaviour __instance) {
             if (__instance.CensorChatButton != null) {
                 if (origin == null) origin = __instance.CensorChatButton.transform.localPosition + Vector3.up * 0.25f;
-                __instance.CensorChatButton.transform.localPosition = origin.Value + Vector3.left * 1.3f;
+                __instance.CensorChatButton.transform.localPosition = origin.Value + Vector3.left * xOffset;
+                __instance.CensorChatButton.transform.localScale = Vector3.one * 2f / 3f;
             }
 
             if ((streamerModeButton == null || streamerModeButton.gameObject == null)) {
-                streamerModeButton = createCustomToggle("Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value, Vector3.right * 1.3f, (UnityEngine.Events.UnityAction)streamerModeToggle, __instance);
+                streamerModeButton = createCustomToggle("Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value, Vector3.zero, (UnityEngine.Events.UnityAction)streamerModeToggle, __instance);
 
                 void streamerModeToggle() {
                     TheOtherRolesPlugin.StreamerMode.Value = !TheOtherRolesPlugin.StreamerMode.Value;
@@ -54,7 +59,7 @@ namespace TheOtherRoles {
             }
 
             if ((ghostsSeeTasksButton == null || ghostsSeeTasksButton.gameObject == null)) {
-                ghostsSeeTasksButton = createCustomToggle("Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value, new Vector2(-1.3f, -0.5f), (UnityEngine.Events.UnityAction)ghostsSeeTaskToggle, __instance);
+                ghostsSeeTasksButton = createCustomToggle("Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value, Vector3.right * xOffset, (UnityEngine.Events.UnityAction)ghostsSeeTaskToggle, __instance);
 
                 void ghostsSeeTaskToggle() {
                     TheOtherRolesPlugin.GhostsSeeTasks.Value = !TheOtherRolesPlugin.GhostsSeeTasks.Value;
@@ -64,12 +69,22 @@ namespace TheOtherRoles {
             }
 
             if ((ghostsSeeRolesButton == null || ghostsSeeRolesButton.gameObject == null)) {
-                ghostsSeeRolesButton = createCustomToggle("Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value, new Vector2(1.3f, -0.5f), (UnityEngine.Events.UnityAction)ghostsSeeRolesToggle, __instance);
+                ghostsSeeRolesButton = createCustomToggle("Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value, new Vector2(-xOffset, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeRolesToggle, __instance);
 
                 void ghostsSeeRolesToggle() {
                     TheOtherRolesPlugin.GhostsSeeRoles.Value = !TheOtherRolesPlugin.GhostsSeeRoles.Value;
                     MapOptions.ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value; 
                     updateToggle(ghostsSeeRolesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value);
+                }
+            }
+
+            if ((ghostsSeeVotesButton == null || ghostsSeeVotesButton.gameObject == null)) {
+                ghostsSeeVotesButton = createCustomToggle("Ghosts See votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value, new Vector2(0, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeVotesToggle, __instance);
+
+                void ghostsSeeVotesToggle() {
+                    TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value;
+                    MapOptions.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value; 
+                    updateToggle(ghostsSeeVotesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeVotes.Value);
                 }
             }
         }
