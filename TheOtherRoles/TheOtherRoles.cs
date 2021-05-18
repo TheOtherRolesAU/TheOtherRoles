@@ -364,7 +364,7 @@ namespace TheOtherRoles
             deadBodyPositions = new List<Vector3>();
             limitSoulDuration = CustomOptionHolder.seerLimitSoulDuration.getBool();
             soulDuration = CustomOptionHolder.seerSoulDuration.getFloat();
-            mode = CustomOptionHolder.medicShowShielded.getSelection();
+            mode = CustomOptionHolder.seerMode.getSelection();
         }
     }
 
