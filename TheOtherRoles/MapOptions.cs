@@ -13,6 +13,7 @@ namespace TheOtherRoles{
         public static bool hidePlayerNames = false;
         public static bool ghostsSeeRoles = true;
         public static bool ghostsSeeTasks = true;
+        public static bool ghostsSeeVotes = true;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -30,6 +31,7 @@ namespace TheOtherRoles{
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value;
             ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
+            ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
         }
     }
 } 

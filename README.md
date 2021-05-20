@@ -1,11 +1,11 @@
-[![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
-![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.6.0.png)
+![eisbison banner](./Images/TOR_logo.png)
+[![Discord](./Images/TOR_server.png)](https://discord.gg/77RkMJHWsM)
+![eisbison infographic](./Images/TOR_roles.png)
 
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
@@ -64,8 +64,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.4**
-- New option: Swapper can only swap other
 - **Lovers:** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
+- **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally been fixed
+- New option: Swapper can only swap others
+- New option: Ghosts can see votes
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -196,7 +198,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Hotfix 1.8.2**
 - Add map and Impostor count to lobby settings.
-- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role. 
+- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role.
 
 **Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
@@ -219,7 +221,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 \
 **Changes in v1.6:**
 - This update is a small hotfix, fixing the bug where some people were unable to join lobbies.
-- The Child can't be voted out anymore before it turns 18, hence games can't end anymore because the Child died. 
+- The Child can't be voted out anymore before it turns 18, hence games can't end anymore because the Child died.
 - Footprints are no longer visible to the Detective, if players are inside vents.
 
 \
@@ -346,10 +348,12 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the *BepInEx\config\me.eisbison.theotherroles.cfg* file.
 - **Number of Impostors:** The number of Impostor count be set inside a lobby
 - **Map:** The map can be changed inside a lobby
-- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
+- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
-- **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
+- **Ghosts Can See Roles**
+- **Ghosts Can See Votes**
+- **Ghosts Can See The Number Ofe Remaining Tasks**
 - **Dleks:** You are now able to select the Dleks map. 
 
 # Custom Hats
@@ -381,7 +385,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-<img src="./Images/Colors.png" alt="drawing" width="300px"/>
+![TOR Colors](./Images/TOR_colors.png)
 
 # Roles
 
@@ -638,10 +642,10 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Seer Spawn Chance | - 
-| Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Spawn Chance | -
+| Seer Mode | Options: Show death flash and souls, show death flash, show souls
 | Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
-| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
+| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting
 -----------------------
 
 ## Engineer
@@ -770,7 +774,7 @@ Otherwise he sees the same information as everyone else.
 | Hacker Spawn Chance | -
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
-| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors) 
+| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
 -----------------------
 
 
@@ -799,7 +803,7 @@ can only use them, if the previous player did not used them before)
 ## Time Master
 ### **Team: Crewmates**
 The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
-If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
+If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the
 time will rewind for a set amount of time.\
 The kill cooldown of the killer won't be reset, so the Time Master
 has to make sure that the game won't result in the same situation.\
@@ -938,7 +942,7 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Name | Description
 |----------|:-------------:|
 | Spy Spawn Chance |
-| Spy Can Die To Sheriff | 
+| Spy Can Die To Sheriff |
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
 -----------------------
 
@@ -959,7 +963,7 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Name | Description
 |----------|:-------------:|
 | Security Guard Spawn Chance |
-| Security Guard Cooldown | 
+| Security Guard Cooldown |
 | Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
