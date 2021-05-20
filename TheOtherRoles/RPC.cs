@@ -360,6 +360,13 @@ namespace TheOtherRoles
                 Medic.shielded = player;
             }
 
+            // Shift Lovers Role
+            if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
+            else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
+
+            if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
+            else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
+
             // Shift role
             if (Jester.jester != null && Jester.jester == player)
                 Jester.jester = oldShifter;
@@ -379,10 +386,6 @@ namespace TheOtherRoles
                 Medic.medic = oldShifter;
             if (Swapper.swapper != null && Swapper.swapper == player)
                 Swapper.swapper = oldShifter;
-            if (Lovers.lover1 != null && Lovers.lover1 == player)
-                Lovers.lover1 = oldShifter;
-            if (Lovers.lover2 != null && Lovers.lover2 == player)
-                Lovers.lover2 = oldShifter;
             if (Seer.seer != null && Seer.seer == player)
                 Seer.seer = oldShifter;
             if (Hacker.hacker != null && Hacker.hacker == player)
