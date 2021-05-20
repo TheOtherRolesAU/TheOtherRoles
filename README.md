@@ -64,10 +64,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.4**
+- **Lovers:** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
+- **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally been fixed
 - New option: Swapper can only swap others
 - New option: Ghosts can see votes
 - New option: Jackal and Sidekick have Impostor vision
-- **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally been fixed
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -564,19 +565,20 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 -----------------------
 
 ## Lovers
-### **Team: Either Crewmates or Impostors**
+### **Team: Lovers (and secondary team)**
 There are always two Lovers which are linked together.\
-Their goal is it to stay alive together until the end of the game.\
+Their primary goal is it to stay alive together until the end of the game.\
 If one Lover dies (and the option is activated), the other Lover suicides.\
+You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
 You can specify the chance of one Lover being an Impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
-If both Lovers are Crewmates, they can achieve a "double victory" but the Crewmates then also win.\
-If one Lover is an Impostor and one a Crewmate, they can only get a "Lovers solo win" where only they win (even if there is another Impostor alive).\
-If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
+The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win)\
+If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
+If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
+If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
-- If there is an equal amount of Impostors and Crewmates left in the game and one of the Lovers is an Impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
+- In a 2 Cremates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
 - The Lovers can change if the Shifter takes the role of a Lovers
 
 ### Game Options
@@ -585,6 +587,7 @@ If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be cou
 | Lovers Spawn Chance | -
 | Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
+| Lovers Can Have Another Role | If set to true, the Lovers can have a second role
 -----------------------
 
 

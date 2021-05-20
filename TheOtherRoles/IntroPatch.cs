@@ -36,16 +36,14 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(IntroCutscene._CoBegin_d__11), nameof(IntroCutscene._CoBegin_d__11.MoveNext))]
-    class IntroPatch
-    {
-        static void Prefix(IntroCutscene._CoBegin_d__11 __instance)
-        {
+    [HarmonyPatch]
+    class IntroPatch {
+        public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             // Intro solo teams
             if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist) {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(PlayerControl.LocalPlayer);
-                __instance.yourTeam = soloTeam;
+                yourTeam = soloTeam;
             }
 
             // Add the Spy to the Impostor team (for the Impostors)
@@ -56,33 +54,49 @@ namespace TheOtherRoles
                     if (p == Spy.spy || p.Data.IsImpostor)
                         fakeImpostorTeam.Add(p);
                 }
-                __instance.yourTeam = fakeImpostorTeam;
+                yourTeam = fakeImpostorTeam;
             }
         }
 
-        // Intro display role
-        static void Postfix(IntroCutscene._CoBegin_d__11 __instance)
-        {
+        public static void setupIntroRole(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
-            if (infos.Count == 0) return;
-            RoleInfo roleInfo = infos[0];
+            RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
 
-            if (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2)
-            {
-                PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                __instance.__4__this.Title.text = PlayerControl.LocalPlayer.Data.IsImpostor ? "<color=#FF1919FF>Imp</color><color=#FC03BEFF>Lover</color>" : "<color=#FC03BEFF>Lover</color>";
-                __instance.__4__this.Title.color = PlayerControl.LocalPlayer.Data.IsImpostor ? Color.white : Lovers.color;
-                __instance.__4__this.ImpostorText.text = "You are in <color=#FC03BEFF>Love</color><color=#FFFFFFFF> with </color><color=#FC03BEFF>" + (otherLover?.Data?.PlayerName ?? "") + "</color>";
-                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__4__this.BackgroundBar.material.color = Lovers.color;
+            if (roleInfo != null) {
+                __instance.Title.text = roleInfo.name;
+                __instance.Title.color = roleInfo.color;
+                __instance.ImpostorText.gameObject.SetActive(true);
+                __instance.ImpostorText.text = roleInfo.introDescription;
+                __instance.BackgroundBar.material.color = roleInfo.color;
             }
-            else if (roleInfo.name == "Crewmate" || roleInfo.name == "Impostor") {}
-            else {
-                __instance.__4__this.Title.text = roleInfo.name;
-                __instance.__4__this.Title.color = roleInfo.color;
-                __instance.__4__this.ImpostorText.gameObject.SetActive(true);
-                __instance.__4__this.ImpostorText.text = roleInfo.introDescription;
-                __instance.__4__this.BackgroundBar.material.color = roleInfo.color;
+
+            if (infos.Any(info => info.roleId == RoleId.Lover)) {
+                var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
+                loversText.transform.localPosition += Vector3.down * 3f;
+                PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in lover with {otherLover?.Data?.PlayerName ?? ""} ❤");
+            }
+        }
+
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+        class BeginCrewmatePatch {
+            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+                setupIntroTeam(__instance, ref yourTeam);
+            }
+
+            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+                setupIntroRole(__instance, ref yourTeam);
+            }
+        }
+
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
+        class BeginImpostorPatch {
+            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+                setupIntroTeam(__instance, ref yourTeam);
+            }
+
+            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+                setupIntroRole(__instance, ref yourTeam);
             }
         }
     }
