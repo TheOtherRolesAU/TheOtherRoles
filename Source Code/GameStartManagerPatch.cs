@@ -97,7 +97,7 @@ namespace TheOtherRoles {
                             if (diff > 0) {
                                 message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an older version of The Other Roles (v{playerVersions[client.Id].ToString()})\n</color>";
                                 blockStart = true;
-                            } else if (diff > 0) {
+                            } else if (diff < 0) {
                                 message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a newer version of The Other Roles (v{playerVersions[client.Id].ToString()}) \n</color>";
                                 blockStart = true;
                             }

@@ -104,6 +104,15 @@ namespace TheOtherRoles
                 }
             }
 
+            // Jester sabotage
+            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.CanMove) {
+                if (!Jester.jester.Data.IsDead && __instance.currentTarget == null) { // no target, so sabotage
+                    __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.SabotageButton);
+                    CooldownHelpers.SetCooldownNormalizedUvs(__instance.UseButton);
+                    __instance.UseButton.color = UseButtonManager.EnabledColor;
+                }
+            }
+
             // Mafia sabotage button render patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
@@ -119,6 +128,13 @@ namespace TheOtherRoles
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
             if (__instance.currentTarget != null) return true;
+
+            // Jester sabotage
+            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.jester.Data.IsDead) {
+                Action<MapBehaviour> action = m => m.ShowInfectedMap() ;
+                DestroyableSingleton<HudManager>.Instance.ShowMap(action);
+                return false;
+            }
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
