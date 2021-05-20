@@ -33,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.10s| v2.6.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.4/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.2/TheOtherRoles.zip)
 | 2021.4.14s| v2.6.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.1/TheOtherRoles.zip)
@@ -61,6 +62,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.6.4**
+- New option: Swapper can only swap other
+- **Lovers:** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -317,7 +322,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 
 
 # Credits & Resources
-[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all versions above v2.3.0, we're using the OxygenFilter for automatic deobfuscation\
+[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all the version v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation\
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
 [BepInEx](https://github.com/BepInEx) - Used to hook game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
@@ -555,19 +560,20 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 -----------------------
 
 ## Lovers
-### **Team: Either Crewmates or Impostors**
+### **Team: Lovers (and secondary team)**
 There are always two Lovers which are linked together.\
-Their goal is it to stay alive together until the end of the game.\
+Their primary goal is it to stay alive together until the end of the game.\
 If one Lover dies (and the option is activated), the other Lover suicides.\
+You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
 You can specify the chance of one Lover being an Impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role.\
-If both Lovers are Crewmates, they can achieve a "double victory" but the Crewmates then also win.\
-If one Lover is an Impostor and one a Crewmate, they can only get a "Lovers solo win" where only they win (even if there is another Impostor alive).\
-If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
+The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role/team.\
+If both Lovers are Crewmates, they can achieve a "double victory", together with the other Crewmates.\
+If both Lovers are part of a different team, they can achieve a "Lovers solo win" where only they win.\
+If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
-- If there is an equal amount of Impostors and Crewmates left in the game and one of the Lovers is an Impostor, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
+- In a 2 Cremates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
 - The Lovers can change if the Shifter takes the role of a Lovers
 
 ### Game Options
@@ -576,6 +582,7 @@ If there's an ImpLover in the game, the tasks of the Crewmate Lover won't be cou
 | Lovers Spawn Chance | -
 | Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
+| Lovers Can Have Another Role | If set to true, the Lovers can have a second role
 -----------------------
 
 
@@ -826,6 +833,7 @@ and can't fix lights and comms.
 |----------|:-------------:|
 | Swapper Spawn Chance | -
 | Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
+| Swapper can only swap others | Sets whether the Swapper can swap himself or not
 -----------------------
 
 ## Tracker

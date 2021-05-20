@@ -233,9 +233,7 @@ namespace TheOtherRoles
         }
 
 
-        static void onClick(int i, MeetingHud __instance)
-        {
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.Data.IsDead) return; 
+        static void onClick(int i, MeetingHud __instance) {
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (__instance.playerStates[i].isDead) return;
 
@@ -310,9 +308,10 @@ namespace TheOtherRoles
             selections = new bool[__instance.playerStates.Length];
             renderers = new SpriteRenderer[__instance.playerStates.Length];
 
-            for (int i = 0; i < __instance.playerStates.Length; i++)
-		    {
+            for (int i = 0; i < __instance.playerStates.Length; i++) {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.isDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+
                 GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                 GameObject checkbox = UnityEngine.Object.Instantiate(template);
                 checkbox.transform.SetParent(playerVoteArea.transform);
@@ -411,10 +410,10 @@ namespace TheOtherRoles
             if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 foreach (PlayerControl target in Eraser.futureErased) {
                     if (target != null) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRole, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRoles, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.erasePlayerRole(target.PlayerId);
+                        RPCProcedure.erasePlayerRoles(target.PlayerId);
                     }
                 }
             }
@@ -512,93 +511,17 @@ namespace TheOtherRoles
         {
             if (ExileController.Instance != null && ExileController.Instance.exiled != null)
             {
-                // Exile role text for roles that are being assigned to crewmates
-                if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN)
-                {
-                    if( Jester.jester != null && ExileController.Instance.exiled.Object.PlayerId == Jester.jester.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Jester.";
-                    else if(Mayor.mayor != null && ExileController.Instance.exiled.Object.PlayerId == Mayor.mayor.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Mayor.";
-                    else if(Engineer.engineer != null && ExileController.Instance.exiled.Object.PlayerId == Engineer.engineer.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Engineer.";
-                    else if(Sheriff.sheriff != null && ExileController.Instance.exiled.Object.PlayerId == Sheriff.sheriff.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Sheriff.";
-                    else if(Lighter.lighter != null && ExileController.Instance.exiled.Object.PlayerId == Lighter.lighter.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Lighter.";
-                    else if(Detective.detective != null && ExileController.Instance.exiled.Object.PlayerId == Detective.detective.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Detective.";
-                    else if(TimeMaster.timeMaster != null && ExileController.Instance.exiled.Object.PlayerId == TimeMaster.timeMaster.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Time Master.";
-                    else if(Medic.medic != null && ExileController.Instance.exiled.Object.PlayerId == Medic.medic.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Medic.";
-                    else if(Shifter.shifter != null && ExileController.Instance.exiled.Object.PlayerId == Shifter.shifter.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Shifter.";
-                    else if(Swapper.swapper != null && ExileController.Instance.exiled.Object.PlayerId == Swapper.swapper.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Swapper.";
-                    else if(Lovers.lover1 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Lover.";
-                    else if(Lovers.lover2 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Lover.";
-                    else if(Seer.seer != null && ExileController.Instance.exiled.Object.PlayerId == Seer.seer.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Seer.";
-                    else if(Hacker.hacker != null && ExileController.Instance.exiled.Object.PlayerId == Hacker.hacker.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Hacker.";
-                    else if(Child.child != null && ExileController.Instance.exiled.Object.PlayerId == Child.child.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Child.";
-                    else if(Tracker.tracker != null && ExileController.Instance.exiled.Object.PlayerId == Tracker.tracker.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Tracker.";
-                    else if(Snitch.snitch != null && ExileController.Instance.exiled.Object.PlayerId == Snitch.snitch.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Snitch.";
-                    else if(Jackal.jackal != null && ExileController.Instance.exiled.Object.PlayerId == Jackal.jackal.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Jackal.";
-                    else if(Sidekick.sidekick != null && ExileController.Instance.exiled.Object.PlayerId == Sidekick.sidekick.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Sidekick.";
-                    else if(Spy.spy != null && ExileController.Instance.exiled.Object.PlayerId == Spy.spy.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Spy.";
-                    else if(SecurityGuard.securityGuard != null && ExileController.Instance.exiled.Object.PlayerId == SecurityGuard.securityGuard.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Security Guard.";
-                    else if(Arsonist.arsonist != null && ExileController.Instance.exiled.Object.PlayerId == Arsonist.arsonist.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Arsonist.";
-                    else if (Hunter.hunter != null && ExileController.Instance.exiled.Object.PlayerId == Hunter.hunter.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The CrewHunter.";
-                    else
-                        __result = ExileController.Instance.exiled.PlayerName + " was not The Impostor.";
+                PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);
+                if (player == null) return;
+                // Exile role text
+                if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN || id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
+                    __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player).Select(x => x.name).ToArray());
                 }
-                // Exile role text for roles that are being assigned to impostors
-                if (id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
-                    if(Godfather.godfather != null && ExileController.Instance.exiled.Object.PlayerId == Godfather.godfather.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Godfather.";
-                    else if(Mafioso.mafioso != null && ExileController.Instance.exiled.Object.PlayerId == Mafioso.mafioso.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Mafioso.";
-                    else if(Janitor.janitor != null && ExileController.Instance.exiled.Object.PlayerId == Janitor.janitor.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Janitor.";
-                    else if(Morphling.morphling != null && ExileController.Instance.exiled.Object.PlayerId == Morphling.morphling.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Morphling.";
-                    else if(Camouflager.camouflager != null && ExileController.Instance.exiled.Object.PlayerId == Camouflager.camouflager.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Camouflager.";
-                    else if(Lovers.lover1 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover1.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
-                    else if(Lovers.lover2 != null && ExileController.Instance.exiled.Object.PlayerId == Lovers.lover2.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The ImpLover.";
-                    else if(Vampire.vampire != null && ExileController.Instance.exiled.Object.PlayerId == Vampire.vampire.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Vampire.";
-                    else if (Eraser.eraser != null && ExileController.Instance.exiled.Object.PlayerId == Eraser.eraser.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Eraser.";
-                    else if (Trickster.trickster != null && ExileController.Instance.exiled.Object.PlayerId == Trickster.trickster.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Trickster.";
-                    else if (Cleaner.cleaner != null && ExileController.Instance.exiled.Object.PlayerId == Cleaner.cleaner.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Cleaner.";
-                    else if (Warlock.warlock != null && ExileController.Instance.exiled.Object.PlayerId == Warlock.warlock.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The Warlock.";
-                    else if (Hunter.hunter != null && ExileController.Instance.exiled.Object.PlayerId == Hunter.hunter.PlayerId)
-                        __result = ExileController.Instance.exiled.PlayerName + " was The ImpHunter.";
-                }
-
                 // Hide number of remaining impostors on Jester win
-                if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS)
-                {
+                if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
                     if (Jester.jester != null && ExileController.Instance.exiled.Object.PlayerId == Jester.jester.PlayerId)
                         __result = "";
+                    }
                 }
             }
         }

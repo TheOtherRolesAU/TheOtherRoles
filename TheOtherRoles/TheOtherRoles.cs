@@ -288,6 +288,7 @@ namespace TheOtherRoles
         public static Color color = new Color(240f / 255f, 128f / 255f, 72f / 255f, 1);
         private static Sprite spriteCheck;
         public static bool canCallEmergency = false;
+        public static bool canOnlySwapOthers = false;
 
         public static byte playerId1 = Byte.MaxValue;
         public static byte playerId2 = Byte.MaxValue;
@@ -303,6 +304,7 @@ namespace TheOtherRoles
             playerId1 = Byte.MaxValue;
             playerId2 = Byte.MaxValue;
             canCallEmergency = CustomOptionHolder.swapperCanCallEmergency.getBool();
+            canOnlySwapOthers = CustomOptionHolder.swapperCanOnlySwapOthers.getBool();
         }
     }
 
@@ -321,7 +323,7 @@ namespace TheOtherRoles
 
         public static bool existingAndCrewLovers() {
             if (lover1 == null || lover2 == null || lover1.Data.Disconnected || lover2.Data.Disconnected) return false; // Null or disconnected
-            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1 == Jackal.jackal || lover2 == Jackal.jackal || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick); // Not Impostor, Sidekick or Jackal
+            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1.isNeutral() || lover2.isNeutral()); // Not Impostor or Neutral
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {

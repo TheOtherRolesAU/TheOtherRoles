@@ -48,6 +48,7 @@ namespace TheOtherRoles {
         public static CustomOption loversSpawnRate;
         public static CustomOption loversImpLoverRate;
         public static CustomOption loversBothDie;
+        public static CustomOption loversCanHaveAnotherRole;
 
         public static CustomOption hunterSpawnRate;
         public static CustomOption hunterIsImpHunterRate;
@@ -105,6 +106,7 @@ namespace TheOtherRoles {
 
         public static CustomOption swapperSpawnRate;
         public static CustomOption swapperCanCallEmergency;
+        public static CustomOption swapperCanOnlySwapOthers;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
@@ -211,6 +213,7 @@ namespace TheOtherRoles {
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
+            loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
 
             hunterSpawnRate = CustomOption.Create(310, cs(Hunter.color, "Hunter"), rates, null, true);
             hunterIsImpHunterRate = CustomOption.Create(311, "Chance That The Hunter Is An Impostor", rates, hunterSpawnRate);
@@ -220,7 +223,7 @@ namespace TheOtherRoles {
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
-            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 30f, 5f, 60f, 2.5f, arsonistSpawnRate);
+            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
             arsonistDuration = CustomOption.Create(292, "Arsonist Douse Duration", 3f, 1f, 10f, 1f, arsonistSpawnRate);
 
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates, null, true);
@@ -269,6 +272,7 @@ namespace TheOtherRoles {
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
             swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
+            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
