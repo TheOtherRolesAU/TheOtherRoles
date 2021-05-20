@@ -505,12 +505,9 @@ namespace TheOtherRoles
     }
 
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
-    class MeetingExiledTextPatch
-    {
-        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts)
-        {
-            if (ExileController.Instance != null && ExileController.Instance.exiled != null)
-            {
+    class MeetingExiledTextPatch {
+        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts) {
+            if (ExileController.Instance != null && ExileController.Instance.exiled != null) {
                 PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);
                 if (player == null) return;
                 // Exile role text
@@ -519,9 +516,7 @@ namespace TheOtherRoles
                 }
                 // Hide number of remaining impostors on Jester win
                 if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
-                    if (Jester.jester != null && ExileController.Instance.exiled.Object.PlayerId == Jester.jester.PlayerId)
-                        __result = "";
-                    }
+                    if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                 }
             }
         }

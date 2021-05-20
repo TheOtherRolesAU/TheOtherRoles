@@ -239,9 +239,10 @@ namespace TheOtherRoles
             }
             if (Hunter.hunter != null && p == Hunter.hunter) {
                 infos.Add(new RoleInfo(p.Data.IsImpostor ? "ImpHunter" : "CrewHunter",
-                Arsonist.color,
+                Hunter.color,
                 "Guess and shoot",
-                "Guess and shoot"));
+                "Guess and shoot",
+                RoleId.Hunter));
             }
 
             // Default roles
