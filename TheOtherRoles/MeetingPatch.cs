@@ -233,7 +233,7 @@ namespace TheOtherRoles
         }
 
 
-        static void onClick(int i, MeetingHud __instance) {
+        static void swapperOnClick(int i, MeetingHud __instance) {
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (__instance.playerStates[i].isDead) return;
 
@@ -276,7 +276,77 @@ namespace TheOtherRoles
             }
         }
 
+        static void hunterOnClick(int buttonTarget, MeetingHud __instance) {
+            if (__instance.state == MeetingHud.VoteStates.Results) return;
+            Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("Background"), __instance.transform);
+            container.transform.localPosition = new Vector3(0, 0, -5f);
+
+            int i = 0;
+            var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
+            var textTemplate = __instance.playerStates[0].NameText;
+            foreach (RoleId roleId in System.Enum.GetValues(typeof(RoleId))) {
+                Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
+                TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
+                int row = i/4, col = i%4;
+                button.transform.localPosition = new Vector3(-3 + 1.83f * col, 1.5f - 0.4f * row, -5);
+                button.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                label.text = System.Enum.GetName(typeof(RoleId), roleId);
+                label.alignment = TMPro.TextAlignmentOptions.Center;
+                label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
+                label.transform.localScale *= 2;
+
+                i++;
+            }
+            container.transform.localScale *= 0.75f;
+        }
+
         static void populateButtonsPostfix(MeetingHud __instance) {
+            // Add Swapper Buttons
+            if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead) {
+                selections = new bool[__instance.playerStates.Length];
+                renderers = new SpriteRenderer[__instance.playerStates.Length];
+
+                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    if (playerVoteArea.isDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+
+                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
+                    GameObject checkbox = UnityEngine.Object.Instantiate(template);
+                    checkbox.transform.SetParent(playerVoteArea.transform);
+                    checkbox.transform.position = template.transform.position;
+                    checkbox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
+                    SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
+                    renderer.sprite = Swapper.getCheckSprite();
+                    renderer.color = Color.red;
+
+                    PassiveButton button = checkbox.GetComponent<PassiveButton>();
+                    button.OnClick.RemoveAllListeners();
+                    int copiedIndex = i;
+                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperOnClick(copiedIndex, __instance)));
+                    
+                    selections[i] = false;
+                    renderers[i] = renderer;
+                }
+            }
+
+            // Add Hunter Buttons
+            if (Hunter.hunter != null && PlayerControl.LocalPlayer == Hunter.hunter && !Hunter.hunter.Data.IsDead) {
+                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Hunter.hunter.PlayerId) continue;
+
+                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
+                    GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
+                    targetBox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
+                    SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();
+                    renderer.sprite = Swapper.getCheckSprite();
+                    PassiveButton button = targetBox.GetComponent<PassiveButton>();
+                    button.OnClick.RemoveAllListeners();
+                    int copiedIndex = i;
+                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => hunterOnClick(copiedIndex, __instance)));
+                }
+            }
+
             // Change buttons if there are more than 10 players
             if (__instance.playerStates != null && __instance.playerStates.Length > 10) { 
                 PlayerVoteArea[] playerStates = __instance.playerStates.OrderBy((PlayerVoteArea p) => p.isDead ? 50 : 0)
@@ -301,35 +371,6 @@ namespace TheOtherRoles
                     area.NameText.transform.localPosition += new Vector3(0.25f, 0.043f, 0f);
                     area.transform.localPosition = new Vector3(-3.63f + 2.43f * col, 1.5f - 0.76f * row, -0.9f - 0.01f * row);
                 }
-            }
-
-            // Add Swapper Buttons
-            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || Swapper.swapper.Data.IsDead) return; 
-            selections = new bool[__instance.playerStates.Length];
-            renderers = new SpriteRenderer[__instance.playerStates.Length];
-
-            for (int i = 0; i < __instance.playerStates.Length; i++) {
-                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                if (playerVoteArea.isDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
-
-                GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
-                GameObject checkbox = UnityEngine.Object.Instantiate(template);
-                checkbox.transform.SetParent(playerVoteArea.transform);
-                checkbox.transform.position = template.transform.position;
-                checkbox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
-                SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
-                renderer.sprite = Swapper.getCheckSprite();
-                renderer.color = Color.red;
-
-                PassiveButton button = checkbox.GetComponent<PassiveButton>();
-                button.OnClick.RemoveAllListeners();
-                int copiedIndex = i;
-                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => onClick(copiedIndex, __instance)));
-                
-
-
-                selections[i] = false;
-                renderers[i] = renderer;
             }
         }
 
