@@ -65,6 +65,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.4**
 - New option: Swapper can only swap others
+- New option: Ghosts can see votes
+- **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally been fixed
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -348,8 +350,10 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
-- **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
-- **Dleks:** You are now able to select the Dleks map.
+- **Ghosts Can See Roles**
+- **Ghosts Can See Votes**
+- **Ghosts Can See The Number Ofe Remaining Tasks**
+- **Dleks:** You are now able to select the Dleks map. 
 
 # Custom Hats
 ## Create and submit new hat designs
