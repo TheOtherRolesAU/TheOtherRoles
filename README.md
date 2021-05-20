@@ -567,9 +567,9 @@ If one Lover dies (and the option is activated), the other Lover suicides.\
 You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
 You can specify the chance of one Lover being an Impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role/team.\
-If both Lovers are Crewmates, they can achieve a "double victory", together with the other Crewmates.\
-If both Lovers are part of a different team, they can achieve a "Lovers solo win" where only they win.\
+The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win)\
+If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
+If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
 If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
