@@ -505,88 +505,18 @@ namespace TheOtherRoles
     }
 
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
-    class MeetingExiledTextPatch
-    {
-        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts)
-        {
-            if (ExileController.Instance != null && ExileController.Instance.exiled != null)
-            {
-                byte exiledId = ExileController.Instance.exiled.Object.PlayerId;
-                string exiledName = ExileController.Instance.exiled.PlayerName;
-                // Exile role text for roles that are being assigned to crewmates
-                if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN)
-                {
-                    if(Jester.jester != null && exiledId == Jester.jester.PlayerId)
-                        __result = exiledName + " was The Jester";
-                    else if(Mayor.mayor != null && exiledId == Mayor.mayor.PlayerId)
-                        __result = exiledName + " was The Mayor";
-                    else if(Engineer.engineer != null && exiledId == Engineer.engineer.PlayerId)
-                        __result = exiledName + " was The Engineer";
-                    else if(Sheriff.sheriff != null && exiledId == Sheriff.sheriff.PlayerId)
-                        __result = exiledName + " was The Sheriff";
-                    else if(Lighter.lighter != null && exiledId == Lighter.lighter.PlayerId)
-                        __result = exiledName + " was The Lighter";
-                    else if(Detective.detective != null && exiledId == Detective.detective.PlayerId)
-                        __result = exiledName + " was The Detective";
-                    else if(TimeMaster.timeMaster != null && exiledId == TimeMaster.timeMaster.PlayerId)
-                        __result = exiledName + " was The Time Master";
-                    else if(Medic.medic != null && exiledId == Medic.medic.PlayerId)
-                        __result = exiledName + " was The Medic";
-                    else if(Shifter.shifter != null && exiledId == Shifter.shifter.PlayerId)
-                        __result = exiledName + " was The Shifter";
-                    else if(Swapper.swapper != null && exiledId == Swapper.swapper.PlayerId)
-                        __result = exiledName + " was The Swapper";
-                    else if(Seer.seer != null && exiledId == Seer.seer.PlayerId)
-                        __result = exiledName + " was The Seer";
-                    else if(Hacker.hacker != null && exiledId == Hacker.hacker.PlayerId)
-                        __result = exiledName + " was The Hacker";
-                    else if(Child.child != null && exiledId == Child.child.PlayerId)
-                        __result = exiledName + " was The Child";
-                    else if(Tracker.tracker != null && exiledId == Tracker.tracker.PlayerId)
-                        __result = exiledName + " was The Tracker";
-                    else if(Snitch.snitch != null && exiledId == Snitch.snitch.PlayerId)
-                        __result = exiledName + " was The Snitch";
-                    else if(Jackal.jackal != null && exiledId == Jackal.jackal.PlayerId)
-                        __result = exiledName + " was The Jackal";
-                    else if(Sidekick.sidekick != null && exiledId == Sidekick.sidekick.PlayerId)
-                        __result = exiledName + " was The Sidekick";
-                    else if(Spy.spy != null && exiledId == Spy.spy.PlayerId)
-                        __result = exiledName + " was The Spy";
-                    else if(SecurityGuard.securityGuard != null && exiledId == SecurityGuard.securityGuard.PlayerId)
-                        __result = exiledName + " was The Security Guard";
-                    else if(Arsonist.arsonist != null && exiledId == Arsonist.arsonist.PlayerId)
-                        __result = exiledName + " was The Arsonist";
-                    else
-                        __result = exiledName + " was not The Impostor";
-
-                    if ((Lovers.lover1 != null && exiledId == Lovers.lover1.PlayerId) || (Lovers.lover2 != null && exiledId == Lovers.lover2.PlayerId))
-                        __result += " and a Lover";
+    class ExileControllerMessagePatch {
+        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts) {
+            if (ExileController.Instance != null && ExileController.Instance.exiled != null) {
+                PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);
+                if (player == null) return;
+                // Exile role text
+                if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN || id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
+                    __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player).Select(x => x.name).ToArray());
                 }
-                // Exile role text for roles that are being assigned to impostors
-                if (id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
-                    if(Godfather.godfather != null && exiledId == Godfather.godfather.PlayerId)
-                        __result = exiledName + " was The Godfather";
-                    else if(Mafioso.mafioso != null && exiledId == Mafioso.mafioso.PlayerId)
-                        __result = exiledName + " was The Mafioso";
-                    else if(Janitor.janitor != null && exiledId == Janitor.janitor.PlayerId)
-                        __result = exiledName + " was The Janitor";
-                    else if(Morphling.morphling != null && exiledId == Morphling.morphling.PlayerId)
-                        __result = exiledName + " was The Morphling";
-                    else if(Camouflager.camouflager != null && exiledId == Camouflager.camouflager.PlayerId)
-                        __result = exiledName + " was The Camouflager";
-                    else if(Vampire.vampire != null && exiledId == Vampire.vampire.PlayerId)
-                        __result = exiledName + " was The Vampire";
-                    else if (Eraser.eraser != null && exiledId == Eraser.eraser.PlayerId)
-                        __result = exiledName + " was The Eraser";
-                    else if (Trickster.trickster != null && exiledId == Trickster.trickster.PlayerId)
-                        __result = exiledName + " was The Trickster";
-                    else if (Cleaner.cleaner != null && exiledId == Cleaner.cleaner.PlayerId)
-                        __result = exiledName + " was The Cleaner";
-                    else if (Warlock.warlock != null && exiledId == Warlock.warlock.PlayerId)
-                        __result = exiledName + " was The Warlock";
-
-                    if ((Lovers.lover1 != null && exiledId == Lovers.lover1.PlayerId) || (Lovers.lover2 != null && exiledId == Lovers.lover2.PlayerId))
-                        __result += " and a Lover";
+                // Hide number of remaining impostors on Jester win
+                if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
+                    if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                 }
             }
         }
