@@ -63,6 +63,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.6.5**
+- Added the ability to increase the number of tasks assigned to crewmates
+- Added a role breakdown to the end screen
+
 **Version 2.6.4**
 - **[Lovers](#lovers):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
 - **[Seer](#seer):** Fixed souls and flash sometimes not being visible (Thanks to [orangeNKeks](https://github.com/orangeNKeks))
@@ -358,6 +362,24 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Ofe Remaining Tasks**
 - **Dleks:** You are now able to select the Dleks map. 
+- **Task Counts:** You are now able to select more tasks.
+
+### Task Limits per map
+You can configure:
+- Up to 4 common tasks
+- Up to 23 short tasks
+- Up to 15 long tasks
+Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks.
+Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
+
+| Map | Common Tasks | Short Tasks | Long Tasks |
+|----------|:-------------:|:-------------:|:-------------:|
+| Skeld / Dleks | 2 | 19 | 8
+| Mira HQ | 2 | 13 | 11
+| Polus | 4 | 14 | 15
+| Airship | 2 | 23 | 15
+-----------------------
+
 
 # Custom Hats
 ## Create and submit new hat designs

@@ -33,9 +33,10 @@ namespace TheOtherRoles {
     static class AdditionalTempData {
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
-
+        public static List<Tuple<string, System.Collections.Generic.List<RoleInfo>>> playerRoles = new List<Tuple<string, List<RoleInfo>>>();
 
         public static void clear() {
+            playerRoles.Clear();
             winCondition = WinCondition.Default;
         }
     }
@@ -50,6 +51,11 @@ namespace TheOtherRoles {
 
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref GameOverReason reason, [HarmonyArgument(1)]bool showAd) {
             AdditionalTempData.clear();
+
+            foreach(var playerControl in PlayerControl.AllPlayerControls) {
+                var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
+                AdditionalTempData.playerRoles.Add(new Tuple<string, List<RoleInfo>>(playerControl.Data.PlayerName, roles));
+            }
 
             // Remove Jester, Arsonist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
             List<PlayerControl> notWinners = new List<PlayerControl>();
@@ -180,7 +186,24 @@ namespace TheOtherRoles {
                 textRenderer.text = "Child died";
                 textRenderer.color = Child.color;
             }
+
+            GameObject roleBreakDown = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
+            roleBreakDown.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y + 1.4f, __instance.WinText.transform.position.z);
+            roleBreakDown.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             
+            var roleBreakDownText = "";
+            int counter = 0;
+            foreach(var data in AdditionalTempData.playerRoles) {
+                if(roleBreakDownText!="" && !roleBreakDownText.EndsWith("\n")) roleBreakDownText += " - ";
+                var playerName = data.Item1;
+                var roles = string.Join(" ", data.Item2.Select(x => Helpers.cs(x.color, x.name)));
+                roleBreakDownText += $"{data.Item1} ({roles})";
+                counter++;
+                if(counter % 3 == 0) roleBreakDownText += "\n";
+            }
+            TMPro.TMP_Text roleBreakDownTextRenderer = roleBreakDown.GetComponent<TMPro.TMP_Text>();
+            roleBreakDownTextRenderer.text = roleBreakDownText;
+            roleBreakDownTextRenderer.color = Color.white;
             AdditionalTempData.clear();
         }
     }
