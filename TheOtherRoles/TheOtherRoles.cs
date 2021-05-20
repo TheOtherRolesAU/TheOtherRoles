@@ -58,11 +58,13 @@ namespace TheOtherRoles
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
+            public static bool canSabotage = true;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
+                canSabotage = CustomOptionHolder.jesterCanSabotage.getBool();
             }
         }
 
@@ -619,6 +621,7 @@ namespace TheOtherRoles
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
+        public static bool hasImpostorVision = false;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -646,6 +649,7 @@ namespace TheOtherRoles
             jackalPromotedFromSidekickCanCreateSidekick = CustomOptionHolder.jackalPromotedFromSidekickCanCreateSidekick.getBool();
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
+            hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
         }
         
     }
@@ -660,6 +664,7 @@ namespace TheOtherRoles
         public static bool canUseVents = true;
         public static bool canKill = true;
         public static bool promotesToJackal = true;
+        public static bool hasImpostorVision = false;
 
         public static void clearAndReload() {
             sidekick = null;
@@ -668,6 +673,7 @@ namespace TheOtherRoles
             canUseVents = CustomOptionHolder.sidekickCanUseVents.getBool();
             canKill = CustomOptionHolder.sidekickCanKill.getBool();
             promotesToJackal = CustomOptionHolder.sidekickPromotesToJackal.getBool();
+            hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
         }
     }
 

@@ -68,6 +68,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Seer:** Thanks to orangeNKeks the Seer souls and Seer flash has finally been fixed
 - New option: Swapper can only swap others
 - New option: Ghosts can see votes
+- New option: Jackal and Sidekick have Impostor vision
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -908,6 +909,7 @@ If both Impostors and Jackals are in the game the game continues even if all Cre
 | Jackal can create a Sidekick | Yes/No |
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+| Jackal and Sidekick have Impostor vision | - |
 -----------------------
 
 ## Sidekick
