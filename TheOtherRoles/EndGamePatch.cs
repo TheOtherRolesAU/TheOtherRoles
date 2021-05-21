@@ -186,24 +186,24 @@ namespace TheOtherRoles {
                 textRenderer.text = "Child died";
                 textRenderer.color = Child.color;
             }
-
+            var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
             GameObject roleBreakDown = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
-            roleBreakDown.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y + 1.4f, __instance.WinText.transform.position.z);
-            roleBreakDown.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-            
-            var roleBreakDownText = "";
-            int counter = 0;
+            roleBreakDown.transform.position = new Vector3(__instance.ExitButton.transform.position.x + 0.1f, position.y - 0.1f, -14f); 
+            roleBreakDown.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+
+            var roleBreakDownText = new StringBuilder();
+            roleBreakDownText.AppendLine("Players and roles at the end of the game:");
             foreach(var data in AdditionalTempData.playerRoles) {
-                if(roleBreakDownText!="" && !roleBreakDownText.EndsWith("\n")) roleBreakDownText += " - ";
                 var playerName = data.Item1;
                 var roles = string.Join(" ", data.Item2.Select(x => Helpers.cs(x.color, x.name)));
-                roleBreakDownText += $"{data.Item1} ({roles})";
-                counter++;
-                if(counter % 3 == 0) roleBreakDownText += "\n";
+                roleBreakDownText.AppendLine($"{data.Item1} - {roles}");
             }
             TMPro.TMP_Text roleBreakDownTextRenderer = roleBreakDown.GetComponent<TMPro.TMP_Text>();
-            roleBreakDownTextRenderer.text = roleBreakDownText;
+            roleBreakDownTextRenderer.alignment = TMPro.TextAlignmentOptions.Left;
+            roleBreakDownTextRenderer.text = roleBreakDownText.ToString();
             roleBreakDownTextRenderer.color = Color.white;
+            var rect = roleBreakDownTextRenderer.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector2(position.x + 2.2f, position.y - 0.1f);
             AdditionalTempData.clear();
         }
     }
