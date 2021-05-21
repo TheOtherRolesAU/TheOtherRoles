@@ -369,7 +369,8 @@ You can configure:
 - Up to 4 common tasks
 - Up to 23 short tasks
 - Up to 15 long tasks
-Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks.
+
+Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
 Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
 
 | Map | Common Tasks | Short Tasks | Long Tasks |
