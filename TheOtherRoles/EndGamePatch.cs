@@ -189,7 +189,7 @@ namespace TheOtherRoles {
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
             GameObject roleBreakDown = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
             roleBreakDown.transform.position = new Vector3(__instance.ExitButton.transform.position.x + 0.1f, position.y - 0.1f, -14f); 
-            roleBreakDown.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+            roleBreakDown.transform.localScale = new Vector3(1f, 1f, 1f);
 
             var roleBreakDownText = new StringBuilder();
             roleBreakDownText.AppendLine("Players and roles at the end of the game:");
@@ -199,11 +199,16 @@ namespace TheOtherRoles {
                 roleBreakDownText.AppendLine($"{data.Item1} - {roles}");
             }
             TMPro.TMP_Text roleBreakDownTextRenderer = roleBreakDown.GetComponent<TMPro.TMP_Text>();
-            roleBreakDownTextRenderer.alignment = TMPro.TextAlignmentOptions.Left;
-            roleBreakDownTextRenderer.text = roleBreakDownText.ToString();
+            roleBreakDownTextRenderer.alignment = TMPro.TextAlignmentOptions.TopLeft;
             roleBreakDownTextRenderer.color = Color.white;
+            roleBreakDownTextRenderer.fontSizeMin = 1.5f;
+            roleBreakDownTextRenderer.fontSizeMax = 1.5f;
+            roleBreakDownTextRenderer.fontSize = 1.5f;
+            
             var rect = roleBreakDownTextRenderer.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(position.x + 2.2f, position.y - 0.1f);
+            rect.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
+
+            roleBreakDownTextRenderer.text = roleBreakDownText.ToString();
             AdditionalTempData.clear();
         }
     }
