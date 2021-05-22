@@ -74,7 +74,7 @@ namespace TheOtherRoles
                 var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
                 loversText.transform.localPosition += Vector3.down * 3f;
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in lover with {otherLover?.Data?.PlayerName ?? ""} ❤");
+                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in love with {otherLover?.Data?.PlayerName ?? ""} ❤");
             }
         }
 
