@@ -201,29 +201,31 @@ namespace TheOtherRoles {
                 textRenderer.text = "Child died";
                 textRenderer.color = Child.color;
             }
-            var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
-            GameObject roleBreakDown = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
-            roleBreakDown.transform.position = new Vector3(__instance.ExitButton.transform.position.x + 0.1f, position.y - 0.1f, -14f); 
-            roleBreakDown.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            var roleBreakDownText = new StringBuilder();
-            roleBreakDownText.AppendLine("Players and roles at the end of the game:");
-            foreach(var data in AdditionalTempData.playerRoles) {
-                var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
-                var taskInfo = data.TotalTasks > 0 ? $" - <color=#FAD934FF>({data.CompletedTasks}/{data.TotalTasks})</color>" : "";
-                roleBreakDownText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
+            if(MapOptions.showRoleSummary) {
+                var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
+                GameObject roleSummary = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
+                roleSummary.transform.position = new Vector3(__instance.ExitButton.transform.position.x + 0.1f, position.y - 0.1f, -14f); 
+                roleSummary.transform.localScale = new Vector3(1f, 1f, 1f);
+
+                var roleSummaryText = new StringBuilder();
+                roleSummaryText.AppendLine("Players and roles at the end of the game:");
+                foreach(var data in AdditionalTempData.playerRoles) {
+                    var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
+                    var taskInfo = data.TotalTasks > 0 ? $" - <color=#FAD934FF>({data.CompletedTasks}/{data.TotalTasks})</color>" : "";
+                    roleSummaryText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
+                }
+                TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
+                roleSummaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
+                roleSummaryTextMesh.color = Color.white;
+                roleSummaryTextMesh.fontSizeMin = 1.5f;
+                roleSummaryTextMesh.fontSizeMax = 1.5f;
+                roleSummaryTextMesh.fontSize = 1.5f;
+                
+                var roleSummaryTextMeshRectTransform = roleSummaryTextMesh.GetComponent<RectTransform>();
+                roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
+                roleSummaryTextMesh.text = roleSummaryText.ToString();
             }
-            TMPro.TMP_Text roleBreakDownTextRenderer = roleBreakDown.GetComponent<TMPro.TMP_Text>();
-            roleBreakDownTextRenderer.alignment = TMPro.TextAlignmentOptions.TopLeft;
-            roleBreakDownTextRenderer.color = Color.white;
-            roleBreakDownTextRenderer.fontSizeMin = 1.5f;
-            roleBreakDownTextRenderer.fontSizeMax = 1.5f;
-            roleBreakDownTextRenderer.fontSize = 1.5f;
-            
-            var rect = roleBreakDownTextRenderer.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
-
-            roleBreakDownTextRenderer.text = roleBreakDownText.ToString();
             AdditionalTempData.clear();
         }
     }

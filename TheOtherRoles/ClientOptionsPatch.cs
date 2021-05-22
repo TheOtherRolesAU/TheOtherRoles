@@ -15,6 +15,7 @@ namespace TheOtherRoles {
         private static ToggleButtonBehaviour ghostsSeeTasksButton;
         private static ToggleButtonBehaviour ghostsSeeRolesButton;
         private static ToggleButtonBehaviour ghostsSeeVotesButton;
+        private static ToggleButtonBehaviour showPlayerSummaryButton;
 
         public static float xOffset = 1.75f;
         public static float yOffset = -0.5f;
@@ -79,12 +80,22 @@ namespace TheOtherRoles {
             }
 
             if ((ghostsSeeVotesButton == null || ghostsSeeVotesButton.gameObject == null)) {
-                ghostsSeeVotesButton = createCustomToggle("Ghosts See votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value, new Vector2(0, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeVotesToggle, __instance);
+                ghostsSeeVotesButton = createCustomToggle("Ghosts See Votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value, new Vector2(0, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeVotesToggle, __instance);
 
                 void ghostsSeeVotesToggle() {
                     TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value;
                     MapOptions.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value; 
-                    updateToggle(ghostsSeeVotesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeVotes.Value);
+                    updateToggle(ghostsSeeVotesButton, "Ghosts See Votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value);
+                }
+            }
+            
+            if ((showPlayerSummaryButton == null || showPlayerSummaryButton.gameObject == null)) {
+                showPlayerSummaryButton = createCustomToggle("Role Summary: ", TheOtherRolesPlugin.ShowRoleSummary.Value, new Vector2(xOffset, yOffset), (UnityEngine.Events.UnityAction)showPlayerSummaryToggle, __instance);
+
+                void showPlayerSummaryToggle() {
+                    TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value;
+                    MapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value; 
+                    updateToggle(showPlayerSummaryButton, "Role Summary in End Screen: ", TheOtherRolesPlugin.ShowRoleSummary.Value);
                 }
             }
         }

@@ -33,6 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.10s| v2.6.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.5/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.4/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.2/TheOtherRoles.zip)
@@ -65,7 +66,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.5**
 - Added the ability to increase the number of tasks assigned to crewmates
-- Added a role breakdown to the end screen
+- New option: A role summary in the end screen (Client option)
 
 **Version 2.6.4**
 - **[Lovers](#lovers):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
@@ -360,11 +361,12 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
-- **Ghosts Can See The Number Ofe Remaining Tasks**
+- **Ghosts Can See The Number Of Remaining Tasks**
 - **Dleks:** You are now able to select the Dleks map. 
 - **Task Counts:** You are now able to select more tasks.
+- **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 
-### Task Limits per map
+### Task Count Limits per map
 You can configure:
 - Up to 4 common tasks
 - Up to 23 short tasks
