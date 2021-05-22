@@ -33,13 +33,21 @@ namespace TheOtherRoles {
     static class AdditionalTempData {
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
-        public static List<Tuple<string, System.Collections.Generic.List<RoleInfo>>> playerRoles = new List<Tuple<string, List<RoleInfo>>>();
+        public static List<PlayerRoleInfo> playerRoles = new List<PlayerRoleInfo>();
 
         public static void clear() {
             playerRoles.Clear();
             winCondition = WinCondition.Default;
         }
+
+        internal class PlayerRoleInfo {
+            public string PlayerName { get; set; }
+            public List<RoleInfo> Roles {get;set;}
+            public int CompletedTasks  {get;set;}
+            public int TotalTasks  {get;set;}
+        }
     }
+
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
@@ -54,7 +62,14 @@ namespace TheOtherRoles {
 
             foreach(var playerControl in PlayerControl.AllPlayerControls) {
                 var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
-                AdditionalTempData.playerRoles.Add(new Tuple<string, List<RoleInfo>>(playerControl.Data.PlayerName, roles));
+                var tasks = playerControl.myTasks.ToArray();
+                var completedTasks = tasks.Count(x => x.IsComplete);
+                var totalTasks = tasks.Length;
+                if (playerControl.Data.IsImpostor || roles.Any(x => x.roleId == RoleId.Jester || x.roleId == RoleId.Jackal || x.roleId == RoleId.Sidekick || x.roleId == RoleId.Arsonist)) {
+                    completedTasks = 0;
+                    totalTasks = 0;
+                }
+                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TotalTasks = totalTasks, CompletedTasks = completedTasks });
             }
 
             // Remove Jester, Arsonist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
@@ -194,9 +209,9 @@ namespace TheOtherRoles {
             var roleBreakDownText = new StringBuilder();
             roleBreakDownText.AppendLine("Players and roles at the end of the game:");
             foreach(var data in AdditionalTempData.playerRoles) {
-                var playerName = data.Item1;
-                var roles = string.Join(" ", data.Item2.Select(x => Helpers.cs(x.color, x.name)));
-                roleBreakDownText.AppendLine($"{data.Item1} - {roles}");
+                var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
+                var taskInfo = data.TotalTasks > 0 ? $" - <color=#FAD934FF>({data.CompletedTasks}/{data.TotalTasks})</color>" : "";
+                roleBreakDownText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
             }
             TMPro.TMP_Text roleBreakDownTextRenderer = roleBreakDown.GetComponent<TMPro.TMP_Text>();
             roleBreakDownTextRenderer.alignment = TMPro.TextAlignmentOptions.TopLeft;
