@@ -33,12 +33,21 @@ namespace TheOtherRoles {
     static class AdditionalTempData {
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
-
+        public static List<PlayerRoleInfo> playerRoles = new List<PlayerRoleInfo>();
 
         public static void clear() {
+            playerRoles.Clear();
             winCondition = WinCondition.Default;
         }
+
+        internal class PlayerRoleInfo {
+            public string PlayerName { get; set; }
+            public List<RoleInfo> Roles {get;set;}
+            public int TasksCompleted  {get;set;}
+            public int TasksTotal  {get;set;}
+        }
     }
+
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class OnGameEndPatch {
@@ -50,6 +59,12 @@ namespace TheOtherRoles {
 
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref GameOverReason reason, [HarmonyArgument(1)]bool showAd) {
             AdditionalTempData.clear();
+
+            foreach(var playerControl in PlayerControl.AllPlayerControls) {
+                var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
+                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
+                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted });
+            }
 
             // Remove Jester, Arsonist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
             List<PlayerControl> notWinners = new List<PlayerControl>();
@@ -180,7 +195,31 @@ namespace TheOtherRoles {
                 textRenderer.text = "Child died";
                 textRenderer.color = Child.color;
             }
-            
+
+            if(MapOptions.showRoleSummary) {
+                var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
+                GameObject roleSummary = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
+                roleSummary.transform.position = new Vector3(__instance.ExitButton.transform.position.x + 0.1f, position.y - 0.1f, -14f); 
+                roleSummary.transform.localScale = new Vector3(1f, 1f, 1f);
+
+                var roleSummaryText = new StringBuilder();
+                roleSummaryText.AppendLine("Players and roles at the end of the game:");
+                foreach(var data in AdditionalTempData.playerRoles) {
+                    var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
+                    var taskInfo = data.TasksTotal > 0 ? $" - <color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
+                    roleSummaryText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
+                }
+                TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
+                roleSummaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
+                roleSummaryTextMesh.color = Color.white;
+                roleSummaryTextMesh.fontSizeMin = 1.5f;
+                roleSummaryTextMesh.fontSizeMax = 1.5f;
+                roleSummaryTextMesh.fontSize = 1.5f;
+                
+                var roleSummaryTextMeshRectTransform = roleSummaryTextMesh.GetComponent<RectTransform>();
+                roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
+                roleSummaryTextMesh.text = roleSummaryText.ToString();
+            }
             AdditionalTempData.clear();
         }
     }

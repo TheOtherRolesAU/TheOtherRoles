@@ -64,10 +64,13 @@ namespace TheOtherRoles
 
             if (roleInfo != null) {
                 __instance.Title.text = roleInfo.name;
-                __instance.Title.color = roleInfo.color;
                 __instance.ImpostorText.gameObject.SetActive(true);
                 __instance.ImpostorText.text = roleInfo.introDescription;
-                __instance.BackgroundBar.material.color = roleInfo.color;
+                if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor) {
+                    // For native Crewmate or Impostor do not modify the colors
+                    __instance.Title.color = roleInfo.color;
+                    __instance.BackgroundBar.material.color = roleInfo.color;
+                }
             }
 
             if (infos.Any(info => info.roleId == RoleId.Lover)) {
