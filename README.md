@@ -67,6 +67,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.5**
 - Added the ability to increase the number of tasks assigned to crewmates
 - New option: A role summary in the end screen (Client option)
+- Fixed a bug causing a crewmate task win when lovers were in the game even when not all crewmates had completed all their tasks
+- Restored the original Among Us color for crewmates in the intro cutscene
 
 **Version 2.6.4**
 - **[Lovers](#lovers):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
