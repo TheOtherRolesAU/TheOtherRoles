@@ -978,6 +978,8 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Spy Spawn Chance |
 | Spy Can Die To Sheriff |
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| Spy Can Enter Vents | Allow the Spy to enter/exit vents (but not actually move to connected vents)
+| Spy Has Impostor Vision | Give the Spy the same vision as the Impostors have
 -----------------------
 
 ## Security Guard
