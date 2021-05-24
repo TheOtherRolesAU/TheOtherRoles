@@ -67,6 +67,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.5**
 - Added the ability to increase the number of tasks assigned to crewmates
 - New option: A role summary in the end screen (Client option)
+- **[Spy](#spy):** New option for spy to have the same vision as impostors
+- **[Spy](#spy):** New option for spy to be able to jump into vents (but he can't move between them)
 - Fixed a bug causing a crewmate task win when lovers were in the game even when not all crewmates had completed all their tasks
 - Restored the original Among Us color for crewmates in the intro cutscene
 
