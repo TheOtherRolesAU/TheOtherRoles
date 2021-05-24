@@ -43,8 +43,8 @@ namespace TheOtherRoles {
         internal class PlayerRoleInfo {
             public string PlayerName { get; set; }
             public List<RoleInfo> Roles {get;set;}
-            public int CompletedTasks  {get;set;}
-            public int TotalTasks  {get;set;}
+            public int TasksCompleted  {get;set;}
+            public int TasksTotal  {get;set;}
         }
     }
 
@@ -62,14 +62,8 @@ namespace TheOtherRoles {
 
             foreach(var playerControl in PlayerControl.AllPlayerControls) {
                 var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
-                var tasks = playerControl.myTasks.ToArray();
-                var completedTasks = tasks.Count(x => x.IsComplete);
-                var totalTasks = tasks.Length;
-                if (playerControl.Data.IsImpostor || roles.Any(x => x.roleId == RoleId.Jester || x.roleId == RoleId.Jackal || x.roleId == RoleId.Sidekick || x.roleId == RoleId.Arsonist)) {
-                    completedTasks = 0;
-                    totalTasks = 0;
-                }
-                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TotalTasks = totalTasks, CompletedTasks = completedTasks });
+                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
+                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted });
             }
 
             // Remove Jester, Arsonist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
@@ -212,7 +206,7 @@ namespace TheOtherRoles {
                 roleSummaryText.AppendLine("Players and roles at the end of the game:");
                 foreach(var data in AdditionalTempData.playerRoles) {
                     var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
-                    var taskInfo = data.TotalTasks > 0 ? $" - <color=#FAD934FF>({data.CompletedTasks}/{data.TotalTasks})</color>" : "";
+                    var taskInfo = data.TasksTotal > 0 ? $" - <color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
                     roleSummaryText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
                 }
                 TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
