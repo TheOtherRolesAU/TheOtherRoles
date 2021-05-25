@@ -19,7 +19,8 @@ namespace TheOtherRoles
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
-            assignRoles();
+            if (!DestroyableSingleton<TutorialManager>.InstanceExists) // Don't assign Roles in Tutorial
+                assignRoles();
         }
 
         private static void assignRoles() {
@@ -106,27 +107,38 @@ namespace TheOtherRoles
             };
         }
 
-        private static void assignSpecialRoles(RoleAssignmentData data) { 
+        private static void assignSpecialRoles(RoleAssignmentData data) {
+            // Assign Lovers
+            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
+                bool isOnlyRole = !CustomOptionHolder.loversCanHaveAnotherRole.getBool();
+                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && (!isOnlyRole || (data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0)) && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.impostors, 0, isOnlyRole); 
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1, isOnlyRole);
+                    if (isOnlyRole) {
+                        data.maxCrewmateRoles--;
+                        data.maxImpostorRoles--;
+                    }
+                } else if (data.crewmates.Count >= 2 && (isOnlyRole || data.maxCrewmateRoles >= 2)) {
+                    byte firstLoverId = setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 0, isOnlyRole); 
+                    if (isOnlyRole) {
+                        setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1);
+                        data.maxCrewmateRoles -= 2;
+                    } else {
+                        var crewmatesWithoutFirstLover = data.crewmates.ToList();
+                        crewmatesWithoutFirstLover.RemoveAll(p => p.PlayerId == firstLoverId);
+                        setRoleToRandomPlayer((byte)RoleId.Lover, crewmatesWithoutFirstLover, 1, false);
+                        System.Console.WriteLine(crewmatesWithoutFirstLover.Count);
+
+                    }
+                }
+            }
+
             // Assign Mafia
             if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, data.impostors);
                 setRoleToRandomPlayer((byte)RoleId.Janitor, data.impostors);
                 setRoleToRandomPlayer((byte)RoleId.Mafioso, data.impostors);
                 data.maxImpostorRoles -= 3;
-            }
-
-            // Assign Lovers
-            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
-                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.impostors); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates);
-                    data.maxCrewmateRoles--;
-                    data.maxImpostorRoles--;
-                } else if (data.crewmates.Count >= 2 && data.maxCrewmateRoles >= 2) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover1, data.crewmates); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover2, data.crewmates); 
-                    data.maxCrewmateRoles -= 2; 
-                }
             }
 
             // Assign Child
@@ -240,21 +252,21 @@ namespace TheOtherRoles
             }
         }
 
-        private static void setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList) {
+        private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, byte flag = 0, bool removePlayer = true) {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
-            playerList.RemoveAt(index);
+            if (removePlayer) playerList.RemoveAt(index);
 
-            setRoleToPlayer(roleId, playerId);
-        }
-
-        private static void setRoleToPlayer(byte roleId, byte playerId) {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
+            writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId);
+            RPCProcedure.setRole(roleId, playerId, flag);
+            return playerId;
         }
+
+
 
         private class RoleAssignmentData {
             public List<PlayerControl> crewmates {get;set;}

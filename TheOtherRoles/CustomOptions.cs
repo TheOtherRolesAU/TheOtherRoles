@@ -48,9 +48,11 @@ namespace TheOtherRoles {
         public static CustomOption loversSpawnRate;
         public static CustomOption loversImpLoverRate;
         public static CustomOption loversBothDie;
+        public static CustomOption loversCanHaveAnotherRole;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
+        public static CustomOption jesterCanSabotage;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -66,6 +68,7 @@ namespace TheOtherRoles {
         public static CustomOption sidekickCanUseVents;
         public static CustomOption jackalPromotedFromSidekickCanCreateSidekick;
         public static CustomOption jackalCanCreateSidekickFromImpostor;
+        public static CustomOption jackalAndSidekickHaveImpostorVision;
 
         public static CustomOption shifterSpawnRate;
 
@@ -101,6 +104,7 @@ namespace TheOtherRoles {
 
         public static CustomOption swapperSpawnRate;
         public static CustomOption swapperCanCallEmergency;
+        public static CustomOption swapperCanOnlySwapOthers;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
@@ -121,6 +125,8 @@ namespace TheOtherRoles {
         public static CustomOption spySpawnRate;
         public static CustomOption spyCanDieToSheriff;
         public static CustomOption spyImpostorsCanKillAnyone;
+        public static CustomOption spyCanEnterVents;
+        public static CustomOption spyHasImpostorVision;
 
         public static CustomOption tricksterSpawnRate;
         public static CustomOption tricksterPlaceBoxCooldown;
@@ -207,12 +213,14 @@ namespace TheOtherRoles {
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
+            loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
+            jesterCanSabotage = CustomOption.Create(62, "Jester can sabotage", true, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
-            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 30f, 5f, 60f, 2.5f, arsonistSpawnRate);
+            arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
             arsonistDuration = CustomOption.Create(292, "Arsonist Douse Duration", 3f, 1f, 10f, 1f, arsonistSpawnRate);
 
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "Jackal"), rates, null, true);
@@ -225,6 +233,7 @@ namespace TheOtherRoles {
             sidekickCanUseVents = CustomOption.Create(227, "Sidekick Can Use Vents", true, jackalSpawnRate);
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true, jackalSpawnRate);
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true, jackalSpawnRate);
+            jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
 
@@ -261,6 +270,7 @@ namespace TheOtherRoles {
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
             swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
+            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
@@ -281,6 +291,8 @@ namespace TheOtherRoles {
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "Spy"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "Spy Can Die To Sheriff", false, spySpawnRate);
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true, spySpawnRate);
+            spyCanEnterVents = CustomOption.Create(243, "Spy Can Enter Vents", false, spySpawnRate);
+            spyHasImpostorVision = CustomOption.Create(244, "Spy Has Impostor Vision", false, spySpawnRate);
 
             securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "Security Guard"), rates, null, true);
             securityGuardCooldown = CustomOption.Create(281, "Security Guard Cooldown", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);
@@ -428,6 +440,16 @@ namespace TheOtherRoles {
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
+            
+            var commonTasksOption = allOptions.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
+            if(commonTasksOption != null) commonTasksOption.ValidRange = new FloatRange(0f, 4f);
+
+            var shortTasksOption = allOptions.FirstOrDefault(x => x.name == "NumShortTasks").TryCast<NumberOption>();
+            if(shortTasksOption != null) shortTasksOption.ValidRange = new FloatRange(0f, 23f);
+
+            var longTasksOption = allOptions.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
+            if(longTasksOption != null) longTasksOption.ValidRange = new FloatRange(0f, 15f);
+            
             __instance.Children = allOptions.ToArray();
         }
     }
@@ -596,7 +618,7 @@ namespace TheOtherRoles {
             int defaultSettingsLines = 19;
             int roleSettingsLines = defaultSettingsLines + 32;
             int detailedSettingsP1 = roleSettingsLines + 34;
-            int detailedSettingsP2 = detailedSettingsP1 + 36;
+            int detailedSettingsP2 = detailedSettingsP1 + 35;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
