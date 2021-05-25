@@ -64,17 +64,20 @@ namespace TheOtherRoles
 
             if (roleInfo != null) {
                 __instance.Title.text = roleInfo.name;
-                __instance.Title.color = roleInfo.color;
                 __instance.ImpostorText.gameObject.SetActive(true);
                 __instance.ImpostorText.text = roleInfo.introDescription;
-                __instance.BackgroundBar.material.color = roleInfo.color;
+                if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor) {
+                    // For native Crewmate or Impostor do not modify the colors
+                    __instance.Title.color = roleInfo.color;
+                    __instance.BackgroundBar.material.color = roleInfo.color;
+                }
             }
 
             if (infos.Any(info => info.roleId == RoleId.Lover)) {
                 var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
                 loversText.transform.localPosition += Vector3.down * 3f;
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in lover with {otherLover?.Data?.PlayerName ?? ""} ❤");
+                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in love with {otherLover?.Data?.PlayerName ?? ""} ❤");
             }
         }
 

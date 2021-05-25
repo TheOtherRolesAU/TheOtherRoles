@@ -158,8 +158,12 @@ namespace TheOtherRoles {
                         chip.transform.localPosition = new Vector3(1.46f + (col * 0.6f), -0.43f - (row * 0.55f), chip.transform.localPosition.z);
                         chip.transform.localScale *= 0.9f;
 
-                        if (i >= pickableColors) 
+                        if (i >= pickableColors) {
                             chip.transform.localScale *= 0f; // Needs to exist for PlayerTab
+                            chip.enabled = false;
+                            chip.Button.enabled = false;
+                            chip.Button.OnClick.RemoveAllListeners();
+                        }
                     }
                 }
             }

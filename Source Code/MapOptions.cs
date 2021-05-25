@@ -14,6 +14,7 @@ namespace TheOtherRoles{
         public static bool ghostsSeeRoles = true;
         public static bool ghostsSeeTasks = true;
         public static bool ghostsSeeVotes = true;
+        public static bool showRoleSummary = true;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -32,6 +33,7 @@ namespace TheOtherRoles{
             ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value;
             ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
+            showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
         }
     }
 } 

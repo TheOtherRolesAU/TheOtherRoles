@@ -19,7 +19,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "2.6.4";
+        public const string VersionString = "2.6.5";
         public static System.Version Version = System.Version.Parse(VersionString);
 
         public Harmony Harmony { get; } = new Harmony(Id);
@@ -32,6 +32,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
         public static ConfigEntry<bool> GhostsSeeVotes{ get; set; }
+        public static ConfigEntry<bool> ShowRoleSummary { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
@@ -56,6 +57,7 @@ namespace TheOtherRoles
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
+            ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             

@@ -327,15 +327,15 @@ namespace TheOtherRoles
         }
 
         public static bool existingWithKiller() {
-            return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal 
-                               || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick 
+            return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
+                               || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
                                || lover1.Data.IsImpostor      || lover2.Data.IsImpostor);
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
             if (!Lovers.existingAndAlive() || !existingWithKiller())
                 return false;
-            return (player != null && player != lover1 && player != lover2);
+            return (player != null && (player == lover1 || player == lover2));
         }
 
         public static void clearAndReload() {
@@ -707,10 +707,14 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
 
         public static bool impostorsCanKillAnyone = true;
+        public static bool canEnterVents = false;
+        public static bool hasImpostorVision = false;
 
         public static void clearAndReload() {
             spy = null;
             impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
+            canEnterVents = CustomOptionHolder.spyCanEnterVents.getBool();
+            hasImpostorVision = CustomOptionHolder.spyHasImpostorVision.getBool();
         }
     }
 

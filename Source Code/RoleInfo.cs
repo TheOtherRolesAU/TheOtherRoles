@@ -255,10 +255,11 @@ namespace TheOtherRoles
 
             // Modifier
             if ((Lovers.lover1 != null && p == Lovers.lover1) || (Lovers.lover2 != null && p == Lovers.lover2)) {
+                var partnerName = (p == Lovers.lover1) ? Lovers.lover2.Data.PlayerName : Lovers.lover1.Data.PlayerName;
                 infos.Add(new RoleInfo("Lover",
                 Lovers.color,
-                "You are in <color=#FC03BEFF>Love</color>",
-                "You are in love",
+                $"You are in <color=#FC03BEFF>Love</color> with <color=#FC03BEFF>{partnerName}</color>",
+                $"You are in love with {partnerName}",
                 RoleId.Lover));
             }
 
