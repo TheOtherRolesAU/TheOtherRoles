@@ -28,7 +28,7 @@ namespace TheOtherRoles
                 roleCouldUse = true;
             else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
                 roleCouldUse = true;
-            else if (Spy.canEnterVents && Spy.canEnterVents)
+            else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
                 roleCouldUse = true;
             else if (pc.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
