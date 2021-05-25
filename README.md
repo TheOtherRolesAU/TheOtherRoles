@@ -67,6 +67,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.6.5**
 - Added the ability to increase the number of tasks assigned to crewmates
 - New option: A role summary in the end screen (Client option)
+- **[Spy](#spy):** New option for spy to have the same vision as impostors
+- **[Spy](#spy):** New option for spy to be able to jump into vents (but he can't move between them)
 - Fixed a bug causing a crewmate task win when lovers were in the game even when not all crewmates had completed all their tasks
 - Restored the original Among Us color for crewmates in the intro cutscene
 
@@ -976,6 +978,8 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Spy Spawn Chance |
 | Spy Can Die To Sheriff |
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| Spy Can Enter Vents | Allow the Spy to enter/exit vents (but not actually move to connected vents)
+| Spy Has Impostor Vision | Give the Spy the same vision as the Impostors have
 -----------------------
 
 ## Security Guard
