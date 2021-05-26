@@ -681,17 +681,6 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
     {
-        public static void Prefix(PlayerControl __instance) {
-            // Child exile lose condition
-            if (Child.child != null && Child.child == __instance && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
-                Child.triggerChildLose = true;
-            }
-            // Jester win condition
-            else if (Jester.jester != null && Jester.jester == __instance) {
-                Jester.triggerJesterWin = true;
-            } 
-        }
-
         public static void Postfix(PlayerControl __instance)
         {
             // Collect dead player info
