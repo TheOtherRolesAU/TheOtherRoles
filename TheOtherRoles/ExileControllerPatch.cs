@@ -66,15 +66,18 @@ namespace TheOtherRoles
     }
 
 
-    [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
-    class ExileControllerWrapUpPatch {
-        static void Prefix(ExileController __instance) {
+    [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
+    class ExileControllerDestroyPatch {
+        static void Prefix(UnityEngine.Object obj) {
+            if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
+            var exiled = ExileController.Instance.exiled;
+
             // Child exile lose condition
-            if (__instance.exiled != null && Child.child != null && Child.child.PlayerId == __instance.exiled.PlayerId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
+            if (exiled != null && Child.child != null && Child.child.PlayerId == exiled.PlayerId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
                 Child.triggerChildLose = true;
             }
             // Jester win condition
-            else if (__instance.exiled != null && Jester.jester != null && Jester.jester.PlayerId == __instance.exiled.PlayerId) {
+            else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
                 Jester.triggerJesterWin = true;
             } 
 
