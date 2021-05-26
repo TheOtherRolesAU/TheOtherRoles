@@ -67,6 +67,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.7**
+- We changed the colors of some of our roles
+- Fixed a bug where a Jester win was triggered, when the partner of a Jester Lover was voted out
+- Fixed a bug where a Child lose was triggered, when the partner of a Crew Child Lover was voted out
 
 **Version 2.6.6**
 - Fixed a bug introduced in v2.6.5 that caused all player to be able to use vents when the new option for spy was enabled
