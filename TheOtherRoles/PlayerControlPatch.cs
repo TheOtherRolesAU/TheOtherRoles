@@ -196,7 +196,7 @@ namespace TheOtherRoles {
                 // Only exclude sidekick from beeing targeted if the jackal can create sidekicks from impostors
                 if(Sidekick.sidekick != null) untargetablePlayers.Add(Sidekick.sidekick);
             }
-            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Jackal from targeting the Child unless it has grown up
+            if(Mini.mini != null && !Mini.isGrownUp()) untargetablePlayers.Add(Mini.mini); // Exclude Jackal from targeting the Mini unless it has grown up
             Jackal.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
             setPlayerOutline(Jackal.currentTarget, Palette.ImpostorRed);
         }
@@ -205,7 +205,7 @@ namespace TheOtherRoles {
             if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
             var untargetablePlayers = new List<PlayerControl>();
             if(Jackal.jackal != null) untargetablePlayers.Add(Jackal.jackal);
-            if(Child.child != null && !Child.isGrownUp()) untargetablePlayers.Add(Child.child); // Exclude Sidekick from targeting the Child unless it has grown up
+            if(Mini.mini != null && !Mini.isGrownUp()) untargetablePlayers.Add(Mini.mini); // Exclude Sidekick from targeting the Mini unless it has grown up
             Sidekick.currentTarget = setTarget(untargetablePlayers : untargetablePlayers);
             if (Sidekick.canKill) setPlayerOutline(Sidekick.currentTarget, Palette.ImpostorRed);
         }
@@ -318,21 +318,21 @@ namespace TheOtherRoles {
             CircleCollider2D collider = p.GetComponent<CircleCollider2D>();
             
             p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
-            collider.radius = Child.defaultColliderRadius;
-            collider.offset = Child.defaultColliderOffset * Vector2.down;
+            collider.radius = Mini.defaultColliderRadius;
+            collider.offset = Mini.defaultColliderOffset * Vector2.down;
 
-            // Set adapted player size to Child and Morphling
-            if (Child.child == null  || Camouflager.camouflageTimer > 0f) return;
+            // Set adapted player size to Mini and Morphling
+            if (Mini.mini == null  || Camouflager.camouflageTimer > 0f) return;
 
-            float growingProgress = Child.growingProgress();
+            float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
-            float correctedColliderRadius = Child.defaultColliderRadius * 0.7f / scale; // scale / 0.7f is the factor by which we decrease the player size, hence we need to increase the collider size by 0.7f / scale
+            float correctedColliderRadius = Mini.defaultColliderRadius * 0.7f / scale; // scale / 0.7f is the factor by which we decrease the player size, hence we need to increase the collider size by 0.7f / scale
 
-            if (p == Child.child) {
+            if (p == Mini.mini) {
                 p.transform.localScale = new Vector3(scale, scale, 1f);
                 collider.radius = correctedColliderRadius;
             }
-            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f) {
+            if (Morphling.morphling != null && p == Morphling.morphling && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f) {
                 p.transform.localScale = new Vector3(scale, scale, 1f);
                 collider.radius = correctedColliderRadius;
             }
@@ -426,7 +426,7 @@ namespace TheOtherRoles {
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
-            // Child and Morphling shrink
+            // Mini and Morphling shrink
             playerSizeUpdate(__instance);
             
             if (PlayerControl.LocalPlayer == __instance) {
@@ -484,10 +484,10 @@ namespace TheOtherRoles {
     class PlayerPhysicsWalkPlayerToPatch {
         private static Vector2 offset = Vector2.zero;
         public static void Prefix(PlayerPhysics __instance) {
-            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.myPlayer == Child.child ||  (Morphling.morphling != null && __instance.myPlayer == Morphling.morphling && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f));
+            bool correctOffset = Camouflager.camouflageTimer <= 0f && (__instance.myPlayer == Mini.mini ||  (Morphling.morphling != null && __instance.myPlayer == Morphling.morphling && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f));
             if (correctOffset) {
-                float currentScaling = (Child.growingProgress() + 1) * 0.5f;
-                __instance.myPlayer.Collider.offset = currentScaling * Child.defaultColliderOffset * Vector2.down;
+                float currentScaling = (Mini.growingProgress() + 1) * 0.5f;
+                __instance.myPlayer.Collider.offset = currentScaling * Mini.defaultColliderOffset * Vector2.down;
             }
         }
     }
@@ -513,7 +513,7 @@ namespace TheOtherRoles {
     class RpcMurderPlayer {
         public static bool Prefix([HarmonyArgument(0)]PlayerControl target) {
             if (Helpers.handleMurderAttempt(target)) { // Custom checks
-                if (Child.child != null && PlayerControl.LocalPlayer == Child.child) { // Not checked by official servers
+                if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) { // Not checked by official servers
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                     writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write(target.PlayerId);
@@ -644,10 +644,10 @@ namespace TheOtherRoles {
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
 
-            // Child set adapted kill cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor && Child.child == __instance) {
-                var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+            // Mini set adapted kill cooldown
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor && Mini.mini == __instance) {
+                var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+                Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
             }
         }
     }
@@ -657,7 +657,7 @@ namespace TheOtherRoles {
         public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)]float time) {
             if (PlayerControl.GameOptions.KillCooldown <= 0f) return false;
             float multiplier = 1f;
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) multiplier = Child.isGrownUp() ? 0.66f : 2f;
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor) multiplier = Mini.isGrownUp() ? 0.66f : 2f;
 
             __instance.killTimer = Mathf.Clamp(time, 0f, PlayerControl.GameOptions.KillCooldown * multiplier);
             DestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.KillCooldown * multiplier);

@@ -10,7 +10,7 @@ Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
 |----------|-------------|-----------------|
-| [Bad Child](#child) | [Child](#child) | [Arsonist](#arsonist) |
+| [Bad Mini](#mini) | [Mini](#mini) | [Arsonist](#arsonist) |
 | [Camouflager](#camouflager) | [Detective](#detective) | [Jester](#jester) |
 | [Cleaner](#cleaner) | [Engineer](#engineer) | [Jackal](#jackal) |
 | [Eraser](#eraser) | [Hacker](#hacker) | [Sidekick](#sidekick) |
@@ -167,9 +167,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.2.1**
 - Trickster: The vent button now has a custom texture. Fixed a bug where the Trickster could clip out of bounds when his box was close to a wall.
-- Fixed a bug where the Bad Child's kill button went on cooldown when someone else performed a kill
+- Fixed a bug where the Bad Mini's kill button went on cooldown when someone else performed a kill
 - Fixed a few bugs with footprints, Seer souls and the Vampire delayed kill
-- Fixed a bug where the Child was banned for hacking (because of its reduced kill cooldown)
+- Fixed a bug where the Mini was banned for hacking (because of its reduced kill cooldown)
 - Improved the version handshake
 
 **Version 2.2.0**
@@ -184,22 +184,22 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where a Lovers win wasn't displayed properly
 - Fixed the Among Us bug where people were unable to move after meetings
 - We added a version checking system: The host can only start the game if everyone in his lobby has the same version of the mod installed (he will see, who is using a wrong version). This prevents hacking in public lobbies and bugs because of version missmatches.
-- Fixed a bug where the Child Impostor had the same cooldowns as normal Impostors
+- Fixed a bug where the Mini Impostor had the same cooldowns as normal Impostors
 - Fixed a bug where the Vampire/Janitor/Mafioso would lose their kill button after being erased
-- The Child is now able to use ladders and it can do all the tasks right away
+- The Mini is now able to use ladders and it can do all the tasks right away
 
 **Version 2.1.0**
 - **New Role:** [Spy](#spy)
 - **Eraser:** The Eraser can now also remove the role of other Impostors. This enables him to reveal the Spy, but might result in removing the special ability of his partner.
-- **Camouflager:** The Child age/size will now also be hidden, to allow the Child Impostor to kill during camouflage
+- **Camouflager:** The Mini age/size will now also be hidden, to allow the Mini Impostor to kill during camouflage
 
 **Hotfix 2.0.1**
 - Fixed a bug where camouflaged players would get stuck on ladders/platforms on the airship
 - Introduced a one second cooldown after the Morphling sampled another player
-- The Child can now always reach all usables (ladders, tasks, ...)
+- The Mini can now always reach all usables (ladders, tasks, ...)
 - We removed a bug, where some footprints remained on the ground forever
 - We removed a bug, where the Detective didn't see the right color type when reporting a player
-- We changed the Jester win and Child lose conditions, they're not being affected by server delays anymore
+- We changed the Jester win and Mini lose conditions, they're not being affected by server delays anymore
 
 **Changes in 2.0.0**
 - **New button art** created by **Bavari**
@@ -214,7 +214,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
 - **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
 - **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
-- **Child:** The Child can now be a Crewmate Child or an Impostor Child, check the [Child](#child) section for more details
+- **Mini:** The Mini can now be a Crewmate Mini or an Impostor Mini, check the [Mini](#mini) section for more details
 - **Eraser:** The Eraser, a new Impostor role, is now part of the mod. Check the [Eraser](#eraser) section for more details
 - **New options:**
   - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
@@ -244,13 +244,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 \
 **Changes in v1.6:**
 - This update is a small hotfix, fixing the bug where some people were unable to join lobbies.
-- The Child can't be voted out anymore before it turns 18, hence games can't end anymore because the Child died.
+- The Mini can't be voted out anymore before it turns 18, hence games can't end anymore because the Mini died.
 - Footprints are no longer visible to the Detective, if players are inside vents.
 
 \
 **Changes in v1.5:**
 - Time Master - Buff: He is not affected by his rewind anymore, which gives him more utility. Players will now be rewinded out of vents.
-- Child - Nerf: The Child now grows up (see [Child](#child)) and becomes a normal Crewmate at some point. A growing Child is not killable anymore. Some tasks are still not doable for the small Child, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
+- Mini - Nerf: The Mini now grows up (see [Mini](#mini)) and becomes a normal Crewmate at some point. A growing Mini is not killable anymore. Some tasks are still not doable for the small Mini, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
 - Seer - Nerf: Added an option that sets how often the Seer mistakes the player for another.
 - Hacker - Nerf: The Hacker now only sees the additional information when he activates his "Hacker mode". That should stops the Hacker from camping the admin table/vitals.
 - Other: Camouflager/Morphling cooldowns were fixed. Custom regions code was removed to enable 3rd party tools. Some minor bugfixes.
@@ -268,7 +268,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Changes in v1.1:**
 - Morphling: The color of pet now also morphs. The skin animation now starts at the right point.
-- The game over screen now shows if the Jester/Child/Lovers won.
+- The game over screen now shows if the Jester/Mini/Lovers won.
 - A bug was removed where the Jester won together with the Crewmates.
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 </details>
@@ -372,7 +372,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Map:** The map can be changed inside a lobby
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
-- **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
+- **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the mini.
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Of Remaining Tasks**
@@ -439,7 +439,7 @@ First you need to choose how many special roles of each kind (Impostor/Neutral/C
 The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
 - First all roles that are set to 100% are being assigned to arbitrary players
 - After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and Impostors). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/Impostors or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
-- The Mafia, Lovers and Child are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and Impostor roles are selected and assigned in a random order.
+- The Mafia, Lovers and Mini are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and Impostor roles are selected and assigned in a random order.
 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
@@ -469,7 +469,7 @@ The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead 
 The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
 \
 **NOTE:**
-- They shrink to the size of the Child when they copies its look.
+- They shrink to the size of the Mini when they copies its look.
 - The Hacker sees the new color on the admin table.
 - The color of the footprints changes accordingly (also the ones that were already on the ground).
 - The other Impostor still sees that they are an Impostor (the name remains red).
@@ -491,7 +491,7 @@ The camouflage mode lasts for 10s and while it is active, all player names/pets/
 are hidden and all players have the same color.\
 \
 **NOTE:**
-- The Child will look like all the other players
+- The Mini will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Hacker sees gray icons on the admin table
 - The shield is not visible anymore
@@ -639,7 +639,7 @@ If they try to kill a Crewmate, they die instead.
 
 **NOTE:**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
-- If the Sheriff shoots a Child Impostor, the Sheriff dies if the Child is still growing up. If it's 18, the Child Impostor dies.
+- If the Sheriff shoots a Mini Impostor, the Sheriff dies if the Mini is still growing up. If it's 18, the Mini Impostor dies.
 
 ### Game Options
 | Name | Description |
@@ -743,28 +743,28 @@ The Lighter can turn on his Lighter every now and then, which increases his visi
 | Lighter Duration | -
 -----------------------
 
-## Child
+## Mini
 ### **Team: Crewmates or Impostors**
-The Child can be a Crewmate (67% chance) or an Impostor (33% chance).\
-The Child's character is smaller and hence visible to everyone in the game.\
-The Child cannot be killed until it turns 18 years old, however it can be voted out.\
-**Impostor Child:**
+The Mini can be a Crewmate (67% chance) or an Impostor (33% chance).\
+The Mini's character is smaller and hence visible to everyone in the game.\
+The Mini cannot be killed until it turns 18 years old, however it can be voted out.\
+**Impostor Mini:**
   - While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
   - If it gets thrown out of the ship, everything is fine.
 
-**Crewmate Child:**
-  - The Crewmate Child aims to play out the strength its invincibility in the early game.
-  - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Child.
+**Crewmate Mini:**
+  - The Crewmate Mini aims to play out the strength its invincibility in the early game.
+  - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
 
 **NOTE:**
-- Impostors can't kill the Child (the button does not work) until it turns 18
-- The Sheriff can kill the Impostor Child, but only if it's fully grown up
+- Impostors can't kill the Mini (the button does not work) until it turns 18
+- The Sheriff can kill the Impostor Mini, but only if it's fully grown up
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Child Spawn Chance | -
-| Child  | Child Growing Up Duration
+| Mini Spawn Chance | -
+| Mini  | Mini Growing Up Duration
 -----------------------
 
 ## Medic
@@ -922,7 +922,7 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Crewmate Child lose by vote
+1. Crewmate Mini lose by vote
 2. Jester wins by vote
 3. Arsonist win
 4. Team Impostor wins by sabotage
@@ -934,7 +934,7 @@ The priority of the win conditions is the following:
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
-- A Jackal cannot target the Child, while it's growing up. After that he can kill it or select it as its Sidekick
+- A Jackal cannot target the Mini, while it's growing up. After that he can kill it or select it as its Sidekick
 - The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (that's why converting the last Crewmate with tasks left into a Sidekick results in a task win for the crew)
 
 If both Impostors and Jackals are in the game the game continues even if all Crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
@@ -962,7 +962,7 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 **NOTE:**
 - A player that converts into a Sidekick loses his previous role and tasks (if he had one), except the Lover role.
 - The Sidekick may be killed by a Sheriff.
-- The Sidekick cannot target the Child, while it's growing up.
+- The Sidekick cannot target the Mini, while it's growing up.
 
 ### Game Options
 | Name | Description

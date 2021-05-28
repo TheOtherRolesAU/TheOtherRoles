@@ -15,7 +15,7 @@ namespace TheOtherRoles {
     enum CustomGameOverReason {
         LoversWin = 10,
         TeamJackalWin = 11,
-        ChildLose = 12,
+        MiniLose = 12,
         JesterWin = 13,
         ArsonistWin = 14
     }
@@ -26,7 +26,7 @@ namespace TheOtherRoles {
         LoversSoloWin,
         JesterWin,
         JackalWin,
-        ChildLose,
+        MiniLose,
         ArsonistWin
     }
 
@@ -82,17 +82,17 @@ namespace TheOtherRoles {
 
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
             bool arsonistWin = Arsonist.arsonist != null && gameOverReason == (GameOverReason)CustomGameOverReason.ArsonistWin;
-            bool childLose = Child.child != null && gameOverReason == (GameOverReason)CustomGameOverReason.ChildLose;
+            bool miniLose = Mini.mini != null && gameOverReason == (GameOverReason)CustomGameOverReason.MiniLose;
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.DidHumansWin(gameOverReason) && !Lovers.existingWithKiller())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead) || (Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead));
 
-            // Child lose
-            if (childLose) {
+            // Mini lose
+            if (miniLose) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Child.child.Data);
-                wpd.IsYou = false; // If "no one is the Child", it will display the Child, but also show defeat to everyone
+                WinningPlayerData wpd = new WinningPlayerData(Mini.mini.Data);
+                wpd.IsYou = false; // If "no one is the Mini", it will display the Mini, but also show defeat to everyone
                 TempData.winners.Add(wpd);
-                AdditionalTempData.winCondition = WinCondition.ChildLose;  
+                AdditionalTempData.winCondition = WinCondition.MiniLose;  
             }
 
             // Jester win
@@ -191,9 +191,9 @@ namespace TheOtherRoles {
                 textRenderer.text = "Team Jackal Wins";
                 textRenderer.color = Jackal.color;
             }
-            else if (AdditionalTempData.winCondition == WinCondition.ChildLose) {
-                textRenderer.text = "Child died";
-                textRenderer.color = Child.color;
+            else if (AdditionalTempData.winCondition == WinCondition.MiniLose) {
+                textRenderer.text = "Mini died";
+                textRenderer.color = Mini.color;
             }
 
             if(MapOptions.showRoleSummary) {
@@ -231,7 +231,7 @@ namespace TheOtherRoles {
             if (DestroyableSingleton<TutorialManager>.InstanceExists) // InstanceExists | Don't check Custom Criteria when in Tutorial
                 return true;
             var statistics = new PlayerStatistics(__instance);
-            if (CheckAndEndGameForChildLose(__instance)) return false;
+            if (CheckAndEndGameForMiniLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
             if (CheckAndEndGameForArsonistWin(__instance)) return false;
             if (CheckAndEndGameForSabotageWin(__instance)) return false;
@@ -243,10 +243,10 @@ namespace TheOtherRoles {
             return false;
         }
 
-        private static bool CheckAndEndGameForChildLose(ShipStatus __instance) {
-            if (Child.triggerChildLose) {
+        private static bool CheckAndEndGameForMiniLose(ShipStatus __instance) {
+            if (Mini.triggerMiniLose) {
                 __instance.enabled = false;
-                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ChildLose, false);
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.MiniLose, false);
                 return true;
             }
             return false;

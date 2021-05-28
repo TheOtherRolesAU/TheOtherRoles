@@ -72,9 +72,9 @@ namespace TheOtherRoles
             if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
             var exiled = ExileController.Instance.exiled;
 
-            // Child exile lose condition
-            if (exiled != null && Child.child != null && Child.child.PlayerId == exiled.PlayerId && !Child.isGrownUp() && !Child.child.Data.IsImpostor) {
-                Child.triggerChildLose = true;
+            // Mini exile lose condition
+            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.IsImpostor) {
+                Mini.triggerMiniLose = true;
             }
             // Jester win condition
             else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
@@ -84,10 +84,10 @@ namespace TheOtherRoles
             // Reset custom button timers where necessary
             CustomButton.MeetingEndedUpdate();
 
-            // Child set adapted cooldown
-            if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
-                var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+            // Mini set adapted cooldown
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor) {
+                var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+                Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
             }
 
             // Seer spawn souls
