@@ -1,11 +1,11 @@
-[![Discord](https://discord.com/assets/e4923594e694a21542a489471ecffa50.svg)](https://discord.gg/77RkMJHWsM)
-![eisbison banner](./Images/Banner.png)
-![eisbison infographic](./Images/Preview_2.6.0.png)
+![eisbison banner](./Images/TOR_logo.png)
+[![Discord](./Images/TOR_server.png)](https://discord.gg/77RkMJHWsM)
+![eisbison infographic](./Images/TOR_roles.png)
 
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Amongs Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
@@ -33,6 +33,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.10s| v2.6.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.6/TheOtherRoles.zip)
+| 2021.5.10s| v2.6.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.5/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.4/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.3/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.2/TheOtherRoles.zip)
@@ -63,9 +65,26 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.6.6**
+- Fixed a bug introduced in v2.6.5 that caused all player to be able to use vents when the new option for spy was enabled
+
+**Version 2.6.5**
+- Added the ability to increase the number of tasks assigned to crewmates
+- New option: A role summary in the end screen (Client option)
+- **[Spy](#spy):** New option for spy to have the same vision as impostors
+- **[Spy](#spy):** New option for spy to be able to jump into vents (but he can't move between them)
+- Fixed a bug causing a crewmate task win when lovers were in the game even when not all crewmates had completed all their tasks
+- Restored the original Among Us color for crewmates in the intro cutscene
+
 **Version 2.6.4**
-- New option: Swapper can only swap other
-- **Lovers:** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
+- **[Lovers](#lovers):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
+- **[Seer](#seer):** Fixed souls and flash sometimes not being visible (Thanks to [orangeNKeks](https://github.com/orangeNKeks))
+- New option: [Swapper](#swapper) can only swap others
+- New option: Ghosts can see votes
+- New option: [Jackal](#jackal) and [Sidekick](#sidekick) have Impostor vision
+- New option: [Jester](#jester) can sabotage
+- Changed FreePlay mode to not assign custom roles anymore
+- Fixed a bug with directional hats not using their flip image after a while
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
@@ -74,7 +93,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.2**
 - The Other Roles now supports the new Among Us version **2021.5.10s**
-- Added a chat command to kick players as the host of a lobby (/kick playerName)
+- Added a chat command to kick players as the host of a lobby (`/kick playerName`)
 
 **Version 2.6.1**
 - Fixed a bug where the Sheriff was unable to kill the Arsonist
@@ -196,7 +215,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Hotfix 1.8.2**
 - Add map and Impostor count to lobby settings.
-- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role. 
+- Fixed bugs where changing players to be the Sidekick didn't reset all the effects of their previous role.
 
 **Hotfix 1.8.1** Resolves bugs that occured when the Jackal recruited a Medic, Swapper and Tracker\
 \
@@ -219,7 +238,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 \
 **Changes in v1.6:**
 - This update is a small hotfix, fixing the bug where some people were unable to join lobbies.
-- The Child can't be voted out anymore before it turns 18, hence games can't end anymore because the Child died. 
+- The Child can't be voted out anymore before it turns 18, hence games can't end anymore because the Child died.
 - Footprints are no longer visible to the Detective, if players are inside vents.
 
 \
@@ -256,13 +275,13 @@ syncs your game options automatically.
 1. Simply get the newest [release](https://github.com/Narua2010/AmongUsModUpdater/releases/latest) of the [AmongUsModUpdater](https://github.com/Narua2010/AmongUsModUpdater)
 2. Unzip the folder and run the **setup.exe**
 
-If you have problems with the AmongUsModUpdater, make sure To [contact us](https://discord.gg/csa3pHYdPU).
+If you have problems with the AmongUsModUpdater, make sure to [contact us](https://discord.gg/csa3pHYdPU).
 
 ## Windows Manual Installation
 1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
 2. Find the folder of your game, for Steam players you can right click in Steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advised, put it where you want.
-4. Drag or extract the files from the zip into your game, at the .exe level.
+4. Drag or extract the files from the zip into your game, at the `.exe` level.
 5. Run the game (the first launch might take a while)
 
 Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
@@ -272,11 +291,11 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 **Linux Manual**
 1. Install Among Us via Steam
 2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
-3. Enable winhttp.dll via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
+3. Enable `winhttp.dll` via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
 4. Launch the game via Steam
 
 # Custom Servers and 10+ Players
-We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod).
+We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creaters of the [CrowdedMod](https://github.com/CrowdedMods/CrowdedMod).
 
 **Setup the Clients:**
 1. Open the region menu where you can choose between the different regions
@@ -286,7 +305,7 @@ We always recommend you to play on custom servers rather than on the official on
 **Setup the Server:**
 1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
 2. Follow the steps (using the server release you just downloaded) on the official [Impostor-Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server)
-3. Make sure to set the following values to false in the *config.json* file:
+3. Make sure to set the following values to false in the `config.json` file:
 ```
     ...
     "AntiCheat": {
@@ -304,7 +323,7 @@ aeonlucid/impostor:nightly
 ```
 (Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
 
-In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+In addition to running it, the environment variables to disable the AntiCheat feature need to be set.
 ```
 IMPOSTOR_AntiCheat__Enabled=false
 IMPOSTOR_AntiCheat__BanIpFromGame=false
@@ -336,21 +355,42 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
 [Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
 [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
-[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter and a similar Mayor role come from **Slushiegoose**\
+[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
-[Town-Of-Impostors](https://github.com/AJMix/TownOfImpostors) - Idea for the Arsonist role comes from  **AJMix**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the *BepInEx\config\me.eisbison.theotherroles.cfg* file.
+- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the `BepInEx\config\me.eisbison.theotherroles.cfg` file.
 - **Number of Impostors:** The number of Impostor count be set inside a lobby
 - **Map:** The map can be changed inside a lobby
-- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count) 
+- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left, Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can alse see the name of the Spy and everyone can still see the age of the child.
-- **Ghosts Can See Roles And Remaining Tasks:** If set to true, ghosts can see the role and the number of remaining tasks of each player.
+- **Ghosts Can See Roles**
+- **Ghosts Can See Votes**
+- **Ghosts Can See The Number Of Remaining Tasks**
 - **Dleks:** You are now able to select the Dleks map. 
+- **Task Counts:** You are now able to select more tasks.
+- **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
+
+### Task Count Limits per map
+You can configure:
+- Up to 4 common tasks
+- Up to 23 short tasks
+- Up to 15 long tasks
+
+Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
+Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
+
+| Map | Common Tasks | Short Tasks | Long Tasks |
+|----------|:-------------:|:-------------:|:-------------:|
+| Skeld / Dleks | 2 | 19 | 8
+| Mira HQ | 2 | 13 | 11
+| Polus | 4 | 14 | 15
+| Airship | 2 | 23 | 15
+-----------------------
+
 
 # Custom Hats
 ## Create and submit new hat designs
@@ -360,28 +400,28 @@ Here are a few instructions, on how to create a custom hat:
 - **Creation:** A hat consists of up to three textures. The aspect ratio of the textures has to be `4:5`, we recommend `300px:375px`:
   - `Main texture (required)`:
     - This is the main texture of your hat. It will usually be rendered in front of the player, if you set the `behind` parameter it will be rendered behind the player.
-    - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding *_parametername* to the file name (before the *.png*).
+    - The name of the texture needs to follow the pattern *hatname.png*, but you can also set some additional parameters in the file name by adding `_parametername` to the file name (before the *.png*).
     - Parameter `bounce`: This parameter determines whether the hat will bounce while you're walking or not.
     - Parameter `adaptive`: If this parameter is set, the Among Us coloring shader will be applied (the shader that replaces some colors with the colors that your character is wearing in the game). The color red (#ff0000) will be replaced with the primary color of your player and the color blue (#0000ff) with the secondary color. Also other colors will be affected and changed, you can have a look at the texture of the [Crewmate Hat](https://static.wikia.nocookie.net/among-us-wiki/images/e/e0/Crewmate_hat.png) to see how this feature should be used.
     - Parameter `behind`: If this parameter is set, the main texture will be rendered behind the player.
   - `Flipped texture (optional)`:
     - This texture will be rendered instead of the Main texture, when facing the left.
-    - The name of the texture needs to follow the pattern *hatname_flip.png*.
+    - The name of the texture needs to follow the pattern `hatname_flip.png`.
   - `Back texture (optional)`:
     - This texture will be rendered behind the player.
-    - The name of the texture needs to follow the pattern *hatname_back.png*.
+    - The name of the texture needs to follow the pattern `hatname_back.png`.
   - `Flipped Back texture (optional)`:
     - This texture will be rendered instead of the Back texture, when facing the left.
-    - The name of the texture needs to follow the pattern *hatname_back_flip.png*.
+    - The name of the texture needs to follow the pattern `hatname_back_flip.png`.
   - `Climb texture (optional)`:
     - This texture will be rendered in front of the player, when he's climbing.
-    - The name of the texture needs to follow the pattern *hatname_climb.png*.
-- **Testing:** You can test your hat design by putting all the files in the *\TheOtherHats\Test* subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
+    - The name of the texture needs to follow the pattern `hatname_climb.png`.
+- **Testing:** You can test your hat design by putting all the files in the `\TheOtherHats\Test` subfolder of your mod folder. Then whenever you start a freeplay game, you and all the dummies will be wearing the new hat. You don't need to restart Among Us if you change the hat files, just exit and reenter the freeplay mode.
 
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-<img src="./Images/Colors.png" alt="drawing" width="300px"/>
+![TOR Colors](./Images/TOR_colors.png)
 
 # Roles
 
@@ -444,7 +484,7 @@ The Camouflager is an Impostor which can additionally activate a camouflage mode
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
 are hidden and all players have the same color.\
 \
-**NOTE**
+**NOTE:**
 - The Child will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Hacker sees gray icons on the admin table
@@ -567,9 +607,9 @@ If one Lover dies (and the option is activated), the other Lover suicides.\
 You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
 You can specify the chance of one Lover being an Impostor.\
 The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win if they are both alive among the last 3 players, however they can also win with their respective role/team.\
-If both Lovers are Crewmates, they can achieve a "double victory", together with the other Crewmates.\
-If both Lovers are part of a different team, they can achieve a "Lovers solo win" where only they win.\
+The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win)\
+If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
+If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
 If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
@@ -591,7 +631,7 @@ If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lo
 The Sheriff has the ability to kill Impostors.
 If they try to kill a Crewmate, they die instead.
 
-**NOTE**
+**NOTE:**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
 - If the Sheriff shoots a Child Impostor, the Sheriff dies if the Child is still growing up. If it's 18, the Child Impostor dies.
 
@@ -612,6 +652,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 |----------|:-------------:|
 | Jester Spawn Chance | -
 | Jester can call emergency meeting | Option to disable the emergency button for the Jester
+| Jester can sabotage | Option to allow the Jester to sabotage
 -----------------------
 
 ## Arsonist
@@ -638,10 +679,10 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Seer Spawn Chance | - 
-| Seer Mode | Options: Show death flash and souls, show death flash, show souls 
+| Seer Spawn Chance | -
+| Seer Mode | Options: Show death flash and souls, show death flash, show souls
 | Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
-| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting 
+| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting
 -----------------------
 
 ## Engineer
@@ -666,7 +707,7 @@ you can double click on the tasks instead.
 The Detective can see footprints that other players leave behind.
 The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
-**NOTE**
+**NOTE:**
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
@@ -729,7 +770,7 @@ If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
 The Medic's other feature shows when they report a corpse: they will see how long ago the player died
 \
-**NOTE**
+**NOTE:**
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
 
@@ -770,7 +811,7 @@ Otherwise he sees the same information as everyone else.
 | Hacker Spawn Chance | -
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
-| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors) 
+| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
 -----------------------
 
 
@@ -799,7 +840,7 @@ can only use them, if the previous player did not used them before)
 ## Time Master
 ### **Team: Crewmates**
 The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
-If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the 
+If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the
 time will rewind for a set amount of time.\
 The kill cooldown of the killer won't be reset, so the Time Master
 has to make sure that the game won't result in the same situation.\
@@ -904,6 +945,7 @@ If both Impostors and Jackals are in the game the game continues even if all Cre
 | Jackal can create a Sidekick | Yes/No |
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+| Jackal and Sidekick have Impostor vision | - |
 -----------------------
 
 ## Sidekick
@@ -938,8 +980,10 @@ You can set whether the Sheriff can kill the Spy or not (in order to keep the li
 | Name | Description
 |----------|:-------------:|
 | Spy Spawn Chance |
-| Spy Can Die To Sheriff | 
+| Spy Can Die To Sheriff |
 | Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| Spy Can Enter Vents | Allow the Spy to enter/exit vents (but not actually move to connected vents)
+| Spy Has Impostor Vision | Give the Spy the same vision as the Impostors have
 -----------------------
 
 ## Security Guard
@@ -959,7 +1003,7 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Name | Description
 |----------|:-------------:|
 | Security Guard Spawn Chance |
-| Security Guard Cooldown | 
+| Security Guard Cooldown |
 | Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent

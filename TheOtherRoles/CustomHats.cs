@@ -121,7 +121,14 @@ namespace TheOtherRoles {
 
         private static Sprite CreateHatSprite(string path, bool fromDisk = false) {
             Texture2D texture = fromDisk ? Helpers.loadTextureFromDisk(path) : Helpers.loadTextureFromResources(path);
-            return texture == null ? null : Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
+            if (texture == null)
+                return null;
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.8f), texture.width * 0.75f);
+            if (sprite == null)
+                return null;
+            texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            return sprite;
         }
 
         private static HatBehaviour CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {

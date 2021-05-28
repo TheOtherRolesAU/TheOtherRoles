@@ -28,6 +28,8 @@ namespace TheOtherRoles
                 roleCouldUse = true;
             else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
                 roleCouldUse = true;
+            else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
+                roleCouldUse = true;
             else if (pc.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
@@ -73,22 +75,33 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(Vent), "Use")]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
-            bool flag;
-            bool flag2;
-            __instance.CanUse(PlayerControl.LocalPlayer.Data, out flag, out flag2);
-
-            if (!flag || !__instance.name.StartsWith("JackInTheBoxVent_")) return true;  // Continue with default method
-
+            bool canUse;
+            bool couldUse;
+            __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+            bool canMoveInVents = true;
+            if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
+            if (Spy.spy == PlayerControl.LocalPlayer) {
+                canMoveInVents = false;
+            }
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
+            
+            if (__instance.name.StartsWith("JackInTheBoxVent_")) {
+                __instance.SetButtons(isEnter && canMoveInVents);
+                MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
+                writer.WritePacked(__instance.Id);
+                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(isEnter ? byte.MaxValue : (byte)0);
+                writer.EndMessage();
+                RPCProcedure.useUncheckedVent(__instance.Id, PlayerControl.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+                return false;
+            }
 
-            __instance.SetButtons(isEnter);
-            MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
-            writer.WritePacked(__instance.Id);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
-            writer.Write(isEnter ? byte.MaxValue : (byte)0);
-            writer.EndMessage();
-            RPCProcedure.useUncheckedVent(__instance.Id, PlayerControl.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
-
+            if(isEnter) {
+                PlayerControl.LocalPlayer.MyPhysics.RpcEnterVent(__instance.Id);
+            } else {
+                PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(__instance.Id);
+            }
+            __instance.SetButtons(isEnter && canMoveInVents);
             return false;
         }
     }
@@ -101,6 +114,15 @@ namespace TheOtherRoles
                 Vent possibleVent =  __instance.currentTarget.TryCast<Vent>();
                 if (possibleVent != null && possibleVent.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
                     __instance.UseButton.sprite = Trickster.getTricksterVentButtonSprite();
+                }
+            }
+
+            // Jester sabotage
+            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.CanMove) {
+                if (!Jester.jester.Data.IsDead && __instance.currentTarget == null) { // no target, so sabotage
+                    __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.SabotageButton);
+                    CooldownHelpers.SetCooldownNormalizedUvs(__instance.UseButton);
+                    __instance.UseButton.color = UseButtonManager.EnabledColor;
                 }
             }
 
@@ -119,6 +141,13 @@ namespace TheOtherRoles
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
             if (__instance.currentTarget != null) return true;
+
+            // Jester sabotage
+            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.jester.Data.IsDead) {
+                Action<MapBehaviour> action = m => m.ShowInfectedMap() ;
+                DestroyableSingleton<HudManager>.Instance.ShowMap(action);
+                return false;
+            }
 
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);

@@ -59,11 +59,13 @@ namespace TheOtherRoles
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
+            public static bool canSabotage = true;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
+                canSabotage = CustomOptionHolder.jesterCanSabotage.getBool();
             }
         }
 
@@ -317,23 +319,24 @@ namespace TheOtherRoles
         // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
         public static bool notAckedExiledIsLover = false;
 
-        public static bool existingAndAlive() {
-            return lover1 != null && lover2 != null && !lover1.Data.IsDead && !lover2.Data.IsDead && !lover1.Data.Disconnected && !lover2.Data.Disconnected && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+        public static bool existing() {
+            return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected;
         }
 
-        public static bool existingAndCrewLovers() {
-            if (lover1 == null || lover2 == null || lover1.Data.Disconnected || lover2.Data.Disconnected) return false; // Null or disconnected
-            return !(lover1.Data.IsImpostor || lover2.Data.IsImpostor || lover1.isNeutral() || lover2.isNeutral()); // Not Impostor or Neutral
+        public static bool existingAndAlive() {
+            return existing() && !lover1.Data.IsDead && !lover2.Data.IsDead && !notAckedExiledIsLover; // ADD NOT ACKED IS LOVER
+        }
+
+        public static bool existingWithKiller() {
+            return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
+                               || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
+                               || lover1.Data.IsImpostor      || lover2.Data.IsImpostor);
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
-            if (!Lovers.existingAndAlive())
+            if (!Lovers.existingAndAlive() || !existingWithKiller())
                 return false;
-            if (player != null && player != lover1 && player != lover2) // Is Player a Lover?
-                return false;
-            return (lover1 == Jackal.jackal     || lover2 == Jackal.jackal 
-                 || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick 
-                 || lover1.Data.IsImpostor      || lover2.Data.IsImpostor); // Either of the lovers is a killer
+            return (player != null && (player == lover1 || player == lover2));
         }
 
         public static void clearAndReload() {
@@ -365,7 +368,7 @@ namespace TheOtherRoles
             deadBodyPositions = new List<Vector3>();
             limitSoulDuration = CustomOptionHolder.seerLimitSoulDuration.getBool();
             soulDuration = CustomOptionHolder.seerSoulDuration.getFloat();
-            mode = CustomOptionHolder.medicShowShielded.getSelection();
+            mode = CustomOptionHolder.seerMode.getSelection();
         }
     }
 
@@ -619,6 +622,7 @@ namespace TheOtherRoles
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
+        public static bool hasImpostorVision = false;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -646,6 +650,7 @@ namespace TheOtherRoles
             jackalPromotedFromSidekickCanCreateSidekick = CustomOptionHolder.jackalPromotedFromSidekickCanCreateSidekick.getBool();
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
+            hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
         }
         
     }
@@ -660,6 +665,7 @@ namespace TheOtherRoles
         public static bool canUseVents = true;
         public static bool canKill = true;
         public static bool promotesToJackal = true;
+        public static bool hasImpostorVision = false;
 
         public static void clearAndReload() {
             sidekick = null;
@@ -668,6 +674,7 @@ namespace TheOtherRoles
             canUseVents = CustomOptionHolder.sidekickCanUseVents.getBool();
             canKill = CustomOptionHolder.sidekickCanKill.getBool();
             promotesToJackal = CustomOptionHolder.sidekickPromotesToJackal.getBool();
+            hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
         }
     }
 
@@ -701,10 +708,14 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
 
         public static bool impostorsCanKillAnyone = true;
+        public static bool canEnterVents = false;
+        public static bool hasImpostorVision = false;
 
         public static void clearAndReload() {
             spy = null;
             impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
+            canEnterVents = CustomOptionHolder.spyCanEnterVents.getBool();
+            hasImpostorVision = CustomOptionHolder.spyHasImpostorVision.getBool();
         }
     }
 

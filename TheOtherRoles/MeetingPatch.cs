@@ -170,14 +170,11 @@ namespace TheOtherRoles
                             if (votedFor == (int)playerVoteArea.TargetPlayerId)
                             {
                                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                                if (PlayerControl.GameOptions.AnonymousVotes)
-                                {
-                                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
-                                }
-                                else
-                                {
+                                if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.ColorId, spriteRenderer);
-                                }
+                                else
+                                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
+
                                 spriteRenderer.transform.SetParent(playerVoteArea.transform);
                                 spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(votesXOffset + __instance.CounterOffsets.x * (float)(num2), 0f, 0f);
                                 spriteRenderer.transform.localScale = Vector3.zero;
@@ -188,14 +185,10 @@ namespace TheOtherRoles
                             else if (i == 0 && votedFor == -1)
                             {
                                 SpriteRenderer spriteRenderer2 = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                                if (PlayerControl.GameOptions.AnonymousVotes)
-                                {
-                                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer2);
-                                }
-                                else
-                                {
+                                if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
                                     PlayerControl.SetPlayerMaterialColors((int)playerById.ColorId, spriteRenderer2);
-                                }
+                                else
+                                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer2);
                                 spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
                                 spriteRenderer2.transform.localPosition = __instance.CounterOrigin + new Vector3(votesXOffset + __instance.CounterOffsets.x * (float)(num), 0f, 0f);
                                 spriteRenderer2.transform.localScale = Vector3.zero;
@@ -411,26 +404,6 @@ namespace TheOtherRoles
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
-            }
-        }
-
-        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CastVote))]
-        class MeetingHudCastVotePatch {
-            static void Postfix([HarmonyArgument(0)]byte srcPlayerId, [HarmonyArgument(1)]sbyte suspectPlayerId) {
-                var source = Helpers.playerById(srcPlayerId);
-                if (source != null && source.Data != null && AmongUsClient.Instance.AmHost && TheOtherRolesPlugin.HostSeesVotesLog.Value) {
-                    string target = null;
-                    if (suspectPlayerId == -2) target = "didn't vote";
-                    else if (suspectPlayerId == -1) target = "skipped";
-                    else if (suspectPlayerId >= 0) {
-                        System.Console.WriteLine(suspectPlayerId);
-                        System.Console.WriteLine((byte)suspectPlayerId);
-                        var targetPlayer = Helpers.playerById((byte)suspectPlayerId);
-                        if (targetPlayer != null && targetPlayer.Data != null) target = $"voted {targetPlayer.Data.PlayerName}";
-                    }                    
-                    
-                    if (target != null) System.Console.WriteLine($"{source.Data.PlayerName} {target}");
-                }
             }
         }
     }

@@ -19,7 +19,8 @@ namespace TheOtherRoles
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
-            assignRoles();
+            if (!DestroyableSingleton<TutorialManager>.InstanceExists) // Don't assign Roles in Tutorial
+                assignRoles();
         }
 
         private static void assignRoles() {

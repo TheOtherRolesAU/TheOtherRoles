@@ -49,14 +49,12 @@ namespace TheOtherRoles {
 
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
             ModUpdater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
+            ModUpdater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
+            ModUpdater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
 
             void onClick() {
                 ModUpdater.ExecuteUpdate();
                 button.SetActive(false);
-                ModUpdater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
-                ModUpdater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
-                ModUpdater.InfoPopup.Show("Updating The Other Roles\nPlease wait...");
-                __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { ModUpdater.setPopupText("Updating The Other Roles\nPlease wait..."); })));
             }
         }
     }
@@ -64,7 +62,7 @@ namespace TheOtherRoles {
     public class ModUpdater { 
         public static bool running = false;
         public static bool hasUpdate = false;
-        public static string updateurl = null;
+        public static string updateURI = null;
         private static Task updateTask = null;
         public static GenericPopup InfoPopup;
 
@@ -76,13 +74,18 @@ namespace TheOtherRoles {
         }
 
         public static void ExecuteUpdate() {
+            string info = "Updating The Other Roles\nPlease wait...";
+            ModUpdater.InfoPopup.Show(info); // Show originally
             if (updateTask == null) {
-                if (updateurl != null) {
+                if (updateURI != null) {
                     updateTask = downloadUpdate();
                 } else {
-                    showPopup("This update has to be done manually");
+                    info = "Unable to auto-update\nPlease update manually";
                 }
+            } else {
+                info = "Update might already\nbe in progress";
             }
+            ModUpdater.InfoPopup.StartCoroutine(Effects.Lerp(0.01f, new System.Action<float>((p) => { ModUpdater.setPopupText(info); })));
         }
         
         public static void clearOldVersions() {
@@ -127,7 +130,7 @@ namespace TheOtherRoles {
                         if (browser_download_url != null && current["content_type"] != null) {
                             if (current["content_type"].ToString().Equals("application/x-msdownload") &&
                                 browser_download_url.EndsWith(".dll")) {
-                                updateurl = browser_download_url;
+                                updateURI = browser_download_url;
                                 return true;
                             }
                         }
@@ -144,7 +147,7 @@ namespace TheOtherRoles {
             try {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-                var response = await http.GetAsync(new System.Uri(updateurl), HttpCompletionOption.ResponseContentRead);
+                var response = await http.GetAsync(new System.Uri(updateURI), HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK || response.Content == null) {
                     System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
                     return false;
