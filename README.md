@@ -33,7 +33,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.5.10s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
+| 2021.5.25.2s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.6/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.5/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.4/TheOtherRoles.zip)
@@ -68,6 +68,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.6.7**
 - We changed the colors of some of our roles
+- We renamed the Child to Mini
 - Fixed a bug where a Jester win was triggered, when the partner of a Jester Lover was voted out
 - Fixed a bug where a Child lose was triggered, when the partner of a Crew Child Lover was voted out
 
