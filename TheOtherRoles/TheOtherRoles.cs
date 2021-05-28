@@ -206,7 +206,7 @@ namespace TheOtherRoles
 
     public static class TimeMaster {
         public static PlayerControl timeMaster;
-        public static Color color = new Color32(144, 232, 245, byte.MaxValue);
+        public static Color color = new Color32(112, 142, 239, byte.MaxValue);
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
@@ -607,7 +607,7 @@ namespace TheOtherRoles
 
     public static class Jackal {
         public static PlayerControl jackal;
-        public static Color color = new Color32(238, 119, 83, byte.MaxValue);
+        public static Color color = new Color32(0, 180, 235, byte.MaxValue);
         public static PlayerControl fakeSidekick;
 
         public static PlayerControl currentTarget;
@@ -655,7 +655,7 @@ namespace TheOtherRoles
 
     public static class Sidekick {
         public static PlayerControl sidekick;
-        public static Color color = new Color32(238, 119, 83, byte.MaxValue);
+        public static Color color = new Color32(0, 180, 235, byte.MaxValue);
 
         public static PlayerControl currentTarget;
 
