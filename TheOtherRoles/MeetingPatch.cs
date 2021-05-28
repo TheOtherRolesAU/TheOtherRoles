@@ -277,13 +277,15 @@ namespace TheOtherRoles
             int i = 0;
             var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
             var textTemplate = __instance.playerStates[0].NameText;
-            foreach (RoleId roleId in System.Enum.GetValues(typeof(RoleId))) {
+            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Hunter) continue; // Not guessable roles
+
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 int row = i/4, col = i%4;
                 button.transform.localPosition = new Vector3(-3 + 1.83f * col, 1.5f - 0.4f * row, -5);
                 button.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
-                label.text = System.Enum.GetName(typeof(RoleId), roleId);
+                label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
                 label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
                 label.transform.localScale *= 2;
