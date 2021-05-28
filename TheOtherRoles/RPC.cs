@@ -30,7 +30,7 @@ namespace TheOtherRoles
         Morphling,
         Camouflager,
         Hacker,
-        Child,
+        Mini,
         Tracker,
         Vampire,
         Snitch,
@@ -182,8 +182,8 @@ namespace TheOtherRoles
                     case RoleId.Hacker:
                         Hacker.hacker = player;
                         break;
-                    case RoleId.Child:
-                        Child.child = player;
+                    case RoleId.Mini:
+                        Mini.mini = player;
                         break;
                     case RoleId.Tracker:
                         Tracker.tracker = player;
@@ -390,8 +390,8 @@ namespace TheOtherRoles
                 Seer.seer = oldShifter;
             if (Hacker.hacker != null && Hacker.hacker == player)
                 Hacker.hacker = oldShifter;
-            if (Child.child != null && Child.child == player)
-                Child.child = oldShifter;
+            if (Mini.mini != null && Mini.mini == player)
+                Mini.mini = oldShifter;
             if (Tracker.tracker != null && Tracker.tracker == player)
                 Tracker.tracker = oldShifter;
             if (Snitch.snitch != null && Snitch.snitch == player)
@@ -530,7 +530,7 @@ namespace TheOtherRoles
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
             if (player == Hacker.hacker) Hacker.clearAndReload();
-            if (player == Child.child) Child.clearAndReload();
+            if (player == Mini.mini) Mini.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();

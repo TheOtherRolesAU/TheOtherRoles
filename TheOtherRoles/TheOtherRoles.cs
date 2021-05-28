@@ -37,7 +37,7 @@ namespace TheOtherRoles
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
-            Child.clearAndReload();
+            Mini.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
@@ -485,20 +485,20 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Child {
-        public static PlayerControl child;
+    public static class Mini {
+        public static PlayerControl mini;
         public static Color color = Color.white;
         public const float defaultColliderRadius = 0.2233912f;
             public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
-        public static bool triggerChildLose = false;
+        public static bool triggerMiniLose = false;
 
         public static void clearAndReload() {
-            child = null;
-            triggerChildLose = false;
-            growingUpDuration = CustomOptionHolder.childGrowingUpDuration.getFloat();
+            mini = null;
+            triggerMiniLose = false;
+            growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 

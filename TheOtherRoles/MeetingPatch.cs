@@ -429,10 +429,10 @@ namespace TheOtherRoles
             {
                 // Reset custom button timers where necessary
                 CustomButton.MeetingEndedUpdate();
-                // Child set adapted cooldown
-                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
-                    var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                    Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+                // Mini set adapted cooldown
+                if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor) {
+                    var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+                    Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
                 }
 
                 // Seer spawn souls

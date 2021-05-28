@@ -10,11 +10,11 @@ Roles in development:
     - Spy: As a morphed Morphling keeps his Red name, the other Impostor can see that he's not a Spy
 
 High priority:
-    - Child and Spy solution
+    - Mini and Spy solution
     - Reintroduce the BountyHunter role, as it was somehow requested multiple times during the last few days
     - Jackal promotion trigger should work on Jackal DC (same for Mafioso)
     - RoleDescription (ImportantTaskText) updates should not be called from FixedUpdate
-    - Jester/Bounty Hunter/Child: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
+    - Jester/Bounty Hunter/Mini: Check which use multiple RPC calls. Either do all checks locally or send only one RPC call (Watch out for the RPC call being sent to late and hence another "wrong" win condition ending the game)
 
 Medium priority:
     - Host/Client Skip/Tie message
