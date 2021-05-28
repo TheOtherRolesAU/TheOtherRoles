@@ -181,12 +181,12 @@ namespace TheOtherRoles
                 "Hack to find the Impostors",
                 RoleId.Hacker));
             }
-            if (Child.child != null && p == Child.child) { 
-                infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Child" : "Good Child",
-                p.Data.IsImpostor ? Palette.ImpostorRed : Child.color,
+            if (Mini.mini != null && p == Mini.mini) { 
+                infos.Add(new RoleInfo(p.Data.IsImpostor ? "Bad Mini" : "Good Mini",
+                p.Data.IsImpostor ? Palette.ImpostorRed : Mini.color,
                 "No one will harm you until you grow up",
                 "No one will harm you",
-                RoleId.Child));
+                RoleId.Mini));
             }
             if (Tracker.tracker != null && p == Tracker.tracker) {
                 infos.Add(new RoleInfo("Tracker",

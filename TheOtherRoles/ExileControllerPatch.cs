@@ -64,57 +64,65 @@ namespace TheOtherRoles {
         }
     }
 
-
     [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
-    class ExileControllerOnDestroyPatch {
-        static void Prefix(UnityEngine.Object obj)
-        {
-            if (ExileController.Instance != null && obj == ExileController.Instance.gameObject)
-            {
-                // Reset custom button timers where necessary
-                CustomButton.MeetingEndedUpdate();
-                // Child set adapted cooldown
-                if (Child.child != null && PlayerControl.LocalPlayer == Child.child && Child.child.Data.IsImpostor) {
-                    var multiplier = Child.isGrownUp() ? 0.66f : 2f;
-                    Child.child.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
-                }
+    class ExileControllerDestroyPatch {
+        static void Prefix(UnityEngine.Object obj) {
+            if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
+            var exiled = ExileController.Instance.exiled;
 
-                // Seer spawn souls
-                if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
-                    foreach (Vector3 pos in Seer.deadBodyPositions) {
-                        GameObject soul = new GameObject();
-                        soul.transform.position = pos;
-                        soul.layer = 5;
-                        var rend = soul.AddComponent<SpriteRenderer>();
-                        rend.sprite = Seer.getSoulSprite();
-                        
-                        if(Seer.limitSoulDuration) {
-                            HudManager.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) => {
-                                if (rend != null) {
-                                    var tmp = rend.color;
-                                    tmp.a = Mathf.Clamp01(1 - p);
-                                    rend.color = tmp;
-                                }    
-                                if (p == 1f && rend != null && rend.gameObject != null) UnityEngine.Object.Destroy(rend.gameObject);
-                            })));
-                        }
+            // Mini exile lose condition
+            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.IsImpostor) {
+                Mini.triggerMiniLose = true;
+            }
+            // Jester win condition
+            else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
+                Jester.triggerJesterWin = true;
+            } 
+
+            // Reset custom button timers where necessary
+            CustomButton.MeetingEndedUpdate();
+
+            // Mini set adapted cooldown
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor) {
+                var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+                Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
+            }
+
+            // Seer spawn souls
+            if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
+                foreach (Vector3 pos in Seer.deadBodyPositions) {
+                    GameObject soul = new GameObject();
+                    soul.transform.position = pos;
+                    soul.layer = 5;
+                    var rend = soul.AddComponent<SpriteRenderer>();
+                    rend.sprite = Seer.getSoulSprite();
+                    
+                    if(Seer.limitSoulDuration) {
+                        HudManager.Instance.StartCoroutine(Effects.Lerp(Seer.soulDuration, new Action<float>((p) => {
+                            if (rend != null) {
+                                var tmp = rend.color;
+                                tmp.a = Mathf.Clamp01(1 - p);
+                                rend.color = tmp;
+                            }    
+                            if (p == 1f && rend != null && rend.gameObject != null) UnityEngine.Object.Destroy(rend.gameObject);
+                        })));
                     }
-                    Seer.deadBodyPositions = new List<Vector3>();
                 }
+                Seer.deadBodyPositions = new List<Vector3>();
+            }
 
-                // Arsonist deactivate dead poolable players
-                if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
-                    int visibleCounter = 0;
-                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                    bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                        if (!Arsonist.dousedIcons.ContainsKey(p.PlayerId)) continue;
-                        if (p.Data.IsDead || p.Data.Disconnected) {
-                            Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(false);
-                        } else {
-                            Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
-                            visibleCounter++;
-                        }                        
+            // Arsonist deactivate dead poolable players
+            if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
+                int visibleCounter = 0;
+                Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
+                bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    if (!Arsonist.dousedIcons.ContainsKey(p.PlayerId)) continue;
+                    if (p.Data.IsDead || p.Data.Disconnected) {
+                        Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(false);
+                    } else {
+                        Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        visibleCounter++;
                     }
                 }
             }

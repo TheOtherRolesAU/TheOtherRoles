@@ -141,13 +141,13 @@ namespace TheOtherRoles
                 data.maxImpostorRoles -= 3;
             }
 
-            // Assign Child
-            if (rnd.Next(1, 101) <= CustomOptionHolder.childSpawnRate.getSelection() * 10) {
+            // Assign Mini
+            if (rnd.Next(1, 101) <= CustomOptionHolder.miniSpawnRate.getSelection() * 10) {
                 if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
-                    setRoleToRandomPlayer((byte)RoleId.Child, data.impostors); 
+                    setRoleToRandomPlayer((byte)RoleId.Mini, data.impostors); 
                     data.maxImpostorRoles--;
                 } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                    setRoleToRandomPlayer((byte)RoleId.Child, data.crewmates);
+                    setRoleToRandomPlayer((byte)RoleId.Mini, data.crewmates);
                     data.maxCrewmateRoles--;
                 }
             }
