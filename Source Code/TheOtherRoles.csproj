@@ -4,10 +4,11 @@
         <Version>2.6.6</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
+        <AmongUsEpic>C:\Program Files\Epic Games\AmongUs</AmongUsEpic>
     </PropertyGroup>
 
     <PropertyGroup>
-        <GameVersion>2021.5.10s</GameVersion>
+        <GameVersion>2021.5.25.2e</GameVersion>
         <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
@@ -19,12 +20,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/core/*.dll"/>
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll"/>
+        <Reference Include="$(AmongUsEpic)/BepInEx/core/*.dll"/>
+        <Reference Include="$(AmongUsEpic)/BepInEx/unhollowed/*.dll"/>
     </ItemGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsEpic)/BepInEx/plugins/" />
     </Target>
 </Project>

@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnhollowerBaseLib;
 
 namespace TheOtherRoles
 {
@@ -20,7 +19,7 @@ Button design by <color=#FCCE03FF>Bavari</color></size>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>EndOfFile</color>
-Balanced with <color=#FCCE03FF>Dhalucard</color> Design by <color=#FCCE03FF>Bavari</color>";
+Balanced with <color=#FCCE03FF>Dhalucard</color> | Design by <color=#FCCE03FF>Bavari</color>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
