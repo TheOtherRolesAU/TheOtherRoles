@@ -26,6 +26,8 @@ namespace TheOtherRoles
         private static void assignRoles() {
             var data = getRoleAssignmentData();
             assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
+            if (Mini.mini != null) // Remove Spy from assigns, if Mini exists
+                data.crewSettings.Remove((byte)RoleId.Spy);
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
         }
