@@ -344,6 +344,14 @@ namespace TheOtherRoles
             container.transform.localScale *= 0.75f;
         }
 
+        [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
+        class PlayerVoteAreaSelectPatch {
+            static bool Prefix(MeetingHud __instance) {
+                return !(PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Guesser.guesser && guesserUI != null);
+            }
+        }
+
+
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Add Swapper Buttons
             if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead) {
