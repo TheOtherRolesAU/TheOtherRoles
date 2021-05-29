@@ -591,7 +591,7 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 ### **Team: Impostors**
 The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
 If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
-Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
+Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.\
 The Warlock can still perform normal kills, but the two buttons share the same cooldown.
 
 \
@@ -611,11 +611,14 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 ## Guesser
 ### **Team: Crewmates or Impostors**
 The Guesser can be a Crewmate or an Impostor (depending on the settings).\
-The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.
-Only one person can be shot per meeting and you can set a maximum number of shots.
+The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
+Only one person can be shot per meeting and you can set a maximum number of shots.\
+The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
+You can only shoot during the voting time.
 
 \
 **NOTE:**
+- The vote of a shot player, won't be counted
 - You can't guess the role **Nice Mini** for obvious reasons
 - You can't guess the role **Lover**, you'll have to guess the primary role of one of the Lovers, to kill both of them
 - Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out

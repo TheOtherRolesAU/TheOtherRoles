@@ -657,6 +657,16 @@ namespace TheOtherRoles
             target.Exiled();
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            if (MeetingHud.Instance) {
+                foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
+                    if (pva.TargetPlayerId == playerId) {
+                        pva.SetDead(playerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                        pva.Overlay.gameObject.SetActive(true);
+			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
+                    }
+                }
+                if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
+            }
         }
     }
 
