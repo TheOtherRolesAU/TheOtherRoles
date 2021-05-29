@@ -929,8 +929,15 @@ namespace TheOtherRoles
     public static class Guesser {
         public static PlayerControl guesser;
         public static Color color = new Color(25f/255f, 63f/255f, 69f/255f, 1f);
-        
+        private static Sprite targetSprite;
+
         public static int numberOfShots = 2;
+
+        public static Sprite getTargetSprite() {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
+            return targetSprite;
+        }
 
         public static void clearAndReload() {
             guesser = null;

@@ -334,7 +334,7 @@ namespace TheOtherRoles
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
                     SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();
-                    renderer.sprite = Swapper.getCheckSprite();
+                    renderer.sprite = Guesser.getTargetSprite();
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
