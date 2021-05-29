@@ -269,7 +269,7 @@ namespace TheOtherRoles
             }
         }
 
-        static void hunterOnClick(int buttonTarget, MeetingHud __instance) {
+        static void guesserOnClick(int buttonTarget, MeetingHud __instance) {
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("Background"), __instance.transform);
             container.transform.localPosition = new Vector3(0, 0, -5f);
@@ -278,7 +278,7 @@ namespace TheOtherRoles
             var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
             var textTemplate = __instance.playerStates[0].NameText;
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Hunter) continue; // Not guessable roles
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser) continue; // Not guessable roles
 
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
@@ -324,11 +324,11 @@ namespace TheOtherRoles
                 }
             }
 
-            // Add Hunter Buttons
-            if (Hunter.hunter != null && PlayerControl.LocalPlayer == Hunter.hunter && !Hunter.hunter.Data.IsDead) {
+            // Add Guesser Buttons
+            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Hunter.hunter.PlayerId) continue;
+                    if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
 
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
@@ -338,7 +338,7 @@ namespace TheOtherRoles
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
-                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => hunterOnClick(copiedIndex, __instance)));
+                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
 

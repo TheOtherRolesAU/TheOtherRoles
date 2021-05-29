@@ -114,8 +114,8 @@ namespace TheOtherRoles
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
             } else if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
-            } else if (Hunter.hunter != null && Hunter.hunter == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Hunter.hunter, Hunter.hunter.Data.IsImpostor ? Palette.ImpostorRed : Hunter.color);
+            } else if (Guesser.guesser != null && Guesser.guesser == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
             }
             
             // No else if here, as a Lover of team Jackal needs the colors

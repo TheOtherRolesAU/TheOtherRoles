@@ -50,9 +50,9 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
 
-        public static CustomOption hunterSpawnRate;
-        public static CustomOption hunterIsImpHunterRate;
-        public static CustomOption hunterNumberOfShots;
+        public static CustomOption guesserSpawnRate;
+        public static CustomOption guesserIsImpGuesserRate;
+        public static CustomOption guesserNumberOfShots;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
@@ -219,9 +219,9 @@ namespace TheOtherRoles {
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
 
-            hunterSpawnRate = CustomOption.Create(310, cs(Hunter.color, "Hunter"), rates, null, true);
-            hunterIsImpHunterRate = CustomOption.Create(311, "Chance That The Hunter Is An Impostor", rates, hunterSpawnRate);
-            hunterNumberOfShots = CustomOption.Create(312, "Number Of Shots", 2f, 1f, 15f, 1f, hunterSpawnRate);
+            guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
+            guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
+            guesserNumberOfShots = CustomOption.Create(312, "Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);

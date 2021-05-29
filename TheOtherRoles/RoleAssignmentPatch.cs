@@ -152,13 +152,13 @@ namespace TheOtherRoles
                 }
             }
 
-            // Assign Hunter
-            if (rnd.Next(1, 101) <= CustomOptionHolder.hunterSpawnRate.getSelection() * 10) {
-                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.hunterIsImpHunterRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Hunter, data.impostors); 
+            // Assign Guesser
+            if (rnd.Next(1, 101) <= CustomOptionHolder.guesserSpawnRate.getSelection() * 10) {
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.impostors); 
                     data.maxImpostorRoles--;
                 } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                    setRoleToRandomPlayer((byte)RoleId.Hunter, data.crewmates);
+                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.crewmates);
                     data.maxCrewmateRoles--;
                 }
             }

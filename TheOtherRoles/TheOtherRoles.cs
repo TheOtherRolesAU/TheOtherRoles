@@ -50,7 +50,7 @@ namespace TheOtherRoles
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
-            Hunter.clearAndReload();
+            Guesser.clearAndReload();
         }
 
         public static class Jester {
@@ -926,16 +926,16 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Hunter {
-        public static PlayerControl hunter;
+    public static class Guesser {
+        public static PlayerControl guesser;
         public static Color color = new Color(25f/255f, 63f/255f, 69f/255f, 1f);
         
         public static int numberOfShots = 2;
 
         public static void clearAndReload() {
-            hunter = null;
+            guesser = null;
             
-            numberOfShots = Mathf.RoundToInt(CustomOptionHolder.hunterNumberOfShots.getFloat());
+            numberOfShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
         }
     }
 }

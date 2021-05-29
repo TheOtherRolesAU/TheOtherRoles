@@ -43,7 +43,7 @@ namespace TheOtherRoles
         Warlock,
         SecurityGuard,
         Arsonist,
-        Hunter,
+        Guesser,
         Crewmate,
         Impostor
     }
@@ -222,8 +222,8 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
-                    case RoleId.Hunter:
-                        Hunter.hunter = player;
+                    case RoleId.Guesser:
+                        Guesser.guesser = player;
                         break;
                     }
                 }
@@ -402,8 +402,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Hunter.hunter != null && Hunter.hunter == player)
-                Hunter.hunter = oldShifter;
+            if (Guesser.guesser != null && Guesser.guesser == player)
+                Guesser.guesser = oldShifter;
             
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
@@ -554,7 +554,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
-            if (player == Hunter.hunter) Hunter.clearAndReload();
+            if (player == Guesser.guesser) Guesser.clearAndReload();
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
