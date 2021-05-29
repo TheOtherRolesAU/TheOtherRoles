@@ -269,10 +269,13 @@ namespace TheOtherRoles
             }
         }
 
+        private static GameObject guesserUI;
         static void guesserOnClick(int buttonTarget, MeetingHud __instance) {
-            if (__instance.state == MeetingHud.VoteStates.Results) return;
+            if (guesserUI != null || !(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted)) return;
+
             Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("Background"), __instance.transform);
             container.transform.localPosition = new Vector3(0, 0, -5f);
+            guesserUI = container.gameObject;
 
             int i = 0;
             var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
@@ -320,7 +323,7 @@ namespace TheOtherRoles
                 confirm.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
                 confirm.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                     PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                    if (target == null || Guesser.remainingShots <= 0) return;
+                    if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
 
                     var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                     if (mainRoleInfo == null) return;
