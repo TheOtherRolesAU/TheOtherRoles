@@ -656,6 +656,7 @@ namespace TheOtherRoles
             if (target == null) return;
             target.Exiled();
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
         }
     }
 
