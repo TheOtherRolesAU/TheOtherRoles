@@ -667,6 +667,8 @@ namespace TheOtherRoles
                 }
                 if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
             }
+            if (HudManager.Instance != null && Guesser.guesser != null && PlayerControl.LocalPlayer == target)
+                HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
         }
     }
 
