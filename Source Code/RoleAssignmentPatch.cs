@@ -13,6 +13,8 @@ namespace TheOtherRoles
     class SetInfectedPatch
     {
 
+        private static bool childSpawned = false;
+
         public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
@@ -24,6 +26,7 @@ namespace TheOtherRoles
         }
 
         private static void assignRoles() {
+            childSpawned = false;
             var data = getRoleAssignmentData();
             assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
@@ -150,6 +153,7 @@ namespace TheOtherRoles
                     setRoleToRandomPlayer((byte)RoleId.Child, data.crewmates);
                     data.maxCrewmateRoles--;
                 }
+                childSpawned = true;
             }
         }
 
@@ -159,6 +163,9 @@ namespace TheOtherRoles
             List<byte> ensuredNeutralRoles = data.neutralSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
             List<byte> ensuredImpostorRoles = data.impSettings.Where(x => x.Value == 10).Select(x => x.Key).ToList();
 
+            // Remove the Spy if a Child was spawn
+            if (childSpawned) ensuredCrewmateRoles.RemoveAll(x => x == (byte)RoleId.Spy);
+            
             // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
             while (
                 (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && ensuredImpostorRoles.Count > 0) || 
@@ -211,6 +218,9 @@ namespace TheOtherRoles
             List<byte> neutralTickets = data.neutralSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
             List<byte> impostorTickets = data.impSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
 
+            // Remove the Spy if a Child was spawn
+            if (childSpawned) crewmateTickets.RemoveAll(x => x == (byte)RoleId.Spy);
+            
             // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
             while (
                 (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) || 
