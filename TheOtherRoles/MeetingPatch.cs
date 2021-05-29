@@ -290,7 +290,7 @@ namespace TheOtherRoles
             List<Transform> confirmButtons = new List<Transform>();
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser) continue; // Not guessable roles
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.goodMini) continue; // Not guessable roles
 
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
                 Transform confirm = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, button);
@@ -336,7 +336,6 @@ namespace TheOtherRoles
                     __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                 }));
 
-
                 i++;
             }
             container.transform.localScale *= 0.75f;
@@ -377,7 +376,7 @@ namespace TheOtherRoles
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
 
-                    GameObject template = playerVoteArea.Buttons.transform.Find("ConfirmButton").gameObject;
+                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.name = "ShootButton";
                     targetBox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
