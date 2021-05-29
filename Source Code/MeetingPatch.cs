@@ -363,6 +363,7 @@ namespace TheOtherRoles
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
+                __instance.TitleText.text = "<color=#ff351f>The Other Roles</color>";
             }
         }
     }
