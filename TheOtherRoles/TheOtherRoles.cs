@@ -912,7 +912,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             arsonist = null;
             currentTarget = null;
-            douseTarget = null;
+            douseTarget = null; 
             triggerArsonistWin = false;
             dousedPlayers = new List<PlayerControl>();
             foreach (PoolablePlayer p in dousedIcons.Values) {
@@ -928,10 +928,10 @@ namespace TheOtherRoles
 
     public static class Guesser {
         public static PlayerControl guesser;
-        public static Color color = new Color(25f/255f, 63f/255f, 69f/255f, 1f);
+        public static Color color = new Color32(255, 255, 0, byte.MaxValue);
         private static Sprite targetSprite;
 
-        public static int numberOfShots = 2;
+        public static int remainingShots = 2;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -942,7 +942,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             guesser = null;
             
-            numberOfShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+            remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
         }
     }
 }

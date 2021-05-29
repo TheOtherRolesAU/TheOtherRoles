@@ -276,19 +276,65 @@ namespace TheOtherRoles
 
             int i = 0;
             var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
+            var smallButtonTemplate = __instance.playerStates[0].Buttons.transform.Find("CancelButton");
             var textTemplate = __instance.playerStates[0].NameText;
+
+
+            Transform exitButton = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, container);
+            exitButton.transform.localPosition = new Vector3(2.5f, 2.25f, -5);
+            exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
+            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                UnityEngine.Object.Destroy(container.gameObject);
+            }));
+
+            List<Transform> confirmButtons = new List<Transform>();
+
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser) continue; // Not guessable roles
 
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
+                Transform confirm = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, button);
+                confirmButtons.Add(confirm);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 int row = i/4, col = i%4;
-                button.transform.localPosition = new Vector3(-3 + 1.83f * col, 1.5f - 0.4f * row, -5);
-                button.transform.localScale = new Vector3(0.4f, 0.4f, 1f);
+                button.localPosition = new Vector3(-3 + 1.83f * col, 1.5f - 0.4f * row, -5);
+                button.localScale = new Vector3(0.4f, 0.4f, 1f);
+                confirm.localScale = new Vector3(1.5f, 1.5f, 1f);
+                confirm.localPosition = new Vector3(0, 0, confirm.localPosition.z);
+                confirm.GetComponent<SpriteRenderer>().sprite = Guesser.getTargetSprite();
+                confirm.GetComponent<SpriteRenderer>().color = Color.black;
+                confirm.gameObject.SetActive(false);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
                 label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
                 label.transform.localScale *= 2;
+                int copiedIndex = i;
+
+                button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
+                button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    confirmButtons.ForEach(x => x.gameObject.SetActive(false));
+                    confirm.gameObject.SetActive(true);
+                }));
+
+
+                confirm.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
+                confirm.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
+                    if (target == null || Guesser.remainingShots <= 0) return;
+
+                    var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
+                    if (mainRoleInfo == null) return;
+
+                    target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.guesserShoot(target.PlayerId);
+
+                    UnityEngine.Object.Destroy(container.gameObject);
+                }));
+
 
                 i++;
             }
@@ -330,7 +376,7 @@ namespace TheOtherRoles
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
 
-                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
+                    GameObject template = playerVoteArea.Buttons.transform.Find("ConfirmButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
                     SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();

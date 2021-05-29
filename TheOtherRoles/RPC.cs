@@ -91,7 +91,8 @@ namespace TheOtherRoles
         WarlockCurseKill,
         PlaceCamera,
         SealVent,
-        ArsonistWin
+        ArsonistWin,
+        GuesserShoot
     }
 
     public static class RPCProcedure {
@@ -649,6 +650,13 @@ namespace TheOtherRoles
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
         }
+
+        public static void guesserShoot(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            target.Exiled();
+            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -802,6 +810,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();
+                    break;
+                case (byte)CustomRPC.GuesserShoot:
+                    RPCProcedure.guesserShoot(reader.ReadByte());
                     break;
             }
         }
