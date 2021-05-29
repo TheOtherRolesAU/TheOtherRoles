@@ -96,7 +96,7 @@ namespace TheOtherRoles
                     int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
                     GameData.PlayerInfo exiled = null;
                     foreach (GameData.PlayerInfo pi in GameData.Instance.AllPlayers) {
-                        if (pi.PlayerId == maxIdx) {
+                        if (pi.PlayerId == maxIdx && !pi.IsDead) {
                             exiled = pi;
                             break;
                         }
