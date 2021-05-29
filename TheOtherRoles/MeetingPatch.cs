@@ -293,7 +293,7 @@ namespace TheOtherRoles
             List<Transform> confirmButtons = new List<Transform>();
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.goodMini) continue; // Not guessable roles
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
 
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
                 Transform confirm = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, button);
