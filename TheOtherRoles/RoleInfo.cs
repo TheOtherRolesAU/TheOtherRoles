@@ -103,7 +103,7 @@ namespace TheOtherRoles
             if (p == null) return infos;
 
             // Special roles
-            if (p == Jester.jester) infos.Add(godfather);
+            if (p == Jester.jester) infos.Add(jester);
             if (p == Mayor.mayor) infos.Add(mayor);
             if (p == Engineer.engineer) infos.Add(engineer);
             if (p == Sheriff.sheriff) infos.Add(sheriff);
