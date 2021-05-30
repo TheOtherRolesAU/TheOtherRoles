@@ -72,7 +72,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - We changed the colors of some of our roles
 - We renamed the Child to Mini
 - Fixed a bug where a Jester win was triggered, when the partner of a Jester Lover was voted out
-- Fixed a bug where a Child lose was triggered, when the partner of a Crew Child Lover was voted out
+- Fixed a bug where a Mini lose was triggered, when the partner of a Crew Mini Lover was voted out
 
 **Version 2.6.6**
 - Fixed a bug introduced in v2.6.5 that caused all player to be able to use vents when the new option for spy was enabled
@@ -379,7 +379,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Of Remaining Tasks**
-- **Dleks:** You are now able to select the Dleks map. 
+- **Dleks:** You are now able to select the Dleks map.
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 
