@@ -4,6 +4,7 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Linq;
 using System.Net;
 using System.IO;
@@ -19,7 +20,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "2.6.6";
+        public const string VersionString = "2.6.7";
         public static System.Version Version = System.Version.Parse(VersionString);
 
         public Harmony Harmony { get; } = new Harmony(Id);
@@ -39,7 +40,6 @@ namespace TheOtherRoles
         public static ConfigEntry<ushort> Port { get; set; }
 
         public static IRegionInfo[] defaultRegions;
-
         public static void UpdateRegions() {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = defaultRegions;

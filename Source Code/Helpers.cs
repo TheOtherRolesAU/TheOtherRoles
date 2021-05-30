@@ -109,8 +109,8 @@ namespace TheOtherRoles {
 
                 return false;
             }
-            // Block impostor not fully grown child kill
-            else if (Child.child != null && target == Child.child && !Child.isGrownUp()) {
+            // Block impostor not fully grown mini kill
+            else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
                 return false;
             }
             // Block Time Master with time shield kill
