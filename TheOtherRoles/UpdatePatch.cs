@@ -130,7 +130,7 @@ namespace TheOtherRoles
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
-            // Crewmate roles with no changes: Child
+            // Crewmate roles with no changes: Mini
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock and Mafioso
         }
 
@@ -249,23 +249,23 @@ namespace TheOtherRoles
             }
         }
 
-        public static void childUpdate() {
-            if (Child.child == null || Camouflager.camouflageTimer > 0f) return;
+        public static void miniUpdate() {
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
                 
-            float growingProgress = Child.growingProgress();
+            float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
             string suffix = "";
             if (growingProgress != 1f)
                 suffix = " <color=#FAD934FF>(" + Mathf.FloorToInt(growingProgress * 18) + ")</color>"; 
 
-            Child.child.nameText.text += suffix;
+            Mini.mini.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                    if (player.NameText != null && Child.child.PlayerId == player.TargetPlayerId)
+                    if (player.NameText != null && Mini.mini.PlayerId == player.TargetPlayerId)
                         player.NameText.text += suffix;
             }
 
-            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+            if (Morphling.morphling != null && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f)
                 Morphling.morphling.nameText.text += suffix;
         }
 
@@ -333,8 +333,8 @@ namespace TheOtherRoles
             timerUpdate();
             // Camouflager and Morphling
             camouflageAndMorphActions();
-            // Child
-            childUpdate();
+            // Mini
+            miniUpdate();
             // Snitch
             snitchUpdate();
         }
