@@ -50,6 +50,7 @@ namespace TheOtherRoles
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
+            Guesser.clearAndReload();
         }
 
         public static class Jester {
@@ -911,7 +912,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             arsonist = null;
             currentTarget = null;
-            douseTarget = null;
+            douseTarget = null; 
             triggerArsonistWin = false;
             dousedPlayers = new List<PlayerControl>();
             foreach (PoolablePlayer p in dousedIcons.Values) {
@@ -922,6 +923,26 @@ namespace TheOtherRoles
             dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsonistCooldown.getFloat();
             duration = CustomOptionHolder.arsonistDuration.getFloat();
+        }
+    }
+
+    public static class Guesser {
+        public static PlayerControl guesser;
+        public static Color color = new Color32(255, 255, 0, byte.MaxValue);
+        private static Sprite targetSprite;
+
+        public static int remainingShots = 2;
+
+        public static Sprite getTargetSprite() {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
+            return targetSprite;
+        }
+
+        public static void clearAndReload() {
+            guesser = null;
+            
+            remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
         }
     }
 }

@@ -153,6 +153,17 @@ namespace TheOtherRoles
                     data.maxCrewmateRoles--;
                 }
             }
+
+            // Assign Guesser
+            if (rnd.Next(1, 101) <= CustomOptionHolder.guesserSpawnRate.getSelection() * 10) {
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.impostors); 
+                    data.maxImpostorRoles--;
+                } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
+                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.crewmates);
+                    data.maxCrewmateRoles--;
+                }
+            }
         }
 
         private static void assignEnsuredRoles(RoleAssignmentData data) {

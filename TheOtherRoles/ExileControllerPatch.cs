@@ -11,10 +11,9 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles {
     [HarmonyPatch(typeof(ExileController), "Begin")]
-    class ExileBeginPatch {
+    class ExileControllerBeginPatch {
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
             // Shifter shift
             if (Shifter.shifter != null && AmongUsClient.Instance.AmHost && Shifter.futureShift != null) { // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
@@ -64,7 +63,6 @@ namespace TheOtherRoles
             MapOptions.ventsToSeal = new List<Vent>();
         }
     }
-
 
     [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
     class ExileControllerDestroyPatch {
@@ -125,7 +123,7 @@ namespace TheOtherRoles
                     } else {
                         Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
-                    }                        
+                    }
                 }
             }
         }

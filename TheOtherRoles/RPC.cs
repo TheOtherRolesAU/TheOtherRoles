@@ -43,6 +43,7 @@ namespace TheOtherRoles
         Warlock,
         SecurityGuard,
         Arsonist,
+        Guesser,
         Crewmate,
         Impostor
     }
@@ -90,7 +91,8 @@ namespace TheOtherRoles
         WarlockCurseKill,
         PlaceCamera,
         SealVent,
-        ArsonistWin
+        ArsonistWin,
+        GuesserShoot
     }
 
     public static class RPCProcedure {
@@ -220,6 +222,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
+                        break;
+                    case RoleId.Guesser:
+                        Guesser.guesser = player;
                         break;
                     }
                 }
@@ -374,8 +379,6 @@ namespace TheOtherRoles
             else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
 
             // Shift role
-            if (Jester.jester != null && Jester.jester == player)
-                Jester.jester = oldShifter;
             if (Mayor.mayor != null && Mayor.mayor == player)
                 Mayor.mayor = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
@@ -406,8 +409,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Arsonist.arsonist != null && Arsonist.arsonist == player)
-                Arsonist.arsonist = oldShifter;
+            if (Guesser.guesser != null && Guesser.guesser == player)
+                Guesser.guesser = oldShifter;
             
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
@@ -558,6 +561,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
+            if (player == Guesser.guesser) Guesser.clearAndReload();
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -651,6 +655,26 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
+        }
+
+        public static void guesserShoot(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            target.Exiled();
+            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            if (MeetingHud.Instance) {
+                foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
+                    if (pva.TargetPlayerId == playerId) {
+                        pva.SetDead(playerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                        pva.Overlay.gameObject.SetActive(true);
+			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
+                    }
+                }
+                if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
+            }
+            if (HudManager.Instance != null && Guesser.guesser != null && PlayerControl.LocalPlayer == target)
+                HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
         }
     }
 
@@ -815,6 +839,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();
+                    break;
+                case (byte)CustomRPC.GuesserShoot:
+                    RPCProcedure.guesserShoot(reader.ReadByte());
                     break;
             }
         }

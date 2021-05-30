@@ -10,7 +10,7 @@ Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral |
 |----------|-------------|-----------------|
-| [Bad Mini](#mini) | [Mini](#mini) | [Arsonist](#arsonist) |
+| [Evil Mini](#mini) | [Nice Mini](#mini) | [Arsonist](#arsonist) |
 | [Camouflager](#camouflager) | [Detective](#detective) | [Jester](#jester) |
 | [Cleaner](#cleaner) | [Engineer](#engineer) | [Jackal](#jackal) |
 | [Eraser](#eraser) | [Hacker](#hacker) | [Sidekick](#sidekick) |
@@ -22,6 +22,7 @@ Even more roles are coming soon :)
 | [Trickster](#trickster) | [Seer](#seer) |  |
 | [Vampire](#vampire) | [Sheriff](#sheriff) |  |
 | [Warlock](#warlock) | [Shifter](#shifter) |  |
+| [Evil Guesser](#guesser) | [Nice Guesser](#guesser) |  |
 |  | [Snitch](#snitch) |  |
 |  | [Spy](#spy) |  |
 |  | [Swapper](#swapper) |  |
@@ -67,10 +68,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.6.7**
+- **New Role:** [Guesser](#guesser)
 - We changed the colors of some of our roles
 - We renamed the Child to Mini
 - Fixed a bug where a Jester win was triggered, when the partner of a Jester Lover was voted out
-- Fixed a bug where a Child lose was triggered, when the partner of a Crew Child Lover was voted out
+- Fixed a bug where a Mini lose was triggered, when the partner of a Crew Mini Lover was voted out
 
 **Version 2.6.6**
 - Fixed a bug introduced in v2.6.5 that caused all player to be able to use vents when the new option for spy was enabled
@@ -377,7 +379,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Of Remaining Tasks**
-- **Dleks:** You are now able to select the Dleks map. 
+- **Dleks:** You are now able to select the Dleks map.
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 
@@ -589,7 +591,7 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies. \
 ### **Team: Impostors**
 The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
 If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
-Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.
+Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.\
 The Warlock can still perform normal kills, but the two buttons share the same cooldown.
 
 \
@@ -604,6 +606,30 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 | Warlock Spawn Chance | -
 | Warlock Cooldown | Cooldown for using the Curse and curse Kill
 | Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
+-----------------------
+
+## Guesser
+### **Team: Crewmates or Impostors**
+The Guesser can be a Crewmate or an Impostor (depending on the settings).\
+The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
+Only one person can be shot per meeting and you can set a maximum number of shots.\
+The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
+You can only shoot during the voting time.
+
+\
+**NOTE:**
+- The vote of a shot player, won't be counted
+- You can't guess the role **Nice Mini** for obvious reasons
+- You can't guess the role **Lover**, you'll have to guess the primary role of one of the Lovers, to kill both of them
+- Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Guesser Spawn Chance | -
+| Chance That The Guesser Is An Impostor | -
+| Guesser Number Of Shots | -
+
 -----------------------
 
 ## Lovers
