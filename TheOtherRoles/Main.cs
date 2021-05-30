@@ -4,6 +4,7 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Linq;
 using System.Net;
 using System.IO;
@@ -39,7 +40,6 @@ namespace TheOtherRoles
         public static ConfigEntry<ushort> Port { get; set; }
 
         public static IRegionInfo[] defaultRegions;
-
         public static void UpdateRegions() {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = defaultRegions;
