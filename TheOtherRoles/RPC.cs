@@ -235,8 +235,14 @@ namespace TheOtherRoles
             if (player != null) player.SetColor(colorId);
         }
 
-        public static void versionHandshake(int major, int minor, int build, int clientId) {
-            GameStartManagerPatch.playerVersions[clientId] = new System.Version(major, minor, build);
+        public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
+            System.Version ver;
+            if (revision < 0) 
+                ver = new System.Version(major, minor, build);
+            else 
+                ver = new System.Version(major, minor, build, revision);
+
+            GameStartManagerPatch.playerVersions[clientId] = new GameStartManagerPatch.PlayerVersion(ver, guid);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -709,7 +715,17 @@ namespace TheOtherRoles
                     byte minor = reader.ReadByte();
                     byte patch = reader.ReadByte();
                     int versionOwnerId = reader.ReadPackedInt32();
-                    RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
+                    byte revision = 0xFF;
+                    Guid guid;
+                    if (reader.Length >= 24) {
+                        revision = reader.ReadByte();
+                        // GUID
+                        byte[] gbytes = reader.ReadBytes(16);
+                        guid = new Guid(gbytes);
+                    } else {
+                        guid = new Guid(new byte[16]);
+                    }
+                    RPCProcedure.versionHandshake(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
                     int ventId = reader.ReadPackedInt32();
