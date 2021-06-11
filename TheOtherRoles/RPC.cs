@@ -364,21 +364,20 @@ namespace TheOtherRoles
                 return;
             }
 
-            /*
-            // Switch shield
-            if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded = oldShifter;
-            } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded = player;
+            if (Shifter.shiftModifiers) {
+                // Switch shield
+                if (Medic.shielded != null && Medic.shielded == player) {
+                    Medic.shielded = oldShifter;
+                } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
+                    Medic.shielded = player;
+                }
+                // Shift Lovers Role
+                if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
+                else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
+
+                if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
+                else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
             }
-
-            // Shift Lovers Role
-            if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
-            else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
-
-            if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
-            else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
-            */
 
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)

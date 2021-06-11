@@ -269,6 +269,7 @@ namespace TheOtherRoles
 
         public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
+        public static bool shiftModifiers = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -281,6 +282,7 @@ namespace TheOtherRoles
             shifter = null;
             currentTarget = null;
             futureShift = null;
+            shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
         }
     }
 

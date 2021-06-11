@@ -75,6 +75,7 @@ namespace TheOtherRoles {
         public static CustomOption jackalAndSidekickHaveImpostorVision;
 
         public static CustomOption shifterSpawnRate;
+        public static CustomOption shifterShiftsModifiers;
 
         public static CustomOption mayorSpawnRate;
 
@@ -244,6 +245,7 @@ namespace TheOtherRoles {
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
+            shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
 
