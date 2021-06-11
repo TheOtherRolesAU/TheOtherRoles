@@ -364,6 +364,7 @@ namespace TheOtherRoles
                 return;
             }
 
+            /*
             // Switch shield
             if (Medic.shielded != null && Medic.shielded == player) {
                 Medic.shielded = oldShifter;
@@ -377,6 +378,7 @@ namespace TheOtherRoles
 
             if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
             else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
+            */
 
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
