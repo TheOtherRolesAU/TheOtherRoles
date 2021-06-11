@@ -39,6 +39,8 @@ namespace TheOtherRoles
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
 
+        public static Sprite ModStamp;
+
         public static IRegionInfo[] defaultRegions;
         public static void UpdateRegions() {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
@@ -77,6 +79,10 @@ namespace TheOtherRoles
             CustomColors.Load();
 
             Harmony.PatchAll();
+        }
+        public static Sprite GetModStamp() {
+            if (ModStamp) return ModStamp;
+            return ModStamp = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ModStamp.png", 150f);
         }
     }
 
