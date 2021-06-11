@@ -880,6 +880,7 @@ can only use them, if the previous player did not used them before)
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
+| Shifter Shifts Modifiers | Sets if Lovers and/or Medic Shield will be shifted
 -----------------------
 
 ## Time Master
