@@ -24,21 +24,18 @@ namespace TheOtherRoles
         class MeetingCalculateVotesPatch {
             private static byte[] calculateVotes(MeetingHud __instance) {
                 byte[] array = new byte[16];
-                for (int i = 0; i < __instance.playerStates.Length; i++)
-                {
+                for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.didVote)
-                    {
+                    if (playerVoteArea.didVote) { //  !playerVoteArea.isDead
+                        PlayerControl player = Helpers.playerById((byte)playerVoteArea.TargetPlayerId);
+                        if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected)
+                            continue;
                         int num = (int)(playerVoteArea.votedFor + 1);
-                        if (num >= 0 && num < array.Length)
-                        {
-                            byte[] array2 = array;
-                            int num2 = num;
-                            // Mayor count vote twice
+                        if (num >= 0 && num < array.Length) {
                             if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
-                                array2[num2] += 2;
+                                array[num] += 2; // Mayor count vote twice
                             else
-                                array2[num2] += 1;
+                                array[num] += 1;
                         }
                     }
                 }

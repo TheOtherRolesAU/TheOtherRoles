@@ -48,14 +48,14 @@ namespace TheOtherRoles {
                     nextButton.gameObject.name = "1" + i;
                     TMPro.TMP_Text text = nextButton.gameObject.GetComponentInChildren<TMPro.TMP_Text>();
                     text.text = "1" + i;
-                    text.color = Helpers.isCustomServer() ? Color.white : Palette.DisabledGrey;
+                    bool isCustom = true; // Helpers.isCustomServer(); // official supports 15 players now
+                    text.color = isCustom ? Color.white : Palette.DisabledGrey;
 
                     nextButton.transform.position = nextButton.transform.position + new Vector3(i * (maxPlayerButtons[1].transform.position.x - maxPlayerButtons[0].transform.position.x), 0, 0);
                     var passiveButton = nextButton.GetComponent<PassiveButton>();
                     passiveButton.OnClick.RemoveAllListeners();
 
                     void onClick() {
-                        bool isCustom = Helpers.isCustomServer();
                         foreach (SpriteRenderer renderer in additionalButtons) {
                             if (renderer != null && renderer.gameObject != null) {
                                 renderer.enabled = false;
@@ -140,7 +140,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdCheckColor))]
     public static class PlayerControlCmdCheckColorPatch {
         public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)]byte bodyColor) {
-            if (!Helpers.isCustomServer() || Palette.PlayerColors.Count >= PlayerControl.AllPlayerControls.Count) 
+            if (!Helpers.isCustomServer() || CustomColors.pickableColors >= PlayerControl.AllPlayerControls.Count) 
                 return true;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetUncheckedColor, Hazel.SendOption.Reliable, -1);
@@ -155,7 +155,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.UpdateAvailableColors))]
     public static class PlayerTabUpdateAvailableColorsPatch {
         public static bool Prefix(PlayerTab __instance) {
-            if (!Helpers.isCustomServer() || Palette.PlayerColors.Count >= PlayerControl.AllPlayerControls.Count) 
+            if (!Helpers.isCustomServer() || CustomColors.pickableColors >= PlayerControl.AllPlayerControls.Count) 
                 return true;
 
             PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.Data.ColorId, __instance.DemoImage);

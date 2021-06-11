@@ -500,26 +500,23 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
                         Jackal.fakeSidekick = player;
-                        return;
+                    } else {
+                        player.RemoveInfected();
+                        erasePlayerRoles(player.PlayerId, true);
+                        Sidekick.sidekick = player;
                     }
-                    player.RemoveInfected();
-                    erasePlayerRoles(player.PlayerId, true);
-                    
-                    Sidekick.sidekick = player;
+                    Jackal.canCreateSidekick = false;
                     return;
                 }
             }
         }
 
         public static void sidekickPromotes() {
-            var player = Sidekick.sidekick;
             Jackal.removeCurrentJackal();
-            Jackal.jackal = player;
-            if (Jackal.jackalPromotedFromSidekickCanCreateSidekick == false) {
-                Jackal.canCreateSidekick = false;
-            }
+            Jackal.jackal = Sidekick.sidekick;
+            Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
             Sidekick.clearAndReload();
             return;
         }
@@ -572,13 +569,19 @@ namespace TheOtherRoles
                     Jackal.clearAndReload();
                 }
             }
-            if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+            if (player == Sidekick.sidekick) 
+                Sidekick.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
-            if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
-            if (player != null) Eraser.futureErased.Add(player);
+            if (Eraser.futureErased == null) 
+                Eraser.futureErased = new List<PlayerControl>();
+            if (player != null) {
+                if (player == Jackal.jackal || player == Sidekick.sidekick)
+                    return; // prevent Eraser erasing Sidekick / Jackal
+                Eraser.futureErased.Add(player);
+            }
         }
 
         public static void setFutureShifted(byte playerId) {
@@ -717,7 +720,7 @@ namespace TheOtherRoles
                     int versionOwnerId = reader.ReadPackedInt32();
                     byte revision = 0xFF;
                     Guid guid;
-                    if (reader.Length >= 24) {
+                    if (reader.Length - reader.Position >= 17) { // enough bytes left to read
                         revision = reader.ReadByte();
                         // GUID
                         byte[] gbytes = reader.ReadBytes(16);
