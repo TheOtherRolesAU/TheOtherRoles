@@ -578,8 +578,6 @@ namespace TheOtherRoles
             if (Eraser.futureErased == null) 
                 Eraser.futureErased = new List<PlayerControl>();
             if (player != null) {
-                if (player == Jackal.jackal || player == Sidekick.sidekick)
-                    return; // prevent Eraser erasing Sidekick / Jackal
                 Eraser.futureErased.Add(player);
             }
         }
@@ -664,20 +662,26 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
+            PlayerControl partner = target.getPartner(); // Lover check
+            byte partnerId = partner != null ? partner.PlayerId : playerId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
-                    if (pva.TargetPlayerId == playerId) {
-                        pva.SetDead(playerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                    if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                        pva.SetDead(pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
                         pva.Overlay.gameObject.SetActive(true);
 			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
                     }
                 }
-                if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
+                if (AmongUsClient.Instance.AmHost) 
+                    MeetingHud.Instance.CheckForEndVoting();
             }
-            if (HudManager.Instance != null && Guesser.guesser != null && PlayerControl.LocalPlayer == target)
-                HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+            if (HudManager.Instance != null && Guesser.guesser != null)
+                if (PlayerControl.LocalPlayer == target) 
+                    HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+                else if (partner != null && PlayerControl.LocalPlayer == partner) 
+                    HudManager.Instance.KillOverlay.ShowOne(partner.Data, partner.Data);
         }
     }
 

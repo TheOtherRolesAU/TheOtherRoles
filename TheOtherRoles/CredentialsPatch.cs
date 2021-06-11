@@ -46,6 +46,15 @@ Balanced with <color=#FCCE03FF>Dhalucard</color>      Design by <color=#FCCE03FF
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         private static class PingTrackerPatch
         {
+            static void Prefix(PingTracker __instance) {
+                if (!__instance.GetComponentInChildren<SpriteRenderer>()) {
+                    GameObject spriteObject = new GameObject("ModStamp");
+                    spriteObject.AddComponent<SpriteRenderer>().sprite = TheOtherRolesPlugin.GetModStamp();//TheOtherRolesPlugin.ModStamp;
+                    spriteObject.transform.parent = __instance.transform;
+                    spriteObject.transform.localPosition = new Vector3(-2f, 0f, -1);
+                    spriteObject.transform.localScale *= 0.7f;
+                }
+            }
             static void Postfix(PingTracker __instance){
                 __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {

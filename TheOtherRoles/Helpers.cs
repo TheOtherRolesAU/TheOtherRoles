@@ -179,6 +179,10 @@ namespace TheOtherRoles {
             return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist);
         }
 
+        public static bool canBeErased(this PlayerControl player) {
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
+        }
+
         public static void clearAllTasks(this PlayerControl player) {
             if (player == null) return;
             for (int i = 0; i < player.myTasks.Count; i++) {

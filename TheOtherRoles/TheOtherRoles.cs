@@ -344,6 +344,16 @@ namespace TheOtherRoles
             notAckedExiledIsLover = false;
             bothDie = CustomOptionHolder.loversBothDie.getBool();
         }
+
+        public static PlayerControl getPartner(this PlayerControl player) {
+            if (player == null)
+                return null;
+            if (lover1 == player)
+                return lover2;
+            if (lover2 == player)
+                return lover1;
+            return null;
+        }
     }
 
     public static class Seer {
