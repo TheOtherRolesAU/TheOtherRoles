@@ -612,12 +612,14 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 ## Bounty Hunter
 ### **Team: Impostors**
 The Bounty Hunter is an Impostor, that continuously get bountys (the targeted player doesn't get notified).\
-If the bounty getting killed, the Bounty Hunter gets a significant lower kill cooldown.\
-Performing a kill to a non-bounty player, will increase the normal kill cooldown.\
+The target of the Bounty Hunter swaps after every meeting and after a configuarble amount of time.\
+If the Bounty Hunter kills his target, his kill cooldown will be a lot less than usual.\
+Killing a player that's not his current target results in an increased kill cooldown.\
+Depending on the options, there'll be an arrow pointing towards the current target.
 
 \
 **NOTE:**
-- The Bounty Hunter target cant be other Impostors or the Spy
+- The target won't be an Impostor or a Spy
 - Killing the target resets the timer and a new target will be selected.
 
 ### Game Options
@@ -626,7 +628,7 @@ Performing a kill to a non-bounty player, will increase the normal kill cooldown
 | Bounty Hunter Spawn Chance | -
 | Duration After Which Bounty Changes | -
 | Cooldown After Killing Bounty | -
-| Bounty Hunter Not Bounty Kill Time Punishment | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
+| Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
 | Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
 | Bounty Hunter Arrow Update Intervall | Sets how often the position is being updated
 -----------------------
