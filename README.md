@@ -67,6 +67,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.7.0**
+- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
+
 **Version 2.6.7**
 - **New Role:** [Guesser](#guesser)
 - We changed the colors of some of our roles
@@ -611,6 +614,9 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 
 ## Bounty Hunter
 ### **Team: Impostors**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
 The Bounty Hunter is an Impostor, that continuously get bountys (the targeted player doesn't get notified).\
 The target of the Bounty Hunter swaps after every meeting and after a configuarble amount of time.\
 If the Bounty Hunter kills his target, his kill cooldown will be a lot less than usual.\
