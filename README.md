@@ -23,7 +23,7 @@ Even more roles are coming soon :)
 | [Vampire](#vampire) | [Sheriff](#sheriff) |  |
 | [Warlock](#warlock) | [Shifter](#shifter) |  |
 | [Evil Guesser](#guesser) | [Nice Guesser](#guesser) |  |
-|  | [Snitch](#snitch) |  |
+| [Bounty Hunter](#bounty-hunter) | [Snitch](#snitch) |  |
 |  | [Spy](#spy) |  |
 |  | [Swapper](#swapper) |  |
 |  | [Time Master](#time-master) |  |
@@ -607,6 +607,30 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 | Warlock Cooldown | Cooldown for using the Curse and curse Kill
 | Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
+
+
+## Bounty Hunter
+### **Team: Impostors**
+The Bounty Hunter is an Impostor, that continuously get bountys (the targeted player doesn't get notified).\
+If the bounty getting killed, the Bounty Hunter gets a significant lower kill cooldown.\
+Performing a kill to a non-bounty player, will increase the normal kill cooldown.\
+
+\
+**NOTE:**
+- The Bounty Hunter target cant be other Impostors or the Spy
+- Killing the target resets the timer and a new target will be selected.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Bounty Hunter Spawn Chance | -
+| Duration After Which Bounty Changes | -
+| Cooldown After Killing Bounty | -
+| Bounty Hunter Not Bounty Kill Time Punishment | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
+| Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
+| Bounty Hunter Arrow Update Intervall | Sets how often the position is being updated
+-----------------------
+
 
 ## Guesser
 ### **Team: Crewmates or Impostors**

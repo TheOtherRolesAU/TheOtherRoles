@@ -769,8 +769,8 @@ namespace TheOtherRoles
                     arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
 
                     foreach (PlayerControl p in Arsonist.dousedPlayers) {
-                        if (Arsonist.dousedIcons.ContainsKey(p.PlayerId)) {
-                            Arsonist.dousedIcons[p.PlayerId].setSemiTransparent(false);
+                        if (MapOptions.playerIcons.ContainsKey(p.PlayerId)) {
+                            MapOptions.playerIcons[p.PlayerId].setSemiTransparent(false);
                         }
                     }
                 }

@@ -73,6 +73,7 @@ namespace TheOtherRoles
             impSettings.Add((byte)RoleId.Trickster, CustomOptionHolder.tricksterSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Cleaner, CustomOptionHolder.cleanerSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Warlock, CustomOptionHolder.warlockSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.BountyHunter, CustomOptionHolder.bountyHunterSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
@@ -129,8 +130,6 @@ namespace TheOtherRoles
                         var crewmatesWithoutFirstLover = data.crewmates.ToList();
                         crewmatesWithoutFirstLover.RemoveAll(p => p.PlayerId == firstLoverId);
                         setRoleToRandomPlayer((byte)RoleId.Lover, crewmatesWithoutFirstLover, 1, false);
-                        System.Console.WriteLine(crewmatesWithoutFirstLover.Count);
-
                     }
                 }
             }
