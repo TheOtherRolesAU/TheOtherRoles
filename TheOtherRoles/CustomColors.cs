@@ -98,7 +98,7 @@ namespace TheOtherRoles {
             colors.Add(new CustomColor { longname = "Wasabi", shortname = "WSBI", 
                                         color = new Color32(112, 143, 46, byte.MaxValue), 
                                         shadow = new Color32(72, 92, 29, byte.MaxValue),
-                                        isLighterColor = true });
+                                        isLighterColor = false });
             colors.Add(new CustomColor { longname = "Hot Pink", shortname = "HTPNK", 
                                         color = new Color32(255, 51, 102, byte.MaxValue), 
                                         shadow = new Color32(232, 0, 58, byte.MaxValue),
@@ -119,12 +119,12 @@ namespace TheOtherRoles {
             colors.Add(new CustomColor { longname = "Teal", shortname = "TEAL", 
                                         color = new Color32(0x25, 0xB8, 0xBF, byte.MaxValue), 
                                         shadow = new Color32(0x12, 0x89, 0x86, byte.MaxValue),
-                                        isLighterColor = true });   
+                                        isLighterColor = false });   
 
             colors.Add(new CustomColor { longname = "Blurple", shortname = "BLURP", 
                                         color = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue), 
                                         shadow = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
-                                        isLighterColor = true });   
+                                        isLighterColor = false });   
 
             colors.Add(new CustomColor { longname = "Sunrise", shortname = "SUN", 
                                         color = new Color32(0xFF, 0xCA, 0x19, byte.MaxValue), 
