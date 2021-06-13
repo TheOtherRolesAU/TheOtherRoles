@@ -50,9 +50,9 @@ Balanced with <color=#FCCE03FF>Dhalucard</color>      Design by <color=#FCCE03FF
                 if (!__instance.GetComponentInChildren<SpriteRenderer>()) {
                     GameObject spriteObject = new GameObject("ModStamp");
                     spriteObject.AddComponent<SpriteRenderer>().sprite = TheOtherRolesPlugin.GetModStamp();//TheOtherRolesPlugin.ModStamp;
-                    spriteObject.transform.parent = __instance.transform;
-                    spriteObject.transform.localPosition = new Vector3(-2f, 0f, -1);
-                    spriteObject.transform.localScale *= 0.7f;
+                    spriteObject.transform.parent = __instance.transform.parent;
+                    spriteObject.transform.position = GameObject.Find("MenuButton").transform.position + Vector3.down * 1.5f;
+                    spriteObject.transform.localScale *= 0.6f;
                 }
             }
             static void Postfix(PingTracker __instance){
