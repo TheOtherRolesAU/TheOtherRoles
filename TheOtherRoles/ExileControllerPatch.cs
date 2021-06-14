@@ -64,12 +64,24 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
-    class ExileControllerDestroyPatch {
-        static void Prefix(UnityEngine.Object obj) {
-            if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
-            var exiled = ExileController.Instance.exiled;
+    [HarmonyPatch]
+    class ExileControllerWrapUpPatch {
 
+        [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
+        class BaseExileControllerPatch {
+            public static void Postfix(ExileController __instance) {
+                WrapUpPostfix(__instance.exiled);
+            }
+        }
+
+        [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
+        class AirshipExileControllerPatch {
+            public static void Postfix(AirshipExileController __instance) {
+                WrapUpPostfix(__instance.exiled);
+            }
+        }
+
+        static void WrapUpPostfix(GameData.PlayerInfo exiled) {
             // Mini exile lose condition
             if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.IsImpostor) {
                 Mini.triggerMiniLose = true;

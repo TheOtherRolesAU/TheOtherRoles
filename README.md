@@ -78,7 +78,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to not be [erasable](#eraser) anymore
 - Fixed a bug where votes would still count after the [Guesser](#guesser) or it's target died
 - Fixed a bug where a [lover partner](#lovers) would not be shown as dead when killed by the [Guesser](#guesser)
-  
+- Fixed a bug on the Airship, where the [Jester](#jester) win was not triggered in some cases
+
 **Version 2.6.7**
 - **New Role:** [Guesser](#guesser)
 - We changed the colors of some of our roles
