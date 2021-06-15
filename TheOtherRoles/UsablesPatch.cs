@@ -284,7 +284,7 @@ namespace TheOtherRoles
     [HarmonyPatch]
     class AdminPanelPatch {
         static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, List<Color>>();
-
+    
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
