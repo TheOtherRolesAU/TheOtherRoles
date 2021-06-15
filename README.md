@@ -1,4 +1,7 @@
 ![eisbison banner](./Images/TOR_logo.png)
+<p align="center">
+This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
+
 [![Discord](./Images/TOR_server.png)](https://discord.gg/77RkMJHWsM)
 ![eisbison infographic](./Images/TOR_roles.jpg)
 
@@ -69,7 +72,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.7.0**
-- Fixed a bug on the Airship, where the Jester win was not triggered in some cases
+- Added more new [colors](#colors)
+- Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
+- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
+- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to not be [erasable](#eraser) anymore
+- Fixed a bug where votes would still count after the [Guesser](#guesser) or it's target died
+- Fixed a bug where a [lover partner](#lovers) would not be shown as dead when killed by the [Guesser](#guesser)
+- Fixed a bug on the Airship, where the [Jester](#jester) win was not triggered in some cases
 
 **Version 2.6.7**
 - **New Role:** [Guesser](#guesser)
@@ -872,6 +881,7 @@ can only use them, if the previous player did not used them before)
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
+| Shifter Shifts Modifiers | Sets if Lovers and/or Medic Shield will be shifted
 -----------------------
 
 ## Time Master

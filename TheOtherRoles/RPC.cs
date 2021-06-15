@@ -364,19 +364,20 @@ namespace TheOtherRoles
                 return;
             }
 
-            // Switch shield
-            if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded = oldShifter;
-            } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded = player;
+            if (Shifter.shiftModifiers) {
+                // Switch shield
+                if (Medic.shielded != null && Medic.shielded == player) {
+                    Medic.shielded = oldShifter;
+                } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
+                    Medic.shielded = player;
+                }
+                // Shift Lovers Role
+                if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
+                else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
+
+                if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
+                else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
             }
-
-            // Shift Lovers Role
-            if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
-            else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
-
-            if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
-            else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
 
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
@@ -500,26 +501,23 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
                         Jackal.fakeSidekick = player;
-                        return;
+                    } else {
+                        player.RemoveInfected();
+                        erasePlayerRoles(player.PlayerId, true);
+                        Sidekick.sidekick = player;
                     }
-                    player.RemoveInfected();
-                    erasePlayerRoles(player.PlayerId, true);
-                    
-                    Sidekick.sidekick = player;
+                    Jackal.canCreateSidekick = false;
                     return;
                 }
             }
         }
 
         public static void sidekickPromotes() {
-            var player = Sidekick.sidekick;
             Jackal.removeCurrentJackal();
-            Jackal.jackal = player;
-            if (Jackal.jackalPromotedFromSidekickCanCreateSidekick == false) {
-                Jackal.canCreateSidekick = false;
-            }
+            Jackal.jackal = Sidekick.sidekick;
+            Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
             Sidekick.clearAndReload();
             return;
         }
@@ -572,13 +570,17 @@ namespace TheOtherRoles
                     Jackal.clearAndReload();
                 }
             }
-            if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+            if (player == Sidekick.sidekick) 
+                Sidekick.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
-            if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
-            if (player != null) Eraser.futureErased.Add(player);
+            if (Eraser.futureErased == null) 
+                Eraser.futureErased = new List<PlayerControl>();
+            if (player != null) {
+                Eraser.futureErased.Add(player);
+            }
         }
 
         public static void setFutureShifted(byte playerId) {
@@ -661,20 +663,26 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
+            PlayerControl partner = target.getPartner(); // Lover check
+            byte partnerId = partner != null ? partner.PlayerId : playerId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
-                    if (pva.TargetPlayerId == playerId) {
-                        pva.SetDead(playerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                    if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                        pva.SetDead(pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
                         pva.Overlay.gameObject.SetActive(true);
 			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
                     }
                 }
-                if (AmongUsClient.Instance.AmHost) MeetingHud.Instance.CheckForEndVoting();
+                if (AmongUsClient.Instance.AmHost) 
+                    MeetingHud.Instance.CheckForEndVoting();
             }
-            if (HudManager.Instance != null && Guesser.guesser != null && PlayerControl.LocalPlayer == target)
-                HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+            if (HudManager.Instance != null && Guesser.guesser != null)
+                if (PlayerControl.LocalPlayer == target) 
+                    HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+                else if (partner != null && PlayerControl.LocalPlayer == partner) 
+                    HudManager.Instance.KillOverlay.ShowOne(partner.Data, partner.Data);
         }
     }
 
@@ -717,7 +725,7 @@ namespace TheOtherRoles
                     int versionOwnerId = reader.ReadPackedInt32();
                     byte revision = 0xFF;
                     Guid guid;
-                    if (reader.Length >= 24) {
+                    if (reader.Length - reader.Position >= 17) { // enough bytes left to read
                         revision = reader.ReadByte();
                         // GUID
                         byte[] gbytes = reader.ReadBytes(16);

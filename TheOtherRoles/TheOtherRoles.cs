@@ -269,6 +269,7 @@ namespace TheOtherRoles
 
         public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
+        public static bool shiftModifiers = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -281,6 +282,7 @@ namespace TheOtherRoles
             shifter = null;
             currentTarget = null;
             futureShift = null;
+            shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
         }
     }
 
@@ -343,6 +345,16 @@ namespace TheOtherRoles
             lover2 = null;
             notAckedExiledIsLover = false;
             bothDie = CustomOptionHolder.loversBothDie.getBool();
+        }
+
+        public static PlayerControl getPartner(this PlayerControl player) {
+            if (player == null)
+                return null;
+            if (lover1 == player)
+                return lover2;
+            if (lover2 == player)
+                return lover1;
+            return null;
         }
     }
 
@@ -610,7 +622,6 @@ namespace TheOtherRoles
         public static PlayerControl jackal;
         public static Color color = new Color32(0, 180, 235, byte.MaxValue);
         public static PlayerControl fakeSidekick;
-
         public static PlayerControl currentTarget;
         public static List<PlayerControl> formerJackals = new List<PlayerControl>();
         
