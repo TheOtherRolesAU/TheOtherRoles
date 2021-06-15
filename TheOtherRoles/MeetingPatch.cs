@@ -135,14 +135,36 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
         class MeetingHudPopulateVotesPatch {
+            
             static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
+                // Swapper swap
+                PlayerVoteArea swapped1 = null;
+                PlayerVoteArea swapped2 = null;
+                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                    if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+                }
+                bool doSwap = swapped1 != null && swapped2 != null;
+                if (doSwap) {
+                    __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
+                }
+
+
                 __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = 0;
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    byte targetPlayerId = playerVoteArea.TargetPlayerId;
+                    // Swapper change playerVoteArea that gets the votes
+                    if (doSwap && playerVoteArea.TargetPlayerId == swapped1.TargetPlayerId) playerVoteArea = swapped2;
+                    if (doSwap && playerVoteArea.TargetPlayerId == swapped2.TargetPlayerId) playerVoteArea = swapped1;
+
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
-                    foreach (MeetingHud.VoterState voterState in states) {
+                    bool mayorFirstVoteDisplayed = false;
+                    for (int j = 0; j < states.Length; j++) {
+                        MeetingHud.VoterState voterState = states[j];
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
                         if (playerById == null) {
                             Debug.LogError(string.Format("Couldn't find player info for voter: {0}", voterState.VoterId));
@@ -151,9 +173,15 @@ namespace TheOtherRoles
                             __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
                             num++;
                         }
-                        else if (voterState.VotedForId == playerVoteArea.TargetPlayerId) {
+                        else if (voterState.VotedForId == targetPlayerId) {
                             __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
                             num2++;
+                        }
+
+                        // Major vote, redo this iteration to place a second vote
+                        if (Mayor.mayor != null && voterState.VoterId == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
+                            mayorFirstVoteDisplayed = true;
+                            j--;    
                         }
                     }
                 }
