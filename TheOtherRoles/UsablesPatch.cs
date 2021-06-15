@@ -232,21 +232,6 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
-    class VitalsMinigameBeginPatch {
-        static void Postfix(VitalsMinigame __instance) {
-
-            if (__instance.vitals.Length > 10) {
-                for (int i = 0; i < __instance.vitals.Length; i++) {
-                    var vitalsPanel = __instance.vitals[i];
-                    var player = GameData.Instance.AllPlayers[i];
-                    vitalsPanel.Text.text = player.PlayerName.Length >= 4 ? player.PlayerName.Substring(0, 4).ToUpper() : player.PlayerName.ToUpper();
-                }
-            }
-        }
-    }
-    
-
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
     class VitalsMinigameUpdatePatch {
 
