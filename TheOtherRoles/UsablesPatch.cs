@@ -258,23 +258,15 @@ namespace TheOtherRoles
                 VitalsPanel vitalsPanel = __instance.vitals[k];
                 GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
 
-                // Crowded scaling
-                float scale = 10f / Mathf.Max(10, __instance.vitals.Length);
-                vitalsPanel.transform.localPosition = new Vector3((float)k * 0.6f * scale + -2.7f, 0.2f, -1f);
-                vitalsPanel.transform.localScale = new Vector3(scale, scale, vitalsPanel.transform.localScale.z);
-
                 // Hacker update
                 if (vitalsPanel.IsDead) {
                     DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.PlayerId)?.FirstOrDefault();
                     if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
                         float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
 
-                        if (showHackerInfo)
-                            vitalsPanel.Text.text = Math.Round(timeSinceDeath / 1000) + "s";
-                        else if (__instance.vitals.Length > 10)
-                            vitalsPanel.Text.text = player.PlayerName.Length >= 4 ? player.PlayerName.Substring(0, 4).ToUpper() : player.PlayerName.ToUpper();
-                        else 
-                            vitalsPanel.Text.text = DestroyableSingleton<TranslationController>.Instance.GetString(Palette.ShortColorNames[(int)player.ColorId], new UnhollowerBaseLib.Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                        if (showHackerInfo) {
+                            // TODO: Add hacker implementation
+                        }
                     }
                 }
 	    	}
@@ -284,7 +276,7 @@ namespace TheOtherRoles
     [HarmonyPatch]
     class AdminPanelPatch {
         static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, List<Color>>();
-    
+
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
             static bool Prefix(MapCountOverlay __instance) {
