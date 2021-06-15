@@ -487,7 +487,7 @@ namespace TheOtherRoles {
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.IsImpostor && p != Spy.spy) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp())) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
