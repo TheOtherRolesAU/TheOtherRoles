@@ -26,11 +26,11 @@ namespace TheOtherRoles
                 byte[] array = new byte[16];
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.didVote) { //  !playerVoteArea.isDead
+                    if (playerVoteArea.DidVote) { //  !playerVoteArea.isDead
                         PlayerControl player = Helpers.playerById((byte)playerVoteArea.TargetPlayerId);
                         if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected)
                             continue;
-                        int num = (int)(playerVoteArea.votedFor + 1);
+                        int num = (int)(playerVoteArea.VotedFor + 1);
                         if (num >= 0 && num < array.Length) {
                             if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
                                 array[num] += 2; // Mayor count vote twice
@@ -80,11 +80,11 @@ namespace TheOtherRoles
             }
 
             static bool Prefix(MeetingHud __instance) {
-                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.isDead || ps.didVote)) {
+                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
                         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                            if (playerVoteArea.votedFor < 0) playerVoteArea.votedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
+                            if (playerVoteArea.VotedFor < 0) playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
                         }
                     }
 
@@ -225,7 +225,7 @@ namespace TheOtherRoles
 
         static void swapperOnClick(int i, MeetingHud __instance) {
             if (__instance.state == MeetingHud.VoteStates.Results) return;
-            if (__instance.playerStates[i].isDead) return;
+            if (__instance.playerStates[i].AmDead) return;
 
             int selectedCount = selections.Where(b => b).Count();
             SpriteRenderer renderer = renderers[i];
@@ -357,7 +357,7 @@ namespace TheOtherRoles
 
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.isDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+                    if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
 
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject checkbox = UnityEngine.Object.Instantiate(template);
@@ -382,7 +382,7 @@ namespace TheOtherRoles
             if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots >= 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.isDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
+                    if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
 
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
@@ -399,7 +399,7 @@ namespace TheOtherRoles
 
             // Change buttons if there are more than 10 players
             if (__instance.playerStates != null && __instance.playerStates.Length > 10) { 
-                PlayerVoteArea[] playerStates = __instance.playerStates.OrderBy((PlayerVoteArea p) => p.isDead ? 50 : 0)
+                PlayerVoteArea[] playerStates = __instance.playerStates.OrderBy((PlayerVoteArea p) => p.AmDead ? 50 : 0)
 						   	       .ThenBy((PlayerVoteArea p) => p.TargetPlayerId)
 						   	       .ToArray<PlayerVoteArea>();
                 for (int i = 0; i < playerStates.Length; i++) {
