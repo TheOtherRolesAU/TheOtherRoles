@@ -670,7 +670,7 @@ namespace TheOtherRoles
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
                     if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
-                        pva.SetDead(pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                        pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
 			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
                     }
