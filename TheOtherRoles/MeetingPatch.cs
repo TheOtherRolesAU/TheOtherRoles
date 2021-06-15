@@ -135,7 +135,7 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
         class MeetingHudPopulateVotesPatch {
-            static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]MeetingHud.VoterState[] states) {
+            static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
                 __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = 0;
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
