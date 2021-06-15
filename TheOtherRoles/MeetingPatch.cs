@@ -396,32 +396,6 @@ namespace TheOtherRoles
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
-
-            // Change buttons if there are more than 10 players
-            if (__instance.playerStates != null && __instance.playerStates.Length > 10) { 
-                PlayerVoteArea[] playerStates = __instance.playerStates.OrderBy((PlayerVoteArea p) => p.AmDead ? 50 : 0)
-						   	       .ThenBy((PlayerVoteArea p) => p.TargetPlayerId)
-						   	       .ToArray<PlayerVoteArea>();
-                for (int i = 0; i < playerStates.Length; i++) {
-                    PlayerVoteArea area = playerStates[i];
-
-                    int row = i/3, col = i%3;
-
-                    // Update scalings
-                    area.Overlay.transform.localScale = area.PlayerButton.transform.localScale = new Vector3(1, 1/scale, 1);
-                    area.NameText.transform.localScale = new Vector3(1/scale, 1/scale, 1);
-                    area.gameObject.transform.localScale = new Vector3(scale, scale, 1);
-                    GameObject megaphoneWrapper = new GameObject();
-                    megaphoneWrapper.transform.SetParent(area.transform);
-                    megaphoneWrapper.transform.localScale = Vector3.one * 1/scale;
-                    area.Megaphone.transform.SetParent(megaphoneWrapper.transform);
-
-                    // Update positions
-                    area.Megaphone.transform.localPosition += Vector3.left * 0.1f;
-                    area.NameText.transform.localPosition += new Vector3(0.25f, 0.043f, 0f);
-                    area.transform.localPosition = new Vector3(-3.63f + 2.43f * col, 1.5f - 0.76f * row, -0.9f - 0.01f * row);
-                }
-            }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
