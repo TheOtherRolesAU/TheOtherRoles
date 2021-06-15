@@ -666,7 +666,6 @@ namespace TheOtherRoles
                     if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
                         pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
-			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
                     }
                 }
                 if (AmongUsClient.Instance.AmHost) 

@@ -157,10 +157,8 @@ namespace TheOtherRoles
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     byte targetPlayerId = playerVoteArea.TargetPlayerId;
                     // Swapper change playerVoteArea that gets the votes
-                    System.Console.WriteLine(playerVoteArea.TargetPlayerId);
                     if (doSwap && playerVoteArea.TargetPlayerId == swapped1.TargetPlayerId) playerVoteArea = swapped2;
                     else if (doSwap && playerVoteArea.TargetPlayerId == swapped2.TargetPlayerId) playerVoteArea = swapped1;
-                    System.Console.WriteLine(playerVoteArea.TargetPlayerId);
 
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
@@ -170,12 +168,11 @@ namespace TheOtherRoles
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
                         if (playerById == null) {
                             Debug.LogError(string.Format("Couldn't find player info for voter: {0}", voterState.VoterId));
-                        }
-                        else if (i == 0 && voterState.SkippedVote) {
+                        } else if (i == 0 && voterState.SkippedVote && !playerById.IsDead) {
                             __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
                             num++;
                         }
-                        else if (voterState.VotedForId == targetPlayerId) {
+                        else if (voterState.VotedForId == targetPlayerId && !playerById.IsDead) {
                             __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
                             num2++;
                         }
@@ -263,61 +260,53 @@ namespace TheOtherRoles
             var smallButtonTemplate = __instance.playerStates[0].Buttons.transform.Find("CancelButton");
             var textTemplate = __instance.playerStates[0].NameText;
 
-
             Transform exitButton = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, container);
-            exitButton.transform.localPosition = new Vector3(2.5f, 2.25f, -5);
+            exitButton.transform.localPosition = new Vector3(2.5f, 2f, -10f);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
             exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
 
-            List<Transform> confirmButtons = new List<Transform>();
+            List<Transform> buttons = new List<Transform>();
+            Transform selectedButton = null;
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
 
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
-                Transform confirm = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, button);
-                confirmButtons.Add(confirm);
+                buttons.Add(button);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 int row = i/4, col = i%4;
-                button.localPosition = new Vector3(-3 + 1.83f * col, 1.5f - 0.4f * row, -5);
-                button.localScale = new Vector3(0.4f, 0.4f, 1f);
-                confirm.localScale = new Vector3(1.5f, 1.5f, 1f);
-                confirm.localPosition = new Vector3(0, 0, confirm.localPosition.z);
-                confirm.GetComponent<SpriteRenderer>().sprite = Guesser.getTargetSprite();
-                confirm.GetComponent<SpriteRenderer>().color = Color.black;
-                confirm.gameObject.SetActive(false);
+                button.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
+                button.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
                 label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
-                label.transform.localScale *= 2;
+                label.transform.localScale *= 1.7f;
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
                 button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    confirmButtons.ForEach(x => x.gameObject.SetActive(false));
-                    confirm.gameObject.SetActive(true);
-                }));
+                    if (selectedButton != button) {
+                        selectedButton = button;
+                        buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
+                    } else {
+                        PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
 
+                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
+                        if (mainRoleInfo == null) return;
 
-                confirm.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                confirm.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                    if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
+                        target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
 
-                    var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
-                    if (mainRoleInfo == null) return;
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.guesserShoot(target.PlayerId);
 
-                    target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
-                    writer.Write(target.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.guesserShoot(target.PlayerId);
-
-                    UnityEngine.Object.Destroy(container.gameObject);
-                    __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+                        UnityEngine.Object.Destroy(container.gameObject);
+                        __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+                    }
                 }));
 
                 i++;
@@ -347,7 +336,7 @@ namespace TheOtherRoles
                     GameObject checkbox = UnityEngine.Object.Instantiate(template);
                     checkbox.transform.SetParent(playerVoteArea.transform);
                     checkbox.transform.position = template.transform.position;
-                    checkbox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
+                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1f);
                     SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
                     renderer.sprite = Swapper.getCheckSprite();
                     renderer.color = Color.red;
@@ -371,7 +360,7 @@ namespace TheOtherRoles
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.name = "ShootButton";
-                    targetBox.transform.localPosition = new Vector3(0f, 0.03f, template.transform.localPosition.z);
+                    targetBox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1f);
                     SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();
                     renderer.sprite = Guesser.getTargetSprite();
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
