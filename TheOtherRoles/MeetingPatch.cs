@@ -117,95 +117,49 @@ namespace TheOtherRoles
             }
         }
 
-        // [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
-        // class MeetingPopulateVotesPatch {
-        //     static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]Il2CppStructArray<byte> states)
-        //     {
-        //         // Swapper swap votes
-        //         PlayerVoteArea swapped1 = null;
-        //         PlayerVoteArea swapped2 = null;
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
+        class MeetingHudBloopAVoteIconPatch {
+            public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
+                SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
+                if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
+                    PlayerControl.SetPlayerMaterialColors(voterPlayer.ColorId, spriteRenderer);
+                else
+                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
+                spriteRenderer.transform.SetParent(parent);
+                spriteRenderer.transform.localScale = Vector3.zero;
+                __instance.StartCoroutine(Effects.Bloop((float)index * 0.3f, spriteRenderer.transform, 1f, 0.5f));
+                parent.GetComponent<VoteSpreader>().AddVote(spriteRenderer);
+                return false;
+            }
+        } 
 
-        //         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-        //             if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-        //             if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-        //         }
-
-        //         bool doSwap = swapped1 != null && swapped2 != null;
-        //         float delay = 0f;
-        //         if (doSwap) {
-        //             delay = 2f;
-        //             __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 2f));
-        //             __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 2f));
-        //         }
-
-        //         float votesXOffset = 0f;
-        //         float votesFinalSize = 1f;
-        //         if (__instance.playerStates.Length > 10) {
-        //             votesXOffset = 0.1f;
-        //             votesFinalSize = scale;
-        //         }
-
-        //         // Mayor display vote twice
-        //         __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
-        //         int num = 0;
-        //         for (int i = 0; i < __instance.playerStates.Length; i++)
-        //         {
-        //             PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-        //             playerVoteArea.ClearForResults();
-        //             int num2 = 0;
-        //             bool mayorFirstVoteDisplayed = false;
-
-        //             for (int j = 0; j < __instance.playerStates.Length; j++)
-        //             {
-        //                 PlayerVoteArea playerVoteArea2 = __instance.playerStates[j];
-        //                 byte self = states[(int)playerVoteArea2.TargetPlayerId];
-
-        //                 if (!((self & 128) > 0))
-        //                 {
-        //                     GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById((byte)playerVoteArea2.TargetPlayerId);
-        //                     int votedFor = (int)PlayerVoteArea.GetVotedFor(self);
-        //                     if (votedFor == (int)playerVoteArea.TargetPlayerId)
-        //                     {
-        //                         SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-        //                         if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
-        //                             PlayerControl.SetPlayerMaterialColors((int)playerById.ColorId, spriteRenderer);
-        //                         else
-        //                             PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
-
-        //                         spriteRenderer.transform.SetParent(playerVoteArea.transform);
-        //                         spriteRenderer.transform.localPosition = __instance.CounterOrigin + new Vector3(votesXOffset + __instance.CounterOffsets.x * (float)(num2), 0f, 0f);
-        //                         spriteRenderer.transform.localScale = Vector3.zero;
-        //                         spriteRenderer.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-        //                         __instance.StartCoroutine(Effects.Bloop((float)(num2) * 0.5f + delay, spriteRenderer.transform, votesFinalSize, 0.5f));
-        //                         num2++;
-        //                     }
-        //                     else if (i == 0 && votedFor == -1)
-        //                     {
-        //                         SpriteRenderer spriteRenderer2 = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-        //                         if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
-        //                             PlayerControl.SetPlayerMaterialColors((int)playerById.ColorId, spriteRenderer2);
-        //                         else
-        //                             PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer2);
-        //                         spriteRenderer2.transform.SetParent(__instance.SkippedVoting.transform);
-        //                         spriteRenderer2.transform.localPosition = __instance.CounterOrigin + new Vector3(votesXOffset + __instance.CounterOffsets.x * (float)(num), 0f, 0f);
-        //                         spriteRenderer2.transform.localScale = Vector3.zero;
-        //                         spriteRenderer2.transform.SetParent(playerVoteArea.transform.parent); // Reparent votes so they don't move with their playerVoteArea
-        //                         __instance.StartCoroutine(Effects.Bloop((float)num * 0.5f + delay, spriteRenderer2.transform, votesFinalSize, 0.5f));
-        //                         num++;
-        //                     }
-
-        //                     // Major vote, redo this iteration to place a second vote
-        //                     if (Mayor.mayor != null && playerVoteArea2.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
-        //                         mayorFirstVoteDisplayed = true;
-        //                         j--;    
-        //                     }
-        //                 }
-        //             }
-        //         }
-
-        //         return false;
-        //     }
-        // }
+        [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
+        class MeetingHudPopulateVotesPatch {
+            static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]MeetingHud.VoterState[] states) {
+                __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                int num = 0;
+                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    playerVoteArea.ClearForResults();
+                    int num2 = 0;
+                    foreach (MeetingHud.VoterState voterState in states) {
+                        GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
+                        if (playerById == null) {
+                            Debug.LogError(string.Format("Couldn't find player info for voter: {0}", voterState.VoterId));
+                        }
+                        else if (i == 0 && voterState.SkippedVote) {
+                            __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
+                            num++;
+                        }
+                        else if (voterState.VotedForId == playerVoteArea.TargetPlayerId) {
+                            __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
+                            num2++;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
         class MeetingHudVotingCompletedPatch {
