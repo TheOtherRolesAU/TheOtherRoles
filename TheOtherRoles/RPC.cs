@@ -56,7 +56,6 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
-        SetUncheckedColor,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
@@ -228,11 +227,6 @@ namespace TheOtherRoles
                         break;
                     }
                 }
-        }
-
-        public static void setUncheckedColor(byte colorId, byte playerId) {
-            var player = Helpers.playerById(playerId);
-            if (player != null) player.SetColor(colorId);
         }
 
         public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
@@ -712,11 +706,6 @@ namespace TheOtherRoles
                     byte playerId = reader.ReadByte();
                     byte flag = reader.ReadByte();
                     RPCProcedure.setRole(roleId, playerId, flag);
-                    break;
-                case (byte)CustomRPC.SetUncheckedColor:
-                    byte c = reader.ReadByte();
-                    byte p = reader.ReadByte();
-                    RPCProcedure.setUncheckedColor(c, p);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();
