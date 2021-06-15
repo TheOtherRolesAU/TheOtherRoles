@@ -680,9 +680,9 @@ namespace TheOtherRoles
             }
             if (HudManager.Instance != null && Guesser.guesser != null)
                 if (PlayerControl.LocalPlayer == target) 
-                    HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
-                    HudManager.Instance.KillOverlay.ShowOne(partner.Data, partner.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
     }
 
