@@ -30,7 +30,7 @@ namespace TheOtherRoles
         Morphling,
         Camouflager,
         Hacker,
-        Child,
+        Mini,
         Tracker,
         Vampire,
         Snitch,
@@ -43,6 +43,8 @@ namespace TheOtherRoles
         Warlock,
         SecurityGuard,
         Arsonist,
+        Guesser,
+        BountyHunter,
         Crewmate,
         Impostor
     }
@@ -55,11 +57,9 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
-        SetUncheckedColor,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
-        OpenToiletDoor,
         // Role functionality
 
         EngineerFixLights = 81,
@@ -90,7 +90,8 @@ namespace TheOtherRoles
         WarlockCurseKill,
         PlaceCamera,
         SealVent,
-        ArsonistWin
+        ArsonistWin,
+        GuesserShoot
     }
 
     public static class RPCProcedure {
@@ -182,8 +183,8 @@ namespace TheOtherRoles
                     case RoleId.Hacker:
                         Hacker.hacker = player;
                         break;
-                    case RoleId.Child:
-                        Child.child = player;
+                    case RoleId.Mini:
+                        Mini.mini = player;
                         break;
                     case RoleId.Tracker:
                         Tracker.tracker = player;
@@ -221,17 +222,24 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
+                    case RoleId.Guesser:
+                        Guesser.guesser = player;
+                        break;
+                    case RoleId.BountyHunter:
+                        BountyHunter.bountyHunter = player;
+                        break;
                     }
                 }
         }
 
-        public static void setUncheckedColor(byte colorId, byte playerId) {
-            var player = Helpers.playerById(playerId);
-            if (player != null) player.SetColor(colorId);
-        }
+        public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
+            System.Version ver;
+            if (revision < 0) 
+                ver = new System.Version(major, minor, build);
+            else 
+                ver = new System.Version(major, minor, build, revision);
 
-        public static void versionHandshake(int major, int minor, int build, int clientId) {
-            GameStartManagerPatch.playerVersions[clientId] = new System.Version(major, minor, build);
+            GameStartManagerPatch.playerVersions[clientId] = new GameStartManagerPatch.PlayerVersion(ver, guid);
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
@@ -353,23 +361,22 @@ namespace TheOtherRoles
                 return;
             }
 
-            // Switch shield
-            if (Medic.shielded != null && Medic.shielded == player) {
-                Medic.shielded = oldShifter;
-            } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
-                Medic.shielded = player;
+            if (Shifter.shiftModifiers) {
+                // Switch shield
+                if (Medic.shielded != null && Medic.shielded == player) {
+                    Medic.shielded = oldShifter;
+                } else if (Medic.shielded != null && Medic.shielded == oldShifter) {
+                    Medic.shielded = player;
+                }
+                // Shift Lovers Role
+                if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
+                else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
+
+                if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
+                else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
             }
 
-            // Shift Lovers Role
-            if (Lovers.lover1 != null && oldShifter == Lovers.lover1) Lovers.lover1 = player;
-            else if (Lovers.lover1 != null && player == Lovers.lover1) Lovers.lover1 = oldShifter;
-
-            if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
-            else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
-
             // Shift role
-            if (Jester.jester != null && Jester.jester == player)
-                Jester.jester = oldShifter;
             if (Mayor.mayor != null && Mayor.mayor == player)
                 Mayor.mayor = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
@@ -390,8 +397,8 @@ namespace TheOtherRoles
                 Seer.seer = oldShifter;
             if (Hacker.hacker != null && Hacker.hacker == player)
                 Hacker.hacker = oldShifter;
-            if (Child.child != null && Child.child == player)
-                Child.child = oldShifter;
+            if (Mini.mini != null && Mini.mini == player)
+                Mini.mini = oldShifter;
             if (Tracker.tracker != null && Tracker.tracker == player)
                 Tracker.tracker = oldShifter;
             if (Snitch.snitch != null && Snitch.snitch == player)
@@ -400,8 +407,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Arsonist.arsonist != null && Arsonist.arsonist == player)
-                Arsonist.arsonist = oldShifter;
+            if (Guesser.guesser != null && Guesser.guesser == player)
+                Guesser.guesser = oldShifter;
             
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
@@ -491,26 +498,23 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if(!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
                         Jackal.fakeSidekick = player;
-                        return;
+                    } else {
+                        player.RemoveInfected();
+                        erasePlayerRoles(player.PlayerId, true);
+                        Sidekick.sidekick = player;
                     }
-                    player.RemoveInfected();
-                    erasePlayerRoles(player.PlayerId, true);
-                    
-                    Sidekick.sidekick = player;
+                    Jackal.canCreateSidekick = false;
                     return;
                 }
             }
         }
 
         public static void sidekickPromotes() {
-            var player = Sidekick.sidekick;
             Jackal.removeCurrentJackal();
-            Jackal.jackal = player;
-            if (Jackal.jackalPromotedFromSidekickCanCreateSidekick == false) {
-                Jackal.canCreateSidekick = false;
-            }
+            Jackal.jackal = Sidekick.sidekick;
+            Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
             Sidekick.clearAndReload();
             return;
         }
@@ -530,7 +534,7 @@ namespace TheOtherRoles
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
             if (player == Hacker.hacker) Hacker.clearAndReload();
-            if (player == Child.child) Child.clearAndReload();
+            if (player == Mini.mini) Mini.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
@@ -552,6 +556,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
+            if (player == Guesser.guesser) Guesser.clearAndReload();
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -563,12 +568,16 @@ namespace TheOtherRoles
                 }
             }
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+            if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
-            if (Eraser.futureErased == null) Eraser.futureErased = new List<PlayerControl>();
-            if (player != null) Eraser.futureErased.Add(player);
+            if (Eraser.futureErased == null) 
+                Eraser.futureErased = new List<PlayerControl>();
+            if (player != null) {
+                Eraser.futureErased.Add(player);
+            }
         }
 
         public static void setFutureShifted(byte playerId) {
@@ -646,7 +655,32 @@ namespace TheOtherRoles
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
         }
-    }
+
+        public static void guesserShoot(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            target.Exiled();
+            PlayerControl partner = target.getPartner(); // Lover check
+            byte partnerId = partner != null ? partner.PlayerId : playerId;
+            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            if (MeetingHud.Instance) {
+                foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
+                    if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                        pva.SetDead(pva.DidReport, true);
+                        pva.Overlay.gameObject.SetActive(true);
+                    }
+                }
+                if (AmongUsClient.Instance.AmHost) 
+                    MeetingHud.Instance.CheckForEndVoting();
+            }
+            if (HudManager.Instance != null && Guesser.guesser != null)
+                if (PlayerControl.LocalPlayer == target) 
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
+                else if (partner != null && PlayerControl.LocalPlayer == partner) 
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+        }
+    }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class RPCHandlerPatch
@@ -675,17 +709,22 @@ namespace TheOtherRoles
                     byte flag = reader.ReadByte();
                     RPCProcedure.setRole(roleId, playerId, flag);
                     break;
-                case (byte)CustomRPC.SetUncheckedColor:
-                    byte c = reader.ReadByte();
-                    byte p = reader.ReadByte();
-                    RPCProcedure.setUncheckedColor(c, p);
-                    break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();
                     byte minor = reader.ReadByte();
                     byte patch = reader.ReadByte();
                     int versionOwnerId = reader.ReadPackedInt32();
-                    RPCProcedure.versionHandshake(major, minor, patch, versionOwnerId);
+                    byte revision = 0xFF;
+                    Guid guid;
+                    if (reader.Length - reader.Position >= 17) { // enough bytes left to read
+                        revision = reader.ReadByte();
+                        // GUID
+                        byte[] gbytes = reader.ReadBytes(16);
+                        guid = new Guid(gbytes);
+                    } else {
+                        guid = new Guid(new byte[16]);
+                    }
+                    RPCProcedure.versionHandshake(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
                     int ventId = reader.ReadPackedInt32();
@@ -697,14 +736,6 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
-                    break;
-
-                // Fixes
-
-                case (byte)CustomRPC.OpenToiletDoor:
-                    int doorId = reader.ReadInt32();
-                    PlainDoor door = UnityEngine.Object.FindObjectsOfType<PlainDoor>().FirstOrDefault(door => door.Id == doorId);
-                    door.SetDoorway(true);
                     break;
 
                 // Role functionality
@@ -799,6 +830,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();
+                    break;
+                case (byte)CustomRPC.GuesserShoot:
+                    RPCProcedure.guesserShoot(reader.ReadByte());
                     break;
             }
         }

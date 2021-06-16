@@ -4,6 +4,7 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Linq;
 using System.Net;
 using System.IO;
@@ -19,7 +20,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "2.6.5";
+        public const string VersionString = "2.7.0";
         public static System.Version Version = System.Version.Parse(VersionString);
 
         public Harmony Harmony { get; } = new Harmony(Id);
@@ -38,8 +39,9 @@ namespace TheOtherRoles
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
 
-        public static IRegionInfo[] defaultRegions;
+        public static Sprite ModStamp;
 
+        public static IRegionInfo[] defaultRegions;
         public static void UpdateRegions() {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = defaultRegions;
@@ -77,6 +79,10 @@ namespace TheOtherRoles
             CustomColors.Load();
 
             Harmony.PatchAll();
+        }
+        public static Sprite GetModStamp() {
+            if (ModStamp) return ModStamp;
+            return ModStamp = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ModStamp.png", 150f);
         }
     }
 

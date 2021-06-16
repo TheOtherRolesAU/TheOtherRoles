@@ -114,8 +114,10 @@ namespace TheOtherRoles
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
             } else if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
+            } else if (Guesser.guesser != null && Guesser.guesser == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
             }
-            
+
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
                 // Sidekick can see the jackal
@@ -130,8 +132,8 @@ namespace TheOtherRoles
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
-            // Crewmate roles with no changes: Child
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock and Mafioso
+            // Crewmate roles with no changes: Mini
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter and Mafioso
         }
 
         static void setNameTags() {
@@ -249,23 +251,23 @@ namespace TheOtherRoles
             }
         }
 
-        public static void childUpdate() {
-            if (Child.child == null || Camouflager.camouflageTimer > 0f) return;
+        public static void miniUpdate() {
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
                 
-            float growingProgress = Child.growingProgress();
+            float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
             string suffix = "";
             if (growingProgress != 1f)
                 suffix = " <color=#FAD934FF>(" + Mathf.FloorToInt(growingProgress * 18) + ")</color>"; 
 
-            Child.child.nameText.text += suffix;
+            Mini.mini.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                    if (player.NameText != null && Child.child.PlayerId == player.TargetPlayerId)
+                    if (player.NameText != null && Mini.mini.PlayerId == player.TargetPlayerId)
                         player.NameText.text += suffix;
             }
 
-            if (Morphling.morphling != null && Morphling.morphTarget == Child.child && Morphling.morphTimer > 0f)
+            if (Morphling.morphling != null && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f)
                 Morphling.morphling.nameText.text += suffix;
         }
 
@@ -286,37 +288,6 @@ namespace TheOtherRoles
             __instance.KillButton.enabled = enabled;
         }
 
-        static void snitchUpdate() {
-            if (Snitch.localArrows == null) return;
-
-            foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
-
-            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
-
-            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
-            int numberOfTasks = playerTotal - playerCompleted;
-
-            if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors) {
-                if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
-                if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
-                    Snitch.localArrows[0].arrow.SetActive(true);
-                    Snitch.localArrows[0].Update(Snitch.snitch.transform.position);
-                }
-            } else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0) { 
-                int arrowIndex = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (p.Data.IsImpostor && !p.Data.IsDead) {
-                        if (arrowIndex >= Snitch.localArrows.Count) Snitch.localArrows.Add(new Arrow(Color.blue));
-                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
-                            Snitch.localArrows[arrowIndex].arrow.SetActive(true);
-                            Snitch.localArrows[arrowIndex].Update(p.transform.position);
-                        }
-                        arrowIndex++;
-                    }
-                }
-            }
-        }
-
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -333,10 +304,8 @@ namespace TheOtherRoles
             timerUpdate();
             // Camouflager and Morphling
             camouflageAndMorphActions();
-            // Child
-            childUpdate();
-            // Snitch
-            snitchUpdate();
+            // Mini
+            miniUpdate();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TheOtherRoles
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
-            Child.clearAndReload();
+            Mini.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
@@ -50,11 +50,13 @@ namespace TheOtherRoles
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
+            Guesser.clearAndReload();
+            BountyHunter.clearAndReload();
         }
 
         public static class Jester {
             public static PlayerControl jester;
-            public static Color color = new Color(255f / 255f, 84f / 255f, 167f / 255f, 1);
+            public static Color color = new Color32(236, 98, 165, byte.MaxValue);
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
@@ -70,7 +72,7 @@ namespace TheOtherRoles
 
         public static class Mayor {
             public static PlayerControl mayor;
-            public static Color color = new Color(105f / 255f, 58f / 255f, 58f / 255f, 1);
+            public static Color color = new Color32(32, 77, 66, byte.MaxValue);
 
             public static void clearAndReload() {
                 mayor = null;
@@ -79,7 +81,7 @@ namespace TheOtherRoles
 
         public static class Engineer {
             public static PlayerControl engineer;
-            public static Color color = new Color(98f / 255f, 216f / 255f, 240f / 255f, 1);
+            public static Color color = new Color32(0, 40, 245, byte.MaxValue);
             public static bool usedRepair;
             private static Sprite buttonSprite;
 
@@ -135,7 +137,7 @@ namespace TheOtherRoles
 
         public static class Sheriff {
             public static PlayerControl sheriff;
-            public static Color color = new Color(255f / 255f, 204f / 255f, 0f / 255f, 1);
+            public static Color color = new Color32(248, 205, 70, byte.MaxValue);
 
             public static float cooldown = 30f;
             public static bool canKillNeutrals = false;
@@ -154,7 +156,7 @@ namespace TheOtherRoles
 
         public static class Lighter {
             public static PlayerControl lighter;
-            public static Color color = new Color(250f / 255f, 204f / 255f, 37f / 255f, 1);
+            public static Color color = new Color32(238, 229, 190, byte.MaxValue);
             
             public static float lighterModeLightsOnVision = 2f;
             public static float lighterModeLightsOffVision = 0.75f;
@@ -183,7 +185,7 @@ namespace TheOtherRoles
 
         public static class Detective {
             public static PlayerControl detective;
-            public static Color color = new Color(2f / 255f, 61f / 255f, 156f / 255f, 1);
+            public static Color color = new Color32(45, 106, 165, byte.MaxValue);
 
             public static float footprintIntervall = 1f;
             public static float footprintDuration = 1f;
@@ -206,7 +208,7 @@ namespace TheOtherRoles
 
     public static class TimeMaster {
         public static PlayerControl timeMaster;
-        public static Color color = new Color(114f / 255f, 234f / 255f, 247f / 255f, 1);
+        public static Color color = new Color32(112, 142, 239, byte.MaxValue);
 
         public static bool reviveDuringRewind = false;
         public static float rewindTime = 3f;
@@ -236,13 +238,13 @@ namespace TheOtherRoles
     public static class Medic {
         public static PlayerControl medic;
         public static PlayerControl shielded;
-        public static Color color = new Color(0f / 255f, 80f / 255f, 105f / 255f, 1);
+        public static Color color = new Color32(126, 251, 194, byte.MaxValue);
         public static bool usedShield;
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
 
-        public static Color shieldedColor = new Color(0f / 255f, 221f / 255f, 255f / 255f, 1);
+        public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
         public static PlayerControl currentTarget;
 
         private static Sprite buttonSprite;
@@ -257,7 +259,6 @@ namespace TheOtherRoles
             shielded = null;
             currentTarget = null;
             usedShield = false;
-            shieldedColor = new Color(0f / 255f, 221f / 255f, 255f / 255f, 1);
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
         }
@@ -265,10 +266,11 @@ namespace TheOtherRoles
 
     public static class Shifter {
         public static PlayerControl shifter;
-        public static Color color = new Color(90f / 255f, 90f / 255f, 90f / 255f, 1);
+        public static Color color = new Color32(102, 102, 102, byte.MaxValue);
 
         public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
+        public static bool shiftModifiers = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -281,12 +283,13 @@ namespace TheOtherRoles
             shifter = null;
             currentTarget = null;
             futureShift = null;
+            shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
         }
     }
 
     public static class Swapper {
         public static PlayerControl swapper;
-        public static Color color = new Color(240f / 255f, 128f / 255f, 72f / 255f, 1);
+        public static Color color = new Color32(134, 55, 86, byte.MaxValue);
         private static Sprite spriteCheck;
         public static bool canCallEmergency = false;
         public static bool canOnlySwapOthers = false;
@@ -312,7 +315,7 @@ namespace TheOtherRoles
     public static class Lovers {
         public static PlayerControl lover1;
         public static PlayerControl lover2;
-        public static Color color = new Color(252f / 255f, 3f / 255f, 190f / 255f, 1);
+        public static Color color = new Color32(232, 57, 185, byte.MaxValue);
 
         public static bool bothDie = true;
         // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
@@ -344,11 +347,21 @@ namespace TheOtherRoles
             notAckedExiledIsLover = false;
             bothDie = CustomOptionHolder.loversBothDie.getBool();
         }
+
+        public static PlayerControl getPartner(this PlayerControl player) {
+            if (player == null)
+                return null;
+            if (lover1 == player)
+                return lover2;
+            if (lover2 == player)
+                return lover1;
+            return null;
+        }
     }
 
     public static class Seer {
         public static PlayerControl seer;
-        public static Color color = new Color(60f / 255f, 181f / 255f, 100f / 255f, 1);
+        public static Color color = new Color32(97, 178, 108, byte.MaxValue);
         public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static float soulDuration = 15f;
@@ -462,7 +475,7 @@ namespace TheOtherRoles
 
     public static class Hacker {
         public static PlayerControl hacker;
-        public static Color color = new Color(252f / 255f, 90f / 255f, 30f / 255f, 1);
+        public static Color color = new Color32(117, 250, 76, byte.MaxValue);
 
         public static float cooldown = 30f;
         public static float duration = 10f;
@@ -485,20 +498,20 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Child {
-        public static PlayerControl child;
+    public static class Mini {
+        public static PlayerControl mini;
         public static Color color = Color.white;
         public const float defaultColliderRadius = 0.2233912f;
             public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
-        public static bool triggerChildLose = false;
+        public static bool triggerMiniLose = false;
 
         public static void clearAndReload() {
-            child = null;
-            triggerChildLose = false;
-            growingUpDuration = CustomOptionHolder.childGrowingUpDuration.getFloat();
+            mini = null;
+            triggerMiniLose = false;
+            growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
@@ -516,7 +529,7 @@ namespace TheOtherRoles
 
     public static class Tracker {
         public static PlayerControl tracker;
-        public static Color color = new Color(117f / 255f, 209f / 255f, 255f / 255f, 1);
+        public static Color color = new Color32(100, 58, 220, byte.MaxValue);
 
         public static float updateIntervall = 5f;
 
@@ -589,7 +602,7 @@ namespace TheOtherRoles
 
     public static class Snitch {
         public static PlayerControl snitch;
-        public static Color color = new Color(227f / 255f, 251f / 255f, 47f / 255f, 1);
+        public static Color color = new Color32(184, 251, 79, byte.MaxValue);
 
         public static List<Arrow> localArrows = new List<Arrow>();
         public static int taskCountForImpostors = 1;
@@ -608,9 +621,8 @@ namespace TheOtherRoles
 
     public static class Jackal {
         public static PlayerControl jackal;
-        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+        public static Color color = new Color32(0, 180, 235, byte.MaxValue);
         public static PlayerControl fakeSidekick;
-
         public static PlayerControl currentTarget;
         public static List<PlayerControl> formerJackals = new List<PlayerControl>();
         
@@ -656,7 +668,7 @@ namespace TheOtherRoles
 
     public static class Sidekick {
         public static PlayerControl sidekick;
-        public static Color color = new Color(0f / 255f, 180f / 255f, 235f / 255f, 1);
+        public static Color color = new Color32(0, 180, 235, byte.MaxValue);
 
         public static PlayerControl currentTarget;
 
@@ -829,7 +841,7 @@ namespace TheOtherRoles
 
     public static class SecurityGuard {
         public static PlayerControl securityGuard;
-        public static Color color = new Color(171/255f, 159f/255f, 55f/255f, 1f);
+        public static Color color = new Color32(195, 178, 95, byte.MaxValue);
 
         public static float cooldown = 30f;
         public static int remainingScrews = 7;
@@ -880,7 +892,7 @@ namespace TheOtherRoles
 
     public static class Arsonist {
         public static PlayerControl arsonist;
-        public static Color color = new Color(1, 200f/255f, 0, 1f);
+        public static Color color = new Color32(238, 112, 46, byte.MaxValue);
 
         public static float cooldown = 30f;
         public static float duration = 3f;
@@ -889,7 +901,6 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
-        public static Dictionary<byte, PoolablePlayer> dousedIcons = new Dictionary<byte, PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -912,17 +923,73 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             arsonist = null;
             currentTarget = null;
-            douseTarget = null;
+            douseTarget = null; 
             triggerArsonistWin = false;
             dousedPlayers = new List<PlayerControl>();
-            foreach (PoolablePlayer p in dousedIcons.Values) {
-                if (p != null && p.gameObject != null) { 
-                    UnityEngine.Object.Destroy(p.gameObject);
-                }
+            foreach (PoolablePlayer p in MapOptions.playerIcons.Values) {
+                if (p != null && p.gameObject != null) p.gameObject.SetActive(false);
             }
-            dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsonistCooldown.getFloat();
             duration = CustomOptionHolder.arsonistDuration.getFloat();
+        }
+    }
+
+    public static class Guesser {
+        public static PlayerControl guesser;
+        public static Color color = new Color32(255, 255, 0, byte.MaxValue);
+        private static Sprite targetSprite;
+
+        public static int remainingShots = 2;
+
+        public static Sprite getTargetSprite() {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
+            return targetSprite;
+        }
+
+        public static void clearAndReload() {
+            guesser = null;
+            
+            remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+        }
+    }
+
+    public static class BountyHunter {
+        public static PlayerControl bountyHunter;
+        public static Color color = Palette.ImpostorRed;
+
+        public static Arrow arrow;
+        public static float bountyDuration = 30f;
+        public static bool showArrow = true;
+        public static float bountyKillCooldown = 0f;
+        public static float punishmentTime = 15f;
+        public static float arrowUpdateIntervall = 10f;
+
+        public static float arrowUpdateTimer = 0f;
+        public static float bountyUpdateTimer = 0f;
+        public static PlayerControl bounty;
+        public static TMPro.TextMeshPro cooldownText;
+
+        public static void clearAndReload() {
+            arrow = new Arrow(color);
+            bountyHunter = null;
+            bounty = null;
+            arrowUpdateTimer = 0f;
+            bountyUpdateTimer = 0f;
+            if (arrow != null && arrow.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            arrow = null;
+            if (cooldownText != null && cooldownText.gameObject != null) UnityEngine.Object.Destroy(cooldownText.gameObject);
+            cooldownText = null;
+            foreach (PoolablePlayer p in MapOptions.playerIcons.Values) {
+                if (p != null && p.gameObject != null) p.gameObject.SetActive(false);
+            }
+
+
+            bountyDuration = CustomOptionHolder.bountyHunterBountyDuration.getFloat();
+            bountyKillCooldown = CustomOptionHolder.bountyHunterReducedCooldown.getFloat();
+            punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
+            showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
+            arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
         }
     }
 }
