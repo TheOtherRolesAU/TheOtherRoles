@@ -63,13 +63,13 @@ Balanced with <color=#FCCE03FF>Dhalucard</color>      Design by <color=#FCCE03FF
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
                     __instance.text.text = $"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}\n" + __instance.text.text;
                     if (PlayerControl.LocalPlayer.Data.IsDead) {
-                        __instance.transform.localPosition = new Vector3(3.45f, 2.675f, __instance.transform.localPosition.z);
+                        __instance.transform.localPosition = new Vector3(3.45f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                     } else {
-                        __instance.transform.localPosition = new Vector3(4.2f, 2.675f, __instance.transform.localPosition.z);
+                        __instance.transform.localPosition = new Vector3(4.2f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                     }
                 } else {
                     __instance.text.text = $"{fullCredentials}\n{__instance.text.text}";
-                    __instance.transform.localPosition = new Vector3(3.5f, 2.675f, __instance.transform.localPosition.z);
+                    __instance.transform.localPosition = new Vector3(3.5f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                 }
             }
         }
