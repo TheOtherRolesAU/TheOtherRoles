@@ -82,6 +82,7 @@ namespace TheOtherRoles {
         public static CustomOption bountyHunterArrowUpdateIntervall;
 
         public static CustomOption shifterSpawnRate;
+        public static CustomOption shifterShiftsModifiers;
 
         public static CustomOption mayorSpawnRate;
 
@@ -259,6 +260,7 @@ namespace TheOtherRoles {
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
+            shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
 
@@ -331,6 +333,8 @@ namespace TheOtherRoles {
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
+            blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
+            blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
             
         }
     }

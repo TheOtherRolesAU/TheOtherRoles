@@ -1,4 +1,7 @@
 ![eisbison banner](./Images/TOR_logo.png)
+<p align="center">
+This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
+
 [![Discord](./Images/TOR_server.png)](https://discord.gg/77RkMJHWsM)
 ![eisbison infographic](./Images/TOR_roles.jpg)
 
@@ -34,6 +37,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.5.25.2s| v2.7.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.0/TheOtherRoles.zip)
 | 2021.5.25.2s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.6/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.5/TheOtherRoles.zip)
@@ -69,6 +73,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.7.0**
 - **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
+- Added more new [colors](#colors)
+- Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
+- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
+- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to not be [erasable](#eraser) anymore
+- Fixed a bug where votes would still count after the [Guesser](#guesser) or it's target died
+- Fixed a bug where a [lover partner](#lovers) would not be shown as dead when killed by the [Guesser](#guesser)
+- Fixed a bug on the Airship, where the [Jester](#jester) win was not triggered in some cases
 
 **Version 2.6.7**
 - **New Role:** [Guesser](#guesser)
@@ -433,7 +444,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
-![TOR Colors](./Images/TOR_colors.png)
+![TOR Colors](./Images/TOR_colors.jpg)
 
 # Roles
 
@@ -900,6 +911,7 @@ can only use them, if the previous player did not used them before)
 | Name | Description
 |----------|:-------------:|
 | Shifter Spawn Chance | -
+| Shifter Shifts Modifiers | Sets if Lovers and/or Medic Shield will be shifted
 -----------------------
 
 ## Time Master
