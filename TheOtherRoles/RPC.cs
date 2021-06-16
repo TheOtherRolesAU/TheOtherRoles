@@ -60,7 +60,6 @@ namespace TheOtherRoles
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
-        OpenToiletDoor,
         // Role functionality
 
         EngineerFixLights = 81,
@@ -737,14 +736,6 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
-                    break;
-
-                // Fixes
-
-                case (byte)CustomRPC.OpenToiletDoor:
-                    int doorId = reader.ReadInt32();
-                    PlainDoor door = UnityEngine.Object.FindObjectsOfType<PlainDoor>().FirstOrDefault(door => door.Id == doorId);
-                    door.SetDoorway(true);
                     break;
 
                 // Role functionality
