@@ -176,7 +176,11 @@ namespace TheOtherRoles {
         }
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist);
+            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || Jackal.formerJackals.Contains(player));
+        }
+
+        public static bool canBeErased(this PlayerControl player) {
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
         }
 
         public static void clearAllTasks(this PlayerControl player) {
@@ -206,6 +210,24 @@ namespace TheOtherRoles {
         private static byte ToByte(float f) {
             f = Mathf.Clamp01(f);
             return (byte)(f * 255);
+        }
+
+        public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie) {
+            tie = true;
+            KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+            foreach (KeyValuePair<byte, int> keyValuePair in self)
+            {
+                if (keyValuePair.Value > result.Value)
+                {
+                    result = keyValuePair;
+                    tie = false;
+                }
+                else if (keyValuePair.Value == result.Value)
+                {
+                    tie = true;
+                }
+            }
+            return result;
         }
     }
 }

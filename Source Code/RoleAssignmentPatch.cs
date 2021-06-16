@@ -26,8 +26,7 @@ namespace TheOtherRoles
         private static void assignRoles() {
             var data = getRoleAssignmentData();
             assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
-            if (Mini.mini != null) // Remove Spy from assigns, if Mini exists
-                data.crewSettings.Remove((byte)RoleId.Spy);
+            selectFactionForFactionIndependentRoles(data);
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
         }
@@ -73,6 +72,7 @@ namespace TheOtherRoles
             impSettings.Add((byte)RoleId.Trickster, CustomOptionHolder.tricksterSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Cleaner, CustomOptionHolder.cleanerSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Warlock, CustomOptionHolder.warlockSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.BountyHunter, CustomOptionHolder.bountyHunterSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
@@ -140,27 +140,21 @@ namespace TheOtherRoles
                 setRoleToRandomPlayer((byte)RoleId.Mafioso, data.impostors);
                 data.maxImpostorRoles -= 3;
             }
+        }
 
-            // Assign Mini
-            if (rnd.Next(1, 101) <= CustomOptionHolder.miniSpawnRate.getSelection() * 10) {
-                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
-                    setRoleToRandomPlayer((byte)RoleId.Mini, data.impostors); 
-                    data.maxImpostorRoles--;
-                } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                    setRoleToRandomPlayer((byte)RoleId.Mini, data.crewmates);
-                    data.maxCrewmateRoles--;
-                }
+        private static void selectFactionForFactionIndependentRoles(RoleAssignmentData data) {
+            // Assign Mini (33% chance impostor / 67% chance crewmate)
+            if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && rnd.Next(1, 101) <= 33) {
+                data.impSettings.Add((byte)RoleId.Mini, CustomOptionHolder.miniSpawnRate.getSelection());
+            } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
+                data.crewSettings.Add((byte)RoleId.Mini, CustomOptionHolder.miniSpawnRate.getSelection());
             }
 
-            // Assign Guesser
-            if (rnd.Next(1, 101) <= CustomOptionHolder.guesserSpawnRate.getSelection() * 10) {
-                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.impostors); 
-                    data.maxImpostorRoles--;
-                } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                    setRoleToRandomPlayer((byte)RoleId.Guesser, data.crewmates);
-                    data.maxCrewmateRoles--;
-                }
+            // Assign Guesser (chance to be impostor based on setting)
+            if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
+                data.impSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+            } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
+                data.crewSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
             }
         }
 

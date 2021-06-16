@@ -27,7 +27,7 @@ namespace TheOtherRoles {
             // Eraser erase
             if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 foreach (PlayerControl target in Eraser.futureErased) {
-                    if (target != null) {
+                    if (target != null && target.canBeErased()) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ErasePlayerRoles, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -64,12 +64,24 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(UnityEngine.Object) })]
-    class ExileControllerDestroyPatch {
-        static void Prefix(UnityEngine.Object obj) {
-            if (ExileController.Instance == null || obj != ExileController.Instance.gameObject) return;
-            var exiled = ExileController.Instance.exiled;
+    [HarmonyPatch]
+    class ExileControllerWrapUpPatch {
 
+        [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
+        class BaseExileControllerPatch {
+            public static void Postfix(ExileController __instance) {
+                WrapUpPostfix(__instance.exiled);
+            }
+        }
+
+        [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
+        class AirshipExileControllerPatch {
+            public static void Postfix(AirshipExileController __instance) {
+                WrapUpPostfix(__instance.exiled);
+            }
+        }
+
+        static void WrapUpPostfix(GameData.PlayerInfo exiled) {
             // Mini exile lose condition
             if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.IsImpostor) {
                 Mini.triggerMiniLose = true;
@@ -117,15 +129,19 @@ namespace TheOtherRoles {
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                 bottomLeft += new Vector3(-0.25f, -0.25f, 0);
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!Arsonist.dousedIcons.ContainsKey(p.PlayerId)) continue;
+                    if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
-                        Arsonist.dousedIcons[p.PlayerId].gameObject.SetActive(false);
+                        MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
                     } else {
-                        Arsonist.dousedIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
                     }
                 }
             }
+
+            // Force Bounty Hunter Bounty Update
+            if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
+                BountyHunter.bountyUpdateTimer = 0f;
         }
     }
 

@@ -182,9 +182,6 @@ namespace TheOtherRoles {
         public static void setPopupText(string message) {
             if (InfoPopup == null)
                 return;
-            if (InfoPopup.TextArea != null) {
-                InfoPopup.TextArea.Text = message;
-            }
             if (InfoPopup.TextAreaTMP != null) {
                 InfoPopup.TextAreaTMP.text = message;
             }
