@@ -22,62 +22,39 @@ namespace TheOtherRoles
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         class MeetingCalculateVotesPatch {
-            private static byte[] calculateVotes(MeetingHud __instance) {
-                byte[] array = new byte[16];
+            private static Dictionary<byte, int> CalculateVotes(MeetingHud __instance) {
+                Dictionary<byte, int> dictionary = new Dictionary<byte, int>();
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.DidVote) { //  !playerVoteArea.isDead
+                    if (playerVoteArea.VotedFor != 252 && playerVoteArea.VotedFor != 255 && playerVoteArea.VotedFor != 254) {
                         PlayerControl player = Helpers.playerById((byte)playerVoteArea.TargetPlayerId);
-                        if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected)
-                            continue;
-                        int num = (int)(playerVoteArea.VotedFor + 1);
-                        if (num >= 0 && num < array.Length) {
-                            if (Mayor.mayor != null && playerVoteArea.TargetPlayerId == (sbyte)Mayor.mayor.PlayerId)
-                                array[num] += 2; // Mayor count vote twice
-                            else
-                                array[num] += 1;
-                        }
+                        if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected) continue;
+
+                        int currentVotes;
+                        int additionalVotes = (Mayor.mayor != null && Mayor.mayor.PlayerId == playerVoteArea.TargetPlayerId) ? 2 : 1; // Mayor vote
+                        if (dictionary.TryGetValue(playerVoteArea.VotedFor, out currentVotes))
+                            dictionary[playerVoteArea.VotedFor] = currentVotes + additionalVotes;
+                        else
+                            dictionary[playerVoteArea.VotedFor] = additionalVotes;
                     }
                 }
-
                 // Swapper swap votes
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
-
                 foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
 
-                if (swapped1 != null && swapped2 != null && swapped1.TargetPlayerId + 1 >= 0 && swapped1.TargetPlayerId + 1 < array.Length && swapped2.TargetPlayerId + 1 >= 0 && swapped2.TargetPlayerId + 1 < array.Length) {
-                    byte tmp = array[swapped1.TargetPlayerId + 1];
-                    array[swapped1.TargetPlayerId + 1] = array[swapped2.TargetPlayerId + 1];
-                    array[swapped2.TargetPlayerId + 1] = tmp;
+                if (swapped1 != null && swapped2 != null && dictionary.ContainsKey(swapped1.TargetPlayerId) && dictionary.ContainsKey(swapped2.TargetPlayerId)) {
+                    int tmp = dictionary[swapped1.TargetPlayerId];
+                    dictionary[swapped1.TargetPlayerId] = dictionary[swapped2.TargetPlayerId];
+                    dictionary[swapped2.TargetPlayerId] = tmp;
                 }
-                return array;
+
+                return dictionary;
             }
 
-            private static int IndexOfMax(byte[] self, Func<byte, int> comparer, out bool tie) {
-                tie = false;
-                int num = int.MinValue;
-                int result = -1;
-                for (int i = 0; i < self.Length; i++)
-                {
-                    int num2 = comparer(self[i]);
-                    if (num2 > num)
-                    {
-                        result = i;
-                        num = num2;
-                        tie = false;
-                    }
-                    else if (num2 == num)
-                    {
-                        tie = true;
-                        result = -1;
-                    }
-                }
-                return result;
-            }
 
             static bool Prefix(MeetingHud __instance) {
                 if (__instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) {
@@ -88,16 +65,10 @@ namespace TheOtherRoles
                         }
                     }
 
-                    byte[] self = calculateVotes(__instance);
+			        Dictionary<byte, int> self = CalculateVotes(__instance);
                     bool tie;
-                    int maxIdx = IndexOfMax(self, (byte p) => (int)p, out tie) - 1;
-                    GameData.PlayerInfo exiled = null;
-                    foreach (GameData.PlayerInfo pi in GameData.Instance.AllPlayers) {
-                        if (pi.PlayerId == maxIdx && !pi.IsDead) {
-                            exiled = pi;
-                            break;
-                        }
-                    }
+			        KeyValuePair<byte, int> max = self.MaxPair(out tie);
+                    GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -108,7 +79,6 @@ namespace TheOtherRoles
                             VotedForId = playerVoteArea.VotedFor
                         };
                     }
-
 
                     // RPCVotingComplete
                     __instance.RpcVotingComplete(array, exiled, tie);
