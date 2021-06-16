@@ -28,12 +28,12 @@ namespace TheOtherRoles
 
                     if (PlayerControl.LocalPlayer == Arsonist.arsonist && p != Arsonist.arsonist) {
                         player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
-                        player.transform.localScale = Vector3.one * 0.3f;
+                        player.transform.localScale = Vector3.one * 0.2f;
                         player.setSemiTransparent(true);
                         player.gameObject.SetActive(true);
                     } else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter) {
                         player.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0);
-                        player.transform.localScale = Vector3.one * 0.8f;
+                        player.transform.localScale = Vector3.one * 0.4f;
                         player.gameObject.SetActive(false);
                     } else {
                         player.gameObject.SetActive(false);
