@@ -22,13 +22,13 @@ namespace TheOtherRoles {
                                                                     10, 34, 12, 14, 28,
                                                                     22, 29, 11, 26, 2,
                                                                     20, 24, 9, 16, 6 }; */
-        private static readonly List<int> ORDER = new List<int>() { 7, 17, 5, 33, 4, 
+        private static readonly List<int> ORDER = new List<int>() { 7, 14, 5, 33, 4, 
                                                                     30, 0, 19, 27, 3,
-                                                                    13, 25, 18, 15, 23,
+                                                                    17, 25, 18, 13, 23,
                                                                     8, 32, 1, 21, 31,
-                                                                    10, 34, 12, 28, 22,
-                                                                    29, 11, 2, 26, 14,
-                                                                    20, 24, 9, 16, 6 };
+                                                                    10, 34, 15, 28, 22,
+                                                                    29, 11, 2, 26, 16,
+                                                                    20, 24, 9, 12, 6 };
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
             List<Color32> colorlist = Enumerable.ToList<Color32>(Palette.PlayerColors);
@@ -36,31 +36,6 @@ namespace TheOtherRoles {
 
             List<CustomColor> colors = new List<CustomColor>();
 
-            /* New official Colors */
-            colors.Add(new CustomColor { longname = "Gray", // Gray     #8395a5 #475664
-                                        color = new Color32(0x89, 0x95, 0xA5, byte.MaxValue), 
-                                        shadow = new Color32(0x47, 0x56, 0x64, byte.MaxValue),
-                                        isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Coral", // Coral    #ec747a #b44362
-                                        color = new Color32(0xEC, 0x74, 0x7A, byte.MaxValue), 
-                                        shadow = new Color32(0xB4, 0x43, 0x62, byte.MaxValue),
-                                        isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Tan", // Tan      #9f9787 #51403e
-                                        color = new Color32(0x9F, 0x97, 0x87, byte.MaxValue), 
-                                        shadow = new Color32(0x51, 0x40, 0x3E, byte.MaxValue),
-                                        isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Rose",  // Rose     #ffd5ed #de91b2
-                                        color = new Color32(0xFF, 0xD5, 0xED, byte.MaxValue), 
-                                        shadow = new Color32(0xDE, 0x91, 0xB2, byte.MaxValue),
-                                        isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Maroon", // Maroon   #6d2b3d #410f1c
-                                        color = new Color32(0x6D, 0x2B, 0x3D, byte.MaxValue), 
-                                        shadow = new Color32(0x41, 0xF, 0x1C, byte.MaxValue),
-                                        isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Banana", // Banana   #fffdbd #d1bc89
-                                        color = new Color32(0xFF, 0xFD, 0xBD, byte.MaxValue), 
-                                        shadow = new Color32(0xD1, 0xBC, 0x89, byte.MaxValue),
-                                        isLighterColor = true });
             /* Custom Colors */
             colors.Add(new CustomColor { longname = "Salmon",
                                         color = new Color32(239, 191, 192, byte.MaxValue), // color = new Color32(0xD8, 0x82, 0x83, byte.MaxValue),
