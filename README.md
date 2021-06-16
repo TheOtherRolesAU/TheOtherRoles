@@ -11,26 +11,25 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
 Even more roles are coming soon :)
 
-| Impostors | Crewmates | Neutral |
-|----------|-------------|-----------------|
-| [Evil Mini](#mini) | [Nice Mini](#mini) | [Arsonist](#arsonist) |
-| [Camouflager](#camouflager) | [Detective](#detective) | [Jester](#jester) |
-| [Cleaner](#cleaner) | [Engineer](#engineer) | [Jackal](#jackal) |
-| [Eraser](#eraser) | [Hacker](#hacker) | [Sidekick](#sidekick) |
-| [ImpLover](#lovers) | [Lover](#lovers) |  |
-| [Godfather (Mafia)](#mafia) | [Lighter](#lighter) |  |
-| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) |  |
-| [Janitor (Mafia)](#mafia)  | [Medic](#medic) |  |
-| [Morphling](#morphling) | [Security Guard](#security-guard) |  |
-| [Trickster](#trickster) | [Seer](#seer) |  |
-| [Vampire](#vampire) | [Sheriff](#sheriff) |  |
-| [Warlock](#warlock) | [Shifter](#shifter) |  |
-| [Evil Guesser](#guesser) | [Nice Guesser](#guesser) |  |
-| [Bounty Hunter](#bounty-hunter) | [Snitch](#snitch) |  |
-|  | [Spy](#spy) |  |
-|  | [Swapper](#swapper) |  |
-|  | [Time Master](#time-master) |  |
-|  |  [Tracker](#tracker) |  |
+| Impostors | Crewmates | Neutral | Secondary |
+|----------|-------------|-----------------|----------------|
+| [Evil Mini](#mini) | [Nice Mini](#mini) | [Arsonist](#arsonist) | [Lover](#lovers) |
+| [Evil Guesser](#guesser) | [Nice Guesser](#guesser) | [Jester](#jester) |  |
+| [Bounty Hunter](#bounty-hunter) | [Detective](#detective) | [Jackal](#jackal) |  |
+| [Camouflager](#camouflager) | [Engineer](#engineer) | [Sidekick](#sidekick) |  |
+| [Cleaner](#cleaner) | [Hacker](#hacker) |  |  |
+| [Eraser](#eraser) | [Lighter](#lighter) |  |  |
+| [Godfather (Mafia)](#mafia) | [Mayor](#mayor) |  |  |
+| [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
+| [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
+| [Morphling](#morphling) | [Seer](#seer) |  |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) |  |  |
+| [Vampire](#vampire) | [Shifter](#shifter) |  |  |
+| [Warlock](#warlock) | [Snitch](#snitch) |  |  |
+|  | [Spy](#spy) |  |  |
+|  | [Swapper](#swapper) |  |  |
+|  | [Time Master](#time-master) |  |  |
+|  |  [Tracker](#tracker) |  |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
@@ -73,10 +72,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.7.0**
 - **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
-- Added more new [colors](#colors)
+- Added more new [colors](#colors) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
 - Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to not be [erasable](#eraser) anymore
+- Changed [Role Assignment](#role-assignment) slightly to make chances more consistent
 - Fixed a bug where votes would still count after the [Guesser](#guesser) or it's target died
 - Fixed a bug where a [lover partner](#lovers) would not be shown as dead when killed by the [Guesser](#guesser)
 - Fixed a bug on the Airship, where the [Jester](#jester) win was not triggered in some cases
