@@ -191,7 +191,7 @@ namespace TheOtherRoles {
                             continue;
                         ColorChip chip = chips[pos];
                         int row = i / cols, col = i % cols; // Dynamically do the positioning
-                        chip.transform.localPosition = new Vector3(1.39f + (col * 0.485f), -0.34f - (row * 0.49f), chip.transform.localPosition.z);
+                        chip.transform.localPosition = new Vector3(-0.975f + (col * 0.485f), 1.475f - (row * 0.49f), chip.transform.localPosition.z);
                         chip.transform.localScale *= 0.78f;
                     }
                     for (int j = ORDER.Count; j < chips.Length; j++) { // If number isn't in order, hide it
