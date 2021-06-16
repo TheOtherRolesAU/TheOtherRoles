@@ -50,7 +50,9 @@ Balanced with <color=#FCCE03FF>Dhalucard</color>      Design by <color=#FCCE03FF
             static void Prefix(PingTracker __instance) {
                 if (modStamp == null) {
                     modStamp = new GameObject("ModStamp");
-                    modStamp.AddComponent<SpriteRenderer>().sprite = TheOtherRolesPlugin.GetModStamp();//TheOtherRolesPlugin.ModStamp;
+                    var rend = modStamp.AddComponent<SpriteRenderer>();
+                    rend.sprite = TheOtherRolesPlugin.GetModStamp();
+                    rend.color = new Color(1, 1, 1, 0.5f);
                     modStamp.transform.parent = __instance.transform.parent;
                     modStamp.transform.localScale *= 0.6f;
                 }
@@ -87,7 +89,6 @@ Balanced with <color=#FCCE03FF>Dhalucard</color>      Design by <color=#FCCE03FF
                 var torLogo = new GameObject("bannerLogo_TOR");
                 torLogo.transform.position = Vector3.up;
                 var renderer = torLogo.AddComponent<SpriteRenderer>();
-                renderer.color = new Color(1, 1, 1, 0.5f);
                 renderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);                                
             }
         }
