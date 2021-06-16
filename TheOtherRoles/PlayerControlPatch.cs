@@ -356,7 +356,7 @@ namespace TheOtherRoles {
                 TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (meetingInfo == null && playerVoteArea != null) {
                     meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                    meetingInfo.transform.localPosition += Vector3.down * (MeetingHud.Instance.playerStates.Length > 10 ? 0.4f : 0.25f);
+                    meetingInfo.transform.localPosition += Vector3.down * 0.2f;
                     meetingInfo.fontSize *= 0.75f;
                     meetingInfo.gameObject.name = "Info";
                 }
