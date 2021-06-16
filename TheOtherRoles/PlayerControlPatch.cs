@@ -342,21 +342,21 @@ namespace TheOtherRoles {
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
 
-                Transform playerInfoTransform = p.transform.FindChild("Info");
+                Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (playerInfo == null) {
                     playerInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
-                    playerInfo.transform.localPosition += Vector3.up * 0.25f;
+                    playerInfo.transform.localPosition += Vector3.up * 0.5f;
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
                 }
 
                 PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
-                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.transform.FindChild("Info") : null;
+                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
                 TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (meetingInfo == null && playerVoteArea != null) {
                     meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                    meetingInfo.transform.localPosition += Vector3.down * 0.2f;
+                    meetingInfo.transform.localPosition += Vector3.down * 0.20f;
                     meetingInfo.fontSize *= 0.75f;
                     meetingInfo.gameObject.name = "Info";
                 }
