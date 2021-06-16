@@ -26,7 +26,7 @@ Even more roles are coming soon :)
 | [Vampire](#vampire) | [Sheriff](#sheriff) |  |
 | [Warlock](#warlock) | [Shifter](#shifter) |  |
 | [Evil Guesser](#guesser) | [Nice Guesser](#guesser) |  |
-|  | [Snitch](#snitch) |  |
+| [Bounty Hunter](#bounty-hunter) | [Snitch](#snitch) |  |
 |  | [Spy](#spy) |  |
 |  | [Swapper](#swapper) |  |
 |  | [Time Master](#time-master) |  |
@@ -72,6 +72,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.7.0**
+- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
 - Added more new [colors](#colors)
 - Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
@@ -620,6 +621,35 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 | Warlock Cooldown | Cooldown for using the Curse and curse Kill
 | Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
+
+
+## Bounty Hunter
+### **Team: Impostors**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The Bounty Hunter is an Impostor, that continuously get bountys (the targeted player doesn't get notified).\
+The target of the Bounty Hunter swaps after every meeting and after a configuarble amount of time.\
+If the Bounty Hunter kills his target, his kill cooldown will be a lot less than usual.\
+Killing a player that's not his current target results in an increased kill cooldown.\
+Depending on the options, there'll be an arrow pointing towards the current target.
+
+\
+**NOTE:**
+- The target won't be an Impostor or a Spy
+- Killing the target resets the timer and a new target will be selected.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Bounty Hunter Spawn Chance | -
+| Duration After Which Bounty Changes | -
+| Cooldown After Killing Bounty | -
+| Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
+| Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
+| Bounty Hunter Arrow Update Intervall | Sets how often the position is being updated
+-----------------------
+
 
 ## Guesser
 ### **Team: Crewmates or Impostors**
