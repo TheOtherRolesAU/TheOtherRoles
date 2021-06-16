@@ -272,7 +272,6 @@ namespace TheOtherRoles
                                 float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
                                 hackerTexts[k].gameObject.SetActive(true);
                                 hackerTexts[k].text = Math.Round(timeSinceDeath / 1000) + "s";
-                                System.Console.WriteLine("here");
                             }
                         }
                     }
