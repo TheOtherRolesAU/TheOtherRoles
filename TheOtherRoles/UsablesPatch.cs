@@ -232,31 +232,58 @@ namespace TheOtherRoles
         }
     }
 
-    [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
-    class VitalsMinigameUpdatePatch {
+    [HarmonyPatch]
+    class VitalsMinigamePatch {
+        private static List<TMPro.TextMeshPro> hackerTexts = new List<TMPro.TextMeshPro>();
 
-        static void Postfix(VitalsMinigame __instance) {
-            // Hacker show time since death
-            bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
-            for (int k = 0; k < __instance.vitals.Length; k++)
-            {
-                VitalsPanel vitalsPanel = __instance.vitals[k];
-                GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
-
-                // Hacker update
-                if (vitalsPanel.IsDead) {
-                    DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.PlayerId)?.FirstOrDefault();
-                    if (deadPlayer != null && deadPlayer.timeOfDeath != null) {
-                        float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
-
-                        if (showHackerInfo) {
-                            // TODO: Add hacker implementation
-                        }
+        [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+        class VitalsMinigameStartPatch {
+            static void Postfix(VitalsMinigame __instance) {
+                if (Hacker.hacker != null && PlayerControl.LocalPlayer == Hacker.hacker) {
+                    hackerTexts = new List<TMPro.TextMeshPro>();
+                    foreach (VitalsPanel panel in __instance.vitals) {
+                        TMPro.TextMeshPro text = UnityEngine.Object.Instantiate(__instance.SabText, panel.transform);
+                        hackerTexts.Add(text);
+                        UnityEngine.Object.DestroyImmediate(text.GetComponent<AlphaBlink>());
+                        text.gameObject.SetActive(false);
+                        text.transform.localScale = Vector3.one * 0.75f;
+                        text.transform.localPosition = new Vector3(-0.75f, -0.23f, 0f);
+                    
                     }
                 }
-	    	}
+            }
         }
-    }    
+
+        [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
+        class VitalsMinigameUpdatePatch {
+
+            static void Postfix(VitalsMinigame __instance) {
+                // Hacker show time since death
+                
+                if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0) {
+                    for (int k = 0; k < __instance.vitals.Length; k++) {
+                        VitalsPanel vitalsPanel = __instance.vitals[k];
+                        GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
+
+                        // Hacker update
+                        if (vitalsPanel.IsDead) {
+                            DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == player?.PlayerId)?.FirstOrDefault();
+                            if (deadPlayer != null && deadPlayer.timeOfDeath != null && k < hackerTexts.Count && hackerTexts[k] != null) {
+                                float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
+                                hackerTexts[k].gameObject.SetActive(true);
+                                hackerTexts[k].text = Math.Round(timeSinceDeath / 1000) + "s";
+                                System.Console.WriteLine("here");
+                            }
+                        }
+                    }
+                } else {
+                    foreach (TMPro.TextMeshPro text in hackerTexts)
+                        if (text != null && text.gameObject != null)
+                            text.gameObject.SetActive(false);
+                }
+            }
+        }
+    }
 
     [HarmonyPatch]
     class AdminPanelPatch {
