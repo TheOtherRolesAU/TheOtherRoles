@@ -261,7 +261,7 @@ namespace TheOtherRoles
             var textTemplate = __instance.playerStates[0].NameText;
 
             Transform exitButton = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, container);
-            exitButton.transform.localPosition = new Vector3(2.5f, 2f, -10f);
+            exitButton.transform.localPosition = new Vector3(-2.725f, 2.1f, -10f);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
             exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                 UnityEngine.Object.Destroy(container.gameObject);
