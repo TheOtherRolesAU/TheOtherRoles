@@ -44,6 +44,7 @@ namespace TheOtherRoles
         SecurityGuard,
         Arsonist,
         Guesser,
+        BountyHunter,
         Crewmate,
         Impostor
     }
@@ -56,11 +57,9 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
-        SetUncheckedColor,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
-        OpenToiletDoor,
         // Role functionality
 
         EngineerFixLights = 81,
@@ -226,13 +225,11 @@ namespace TheOtherRoles
                     case RoleId.Guesser:
                         Guesser.guesser = player;
                         break;
+                    case RoleId.BountyHunter:
+                        BountyHunter.bountyHunter = player;
+                        break;
                     }
                 }
-        }
-
-        public static void setUncheckedColor(byte colorId, byte playerId) {
-            var player = Helpers.playerById(playerId);
-            if (player != null) player.SetColor(colorId);
         }
 
         public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
@@ -570,8 +567,8 @@ namespace TheOtherRoles
                     Jackal.clearAndReload();
                 }
             }
-            if (player == Sidekick.sidekick) 
-                Sidekick.clearAndReload();
+            if (player == Sidekick.sidekick) Sidekick.clearAndReload();
+            if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -670,9 +667,8 @@ namespace TheOtherRoles
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
                     if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
-                        pva.SetDead(pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId, pva.didReport, true);
+                        pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
-			            pva.Overlay.transform.GetChild(0).gameObject.SetActive(true);
                     }
                 }
                 if (AmongUsClient.Instance.AmHost) 
@@ -680,11 +676,11 @@ namespace TheOtherRoles
             }
             if (HudManager.Instance != null && Guesser.guesser != null)
                 if (PlayerControl.LocalPlayer == target) 
-                    HudManager.Instance.KillOverlay.ShowOne(Guesser.guesser.Data, target.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
-                    HudManager.Instance.KillOverlay.ShowOne(partner.Data, partner.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
-    }
+    }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class RPCHandlerPatch
@@ -713,11 +709,6 @@ namespace TheOtherRoles
                     byte flag = reader.ReadByte();
                     RPCProcedure.setRole(roleId, playerId, flag);
                     break;
-                case (byte)CustomRPC.SetUncheckedColor:
-                    byte c = reader.ReadByte();
-                    byte p = reader.ReadByte();
-                    RPCProcedure.setUncheckedColor(c, p);
-                    break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();
                     byte minor = reader.ReadByte();
@@ -745,14 +736,6 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
-                    break;
-
-                // Fixes
-
-                case (byte)CustomRPC.OpenToiletDoor:
-                    int doorId = reader.ReadInt32();
-                    PlainDoor door = UnityEngine.Object.FindObjectsOfType<PlainDoor>().FirstOrDefault(door => door.Id == doorId);
-                    door.SetDoorway(true);
                     break;
 
                 // Role functionality

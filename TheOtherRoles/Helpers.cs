@@ -211,5 +211,23 @@ namespace TheOtherRoles {
             f = Mathf.Clamp01(f);
             return (byte)(f * 255);
         }
+
+        public static KeyValuePair<byte, int> MaxPair(this Dictionary<byte, int> self, out bool tie) {
+            tie = true;
+            KeyValuePair<byte, int> result = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+            foreach (KeyValuePair<byte, int> keyValuePair in self)
+            {
+                if (keyValuePair.Value > result.Value)
+                {
+                    result = keyValuePair;
+                    tie = false;
+                }
+                else if (keyValuePair.Value == result.Value)
+                {
+                    tie = true;
+                }
+            }
+            return result;
+        }
     }
 }

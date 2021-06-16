@@ -8,29 +8,48 @@ using System.Linq;
 namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-    class IntroCutsceneOnDestroyPatch {
+    class IntroCutsceneOnDestroyPatch
+    {
         public static void Prefix(IntroCutscene __instance) {
-            // Arsonist generate player icons
-            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Arsonist.arsonist && HudManager.Instance != null) {
-                int playerCounter = 0;
+            // Generate and initialize player icons
+            int playerCounter = 0;
+            if (PlayerControl.LocalPlayer != null && HudManager.Instance != null) {
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                    if (player != PlayerControl.LocalPlayer) {
-                        GameData.PlayerInfo data = player.Data;
-                        PoolablePlayer poolablePlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
-                        poolablePlayer.transform.localPosition = bottomLeft + Vector3.right * playerCounter * 0.35f;
-                        poolablePlayer.transform.localScale = Vector3.one * 0.3f;
-                        PlayerControl.SetPlayerMaterialColors(data.ColorId, poolablePlayer.Body);
-                        DestroyableSingleton<HatManager>.Instance.SetSkin(poolablePlayer.SkinSlot, data.SkinId);
-                        poolablePlayer.HatSlot.SetHat(data.HatId, data.ColorId);
-                        PlayerControl.SetPetImage(data.PetId, data.ColorId, poolablePlayer.PetSlot);
-                        poolablePlayer.NameText.text = data.PlayerName;
-                        poolablePlayer.SetFlipX(true);
-                        poolablePlayer.setSemiTransparent(true);
-                        Arsonist.dousedIcons[player.PlayerId] = poolablePlayer;
-                        playerCounter++;
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    GameData.PlayerInfo data = p.Data;
+                    PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
+                    PlayerControl.SetPlayerMaterialColors(data.ColorId, player.Body);
+                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.SkinSlot, data.SkinId);
+                    player.HatSlot.SetHat(data.HatId, data.ColorId);
+                    PlayerControl.SetPetImage(data.PetId, data.ColorId, player.PetSlot);
+                    player.NameText.text = data.PlayerName;
+                    player.SetFlipX(true);
+                    MapOptions.playerIcons[p.PlayerId] = player;
+
+                    if (PlayerControl.LocalPlayer == Arsonist.arsonist && p != Arsonist.arsonist) {
+                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
+                        player.transform.localScale = Vector3.one * 0.2f;
+                        player.setSemiTransparent(true);
+                        player.gameObject.SetActive(true);
+                    } else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter) {
+                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0);
+                        player.transform.localScale = Vector3.one * 0.4f;
+                        player.gameObject.SetActive(false);
+                    } else {
+                        player.gameObject.SetActive(false);
                     }
+                }
+            }
+
+            // Force Bounty Hunter to load a new Bounty when the Intro is over
+            if (BountyHunter.bounty != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) {
+                BountyHunter.bountyUpdateTimer = 0f;
+                if (HudManager.Instance != null) {
+                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
+                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(HudManager.Instance.KillButton.TimerText, HudManager.Instance.transform);
+                    BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
+                    BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
+                    BountyHunter.cooldownText.gameObject.SetActive(true);
                 }
             }
         }
@@ -104,3 +123,4 @@ namespace TheOtherRoles
         }
     }
 }
+

@@ -51,6 +51,7 @@ namespace TheOtherRoles
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
+            BountyHunter.clearAndReload();
         }
 
         public static class Jester {
@@ -900,7 +901,6 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
-        public static Dictionary<byte, PoolablePlayer> dousedIcons = new Dictionary<byte, PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -926,12 +926,9 @@ namespace TheOtherRoles
             douseTarget = null; 
             triggerArsonistWin = false;
             dousedPlayers = new List<PlayerControl>();
-            foreach (PoolablePlayer p in dousedIcons.Values) {
-                if (p != null && p.gameObject != null) { 
-                    UnityEngine.Object.Destroy(p.gameObject);
-                }
+            foreach (PoolablePlayer p in MapOptions.playerIcons.Values) {
+                if (p != null && p.gameObject != null) p.gameObject.SetActive(false);
             }
-            dousedIcons = new Dictionary<byte, PoolablePlayer>();
             cooldown = CustomOptionHolder.arsonistCooldown.getFloat();
             duration = CustomOptionHolder.arsonistDuration.getFloat();
         }
@@ -954,6 +951,45 @@ namespace TheOtherRoles
             guesser = null;
             
             remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+        }
+    }
+
+    public static class BountyHunter {
+        public static PlayerControl bountyHunter;
+        public static Color color = Palette.ImpostorRed;
+
+        public static Arrow arrow;
+        public static float bountyDuration = 30f;
+        public static bool showArrow = true;
+        public static float bountyKillCooldown = 0f;
+        public static float punishmentTime = 15f;
+        public static float arrowUpdateIntervall = 10f;
+
+        public static float arrowUpdateTimer = 0f;
+        public static float bountyUpdateTimer = 0f;
+        public static PlayerControl bounty;
+        public static TMPro.TextMeshPro cooldownText;
+
+        public static void clearAndReload() {
+            arrow = new Arrow(color);
+            bountyHunter = null;
+            bounty = null;
+            arrowUpdateTimer = 0f;
+            bountyUpdateTimer = 0f;
+            if (arrow != null && arrow.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            arrow = null;
+            if (cooldownText != null && cooldownText.gameObject != null) UnityEngine.Object.Destroy(cooldownText.gameObject);
+            cooldownText = null;
+            foreach (PoolablePlayer p in MapOptions.playerIcons.Values) {
+                if (p != null && p.gameObject != null) p.gameObject.SetActive(false);
+            }
+
+
+            bountyDuration = CustomOptionHolder.bountyHunterBountyDuration.getFloat();
+            bountyKillCooldown = CustomOptionHolder.bountyHunterReducedCooldown.getFloat();
+            punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
+            showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
+            arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
         }
     }
 }

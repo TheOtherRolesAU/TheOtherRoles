@@ -4,8 +4,8 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-namespace TheOtherRoles{
-    
+namespace TheOtherRoles {
+
     public class JackInTheBox {
         public static System.Collections.Generic.List<JackInTheBox> AllJackInTheBoxes = new System.Collections.Generic.List<JackInTheBox>();
         public static int JackInTheBoxLimit = 3;
@@ -38,7 +38,7 @@ namespace TheOtherRoles{
 
         public JackInTheBox(Vector2 p) {
             gameObject = new GameObject("JackInTheBox");
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f); 
+            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
             position += (Vector3)PlayerControl.LocalPlayer.Collider.offset; // Add collider offset that DoMove moves the player up at a valid position
             // Create the marker
             gameObject.transform.position = position;
@@ -46,7 +46,7 @@ namespace TheOtherRoles{
             boxRenderer.sprite = getBoxAnimationSprite(0);
 
             // Create the vent
-            var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>(); 
+            var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>();
             vent = UnityEngine.Object.Instantiate<Vent>(referenceVent);
             vent.transform.position = gameObject.transform.position;
             vent.Left = null;
@@ -75,7 +75,7 @@ namespace TheOtherRoles{
 
         public static void UpdateStates() {
             if (boxesConvertedToVents == true) return;
-            foreach(var box in AllJackInTheBoxes) {
+            foreach (var box in AllJackInTheBoxes) {
                 var playerIsTrickster = PlayerControl.LocalPlayer == Trickster.trickster;
                 box.gameObject.SetActive(playerIsTrickster);
             }
@@ -88,7 +88,7 @@ namespace TheOtherRoles{
         }
 
         public static void convertToVents() {
-            foreach(var box in AllJackInTheBoxes) {
+            foreach (var box in AllJackInTheBoxes) {
                 box.convertToVent();
             }
             connectVents();
@@ -101,7 +101,7 @@ namespace TheOtherRoles{
         }
 
         private static void connectVents() {
-            for(var i = 0;i < AllJackInTheBoxes.Count - 1;i++) {
+            for (var i = 0; i < AllJackInTheBoxes.Count - 1; i++) {
                 var a = AllJackInTheBoxes[i];
                 var b = AllJackInTheBoxes[i + 1];
                 a.vent.Right = b.vent;
@@ -116,7 +116,7 @@ namespace TheOtherRoles{
             boxesConvertedToVents = false;
             AllJackInTheBoxes = new List<JackInTheBox>();
         }
-        
+
     }
 
 }
