@@ -232,8 +232,10 @@ namespace TheOtherRoles
             var smallButtonTemplate = __instance.playerStates[0].Buttons.transform.Find("CancelButton");
             var textTemplate = __instance.playerStates[0].NameText;
 
-            Transform exitButton = UnityEngine.Object.Instantiate(smallButtonTemplate.transform, container);
-            exitButton.transform.localPosition = new Vector3(-2.725f, 2.1f, -10f);
+            Transform exitButton = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
+            exitButton.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
+            exitButton.transform.localScale = new Vector3(0.25f, 0.9f, 1);
+            exitButton.gameObject.GetComponent<SpriteRenderer>().sprite = smallButtonTemplate.GetComponent<SpriteRenderer>().sprite;
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
             exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                 UnityEngine.Object.Destroy(container.gameObject);
