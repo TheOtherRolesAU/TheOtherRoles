@@ -36,7 +36,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| **2021.6.15**| v2.7.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.0/TheOtherRoles.zip)
+| **2021.6.15**| v2.7.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.1/TheOtherRoles.zip)
 | **2021.6.15**| v2.7.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.0/TheOtherRoles.zip)
 | 2021.5.25.2s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
 | 2021.5.10s| v2.6.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.6/TheOtherRoles.zip)
@@ -72,10 +72,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.7.1**
-- Fixed a bug where swapped votes were sometimes counted wrongly
+- Fixed a bug where [swapped](#swapper) votes were sometimes counted wrongly
 - Fixed the positioning of the player name while morphed
-- Fixed a bug where the window of the Guesser sometimes showed no "close button"
-- Fixed a bug where the garlics were not displayed properly
+- Fixed a bug where the window of the [Guesser](#guesser) sometimes showed no "close button"
+- Fixed a bug where the [garlics](#vampire) were not displayed properly
 
 **Version 2.7.0**
 - **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
