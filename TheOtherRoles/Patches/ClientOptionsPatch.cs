@@ -25,7 +25,7 @@ namespace TheOtherRoles.Patches {
 
             Color color = on ? new Color(0f, 1f, 0.16470589f, 1f) : Color.white;
             button.Background.color = color;
-            button.Text.text = $"{text}{(on ? "On" : "Off")}";
+            button.Text.text = $"{text}{(on ? "開" : "關")}";
             if (button.Rollover) button.Rollover.ChangeOutColor(color);
         }
 
@@ -51,51 +51,51 @@ namespace TheOtherRoles.Patches {
             }
 
             if ((streamerModeButton == null || streamerModeButton.gameObject == null)) {
-                streamerModeButton = createCustomToggle("Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value, Vector3.zero, (UnityEngine.Events.UnityAction)streamerModeToggle, __instance);
+                streamerModeButton = createCustomToggle("直播模式: ", TheOtherRolesPlugin.StreamerMode.Value, Vector3.zero, (UnityEngine.Events.UnityAction)streamerModeToggle, __instance);
 
                 void streamerModeToggle() {
                     TheOtherRolesPlugin.StreamerMode.Value = !TheOtherRolesPlugin.StreamerMode.Value;
-                    updateToggle(streamerModeButton, "Streamer Mode: ", TheOtherRolesPlugin.StreamerMode.Value);
+                    updateToggle(streamerModeButton, "直播模式: ", TheOtherRolesPlugin.StreamerMode.Value);
                 }
             }
 
             if ((ghostsSeeTasksButton == null || ghostsSeeTasksButton.gameObject == null)) {
-                ghostsSeeTasksButton = createCustomToggle("Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value, Vector3.right * xOffset, (UnityEngine.Events.UnityAction)ghostsSeeTaskToggle, __instance);
+                ghostsSeeTasksButton = createCustomToggle("死者可看到剩餘任務: ", TheOtherRolesPlugin.GhostsSeeTasks.Value, Vector3.right * xOffset, (UnityEngine.Events.UnityAction)ghostsSeeTaskToggle, __instance);
 
                 void ghostsSeeTaskToggle() {
                     TheOtherRolesPlugin.GhostsSeeTasks.Value = !TheOtherRolesPlugin.GhostsSeeTasks.Value;
                     MapOptions.ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value; 
-                    updateToggle(ghostsSeeTasksButton, "Ghosts See Remaining Tasks: ", TheOtherRolesPlugin.GhostsSeeTasks.Value);
+                    updateToggle(ghostsSeeTasksButton, "死者可看到剩餘任務: ", TheOtherRolesPlugin.GhostsSeeTasks.Value);
                 }
             }
 
             if ((ghostsSeeRolesButton == null || ghostsSeeRolesButton.gameObject == null)) {
-                ghostsSeeRolesButton = createCustomToggle("Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value, new Vector2(-xOffset, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeRolesToggle, __instance);
+                ghostsSeeRolesButton = createCustomToggle("死者可看到職業: ", TheOtherRolesPlugin.GhostsSeeRoles.Value, new Vector2(-xOffset, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeRolesToggle, __instance);
 
                 void ghostsSeeRolesToggle() {
                     TheOtherRolesPlugin.GhostsSeeRoles.Value = !TheOtherRolesPlugin.GhostsSeeRoles.Value;
                     MapOptions.ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value; 
-                    updateToggle(ghostsSeeRolesButton, "Ghosts See Roles: ", TheOtherRolesPlugin.GhostsSeeRoles.Value);
+                    updateToggle(ghostsSeeRolesButton, "死者可看到職業: ", TheOtherRolesPlugin.GhostsSeeRoles.Value);
                 }
             }
 
             if ((ghostsSeeVotesButton == null || ghostsSeeVotesButton.gameObject == null)) {
-                ghostsSeeVotesButton = createCustomToggle("Ghosts See Votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value, new Vector2(0, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeVotesToggle, __instance);
+                ghostsSeeVotesButton = createCustomToggle("死者可看到投票: ", TheOtherRolesPlugin.GhostsSeeVotes.Value, new Vector2(0, yOffset), (UnityEngine.Events.UnityAction)ghostsSeeVotesToggle, __instance);
 
                 void ghostsSeeVotesToggle() {
                     TheOtherRolesPlugin.GhostsSeeVotes.Value = !TheOtherRolesPlugin.GhostsSeeVotes.Value;
                     MapOptions.ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value; 
-                    updateToggle(ghostsSeeVotesButton, "Ghosts See Votes: ", TheOtherRolesPlugin.GhostsSeeVotes.Value);
+                    updateToggle(ghostsSeeVotesButton, "死者可看到投票: ", TheOtherRolesPlugin.GhostsSeeVotes.Value);
                 }
             }
             
             if ((showRoleSummaryButton == null || showRoleSummaryButton.gameObject == null)) {
-                showRoleSummaryButton = createCustomToggle("Role Summary: ", TheOtherRolesPlugin.ShowRoleSummary.Value, new Vector2(xOffset, yOffset), (UnityEngine.Events.UnityAction)showRoleSummaryToggle, __instance);
+                showRoleSummaryButton = createCustomToggle("角色總結: ", TheOtherRolesPlugin.ShowRoleSummary.Value, new Vector2(xOffset, yOffset), (UnityEngine.Events.UnityAction)showRoleSummaryToggle, __instance);
 
                 void showRoleSummaryToggle() {
                     TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value;
                     MapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value; 
-                    updateToggle(showRoleSummaryButton, "Role Summary: ", TheOtherRolesPlugin.ShowRoleSummary.Value);
+                    updateToggle(showRoleSummaryButton, "角色總結: ", TheOtherRolesPlugin.ShowRoleSummary.Value);
                 }
             }
         }
