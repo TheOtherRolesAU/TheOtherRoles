@@ -209,7 +209,7 @@ namespace TheOtherRoles {
             vampireSpawnRate = CustomOption.Create(40, cs(Vampire.color, "吸血鬼"), rates, null, true);
             vampireKillDelay = CustomOption.Create(41, "吸血鬼死亡延遲", 10f, 1f, 20f, 1f, vampireSpawnRate);
             vampireCooldown = CustomOption.Create(42, "吸血鬼冷卻", 30f, 10f, 60f, 2.5f, vampireSpawnRate);
-            vampireCanKillNearGarlics = CustomOption.Create(43, "吸血鬼可在大蒜附近殺死", true, vampireSpawnRate);
+            vampireCanKillNearGarlics = CustomOption.Create(43, "吸血鬼可在大蒜附近殺人", true, vampireSpawnRate);
 
             eraserSpawnRate = CustomOption.Create(230, cs(Eraser.color, "抹除者"), rates, null, true);
             eraserCooldown = CustomOption.Create(231, "抹除者冷卻", 30f, 10f, 120f, 5f, eraserSpawnRate);
