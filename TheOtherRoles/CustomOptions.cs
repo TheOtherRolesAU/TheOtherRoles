@@ -216,7 +216,7 @@ namespace TheOtherRoles {
             eraserCanEraseAnyone = CustomOption.Create(232, "抹除者可抹除任何人", false, eraserSpawnRate);
 
             tricksterSpawnRate = CustomOption.Create(250, cs(Trickster.color, "詭騙師"), rates, null, true);
-            tricksterPlaceBoxCooldown = CustomOption.Create(251, "詭騙師箱子冷卻", 10f, 0f, 30f, 2.5f, tricksterSpawnRate);
+            tricksterPlaceBoxCooldown = CustomOption.Create(251, "詭騙箱冷卻", 10f, 0f, 30f, 2.5f, tricksterSpawnRate);
             tricksterLightsOutCooldown = CustomOption.Create(252, "詭騙師關燈冷卻", 30f, 10f, 60f, 5f, tricksterSpawnRate);
             tricksterLightsOutDuration = CustomOption.Create(253, "詭騙師關燈持續時間", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
 
