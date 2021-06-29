@@ -11,7 +11,18 @@ using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
-
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
+    public static class AddChat
+    {
+        public static bool Prefix(ChatController __instance, [HarmonyArgument(0)] PlayerControl sourcePlayer)
+        {
+            if (__instance != HudManager.Instance.Chat) return true;
+            var localPlayer = PlayerControl.LocalPlayer;
+            if (localPlayer == null) return true;
+            return MeetingHud.Instance != null || LobbyBehaviour.Instance != null || localPlayer.Data.IsDead ||
+                   localPlayer == Lovers.lover1 || localPlayer == Lovers.lover2 || sourcePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+        }
+    }
     [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentCanUsePatch
     {

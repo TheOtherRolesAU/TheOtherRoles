@@ -270,7 +270,13 @@ namespace TheOtherRoles
             if (Morphling.morphling != null && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f)
                 Morphling.morphling.nameText.text += suffix;
         }
-
+        static void LoverCheck(HudManager __instance)
+        {
+            if(PlayerControl.LocalPlayer == Lovers.lover1 && !__instance.Chat.isActiveAndEnabled || PlayerControl.LocalPlayer == Lovers.lover2 && !__instance.Chat.isActiveAndEnabled)
+            {
+                __instance.Chat.SetVisible(true);
+            }
+        }
         static void updateImpostorKillButton(HudManager __instance) {
             if (!PlayerControl.LocalPlayer.Data.IsImpostor) return;
             bool enabled = true;
@@ -300,6 +306,8 @@ namespace TheOtherRoles
 
             // Impostors
             updateImpostorKillButton(__instance);
+            //Lovers Chat Check
+            LoverCheck(__instance);
             // Timer updates
             timerUpdate();
             // Camouflager and Morphling
