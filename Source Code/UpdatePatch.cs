@@ -240,7 +240,6 @@ namespace TheOtherRoles
                 {
                     TheOtherRolesPlugin.commsActive = true;
                     Helpers.Camouflage();
-                    break;
                 }
                 else
                 {
