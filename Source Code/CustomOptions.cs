@@ -647,7 +647,7 @@ namespace TheOtherRoles {
             int defaultSettingsLines = 19;
             int roleSettingsLines = defaultSettingsLines + 34;
             int detailedSettingsP1 = roleSettingsLines + 37;
-            int detailedSettingsP2 = detailedSettingsP1 + 38;
+            int detailedSettingsP2 = detailedSettingsP1 + 39;//Added Colorblind Comms
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
