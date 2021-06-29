@@ -445,7 +445,7 @@ namespace TheOtherRoles
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
                         camera.orthographicSize = 2.35f;
-                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256);
+                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256,16,0);
                         __instance.textures[i] = temporary;
                         camera.targetTexture = temporary;
                     }
