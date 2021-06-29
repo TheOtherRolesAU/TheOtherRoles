@@ -219,30 +219,12 @@ namespace TheOtherRoles
 
             // Set camouflaged look (overrides morphling morphed look if existent)
             if (Camouflager.camouflageTimer > 0f) {
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    p.nameText.text = "";
-                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
-                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
-                    p.HatRenderer.SetHat(0, 0);
-                    Helpers.setSkinWithAnim(p.MyPhysics, 0);
-                    bool spawnPet = false;
-                    if (p.CurrentPet == null) spawnPet = true;
-                    else if (p.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[0].ProdId) {
-                        UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
-                        spawnPet = true;
-                    }
-
-                    if (spawnPet) {
-                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[0]);
-                        p.CurrentPet.transform.position = p.transform.position;
-                        p.CurrentPet.Source = p;
-                    }
-                }
+                Helpers.Camouflage();
             } 
             
             // Everyone but morphling reset
             if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
-                Camouflager.resetCamouflage();
+                Helpers.UnCamouflage();
             }
 
             // Morphling reset
