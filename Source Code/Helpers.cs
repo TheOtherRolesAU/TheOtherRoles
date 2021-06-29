@@ -43,7 +43,6 @@ namespace TheOtherRoles {
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                TheOtherRolesPlugin.commsActive = false;
                 var colorId = player.Data.ColorId;
                 player.nameText.text = player.Data.PlayerName;
                 PlayerControl.SetPlayerMaterialColors(colorId, player.myRend);
