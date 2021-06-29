@@ -20,9 +20,9 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "2.7.1";
+        public const string VersionString = "2.7.2";
         public static System.Version Version = System.Version.Parse(VersionString);
-
+        public static bool commsActive = false;
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
 

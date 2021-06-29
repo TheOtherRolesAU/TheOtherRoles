@@ -22,7 +22,43 @@ namespace TheOtherRoles {
             }
             return null;
         }
-
+		public static void Camouflage()
+        {
+                foreach (var player in PlayerControl.AllPlayerControls)
+                {
+                    player.nameText.text = "";
+                    PlayerControl.SetPlayerMaterialColors(Color.grey, player.myRend);
+                    player.HatRenderer.SetHat(0, 0);
+                    if (player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins.ToArray()[0].ProdId)
+                        player.MyPhysics.SetSkin(0);
+                    if (player.CurrentPet != null) UnityEngine.Object.Destroy(player.CurrentPet.gameObject);
+                    player.CurrentPet = UnityEngine.Object.Instantiate(DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[0]);
+                    player.CurrentPet.transform.position = player.transform.position;
+                    player.CurrentPet.Source = player;
+                    player.CurrentPet.Visible = player.Visible;
+                }
+            
+        }
+        public static void UnCamouflage()
+        {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                TheOtherRolesPlugin.commsActive = false;
+                var colorId = player.Data.ColorId;
+                player.nameText.text = player.Data.PlayerName;
+                PlayerControl.SetPlayerMaterialColors(colorId, player.myRend);
+                player.HatRenderer.SetHat(player.Data.HatId, colorId);
+                if (player.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins.ToArray()[(int)player.Data.SkinId].ProdId)
+                    player.MyPhysics.SetSkin(player.Data.SkinId);
+                if (player.CurrentPet != null) UnityEngine.Object.Destroy(player.CurrentPet.gameObject);
+                player.CurrentPet = UnityEngine.Object.Instantiate(DestroyableSingleton<HatManager>.Instance.AllPets.ToArray()[(int)player.Data.PetId]);
+                player.CurrentPet.transform.position = player.transform.position;
+                player.CurrentPet.Source = player;
+                player.CurrentPet.Visible = player.Visible;
+                
+            }
+            
+        }
         public static Texture2D loadTextureFromResources(string path) {
             try {
                 Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);

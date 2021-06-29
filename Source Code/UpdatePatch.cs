@@ -250,7 +250,23 @@ namespace TheOtherRoles
                 Morphling.resetMorph();
             }
         }
-
+        static void CommsCheck()
+        {
+            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            {
+                if (task.TaskType == TaskTypes.FixComms)
+                {
+                    TheOtherRolesPlugin.commsActive = true;
+                    Helpers.Camouflage();
+                    break;
+                }
+                else
+                {
+                    TheOtherRolesPlugin.commsActive = false;
+                    Helpers.UnCamouflage();
+                }
+            }
+        }
         public static void miniUpdate() {
             if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
                 
@@ -303,7 +319,10 @@ namespace TheOtherRoles
             setNameColors();
             updateShielded();
             setNameTags();
-
+            if (CustomOptionHolder.ColorblindComms.getBool() == true)
+            {
+                CommsCheck();
+            }
             // Impostors
             updateImpostorKillButton(__instance);
             //Lovers Chat Check
