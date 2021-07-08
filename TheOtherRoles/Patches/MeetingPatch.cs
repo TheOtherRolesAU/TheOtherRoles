@@ -11,8 +11,7 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     class MeetingHudPatch {
         static bool[] selections;

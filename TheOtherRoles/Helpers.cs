@@ -7,6 +7,7 @@ using UnhollowerBaseLib;
 using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Modules;
 using HarmonyLib;
 using Hazel;
 
@@ -201,6 +202,10 @@ namespace TheOtherRoles {
             foreach (SpriteRenderer r in player.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 r.color = new Color(r.color.r, r.color.g, r.color.b, alpha);
             player.NameText.color = new Color(player.NameText.color.r, player.NameText.color.g, player.NameText.color.b, alpha);
+        }
+
+        public static string GetString(this TranslationController t, StringNames key, params Il2CppSystem.Object[] parts) {
+            return t.GetString(key, parts);
         }
 
         public static string cs(Color c, string s) {

@@ -5,8 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     class IntroCutsceneOnDestroyPatch
     {
@@ -19,7 +18,7 @@ namespace TheOtherRoles
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
                     PlayerControl.SetPlayerMaterialColors(data.ColorId, player.Body);
-                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.SkinSlot, data.SkinId);
+                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.SkinId);
                     player.HatSlot.SetHat(data.HatId, data.ColorId);
                     PlayerControl.SetPetImage(data.PetId, data.ColorId, player.PetSlot);
                     player.NameText.text = data.PlayerName;

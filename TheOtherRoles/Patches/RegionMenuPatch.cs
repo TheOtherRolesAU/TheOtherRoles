@@ -29,7 +29,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.Events;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
     public static class RegionMenuOpenPatch
     {

@@ -2,7 +2,7 @@ using HarmonyLib;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(ShipStatus))]
     public class ShipStatusPatch {

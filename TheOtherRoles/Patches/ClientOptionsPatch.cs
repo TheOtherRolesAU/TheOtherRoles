@@ -7,7 +7,7 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
     public class OptionsMenuBehaviourStartPatch {
         private static Vector3? origin;

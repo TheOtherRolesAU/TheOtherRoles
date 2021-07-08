@@ -7,8 +7,7 @@ using UnityEngine;
 using System;
 using static TheOtherRoles.TheOtherRoles;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetInfected))]
     class SetInfectedPatch
     {

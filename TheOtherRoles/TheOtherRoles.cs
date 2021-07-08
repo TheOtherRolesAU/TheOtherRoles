@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.IO;
 using UnityEngine;
+using TheOtherRoles.Objects;
 
 namespace TheOtherRoles
 {

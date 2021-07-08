@@ -11,7 +11,7 @@ using UnhollowerBaseLib;
 using System;
 using System.Text;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     enum CustomGameOverReason {
         LoversWin = 10,
         TeamJackalWin = 11,
