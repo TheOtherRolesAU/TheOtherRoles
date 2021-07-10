@@ -44,6 +44,7 @@ namespace TheOtherRoles
         SecurityGuard,
         Arsonist,
         Guesser,
+        Miner,
         BountyHunter,
         Crewmate,
         Impostor
@@ -91,7 +92,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        MinerMine,
     }
 
     public static class RPCProcedure {
@@ -228,6 +230,9 @@ namespace TheOtherRoles
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
+                    case RoleId.Miner:
+                        Miner.miner = player;
+                        break;
                     }
                 }
         }
@@ -273,7 +278,28 @@ namespace TheOtherRoles
         public static void engineerUsedRepair() {
             Engineer.usedRepair = true;
         }
+        public static void SpawnVent(int ventId, float zAxis){
+            var ventPrefab = UnityEngine.Object.FindObjectOfType<Vent>();
+            Vector2 position = Miner.miner.transform.position;
+            var vent = UnityEngine.Object.Instantiate(ventPrefab, ventPrefab.transform.parent);
+            vent.Id = ventId;
+            vent.transform.position = new Vector3(position.x, position.y, zAxis);
+            if (Miner.Vents.Count > 0){
+                var leftVent = Miner.Vents[^1];
+                vent.Left = leftVent;
+                leftVent.Right = vent;
+            }else{
+                vent.Left = null;
+            }
+            vent.Right = null;
+            vent.Center = null;
+            var allVents = ShipStatus.Instance.AllVents.ToList();
+            allVents.Add(vent);
+            ShipStatus.Instance.AllVents = allVents.ToArray();
 
+           Miner.Vents.Add(vent);
+           Miner.lastMined = DateTime.UtcNow;
+        }
         public static void cleanBody(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
@@ -833,6 +859,11 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.MinerMine:
+                    var ventIdMiner = reader.ReadInt32();
+                    var zAxis = reader.ReadSingle();
+                    RPCProcedure.SpawnVent(ventIdMiner, zAxis);
                     break;
             }
         }
