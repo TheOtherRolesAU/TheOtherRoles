@@ -134,6 +134,8 @@ public class CustomButton
         setActive(hudManager.UseButton.isActiveAndEnabled);
 
         killButtonManager.renderer.sprite = Sprite;
+        killButtonManager.killText.enabled = false;
+        killButtonManager.killText.text = "";
         if (hudManager.UseButton != null) {
             Vector3 pos = hudManager.UseButton.transform.localPosition;
             if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
