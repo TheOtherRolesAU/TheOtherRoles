@@ -52,6 +52,7 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
+            Miner.clearAndReload();
         }
 
         public static class Jester {
@@ -976,6 +977,29 @@ namespace TheOtherRoles
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
+        }
+    }
+    public static class Miner
+    {
+        public static PlayerControl miner;
+        public static float mineCooldown = 0f;
+        public static Color color = Palette.ImpostorRed;
+        public static bool CanPlaceVent { get; set; }
+        public static Vector2 ventSize { get; set; }
+        public static DateTime lastMined;
+        public static readonly List<Vent> Vents = new List<Vent>();
+        public static Sprite buttonSprite;
+        
+        public static void getButtonSprite(){
+            if(buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MineButton.png", 100f);
+            return buttonSprite;
+        }
+        public static void clearAndReload(){
+            miner = null;
+            CanPlaceVent = false;
+            mineCooldown = CustomOptionHolder.MinerCooldown.getSelection();
+            lastMined = DateTime.UtcNow;
         }
     }
 }
