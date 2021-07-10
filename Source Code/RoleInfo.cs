@@ -27,6 +27,7 @@ namespace TheOtherRoles
         public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
         public static RoleInfo sheriff = new RoleInfo("Sheriff", Sheriff.color, "Shoot the <color=#FF1919FF>Impostors</color>", "Shoot the Impostors", RoleId.Sheriff);
         public static RoleInfo lighter = new RoleInfo("Lighter", Lighter.color, "Your light never goes out", "Your light never goes out", RoleId.Lighter);
+        public static RoleInfo miner = new RoleInfo("Miner", Vampire.color, "You can dig vents for Impostors!", "Dig Vents and Kill", RoleId.Miner);
         public static RoleInfo godfather = new RoleInfo("Godfather", Godfather.color, "Kill all Crewmates", "Kill all Crewmates", RoleId.Godfather);
         public static RoleInfo mafioso = new RoleInfo("Mafioso", Mafioso.color, "Work with the <color=#FF1919FF>Mafia</color> to kill the Crewmates", "Kill all Crewmates", RoleId.Mafioso);
         public static RoleInfo janitor = new RoleInfo("Janitor", Janitor.color, "Work with the <color=#FF1919FF>Mafia</color> by hiding dead bodies", "Hide dead bodies", RoleId.Janitor);
@@ -72,6 +73,7 @@ namespace TheOtherRoles
             trickster,
             cleaner,
             warlock,
+            miner,
             bountyHunter,
             niceMini,
             evilMini,
@@ -114,6 +116,7 @@ namespace TheOtherRoles
             if (p == Godfather.godfather) infos.Add(godfather);
             if (p == Mafioso.mafioso) infos.Add(mafioso);
             if (p == Janitor.janitor) infos.Add(janitor);
+            if(p == Miner.miner) infos.Add(miner);
             if (p == Morphling.morphling) infos.Add(morphling);
             if (p == Camouflager.camouflager) infos.Add(camouflager);
             if (p == Vampire.vampire) infos.Add(vampire);
