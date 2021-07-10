@@ -24,6 +24,7 @@ namespace TheOtherRoles
         private static CustomButton jackalKillButton;
         private static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
+        private static CustomButton minerMineButton;
         private static CustomButton lighterButton;
         private static CustomButton eraserButton;
         private static CustomButton placeJackInTheBoxButton;        
@@ -50,6 +51,7 @@ namespace TheOtherRoles
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
+            minerMineButton.maxTimer = Miner.mineCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
             eraserButton.MaxTimer = Eraser.cooldown;
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
@@ -775,6 +777,27 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+            //miner
+            minerMineButton = new CustomButton(
+                () =>
+                {
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    (byte)CustomRPC.MinerMine, SendOption.Reliable, -1);
+                    var id = Miner.GetAvailableId();
+                    writer.Write(id);
+                    writer.Write(0.01f);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.SpawnVent(id, 0.01f);
+                    minerMineButton.Timer = minerMineButton.MaxTimer;
+                },
+                () => { return Miner.miner != null && Miner.miner == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {return PlayerControl.LocalPlayer.CanMove && Miner.CanPlaceVent; },
+                () => { minerMineButton.Timer = minerMineButton.MaxTimer; },
+                Miner.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
