@@ -990,10 +990,19 @@ namespace TheOtherRoles
         public static readonly List<Vent> Vents = new List<Vent>();
         public static Sprite buttonSprite;
         
-        public static void getButtonSprite(){
+        public static Sprite getButtonSprite(){
             if(buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MineButton.png", 100f);
             return buttonSprite;
+        }
+        public static int GetAvailableId()
+        {
+            var id = 0;
+            while (true)
+            {
+                if (ShipStatus.Instance.AllVents.All(v => v.Id != id)) return id;
+                id++;
+            }
         }
         public static void clearAndReload(){
             miner = null;

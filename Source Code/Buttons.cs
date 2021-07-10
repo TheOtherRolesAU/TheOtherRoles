@@ -51,7 +51,7 @@ namespace TheOtherRoles
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
-            minerMineButton.maxTimer = Miner.mineCooldown;
+            minerMineButton.MaxTimer = Miner.mineCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
             eraserButton.MaxTimer = Eraser.cooldown;
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
