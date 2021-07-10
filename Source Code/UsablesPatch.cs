@@ -20,7 +20,7 @@ namespace TheOtherRoles
             var localPlayer = PlayerControl.LocalPlayer;
             if (localPlayer == null) return true;
             return MeetingHud.Instance != null || LobbyBehaviour.Instance != null || localPlayer.Data.IsDead ||
-                   localPlayer == Lovers.lover1 || localPlayer == Lovers.lover2 || sourcePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId;
+                   Lovers.isLover(localPlayer.Data) && Lovers.canLoversChat || sourcePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId;
         }
     }
     [HarmonyPatch(typeof(Vent), "CanUse")]

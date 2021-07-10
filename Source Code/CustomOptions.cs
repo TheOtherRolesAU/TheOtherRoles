@@ -51,6 +51,7 @@ namespace TheOtherRoles {
         public static CustomOption loversImpLoverRate;
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
+        public static CustomOption loversCanChat;
 
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
@@ -240,6 +241,7 @@ namespace TheOtherRoles {
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
+            loversCanChat = CustomOption.Create(54, "Lovers Can Chat", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -651,7 +653,7 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 19;
             int roleSettingsLines = defaultSettingsLines + 35;//Added Miner
-            int detailedSettingsP1 = roleSettingsLines + 38;//Added Miner Cooldown
+            int detailedSettingsP1 = roleSettingsLines + 39;//Added Miner Cooldown and Lovers Chat Bool
             int detailedSettingsP2 = detailedSettingsP1 + 39;//Added Colorblind Comms
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();

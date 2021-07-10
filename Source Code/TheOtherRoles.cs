@@ -321,7 +321,11 @@ namespace TheOtherRoles
         public static bool bothDie = true;
         // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
         public static bool notAckedExiledIsLover = false;
-
+        public static bool canLoversChat = false;
+        public static bool isLover(GameData.PlayerInfo p)
+        {
+            return (Lovers.lover1 != null && Lovers.lover1.PlayerId == p.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == p.PlayerId);
+        }
         public static bool existing() {
             return lover1 != null && lover2 != null && !lover1.Data.Disconnected && !lover2.Data.Disconnected;
         }
@@ -346,6 +350,7 @@ namespace TheOtherRoles
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
+            canLoversChat = CustomOptionHolder.loversCanChat.getBool();
             bothDie = CustomOptionHolder.loversBothDie.getBool();
         }
 

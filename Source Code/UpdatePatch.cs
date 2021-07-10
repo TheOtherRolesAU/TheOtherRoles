@@ -269,7 +269,7 @@ namespace TheOtherRoles
         }
         static void LoverCheck(HudManager __instance)
         {
-            if(PlayerControl.LocalPlayer == Lovers.lover1 && !__instance.Chat.isActiveAndEnabled || PlayerControl.LocalPlayer == Lovers.lover2 && !__instance.Chat.isActiveAndEnabled)
+            if(Lovers.isLover(PlayerControl.LocalPlayer.Data) && !__instance.Chat.isActiveAndEnabled && Lovers.canLoversChat)
             {
                 __instance.Chat.SetVisible(true);
             }
