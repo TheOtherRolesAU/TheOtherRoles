@@ -274,6 +274,14 @@ namespace TheOtherRoles
                 __instance.Chat.SetVisible(true);
             }
         }
+        MinerVentCheck(){
+            if(Miner.miner != null && Miner.miner == PlayerControl.LocalPlayer){
+                var isnearVent = Physics2D.OverlapBoxAll(Miner.miner.transform.position, miner.ventSize, 0);
+                isNearVent = isNearVent.ToArray().where(v => (v.name.Contains("Vent") || !v.isTrigger) && v.gameObject.layer != 8  && v.gameObject.layer != 5).ToArray();
+                if (isNearVent.Count == 0) Miner.CanPlaceVent = true;
+                else Miner.CanPlaceVent = false;
+            }
+        }
         static void updateImpostorKillButton(HudManager __instance) {
             if (!PlayerControl.LocalPlayer.Data.IsImpostor) return;
             bool enabled = true;
@@ -314,6 +322,8 @@ namespace TheOtherRoles
             camouflageAndMorphActions();
             // Mini
             miniUpdate();
+            //Miner
+            MinerVentCheck();
         }
     }
 }
