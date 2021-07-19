@@ -73,6 +73,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.7.3**
+- Updated to Among Us v2021.6.30
+- Updated BepInEx version
+- Updated Credentials
+- Fixed some Colors being considered darker, when they should be lighter
+- Added /size command for Lobby
+- Added /color and /murder command to Freeplay (for the Hat Designers)
 
 **Version 2.7.1**
 - Fixed a bug where swapped votes were sometimes counted wrongly
@@ -324,7 +330,7 @@ Not working? You might want to install the dependency [vc_redist](https://aka.ms
 **Linux Manual**
 1. Install Among Us via Steam
 2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
-3. Enable `winhttp.dll` via the proton winecfg (https://bepinex.github.io/bepinex_docs/master/articles/advanced/steam_interop.html#protonwine)
+3. Enable `winhttp.dll` via the proton winecfg (https://docs.bepinex.dev/articles/advanced/steam_interop.html#open-winecfg-for-the-target-game)
 4. Launch the game via Steam
 
 # Custom Servers and 10+ Players
@@ -665,7 +671,7 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ### **Team: Crewmates or Impostors**
 The Guesser can be a Crewmate or an Impostor (depending on the settings).\
 The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
-Only one person can be shot per meeting and you can set a maximum number of shots.\
+You can select how many players can be shot per meeting and how many players can be shot per game.\
 The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.
 
@@ -681,7 +687,8 @@ You can only shoot during the voting time.
 |----------|:-------------:|
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
-| Guesser Number Of Shots | -
+| Guesser Number Of Shots Per Game| -
+| Guesser Number Of Shots Per Meeting| -
 
 -----------------------
 
