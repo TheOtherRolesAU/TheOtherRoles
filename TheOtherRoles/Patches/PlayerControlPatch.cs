@@ -7,9 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
+using TheOtherRoles.Objects;
 using UnityEngine;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {

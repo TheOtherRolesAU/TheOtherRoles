@@ -5,8 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     class IntroCutsceneOnDestroyPatch
     {
@@ -19,7 +18,7 @@ namespace TheOtherRoles
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
                     PlayerControl.SetPlayerMaterialColors(data.ColorId, player.Body);
-                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.SkinSlot, data.SkinId);
+                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.SkinId);
                     player.HatSlot.SetHat(data.HatId, data.ColorId);
                     PlayerControl.SetPetImage(data.PetId, data.ColorId, player.PetSlot);
                     player.NameText.text = data.PlayerName;
@@ -96,7 +95,7 @@ namespace TheOtherRoles
                 var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
                 loversText.transform.localPosition += Vector3.down * 3f;
                 PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                loversText.text = Helpers.cs(Lovers.color, $"❤ You are in love with {otherLover?.Data?.PlayerName ?? ""} ❤");
+                loversText.text = Helpers.cs(Lovers.color, $"♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
             }
         }
 

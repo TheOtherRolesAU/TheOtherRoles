@@ -9,8 +9,7 @@ using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
 
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentCanUsePatch
@@ -112,17 +111,28 @@ namespace TheOtherRoles
             // Trickster render special vent button
             if (__instance.currentTarget != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
                 Vent possibleVent =  __instance.currentTarget.TryCast<Vent>();
-                if (possibleVent != null && possibleVent.gameObject != null && possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
-                    __instance.UseButton.sprite = Trickster.getTricksterVentButtonSprite();
+                if (possibleVent != null && possibleVent.gameObject != null) {
+                    var useButton = __instance.currentButtonShown;
+                    if (possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
+                        useButton.graphic.sprite = Trickster.getTricksterVentButtonSprite();
+                        useButton.text.enabled = false; // clear text;
+                    } else {
+                        useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                        useButton.text.enabled = false;
+                    }
                 }
             }
 
             // Jester sabotage
             if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.CanMove) {
+                var useButton = __instance.currentButtonShown;
                 if (!Jester.jester.Data.IsDead && __instance.currentTarget == null) { // no target, so sabotage
-                    __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.SabotageButton);
-                    CooldownHelpers.SetCooldownNormalizedUvs(__instance.UseButton);
-                    __instance.UseButton.color = UseButtonManager.EnabledColor;
+                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.SabotageButton);
+                    useButton.graphic.color = UseButtonManager.EnabledColor;
+                    useButton.text.enabled = false;
+                } else {
+                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
+                    useButton.text.enabled = false;
                 }
             }
 
@@ -130,25 +140,25 @@ namespace TheOtherRoles
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (__instance.currentTarget == null && (blockSabotageJanitor || blockSabotageMafioso)) {
-                __instance.UseButton.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
-                __instance.UseButton.color = new Color(1f, 1f, 1f, 0.3f);
+                var useButton = __instance.currentButtonShown;
+                useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
+                useButton.graphic.color = UseButtonManager.DisabledColor;
+                useButton.text.enabled = false;
             }
 
         }
     }
-
+    
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
     class UseButtonDoClickPatch {
         static bool Prefix(UseButtonManager __instance) { 
             if (__instance.currentTarget != null) return true;
-
             // Jester sabotage
-            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.jester.Data.IsDead) {
+            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) {
                 Action<MapBehaviour> action = m => m.ShowInfectedMap() ;
                 DestroyableSingleton<HudManager>.Instance.ShowMap(action);
                 return false;
             }
-
             // Mafia sabotage button click patch
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
@@ -434,7 +444,7 @@ namespace TheOtherRoles
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
                         camera.orthographicSize = 2.35f;
-                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, 0);
+                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
                         __instance.textures[i] = temporary;
                         camera.targetTexture = temporary;
                     }

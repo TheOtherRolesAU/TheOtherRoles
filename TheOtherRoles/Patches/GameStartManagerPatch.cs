@@ -7,7 +7,7 @@ using Hazel;
 using System;
 using UnhollowerBaseLib;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     public class GameStartManagerPatch  {
         public static Dictionary<int, PlayerVersion> playerVersions = new Dictionary<int, PlayerVersion>();
         private static float timer = 600f;

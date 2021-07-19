@@ -21,10 +21,11 @@ using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Modules {
     [HarmonyPatch]
     public class CustomHats { 
         private static bool LOADED = false;
+        private static bool RUNNING = false;
         public static Material hatShader;
 
         public static Dictionary<string, HatExtension> CustomHatRegistry = new Dictionary<string, HatExtension>();
@@ -195,7 +196,9 @@ namespace TheOtherRoles {
 
         [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
         private static class HatManagerPatch {
-            static bool Prefix(HatManager __instance) {
+            static void Prefix(HatManager __instance) {
+                if (RUNNING) return;
+                RUNNING = true; // prevent simultanious execution
                 try {
                     if (!LOADED) {
                         Assembly assembly = Assembly.GetExecutingAssembly();
@@ -207,19 +210,19 @@ namespace TheOtherRoles {
                         List<CustomHat> customhats = createCustomHatDetails(hats);
                         foreach (CustomHat ch in customhats)
                             __instance.AllHats.Add(CreateHatBehaviour(ch));
-
-                        while (CustomHatLoader.hatdetails.Count > 0) {
-                            __instance.AllHats.Add(CreateHatBehaviour(CustomHatLoader.hatdetails[0]));
-                            CustomHatLoader.hatdetails.RemoveAt(0);
-                        }
-
-                        LOADED = true;
                     }
-                    return true;
+                    while (CustomHatLoader.hatdetails.Count > 0) {
+                        __instance.AllHats.Add(CreateHatBehaviour(CustomHatLoader.hatdetails[0]));
+                        CustomHatLoader.hatdetails.RemoveAt(0);
+                    }
                 } catch (System.Exception e) {
-                    System.Console.WriteLine("Unable to add Custom Hats\n" + e);
-                    return false;
+                    if (!LOADED)
+                        System.Console.WriteLine("Unable to add Custom Hats\n" + e);
                 }
+                LOADED = true;
+            }
+            static void Postfix(HatManager __instance) {
+                RUNNING = false;
             }
         }
 
@@ -515,7 +518,7 @@ namespace TheOtherRoles {
         }
 
         private static bool doesResourceRequireDownload(string respath, string reshash, MD5 md5) {
-            if (reshash == null || !File.Exists(respath))
+            if (reshash == null || !File.Exists(respath)) 
                 return true;
 
             using (var stream = File.OpenRead(respath)) {
