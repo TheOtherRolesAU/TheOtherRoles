@@ -20,6 +20,7 @@ namespace TheOtherRoles.Objects {
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
+        private bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
         private HudManager hudManager;
@@ -43,6 +44,7 @@ namespace TheOtherRoles.Objects {
             Timer = 16.2f;
             buttons.Add(this);
             killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
+            this.showButtonText = killButtonManager.renderer.sprite == Sprite;
             PassiveButton button = killButtonManager.GetComponent<PassiveButton>();
             button.OnClick = new Button.ButtonClickedEvent();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
@@ -135,8 +137,7 @@ namespace TheOtherRoles.Objects {
             setActive(hudManager.UseButton.isActiveAndEnabled);
 
             killButtonManager.renderer.sprite = Sprite;
-            killButtonManager.killText.enabled = false; // clear Text because button has it
-            killButtonManager.killText.text = "";
+            killButtonManager.killText.enabled = showButtonText; // Only show the text if it's a kill button
             if (hudManager.UseButton != null) {
                 Vector3 pos = hudManager.UseButton.transform.localPosition;
                 if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
@@ -144,10 +145,10 @@ namespace TheOtherRoles.Objects {
                 if (hudManager.KillButton != null) hudManager.KillButton.transform.localPosition = hudManager.UseButton.transform.localPosition - new Vector3(1.3f, 0, 0); // Align the kill button (because it's on another position depending on the screen resolution)
             }
             if (CouldUse()) {
-                killButtonManager.renderer.color = Palette.EnabledColor;
+                killButtonManager.renderer.color = killButtonManager.killText.color = Palette.EnabledColor;
                 killButtonManager.renderer.material.SetFloat("_Desat", 0f);
             } else {
-                killButtonManager.renderer.color = Palette.DisabledClear;
+                killButtonManager.renderer.color = killButtonManager.killText.color = Palette.DisabledClear;
                 killButtonManager.renderer.material.SetFloat("_Desat", 1f);
             }
 
