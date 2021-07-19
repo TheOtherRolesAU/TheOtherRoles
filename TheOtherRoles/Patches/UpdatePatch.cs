@@ -158,7 +158,7 @@ namespace TheOtherRoles.Patches {
 
             // Lovers
             if (Lovers.lover1 != null && Lovers.lover2 != null && (Lovers.lover1 == PlayerControl.LocalPlayer || Lovers.lover2 == PlayerControl.LocalPlayer)) {
-                string suffix = Helpers.cs(Lovers.color, " ❤");
+                string suffix = Helpers.cs(Lovers.color, " ♥");
                 Lovers.lover1.nameText.text += suffix;
                 Lovers.lover2.nameText.text += suffix;
 
