@@ -4,6 +4,8 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.HudManagerStartPatch;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
+using TheOtherRoles.Objects;
+using TheOtherRoles.Patches;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;

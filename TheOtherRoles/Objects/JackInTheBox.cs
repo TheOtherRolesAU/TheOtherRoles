@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Objects {
 
     public class JackInTheBox {
         public static System.Collections.Generic.List<JackInTheBox> AllJackInTheBoxes = new System.Collections.Generic.List<JackInTheBox>();

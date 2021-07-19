@@ -11,8 +11,7 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     class MeetingHudPatch {
         static bool[] selections;
@@ -222,22 +221,29 @@ namespace TheOtherRoles
         private static GameObject guesserUI;
         static void guesserOnClick(int buttonTarget, MeetingHud __instance) {
             if (guesserUI != null || !(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted)) return;
+            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(false));
 
             Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("Background"), __instance.transform);
+            container.FindChild("BlackBG").gameObject.SetActive(false);
             container.transform.localPosition = new Vector3(0, 0, -5f);
             guesserUI = container.gameObject;
 
             int i = 0;
             var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
+            var maskTemplate = __instance.playerStates[0].transform.FindChild("MaskArea");
             var smallButtonTemplate = __instance.playerStates[0].Buttons.transform.Find("CancelButton");
             var textTemplate = __instance.playerStates[0].NameText;
 
-            Transform exitButton = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
-            exitButton.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
-            exitButton.transform.localScale = new Vector3(0.25f, 0.9f, 1);
+            Transform exitButtonParent = (new GameObject()).transform;
+            exitButtonParent.SetParent(container);
+            Transform exitButton = UnityEngine.Object.Instantiate(buttonTemplate.transform, exitButtonParent);
+            Transform exitButtonMask = UnityEngine.Object.Instantiate(maskTemplate, exitButtonParent);
             exitButton.gameObject.GetComponent<SpriteRenderer>().sprite = smallButtonTemplate.GetComponent<SpriteRenderer>().sprite;
+            exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
+            exitButtonParent.transform.localScale = new Vector3(0.25f, 0.9f, 1);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
             exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
 
@@ -246,13 +252,15 @@ namespace TheOtherRoles
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
-
-                Transform button = UnityEngine.Object.Instantiate(buttonTemplate.transform, container);
-                buttons.Add(button);
+                Transform buttonParent = (new GameObject()).transform;
+                buttonParent.SetParent(container);
+                Transform button = UnityEngine.Object.Instantiate(buttonTemplate, buttonParent);
+                Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
+                buttons.Add(button);
                 int row = i/4, col = i%4;
-                button.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
-                button.localScale = new Vector3(0.55f, 0.55f, 1f);
+                buttonParent.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
+                buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
                 label.transform.localPosition = new Vector3(0, 0, label.transform.localPosition.z);
@@ -278,6 +286,7 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId);
 
+                        __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
                         __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>2.7.1</Version>
+        <Version>2.7.3</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
     </PropertyGroup>
@@ -19,12 +19,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/core/*.dll"/>
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll"/>
+        <Reference Include="$(AmongUsLatest)/BepInEx/core/*.dll"/>
+        <Reference Include="$(AmongUsLatest)/BepInEx/unhollowed/*.dll"/>
     </ItemGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUs)/BepInEx/plugins/" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
     </Target>
 </Project>

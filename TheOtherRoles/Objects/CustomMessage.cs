@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-namespace TheOtherRoles{
+namespace TheOtherRoles.Objects {
 
     public class CustomMessage {
 

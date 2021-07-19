@@ -4,11 +4,11 @@ using System.IO;
 using System.Net.Http;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Objects;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
     {
@@ -158,7 +158,7 @@ namespace TheOtherRoles
 
             // Lovers
             if (Lovers.lover1 != null && Lovers.lover2 != null && (Lovers.lover1 == PlayerControl.LocalPlayer || Lovers.lover2 == PlayerControl.LocalPlayer)) {
-                string suffix = Helpers.cs(Lovers.color, " ❤");
+                string suffix = Helpers.cs(Lovers.color, " ♥");
                 Lovers.lover1.nameText.text += suffix;
                 Lovers.lover2.nameText.text += suffix;
 

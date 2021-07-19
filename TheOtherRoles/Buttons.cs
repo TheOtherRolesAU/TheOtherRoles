@@ -3,6 +3,7 @@ using Hazel;
 using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Objects;
 
 namespace TheOtherRoles
 {

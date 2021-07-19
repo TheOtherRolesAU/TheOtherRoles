@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Objects;
 using static TheOtherRoles.MapOptions;
 using System.Collections;
 using System;
@@ -11,7 +12,7 @@ using System.Text;
 using UnityEngine;
 using System.Reflection;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), "Begin")]
     class ExileControllerBeginPatch {
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
@@ -147,18 +148,22 @@ namespace TheOtherRoles {
 
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class ExileControllerMessagePatch {
-        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id, [HarmonyArgument(1)]Il2CppReferenceArray<Il2CppSystem.Object> parts) {
-            if (ExileController.Instance != null && ExileController.Instance.exiled != null) {
-                PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);
-                if (player == null) return;
-                // Exile role text
-                if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN || id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
-                    __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player).Select(x => x.name).ToArray());
+        static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id) {
+            try {
+                if (ExileController.Instance != null && ExileController.Instance.exiled != null) {
+                    PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);
+                    if (player == null) return;
+                    // Exile role text
+                    if (id == StringNames.ExileTextPN || id == StringNames.ExileTextSN || id == StringNames.ExileTextPP || id == StringNames.ExileTextSP) {
+                        __result = player.Data.PlayerName + " was The " + String.Join(" ", RoleInfo.getRoleInfoForPlayer(player).Select(x => x.name).ToArray());
+                    }
+                    // Hide number of remaining impostors on Jester win
+                    if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
+                        if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
+                    }
                 }
-                // Hide number of remaining impostors on Jester win
-                if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
-                    if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
-                }
+            } catch {
+                // pass - Hopefully prevent leaving while exiling to softlock game
             }
         }
     }
