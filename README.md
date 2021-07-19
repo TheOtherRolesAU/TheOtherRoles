@@ -81,10 +81,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added /color and /murder command to Freeplay (for the Hat Designers)
 
 **Version 2.7.1**
-- Fixed a bug where swapped votes were sometimes counted wrongly
-- Fixed the positioning of the player name while morphed
-- Fixed a bug where the window of the Guesser sometimes showed no "close button"
-- Fixed a bug where the garlics were not displayed properly
+- Fixed a bug where [swapped](#swapper) votes were sometimes counted wrongly
+- Fixed the positioning of the player name while [morphed](#morphling)
+- Fixed a bug where the window of the [Guesser](#guesser) sometimes showed no "close button"
+- Fixed a bug where the [garlics](#vampire) were not displayed properly
 
 **Version 2.7.0**
 - **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
