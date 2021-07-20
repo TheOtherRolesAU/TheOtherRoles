@@ -533,6 +533,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
 
         public static float updateIntervall = 5f;
+        public static bool targetResetAfterMeeting = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
@@ -547,6 +548,16 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        public static void resetTracked()
+        {
+            currentTarget = null;
+            tracked = null;
+            usedTracker = false;
+            if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            arrow = new Arrow(Color.blue);
+            if (arrow.arrow != null) arrow.arrow.SetActive(true);
+        }
+
         public static void clearAndReload() {
             tracker = null;
             currentTarget = null;
@@ -554,10 +565,11 @@ namespace TheOtherRoles
             usedTracker = false;
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            targetResetAfterMeeting = CustomOptionHolder.trackerTargetResetAfterMeeting.getBool();
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
-            if (arrow.arrow != null) arrow.arrow.SetActive(false);
-        }
+            if (arrow.arrow != null) arrow.arrow.SetActive(true);
+            }
     }
 
     public static class Vampire {
