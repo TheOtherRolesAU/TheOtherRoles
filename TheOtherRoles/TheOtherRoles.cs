@@ -568,7 +568,7 @@ namespace TheOtherRoles
             targetResetAfterMeeting = CustomOptionHolder.trackerTargetResetAfterMeeting.getBool();
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
-            if (arrow.arrow != null) arrow.arrow.SetActive(true);
+            if (arrow.arrow != null) arrow.arrow.SetActive(false);
         }
     }
 
