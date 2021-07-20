@@ -192,8 +192,8 @@ namespace TheOtherRoles {
             crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大船員職業數"), 0f, 0f, 15f, 1f);
             neutralRolesCountMin = CustomOption.Create(302, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小獨立職業數"), 0f, 0f, 15f, 1f);
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大獨立職業數"), 0f, 0f, 15f, 1f);
-            impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小冒牌貨職業數"), 0f, 0f, 3f, 1f);
-            impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大冒牌貨職業數"), 0f, 0f, 3f, 1f);
+            impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最小偽裝者職業數"), 0f, 0f, 3f, 1f);
+            impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "最大偽裝者職業數"), 0f, 0f, 3f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "黑手黨"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "守墓人冷卻", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -239,12 +239,12 @@ namespace TheOtherRoles {
             miniGrowingUpDuration = CustomOption.Create(181, "迷你船員成長時間", 400f, 100f, 1500f, 100f, miniSpawnRate);
 
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "戀人"), rates, null, true);
-            loversImpLoverRate = CustomOption.Create(51, "一個戀人是冒牌貨的機率", rates, loversSpawnRate);
+            loversImpLoverRate = CustomOption.Create(51, "一個戀人是偽裝者的機率", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "戀人雙死", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "戀人可有其他職業", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "賭徒"), rates, null, true);
-            guesserIsImpGuesserRate = CustomOption.Create(311, "賭徒是個冒牌貨的機率", rates, guesserSpawnRate);
+            guesserIsImpGuesserRate = CustomOption.Create(311, "賭徒是個偽裝者的機率", rates, guesserSpawnRate);
             guesserNumberOfShots = CustomOption.Create(312, "賭徒的嘗試次數", 2f, 1f, 15f, 1f, guesserSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "小丑"), rates, null, true);
@@ -264,8 +264,8 @@ namespace TheOtherRoles {
             sidekickCanKill = CustomOption.Create(226, "跟班可以殺人", false, jackalSpawnRate);
             sidekickCanUseVents = CustomOption.Create(227, "跟班可使用地道", true, jackalSpawnRate);
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "從跟班升職的豺狼可製造跟班", true, jackalSpawnRate);
-            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "豺狼可讓冒牌貨轉成跟班", true, jackalSpawnRate);
-            jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "豺狼與跟班有冒牌貨視野", false, jackalSpawnRate);
+            jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "豺狼可讓偽裝者轉成跟班", true, jackalSpawnRate);
+            jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "豺狼與跟班有偽裝者視野", false, jackalSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "轉職者"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, "轉職者轉移調整", false, shifterSpawnRate);
@@ -321,15 +321,15 @@ namespace TheOtherRoles {
             trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
 
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "密探"), rates, null, true);
-            snitchLeftTasksForReveal = CustomOption.Create(211, "告密者可看到冒牌貨在哪的任務數", 1f, 0f, 5f, 1f, snitchSpawnRate);
+            snitchLeftTasksForReveal = CustomOption.Create(211, "告密者可看到偽裝者在哪的任務數", 1f, 0f, 5f, 1f, snitchSpawnRate);
             snitchIncludeTeamJackal = CustomOption.Create(212, "Include Team Jackal", false, snitchSpawnRate);
             snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, "Use Different Arrow Color For Team Jackal", true, snitchIncludeTeamJackal);
 
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "間諜"), rates, null, true);
-            spyCanDieToSheriff = CustomOption.Create(241, "間諜可被警長殺私", false, spySpawnRate);
-            spyImpostorsCanKillAnyone = CustomOption.Create(242, "如果有間諜 冒牌貨可以殺死任何人", true, spySpawnRate);
+            spyCanDieToSheriff = CustomOption.Create(241, "間諜可被警長殺死", false, spySpawnRate);
+            spyImpostorsCanKillAnyone = CustomOption.Create(242, "如果偽裝者中有間諜可以殺死任何人", true, spySpawnRate);
             spyCanEnterVents = CustomOption.Create(243, "間諜可進入地道", false, spySpawnRate);
-            spyHasImpostorVision = CustomOption.Create(244, "間諜有冒牌貨視野", false, spySpawnRate);
+            spyHasImpostorVision = CustomOption.Create(244, "間諜有偽裝者視野", false, spySpawnRate);
 
             securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "守衛"), rates, null, true);
             securityGuardCooldown = CustomOption.Create(281, "守衛冷卻", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);
@@ -636,7 +636,7 @@ namespace TheOtherRoles {
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
                     } else if (option == CustomOptionHolder.impostorRolesCountMin) {
-                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "冒牌貨職業");
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "偽裝者職業");
                         var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
                         var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
                         if (min > max) min = max;
