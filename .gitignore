@@ -1,2 +1,5 @@
 .vs
 .vscode/tasks.json
+TheOtherRoles/bin
+TheOtherRoles/obj
+.idea
