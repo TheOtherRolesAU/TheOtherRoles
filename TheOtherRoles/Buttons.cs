@@ -30,6 +30,7 @@ namespace TheOtherRoles
         private static CustomButton placeJackInTheBoxButton;        
         private static CustomButton lightsOutButton;
         public static CustomButton cleanerCleanButton;
+        public static CustomButton undertakerDragButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
@@ -56,6 +57,7 @@ namespace TheOtherRoles
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
+            undertakerDragButton.MaxTimer = Undertaker.dragingCooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
@@ -633,6 +635,55 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,
                 KeyCode.F
+            );
+
+            // Cleaner Clean
+            undertakerDragButton = new CustomButton(
+                () => {
+                    if(Undertaker.deadBodyDraged == null)
+                    {
+                        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+                        {
+                            if (collider2D.tag == "DeadBody")
+                            {
+                                DeadBody deadBody = collider2D.GetComponent<DeadBody>();
+                                if (deadBody && !deadBody.Reported)
+                                {
+                                    Vector2 playerPosition = PlayerControl.LocalPlayer.GetTruePosition();
+                                    Vector2 deadBodyPosition = deadBody.TruePosition;
+                                    if (Vector2.Distance(deadBodyPosition, playerPosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(playerPosition, deadBodyPosition, Constants.ShipAndObjectsMask, false) && !Undertaker.isDraging)
+                                    {
+                                        
+                                        GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(deadBody.ParentId);
+                                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DragBody, Hazel.SendOption.Reliable, -1);
+                                        writer.Write(playerInfo.PlayerId);
+                                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                        RPCProcedure.dragBody(playerInfo.PlayerId);
+                                        Undertaker.deadBodyDraged = deadBody;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    } else
+                    {
+                        var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,(byte)CustomRPC.DropBody, SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);                        
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        Undertaker.deadBodyDraged = null;
+                    }
+ 
+                },
+                () => { return Undertaker.undertaker!= null && Undertaker.undertaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (( __instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove ) || Undertaker.deadBodyDraged != null) ;  },
+                () => { undertakerDragButton.Timer = undertakerDragButton.MaxTimer;},
+                Undertaker.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F,
+                true,
+                0f,
+                () =>  { }
             );
 
             // Warlock curse
