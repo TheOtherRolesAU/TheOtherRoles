@@ -9,7 +9,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
+The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#custom-servers-and-10-players) to the game.
 Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral | Secondary |
@@ -220,7 +220,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.2.0**
 - **Works with the latest Among Us version (2021.4.12s)**
-- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#Custom-Servers-and-10+-Players) section. During meetings use the up/down keys, on vitals use the left/right keys.
+- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#custom-servers-and-10-players) section. During meetings use the up/down keys, on vitals use the left/right keys.
 - **Added a new Impostor role: The Trickster** check the [Trickster](#trickster) section for more infos
 - You can now set how long the Time Master shield lasts
 - The host now sees for how long the lobby will remain open

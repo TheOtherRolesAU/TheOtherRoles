@@ -9,7 +9,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 # The Other Roles
 
-**The Other Roles** 是個 [Among Us](https://store.steampowered.com/app/945360/Among_Us) 的模組, 新增了更多的職業與新的 [設定](#設定), [自定義帽子](#自定義帽子) 及支援 [10人以上玩家](#Custom-Servers-and-10+-Players) 進到遊戲.
+**The Other Roles** 是個 [Among Us](https://store.steampowered.com/app/945360/Among_Us) 的模組，新增了更多的職業與新的 [設定](#設定)，[自定義帽子](#自定義帽子) 及支援 [10人以上玩家](#Custom-Servers-and-10-Players) 進到遊戲。
 更多職業即將推出 :)
 
 | 偽裝者 | 船員 | 獨立 | 第二 |
@@ -32,7 +32,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 |  | [時間管理大師](#時間管理大師) |  |  |
 |  |  [追踪者](#追踪者) |  |  |
 
-[職業分配](#職業分配) 部分解釋了職業與如何分配.
+[職業分配](#職業分配) 部分解釋了職業如何分配.
 
 # 發佈
 | Among Us - 版本| 模組 | 鏈結 |
@@ -82,24 +82,24 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Added /color and /murder command to Freeplay (for the Hat Designers)
 
 **Version 2.7.1**
-- Fixed a bug where [swapped](#swapper) votes were sometimes counted wrongly
-- Fixed the positioning of the player name while [morphed](#morphling)
-- Fixed a bug where the window of the [Guesser](#guesser) sometimes showed no "close button"
-- Fixed a bug where the [garlics](#vampire) were not displayed properly
+- Fixed a bug where [swapped](#掉包者) votes were sometimes counted wrongly
+- Fixed the positioning of the player name while [morphed]()
+- Fixed a bug where the window of the [Guesser](#賭徒) sometimes showed no "close button"
+- Fixed a bug where the [garlics](#吸血鬼) were not displayed properly
 
 **Version 2.7.0**
-- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris)
+- **New Role:** [Bounty Hunter](#賞金獵人) created by [Mallöris](https://github.com/Mallaris)
 - Added more new [colors](#colors) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
-- Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
-- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
-- Changed [Jackal](#jackal) & [Sidekick](#sidekick) to not be [erasable](#eraser) anymore
-- Changed [Role Assignment](#role-assignment) slightly to make chances more consistent
-- Fixed a bug where votes would still count after the [Guesser](#guesser) or it's target died
-- Fixed a bug where a [lover partner](#lovers) would not be shown as dead when killed by the [Guesser](#guesser)
-- Fixed a bug on the Airship, where the [Jester](#jester) win was not triggered in some cases
+- Added a setting to the [Shifter](#轉職者), that will prevent [Medic Shield](#醫生) & [Lover](#戀人) Roles to be shifted
+- Changed [Jackal](#豺狼) & [Sidekick](#跟班) to always be killable by [Sheriff](#警長)
+- Changed [Jackal](#豺狼) & [Sidekick](#跟班) to not be [erasable](#抹除者) anymore
+- Changed [Role Assignment](#職業分配) slightly to make chances more consistent
+- Fixed a bug where votes would still count after the [Guesser](#賭徒) or it's target died
+- Fixed a bug where a [lover partner](#戀人) would not be shown as dead when killed by the [Guesser](#賭徒)
+- Fixed a bug on the Airship, where the [Jester](#小丑) win was not triggered in some cases
 
 **Version 2.6.7**
-- **New Role:** [Guesser](#guesser)
+- **New Role:** [Guesser](#賭徒)
 - We changed the colors of some of our roles
 - We renamed the Child to Mini
 - Fixed a bug where a Jester win was triggered, when the partner of a Jester Lover was voted out
@@ -111,25 +111,25 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 **Version 2.6.5**
 - Added the ability to increase the number of tasks assigned to crewmates
 - New option: A role summary in the end screen (Client option)
-- **[Spy](#spy):** New option for spy to have the same vision as impostors
-- **[Spy](#spy):** New option for spy to be able to jump into vents (but he can't move between them)
+- **[Spy](#間諜):** New option for spy to have the same vision as impostors
+- **[Spy](#間諜):** New option for spy to be able to jump into vents (but he can't move between them)
 - Fixed a bug causing a crewmate task win when lovers were in the game even when not all crewmates had completed all their tasks
 - Restored the original Among Us color for crewmates in the intro cutscene
 
 **Version 2.6.4**
-- **[Lovers](#lovers):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
-- **[Seer](#seer):** Fixed souls and flash sometimes not being visible (Thanks to [orangeNKeks](https://github.com/orangeNKeks))
-- New option: [Swapper](#swapper) can only swap others
+- **[Lovers](#戀人):** You can now select that Lovers may have a second role (could be a Crewmate, Neutral or Impostor role)
+- **[Seer](#靈媒):** Fixed souls and flash sometimes not being visible (Thanks to [orangeNKeks](https://github.com/orangeNKeks))
+- New option: [Swapper](#掉包者) can only swap others
 - New option: Ghosts can see votes
-- New option: [Jackal](#jackal) and [Sidekick](#sidekick) have Impostor vision
-- New option: [Jester](#jester) can sabotage
+- New option: [Jackal](#豺狼) and [Sidekick](#跟班) have Impostor vision
+- New option: [Jester](#小丑) can sabotage
 - Changed FreePlay mode to not assign custom roles anymore
 - Fixed a bug with directional hats not using their flip image after a while
 
 **Version 2.6.3**
 - Changed the role limits options to allow for minimum and maximum bounds
 - Changed the role assignment to be more random when assigning roles (previously assigned the neutral roles before assigning the crewmate roles)
-- Added new `flip` option to [Custom Hats](#custom-hats)
+- Added new `flip` option to [Custom Hats](#自定義帽子)
 
 **Version 2.6.2**
 - The Other Roles now supports the new Among Us version **2021.5.10s**
@@ -142,7 +142,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Improved the overlay of the Arsonist
 
 **Version 2.6.0**
-- **New Role:** [Arsonist](#arsonist)
+- **New Role:** [Arsonist](#縱火狂)
 - Added an Ingame Updater, to make it easier to update the Mod
 - Added synchronization for Airship toilet doors. Doors now open/close for everyone
 - Changed Shifter to also die when shifting a neutral role (Jester, Arsonist, Jackal, ...)
@@ -162,12 +162,12 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Fixed a bug on there Airship, where the view of the cameras that the Security Guard placed wasn't centered on the camera.
 
 **Version 2.5.0**
-- **New Role:** [Security Guard](#security-guard)
+- **New Role:** [Security Guard](#守衛)
 - Fixed a bug where the game would stop after the first meeting
 - Fixed a bug where killing with the hotkey Q ignored shields
 
 **Version 2.4.0**
-- **New Role:** [Warlock](#warlock)
+- **New Role:** [Warlock](#咒詛師)
 - Added an option that allows ghosts to see the roles and remaining tasks of other players
 - Added options to configure Morph & Camo duration
 - Added hotkeys to the custom buttons (**Q** for the buttons that are on the same place as the kill button, **F** for the buttons that are above the kill button)
@@ -179,15 +179,15 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Added a way to get the 2 Hidden [Colors](#colors)
 
 **Version 2.3.0**
-- **New Role:** [Cleaner](#cleaner)
+- **New Role:** [Cleaner](#清除者)
 - Added 12 new [Colors](#colors)
-- We added support for creating [Custom Hats](#custom-hats). New hats are coming with the next version, but you can already create and submit your own hats on [Discord](https://discord.gg/77RkMJHWsM).
+- We added support for creating [Custom Hats](#自定義帽子). New hats are coming with the next version, but you can already create and submit your own hats on [Discord](https://discord.gg/77RkMJHWsM).
 - Added the option to hide the name of players with an unknown role
 - Added Trickster Box vent animation. Thanks to [Drakoni](https://twitter.com/Drakoni13)
 - You can now change the custom server ip/port right inside the game
 - The Jackal, the Sidekick and the Jester now have fake tasks
 - Added outlines, to show who you're targetting with your ability. Thanks to [Sihaack](https://github.com/sihaack) for part of the code.
-- Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#settings) for more details.
+- Added a streamer mode to Among Us, which hides lobby codes, the ip of your custom server and the port of your custom server. You can also modify the text that replaces the lobby code, check [Settings](#設定) for more details.
 - Changed Meeting Hud Layout when playing with more than 10 players
 - Fixed a bug where **ImpLovers** would hardly spawn
 - Fixed a bug where players could get stuck on ladders/platforms when being rewinded
@@ -208,8 +208,8 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 **Version 2.2.0**
 - **Works with the latest Among Us version (2021.4.12s)**
-- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#Custom-Servers-and-10+-Players) section. During meetings use the up/down keys, on vitals use the left/right keys.
-- **Added a new Impostor role: The Trickster** check the [Trickster](#trickster) section for more infos
+- **Added support for 10+ player lobbies on custom servers:** Check the [Custom Servers and 10+ Players](#custom-servers-and-10-players) section. During meetings use the up/down keys, on vitals use the left/right keys.
+- **Added a new Impostor role: The Trickster** check the [Trickster](#詭騙師) section for more infos
 - You can now set how long the Time Master shield lasts
 - The host now sees for how long the lobby will remain open
 - We changed the look/layout of the settings
@@ -223,7 +223,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - The Mini is now able to use ladders and it can do all the tasks right away
 
 **Version 2.1.0**
-- **New Role:** [Spy](#spy)
+- **New Role:** [Spy](#間諜)
 - **Eraser:** The Eraser can now also remove the role of other Impostors. This enables him to reveal the Spy, but might result in removing the special ability of his partner.
 - **Camouflager:** The Mini age/size will now also be hidden, to allow the Mini Impostor to kill during camouflage
 
@@ -237,19 +237,19 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 **Changes in 2.0.0**
 - **New button art** created by **Bavari**
-- **New mod updater/installer tool** created by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). Check the [Installation](#installation) section for more details.
+- **New mod updater/installer tool** created by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). Check the [Installation](#安裝) section for more details.
 - **Custom options:** Introduced customizable presets. Starting with 2.0.0, settings can be copied and used with higher versions (2.0.0).
-- **Time Master rework:** Check [Time Master](#time-master) for more information
+- **Time Master rework:** Check [Time Master](#時間管理大師) for more information
 - **Medic:** The Medic report changed, it only shows the time since death (see Detective)
 - **Detective:** The Detective now sees the name/color type of the killer when he reports a dead body (ability moved from the Medic to the Detective)
-- **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#lighter) section for more details.
-- **Seer:** As the role didn't work the way it was, we completely changed it. We're still working on the role, for now we're trying a few things. Check the [Seer](#seer) section to get more details about the new Seer.
-- **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#shifter) sections for more details.
+- **Lighter:** We changed and tried to nerf the Lighter, see the [Lighter](#點燈人) section for more details.
+- **Seer:** As the role didn't work the way it was, we completely changed it. We're still working on the role, for now we're trying a few things. Check the [Seer](#靈媒) section to get more details about the new Seer.
+- **Shifter:** We reworked the Shifter, he is now part of the crew. Check out the [Shifter](#轉職者) sections for more details.
 - **Hacker:** The Hacker is basically the old Spy. We added the option to only show the color type instead of the color on the admin table.
-- **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#camouflager) section for more details.
-- **Morphling:** Now also overrides the information of other roles, check the [Morphling](#morphling) section for more details
-- **Mini:** The Mini can now be a Crewmate Mini or an Impostor Mini, check the [Mini](#mini) section for more details
-- **Eraser:** The Eraser, a new Impostor role, is now part of the mod. Check the [Eraser](#eraser) section for more details
+- **Camouflager:** Now also overrides the information of other roles, check the [Camouflager](#魔術師) section for more details.
+- **Morphling:** Now also overrides the information of other roles, check the [Morphling](#百變怪) section for more details
+- **Mini:** The Mini can now be a Crewmate Mini or an Impostor Mini, check the [Mini](#迷你) section for more details
+- **Eraser:** The Eraser, a new Impostor role, is now part of the mod. Check the [Eraser](#抹除者) section for more details
 - **New options:**
     - You can now set the maximum number of meetings in a game: Every player still only has one meeting. The Mayor can always use his meeting (even if the maximum number of meetings was reached). Impostor/Jackal meetings also count.
 
@@ -267,7 +267,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Fixed a bug that prevented the game from continuing after a meeting (for an edge case with Lovers)
 - If two players try to kill each other at the same time both should die (e.g. Sheriff vs Impostor)
 - We added a description for your current role right above the task list
-- Added a description for the [Role Assignment System](#role-assignment)
+- Added a description for the [Role Assignment System](#職業分配)
 
 \
 **Changes in v1.7:**
@@ -284,7 +284,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 \
 **Changes in v1.5:**
 - Time Master - Buff: He is not affected by his rewind anymore, which gives him more utility. Players will now be rewinded out of vents.
-- Mini - Nerf: The Mini now grows up (see [Mini](#mini)) and becomes a normal Crewmate at some point. A growing Mini is not killable anymore. Some tasks are still not doable for the small Mini, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
+- Mini - Nerf: The Mini now grows up (see [Mini](#迷你)) and becomes a normal Crewmate at some point. A growing Mini is not killable anymore. Some tasks are still not doable for the small Mini, we are working on that. But eventually when growing up it can do all the tasks as it's size increases.
 - Seer - Nerf: Added an option that sets how often the Seer mistakes the player for another.
 - Hacker - Nerf: The Hacker now only sees the additional information when he activates his "Hacker mode". That should stops the Hacker from camping the admin table/vitals.
 - Other: Camouflager/Morphling cooldowns were fixed. Custom regions code was removed to enable 3rd party tools. Some minor bugfixes.
@@ -307,7 +307,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 </details>
 
-# Installation
+# 安裝
 ## Windows Auto Installation/Updating Using The AmongUsModUpdater
 This tool was made by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). It automatically installs/updates the TheOtherRoles mod to the newest version, runs the game and
 syncs your game options automatically.
@@ -469,11 +469,11 @@ Here are a few instructions, on how to create a custom hat:
 We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
 if you're using it right.
 
-First you need to choose how many special roles of each kind (Impostor/Neutral/Crewmate) you want in the game.
-The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
+First you need to choose how many special roles of each kind (偽裝者/Neutral/Crewmate) you want in the game.
+The count you set will only be reached, if there are enough Crewmates/偽裝者s in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
 - First all roles that are set to 100% are being assigned to arbitrary players
-- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and Impostors). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/Impostors or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
-- The Mafia, Lovers and Mini are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and Impostor roles are selected and assigned in a random order.
+- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and 偽裝者s). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/偽裝者s or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
+- The 黑手黨, 戀人 and 迷你 are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and 偽裝者 roles are selected and assigned in a random order.
 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
@@ -482,66 +482,66 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 
 
 ## 黑手黨
-### **Team: Impostors**
-The Mafia are a group of three Impostors.\
-The Godfather works like a normal Impostor.\
-The Mafioso is an Impostor who cannot kill nor sabotage until the Godfather is dead.\
-The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
+### **隊伍:偽裝者**
+黑手黨是由三個冒名頂替者組成的團體。\
+教父 works like a normal 偽裝者.\
+黑手黨員 is an 偽裝者 who cannot kill nor sabotage until the 教父 is dead.\
+守墓人 is an 偽裝者 who cannot kill nor sabotage, but they can hide dead bodies instead.\
 \
 **NOTE:**
-- There have to be 3 Impostors activated for the mafia to spawn.
+- There have to be 3 偽裝者s activated for the 黑手黨 to spawn.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Mafia Spawn Chance | -
-| Janitor Cooldown | -
+| 黑手黨生成機率 | -
+| 守墓人冷卻 | -
 -----------------------
 
 ## 百變怪
-### **Team: Impostors**
-The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
+### **隊伍:偽裝者**
+The Morphling is an 偽裝者 which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
 \
 **NOTE:**
-- They shrink to the size of the Mini when they copies its look.
+- They shrink to the size of the 迷你 when they copies its look.
 - The Hacker sees the new color on the admin table.
 - The color of the footprints changes accordingly (also the ones that were already on the ground).
-- The other Impostor still sees that they are an Impostor (the name remains red).
+- The other 偽裝者 still sees that they are an 偽裝者 (the name remains red).
 - The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
 - Tracker and Snitch arrows keep working.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Morphling Spawn Chance | -
-| Morphling Cooldown | -
+| Morphling 生成機率 | -
+| Morphling 冷卻 | -
 | Morph Duration | Time the Morphling stays morphed
 -----------------------
 
 ## 魔術師
-### **Team: Impostors**
-The Camouflager is an Impostor which can additionally activate a camouflage mode.
+### **隊伍:偽裝者**
+The Camouflager is an 偽裝者 which can additionally activate a camouflage mode.
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
 are hidden and all players have the same color.\
 \
 **NOTE:**
-- The Mini will look like all the other players
+- The 迷你 will look like all the other players
 - The color of the footprints turns gray (also the ones that were already on the ground).
 - The Hacker sees gray icons on the admin table
 - The shield is not visible anymore
 - Tracker and Snitch arrows keep working
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Camouflager Spawn Chance | -
-| Camouflager Cooldown | -
+| Camouflager 生成機率 | -
+| Camouflager 冷卻 | -
 | Camo Duration | Time players stay camouflaged
 -----------------------
 
 ## 吸血鬼
-### **Team: Impostors**
-The Vampire is an Impostor, that can bite other player. Bitten players die after a configurable amount of time.\
+### **隊伍:偽裝者**
+The Vampire is an 偽裝者, that can bite other player. Bitten players die after a configurable amount of time.\
 If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
 If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
 \
@@ -550,102 +550,102 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
 - If there is a Vampire in the game, there can't be a Warlock
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Vampire Spawn Chance | -
+| Vampire 生成機率 | -
 | Vampire Kill Delay | -
-| Vampire Cooldown | Sets the kill/bite cooldown
+| Vampire 冷卻 | Sets the kill/bite cooldown
 | Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
 ## 抹除者
-### **Team: Impostors**
-The Eraser is an Impostor that can erase the role of every player.\
+### **隊伍:偽裝者**
+The Eraser is an 偽裝者 that can erase the role of every player.\
 The targeted players will lose their role after the meeting right before a player is exiled.\
 After every erase, the cooldown increases by 10 seconds.\
 The erase will be performed, even if the Eraser or his target die before the next meeting.\
-By default the Eraser can erase everyone but the Spy and other Impostors. Depending on the options
-he can also erase them (Impostors will lose their special Impostor ability).
+By default the Eraser can erase everyone but the Spy and other 偽裝者s. Depending on the options
+he can also erase them (偽裝者s will lose their special 偽裝者 ability).
 \
 **NOTE:**
 - The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of his target, depending on who the Eraser erased)
-- Erasing a Lover automatically erases the other Lover as well (if the second Lover is an ImpLover, he will turn into an Impostor)
+- Erasing a Lover automatically erases the other Lover as well (if the second Lover is an ImpLover, he will turn into an 偽裝者)
 - Erasing a Jackal that has a Sidekick, triggers the Sidekick promotion if it's activated in the settings
 - As the erasing is being triggered before the eject of a player, erasing and voting out a Lover in the same round, would result in the
   ex Lover surviving as the partnership was erased before. Also a Jester win would not happen, as the erase will be triggered before.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Eraser Spawn Chance | -
-| Eraser Cooldown | The Erasers cooldown will increase by 10 seconds after every erase.
-| Eraser Can Erase Anyone | If set to false, he can't erase the Spy and other Impostors
+| Eraser 生成機率 | -
+| Eraser 冷卻 | The Erasers cooldown will increase by 10 seconds after every erase.
+| Eraser Can Erase Anyone | If set to false, he can't erase the Spy and other 偽裝者s
 -----------------------
 
 ## 詭騙師
-### **Team: Impostors**
-The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players. \
+### **隊伍:偽裝者**
+The Trickster is an 偽裝者 that can place 3 jack-in-the-boxes that are invisible at first to other players. \
 If the Trickster has placed all of his boxes they will be converted into a vent network usable only by the Trickster himself, but the boxes are revealed to the others. \
-If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while. \
+If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-偽裝者s, that cannot be fixed by other players. Lights are automatically restored after a while. 
 
 \
 **NOTE:**
-- Impostors will get a text indicator at the bottom of the screen to notify them if the lights are out due to the Trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
+- 偽裝者s will get a text indicator at the bottom of the screen to notify them if the lights are out due to the Trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Trickster Spawn Chance | -
-| Trickster Box Cooldown | Cooldown for placing jack-in-the-boxes
-| Trickster Lights Out Cooldown | Cooldown for his "lights out" ability
+| Trickster 生成機率 | -
+| Trickster Box 冷卻 | Cooldown for placing jack-in-the-boxes
+| Trickster Lights Out 冷卻 | Cooldown for his "lights out" ability
 | Trickster Lights Out Duration | Duration after which the light is automatically restored
 -----------------------
 
 ## 清除者
-### **Team: Impostors**
-The Cleaner is an Impostor who has the ability to clean up dead bodies. \
+### **隊伍:偽裝者**
+The Cleaner is an 偽裝者 who has the ability to clean up dead bodies. \
 
 \
 **NOTE:**
 - The Kill and Clean cooldown are shared, preventing him from immediately cleaning his own kills.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Cleaner Spawn Chance | -
-| Cleaner Cooldown | Cooldown for cleaning dead bodies
+| Cleaner 生成機率 | -
+| Cleaner 冷卻 | Cooldown for cleaning dead bodies
 -----------------------
 
 
 ## 咒詛師
-### **Team: Impostors**
-The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
+### **隊伍:偽裝者**
+The Warlock is an 偽裝者, that can curse another player (the cursed player doesn't get notified).\
 If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away he is).\
 Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.\
 The Warlock can still perform normal kills, but the two buttons share the same cooldown.
 
 \
 **NOTE:**
-- The Warlock can always kill his Impostor mates (and even himselfs) using the "cursed kill"
+- The Warlock can always kill his 偽裝者 mates (and even himselfs) using the "cursed kill"
 - If there is a Warlock in the game, there can't be a Vampire
 - Performing a normal kill, doesn't lift the curse
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Warlock Spawn Chance | -
-| Warlock Cooldown | Cooldown for using the Curse and curse Kill
+| Warlock 生成機率 | -
+| Warlock 冷卻 | Cooldown for using the Curse and curse Kill
 | Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
 -----------------------
 
 
 ## 賞金獵人
-### **Team: Impostors**
+### **隊伍:偽裝者**
 \
 Created by  [Mallöris](https://github.com/Mallaris)\
 \
-The Bounty Hunter is an Impostor, that continuously get bountys (the targeted player doesn't get notified).\
+The Bounty Hunter is an 偽裝者, that continuously get bountys (the targeted player doesn't get notified).\
 The target of the Bounty Hunter swaps after every meeting and after a configuarble amount of time.\
 If the Bounty Hunter kills his target, his kill cooldown will be a lot less than usual.\
 Killing a player that's not his current target results in an increased kill cooldown.\
@@ -653,151 +653,151 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 
 \
 **NOTE:**
-- The target won't be an Impostor or a Spy
+- The target won't be an 偽裝者 or a Spy
 - Killing the target resets the timer and a new target will be selected.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Bounty Hunter Spawn Chance | -
+| Bounty Hunter 生成機率 | -
 | Duration After Which Bounty Changes | -
 | Cooldown After Killing Bounty | -
-| Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
+| Additional Cooldown After Killing Others | Time will be added to the normal 偽裝者 cooldown if the Bounty Hunter kills a not-bounty player
 | Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
 | Bounty Hunter Arrow Update Intervall | Sets how often the position is being updated
 -----------------------
 
 
 ## 賭徒
-### **Team: Crewmates or Impostors**
-The Guesser can be a Crewmate or an Impostor (depending on the settings).\
-The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
+### **隊伍:船員或偽裝者**
+The 賭徒 can be a Crewmate or an 偽裝者 (depending on the settings).\
+The 賭徒 can shoot a player during the meeting, by guessing its role. If the guess is wrong, the 賭徒 dies instead.\
 You can select how many players can be shot per meeting and how many players can be shot per game.\
-The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
+The guesses 偽裝者 and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.
 
 \
 **NOTE:**
 - The vote of a shot player, won't be counted
-- You can't guess the role **Nice Mini** for obvious reasons
-- You can't guess the role **Lover**, you'll have to guess the primary role of one of the Lovers, to kill both of them
-- Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out
+- You can't guess the role **Nice 迷你** for obvious reasons
+- You can't guess the role **Lover**, you'll have to guess the primary role of one of the 戀人, to kill both of them
+- Jester wins won't be triggered, if the 賭徒 shoots the Jester before the Jester gets voted out
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Guesser Spawn Chance | -
-| Chance That The Guesser Is An Impostor | -
-| Guesser Number Of Shots Per Game| -
-| Guesser Number Of Shots Per Meeting| -
+| 賭徒 生成機率 | -
+| Chance That The 賭徒 Is An 偽裝者 | -
+| 賭徒 Number Of Shots Per Game| -
+| 賭徒 Number Of Shots Per Meeting| -
 
 -----------------------
 
 ## 戀人
-### **Team: Lovers (and secondary team)**
-There are always two Lovers which are linked together.\
+### **隊伍:戀人(與第二隊伍)**
+There are always two 戀人 which are linked together.\
 Their primary goal is it to stay alive together until the end of the game.\
 If one Lover dies (and the option is activated), the other Lover suicides.\
-You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
-You can specify the chance of one Lover being an Impostor.\
-The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win)\
-If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
-If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
-If there's an team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
+You can select if 戀人 are able to have a second role (could be a Neutral, Crewmate or 偽裝者 Role)\
+You can specify the chance of one Lover being an 偽裝者.\
+The 戀人 never know the role of their partner, they only see who their partner is.\
+The 戀人 win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead 偽裝者 Lover can win with the 偽裝者s, an Arsonist Lover can still achieve an Arsonist win)\
+If one of the 戀人 is a killer (i.e. Jackal/Sidekick/偽裝者), they can achieve a "戀人 solo win" where only the 戀人 win.\
+If there is no killer among the 戀人 (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
+If there's an team 偽裝者/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
 \
 **NOTE:**
-- In a 2 Cremates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
-- The Lovers can change if the Shifter takes the role of a Lovers
+- In a 2 Cremates vs 2 偽裝者s (or 2 members of team Jackal) and the 戀人 are not in the same team, the game is not automatically over since the 戀人 can still achieve a solo win. E.g. if there are the following roles 偽裝者 + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the 偽裝者s or 戀人 win.
+- The 戀人 can change if the Shifter takes the role of a 戀人
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Lovers Spawn Chance | -
-| Chance That One Lover Is Impostor | -
-| Both Lovers Die | Whether the second Lover suicides, if the first one dies
-| Lovers Can Have Another Role | If set to true, the Lovers can have a second role
+| 戀人 生成機率 | -
+| Chance That One Lover Is 偽裝者 | -
+| Both 戀人 Die | Whether the second Lover suicides, if the first one dies
+| 戀人 Can Have Another Role | If set to true, the 戀人 can have a second role
 -----------------------
 
 
 ## 警長
-### **Team: Crewmates**
-The Sheriff has the ability to kill Impostors.
+### **隊伍:船員**
+The Sheriff has the ability to kill 偽裝者s.
 If they try to kill a Crewmate, they die instead.
 
 **NOTE:**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
-- If the Sheriff shoots a Mini Impostor, the Sheriff dies if the Mini is still growing up. If it's 18, the Mini Impostor dies.
+- If the Sheriff shoots a 迷你 偽裝者, the Sheriff dies if the 迷你 is still growing up. If it's 18, the 迷你 偽裝者 dies.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Sheriff Spawn Chance | -
-| Sheriff Cooldown | -
+| Sheriff 生成機率 | -
+| Sheriff 冷卻 | -
 | Neutrals Can Die To Sheriff | -
 -----------------------
 
 ## 小丑
-### **Team: Neutral**
+### **隊伍:獨立**
 The Jester does not have any tasks. They win the game as a solo, if they get voted out during a meeting.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Jester Spawn Chance | -
+| Jester 生成機率 | -
 | Jester can call emergency meeting | Option to disable the emergency button for the Jester
 | Jester can sabotage | Option to allow the Jester to sabotage
 -----------------------
 
 ## 縱火狂
-### **Team: Neutral**
+### **隊伍:獨立**
 The Arsonist does not have any tasks, he has to win the game as a solo.\
 The Arsonist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
 If the player that the Arsonist douses walks out of range, the cooldown will reset to 0.\
 After dousing everyone alive the Arsonist can ignite all the players which results in an Arsonist win.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Arsonist Spawn Chance | -
+| Arsonist 生成機率 | -
 | Arsonist Countdown | -
 | Arsonist Douse Duration | The time it takes to douse a player
 -----------------------
 
 ## 靈媒
-### **Team: Crewmates**
+### **隊伍:船員**
 The Seer has two abilities (one can activate one of them or both in the options).
 The Seer sees the souls of players that died a round earlier, the souls slowy fade away.
 The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Seer Spawn Chance | -
+| Seer 生成機率 | -
 | Seer Mode | Options: Show death flash and souls, show death flash, show souls
 | Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
 | Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting
 -----------------------
 
 ## 工程師
-### **Team: Crewmates**
+### **隊伍:船員**
 The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
-The Engineer can use vents. If the Engineer is inside a vent, the Impostors will see a blue outline
+The Engineer can use vents. If the Engineer is inside a vent, the 偽裝者s will see a blue outline
 around all vents on the map (in order to warn them).
 Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
 you can double click on the tasks instead.
 \
 **NOTE:**
-- The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
+- The kill button of 偽裝者s activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Engineer Spawn Chance | -
+| Engineer 生成機率 | -
 -----------------------
 
 ## 偵探
-### **Team: Crewmates**
+### **隊伍:船員**
 The Detective can see footprints that other players leave behind.
 The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
 \
@@ -806,10 +806,10 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Detective Spawn Chance | -
+| Detective 生成機率 | -
 | Anonymous Footprints | If set to true, all footprints will have the same color. Otherwise they will have the color of the respective player.
 | Footprint Intervall | The intervall between two footprints
 | Footprint Duration | Sets how long the footprints remain visible.
@@ -818,50 +818,50 @@ The Detective's other feature shows when they report a corpse: they recieve clue
 -----------------------
 
 ## 點燈人
-### **Team: Crewmates**
+### **隊伍:船員**
 The Lighter can turn on his Lighter every now and then, which increases his vision by a costumizable amount.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Lighter Spawn Chance | -
+| Lighter 生成機率 | -
 | Lighter Mode Vision On Lights On | The vision the Lighter has when the lights are on and the Lighter mode is on
 | Lighter Mode Vision On Lights Off | The vision the Lighter has when the lights are down and the Lighter mode is on
-| Lighter Cooldown | -
+| Lighter 冷卻 | -
 | Lighter Duration | -
 -----------------------
 
 ## 迷你
-### **Team: Crewmates or Impostors**
-The Mini can be a Crewmate (67% chance) or an Impostor (33% chance).\
-The Mini's character is smaller and hence visible to everyone in the game.\
-The Mini cannot be killed until it turns 18 years old, however it can be voted out.\
-**Impostor Mini:**
+### **隊伍:船員或偽裝者**
+迷你可以是船員(67%機率)或是偽裝者(33%機率)。\
+The 迷你's character is smaller and hence visible to everyone in the game.\
+The 迷你 cannot be killed until it turns 18 years old, however it can be voted out.\
+**迷你偽裝者:**
 - While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
 - If it gets thrown out of the ship, everything is fine.
 
-**Crewmate Mini:**
-- The Crewmate Mini aims to play out the strength its invincibility in the early game.
-- If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
+**迷你船員:**
+- The Crewmate 迷你 aims to play out the strength its invincibility in the early game.
+- If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a 迷你.
 
 **NOTE:**
-- Impostors can't kill the Mini (the button does not work) until it turns 18
-- The Sheriff can kill the Impostor Mini, but only if it's fully grown up
+- 偽裝者s can't kill the 迷你 (the button does not work) until it turns 18
+- The Sheriff can kill the 偽裝者 迷你, but only if it's fully grown up
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Mini Spawn Chance | -
-| Mini  | Mini Growing Up Duration
+| 迷你 生成機率 | -
+| 迷你  | 迷你 Growing Up Duration
 -----------------------
 
 ## 醫生
-### **Team: Crewmates**
+### **隊伍:船員**
 The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
-The shielded player can still be voted out and might also be an Impostor.\
-If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
+The shielded player can still be voted out and might also be an 偽裝者.\
+If set in the options, the shielded player will get a red flash on their screen if someone (偽裝者, Sheriff, ...) tried to murder them.
 If the Medic dies, the shield disappears with them.\
-The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
+The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded 偽裝者.\
 The Medic's other feature shows when they report a corpse: they will see how long ago the player died
 \
 **NOTE:**
@@ -869,27 +869,27 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
 
 
-### Game Options
-| Name | Description | Options |
+### 遊戲選項
+| 名稱 | 描述 | Options |
 |----------|:-------------:|:-------------:|
-| Medic Spawn Chance | - | -
+| Medic 生成機率 | - | -
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
 -----------------------
 
 ## 市長
-### **Team: Crewmates**
+### **隊伍:船員**
 The Mayor leades the Crewmates by having a vote that counts twice.\
 The Mayor can always use his meeting, even if the maximum number of meetings was reached.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Mayor Spawn Chance | -
+| Mayor 生成機率 | -
 -----------------------
 
 ## 駭客
-### **Team: Crewmates**
+### **隊伍:船員**
 If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
 Otherwise he sees the same information as everyone else.
 **Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
@@ -899,10 +899,10 @@ Otherwise he sees the same information as everyone else.
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Hacker Spawn Chance | -
+| Hacker 生成機率 | -
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
@@ -910,12 +910,12 @@ Otherwise he sees the same information as everyone else.
 
 
 ## 轉職者
-### **Team: Crewmates**
+### **隊伍:船員**
 The Shifter can take over the role of another Crewmate, the other player will transform into a Crewmate.\
 The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
 Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
-Swapping roles with an Impostor or Neutral fails and the Shifter commits suicide after the next meeting (there won't be any body).\
-The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the Impostors.\
+Swapping roles with an 偽裝者 or Neutral fails and the Shifter commits suicide after the next meeting (there won't be any body).\
+The Shifter aims to save roles from leaving the game, by e.g. taking over a Sheriff or Medic that is known to the 偽裝者s.\
 This works especially well against the Eraser, but also gives the Eraser the possiblity to act like a Shifter.\
 The **special interactions** with the Shifter are noted in the chapters of the respective roles.\
 \
@@ -925,15 +925,15 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 - One time use abilities (e.g. shielding a player or Engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
   can only use them, if the previous player did not used them before)
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Shifter Spawn Chance | -
-| Shifter Shifts Modifiers | Sets if Lovers and/or Medic Shield will be shifted
+| Shifter 生成機率 | -
+| Shifter Shifts Modifiers | Sets if 戀人 and/or Medic Shield will be shifted
 -----------------------
 
 ## 時間管理大師
-### **Team: Crewmates**
+### **隊伍:船員**
 The Time Master has a time shield which he can activate. The time shield remains active for a configurable amount of time.\
 If a player trys to kill the Time Master while the time shield is active, the kill won't happen and the
 time will rewind for a set amount of time.\
@@ -948,99 +948,99 @@ The Time Master won't be affected by the rewind.\
 - If the Time Master has a Medic shield, he won't rewind.
 - The shield itself ends immediately when triggered. So the timemaster can be attacked again as soon as the rewind ends.
 
-### Game Options
-| Name | Description |
+### 遊戲選項
+| 名稱 | 描述 |
 |----------|:-------------:|
-| Time Master Spawn Chance | - |
-| Time Master Cooldown | - |
+| Time Master 生成機率 | - |
+| Time Master 冷卻 | - |
 | Rewind Duration | How much time to rewind |
 | Time Master Shield Duration |
 -----------------------
 
 ## 掉包者
-### **Team: Crewmates**
+### **隊伍:船員**
 During meetings the Swapper can exchange votes that two people get (i.e. all votes
 that player A got will be given to player B and vice versa).\
 Because of the Swappers strength in meetings, they might not start emergency meetings
 and can't fix lights and comms.
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Swapper Spawn Chance | -
+| Swapper 生成機率 | -
 | Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
 | Swapper can only swap others | Sets whether the Swapper can swap himself or not
 -----------------------
 
 ## 追踪者
-### **Team: Crewmates**
+### **隊伍:船員**
 The Tracker can select one player in a game and tracks this player for the rest of the game.
 An arrow points to the last tracked position of the player.
 The arrow updates it's position every few seconds (configurable).
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Tracker Spawn Chance | -
+| Tracker 生成機率 | -
 | Tracker Update Intervall | Sets how often the position is being updated
 -----------------------
 
 ## 密探
-### **Team: Crewmates**
-When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors.
-When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors, also with an arrow.
+### **隊伍:船員**
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the 偽裝者s.
+When the Snitch has one task left (configurable) the Snitch will be revealed to the 偽裝者s, also with an arrow.
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Snitch Spawn Chance | -
-| Task Count Where Impostors See Snitch | -
+| Snitch 生成機率 | -
+| Task Count Where 偽裝者s See Snitch | -
 -----------------------
 
 ## 豺狼
 ### **Team: Jackal**
 The Jackal is part of an extra team, that tries to eliminate all the other players.\
-The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
+The Jackal has no tasks and can kill 偽裝者s, Crewmates and Neutrals.\
 The Jackal (if allowed by the options) can select another player to be his Sidekick.
 Creating a Sidekick removes all tasks of the Sidekick and adds him to the team Jackal. The Sidekick loses his current role (except if he's a Lover, then he plays in two teams).
 The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
-The Jackal can also promote Impostors to be his Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or he will just look like the Sidekick to the Jackal an remain as he was.\
+The Jackal can also promote 偽裝者s to be his Sidekick, but depending on the options the 偽裝者 will either really turn into the Sidekick and leave the team 偽裝者s or he will just look like the Sidekick to the Jackal an remain as he was.\
 \
 The team Jackal enables multiple new outcomes of the game, listing some examples here:
-- The Impostors could be eliminated and then the crew plays against the team Jackal.
-- The Crew could be eliminated, then the Team Jackal fight against the Impostors (the Crew can still make a task win in this scenario)
+- The 偽裝者s could be eliminated and then the crew plays against the team Jackal.
+- The Crew could be eliminated, then the Team Jackal fight against the 偽裝者s (the Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Crewmate Mini lose by vote
+1. Crewmate 迷你 lose by vote
 2. Jester wins by vote
 3. Arsonist win
-4. Team Impostor wins by sabotage
+4. Team 偽裝者 wins by sabotage
 5. Team Crew wins by tasks (also possible if the whole Crew is dead)
-6. Lovers among the last three players win
-7. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
-8. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
+6. 戀人 among the last three players win
+7. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 偽裝者s left and team Jackal contains no Lover)
+8. Team 偽裝者 wins by outnumbering (When the team 偽裝者s contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team 偽裝者s contains no Lover)
 9. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostrs left)
 
 **NOTE:**
 - The Jackal (and his Sidekick) may be killed by a Sheriff.
-- A Jackal cannot target the Mini, while it's growing up. After that he can kill it or select it as its Sidekick
+- A Jackal cannot target the 迷你, while it's growing up. After that he can kill it or select it as its Sidekick
 - The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (that's why converting the last Crewmate with tasks left into a Sidekick results in a task win for the crew)
 
-If both Impostors and Jackals are in the game the game continues even if all Crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
+If both 偽裝者s and Jackals are in the game the game continues even if all Crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and 偽裝者 have to kill each other.
 
 
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Jackal Spawn Chance | - |
-| Jackal/Sidekick Kill Cooldown | Kill cooldown |
-| Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created |
+| Jackal 生成機率 | - |
+| Jackal/Sidekick Kill 冷卻 | Kill 冷卻 |
+| Jackal Create Sidekick 冷卻 | Cooldown before a Sidekick can be created |
 | Jackal can use vents | Yes/No |
 | Jackal can create a Sidekick | Yes/No |
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
-| Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
-| Jackal and Sidekick have Impostor vision | - |
+| Jackals can make an 偽裝者 to his Sidekick | Yes/No (to prevent a Jackal from turning an 偽裝者 into a Sidekick, if he uses the ability on an 偽裝者 he sees the 偽裝者 as Sidekick, but the 偽裝者 isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+| Jackal and Sidekick have 偽裝者 vision | - |
 -----------------------
 
 ## 跟班
@@ -1051,38 +1051,38 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 **NOTE:**
 - A player that converts into a Sidekick loses his previous role and tasks (if he had one), except the Lover role.
 - The Sidekick may be killed by a Sheriff.
-- The Sidekick cannot target the Mini, while it's growing up.
+- The Sidekick cannot target the 迷你, while it's growing up.
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
+| Jackal/Sidekick Kill 冷卻 | Uses the same kill cooldown setting as the Jackal |
 | Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
 | Sidekick can kill | Yes/No |
 | Sidekick can use vents | Yes/No |
 -----------------------
 
 ## 間諜
-### **Team: Crewmates**
+### **隊伍:船員**
 The Spy is a Crewmate, which has no special abilities.\
-The Spy looks like an additional Impostor to the Impostors, they can't tell the difference.\
+The Spy looks like an additional 偽裝者 to the 偽裝者s, they can't tell the difference.\
 There are two possibilities (depending on the set options):
-- The Impostors can't kill the Spy (because otherwise their kill button would reveal, who the Spy is)
-- The Impostors can kill the Spy but they can also kill their Impostor partner (if they mistake another Impostor for the Spy)
+- The 偽裝者s can't kill the Spy (because otherwise their kill button would reveal, who the Spy is)
+- The 偽裝者s can kill the Spy but they can also kill their 偽裝者 partner (if they mistake another 偽裝者 for the Spy)
   You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Spy Spawn Chance |
+| Spy 生成機率 |
 | Spy Can Die To Sheriff |
-| Impostors Can Kill Anyone If There Is A Spy | This allows the Impostors to kill both the Spy and their Impostor partners
+| 偽裝者s Can Kill Anyone If There Is A Spy | This allows the 偽裝者s to kill both the Spy and their 偽裝者 partners
 | Spy Can Enter Vents | Allow the Spy to enter/exit vents (but not actually move to connected vents)
-| Spy Has Impostor Vision | Give the Spy the same vision as the Impostors have
+| Spy Has 偽裝者 Vision | Give the Spy the same vision as the 偽裝者s have
 -----------------------
 
 ## 守衛
-### **Team: Crewmates**
+### **隊伍:船員**
 The Security Guard is a Crewmate that has a certain amount of screws that he can use for either sealing vents or for placing new cameras.\
 Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
@@ -1094,11 +1094,11 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 - On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
 
-### Game Options
+### 遊戲選項
 | Name | Description
 |----------|:-------------:|
-| Security Guard Spawn Chance |
-| Security Guard Cooldown |
+| Security Guard 生成機率 |
+| Security Guard 冷卻 |
 | Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent

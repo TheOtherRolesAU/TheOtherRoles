@@ -18,16 +18,16 @@ namespace TheOtherRoles.Modules {
                             if (AmongUsClient.Instance.AmHost && AmongUsClient.Instance.CanBan()) { // checking both just cause
                                 handled = true;
                                 if (!Int32.TryParse(text.Substring(6), out LobbyLimit)) {
-                                    __instance.AddChat(PlayerControl.LocalPlayer, "Invalid Size\nUsage: /size {amount}");
+                                    __instance.AddChat(PlayerControl.LocalPlayer, "無效的大小\n用法: /size {amount}");
                                 } else {
                                     LobbyLimit = Math.Clamp(LobbyLimit, 4, 15);
                                     if (LobbyLimit != PlayerControl.GameOptions.MaxPlayers) {
                                         PlayerControl.GameOptions.MaxPlayers = LobbyLimit;
                                         DestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
                                         PlayerControl.LocalPlayer.RpcSyncSettings(PlayerControl.GameOptions);
-                                        __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size changed to {LobbyLimit} players");
+                                        __instance.AddChat(PlayerControl.LocalPlayer, $"大廳大小變更至{LobbyLimit}人");
                                     } else {
-                                        __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size is already {LobbyLimit}");
+                                        __instance.AddChat(PlayerControl.LocalPlayer, $"大廳大小已是{LobbyLimit}人");
                                     }
                                 }
                             }
