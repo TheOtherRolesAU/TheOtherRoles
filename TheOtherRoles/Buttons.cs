@@ -57,7 +57,7 @@ namespace TheOtherRoles
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
-            undertakerDragButton.MaxTimer = Undertaker.dragingCooldown;
+            undertakerDragButton.MaxTimer = 0f;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
@@ -652,8 +652,7 @@ namespace TheOtherRoles
                                     Vector2 playerPosition = PlayerControl.LocalPlayer.GetTruePosition();
                                     Vector2 deadBodyPosition = deadBody.TruePosition;
                                     if (Vector2.Distance(deadBodyPosition, playerPosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(playerPosition, deadBodyPosition, Constants.ShipAndObjectsMask, false) && !Undertaker.isDraging)
-                                    {
-                                        
+                                    {                                        
                                         GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(deadBody.ParentId);
                                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DragBody, Hazel.SendOption.Reliable, -1);
                                         writer.Write(playerInfo.PlayerId);
@@ -675,8 +674,27 @@ namespace TheOtherRoles
  
                 },
                 () => { return Undertaker.undertaker!= null && Undertaker.undertaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return (( __instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove ) || Undertaker.deadBodyDraged != null) ;  },
-                () => { undertakerDragButton.Timer = undertakerDragButton.MaxTimer;},
+                () => {
+                    if (Undertaker.deadBodyDraged != null) return true;
+                    else
+                    {
+                        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+                        {
+                            if (collider2D.tag == "DeadBody")
+                            {
+                                DeadBody deadBody = collider2D.GetComponent<DeadBody>();
+                                Vector2 deadBodyPosition = deadBody.TruePosition;
+                                deadBodyPosition.x -= 0.2f;
+                                deadBodyPosition.y -= 0.2f;
+                                return (PlayerControl.LocalPlayer.CanMove && Vector2.Distance(PlayerControl.LocalPlayer.GetTruePosition(), deadBodyPosition)  < 0.80f);
+                            }
+                        }
+                        return false;
+                    }
+                    
+                },
+                //() => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove) || Undertaker.deadBodyDraged != null); },
+                () => { },
                 Undertaker.getButtonSprite(),
                 new Vector3(-1.3f, 1.3f, 0f),
                 __instance,

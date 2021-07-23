@@ -798,8 +798,7 @@ namespace TheOtherRoles
         public static PlayerControl undertaker;
         public static Color color = Palette.ImpostorRed;
 
-        public static float cooldown = 30f;
-        public static float dragingCooldown = 0.5f;
+        public static float dragingDelaiAfterKill = 0f;
 
         public static bool isDraging = false;
         public static DeadBody deadBodyDraged = null;
@@ -818,8 +817,7 @@ namespace TheOtherRoles
             undertaker = null;
             isDraging = false;
             deadBodyDraged = null;
-            cooldown = CustomOptionHolder.undertakerCooldown.getFloat();
-            dragingCooldown = CustomOptionHolder.undertakerDragingCooldown.getFloat();
+            dragingDelaiAfterKill = CustomOptionHolder.undertakerDragingDelaiAfterKill.getFloat();
         }
     }
 
