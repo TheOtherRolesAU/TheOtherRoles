@@ -47,6 +47,7 @@ namespace TheOtherRoles
         Arsonist,
         Guesser,
         BountyHunter,
+        Chamaleon,
         Crewmate,
         Impostor
     }
@@ -93,7 +94,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        ChamaleonHide
     }
 
     public static class RPCProcedure {
@@ -229,6 +231,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
+                        break;
+                    case RoleId.Chamaleon:
+                        Roles.Chamaleon.chamaleon = player;
                         break;
                     }
                 }
@@ -554,7 +559,8 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+            if (player == Roles.Chamaleon.chamaleon) Roles.Chamaleon.clearAndReload();
+
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
@@ -681,6 +687,10 @@ namespace TheOtherRoles
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+        }
+
+        public static void chamaleonHide() {
+            Roles.Chamaleon.chamaleonHide();
         }
     }   
 
@@ -835,6 +845,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.ChamaleonHide:
+                    RPCProcedure.chamaleonHide();
                     break;
             }
         }
