@@ -305,7 +305,7 @@ namespace TheOtherRoles
             if (Undertaker.undertaker == null || Undertaker.deadBodyDraged == null) return;
             var deadBody = Undertaker.deadBodyDraged;
             Undertaker.deadBodyDraged = null;
-            deadBody.transform.position = new Vector3(Undertaker.undertaker.transform.position.x, Undertaker.undertaker.transform.position.y, Undertaker.undertaker.transform.position.z);
+            deadBody.transform.position = new Vector3(Undertaker.undertaker.GetTruePosition().x, Undertaker.undertaker.GetTruePosition().y, Undertaker.undertaker.transform.position.z);
         }
 
         public static void sheriffKill(byte targetId) {
