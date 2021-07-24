@@ -133,7 +133,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Crewmate roles with no changes: Mini
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter, Mafioso and Chamaleon
         }
 
         static void setNameTags() {
@@ -306,6 +306,8 @@ namespace TheOtherRoles.Patches {
             camouflageAndMorphActions();
             // Mini
             miniUpdate();
+            // Chamaleon
+            Roles.Chamaleon.chamaleonAction();
         }
     }
 }
