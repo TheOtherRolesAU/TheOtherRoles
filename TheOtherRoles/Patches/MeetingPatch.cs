@@ -38,19 +38,21 @@ namespace TheOtherRoles.Patches {
                     }
                 }
                 // Swapper swap votes
-                PlayerVoteArea swapped1 = null;
-                PlayerVoteArea swapped2 = null;
-                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                    if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-                }
+                if (Swapper.swapper != null && !Swapper.swapper.isDead) { // Don't swap if swapper is dead
+                    PlayerVoteArea swapped1 = null;
+                    PlayerVoteArea swapped2 = null;
+                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                        if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+                        if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+                    }
 
-                if (swapped1 != null && swapped2 != null) {
-                    if (!dictionary.ContainsKey(swapped1.TargetPlayerId)) dictionary[swapped1.TargetPlayerId] = 0;
-                    if (!dictionary.ContainsKey(swapped2.TargetPlayerId)) dictionary[swapped2.TargetPlayerId] = 0;
-                    int tmp = dictionary[swapped1.TargetPlayerId];
-                    dictionary[swapped1.TargetPlayerId] = dictionary[swapped2.TargetPlayerId];
-                    dictionary[swapped2.TargetPlayerId] = tmp;
+                    if (swapped1 != null && swapped2 != null) {
+                        if (!dictionary.ContainsKey(swapped1.TargetPlayerId)) dictionary[swapped1.TargetPlayerId] = 0;
+                        if (!dictionary.ContainsKey(swapped2.TargetPlayerId)) dictionary[swapped2.TargetPlayerId] = 0;
+                        int tmp = dictionary[swapped1.TargetPlayerId];
+                        dictionary[swapped1.TargetPlayerId] = dictionary[swapped2.TargetPlayerId];
+                        dictionary[swapped2.TargetPlayerId] = tmp;
+                    }
                 }
 
                 return dictionary;
@@ -109,16 +111,18 @@ namespace TheOtherRoles.Patches {
             
             static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
                 // Swapper swap
-                PlayerVoteArea swapped1 = null;
-                PlayerVoteArea swapped2 = null;
-                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                    if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-                    if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-                }
-                bool doSwap = swapped1 != null && swapped2 != null;
-                if (doSwap) {
-                    __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
-                    __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
+                if (Swapper.swapper != null && !Swapper.swapper.isDead) { // Don'T swap if dead
+                    PlayerVoteArea swapped1 = null;
+                    PlayerVoteArea swapped2 = null;
+                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                        if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+                        if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+                    }
+                    bool doSwap = swapped1 != null && swapped2 != null;
+                    if (doSwap) {
+                        __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
+                        __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
+                    }
                 }
 
 
