@@ -19,8 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(AmongUsLatest)/BepInEx/core/*.dll"/>
-        <Reference Include="$(AmongUsLatest)/BepInEx/unhollowed/*.dll"/>
+        <Reference Include="$(AmongUs)/BepInEx/core/*.dll"/>
+        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll"/>
     </ItemGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
