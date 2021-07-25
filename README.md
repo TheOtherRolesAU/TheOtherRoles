@@ -758,6 +758,9 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Jester Spawn Chance | -
 | Jester can call emergency meeting | Option to disable the emergency button for the Jester
 | Jester can sabotage | Option to allow the Jester to sabotage
+| Jester can vent | Option to allow the Jester to use vents
+| Jester can see impostors | The Jester sees impostors with a red name plate
+| Jester can see roles | The Jester sees the role next to the player name
 -----------------------
 
 ## Arsonist
