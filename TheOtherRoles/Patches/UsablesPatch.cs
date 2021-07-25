@@ -21,7 +21,10 @@ namespace TheOtherRoles.Patches {
 
 
             bool roleCouldUse = false;
+            var jesterCanVent = CustomOptionHolder.jesterCanVent.getBool();
             if (Engineer.engineer != null && Engineer.engineer == @object)
+                roleCouldUse = true;
+            else if (Jester.jester != null && Jester.jester == @object && jesterCanVent)
                 roleCouldUse = true;
             else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == @object)
                 roleCouldUse = true;

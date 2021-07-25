@@ -57,6 +57,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterCanSabotage;
+        public static CustomOption jesterCanVent;
         public static CustomOption jesterCanSeeImpostors;
         public static CustomOption jesterCanSeeRoles;
 
@@ -252,6 +253,7 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
             jesterCanSabotage = CustomOption.Create(62, "Jester can sabotage", true, jesterSpawnRate);
+            jesterCanVent = CustomOption.Create(63, "Jester can vent", false, jesterSpawnRate);
             jesterCanSeeImpostors = CustomOption.Create(64, "Jester can see impostors", false, jesterSpawnRate);
             jesterCanSeeRoles = CustomOption.Create(65, "Jester can see roles", false, jesterCanSeeImpostors);
 
