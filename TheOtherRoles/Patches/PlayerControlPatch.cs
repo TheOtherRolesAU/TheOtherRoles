@@ -339,9 +339,13 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        public static void updatePlayerInfo() {
+        public static void updatePlayerInfo()
+        {
+            var infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            var isJester = infos.Any(info => info.roleId == RoleId.Jester);
+            var canSeeRoles = CustomOptionHolder.jesterCanSeeRoles.getBool() && CustomOptionHolder.jesterCanSeeImpostors.getBool();
             foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
+                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && !(isJester && canSeeRoles)) continue;                        
 
                 Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
