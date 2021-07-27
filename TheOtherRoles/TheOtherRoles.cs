@@ -53,6 +53,7 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
+            Logger.clearAndReload();
         }
 
         public static class Jester {
@@ -993,4 +994,45 @@ namespace TheOtherRoles
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
         }
     }
+
+    public static class Logger { 
+
+        public static PlayerControl logger;
+        public static Color color = new Color32(139, 69, 19, byte.MaxValue);
+        public static List<LogTrap> logTraps = new List<LogTrap>();
+        public static float maxTrap;
+        public static float nbRecordPerTrap;
+        public static float cooldown;
+        private static Sprite placeLogTrapButtonSprite;
+
+        public static Sprite getPlaceLogTrapButtonSprite()
+        {
+            if (placeLogTrapButtonSprite) return placeLogTrapButtonSprite;
+            placeLogTrapButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LoggerButton.png", 150f);
+            return placeLogTrapButtonSprite;
+        }
+
+        public static void clearAndReload()
+        {           
+            logger = null;            
+            maxTrap = CustomOptionHolder.loggerMaxTrap.getFloat();
+            nbRecordPerTrap = CustomOptionHolder.loggerNbRecordPerTrap.getFloat();
+            cooldown = CustomOptionHolder.loggerCooldown.getFloat();
+            clearLogTraps();
+        }
+
+        public static void clearLogTraps()
+        {
+            logTraps = new List<LogTrap>();
+        }
+
+        public static void clearLogTrapsPlayerName()
+        {
+            foreach(LogTrap logTrap in logTraps)
+            {
+                logTrap.clearLoggedPlayersName();
+            }
+        }
+    }
+
 }

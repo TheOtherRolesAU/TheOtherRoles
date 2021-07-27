@@ -354,11 +354,44 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void addLoggerInformationsPostfix(MeetingHud __instance)
+        {
+            bool isLogger = Logger.logger != null && PlayerControl.LocalPlayer == Logger.logger;
+            if(isLogger)
+            {
+                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                {
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, "addLoggerInformationsPostfix");
+                }
+                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                {
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, "nbTrap: " + Logger.logTraps.Count);
+                }
+
+                for (int i = 0; i < Logger.logTraps.Count; i++)
+                {
+                    string msg = $"log trap {i}: ";      
+                    List<string> playersName = Logger.logTraps[i].playersName;
+                    playersName.Reverse();
+                    foreach (string playerName in playersName)
+                    {
+                        msg += "playerName, ";                       
+                    }
+
+                    if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                    {
+                        DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                    }
+                }
+            }                                                 
+        }
+
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
         class MeetingServerStartPatch {
             static void Postfix(MeetingHud __instance)
             {
                 populateButtonsPostfix(__instance);
+                addLoggerInformationsPostfix(__instance);
             }
         }
 

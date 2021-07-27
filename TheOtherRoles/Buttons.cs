@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton loggerButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -59,6 +60,7 @@ namespace TheOtherRoles
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
+            loggerButton.MaxTimer = Logger.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -702,7 +704,7 @@ namespace TheOtherRoles
                         writer.EndMessage();
                         RPCProcedure.placeCamera(buff); 
                     }
-                    securityGuardButton.Timer = securityGuardButton.MaxTimer;
+                    
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
@@ -776,6 +778,38 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+
+            loggerButton = new CustomButton(
+                () => {                    
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    Logger.logTraps.Add(new LogTrap(pos));
+
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceLogTrap, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placeLogTrap(buff);
+
+                    loggerButton.Timer = loggerButton.MaxTimer;
+                },
+                () => { return Logger.logger != null && Logger.logger == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Logger.logTraps.Count <= Logger.maxTrap; },
+                () => {
+                    loggerButton.Timer = loggerButton.MaxTimer;
+                    Logger.clearLogTrapsPlayerName();
+
+                },
+                Logger.getPlaceLogTrapButtonSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q,
+                true,
+                Logger.cooldown,
+                () => {}
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

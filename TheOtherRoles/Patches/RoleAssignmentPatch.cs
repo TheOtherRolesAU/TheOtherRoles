@@ -95,6 +95,8 @@ namespace TheOtherRoles.Patches {
                 crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
             }
             crewSettings.Add((byte)RoleId.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Logger, CustomOptionHolder.loggerSpawnRate.getSelection());
+            
 
             return new RoleAssignmentData {
                 crewmates = crewmates,
