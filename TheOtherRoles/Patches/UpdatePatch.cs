@@ -48,8 +48,8 @@ namespace TheOtherRoles.Patches {
             }
             var infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
             var isJester = infos.Any(info => info.roleId == RoleId.Jester);
-            var canSeeTeams = CustomOptionHolder.jesterCanSeeImpostors.getBool();
-            if (PlayerControl.LocalPlayer.Data.IsImpostor || isJester && canSeeTeams) {
+            var canSeeImpostors = CustomOptionHolder.jesterCanSeeImpostors.getBool();
+            if (PlayerControl.LocalPlayer.Data.IsImpostor || isJester && canSeeImpostors) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !x.Data.IsImpostor);
                 foreach (PlayerControl player in impostors)
