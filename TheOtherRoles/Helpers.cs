@@ -218,6 +218,15 @@ namespace TheOtherRoles {
             player.NameText.color = new Color(player.NameText.color.r, player.NameText.color.g, player.NameText.color.b, alpha);
         }
 
+        public static bool onSkeld() { return onMap(GameOptionsData.SkeldBit); }
+        public static bool onMira() { return onMap(GameOptionsData.MiraBit); }
+        public static bool onPolus() { return onMap(GameOptionsData.PolusBit); }
+        public static bool onAirship() { return onMap(GameOptionsData.AirshipBit); }
+
+        private static bool onMap(int mapBit) {
+            return (mapBit & (1 << PlayerControl.GameOptions.MapId)) != 0;
+        }
+
         public static string GetString(this TranslationController t, StringNames key, params Il2CppSystem.Object[] parts) {
             return t.GetString(key, parts);
         }

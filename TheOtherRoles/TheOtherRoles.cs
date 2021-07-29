@@ -1051,7 +1051,58 @@ namespace TheOtherRoles
 
         public static void sabotage()
         {
-            // TODO implement
+            resetCooldown();  // TODO separate cooldown for sabotage
+            System.Console.WriteLine("Trying to sabotage");
+            System.Console.WriteLine(GameOptionsData.SkeldBit);
+            System.Console.WriteLine(GameOptionsData.MiraBit);
+            System.Console.WriteLine(GameOptionsData.PolusBit);
+            System.Console.WriteLine(GameOptionsData.AirshipBit);
+            System.Console.WriteLine(PlayerControl.GameOptions.MapId);
+            // MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)RpcCalls.UpdateSystem, Hazel.SendOption.Reliable, -1);
+
+            if (Helpers.onSkeld())
+                System.Console.WriteLine("We are on Skeld!");
+            if (Helpers.onMira())
+                System.Console.WriteLine("We are on Mira!");
+            if (Helpers.onPolus())
+                System.Console.WriteLine("We are on Polus!");
+            if (Helpers.onAirship())
+                System.Console.WriteLine("We are on Airship!");
+
+            // Reactor, Comms, Electrical: all maps
+            // ShipStatus.Instance.RpcRepairSystem(SystemTypes.Sabotage, (byte)SystemTypes.Reactor);
+            // ShipStatus.Instance.RpcRepairSystem(SystemTypes.Sabotage, (byte)SystemTypes.Comms);
+            ShipStatus.Instance.RpcRepairSystem(SystemTypes.Sabotage, (byte)SystemTypes.Electrical);
+            
+            // O2: Skeld, Mira
+            // ShipStatus.Instance.RpcRepairSystem(SystemTypes.Sabotage, (byte)SystemTypes.LifeSupp);
+            
+            // Skeld doors
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Cafeteria);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.UpperEngine);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.LowerEngine);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Security);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.MedBay);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Electrical);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Storage);
+            
+            // Polus doors
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Laboratory);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Office);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.LifeSupp);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Comms);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Weapons);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Electrical);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Storage);
+            
+            // Airship doors
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Comms);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Kitchen);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Brig);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.MainHall);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Records);
+            ShipStatus.Instance.RpcCloseDoorsOfType(SystemTypes.Medical);
+            
         }
         private static void killPlayer(byte playerId)
         {

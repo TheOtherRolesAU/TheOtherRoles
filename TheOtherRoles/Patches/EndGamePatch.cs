@@ -379,8 +379,10 @@ namespace TheOtherRoles.Patches {
 
         private static void EndGameForSabotage(ShipStatus __instance) {
             __instance.enabled = false;
-            ShipStatus.RpcEndGame(GameOverReason.ImpostorBySabotage, false);
-            return;
+            if (EvilShip.enabled)
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.EvilShipWin, false);
+            else
+                ShipStatus.RpcEndGame(GameOverReason.ImpostorBySabotage, false);
         }
 
     }

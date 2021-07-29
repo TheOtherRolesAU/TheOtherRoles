@@ -285,8 +285,8 @@ namespace TheOtherRoles.Patches {
                 return;
             }
             if (MeetingHud.Instance || ExileController.Instance) EvilShip.resetCooldown();
-            if (EvilShip.killCooldown <= 0) EvilShip.kill();
-            EvilShip.sabotage();
+            // if (EvilShip.killCooldown <= 0) EvilShip.kill();
+            if (EvilShip.killCooldown <= 0) EvilShip.sabotage();  // TODO separate cooldown for sabotage
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
