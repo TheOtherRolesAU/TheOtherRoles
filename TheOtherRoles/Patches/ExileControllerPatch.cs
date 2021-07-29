@@ -157,6 +157,22 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString), new Type[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
     class ExileControllerMessagePatch {
         static void Postfix(ref string __result, [HarmonyArgument(0)]StringNames id) {
+            // Evil Ship should pretend that there are still impostors
+            if (EvilShip.enabled && (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS))
+            {
+                var numImpostors = EvilShip.originalNumImpostors;
+                var statistics = new PlayerStatistics(ShipStatus.Instance);
+                var totalAlive = statistics.TotalAlive;
+                if (ExileController.Instance.exiled != null && Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId) != null)
+                    totalAlive--;
+                if (numImpostors == 1 || totalAlive <= 4)
+                    __result = "1 Impostor remains.";
+                else if (numImpostors == 2 || totalAlive <= 6)
+                    __result = "2 Impostors remain.";
+                else
+                   __result = numImpostors + " Impostors remain.";
+            }
+
             try {
                 if (ExileController.Instance != null && ExileController.Instance.exiled != null) {
                     PlayerControl player = Helpers.playerById(ExileController.Instance.exiled.Object.PlayerId);

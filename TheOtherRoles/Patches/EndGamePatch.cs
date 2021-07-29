@@ -17,7 +17,8 @@ namespace TheOtherRoles.Patches {
         TeamJackalWin = 11,
         MiniLose = 12,
         JesterWin = 13,
-        ArsonistWin = 14
+        ArsonistWin = 14,
+        EvilShipWin = 15
     }
 
     enum WinCondition {
@@ -27,7 +28,8 @@ namespace TheOtherRoles.Patches {
         JesterWin,
         JackalWin,
         MiniLose,
-        ArsonistWin
+        ArsonistWin,
+        EvilShipWin
     }
 
     static class AdditionalTempData {
@@ -85,6 +87,7 @@ namespace TheOtherRoles.Patches {
             bool miniLose = Mini.mini != null && gameOverReason == (GameOverReason)CustomGameOverReason.MiniLose;
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.DidHumansWin(gameOverReason) && !Lovers.existingWithKiller())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead) || (Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead));
+            bool evilShipWin = gameOverReason == (GameOverReason)CustomGameOverReason.EvilShipWin;
 
             // Mini lose
             if (miniLose) {
@@ -154,6 +157,12 @@ namespace TheOtherRoles.Patches {
                     TempData.winners.Add(wpdFormerJackal);
                 }
             }
+            
+            // Evil Ship win (everyone looses)
+            else if (evilShipWin) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                AdditionalTempData.winCondition = WinCondition.EvilShipWin;
+            }
 
             // Reset Settings
             RPCProcedure.resetVariables();
@@ -194,6 +203,11 @@ namespace TheOtherRoles.Patches {
             else if (AdditionalTempData.winCondition == WinCondition.MiniLose) {
                 textRenderer.text = "Mini died";
                 textRenderer.color = Mini.color;
+            }
+            else if (AdditionalTempData.winCondition == WinCondition.EvilShipWin)
+            {
+                textRenderer.text = "No impostors - the ship killed everyone";
+                textRenderer.color = EvilShip.color;
             }
 
             if (MapOptions.showRoleSummary) {
@@ -239,6 +253,7 @@ namespace TheOtherRoles.Patches {
             if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
             if (CheckAndEndGameForJackalWin(__instance, statistics)) return false;
             if (CheckAndEndGameForImpostorWin(__instance, statistics)) return false;
+            if (CheckAndEndGameForEvilShipWin(__instance, statistics)) return false;
             if (CheckAndEndGameForCrewmateWin(__instance, statistics)) return false;
             return false;
         }
@@ -343,9 +358,18 @@ namespace TheOtherRoles.Patches {
             }
             return false;
         }
+        
+        private static bool CheckAndEndGameForEvilShipWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (EvilShip.enabled && statistics.TotalAlive <= 2) {
+                __instance.enabled = false;
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.EvilShipWin, false);
+                return true;
+            }
+            return false;
+        }
 
         private static bool CheckAndEndGameForCrewmateWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0) {
+            if (!EvilShip.enabled && statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame(GameOverReason.HumansByVote, false);
                 return true;

@@ -24,6 +24,7 @@ namespace TheOtherRoles.Patches {
 
         private static void assignRoles() {
             var data = getRoleAssignmentData();
+            EvilShip.broadcastEvilShipData();
             assignSpecialRoles(data); // Assign special roles like mafia and lovers first as they assign a role to multiple players and the chances are independent of the ticket system
             selectFactionForFactionIndependentRoles(data);
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
@@ -35,6 +36,11 @@ namespace TheOtherRoles.Patches {
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             crewmates.RemoveAll(x => x.Data.IsImpostor);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+            
+            // Special round where we have no impostors
+            if (EvilShip.enabled)
+                impostors.ForEach(x => x.Data.IsImpostor = false);
+            
             impostors.RemoveAll(x => !x.Data.IsImpostor);
 
             var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();

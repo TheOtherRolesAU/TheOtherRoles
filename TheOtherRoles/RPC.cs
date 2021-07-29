@@ -60,6 +60,7 @@ namespace TheOtherRoles
         ShareOptionSelection,
         ForceEnd,
         SetRole,
+        SetEvilShipData,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
@@ -108,6 +109,7 @@ namespace TheOtherRoles
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
             clearAndReloadMapOptions();
+            EvilShip.clearAndReload();
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
@@ -128,6 +130,13 @@ namespace TheOtherRoles
                     player.Data.IsDead = true;
                 }
             }
+        }
+
+        public static void setEvilShipData(bool enabled, int numImpostors, byte responsiblePlayerId)
+        {
+            EvilShip.enabled = enabled;
+            EvilShip.originalNumImpostors = numImpostors;
+            EvilShip.responsiblePlayerId = responsiblePlayerId;
         }
 
         public static void setRole(byte roleId, byte playerId, byte flag) {
@@ -731,6 +740,14 @@ namespace TheOtherRoles
                     byte playerId = reader.ReadByte();
                     byte flag = reader.ReadByte();
                     RPCProcedure.setRole(roleId, playerId, flag);
+                    break;
+                case (byte)CustomRPC.SetEvilShipData:
+                    bool enabled = reader.ReadBoolean();
+                    int numImpostors = reader.ReadInt32();
+                    byte responsiblePlayerId = reader.ReadByte();
+                    var player = Helpers.playerById(responsiblePlayerId);
+                    System.Console.WriteLine("Received evil ship data. enabled=" + enabled + " numImp=" + numImpostors + " respPlayer=" + player.name);
+                    RPCProcedure.setEvilShipData(enabled, numImpostors, responsiblePlayerId);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();

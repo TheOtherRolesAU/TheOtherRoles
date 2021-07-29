@@ -1026,4 +1026,80 @@ namespace TheOtherRoles
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
         }
     }
+
+    public static class EvilShip
+    {
+        public static Color color = Palette.ImpostorRed;
+
+        public static bool enabled;
+        public static byte responsiblePlayerId;  // only one player may execute EvilShip actions
+        public static int originalNumImpostors;
+        public static float killCooldown = 30f;
+
+        public static void kill()
+        {
+            resetCooldown();
+            List<PlayerControl> alivePlayers = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+            alivePlayers.RemoveAll(x => x.Data.IsDead || x.Data.Disconnected);
+            if (Medic.shielded != null)
+                alivePlayers.RemoveAll(x => x.Data.PlayerId == Medic.shielded.PlayerId);
+            var index = TheOtherRoles.rnd.Next(0, alivePlayers.Count);
+            var player = alivePlayers[index];
+            System.Console.WriteLine("Ship murders " + player.Data.PlayerName);
+            killPlayer(player.PlayerId);
+        }
+
+        public static void sabotage()
+        {
+            // TODO implement
+        }
+        private static void killPlayer(byte playerId)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+            writer.Write(playerId);
+            writer.Write(playerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.uncheckedMurderPlayer(playerId, playerId);
+        }
+
+        public static void broadcastEvilShipData()
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetEvilShipData, Hazel.SendOption.Reliable, -1);
+            writer.Write(enabled);
+            writer.Write(originalNumImpostors);
+            writer.Write(responsiblePlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
+        public static void assignNewResponsiblePlayer()
+        {
+            // In case the host leaves, we need a new client that feels responsible to execute EvilShip actions.
+            // Choose the client deterministically, so we can dismiss sending RPC messages
+            List<PlayerControl> connectedPlayers = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => x.PlayerId).ToList();
+            connectedPlayers.RemoveAll(x => x.Data.Disconnected);
+            responsiblePlayerId = connectedPlayers.First().PlayerId;
+            resetCooldown();  // otherwise the new client would instantly kill
+            System.Console.WriteLine("Now player " + connectedPlayers.First().name + " is responsible");
+        }
+        
+        public static void clearAndReload()
+        {
+            enabled = TheOtherRoles.rnd.Next(1, 101) <= CustomOptionHolder.evilShipProbability.getSelection() * 10;
+            originalNumImpostors = PlayerControl.GameOptions.NumImpostors;
+            responsiblePlayerId = PlayerControl.LocalPlayer.PlayerId;
+            System.Console.WriteLine(
+                "Cleared and reloaded EvilShip. enabled=" + enabled +
+                " numImp=" + originalNumImpostors +
+                " responsiblePlayer=" + PlayerControl.LocalPlayer.name
+            );
+            resetCooldown();
+        }
+
+        public static void resetCooldown()
+        {
+            var baseCooldown = CustomOptionHolder.evilShipKillCooldown.getFloat();
+            var cooldownVariance = CustomOptionHolder.evilShipKillCooldownVariance.getSelection();
+            killCooldown = baseCooldown + TheOtherRoles.rnd.Next(-cooldownVariance, cooldownVariance+1);
+        }
+    }
 }
