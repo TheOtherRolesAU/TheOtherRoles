@@ -10,10 +10,10 @@ namespace TheOtherRoles.Objects
         public static List<LogTrap> logTraps = new List<LogTrap>();
         public List<String> playersName = new List<String>();
 
-        public static int logTrapLimit = 3;
+        public static float logTrapLimit = CustomOptionHolder.loggerMaxTrap.getFloat();
         public static float recordIntervall = 0.10f;
         public static float recordTimer = 0.10f;
-        public static int nbRecordPerTrap = 3;
+        public static float nbRecordPerTrap = CustomOptionHolder.loggerNbRecordPerTrap.getFloat();
 
         private List<String> playersNameRecordedLastTick = new List<String>();
 
@@ -46,8 +46,7 @@ namespace TheOtherRoles.Objects
             Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
             logTrap.transform.position = position;
             logTrap.transform.localPosition = position;
-            background.transform.localPosition = new Vector3(0, 0, -0.01f); // before player
-
+            background.transform.localPosition = new Vector3(0, 0, -0.01f); // before player                       
             var logTrapRenderer = logTrap.AddComponent<SpriteRenderer>();
             logTrapRenderer.sprite = getLogTrapSprite();
             var backgroundRenderer = background.AddComponent<SpriteRenderer>();
@@ -140,7 +139,7 @@ namespace TheOtherRoles.Objects
             // resize player recorded to nbRecordPerTrap
             if (this.playersName.Count > nbRecordPerTrap)
             {
-                 this.playersName.RemoveRange(0, this.playersName.Count - 3);
+                 this.playersName.RemoveRange(0, this.playersName.Count - (int)nbRecordPerTrap);
             }
             
             // save ppl recorded this tick
