@@ -704,7 +704,7 @@ namespace TheOtherRoles
                         writer.EndMessage();
                         RPCProcedure.placeCamera(buff); 
                     }
-                    
+                    securityGuardButton.Timer = securityGuardButton.MaxTimer;
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
@@ -798,7 +798,6 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && !LogTrap.hasLogTrapLimitReached(); },
                 () => {
                     loggerButton.Timer = loggerButton.MaxTimer;
-                    //LogTrap.clearLogTrapsPlayerName();
                 },
                 Logger.getPlaceLogTrapButtonSprite(),
                 new Vector3(-1.3f, 0f, 0f),
