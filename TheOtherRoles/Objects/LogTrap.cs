@@ -5,9 +5,17 @@ using UnityEngine;
 
 namespace TheOtherRoles.Objects
 {
-    public class LogTrap
-    {       
-        public List<String> playersName;
+    class LogTrap
+    {
+        public static List<LogTrap> logTraps = new List<LogTrap>();
+        public List<String> playersName = new List<String>();
+
+        public static int logTrapLimit = 3;
+        public static float recordIntervall = 0.10f;
+        public static float recordTimer = 0.10f;
+        public static int nbRecordPerTrap = 3;
+
+        private List<String> playersNameRecordedLastTick = new List<String>();
 
         public GameObject logTrap;
         private GameObject background;
@@ -44,17 +52,101 @@ namespace TheOtherRoles.Objects
             logTrapRenderer.sprite = getLogTrapSprite();
             var backgroundRenderer = background.AddComponent<SpriteRenderer>();
             backgroundRenderer.sprite = getBackgroundSprite();
-            playersName.Add("player1");
-            playersName.Add("player2");
-            playersName.Add("player3");
             logTrap.SetActive(true);
-            Logger.logTraps.Add(this);
+            logTraps.Add(this);
+        }
+
+        public static void clearLogTraps()
+        {
+            logTraps = new List<LogTrap>();
+        }
+
+        public static void clearLogTrapsPlayerName()
+        {
+            foreach (LogTrap logTrap in logTraps)
+            {
+                logTrap.clearLoggedPlayersName();
+            }
         }
 
         public void clearLoggedPlayersName()
         {
             playersName.Clear();
         }
+
+        public static bool hasLogTrapLimitReached()
+        {
+            return (logTraps.Count >= logTrapLimit);
+        }
+
+        /**
+         * for all trap, record player on it
+         */
+        public static void recordAllPlayerOnTraps()
+        {
+            if (Logger.logger == null || Logger.logger != PlayerControl.LocalPlayer) return;
+            LogTrap.recordTimer -= Time.fixedDeltaTime;
+            if(LogTrap.recordTimer <= 0f)
+            {
+                LogTrap.recordTimer = recordIntervall;
+                foreach(LogTrap logtrap in logTraps)
+                {
+                    logtrap.recordPlayerOnTrap();
+                }
+            }
+        }
+
+        /**
+         * The trap record who walk on it and save it into this.playersName                   
+         */
+        private void recordPlayerOnTrap()
+        {
+            List<String> playersNameCurrentlyRecorded = new List<String>();            
+            float distanceRecord = 2f;
+            if (!ShipStatus.Instance) return;
+                        
+            Vector2 logTrapTruePosition = logTrap.transform.position; 
+            
+            // Record every player name in trap area
+            var allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && !playerInfo.IsDead)
+                {
+                    PlayerControl currentPlayer = playerInfo.Object; 
+                    if (currentPlayer && !currentPlayer.inVent)
+                    {
+                        Vector2 vector = currentPlayer.GetTruePosition() - logTrapTruePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= distanceRecord)
+                        {
+                            playersNameCurrentlyRecorded.Add(currentPlayer.Data.PlayerName);                                                   
+                        } 
+                    }
+                }
+            }
+
+            List<String> playersNameCurrentlyRecordedToAdd;
+
+            playersNameCurrentlyRecordedToAdd = new List<String>(playersNameCurrentlyRecorded);
+
+            // Remove player that was already recorded last tick
+            playersNameCurrentlyRecordedToAdd.RemoveAll(playerName => this.playersNameRecordedLastTick.Contains(playerName));
+
+            // Add player Name that was not recorded last tick
+            this.playersName.AddRange(playersNameCurrentlyRecordedToAdd);            
+            
+            // resize player recorded to nbRecordPerTrap
+            if (this.playersName.Count > nbRecordPerTrap)
+            {
+                 this.playersName.RemoveRange(0, this.playersName.Count - 3);
+            }
+            
+            // save ppl recorded this tick
+            this.playersNameRecordedLastTick = playersNameCurrentlyRecorded;
+        }
+       
 
     }
 }

@@ -999,7 +999,6 @@ namespace TheOtherRoles
 
         public static PlayerControl logger;
         public static Color color = new Color32(139, 69, 19, byte.MaxValue);
-        public static List<LogTrap> logTraps = new List<LogTrap>();
         public static float maxTrap;
         public static float nbRecordPerTrap;
         public static float cooldown;
@@ -1017,22 +1016,9 @@ namespace TheOtherRoles
             logger = null;            
             maxTrap = CustomOptionHolder.loggerMaxTrap.getFloat();
             nbRecordPerTrap = CustomOptionHolder.loggerNbRecordPerTrap.getFloat();
-            cooldown = CustomOptionHolder.loggerCooldown.getFloat();
-            clearLogTraps();
+            cooldown = CustomOptionHolder.loggerCooldown.getFloat();            
         }
 
-        public static void clearLogTraps()
-        {
-            logTraps = new List<LogTrap>();
-        }
-
-        public static void clearLogTrapsPlayerName()
-        {
-            foreach(LogTrap logTrap in logTraps)
-            {
-                logTrap.clearLoggedPlayersName();
-            }
-        }
     }
 
 }

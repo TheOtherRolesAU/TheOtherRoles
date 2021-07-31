@@ -105,7 +105,7 @@ namespace TheOtherRoles
         public static void resetVariables() {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
-            Logger.clearLogTraps();            
+            LogTrap.clearLogTraps();            
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -477,7 +477,7 @@ namespace TheOtherRoles
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
             position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
-            Logger.logTraps.Add(new LogTrap(position));
+            new LogTrap(position);
         }
 
         public static void trackerUsedTracker(byte targetId) {

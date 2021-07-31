@@ -781,10 +781,10 @@ namespace TheOtherRoles
             );
 
             loggerButton = new CustomButton(
-                () => {                    
-                    var pos = PlayerControl.LocalPlayer.transform.position;
-                    Logger.logTraps.Add(new LogTrap(pos));
+                () => {
+                    loggerButton.Timer = loggerButton.MaxTimer;
 
+                    var pos = PlayerControl.LocalPlayer.transform.position;
                     byte[] buff = new byte[sizeof(float) * 2];
                     Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
                     Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
@@ -792,24 +792,18 @@ namespace TheOtherRoles
                     MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceLogTrap, Hazel.SendOption.Reliable);
                     writer.WriteBytesAndSize(buff);
                     writer.EndMessage();
-                    RPCProcedure.placeLogTrap(buff);
-
-                    loggerButton.Timer = loggerButton.MaxTimer;
+                    RPCProcedure.placeLogTrap(buff);                   
                 },
-                () => { return Logger.logger != null && Logger.logger == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove && Logger.logTraps.Count <= Logger.maxTrap; },
+                () => { return Logger.logger != null && Logger.logger == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && !LogTrap.hasLogTrapLimitReached(); },
+                () => { return PlayerControl.LocalPlayer.CanMove && !LogTrap.hasLogTrapLimitReached(); },
                 () => {
                     loggerButton.Timer = loggerButton.MaxTimer;
-                    Logger.clearLogTrapsPlayerName();
-
+                    //LogTrap.clearLogTrapsPlayerName();
                 },
                 Logger.getPlaceLogTrapButtonSprite(),
                 new Vector3(-1.3f, 0f, 0f),
                 __instance,
-                KeyCode.Q,
-                true,
-                Logger.cooldown,
-                () => {}
+                KeyCode.F
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

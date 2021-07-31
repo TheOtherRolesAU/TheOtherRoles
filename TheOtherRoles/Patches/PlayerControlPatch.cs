@@ -574,6 +574,8 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
+                // Logger
+                LogTrap.recordAllPlayerOnTraps();
             } 
         }
     }
@@ -632,6 +634,8 @@ namespace TheOtherRoles.Patches {
             return false;
         }
     }
+
+
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch

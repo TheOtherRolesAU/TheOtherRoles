@@ -10,6 +10,7 @@ using System;
 using System.Text;
 using UnityEngine;
 using System.Reflection;
+using TheOtherRoles.Objects;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -358,26 +359,19 @@ namespace TheOtherRoles.Patches {
         {
             bool isLogger = Logger.logger != null && PlayerControl.LocalPlayer == Logger.logger;
             if(isLogger)
-            {
-                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+            {                      
+                for (int i = 0; i < LogTrap.logTraps.Count; i++)
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, "addLoggerInformationsPostfix");
-                }
-                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
-                {
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, "nbTrap: " + Logger.logTraps.Count);
-                }
+                    string msg = $"log trap {i+1}:";      
 
-                for (int i = 0; i < Logger.logTraps.Count; i++)
-                {
-                    string msg = $"log trap {i}: ";      
-                    List<string> playersName = Logger.logTraps[i].playersName;
-                    playersName.Reverse();
-                    foreach (string playerName in playersName)
+                    foreach(string playerName in LogTrap.logTraps[i].playersName)
                     {
-                        msg += "playerName, ";                       
+                        msg += $" {playerName},";
+                    }                     
+                    if(msg.Last() ==  ',')
+                    {
+                        msg = msg.Remove(msg.Length - 1);
                     }
-
                     if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
                     {
                         DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
@@ -402,6 +396,7 @@ namespace TheOtherRoles.Patches {
                 // Add swapper buttons
                 if (initialState) {
                     populateButtonsPostfix(__instance);
+                    addLoggerInformationsPostfix(__instance);
                 }
             }
         }
