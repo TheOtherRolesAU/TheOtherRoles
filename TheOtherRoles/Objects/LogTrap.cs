@@ -121,10 +121,18 @@ namespace TheOtherRoles.Objects
                         if (magnitude <= distanceRecord)
                         {
                             //if walk during camouflage
-                            if(Camouflager.camouflageTimer > 0)
+                            if (Camouflager.camouflageTimer > 0)
                             {
                                 playersNameCurrentlyRecorded.Add("Anonymous");
-                            } else playersNameCurrentlyRecorded.Add(currentPlayer.Data.PlayerName);
+                            }
+                            else if(Morphling.morphling != null && Morphling.morphling == currentPlayer &&  Morphling.morphTimer > 0 && Morphling.morphTarget != null )
+                            {
+                                playersNameCurrentlyRecorded.Add(Morphling.morphTarget.Data.PlayerName);
+                            }
+                            else
+                            {
+                                playersNameCurrentlyRecorded.Add(currentPlayer.Data.PlayerName);
+                            }
 
                         } 
                     }
