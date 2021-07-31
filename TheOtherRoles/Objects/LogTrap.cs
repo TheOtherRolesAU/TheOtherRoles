@@ -120,7 +120,12 @@ namespace TheOtherRoles.Objects
                         float magnitude = vector.magnitude;
                         if (magnitude <= distanceRecord)
                         {
-                            playersNameCurrentlyRecorded.Add(currentPlayer.Data.PlayerName);                                                   
+                            //if walk during camouflage
+                            if(Camouflager.camouflageTimer > 0)
+                            {
+                                playersNameCurrentlyRecorded.Add("Anonymous");
+                            } else playersNameCurrentlyRecorded.Add(currentPlayer.Data.PlayerName);
+
                         } 
                     }
                 }
