@@ -63,6 +63,13 @@ namespace TheOtherRoles.Patches {
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
+            // In EvilShip mode and when not having a neutral role, show everyone in the intro screen
+            else if (EvilShip.enabled) {
+                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    fakeImpostorTeam.Add(p);
+                yourTeam = fakeImpostorTeam;
+            }
 
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
