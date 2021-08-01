@@ -746,7 +746,6 @@ namespace TheOtherRoles
                     int numImpostors = reader.ReadInt32();
                     byte responsiblePlayerId = reader.ReadByte();
                     var player = Helpers.playerById(responsiblePlayerId);
-                    System.Console.WriteLine("Received evil ship data. enabled=" + enabled + " numImp=" + numImpostors + " respPlayer=" + player.name);
                     RPCProcedure.setEvilShipData(enabled, numImpostors, responsiblePlayerId);
                     break;
                 case (byte)CustomRPC.VersionHandshake:

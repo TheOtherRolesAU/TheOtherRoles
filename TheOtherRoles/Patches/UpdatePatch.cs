@@ -184,6 +184,7 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
             EvilShip.killCooldown -= Time.deltaTime;
+            EvilShip.sabotageCooldown -= Time.deltaTime;
         }
 
         static void camouflageAndMorphActions() {
@@ -285,8 +286,8 @@ namespace TheOtherRoles.Patches {
                 return;
             }
             if (MeetingHud.Instance || ExileController.Instance) EvilShip.resetCooldown();
-            // if (EvilShip.killCooldown <= 0) EvilShip.kill();
-            if (EvilShip.killCooldown <= 0) EvilShip.sabotage();  // TODO separate cooldown for sabotage
+            if (EvilShip.killCooldown <= 0) EvilShip.kill();
+            if (EvilShip.sabotageCooldown <= 0) EvilShip.sabotage();
         }
 
         static void updateImpostorKillButton(HudManager __instance) {

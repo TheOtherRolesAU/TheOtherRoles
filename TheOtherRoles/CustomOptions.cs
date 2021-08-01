@@ -23,8 +23,10 @@ namespace TheOtherRoles {
         public static CustomOption impostorRolesCountMax;
         
         public static CustomOption evilShipProbability;
-        public static CustomOption evilShipKillCooldown;
-        public static CustomOption evilShipKillCooldownVariance;
+        public static CustomOption evilShipKillCooldownMin;
+        public static CustomOption evilShipKillCooldownMax;
+        public static CustomOption evilShipSabotageCooldownMin;
+        public static CustomOption evilShipSabotageCooldownMax;
 
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -199,8 +201,10 @@ namespace TheOtherRoles {
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
             evilShipProbability = CustomOption.Create(306, "Evil Ship", rates, null, true);
-            evilShipKillCooldown = CustomOption.Create(307, "Base kill Cooldown", 45f, 10f, 120f, 5f, evilShipProbability);
-            evilShipKillCooldownVariance = CustomOption.Create(308, "Kill Cooldown +/- seconds", 20f, 0f, 60f, 2f, evilShipProbability);
+            evilShipKillCooldownMin = CustomOption.Create(307, "Minimum Kill Cooldown", 60f, 10f, 300f, 5f, evilShipProbability);
+            evilShipKillCooldownMax = CustomOption.Create(308, "Maximum Kill Cooldown", 120f, 10f, 300f, 5f, evilShipProbability);
+            evilShipSabotageCooldownMin = CustomOption.Create(309, "Minimum Sabotage Cooldown", 30f, 10f, 300f, 5f, evilShipProbability);
+            evilShipSabotageCooldownMax = CustomOption.Create(310, "Maximum Sabotage Cooldown", 90f, 10f, 300f, 5f, evilShipProbability);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -447,6 +451,10 @@ namespace TheOtherRoles {
 
         public float getFloat() {
             return (float)selections[selection];
+        }
+
+        public int getInt() {
+            return (int)(float)selections[selection];
         }
 
         // Option changes
