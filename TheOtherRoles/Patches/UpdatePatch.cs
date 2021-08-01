@@ -114,8 +114,10 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
             } else if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
-            } else if (Guesser.guesser != null && Guesser.guesser == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
+            } else if (BadGuesser.guesser != null && BadGuesser.guesser == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(BadGuesser.guesser, BadGuesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : BadGuesser.color);
+            } else if (GoodGuesser.guesser != null && GoodGuesser.guesser == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(GoodGuesser.guesser, GoodGuesser.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
@@ -133,7 +135,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Crewmate roles with no changes: Mini
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter, Mafioso
         }
 
         static void setNameTags() {

@@ -72,6 +72,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Cleaner, CustomOptionHolder.cleanerSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Warlock, CustomOptionHolder.warlockSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.BountyHunter, CustomOptionHolder.bountyHunterSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.BadGuesser, CustomOptionHolder.badGuesserSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
@@ -90,6 +91,7 @@ namespace TheOtherRoles.Patches {
             crewSettings.Add((byte)RoleId.Hacker, CustomOptionHolder.hackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.GoodGuesser, CustomOptionHolder.goodGuesserSpawnRate.getSelection());
             if (impostors.Count > 1) {
                 // Only add Spy if more than 1 impostor as the spy role is otherwise useless
                 crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
@@ -147,13 +149,6 @@ namespace TheOtherRoles.Patches {
                 data.impSettings.Add((byte)RoleId.Mini, CustomOptionHolder.miniSpawnRate.getSelection());
             } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
                 data.crewSettings.Add((byte)RoleId.Mini, CustomOptionHolder.miniSpawnRate.getSelection());
-            }
-
-            // Assign Guesser (chance to be impostor based on setting)
-            if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
-                data.impSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
-            } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                data.crewSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
             }
         }
 
