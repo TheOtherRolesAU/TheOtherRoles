@@ -200,7 +200,7 @@ namespace TheOtherRoles {
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
-            evilShipProbability = CustomOption.Create(306, "Evil Ship", rates, null, true);
+            evilShipProbability = CustomOption.Create(306, cs(EvilShip.color, "Evil Ship"), rates, null, true);
             evilShipKillCooldownMin = CustomOption.Create(307, "Minimum Kill Cooldown", 60f, 10f, 300f, 5f, evilShipProbability);
             evilShipKillCooldownMax = CustomOption.Create(308, "Maximum Kill Cooldown", 120f, 10f, 300f, 5f, evilShipProbability);
             evilShipSabotageCooldownMin = CustomOption.Create(309, "Minimum Sabotage Cooldown", 30f, 10f, 300f, 5f, evilShipProbability);
@@ -672,7 +672,7 @@ namespace TheOtherRoles {
 
             var hudString = sb.ToString();
 
-            int defaultSettingsLines = 19;
+            int defaultSettingsLines = 18;
             int roleSettingsLines = defaultSettingsLines + 35;
             int detailedSettingsP1 = roleSettingsLines + 37;
             int detailedSettingsP2 = detailedSettingsP1 + 38;
