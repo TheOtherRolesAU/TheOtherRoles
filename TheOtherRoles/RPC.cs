@@ -45,8 +45,9 @@ namespace TheOtherRoles
         Warlock,
         SecurityGuard,
         Arsonist,
-        Guesser,
+        BadGuesser,
         BountyHunter,
+        GoodGuesser,
         Crewmate,
         Impostor
     }
@@ -93,7 +94,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        BadGuesserShoot,
+        GoodGuesserShoot,
     }
 
     public static class RPCProcedure {
@@ -224,10 +226,13 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
-                    case RoleId.Guesser:
-                        Guesser.guesser = player;
+                    case RoleId.BadGuesser:
+                        BadGuesser.guesser = player;
                         break;
-                    case RoleId.BountyHunter:
+                    case RoleId.GoodGuesser:
+                        GoodGuesser.guesser = player;
+                        break;
+                        case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
                     }
@@ -409,9 +414,9 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Guesser.guesser != null && Guesser.guesser == player)
-                Guesser.guesser = oldShifter;
-            
+            if (GoodGuesser.guesser != null && GoodGuesser.guesser == player)
+                GoodGuesser.guesser = oldShifter;
+
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
@@ -542,6 +547,7 @@ namespace TheOtherRoles
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
+            if (player == GoodGuesser.guesser) GoodGuesser.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -554,11 +560,11 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+            if (player == BadGuesser.guesser) BadGuesser.clearAndReload();
+
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
-            if (player == Guesser.guesser) Guesser.clearAndReload();
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -658,13 +664,13 @@ namespace TheOtherRoles
             Arsonist.triggerArsonistWin = true;
         }
 
-        public static void guesserShoot(byte playerId) {
+        public static void badGuesserShoot(byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
             PlayerControl partner = target.getPartner(); // Lover check
             byte partnerId = partner != null ? partner.PlayerId : playerId;
-            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            BadGuesser.remainingShots = Mathf.Max(0, BadGuesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
@@ -676,10 +682,35 @@ namespace TheOtherRoles
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
             }
-            if (HudManager.Instance != null && Guesser.guesser != null)
+            if (HudManager.Instance != null && BadGuesser.guesser != null)
                 if (PlayerControl.LocalPlayer == target) 
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(BadGuesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+        }
+
+        public static void goodGuesserShoot(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if(target == null) return;
+            target.Exiled();
+            PlayerControl partner = target.getPartner(); // Lover check
+            byte partnerId = partner != null ? partner.PlayerId : playerId;
+            GoodGuesser.remainingShots = Mathf.Max(0, GoodGuesser.remainingShots - 1);
+            if(Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            if(MeetingHud.Instance) {
+                foreach(PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
+                    if(pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                        pva.SetDead(pva.DidReport, true);
+                        pva.Overlay.gameObject.SetActive(true);
+                    }
+                }
+                if(AmongUsClient.Instance.AmHost)
+                    MeetingHud.Instance.CheckForEndVoting();
+            }
+            if(HudManager.Instance != null && GoodGuesser.guesser != null)
+                if(PlayerControl.LocalPlayer == target)
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(GoodGuesser.guesser.Data, target.Data);
+                else if(partner != null && PlayerControl.LocalPlayer == partner)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
     }   
@@ -833,8 +864,11 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();
                     break;
-                case (byte)CustomRPC.GuesserShoot:
-                    RPCProcedure.guesserShoot(reader.ReadByte());
+                case (byte)CustomRPC.BadGuesserShoot:
+                    RPCProcedure.badGuesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.GoodGuesserShoot:
+                    RPCProcedure.goodGuesserShoot(reader.ReadByte());
                     break;
             }
         }

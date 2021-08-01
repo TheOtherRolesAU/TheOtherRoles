@@ -51,7 +51,8 @@ namespace TheOtherRoles
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
-            Guesser.clearAndReload();
+            BadGuesser.clearAndReload();
+            GoodGuesser.clearAndReload();
             BountyHunter.clearAndReload();
         }
 
@@ -935,9 +936,9 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Guesser {
+    public static class BadGuesser {
         public static PlayerControl guesser;
-        public static Color color = new Color32(255, 255, 0, byte.MaxValue);
+        public static Color color = Palette.ImpostorRed;
         private static Sprite targetSprite;
 
         public static int remainingShots = 2;
@@ -951,7 +952,28 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             guesser = null;
             
-            remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+            remainingShots = Mathf.RoundToInt(CustomOptionHolder.badGuesserNumberOfShots.getFloat());
+        }
+    }
+
+
+    public static class GoodGuesser {
+        public static PlayerControl guesser;
+        public static Color color = new Color32(255, 255, 0, byte.MaxValue);
+        private static Sprite targetSprite;
+
+        public static int remainingShots = 2;
+
+        public static Sprite getTargetSprite() {
+            if(targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
+            return targetSprite;
+        }
+
+        public static void clearAndReload() {
+            guesser = null;
+
+            remainingShots = Mathf.RoundToInt(CustomOptionHolder.badGuesserNumberOfShots.getFloat());
         }
     }
 

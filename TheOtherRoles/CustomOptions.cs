@@ -50,9 +50,11 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
 
-        public static CustomOption guesserSpawnRate;
-        public static CustomOption guesserIsImpGuesserRate;
-        public static CustomOption guesserNumberOfShots;
+        public static CustomOption badGuesserSpawnRate;
+        public static CustomOption badGuesserNumberOfShots;
+
+        public static CustomOption goodGuesserSpawnRate;
+        public static CustomOption goodGuesserNumberOfShots;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
@@ -226,6 +228,9 @@ namespace TheOtherRoles {
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
+            badGuesserSpawnRate = CustomOption.Create(405, cs(BadGuesser.color, "Bad Guesser"), rates, null, true);
+            badGuesserNumberOfShots = CustomOption.Create(406, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, badGuesserSpawnRate);
+
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
@@ -234,10 +239,6 @@ namespace TheOtherRoles {
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
-
-            guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
-            guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
-            guesserNumberOfShots = CustomOption.Create(312, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
@@ -324,6 +325,9 @@ namespace TheOtherRoles {
             securityGuardTotalScrews = CustomOption.Create(282, "Security Guard Number Of Screws", 7f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
+
+            goodGuesserSpawnRate = CustomOption.Create(410, cs(GoodGuesser.color, "Good Guesser"), rates, null, true);
+            goodGuesserNumberOfShots = CustomOption.Create(411, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, goodGuesserSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
@@ -643,9 +647,9 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 34;
-            int detailedSettingsP1 = roleSettingsLines + 37;
-            int detailedSettingsP2 = detailedSettingsP1 + 38;
+            int roleSettingsLines = defaultSettingsLines + 38;
+            int detailedSettingsP1 = roleSettingsLines + 39;
+            int detailedSettingsP2 = detailedSettingsP1 + 40;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -662,10 +666,10 @@ namespace TheOtherRoles {
                 gap = 5;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 18;
+                gap = 19;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 22;
+                gap = 23;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
