@@ -2,6 +2,7 @@
 
 ## How to use 
 1) Open `role.html` in browser
+    - (*optional*: get and install better font from https://www.fontget.com/font/vcr-osd-mono/)
 2) Use Zoom (`Ctrl`+`-`) and Resize Element (**lower right corner of black background**) to adjust the overview to a good size
 3) Take screenshot and download it
     - (`Ctrl`+`Shift`+`s`) and select wanted area
