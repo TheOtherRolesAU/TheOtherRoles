@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+    *, *::before, *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+</style>
+
+<body>
+<div style="display: none">
+    <img id="img" src="./Grey-Among-Us-clipart-transparent.png" alt="Among Us"/>
+</div>
+
+<canvas
+        id="myCanvas"
+        width="300"
+        height="200"
+        style="border: 1px solid #d3d3d3"
+>
+    Your browser does not support the HTML canvas tag.
+</canvas
+>
+
+<script>
+    const roles = [
+        {
+            name: "Mafioso",
+            desc: "work with the <#FF1919>mafia</> to kill the crewmates",
+            color: "#FF1919",
+        },
+        {
+            name: "Janitor",
+            desc: "work with the <#FF1919>mafia</> by hiding dead bodies",
+            color: "#FF1919",
+        },
+        {
+            name: "Godfather",
+            desc: "kill all crewmates",
+            color: "#FF1919",
+        },
+        {
+            name: "Cleaner",
+            desc: "kill everyone and leave no traces",
+            color: "#FF1919",
+        },
+        {
+            name: "Morphling",
+            desc: "change your look to not get caught",
+            color: "#FF1919",
+        },
+        {
+            name: "Trickster",
+            desc: "use your jack-in-the-boxes to suprise others",
+            color: "#FF1919",
+        },
+        {
+            name: "Camouflager",
+            desc: "camouflage and kill the crewmates",
+            color: "#FF1919",
+        },
+        {
+            name: "Warlock",
+            desc: "curse other players and kill everyone",
+            color: "#FF1919",
+        },
+        {
+            name: "Vampire",
+            desc: "kill the crewmates with your bites",
+            color: "#FF1919",
+        },
+        {
+            name: "Eraser",
+            desc: "kill the crewmates and erase their role",
+            color: "#FF1919",
+        },
+        {
+            name: "Bad Mini",
+            desc: "no one will harm you until you grow up",
+            color: "#FF1919",
+        },
+        {
+            name: "Evil Guesser",
+            desc: "guess and shoot",
+            color: "#FF1919",
+        },
+        {
+            name: "Imp<#FF02C2>Lover</>",
+            desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+            color: "#FF1919",
+        },
+        {
+            name: "Lover",
+            desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+            color: "#FF02C2",
+        },
+        {
+            name: "Jester",
+            desc: "get voted out",
+            color: "#FE58AF",
+        },
+        {
+            name: "Good Mini",
+            desc: "no one will harm you until you grow up",
+            color: "#F8BBDC",
+        },
+        {
+            name: "Swapper",
+            desc: "swap votes to exile the <#FF1919>impostors</>",
+            color: "#9B335E",
+        },
+        {
+            name: "Tracker",
+            desc: "track the <#FF1919>impostors</> down",
+            color: "#7230F0",
+        },
+        {
+            name: "Time Master",
+            desc: "save yourself with your time shield",
+            color: "#6D8FF0",
+        },
+        {
+            name: "Detective",
+            desc: "find the <#FF1919>impostors</> by examining foodprints",
+            color: "#0A6AAA",
+        },
+        {
+            name: "Engineer",
+            desc: "maintain important systems on the ship",
+            color: "#0012FD",
+        },
+        {
+            name: "Jackal",
+            desc: "kill all crewmates and <#FF1919>impostors</> to win",
+            color: "#00BBF4",
+        },
+        {
+            name: "Sidekick",
+            desc: "help your <#00BBF4>jackal</> to kill everyone",
+            color: "#00BBF4",
+        },
+        {
+            name: "Medic",
+            desc: "create a shild to protect a person",
+            color: "#3AFFC9",
+        },
+        {
+            name: "Mayor",
+            desc: "your vote counts twice",
+            color: "#03332B",
+        },
+        {
+            name: "Seer",
+            desc: "you will see players die",
+            color: "#41C16C",
+        },
+        {
+            name: "Hacker",
+            desc: "hack systems to find the <#FF1919>impostors</>",
+            color: "#00F500",
+        },
+        {
+            name: "Snitch",
+            desc: "finish your tasks to find the <#FF1919>impostors</>",
+            color: "#A3FF00",
+        },
+        {
+            name: "Lighter",
+            desc: "your light never goes out",
+            color: "#EBE0B5",
+        },
+        {
+            name: "Shifter",
+            desc: "shift your role",
+            color: "#666666",
+        },
+        {
+            name: "Security Guard",
+            desc: "seal vents and place cameras",
+            color: "#CEB851",
+        },
+        {
+            name: "Nice Guesser",
+            desc: "guess and shoot",
+            color: "#FFFF00",
+        },
+        {
+            name: "Sheriff",
+            desc: "shoot the <#FF1919>imposters</>",
+            color: "#FDC900",
+        },
+        {
+            name: "Arsonist",
+            desc: "let them burn",
+            color: "#FD6700",
+        },
+        {
+            name: "Spy",
+            desc: "confuse the <#FF1919>imposters</>",
+            color: "#FF1919",
+        },
+    ];
+
+    const c = document.getElementById("myCanvas");
+    const image = document.getElementById("img");
+    const ctx = c.getContext("2d");
+
+    function lookForColor(text) {
+        return text.includes("</>")
+            ? text.replaceAll(
+                /<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/g,
+                "<span style='color: $1'>$2</span>"
+            )
+            : text;
+    }
+
+    function drawRole(role, description, color) {
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.rect(0, 0, 300, 200);
+        ctx.fill();
+
+        ctx.textAlign = "center";
+
+        // if (role.match(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/)) {
+        //     const secondColor = role.match(/#[a-zA-Z0-9]{6}/)[0]
+        //     let secondText = role.match(/[a-zA-Z]*<\/>/)[0]
+        //     secondText.replace("</>", "")
+        //
+        //     ctx.fillStyle = secondColor;
+        //     ctx.font = "40px VT323";
+        //     ctx.fillText(secondText.toUpperCase(), 150, 40);
+        // } else {
+            ctx.fillStyle = color;
+            ctx.font = "40px VT323";
+            ctx.fillText(role.toUpperCase(), 150, 40);
+        // }
+
+        // if (description.match(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/)) {
+        //     const secondColor = description.match(/#[a-zA-Z0-9]{6}/)[0]
+        //     let secondText = description.match(/[a-zA-Z]*<\/>/)[0]
+        //     secondText.replace("</>", "")
+        //
+        //     ctx.fillStyle = secondColor;
+        //     ctx.font = "20px VT323";
+        //     ctx.fillText(secondText.toUpperCase(), 150, 60);
+        // } else {
+            ctx.fillStyle = "white";
+            ctx.font = "20px VT323";
+            ctx.fillText(description.toUpperCase(), 150, 60);
+        // }
+
+        ctx.fillStyle = color;
+        ctx.filter = "blur(10px)";
+        ctx.beginPath();
+        ctx.ellipse(150, 130, 40, 200, (1 / 2) * Math.PI, 0, 2 * Math.PI);
+        ctx.fill();
+
+        ctx.filter = "blur(0px)";
+        ctx.drawImage(image, 120, 100, 70, 90);
+    }
+
+    window.onload = function () {
+        roles.forEach(({name, desc, color}, i) => {
+            drawRole(name, desc, color)
+        })
+    }
+</script>
+</body>
+</html>
