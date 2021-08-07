@@ -435,8 +435,7 @@ namespace TheOtherRoles.Patches {
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
             int numberOfTasks = playerTotal - playerCompleted;
 
-            if (PlayerControl.LocalPlayer.Data.IsImpostor && numberOfTasks <= Snitch.taskCountForImpostors)
-            {
+            if (numberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)))) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null)
                 {
@@ -449,11 +448,12 @@ namespace TheOtherRoles.Patches {
                 int arrowIndex = 0;
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
-                    if (p.Data.IsImpostor && !p.Data.IsDead)
-                    {
-                        if (arrowIndex >= Snitch.localArrows.Count) Snitch.localArrows.Add(new Arrow(Color.blue));
-                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null)
-                        {
+                    if (!p.Data.IsDead && (p.Data.IsImpostor || (Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick)))) {
+                        if (arrowIndex >= Snitch.localArrows.Count) {
+                            if (Snitch.teamJackalUseDifferentArrowColor && (p == Jackal.jackal || p == Sidekick.sidekick)) Snitch.localArrows.Add(new Arrow(Jackal.color));
+                            else Snitch.localArrows.Add(new Arrow(Palette.ImpostorRed));
+                        }
+                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
                             Snitch.localArrows[arrowIndex].arrow.SetActive(true);
                             Snitch.localArrows[arrowIndex].Update(p.transform.position);
                         }
@@ -517,6 +517,41 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void baitUpdate() {
+            if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
+
+            // Bait report
+            if (Bait.bait.Data.IsDead && !Bait.reported) {
+                Bait.reportDelay -= Time.fixedDeltaTime;
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
+                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
+                    deadPlayer.killerIfExisting.CmdReportDeadBody(Bait.bait.Data);
+                    Bait.reported = true;
+                }
+            }
+
+            // Bait Vents
+            if (ShipStatus.Instance?.AllVents != null) {
+                var ventsWithPlayers = new List<int>();
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                    if (player.inVent) {
+                        Vent target = ShipStatus.Instance.AllVents.OrderBy(x => Vector2.Distance(x.transform.position, player.GetTruePosition())).FirstOrDefault();
+                        if (target != null) ventsWithPlayers.Add(target.Id);
+                    }
+                }
+
+                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                    if (vent.myRend == null || vent.myRend.material == null) continue;
+                    if (ventsWithPlayers.Contains(vent.Id) || (ventsWithPlayers.Count > 0 && Bait.highlightAllVents)) {
+                        vent.myRend.material.SetFloat("_Outline", 1f);
+                        vent.myRend.material.SetColor("_OutlineColor", Color.yellow);
+                    } else {
+                        vent.myRend.material.SetFloat("_Outline", 0);
+                    }
+                }
+            }
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -574,6 +609,8 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
+                // Bait
+                baitUpdate();
             } 
         }
     }

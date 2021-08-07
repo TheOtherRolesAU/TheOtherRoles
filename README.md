@@ -30,13 +30,15 @@ Even more roles are coming soon :)
 |  | [Swapper](#swapper) |  |  |
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
+|  |  [Bait](#bait) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| **2021.6.30s**| v2.7.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.3/TheOtherRoles.zip)
+| 2021.6.30s| v2.8.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.0/TheOtherRoles.zip)
+| 2021.6.30s| v2.7.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.3/TheOtherRoles.zip)
 | 2021.6.15s| v2.7.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.1/TheOtherRoles.zip)
 | 2021.6.15s| v2.7.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.0/TheOtherRoles.zip)
 | 2021.5.25.2s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
@@ -71,6 +73,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 2.8.0**
+- **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris) 
+- Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
+- Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
+- Added Medic Option: "Shield Will Be Set After Next Meeting" (feature created by [Mallöris](https://github.com/Mallaris))
 
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
@@ -866,6 +874,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 **NOTE:**
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
+- Shields set after the next meeting, will be set before a possible shift is being performed.
 
 
 ### Game Options
@@ -874,6 +883,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | Medic Spawn Chance | - | -
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
+| Shield Will Be Set After Next Meeting | - | True/false
 -----------------------
 
 ## Mayor
@@ -973,7 +983,8 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
-The Tracker can select one player in a game and tracks this player for the rest of the game.
+The Tracker can select one player to track.
+Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates it's position every few seconds (configurable).
 
@@ -982,18 +993,21 @@ The arrow updates it's position every few seconds (configurable).
 |----------|:-------------:|
 | Tracker Spawn Chance | -
 | Tracker Update Intervall | Sets how often the position is being updated
+| Tracker Reset Target After Meeting | -
 -----------------------
 
 ## Snitch
 ### **Team: Crewmates**
-When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors.
-When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors, also with an arrow.
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).
+When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Snitch Spawn Chance | -
-| Task Count Where Impostors See Snitch | -
+| Task Count Where The Snitch Will Be Revealed | -
+| Include Team Jackal | -
+| Use Different Arrow Color For Team Jackal | -
 -----------------------
 
 ## Jackal
@@ -1103,6 +1117,21 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
 -----------------------
 
+## Bait
+### **Team: Crewmates**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The Bait is a Crewmate that if killed, forces the killer to self report the body (you can configure a delay in the options).
+Additionally, the Bait can see if someone is inside a vent (depending on the options the exact vent gets
+an outline or all vents do).
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Bait Spawn Chance | -
+| Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
+| Bait Report Delay | -
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
