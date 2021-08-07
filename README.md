@@ -74,7 +74,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.8.0**
-- Added Tracker Option: Tracker Reset Target After Meeting (feature created by [MaximeGillot](https://github.com/MaximeGillot))
+- Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
+- Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
 
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
@@ -992,14 +993,16 @@ The arrow updates it's position every few seconds (configurable).
 
 ## Snitch
 ### **Team: Crewmates**
-When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors.
-When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors, also with an arrow.
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).
+When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
 | Snitch Spawn Chance | -
-| Task Count Where Impostors See Snitch | -
+| Task Count Where The Snitch Will Be Revealed | -
+| Include Team Jackal | -
+| Use Different Arrow Color For Team Jackal | -
 -----------------------
 
 ## Jackal

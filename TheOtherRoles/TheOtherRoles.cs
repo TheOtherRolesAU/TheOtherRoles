@@ -611,7 +611,10 @@ namespace TheOtherRoles
         public static Color color = new Color32(184, 251, 79, byte.MaxValue);
 
         public static List<Arrow> localArrows = new List<Arrow>();
-        public static int taskCountForImpostors = 1;
+        public static int taskCountForReveal = 1;
+        public static bool includeTeamJackal = false;
+        public static bool teamJackalUseDifferentArrowColor = true;
+
 
         public static void clearAndReload() {
             if (localArrows != null) {
@@ -620,7 +623,9 @@ namespace TheOtherRoles
                     UnityEngine.Object.Destroy(arrow.arrow);
             }
             localArrows = new List<Arrow>();
-            taskCountForImpostors = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForImpostors.getFloat());
+            taskCountForReveal = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForReveal.getFloat());
+            includeTeamJackal = CustomOptionHolder.snitchIncludeTeamJackal.getBool();
+            teamJackalUseDifferentArrowColor = CustomOptionHolder.snitchTeamJackalUseDifferentArrowColor.getBool();
             snitch = null;
         }
     }
