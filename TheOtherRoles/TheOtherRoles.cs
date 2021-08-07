@@ -53,6 +53,7 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
+            Bait.clearAndReload();
         }
 
         public static class Jester {
@@ -239,11 +240,14 @@ namespace TheOtherRoles
     public static class Medic {
         public static PlayerControl medic;
         public static PlayerControl shielded;
+        public static PlayerControl futureShielded;
+        
         public static Color color = new Color32(126, 251, 194, byte.MaxValue);
         public static bool usedShield;
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
+        public static bool setShieldAfterMeeting = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
         public static PlayerControl currentTarget;
@@ -258,10 +262,12 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             medic = null;
             shielded = null;
+            futureShielded = null;
             currentTarget = null;
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
         }
     }
 
@@ -533,6 +539,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
 
         public static float updateIntervall = 5f;
+        public static bool resetTargetAfterMeeting = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
@@ -547,16 +554,20 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
-        public static void clearAndReload() {
-            tracker = null;
-            currentTarget = null;
-            tracked = null;
+        public static void resetTracked() {
+            currentTarget = tracked = null;
             usedTracker = false;
-            timeUntilUpdate = 0f;
-            updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+
+        public static void clearAndReload() {
+            tracker = null;
+            resetTracked();
+            timeUntilUpdate = 0f;
+            updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
         }
     }
 
@@ -606,7 +617,10 @@ namespace TheOtherRoles
         public static Color color = new Color32(184, 251, 79, byte.MaxValue);
 
         public static List<Arrow> localArrows = new List<Arrow>();
-        public static int taskCountForImpostors = 1;
+        public static int taskCountForReveal = 1;
+        public static bool includeTeamJackal = false;
+        public static bool teamJackalUseDifferentArrowColor = true;
+
 
         public static void clearAndReload() {
             if (localArrows != null) {
@@ -615,7 +629,9 @@ namespace TheOtherRoles
                     UnityEngine.Object.Destroy(arrow.arrow);
             }
             localArrows = new List<Arrow>();
-            taskCountForImpostors = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForImpostors.getFloat());
+            taskCountForReveal = Mathf.RoundToInt(CustomOptionHolder.snitchLeftTasksForReveal.getFloat());
+            includeTeamJackal = CustomOptionHolder.snitchIncludeTeamJackal.getBool();
+            teamJackalUseDifferentArrowColor = CustomOptionHolder.snitchTeamJackalUseDifferentArrowColor.getBool();
             snitch = null;
         }
     }
@@ -991,6 +1007,23 @@ namespace TheOtherRoles
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
+        }
+    }
+
+    public static class Bait {
+        public static PlayerControl bait;
+        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+        public static bool highlightAllVents = false;
+        public static float reportDelay = 0f;
+
+        public static bool reported = false;
+
+        public static void clearAndReload() {
+            bait = null;
+            reported = false;
+            highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
+            reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
         }
     }
 }

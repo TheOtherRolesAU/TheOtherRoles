@@ -116,6 +116,8 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
             } else if (Guesser.guesser != null && Guesser.guesser == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
+            } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Bait.bait, Bait.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
