@@ -47,6 +47,7 @@ namespace TheOtherRoles
         Arsonist,
         Guesser,
         BountyHunter,
+        Bait,
         Crewmate,
         Impostor
     }
@@ -62,6 +63,7 @@ namespace TheOtherRoles
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
+
         // Role functionality
 
         EngineerFixLights = 81,
@@ -87,6 +89,7 @@ namespace TheOtherRoles
         ErasePlayerRoles,
         SetFutureErased,
         SetFutureShifted,
+        SetFutureShielded,
         PlaceJackInTheBox,
         LightsOut,
         WarlockCurseKill,
@@ -230,6 +233,9 @@ namespace TheOtherRoles
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
+                    case RoleId.Bait:
+                        Bait.bait = player;
+                        break;
                     }
                 }
         }
@@ -326,9 +332,8 @@ namespace TheOtherRoles
 
         public static void medicSetShielded(byte shieldedId) {
             Medic.usedShield = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == shieldedId)
-                    Medic.shielded = player;
+            Medic.shielded = Helpers.playerById(shieldedId);
+            Medic.futureShielded = null;
         }
 
         public static void shieldedMurderAttempt() {
@@ -411,6 +416,8 @@ namespace TheOtherRoles
                 SecurityGuard.securityGuard = oldShifter;
             if (Guesser.guesser != null && Guesser.guesser == player)
                 Guesser.guesser = oldShifter;
+            if (Bait.bait != null && Bait.bait == player)
+                Bait.bait = oldShifter;
             
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
@@ -542,6 +549,7 @@ namespace TheOtherRoles
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
+            if (player == Bait.bait) Bait.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -584,6 +592,11 @@ namespace TheOtherRoles
 
         public static void setFutureShifted(byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
+        }
+
+        public static void setFutureShielded(byte playerId) {
+            Medic.futureShielded = Helpers.playerById(playerId);
+            Medic.usedShield = true;
         }
         
         public static void placeJackInTheBox(byte[] buff) {
@@ -814,6 +827,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
                     RPCProcedure.setFutureShifted(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureShielded:
+                    RPCProcedure.setFutureShielded(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());
