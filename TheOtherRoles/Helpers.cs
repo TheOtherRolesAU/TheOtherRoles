@@ -126,7 +126,6 @@ namespace TheOtherRoles {
             return true;
         }
 
-
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
 

@@ -162,6 +162,10 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardCamPrice;
         public static CustomOption securityGuardVentPrice;
 
+        public static CustomOption baitSpawnRate;
+        public static CustomOption baitHighlightAllVents;
+        public static CustomOption baitReportDelay;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -331,6 +335,10 @@ namespace TheOtherRoles {
             securityGuardTotalScrews = CustomOption.Create(282, "Security Guard Number Of Screws", 7f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
+
+            baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
+            baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
+            baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
@@ -650,7 +658,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 34;
+            int roleSettingsLines = defaultSettingsLines + 35;
             int detailedSettingsP1 = roleSettingsLines + 37;
             int detailedSettingsP2 = detailedSettingsP1 + 38;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();

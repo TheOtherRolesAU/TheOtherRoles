@@ -517,6 +517,41 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void baitUpdate() {
+            if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
+
+            // Bait report
+            if (Bait.bait.Data.IsDead && !Bait.reported) {
+                Bait.reportDelay -= Time.fixedDeltaTime;
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
+                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
+                    deadPlayer.killerIfExisting.CmdReportDeadBody(Bait.bait.Data);
+                    Bait.reported = true;
+                }
+            }
+
+            // Bait Vents
+            if (ShipStatus.Instance?.AllVents != null) {
+                var ventsWithPlayers = new List<int>();
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                    if (player.inVent) {
+                        Vent target = ShipStatus.Instance.AllVents.OrderBy(x => Vector2.Distance(x.transform.position, player.GetTruePosition())).FirstOrDefault();
+                        if (target != null) ventsWithPlayers.Add(target.Id);
+                    }
+                }
+
+                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                    if (vent.myRend == null || vent.myRend.material == null) continue;
+                    if (ventsWithPlayers.Contains(vent.Id) || (ventsWithPlayers.Count > 0 && Bait.highlightAllVents)) {
+                        vent.myRend.material.SetFloat("_Outline", 1f);
+                        vent.myRend.material.SetColor("_OutlineColor", Color.yellow);
+                    } else {
+                        vent.myRend.material.SetFloat("_Outline", 0);
+                    }
+                }
+            }
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -574,6 +609,8 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
+                // Bait
+                baitUpdate();
             } 
         }
     }

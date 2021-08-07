@@ -53,6 +53,7 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
+            Bait.clearAndReload();
         }
 
         public static class Jester {
@@ -1006,6 +1007,23 @@ namespace TheOtherRoles
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
+        }
+    }
+
+    public static class Bait {
+        public static PlayerControl bait;
+        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+        public static bool highlightAllVents = false;
+        public static float reportDelay = 0f;
+
+        public static bool reported = false;
+
+        public static void clearAndReload() {
+            bait = null;
+            reported = false;
+            highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
+            reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
         }
     }
 }
