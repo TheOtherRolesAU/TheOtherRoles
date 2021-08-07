@@ -76,6 +76,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.8.0**
 - Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
 - Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
+- Added Medic Option: "Shield Will Be Set After Next Meeting" (feature created by [Mallöris](https://github.com/Mallaris))
 
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
@@ -871,6 +872,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 **NOTE:**
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
+- Shields set after the next meeting, will be set before a possible shift is being performed.
 
 
 ### Game Options
@@ -879,6 +881,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | Medic Spawn Chance | - | -
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
+| Shield Will Be Set After Next Meeting | - | True/false
 -----------------------
 
 ## Mayor

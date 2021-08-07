@@ -227,10 +227,13 @@ namespace TheOtherRoles
                 () => {
                     medicShieldButton.Timer = 0f;
  
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, Medic.setShieldAfterMeeting ? (byte)CustomRPC.SetFutureShielded : (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
                     writer.Write(Medic.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
+                    if (Medic.setShieldAfterMeeting)
+                        RPCProcedure.setFutureShielded(Medic.currentTarget.PlayerId);
+                    else
+                        RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
                 },
                 () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },

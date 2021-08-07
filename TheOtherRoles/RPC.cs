@@ -87,6 +87,7 @@ namespace TheOtherRoles
         ErasePlayerRoles,
         SetFutureErased,
         SetFutureShifted,
+        SetFutureShielded,
         PlaceJackInTheBox,
         LightsOut,
         WarlockCurseKill,
@@ -326,9 +327,8 @@ namespace TheOtherRoles
 
         public static void medicSetShielded(byte shieldedId) {
             Medic.usedShield = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == shieldedId)
-                    Medic.shielded = player;
+            Medic.shielded = Helpers.playerById(shieldedId);
+            Medic.futureShielded = null;
         }
 
         public static void shieldedMurderAttempt() {
@@ -585,6 +585,11 @@ namespace TheOtherRoles
         public static void setFutureShifted(byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
         }
+
+        public static void setFutureShielded(byte playerId) {
+            Medic.futureShielded = Helpers.playerById(playerId);
+            Medic.usedShield = true;
+        }
         
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
@@ -814,6 +819,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
                     RPCProcedure.setFutureShifted(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureShielded:
+                    RPCProcedure.setFutureShielded(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());

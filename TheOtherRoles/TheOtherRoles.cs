@@ -239,11 +239,14 @@ namespace TheOtherRoles
     public static class Medic {
         public static PlayerControl medic;
         public static PlayerControl shielded;
+        public static PlayerControl futureShielded;
+        
         public static Color color = new Color32(126, 251, 194, byte.MaxValue);
         public static bool usedShield;
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
+        public static bool setShieldAfterMeeting = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
         public static PlayerControl currentTarget;
@@ -258,10 +261,12 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             medic = null;
             shielded = null;
+            futureShielded = null;
             currentTarget = null;
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
         }
     }
 
