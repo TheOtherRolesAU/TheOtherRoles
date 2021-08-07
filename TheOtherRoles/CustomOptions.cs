@@ -130,6 +130,7 @@ namespace TheOtherRoles {
 
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
+        public static CustomOption trackerResetTargetAfterMeeting;
 
         public static CustomOption snitchSpawnRate;
         public static CustomOption snitchLeftTasksForImpostors;
@@ -309,6 +310,7 @@ namespace TheOtherRoles {
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
+            trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
 
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "Snitch"), rates, null, true);
             snitchLeftTasksForImpostors = CustomOption.Create(211, "Task Count Where Impostors See Snitch", 1f, 0f, 5f, 1f, snitchSpawnRate);

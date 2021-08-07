@@ -533,6 +533,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
 
         public static float updateIntervall = 5f;
+        public static bool resetTargetAfterMeeting = false;
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
@@ -547,16 +548,20 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
-        public static void clearAndReload() {
-            tracker = null;
-            currentTarget = null;
-            tracked = null;
+        public static void resetTracked() {
+            currentTarget = tracked = null;
             usedTracker = false;
-            timeUntilUpdate = 0f;
-            updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.blue);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+
+        public static void clearAndReload() {
+            tracker = null;
+            resetTracked();
+            timeUntilUpdate = 0f;
+            updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
         }
     }
 

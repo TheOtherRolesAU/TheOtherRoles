@@ -74,6 +74,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.8.0**
+- Added Tracker Option: Tracker Reset Target After Meeting (feature created by [MaximeGillot](https://github.com/MaximeGillot))
 
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
@@ -976,7 +977,8 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
-The Tracker can select one player in a game and tracks this player for the rest of the game.
+The Tracker can select one player to track.
+Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates it's position every few seconds (configurable).
 
@@ -985,6 +987,7 @@ The arrow updates it's position every few seconds (configurable).
 |----------|:-------------:|
 | Tracker Spawn Chance | -
 | Tracker Update Intervall | Sets how often the position is being updated
+| Tracker Reset Target After Meeting | -
 -----------------------
 
 ## Snitch
