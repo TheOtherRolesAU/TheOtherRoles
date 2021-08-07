@@ -38,7 +38,7 @@ namespace TheOtherRoles.Patches {
                     }
                 }
                 // Swapper swap votes
-                if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead) { // Don't swap if swapper is dead
+                if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead) {
                     PlayerVoteArea swapped1 = null;
                     PlayerVoteArea swapped2 = null;
                     foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
@@ -111,18 +111,16 @@ namespace TheOtherRoles.Patches {
             
             static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
                 // Swapper swap
-                if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead) { // Don't swap if dead
-                    PlayerVoteArea swapped1 = null;
-                    PlayerVoteArea swapped2 = null;
-                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                        if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
-                        if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
-                    }
-                    bool doSwap = swapped1 != null && swapped2 != null;
-                    if (doSwap) {
-                        __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
-                        __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
-                    }
+                PlayerVoteArea swapped1 = null;
+                PlayerVoteArea swapped2 = null;
+                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                    if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
+                    if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
+                }
+                bool doSwap = swapped1 != null && swapped2 != null && Swapper.swapper != null && !Swapper.swapper.Data.IsDead;
+                if (doSwap) {
+                    __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
                 }
 
 
