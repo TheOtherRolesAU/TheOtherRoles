@@ -79,12 +79,12 @@
       const roles = [
         {
           name: "Mafioso",
-          desc: "work with the <#FF1919>mafia</> to kill the crewmates",
+          desc: "work with the <color=#FF1919>mafia</color> to kill the crewmates",
           color: "#FF1919",
         },
         {
           name: "Janitor",
-          desc: "work with the <#FF1919>mafia</> by hiding dead bodies",
+          desc: "work with the <color=#FF1919>mafia</color> by hiding dead bodies",
           color: "#FF1919",
         },
         {
@@ -138,13 +138,13 @@
           color: "#FF1919",
         },
         {
-          name: "Imp<#FF02C2>Lover</>",
-          desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+          name: "Imp<color=#FF02C2>Lover</color>",
+          desc: "you are in <color=#FF02C2>love</color> with <color=#FF02C2>eisbison</color>",
           color: "#FF1919",
         },
         {
           name: "Lover",
-          desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+          desc: "you are in <color=#FF02C2>love</color> with <color=#FF02C2>eisbison</color>",
           color: "#FF02C2",
         },
         {
@@ -159,18 +159,13 @@
         },
         {
           name: "Swapper",
-          desc: "swap votes to exile the <#FF1919>impostors</>",
+          desc: "swap votes to exile the <color=#FF1919>impostors</color>",
           color: "#9B335E",
         },
         {
           name: "Tracker",
-          desc: "track the <#FF1919>impostors</> down",
+          desc: "track the <color=#FF1919>impostors</color> down",
           color: "#005acf",
-        },
-        {
-          name: "Bait",
-          desc: "force your killer to self report",
-          color: "#7230F0",
         },
         {
           name: "Time Master",
@@ -179,7 +174,7 @@
         },
         {
           name: "Detective",
-          desc: "find the <#FF1919>impostors</> by examining foodprints",
+          desc: "find the <color=#FF1919>impostors</color> by examining foodprints",
           color: "#0A6AAA",
         },
         {
@@ -189,13 +184,18 @@
         },
         {
           name: "Jackal",
-          desc: "kill all crewmates and <#FF1919>impostors</> to win",
+          desc: "kill all crewmates and <color=#FF1919>impostors</color> to win",
           color: "#00BBF4",
         },
         {
           name: "Sidekick",
-          desc: "help your <#00BBF4>jackal</> to kill everyone",
+          desc: "help your <color=#00BBF4>jackal</color> to kill everyone",
           color: "#00BBF4",
+        },
+        {
+          name: "Bait",
+          desc: "Bait your enemies",
+          color: "#00DFE6",
         },
         {
           name: "Medic",
@@ -214,12 +214,12 @@
         },
         {
           name: "Hacker",
-          desc: "hack systems to find the <#FF1919>impostors</>",
+          desc: "hack systems to find the <color=#FF1919>impostors</color>",
           color: "#00F500",
         },
         {
           name: "Snitch",
-          desc: "finish your tasks to find the <#FF1919>impostors</>",
+          desc: "finish your tasks to find the <color=#FF1919>impostors</color>",
           color: "#A3FF00",
         },
         {
@@ -244,7 +244,7 @@
         },
         {
           name: "Sheriff",
-          desc: "shoot the <#FF1919>imposters</>",
+          desc: "shoot the <color=#FF1919>imposters</color>",
           color: "#FDC900",
         },
         {
@@ -254,15 +254,15 @@
         },
         {
           name: "Spy",
-          desc: "confuse the <#FF1919>imposters</>",
+          desc: "confuse the <color=#FF1919>imposters</color>",
           color: "#FF1919",
         },
       ];
 
       function lookForColor(text) {
-        return text.includes("</>")
+        return text.includes("</color>")
           ? text.replaceAll(
-              /<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/g,
+              /<color=(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/color>/g,
               "<span style='color: $1'>$2</span>"
             )
           : text;
