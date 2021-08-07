@@ -111,6 +111,7 @@ namespace TheOtherRoles.Patches {
             
             static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
                 // Swapper swap
+
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
                 foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
