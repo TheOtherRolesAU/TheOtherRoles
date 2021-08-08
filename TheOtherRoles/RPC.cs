@@ -683,7 +683,7 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
-            PlayerControl partner = target.getPartner(); // Lover check
+            PlayerControl partner = target.getSuicidePartner(); // Lover check
             byte partnerId = partner != null ? partner.PlayerId : playerId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);

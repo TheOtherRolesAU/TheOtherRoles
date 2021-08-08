@@ -364,6 +364,12 @@ namespace TheOtherRoles
                 return lover1;
             return null;
         }
+
+        public static PlayerControl getSuicidePartner(this PlayerControl player) {
+            if (bothDie) return null;
+
+            return player.getPartner();
+        }
     }
 
     public static class Seer {
