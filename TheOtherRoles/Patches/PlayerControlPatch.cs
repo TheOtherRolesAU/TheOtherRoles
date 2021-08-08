@@ -627,11 +627,19 @@ namespace TheOtherRoles.Patches
             {
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 var deadPlayer =
-                    deadPlayers?.FirstOrDefault(x =>
-                        x.player != null && x.player.PlayerId == Bait.Instance.player.PlayerId);
+                     deadPlayers?.FirstOrDefault(x =>
+                         x.player != null && x.player.PlayerId == Bait.Instance.player.PlayerId);
+                
                 if (deadPlayer != null && deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f)
                 {
-                    deadPlayer.killerIfExisting.CmdReportDeadBody(Bait.Instance.player.Data);
+                    Helpers.HandleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                    RPCProcedure.UncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.Instance.player.PlayerId);
+
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
+                    writer.Write(deadPlayer.killerIfExisting.PlayerId);
+                    writer.Write(Bait.Instance.player.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+
                     Bait.reported = true;
                 }
             }
@@ -750,24 +758,7 @@ namespace TheOtherRoles.Patches
     {
         public static void Prefix()
         {
-            // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead &&
-                Helpers.HandleMurderAttempt(Vampire.bitten, true))
-            {
-                var killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.VampireTryKill, SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.VampireTryKill();
-            }
-            else
-            {
-                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
-                    (byte) CustomRPC.VampireSetBitten, SendOption.Reliable, -1);
-                writer.Write(byte.MaxValue);
-                writer.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.VampireSetBitten(byte.MaxValue, byte.MaxValue);
-            }
+            Helpers.HandleVampireBiteOnBodyReport();
         }
     }
 

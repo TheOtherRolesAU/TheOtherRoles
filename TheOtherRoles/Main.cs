@@ -18,7 +18,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "2.8.0";
+        public const string VersionString = "2.8.1";
         public static Version Version = Version.Parse(VersionString);
         public static TheOtherRolesPlugin Instance;
 

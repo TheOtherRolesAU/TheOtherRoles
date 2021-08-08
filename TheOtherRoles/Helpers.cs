@@ -152,6 +152,28 @@ namespace TheOtherRoles
             }
         }
 
+        public static void HandleVampireBiteOnBodyReport()
+        {
+            // Murder the bitten player before the meeting starts or reset the bitten player
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead &&
+                HandleMurderAttempt(Vampire.bitten, true))
+            {
+                var killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    (byte) CustomRPC.VampireTryKill, SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                RPCProcedure.VampireTryKill();
+            }
+            else
+            {
+                var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId,
+                    (byte) CustomRPC.VampireSetBitten, SendOption.Reliable, -1);
+                writer.Write(byte.MaxValue);
+                writer.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.VampireSetBitten(byte.MaxValue, byte.MaxValue);
+            }
+        }
+
         public static void RefreshRoleDescription(PlayerControl player)
         {
             if (player == null) return;

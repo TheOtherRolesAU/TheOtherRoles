@@ -27,6 +27,7 @@ namespace TheOtherRoles
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
+        UncheckedCmdReportDeadBody,
 
         // Role functionality
 
@@ -138,6 +139,13 @@ namespace TheOtherRoles
             var target = Helpers.PlayerById(targetId);
             if (source && target) source.MurderPlayer(target);
         }
+
+        public static void UncheckedCmdReportDeadBody(byte sourceId, byte targetId) {
+            var source = Helpers.PlayerById(sourceId);
+            var target = Helpers.PlayerById(targetId);
+            if (source != null && target != null) source.ReportDeadBody(target.Data);
+        }
+
 
         // Role functionality
 
@@ -602,6 +610,11 @@ namespace TheOtherRoles
                     var source = reader.ReadByte();
                     var target = reader.ReadByte();
                     RPCProcedure.UncheckedMurderPlayer(source, target);
+                    break;
+                case (byte)CustomRPC.UncheckedCmdReportDeadBody:
+                    var reportSource = reader.ReadByte();
+                    var reportTarget = reader.ReadByte();
+                    RPCProcedure.UncheckedCmdReportDeadBody(reportSource, reportTarget);
                     break;
 
                 // Role functionality
