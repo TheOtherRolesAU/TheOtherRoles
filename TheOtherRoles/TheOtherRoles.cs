@@ -1051,17 +1051,29 @@ namespace TheOtherRoles
             SystemTypes.Medical
         };
 
+        // multiple times in list = more likely to be selected
         private static readonly List<SystemTypes> systemsSkeld = new List<SystemTypes>() {
-            SystemTypes.Reactor, SystemTypes.Comms, SystemTypes.Electrical, SystemTypes.LifeSupp
+            SystemTypes.Reactor, SystemTypes.Reactor, SystemTypes.Reactor,
+            SystemTypes.LifeSupp, SystemTypes.LifeSupp, SystemTypes.LifeSupp,
+            SystemTypes.Electrical, SystemTypes.Electrical,
+            SystemTypes.Comms,
         };
         private static readonly List<SystemTypes> systemsMira = new List<SystemTypes>() {
-            SystemTypes.Reactor, SystemTypes.Comms, SystemTypes.Electrical, SystemTypes.LifeSupp
+            SystemTypes.Reactor, SystemTypes.Reactor, SystemTypes.Reactor,
+            SystemTypes.LifeSupp, SystemTypes.LifeSupp, SystemTypes.LifeSupp,
+            SystemTypes.Electrical, SystemTypes.Electrical,
+            SystemTypes.Comms,
         };
         private static readonly List<SystemTypes> systemsPolus = new List<SystemTypes>() {
-            SystemTypes.Laboratory, SystemTypes.Comms, SystemTypes.Electrical  // Lab on Polus = Reactor on all others
+            SystemTypes.Laboratory, SystemTypes.Laboratory, SystemTypes.Laboratory, // Lab on Polus = Reactor on all others
+            SystemTypes.Electrical, SystemTypes.Electrical,
+            SystemTypes.Comms,
         };
         private static readonly List<SystemTypes> systemsAirship = new List<SystemTypes>() {
-            SystemTypes.Reactor, SystemTypes.Comms, SystemTypes.Electrical, SystemTypes.LifeSupp
+            SystemTypes.Reactor, SystemTypes.Reactor, SystemTypes.Reactor,
+            SystemTypes.LifeSupp, SystemTypes.LifeSupp, SystemTypes.LifeSupp,
+            SystemTypes.Electrical, SystemTypes.Electrical,
+            SystemTypes.Comms,
         };
 
         public static void kill()
@@ -1091,9 +1103,10 @@ namespace TheOtherRoles
         }
 
         private static void sabotage(List<SystemTypes> systems, List<SystemTypes> doors = null) {
-            if (doors != null)
+            if (doors != null && new System.Random().Next(100) < 30)
                 sabotageDoors(doors);
-            sabotageRandomSystem(systems);
+            else
+                sabotageRandomSystem(systems);
         }
 
         private static void sabotageDoors(List<SystemTypes> doors, int percentage = 50) {
