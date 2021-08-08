@@ -1,49 +1,46 @@
-using HarmonyLib;
-using static TheOtherRoles.TheOtherRoles;
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using HarmonyLib;
+using TheOtherRoles.Roles;
 
-namespace TheOtherRoles {
+namespace TheOtherRoles
+{
     [HarmonyPatch]
-    public static class TasksHandler {
-
-        public static Tuple<int, int> taskInfo(GameData.PlayerInfo playerInfo) {
-            int TotalTasks = 0;
-            int CompletedTasks = 0;
-            if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
-                playerInfo.Object &&
-                (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
-                !playerInfo.IsImpostor &&
-                !playerInfo.Object.hasFakeTasks()
-                ) {
-
-                for (int j = 0; j < playerInfo.Tasks.Count; j++) {
-                    TotalTasks++;
-                    if (playerInfo.Tasks[j].Complete) {
-                        CompletedTasks++;
-                    }
-                }
+    public static class TasksHandler
+    {
+        public static Tuple<int, int> TaskInfo(GameData.PlayerInfo playerInfo)
+        {
+            var totalTasks = 0;
+            var completedTasks = 0;
+            if (playerInfo.Disconnected || playerInfo.Tasks == null || !playerInfo.Object ||
+                !PlayerControl.GameOptions.GhostsDoTasks && playerInfo.IsDead || playerInfo.IsImpostor ||
+                playerInfo.Object.HasFakeTasks()) return Tuple.Create(completedTasks, totalTasks);
+            foreach (var task in playerInfo.Tasks)
+            {
+                totalTasks++;
+                if (task.Complete) completedTasks++;
             }
-            return Tuple.Create(CompletedTasks, TotalTasks);
+
+            return Tuple.Create(completedTasks, totalTasks);
         }
 
         [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
-        private static class GameDataRecomputeTaskCountsPatch {
-            private static bool Prefix(GameData __instance) {
+        private static class GameDataRecomputeTaskCountsPatch
+        {
+            private static bool Prefix(GameData __instance)
+            {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
-                for (int i = 0; i < __instance.AllPlayers.Count; i++) {
-                    GameData.PlayerInfo playerInfo = __instance.AllPlayers[i];
-                    if (playerInfo.Object && playerInfo.Object.hasAliveKillingLover())
+                foreach (var player in __instance.AllPlayers)
+                {
+                    if (player.Object && Lovers.HasAliveKillingLover(player.Object))
                         continue;
-                    var (playerCompleted, playerTotal) = taskInfo(playerInfo);
+                    var (playerCompleted, playerTotal) = TaskInfo(player);
                     __instance.TotalTasks += playerTotal;
                     __instance.CompletedTasks += playerCompleted;
                 }
+
                 return false;
             }
         }
-        
     }
 }

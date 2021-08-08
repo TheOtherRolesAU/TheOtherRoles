@@ -1,65 +1,58 @@
 using System;
-using System.Collections.Generic;
-using System.Collections;
+using TheOtherRoles.Roles;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
-namespace TheOtherRoles.Objects {
-    class Footprint {
-        private static List<Footprint> footprints = new List<Footprint>();
+namespace TheOtherRoles.Objects
+{
+    internal class Footprint
+    {
         private static Sprite sprite;
-        private Color color;
-        private GameObject footprint;
-        private SpriteRenderer spriteRenderer;
-        private PlayerControl owner;
-        private bool anonymousFootprints;
 
-        public static Sprite getFootprintSprite() {
-            if (sprite) return sprite;
-            sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
-            return sprite;
-        }
+        public Footprint(float footprintDuration, bool anonymousFootprints, PlayerControl player)
+        {
+            var owner = player;
+            Color color = Palette.PlayerColors[anonymousFootprints ? 6 : player.Data.ColorId];
 
-        public Footprint(float footprintDuration, bool anonymousFootprints, PlayerControl player) {
-            this.owner = player;
-            this.anonymousFootprints = anonymousFootprints;
-            if (anonymousFootprints)
-                this.color = Palette.PlayerColors[6];
-            else
-                this.color = Palette.PlayerColors[(int) player.Data.ColorId];
-
-            footprint = new GameObject("Footprint");
-            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
-            footprint.transform.position = position;
-            footprint.transform.localPosition = position;
+            var footprint = new GameObject("Footprint");
+            footprint.transform.position = player.transform.position + new Vector3(0, 0, 1f);
+            footprint.transform.localPosition = footprint.transform.position;
             footprint.transform.SetParent(player.transform.parent);
 
-            footprint.transform.Rotate(0.0f, 0.0f, UnityEngine.Random.Range(0.0f, 360.0f));
+            footprint.transform.Rotate(0.0f, 0.0f, Random.Range(0.0f, 360.0f));
 
 
-            spriteRenderer = footprint.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = getFootprintSprite();
+            var spriteRenderer = footprint.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = GetFootprintSprite();
             spriteRenderer.color = color;
 
             footprint.SetActive(true);
-            footprints.Add(this);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) => {
-            Color c = color;
-            if (!anonymousFootprints && owner != null) {
-                if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)
-                    c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
-                else if (Camouflager.camouflageTimer > 0)
-                    c = Palette.PlayerColors[6];
-            }
+            HudManager.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>(p =>
+            {
+                var c = color;
+                if (!anonymousFootprints && owner != null)
+                {
+                    if (owner == Morphling.Instance.player && Morphling.morphTimer > 0 && Morphling.morphTarget &&
+                        Morphling.morphTarget.Data != null)
+                        c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
+                    else if (Camouflager.camouflageTimer > 0)
+                        c = Palette.PlayerColors[6];
+                }
 
-            if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(1 - p));
+                if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(1 - p));
 
-            if (p == 1f && footprint != null) {
-                UnityEngine.Object.Destroy(footprint);
-                footprints.Remove(this);
-            }
+                if (!(Math.Abs(p - 1f) < 0.1f) || footprint == null) return;
+                Object.Destroy(footprint);
             })));
+        }
+
+        private static Sprite GetFootprintSprite()
+        {
+            if (sprite) return sprite;
+            sprite = Helpers.LoadSpriteFromResources("TheOtherRoles.Resources.Footprint.png", 600f);
+            return sprite;
         }
     }
 }

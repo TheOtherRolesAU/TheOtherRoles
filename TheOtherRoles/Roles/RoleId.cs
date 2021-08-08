@@ -1,0 +1,42 @@
+namespace TheOtherRoles
+{
+    public enum RoleId
+    {
+        Jester,
+        Mayor,
+        Engineer,
+        Sheriff,
+        Lighter,
+        Godfather,
+        Mafioso,
+        Janitor,
+        Detective,
+        TimeMaster,
+        Medic,
+        Shifter,
+        Swapper,
+        Lover,
+        Seer,
+        Morphling,
+        Camouflager,
+        Hacker,
+        Mini,
+        Tracker,
+        Vampire,
+        Snitch,
+        Jackal,
+        Sidekick,
+        Eraser,
+        Spy,
+        Trickster,
+        Cleaner,
+        Warlock,
+        SecurityGuard,
+        Arsonist,
+        Guesser,
+        BountyHunter,
+        Bait,
+        Crewmate,
+        Impostor
+    }
+}

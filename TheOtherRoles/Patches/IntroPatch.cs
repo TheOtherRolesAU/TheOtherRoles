@@ -1,22 +1,29 @@
-using HarmonyLib;
 using System;
-using static TheOtherRoles.TheOtherRoles;
-using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
+using TheOtherRoles.Roles;
+using TMPro;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace TheOtherRoles.Patches {
+namespace TheOtherRoles.Patches
+{
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-    class IntroCutsceneOnDestroyPatch
+    internal class IntroCutsceneOnDestroyPatch
     {
-        public static void Prefix(IntroCutscene __instance) {
+        public static void Prefix(IntroCutscene __instance)
+        {
             // Generate and initialize player icons
-            int playerCounter = 0;
-            if (PlayerControl.LocalPlayer != null && HudManager.Instance != null) {
-                Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    GameData.PlayerInfo data = p.Data;
-                    PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
+            var playerCounter = 0;
+            if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
+            {
+                var bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+                bottomLeft[0] = -bottomLeft[0];
+                foreach (var p in PlayerControl.AllPlayerControls)
+                {
+                    var data = p.Data;
+                    var player = Object.Instantiate(__instance.PlayerPrefab, HudManager.Instance.transform);
                     PlayerControl.SetPlayerMaterialColors(data.ColorId, player.Body);
                     DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.SkinId);
                     player.HatSlot.SetHat(data.HatId, data.ColorId);
@@ -25,101 +32,126 @@ namespace TheOtherRoles.Patches {
                     player.SetFlipX(true);
                     MapOptions.playerIcons[p.PlayerId] = player;
 
-                    if (PlayerControl.LocalPlayer == Arsonist.arsonist && p != Arsonist.arsonist) {
-                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
+                    if (PlayerControl.LocalPlayer == Arsonist.Instance.player && p != Arsonist.Instance.player)
+                    {
+                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) +
+                                                         Vector3.right * playerCounter++ * 0.35f;
                         player.transform.localScale = Vector3.one * 0.2f;
-                        player.setSemiTransparent(true);
+                        player.SetSemiTransparent(true);
                         player.gameObject.SetActive(true);
-                    } else if (PlayerControl.LocalPlayer == BountyHunter.bountyHunter) {
+                    }
+                    else if (PlayerControl.LocalPlayer == BountyHunter.Instance.player)
+                    {
                         player.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0);
                         player.transform.localScale = Vector3.one * 0.4f;
                         player.gameObject.SetActive(false);
-                    } else {
+                    }
+                    else
+                    {
                         player.gameObject.SetActive(false);
                     }
                 }
             }
 
             // Force Bounty Hunter to load a new Bounty when the Intro is over
-            if (BountyHunter.bounty != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) {
+            if (BountyHunter.bounty == null || PlayerControl.LocalPlayer != BountyHunter.Instance.player) return;
+
+            {
+                // redefining bottomLeft
                 BountyHunter.bountyUpdateTimer = 0f;
-                if (HudManager.Instance != null) {
-                    Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
-                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(HudManager.Instance.KillButton.TimerText, HudManager.Instance.transform);
-                    BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
-                    BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
-                    BountyHunter.cooldownText.gameObject.SetActive(true);
-                }
+                if (HudManager.Instance == null) return;
+                var bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+                bottomLeft[0] = -bottomLeft[0];
+                bottomLeft += new Vector3(-0.25f, 1f, 0);
+                BountyHunter.cooldownText = Object.Instantiate(HudManager.Instance.KillButton.TimerText,
+                    HudManager.Instance.transform);
+                BountyHunter.cooldownText.alignment = TextAlignmentOptions.Center;
+                BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
+                BountyHunter.cooldownText.gameObject.SetActive(true);
             }
         }
     }
 
     [HarmonyPatch]
-    class IntroPatch {
-        public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+    internal class IntroPatch
+    {
+        private static void SetupIntroTeam(ref List<PlayerControl> yourTeam)
+        {
             // Intro solo teams
-            if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist) {
-                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+            if (PlayerControl.LocalPlayer == Jester.Instance.player ||
+                PlayerControl.LocalPlayer == Jackal.Instance.player ||
+                PlayerControl.LocalPlayer == Arsonist.Instance.player)
+            {
+                var soloTeam = new List<PlayerControl>();
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
 
             // Add the Spy to the Impostor team (for the Impostors)
-            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
-                List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                foreach (PlayerControl p in players) {
-                    if (p == Spy.spy || p.Data.IsImpostor)
-                        fakeImpostorTeam.Add(p);
-                }
-                yourTeam = fakeImpostorTeam;
-            }
+            if (Spy.Instance.player == null || !PlayerControl.LocalPlayer.Data.IsImpostor) return;
+            var players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(_ => Guid.NewGuid()).ToList();
+            var fakeImpostorTeam = new List<PlayerControl>();
+            foreach (var p in players.Where(p => p == Spy.Instance.player || p.Data.IsImpostor))
+                fakeImpostorTeam.Add(p);
+            yourTeam = fakeImpostorTeam;
         }
 
-        public static void setupIntroRole(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-            List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
-            RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
+        private static void SetupIntroRole(IntroCutscene __instance)
+        {
+            var infos = RoleInfo.GetRoleInfoForPlayer(PlayerControl.LocalPlayer);
+            var roleInfo = infos.FirstOrDefault(info => info.roleId != RoleId.Lover);
 
-            if (roleInfo != null) {
+            if (roleInfo != null)
+            {
                 __instance.Title.text = roleInfo.name;
                 __instance.ImpostorText.gameObject.SetActive(true);
                 __instance.ImpostorText.text = roleInfo.introDescription;
-                if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor) {
+                if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor)
+                {
                     // For native Crewmate or Impostor do not modify the colors
                     __instance.Title.color = roleInfo.color;
                     __instance.BackgroundBar.material.color = roleInfo.color;
                 }
             }
 
-            if (infos.Any(info => info.roleId == RoleId.Lover)) {
-                var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
+            if (infos.Any(info => info.roleId == RoleId.Lover))
+            {
+                var loversText = Object.Instantiate(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
                 loversText.transform.localPosition += Vector3.down * 3f;
-                PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                loversText.text = Helpers.cs(Lovers.color, $"♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                var otherLover = PlayerControl.LocalPlayer == Lovers.Instance.player
+                    ? Lovers.Instance.secondPlayer
+                    : Lovers.Instance.player;
+                loversText.text = Helpers.Cs(Lovers.Instance.color,
+                    $"♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
             }
         }
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-        class BeginCrewmatePatch {
-            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+        private class BeginCrewmatePatch
+        {
+            public static void Prefix(ref List<PlayerControl> yourTeam)
+            {
+                SetupIntroTeam(ref yourTeam);
             }
 
-            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroRole(__instance, ref yourTeam);
+            public static void Postfix(IntroCutscene __instance)
+            {
+                SetupIntroRole(__instance);
             }
         }
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
-        class BeginImpostorPatch {
-            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+        private class BeginImpostorPatch
+        {
+            public static void Prefix(ref List<PlayerControl> yourTeam)
+            {
+                SetupIntroTeam(ref yourTeam);
             }
 
-            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroRole(__instance, ref yourTeam);
+            public static void Postfix(IntroCutscene __instance)
+            {
+                SetupIntroRole(__instance);
             }
         }
     }
 }
-

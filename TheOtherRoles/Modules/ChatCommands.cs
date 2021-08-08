@@ -1,82 +1,100 @@
 using System;
-using System.Security.Cryptography;
-using System.Text;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.IL2CPP;
-using HarmonyLib;
-using UnityEngine;
 using System.Linq;
-using UnhollowerBaseLib;
+using HarmonyLib;
+using InnerNet;
 
-namespace TheOtherRoles.Modules {
+namespace TheOtherRoles.Modules
+{
     [HarmonyPatch]
-    public static class ChatCommands {
+    public static class ChatCommands
+    {
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
-        private static class SendChatPatch {
-            static bool Prefix(ChatController __instance) {
-                string text = __instance.TextArea.text;
-                bool handled = false;
-                if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
-                    if (text.ToLower().StartsWith("/kick ")) {
-                        string playerName = text.Substring(6);
-                        PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
-                        if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan()) {
+        private static class SendChatPatch
+        {
+            private static bool Prefix(ChatController __instance)
+            {
+                var text = __instance.TextArea.text;
+                var handled = false;
+                if (AmongUsClient.Instance.GameState != InnerNetClient.GameStates.Started)
+                {
+                    if (text.ToLower().StartsWith("/kick "))
+                    {
+                        var playerName = text.Substring(6);
+                        var target = PlayerControl.AllPlayerControls.ToArray().ToList()
+                            .FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
+                        {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);
-                            if (client != null) {
+                            if (client != null)
+                            {
                                 AmongUsClient.Instance.KickPlayer(client.Id, false);
                                 handled = true;
                             }
                         }
-                    } else if (text.ToLower().StartsWith("/ban ")) {
-                        string playerName = text.Substring(6);
-                        PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
-                        if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan()) {
+                    }
+                    else if (text.ToLower().StartsWith("/ban "))
+                    {
+                        var playerName = text.Substring(5);
+                        var target = PlayerControl.AllPlayerControls.ToArray().ToList()
+                            .FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                        if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan())
+                        {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);
-                            if (client != null) {
+                            if (client != null)
+                            {
                                 AmongUsClient.Instance.KickPlayer(client.Id, true);
                                 handled = true;
                             }
                         }
                     }
                 }
-                
-                if (AmongUsClient.Instance.GameMode == GameModes.FreePlay) {
-                    if (text.ToLower().Equals("/murder")) {
+
+                if (AmongUsClient.Instance.GameMode == GameModes.FreePlay)
+                {
+                    if (text.ToLower().Equals("/murder"))
+                    {
                         PlayerControl.LocalPlayer.Exiled();
-                        HudManager.Instance.KillOverlay.ShowKillAnimation(PlayerControl.LocalPlayer.Data, PlayerControl.LocalPlayer.Data);
+                        HudManager.Instance.KillOverlay.ShowKillAnimation(PlayerControl.LocalPlayer.Data,
+                            PlayerControl.LocalPlayer.Data);
                         handled = true;
-                    } else if (text.ToLower().StartsWith("/color ")) {
+                    }
+                    else if (text.ToLower().StartsWith("/color "))
+                    {
                         handled = true;
-                        int col;
-                        if (!Int32.TryParse(text.Substring(7), out col)) {
-                            __instance.AddChat(PlayerControl.LocalPlayer, "Unable to parse color id\nUsage: /color {id}");
-                        }
+                        if (!int.TryParse(text.Substring(7), out var col))
+                            __instance.AddChat(PlayerControl.LocalPlayer,
+                                "Unable to parse color id\nUsage: /color {id}");
                         col = Math.Clamp(col, 0, Palette.PlayerColors.Length - 1);
                         PlayerControl.LocalPlayer.SetColor(col);
-                        __instance.AddChat(PlayerControl.LocalPlayer, "Changed color succesfully");;
-                    } 
+                        __instance.AddChat(PlayerControl.LocalPlayer, "Changed color successfully");
+                    }
                 }
 
-                if (text.ToLower().StartsWith("/tp ") && PlayerControl.LocalPlayer.Data.IsDead) {
-                    string playerName = text.Substring(4).ToLower();
-                    PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
-                    if (target != null) {
+                if (text.ToLower().StartsWith("/tp ") && PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    var playerName = text.Substring(4).ToLower();
+                    var target = PlayerControl.AllPlayerControls.ToArray().ToList()
+                        .FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
+                    if (target != null)
+                    {
                         PlayerControl.LocalPlayer.transform.position = target.transform.position;
                         handled = true;
                     }
                 }
 
-                if (handled) {
-                    __instance.TextArea.Clear();
-                    __instance.quickChatMenu.ResetGlyphs();
-                }
-                return !handled;
+                if (!handled) return true;
+                __instance.TextArea.Clear();
+                __instance.quickChatMenu.ResetGlyphs();
+
+                return false;
             }
         }
+
         [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
-        public static class EnableChat {
-            public static void Postfix(HudManager __instance) {
+        public static class EnableChat
+        {
+            public static void Postfix(HudManager __instance)
+            {
                 if (!__instance.Chat.isActiveAndEnabled && AmongUsClient.Instance.GameMode == GameModes.FreePlay)
                     __instance.Chat.SetVisible(true);
             }
