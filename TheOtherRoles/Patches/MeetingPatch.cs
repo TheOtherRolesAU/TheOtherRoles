@@ -362,7 +362,7 @@ namespace TheOtherRoles.Patches {
             {                      
                 for (int i = 0; i < LogTrap.logTraps.Count; i++)
                 {
-                    string msg = $"log trap {i+1}:";
+                    string msg = $"log trap " + LogTrap.colorTrap[i] + ":";
                     LogTrap.logTraps[i].playersName.Reverse();
                     foreach (string playerName in LogTrap.logTraps[i].playersName)
                     {

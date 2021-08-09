@@ -17,11 +17,19 @@ namespace TheOtherRoles.Objects
 
         private List<String> playersNameRecordedLastTick = new List<String>();
 
+        public static Dictionary<int, string> colorTrap = new Dictionary<int, string>()
+        {
+            {0,"Blue"},
+            {1,"Red"},
+            {2,"Yellow"}
+        };
+
         public GameObject logTrap;
         private GameObject background;
 
         private static Sprite logTrapSprite;
-        private static Sprite backgroundSprite;
+        private Sprite backgroundSprite;
+        private SpriteRenderer backgroundRendererComponent;
 
         // LogTrapSprite is set as the same sprite to Garlic to confuse imposteur. 
         public static Sprite getLogTrapSprite()
@@ -31,11 +39,31 @@ namespace TheOtherRoles.Objects
             return logTrapSprite;
         }
 
-        public static Sprite getBackgroundSprite()
+        public Sprite getBackgroundSprite()
         {
             if (backgroundSprite) return backgroundSprite;
-            backgroundSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.GarlicBackground.png", 60f);
+            if (Logger.logger != null && Logger.logger == PlayerControl.LocalPlayer)
+            {
+                int nbLogTrap = logTraps.Count;
+
+                switch (nbLogTrap)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                        backgroundSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LoggerBackground" + colorTrap[nbLogTrap] + ".png", 60f);
+                        break;
+                    default:
+                        backgroundSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.GarlicBackground.png", 60f);
+                        break;
+                }
+            }
+            else
+            {
+                backgroundSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.GarlicBackground.png", 60f);
+            }
             return backgroundSprite;
+
         }
 
         public LogTrap(Vector2 p)
@@ -51,9 +79,22 @@ namespace TheOtherRoles.Objects
             logTrapRenderer.sprite = getLogTrapSprite();
             var backgroundRenderer = background.AddComponent<SpriteRenderer>();
             backgroundRenderer.sprite = getBackgroundSprite();
+            backgroundRendererComponent = backgroundRenderer;
             logTrap.SetActive(true);
             logTraps.Add(this);
         }
+
+        public static void resetBackgroundImageForShifter()
+        {
+            if (Logger.logger != null && Logger.logger == PlayerControl.LocalPlayer)
+            {
+                for (int i = 0; i < logTraps.Count; i++)
+                {
+                    logTraps[i].backgroundRendererComponent.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LoggerBackground" + colorTrap[i] + ".png", 60f);
+                }
+            }
+        }
+
 
         public static void clearLogTraps()
         {
@@ -120,8 +161,11 @@ namespace TheOtherRoles.Objects
                         float magnitude = vector.magnitude;
                         if (magnitude <= distanceRecord)
                         {
+                            var commsActive = false;
+                            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                                if (task.TaskType == TaskTypes.FixComms) commsActive = true;
                             //if walk during camouflage
-                            if (Camouflager.camouflageTimer > 0)
+                            if (Camouflager.camouflageTimer > 0 || commsActive)
                             {
                                 playersNameCurrentlyRecorded.Add("Anonymous");
                             }

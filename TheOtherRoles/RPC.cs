@@ -418,7 +418,11 @@ namespace TheOtherRoles
             if (Guesser.guesser != null && Guesser.guesser == player)
                 Guesser.guesser = oldShifter;
             if (Logger.logger != null && Logger.logger == player)
+            {
                 Logger.logger = oldShifter;
+                LogTrap.resetBackgroundImageForShifter();
+            }
+                
 
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
