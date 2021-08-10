@@ -1024,6 +1024,7 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             bait = null;
+            wasCleaned = false;
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
