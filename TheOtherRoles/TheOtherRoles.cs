@@ -1014,6 +1014,9 @@ namespace TheOtherRoles
         public static PlayerControl bait;
         public static Color color = new Color32(0, 247, 255, byte.MaxValue);
 
+        public static bool canBeCleaned = false;
+        public static bool wasCleaned = false;
+
         public static bool highlightAllVents = false;
         public static float reportDelay = 0f;
 
@@ -1024,6 +1027,7 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+            canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getBool();
         }
     }
 }
