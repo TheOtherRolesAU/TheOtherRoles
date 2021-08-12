@@ -228,10 +228,10 @@ namespace TheOtherRoles {
             warlockRootTime = CustomOption.Create(272, "咒詛師定身持續時間", 5f, 0f, 15f, 1f, warlockSpawnRate);
 
             bountyHunterSpawnRate = CustomOption.Create(320, cs(BountyHunter.color, "賞金獵人"), rates, null, true);
-            bountyHunterBountyDuration = CustomOption.Create(321, "選賞改變後的持續時間",  60f, 10f, 180f, 10f, bountyHunterSpawnRate);
-            bountyHunterReducedCooldown = CustomOption.Create(322, "擊殺選賞後的冷卻", 2.5f, 0f, 30f, 2.5f, bountyHunterSpawnRate);
-            bountyHunterPunishmentTime = CustomOption.Create(323, "殺死別人後的額外冷卻", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
-            bountyHunterShowArrow = CustomOption.Create(324, "顯示指向選賞的指示箭頭", true, bountyHunterSpawnRate);
+            bountyHunterBountyDuration = CustomOption.Create(321, "懸賞改變後的持續時間",  60f, 10f, 180f, 10f, bountyHunterSpawnRate);
+            bountyHunterReducedCooldown = CustomOption.Create(322, "擊殺懸賞後的冷卻", 2.5f, 0f, 30f, 2.5f, bountyHunterSpawnRate);
+            bountyHunterPunishmentTime = CustomOption.Create(323, "殺死其他人後的額外冷卻", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
+            bountyHunterShowArrow = CustomOption.Create(324, "顯示指向懸賞的指示箭頭", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "指示箭頭更新間隔", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
 
@@ -289,7 +289,7 @@ namespace TheOtherRoles {
             detectiveAnonymousFootprints = CustomOption.Create(121, "匿名足跡", false, detectiveSpawnRate); 
             detectiveFootprintIntervall = CustomOption.Create(122, "足跡間隔", 0.5f, 0.25f, 10f, 0.25f, detectiveSpawnRate);
             detectiveFootprintDuration = CustomOption.Create(123, "足跡持續時間", 5f, 0.25f, 10f, 0.25f, detectiveSpawnRate);
-            detectiveReportNameDuration = CustomOption.Create(124, "偵探報告有名字的時間", 0, 0, 60, 2.5f, detectiveSpawnRate);
+            detectiveReportNameDuration = CustomOption.Create(124, "偵探報告將有名字的時間", 0, 0, 60, 2.5f, detectiveSpawnRate);
             detectiveReportColorDuration = CustomOption.Create(125, "偵探報告將有顏色類型的時間", 20, 0, 120, 2.5f, detectiveSpawnRate);
 
             timeMasterSpawnRate = CustomOption.Create(130, cs(TimeMaster.color, "時間管理大師"), rates, null, true);
@@ -298,7 +298,7 @@ namespace TheOtherRoles {
             timeMasterShieldDuration = CustomOption.Create(133, "回溯時間護盾持續時間", 3f, 1f, 20f, 1f, timeMasterSpawnRate);
 
             medicSpawnRate = CustomOption.Create(140, cs(Medic.color, "醫生"), rates, null, true);
-            medicShowShielded = CustomOption.Create(143, "顯示被上盾玩家", new string[] {"所有人", "被上盾者 + 醫生", "醫生"}, medicSpawnRate);
+            medicShowShielded = CustomOption.Create(143, "顯示被上盾者", new string[] {"所有人", "被上盾者 + 醫生", "醫生"}, medicSpawnRate);
             medicShowAttemptToShielded = CustomOption.Create(144, "裝盾玩家可看到謀殺未遂", false, medicSpawnRate);
             medicSetShieldAfterMeeting = CustomOption.Create(145, "Shield Will Be Set After The Next Meeting", false, medicSpawnRate);
 

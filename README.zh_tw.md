@@ -176,11 +176,11 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 - Fixed an oversight which made Sidekicks not promote, if the Jackal disconnected
 - Fixed a bug where the Trickster box was invisible
 - Fixed a bug where changes to the server ip and port would only be applied if the game was restarted
-- Added a way to get the 2 Hidden [Colors](#colors)
+- Added a way to get the 2 Hidden [Colors](#顏色)
 
 **Version 2.3.0**
 - **New Role:** [Cleaner](#清除者)
-- Added 12 new [Colors](#colors)
+- Added 12 new [Colors](#顏色)
 - We added support for creating [Custom Hats](#自定義帽子). New hats are coming with the next version, but you can already create and submit your own hats on [Discord](https://discord.gg/77RkMJHWsM).
 - Added the option to hide the name of players with an unknown role
 - Added Trickster Box vent animation. Thanks to [Drakoni](https://twitter.com/Drakoni13)
@@ -460,7 +460,7 @@ Here are a few instructions, on how to create a custom hat:
 
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
-# Colors
+# 顏色
 ![TOR Colors](./Images/TOR_colors.jpg)
 
 # 職業
@@ -483,13 +483,13 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 
 ## 黑手黨
 ### **隊伍:偽裝者**
-黑手黨是由三個冒名頂替者組成的團體。\
-教父 works like a normal 偽裝者.\
-黑手黨員 is an 偽裝者 who cannot kill nor sabotage until the 教父 is dead.\
-守墓人 is an 偽裝者 who cannot kill nor sabotage, but they can hide dead bodies instead.\
+黑手黨是由三個偽裝者組成的團體。\
+教父像是普通的偽裝者。\
+黑手黨員是個偽裝者不能殺人及破壞直到教父死亡。\
+守墓人是個偽裝者不能殺人及破壞，但是可以隱藏屍體。\
 \
 **NOTE:**
-- There have to be 3 偽裝者s activated for the 黑手黨 to spawn.
+- 必須至少有 3 個偽裝者才能生成黑手黨。
 
 ### 遊戲選項
 | 名稱 | 描述 |
@@ -500,7 +500,7 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 
 ## 百變怪
 ### **隊伍:偽裝者**
-The Morphling is an 偽裝者 which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.
+百變怪是個偽裝者他可以掃描玩家的外觀。在任意時間之後可以變形成這種外觀 10 秒。
 \
 **NOTE:**
 - They shrink to the size of the 迷你 when they copies its look.
@@ -513,14 +513,14 @@ The Morphling is an 偽裝者 which can additionally scan the appearance of a pl
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Morphling 生成機率 | -
-| Morphling 冷卻 | -
-| Morph Duration | Time the Morphling stays morphed
+| 百變怪生成機率 | -
+| 百變怪冷卻 | -
+| 變形持續時間 | 百變怪保持變形的時長
 -----------------------
 
 ## 魔術師
 ### **隊伍:偽裝者**
-The Camouflager is an 偽裝者 which can additionally activate a camouflage mode.
+The 魔術師 is an 偽裝者 which can additionally activate a camouflage mode.
 The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
 are hidden and all players have the same color.\
 \
@@ -534,9 +534,9 @@ are hidden and all players have the same color.\
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Camouflager 生成機率 | -
-| Camouflager 冷卻 | -
-| Camo Duration | Time players stay camouflaged
+| 魔術師生成機率 | -
+| 魔術師冷卻 | -
+| Camo持續時間 | Time players stay camouflaged
 -----------------------
 
 ## 吸血鬼
@@ -553,10 +553,10 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Vampire 生成機率 | -
-| Vampire Kill Delay | -
-| Vampire 冷卻 | Sets the kill/bite cooldown
-| Vampire Can Kill Near Garlics | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
+| 吸血鬼生成機率 | -
+| 吸血鬼死亡延遲 | -
+| 吸血鬼冷卻 | 設置殺人/咬人冷卻時間
+| 吸血鬼可在大蒜附近殺人 | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
 -----------------------
 
 ## 抹除者
@@ -578,9 +578,9 @@ he can also erase them (偽裝者s will lose their special 偽裝者 ability).
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Eraser 生成機率 | -
-| Eraser 冷卻 | The Erasers cooldown will increase by 10 seconds after every erase.
-| Eraser Can Erase Anyone | If set to false, he can't erase the Spy and other 偽裝者s
+| 抹除者生成機率 | -
+| 抹除者冷卻 | The Erasers cooldown will increase by 10 seconds after every erase.
+| 抹除者可抹除任何人 | If set to false, he can't erase the Spy and other 偽裝者s
 -----------------------
 
 ## 詭騙師
@@ -596,10 +596,10 @@ If the boxes are converted to a vent network, the Trickster gains a new ability 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Trickster 生成機率 | -
-| Trickster Box 冷卻 | Cooldown for placing jack-in-the-boxes
-| Trickster Lights Out 冷卻 | Cooldown for his "lights out" ability
-| Trickster Lights Out Duration | Duration after which the light is automatically restored
+| 詭騙師 生成機率 | -
+| 詭騙箱冷卻 | Cooldown for placing jack-in-the-boxes
+| 詭騙師關燈冷卻 | Cooldown for his "lights out" ability
+| 詭騙師關燈持續時間 | Duration after which the light is automatically restored
 -----------------------
 
 ## 清除者
@@ -613,8 +613,8 @@ The Cleaner is an 偽裝者 who has the ability to clean up dead bodies. \
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Cleaner 生成機率 | -
-| Cleaner 冷卻 | Cooldown for cleaning dead bodies
+| 清除者生成機率 | -
+| 清除者冷卻 | Cooldown for cleaning dead bodies
 -----------------------
 
 
@@ -634,9 +634,9 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Warlock 生成機率 | -
-| Warlock 冷卻 | Cooldown for using the Curse and curse Kill
-| Warlock Root Time | Time the Warlock is rooted in place after killing using the curse
+| 咒詛師 生成機率 | -
+| 咒詛師冷卻 | Cooldown for using the Curse and curse Kill
+| 咒詛師定身持續時間 | Time the Warlock is rooted in place after killing using the curse
 -----------------------
 
 
@@ -659,12 +659,12 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Bounty Hunter 生成機率 | -
-| Duration After Which Bounty Changes | -
-| Cooldown After Killing Bounty | -
-| Additional Cooldown After Killing Others | Time will be added to the normal 偽裝者 cooldown if the Bounty Hunter kills a not-bounty player
-| Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
-| Bounty Hunter Arrow Update Intervall | Sets how often the position is being updated
+| 賞金獵人生成機率 | -
+| 懸賞改變後的持續時間 | -
+| 擊殺懸賞後的冷卻 | -
+| 殺死其他人後的額外冷卻 | 如果賞金獵人殺死了非懸賞玩家後，那麼正常的偽裝者冷卻時間將額外增加
+| 顯示指向懸賞的指示箭頭 | If set to true an arrow will appear (only visiable for the Bounty Hunter)
+| 指示箭頭更新間隔 | Sets how often the position is being updated
 -----------------------
 
 
@@ -687,9 +687,9 @@ You can only shoot during the voting time.
 | 名稱 | 描述 |
 |----------|:-------------:|
 | 賭徒 生成機率 | -
-| Chance That The 賭徒 Is An 偽裝者 | -
-| 賭徒 Number Of Shots Per Game| -
-| 賭徒 Number Of Shots Per Meeting| -
+| 賭徒是個偽裝者的機率 | -
+| 一場遊戲中賭徒的嘗試次數 | -
+| 一場會議中賭徒的嘗試次數 | -
 
 -----------------------
 
@@ -713,10 +713,10 @@ If there's an team 偽裝者/Jackal Lover in the game, the tasks of a Crewmate L
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| 戀人 生成機率 | -
-| Chance That One Lover Is 偽裝者 | -
-| Both 戀人 Die | Whether the second Lover suicides, if the first one dies
-| 戀人 Can Have Another Role | If set to true, the 戀人 can have a second role
+| 戀人生成機率 | -
+| 一個戀人是偽裝者的機率 | -
+| 戀人雙死 | Whether the second Lover suicides, if the first one dies
+| 戀人可有其他職業 | If set to true, the 戀人 can have a second role
 -----------------------
 
 
@@ -732,9 +732,9 @@ If they try to kill a Crewmate, they die instead.
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Sheriff 生成機率 | -
-| Sheriff 冷卻 | -
-| Neutrals Can Die To Sheriff | -
+| 警長生成機率 | -
+| 警長冷卻 | -
+| 警長可擊殺獨立職業 | -
 -----------------------
 
 ## 小丑
@@ -744,9 +744,9 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Jester 生成機率 | -
-| Jester can call emergency meeting | Option to disable the emergency button for the Jester
-| Jester can sabotage | Option to allow the Jester to sabotage
+| 小丑生成機率 | -
+| 小丑可召開緊急會議 | Option to disable the emergency button for the Jester
+| 小丑可破壞 | Option to allow the Jester to sabotage
 -----------------------
 
 ## 縱火狂
@@ -759,9 +759,9 @@ After dousing everyone alive the Arsonist can ignite all the players which resul
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Arsonist 生成機率 | -
-| Arsonist Countdown | -
-| Arsonist Douse Duration | The time it takes to douse a player
+| 縱火狂生成機率 | -
+| 縱火狂冷卻 | -
+| 縱火狂澆油持續時間 | The time it takes to douse a player
 -----------------------
 
 ## 靈媒
@@ -773,10 +773,10 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Seer 生成機率 | -
-| Seer Mode | Options: Show death flash and souls, show death flash, show souls
-| Seer Limit Soul Duration | Toggle if souls should turn invisible after a while
-| Seer Soul Duration | Sets how long it will take the souls to turn invisible after a meeting
+| 靈媒生成機率 | -
+| 靈媒能力模式 | Options: Show death flash and souls, show death flash, show souls
+| 靈魂有持續時間限制 | Toggle if souls should turn invisible after a while
+| 靈魂持續時間 | Sets how long it will take the souls to turn invisible after a meeting
 -----------------------
 
 ## 工程師
@@ -798,23 +798,23 @@ you can double click on the tasks instead.
 
 ## 偵探
 ### **隊伍:船員**
-The Detective can see footprints that other players leave behind.
-The Detective's other feature shows when they report a corpse: they recieve clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
+偵探可以看到其他玩家留下的腳印。
+偵探的另一個特點是在他們報告屍體時將顯示：他們收到有關兇手身份的線索。他們獲得的信息類型取決於他們找到屍體所花的時間。
 \
 **NOTE:**
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
-- More information about the [colors](#colors)
+- More information about the [顏色](#顏色)
 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Detective 生成機率 | -
-| Anonymous Footprints | If set to true, all footprints will have the same color. Otherwise they will have the color of the respective player.
-| Footprint Intervall | The intervall between two footprints
-| Footprint Duration | Sets how long the footprints remain visible.
-| Time Where Detective Reports Will Have Name | The amount of time that the Detective will have to report the body since death to get the killer's name.  |
-| Time Where Detective Reports Will Have Color Type| The amount of time that the Detective will have to report the body since death to get the killer's color type. |
+| 偵探生成機率 | -
+| 匿名足跡 | If set to true, all footprints will have the same color. Otherwise they will have the color of the respective player.
+| 足跡間隔 | The intervall between two footprints
+| 足跡持續時間 | Sets how long the footprints remain visible.
+| 偵探報告將有名字的時間 | The amount of time that the Detective will have to report the body since death to get the killer's name.  |
+| 偵探報告將有顏色類型的時間 | The amount of time that the Detective will have to report the body since death to get the killer's color type. |
 -----------------------
 
 ## 點燈人
@@ -824,11 +824,11 @@ The Lighter can turn on his Lighter every now and then, which increases his visi
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Lighter 生成機率 | -
-| Lighter Mode Vision On Lights On | The vision the Lighter has when the lights are on and the Lighter mode is on
-| Lighter Mode Vision On Lights Off | The vision the Lighter has when the lights are down and the Lighter mode is on
-| Lighter 冷卻 | -
-| Lighter Duration | -
+| 點燈人生成機率 | -
+| 開燈時點燈視野 | The vision the Lighter has when the lights are on and the Lighter mode is on
+| 關燈時點燈視野 | The vision the Lighter has when the lights are down and the Lighter mode is on
+| 點燈人冷卻 | -
+| 點燈持續時間 | -
 -----------------------
 
 ## 迷你
@@ -851,7 +851,7 @@ The 迷你 cannot be killed until it turns 18 years old, however it can be voted
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| 迷你 生成機率 | -
+| 迷你生成機率 | -
 | 迷你  | 迷你 Growing Up Duration
 -----------------------
 
@@ -872,9 +872,9 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 ### 遊戲選項
 | 名稱 | 描述 | Options |
 |----------|:-------------:|:-------------:|
-| Medic 生成機率 | - | -
-| Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
-| Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
+| 醫生生成機率 | - | -
+| 顯示被上盾者 | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
+| 裝盾玩家可看到謀殺未遂 | Whether a shielded player sees if someone tries to kill him | True/false |
 -----------------------
 
 ## 市長
@@ -885,7 +885,7 @@ The Mayor can always use his meeting, even if the maximum number of meetings was
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Mayor 生成機率 | -
+| 市長生成機率 | -
 -----------------------
 
 ## 駭客
@@ -897,15 +897,15 @@ Otherwise he sees the same information as everyone else.
 \
 **NOTE:**
 - If the Morphling morphes or the Camouflager camouflages, the colors on the admin table change accordingly
-- More information about the [colors](#colors)
+- More information about the [顏色](#顏色)
 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Hacker 生成機率 | -
-| Hacker Cooldown| -
-| Hacker Duration | Sets how long the "Hacker mode" remains active
-| Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
+| 駭客生成機率 | -
+| 駭客冷卻 | -
+| 駭客持續時間 | Sets how long the "Hacker mode" remains active
+| 駭客只可看到有顏色類型 | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
 -----------------------
 
 
@@ -953,8 +953,8 @@ The Time Master won't be affected by the rewind.\
 |----------|:-------------:|
 | Time Master 生成機率 | - |
 | Time Master 冷卻 | - |
-| Rewind Duration | How much time to rewind |
-| Time Master Shield Duration |
+| Rewind持續時間 | How much time to rewind |
+| Time Master Shield持續時間 |
 -----------------------
 
 ## 掉包者
