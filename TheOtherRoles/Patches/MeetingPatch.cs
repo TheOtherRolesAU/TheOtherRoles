@@ -297,7 +297,7 @@ namespace TheOtherRoles.Patches {
                         if (true)  // Could add an option for this, but only lobby-wide if we use chat instead of a custom rpc command.
                         {
                             string msg = $"Guesser guessed {target.name} as {roleInfo.name} ";
-                            msg += (target != PlayerControl.LocalPlayer ? "and was correct!" : "but was wrong");
+                            msg += (target != PlayerControl.LocalPlayer ? "and was correct!" : "but was wrong!");
                             target.RpcSendChat(msg);  // The target is dead at this point, so only ghosts will see the message.
                         }
                     }
