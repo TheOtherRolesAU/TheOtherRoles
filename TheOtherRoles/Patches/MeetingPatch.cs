@@ -272,12 +272,15 @@ namespace TheOtherRoles.Patches {
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
                 button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    if (selectedButton != button) {
+                    if (selectedButton != button)
+                    {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
-                    } else {
+                    }
+                    else
+                    {
                         PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0) return;
 
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                         if (mainRoleInfo == null) return;
@@ -292,6 +295,14 @@ namespace TheOtherRoles.Patches {
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
                         __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+
+                        // Guesser info posted to ghost chat
+                        if (true)  // Could add an option for this, but only lobby-wide if we use chat instead of a custom rpc command.
+                        {
+                            string msg = $"Guesser guessed {target.name} as {roleInfo.name} ";
+                            msg += (target != PlayerControl.LocalPlayer ? "and was correct!" : "but was wrong");
+                            target.RpcSendChat(msg);  // The target is dead at this point, so only ghosts will see the message.
+                        }
                     }
                 }));
 
