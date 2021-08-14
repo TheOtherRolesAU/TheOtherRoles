@@ -294,7 +294,7 @@ namespace TheOtherRoles.Patches {
                         __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
                         // Guesser info posted to ghost chat
-                        if (true)  // Could add an option for this, but only lobby-wide if we use chat instead of a custom rpc command.
+                        if (CustomOptionHolder.guesserInfoInGhostChat.getBool())
                         {
                             string msg = $"Guesser guessed {target.name} as {roleInfo.name} ";
                             msg += (target != PlayerControl.LocalPlayer ? "and was correct!" : "but was wrong!");
