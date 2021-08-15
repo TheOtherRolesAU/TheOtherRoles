@@ -9,7 +9,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 # The Other Roles
 
-**The Other Roles** 是個 [Among Us](https://store.steampowered.com/app/945360/Among_Us) 的模組，新增了更多的職業與新的 [設定](#設定)，[自定義帽子](#自定義帽子) 及支援 [10人以上玩家](#Custom-Servers-and-10-Players) 進到遊戲。
+**The Other Roles** 是個 [Among Us](https://store.steampowered.com/app/945360/Among_Us) 的模組，新增了更多的職業與新的 [設定](#設定)，[自定義帽子](#自定義帽子) 及支援 [10人以上玩家](#custom-servers-and-10-players) 進到遊戲。
 更多職業即將推出 :)
 
 | 偽裝者 | 船員 | 獨立 | 第二 |
@@ -31,13 +31,16 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 |  | [掉包者](#掉包者) |  |  |
 |  | [時間管理大師](#時間管理大師) |  |  |
 |  |  [追踪者](#追踪者) |  |  |
+|  |  [誘餌](#誘餌) |  |
 
 [職業分配](#職業分配) 部分解釋了職業如何分配.
 
 # 發佈
 | Among Us - 版本| 模組 | 鏈結 |
 |----------|-------------|-----------------|
-| **2021.6.30s**| v2.7.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.3/TheOtherRoles.zip)
+| 2021.6.30s| v2.8.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.1/TheOtherRoles.zip)
+| 2021.6.30s| v2.8.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.0/TheOtherRoles.zip)
+| 2021.6.30s| v2.7.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.3/TheOtherRoles.zip)
 | 2021.6.15s| v2.7.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.1/TheOtherRoles.zip)
 | 2021.6.15s| v2.7.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.0/TheOtherRoles.zip)
 | 2021.5.25.2s| v2.6.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.6.7/TheOtherRoles.zip)
@@ -73,6 +76,15 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Hotfix 2.8.1**
+- Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
+
+**Version 2.8.0**
+- **New Role:** [Bait](#誘餌) created by [Mallöris](https://github.com/Mallaris) 
+- Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
+- Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
+- Added Medic Option: "Shield Will Be Set After Next Meeting" (feature created by [Mallöris](https://github.com/Mallaris))
+
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
 - Updated BepInEx version
@@ -83,13 +95,13 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 **Version 2.7.1**
 - Fixed a bug where [swapped](#掉包者) votes were sometimes counted wrongly
-- Fixed the positioning of the player name while [morphed]()
+- Fixed the positioning of the player name while [morphed](#黑手黨)
 - Fixed a bug where the window of the [Guesser](#賭徒) sometimes showed no "close button"
 - Fixed a bug where the [garlics](#吸血鬼) were not displayed properly
 
 **Version 2.7.0**
 - **New Role:** [Bounty Hunter](#賞金獵人) created by [Mallöris](https://github.com/Mallaris)
-- Added more new [colors](#colors) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
+- Added more new [colors](#顏色) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
 - Added a setting to the [Shifter](#轉職者), that will prevent [Medic Shield](#醫生) & [Lover](#戀人) Roles to be shifted
 - Changed [Jackal](#豺狼) & [Sidekick](#跟班) to always be killable by [Sheriff](#警長)
 - Changed [Jackal](#豺狼) & [Sidekick](#跟班) to not be [erasable](#抹除者) anymore
@@ -414,16 +426,16 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 
-### Task Count Limits per map
+### 地圖任務數上限
 You can configure:
-- Up to 4 common tasks
-- Up to 23 short tasks
-- Up to 15 long tasks
+- 最多 4 個普通任務
+- 最多 23 個短任務
+- 最多 15 個長任務
 
 Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
 Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
 
-| Map | Common Tasks | Short Tasks | Long Tasks |
+| 地圖 | 普通任務 | 短任務 | 長任務 |
 |----------|:-------------:|:-------------:|:-------------:|
 | Skeld / Dleks | 2 | 19 | 8
 | Mira HQ | 2 | 13 | 11
@@ -793,7 +805,7 @@ you can double click on the tasks instead.
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Engineer 生成機率 | -
+| 工程師生成機率 | -
 -----------------------
 
 ## 偵探
@@ -867,6 +879,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 **NOTE:**
 - If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
 - If the Shifter has a shield or their target has a Shield, the shielded player switches.
+- Shields set after the next meeting, will be set before a possible shift is being performed.
 
 
 ### 遊戲選項
@@ -875,6 +888,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | 醫生生成機率 | - | -
 | 顯示被上盾者 | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | 裝盾玩家可看到謀殺未遂 | Whether a shielded player sees if someone tries to kill him | True/false |
+| Shield Will Be Set After Next Meeting | - | True/false
 -----------------------
 
 ## 市長
@@ -926,7 +940,7 @@ The **special interactions** with the Shifter are noted in the chapters of the r
   can only use them, if the previous player did not used them before)
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Shifter 生成機率 | -
 | Shifter Shifts Modifiers | Sets if 戀人 and/or Medic Shield will be shifted
@@ -965,7 +979,7 @@ Because of the Swappers strength in meetings, they might not start emergency mee
 and can't fix lights and comms.
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Swapper 生成機率 | -
 | Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
@@ -974,27 +988,31 @@ and can't fix lights and comms.
 
 ## 追踪者
 ### **隊伍:船員**
-The Tracker can select one player in a game and tracks this player for the rest of the game.
+The Tracker can select one player to track.
+Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates it's position every few seconds (configurable).
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Tracker 生成機率 | -
 | Tracker Update Intervall | Sets how often the position is being updated
+| Tracker Reset Target After Meeting | -
 -----------------------
 
 ## 密探
 ### **隊伍:船員**
-When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the 偽裝者s.
-When the Snitch has one task left (configurable) the Snitch will be revealed to the 偽裝者s, also with an arrow.
+When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).
+When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Snitch 生成機率 | -
-| Task Count Where 偽裝者s See Snitch | -
+| Task Count Where The Snitch Will Be Revealed | -
+| Include Team Jackal | -
+| Use Different Arrow Color For Team Jackal | -
 -----------------------
 
 ## 豺狼
@@ -1031,7 +1049,7 @@ If both 偽裝者s and Jackals are in the game the game continues even if all Cr
 
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Jackal 生成機率 | - |
 | Jackal/Sidekick Kill 冷卻 | Kill 冷卻 |
@@ -1054,7 +1072,7 @@ Upon the death of the Jackal (depending on the options), he might get promoted t
 - The Sidekick cannot target the 迷你, while it's growing up.
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Jackal/Sidekick Kill 冷卻 | Uses the same kill cooldown setting as the Jackal |
 | Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
@@ -1072,7 +1090,7 @@ There are two possibilities (depending on the set options):
   You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
 | Spy 生成機率 |
 | Spy Can Die To Sheriff |
@@ -1095,17 +1113,31 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 
 
 ### 遊戲選項
-| Name | Description
+| 名稱 | 描述
 |----------|:-------------:|
-| Security Guard 生成機率 |
-| Security Guard 冷卻 |
-| Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
+| 守衛生成機率 |
+| 守衛冷卻 |
+| 守衛Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
 -----------------------
 
+## 誘餌
+### **隊伍:船員**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+誘餌是一個船員如果他被殺死，他會強制殺手舉報該誘餌（您可以在選項中設定延遲）。
+此外，誘餌可以查看是否有人在通風口內（取決於設定，發光準確的通風口或所有通風口都可以）。
 
-# Source code
+### 遊戲選項
+| 名稱 | 描述
+|----------|:-------------:|
+| 誘餌生成機率 | -
+| 誘餌所有通風口發光 | 如果設置為開，玩家在其中一個通風口內，所有通風口都將發光。 如果設置為關，則只會發光玩家所在的通風口。
+| 誘餌舉報延遲 | -
+
+# 原始碼
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
 You can use parts of the code but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 

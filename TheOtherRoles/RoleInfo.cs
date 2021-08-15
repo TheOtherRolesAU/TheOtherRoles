@@ -52,11 +52,11 @@ namespace TheOtherRoles
         public static RoleInfo jackal = new RoleInfo("豺狼", Jackal.color, "殺死所有船員與<color=#FF1919FF>偽裝者</color>來勝利", "殺死所有人", RoleId.Jackal);
         public static RoleInfo sidekick = new RoleInfo("跟班", Sidekick.color, "幫助你的豺狼殺死所有人", "幫助你的豺狼殺死所有人", RoleId.Sidekick);
         public static RoleInfo spy = new RoleInfo("間諜", Spy.color, "讓<color=#FF1919FF>偽裝者</color>混亂", "讓偽裝者混亂", RoleId.Spy);
-        public static RoleInfo securityGuard = new RoleInfo("守衛", SecurityGuard.color, "封鎖地道跟放置攝像頭", "封鎖地道跟放置攝像頭", RoleId.SecurityGuard);
+        public static RoleInfo securityGuard = new RoleInfo("守衛", SecurityGuard.color, "封鎖通風口跟放置攝像頭", "封鎖通風口跟放置攝像頭", RoleId.SecurityGuard);
         public static RoleInfo arsonist = new RoleInfo("縱火狂", Arsonist.color, "燒了大家", "燒了大家", RoleId.Arsonist);
         public static RoleInfo goodGuesser = new RoleInfo("好賭徒", Guesser.color, "猜測並放逐", "猜測並放逐", RoleId.Guesser);
         public static RoleInfo badGuesser = new RoleInfo("壞賭徒", Palette.ImpostorRed, "猜測並放逐", "猜測並放逐", RoleId.Guesser);
-        public static RoleInfo bait = new RoleInfo("Bait", Bait.color, "Bait your enemies", "Bait your enemies", RoleId.Bait);
+        public static RoleInfo bait = new RoleInfo("誘餌", Bait.color, "引誘你的敵人", "引誘你的敵人", RoleId.Bait);
         public static RoleInfo impostor = new RoleInfo("偽裝者", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "破壞跟殺死所有人"), "破壞跟殺死所有人", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("船員", Color.white, "找到偽裝者", "找到偽裝者", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("戀人", Lovers.color, $"你正在戀愛中", $"你正在戀愛中", RoleId.Lover);

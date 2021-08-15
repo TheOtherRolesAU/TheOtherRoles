@@ -258,11 +258,11 @@ namespace TheOtherRoles {
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "豺狼"), rates, null, true);
             jackalKillCooldown = CustomOption.Create(221, "豺狼/跟班殺人冷卻", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
             jackalCreateSidekickCooldown = CustomOption.Create(222, "狐狼製造跟班冷卻", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
-            jackalCanUseVents = CustomOption.Create(223, "豺狼可使用地道", true, jackalSpawnRate);
+            jackalCanUseVents = CustomOption.Create(223, "豺狼可使用通風口", true, jackalSpawnRate);
             jackalCanCreateSidekick = CustomOption.Create(224, "豺狼可製造跟班跟班", false, jackalSpawnRate);
             sidekickPromotesToJackal = CustomOption.Create(225, "在豺狼死亡後跟班可升職成豺狼", false, jackalSpawnRate);
             sidekickCanKill = CustomOption.Create(226, "跟班可以殺人", false, jackalSpawnRate);
-            sidekickCanUseVents = CustomOption.Create(227, "跟班可使用地道", true, jackalSpawnRate);
+            sidekickCanUseVents = CustomOption.Create(227, "跟班可使用通風口", true, jackalSpawnRate);
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "從跟班升職的豺狼可製造跟班", true, jackalSpawnRate);
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "豺狼可讓偽裝者轉成跟班", true, jackalSpawnRate);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "豺狼與跟班有偽裝者視野", false, jackalSpawnRate);
@@ -289,8 +289,8 @@ namespace TheOtherRoles {
             detectiveAnonymousFootprints = CustomOption.Create(121, "匿名足跡", false, detectiveSpawnRate); 
             detectiveFootprintIntervall = CustomOption.Create(122, "足跡間隔", 0.5f, 0.25f, 10f, 0.25f, detectiveSpawnRate);
             detectiveFootprintDuration = CustomOption.Create(123, "足跡持續時間", 5f, 0.25f, 10f, 0.25f, detectiveSpawnRate);
-            detectiveReportNameDuration = CustomOption.Create(124, "偵探報告將有名字的時間", 0, 0, 60, 2.5f, detectiveSpawnRate);
-            detectiveReportColorDuration = CustomOption.Create(125, "偵探報告將有顏色類型的時間", 20, 0, 120, 2.5f, detectiveSpawnRate);
+            detectiveReportNameDuration = CustomOption.Create(124, "偵探舉報將有名字的時間", 0, 0, 60, 2.5f, detectiveSpawnRate);
+            detectiveReportColorDuration = CustomOption.Create(125, "偵探舉報將有顏色類型的時間", 20, 0, 120, 2.5f, detectiveSpawnRate);
 
             timeMasterSpawnRate = CustomOption.Create(130, cs(TimeMaster.color, "時間管理大師"), rates, null, true);
             timeMasterCooldown = CustomOption.Create(131, "時間管理大師冷卻", 30f, 10f, 120f, 2.5f, timeMasterSpawnRate);
@@ -300,7 +300,7 @@ namespace TheOtherRoles {
             medicSpawnRate = CustomOption.Create(140, cs(Medic.color, "醫生"), rates, null, true);
             medicShowShielded = CustomOption.Create(143, "顯示被上盾者", new string[] {"所有人", "被上盾者 + 醫生", "醫生"}, medicSpawnRate);
             medicShowAttemptToShielded = CustomOption.Create(144, "裝盾玩家可看到謀殺未遂", false, medicSpawnRate);
-            medicSetShieldAfterMeeting = CustomOption.Create(145, "Shield Will Be Set After The Next Meeting", false, medicSpawnRate);
+            medicSetShieldAfterMeeting = CustomOption.Create(145, "盾在會議後生效", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "掉包者"), rates, null, true);
             swapperCanCallEmergency = CustomOption.Create(151, "掉包者可召開緊急會議", false, swapperSpawnRate);
@@ -318,28 +318,28 @@ namespace TheOtherRoles {
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "追踪者"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "追踪更新間隔", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
-            trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
+            trackerResetTargetAfterMeeting = CustomOption.Create(202, "會議後重置追踪", false, trackerSpawnRate);
 
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "密探"), rates, null, true);
             snitchLeftTasksForReveal = CustomOption.Create(211, "告密者可看到偽裝者在哪的任務數", 1f, 0f, 5f, 1f, snitchSpawnRate);
-            snitchIncludeTeamJackal = CustomOption.Create(212, "Include Team Jackal", false, snitchSpawnRate);
-            snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, "Use Different Arrow Color For Team Jackal", true, snitchIncludeTeamJackal);
+            snitchIncludeTeamJackal = CustomOption.Create(212, "包含豺狼團隊", false, snitchSpawnRate);
+            snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, "隊豺狼團隊使用不同顏色的箭頭", true, snitchIncludeTeamJackal);
 
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "間諜"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "間諜可被警長殺死", false, spySpawnRate);
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "如果偽裝者中有間諜可以殺死任何人", true, spySpawnRate);
-            spyCanEnterVents = CustomOption.Create(243, "間諜可進入地道", false, spySpawnRate);
+            spyCanEnterVents = CustomOption.Create(243, "間諜可進入通風口", false, spySpawnRate);
             spyHasImpostorVision = CustomOption.Create(244, "間諜有偽裝者視野", false, spySpawnRate);
 
             securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "守衛"), rates, null, true);
             securityGuardCooldown = CustomOption.Create(281, "守衛冷卻", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);
             securityGuardTotalScrews = CustomOption.Create(282, "初始守衛螺絲數量", 7f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardCamPrice = CustomOption.Create(283, "設置攝影機消耗螺絲數量", 2f, 1f, 15f, 1f, securityGuardSpawnRate);
-            securityGuardVentPrice = CustomOption.Create(284, "封鎖地道消耗螺絲數量", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
+            securityGuardVentPrice = CustomOption.Create(284, "封鎖通風口消耗螺絲數量", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
 
-            baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
-            baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
-            baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
+            baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "誘餌"), rates, null, true);
+            baitHighlightAllVents = CustomOption.Create(331, "如果通風口被佔用所有通風口發光", false, baitSpawnRate);
+            baitReportDelay = CustomOption.Create(332, "誘餌舉報延遲", 0f, 0f, 10f, 1f, baitSpawnRate);
 
             // Other options  
             maxNumberOfMeetings = CustomOption.Create(3, "會議數量(不包括市長會議)", 10, 0, 15, 1, null, true);

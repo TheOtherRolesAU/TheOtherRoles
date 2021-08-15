@@ -199,7 +199,7 @@ namespace TheOtherRoles.Patches {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
                 int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
-                __instance.NumberText.text = $"{localRemaining.ToString()} 船上剩下 {teamRemaining.ToString()}";
+                __instance.NumberText.text = $"{localRemaining.ToString()} 次船上總共剩下 {teamRemaining.ToString()}";
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
                 __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);
