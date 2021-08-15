@@ -321,7 +321,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3 && !EvilShip.enabled) {
+            if (!EvilShip.enabled && statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false);
                 return true;
