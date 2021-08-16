@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  </style>
+
+  <body>
+    <div id="panel">
+      Width:
+      <input type="number" value="2" placeholder="Width" id="canvas-width" />
+      Height:
+      <input type="number" value="2" placeholder="Height" id="canvas-height" />
+      Role Size:
+      <input type="number" value="40" placeholder="Role Size" id="role-size" />
+      Description Size:
+      <input
+        type="number"
+        value="20"
+        placeholder="Description Size"
+        id="description-size"
+      />
+    </div>
+
+    <div style="display: none">
+      <img
+        id="img"
+        src="./Grey-Among-Us-clipart-transparent.png"
+        alt="Among Us"
+      />
+    </div>
+
+    <canvas
+      id="myCanvas"
+      width="3000"
+      height="2000"
+      style="border: 1px solid #d3d3d3"
+    >
+      Your browser does not support the HTML canvas tag.
+    </canvas>
+
+    <script>
+      const roles = [
+        {
+          name: "Mafioso",
+          desc: "work with the <#FF1919>mafia</> to kill the crewmates",
+          color: "#FF1919",
+        },
+        {
+          name: "Janitor",
+          desc: "work with the <#FF1919>mafia</> by hiding dead bodies",
+          color: "#FF1919",
+        },
+        {
+          name: "Godfather",
+          desc: "kill all crewmates",
+          color: "#FF1919",
+        },
+        {
+          name: "Cleaner",
+          desc: "kill everyone and leave no traces",
+          color: "#FF1919",
+        },
+        {
+          name: "Morphling",
+          desc: "change your look to not get caught",
+          color: "#FF1919",
+        },
+        {
+          name: "Trickster",
+          desc: "use your jack-in-the-boxes to suprise others",
+          color: "#FF1919",
+        },
+        {
+          name: "Camouflager",
+          desc: "camouflage and kill the crewmates",
+          color: "#FF1919",
+        },
+        {
+          name: "Warlock",
+          desc: "curse other players and kill everyone",
+          color: "#FF1919",
+        },
+        {
+          name: "Vampire",
+          desc: "kill the crewmates with your bites",
+          color: "#FF1919",
+        },
+        {
+          name: "Eraser",
+          desc: "kill the crewmates and erase their role",
+          color: "#FF1919",
+        },
+        {
+          name: "Bad Mini",
+          desc: "no one will harm you until you grow up",
+          color: "#FF1919",
+        },
+        {
+          name: "Evil Guesser",
+          desc: "guess and shoot",
+          color: "#FF1919",
+        },
+        {
+          name: "Imp<#FF02C2>Lover</>",
+          desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+          color: "#FF1919",
+        },
+        {
+          name: "Lover",
+          desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
+          color: "#FF02C2",
+        },
+        {
+          name: "Jester",
+          desc: "get voted out",
+          color: "#FE58AF",
+        },
+        {
+          name: "Good Mini",
+          desc: "no one will harm you until you grow up",
+          color: "#F8BBDC",
+        },
+        {
+          name: "Swapper",
+          desc: "swap votes to exile the <#FF1919>impostors</>",
+          color: "#9B335E",
+        },
+        {
+          name: "Tracker",
+          desc: "track the <#FF1919>impostors</> down",
+          color: "#7230F0",
+        },
+        {
+          name: "Bait",
+          desc: "force your killer to self report",
+          color: "#7230F0",
+        },
+        {
+          name: "Time Master",
+          desc: "save yourself with your time shield",
+          color: "#6D8FF0",
+        },
+        {
+          name: "Detective",
+          desc: "find the <#FF1919>impostors</> by examining foodprints",
+          color: "#0A6AAA",
+        },
+        {
+          name: "Engineer",
+          desc: "maintain important systems on the ship",
+          color: "#0012FD",
+        },
+        {
+          name: "Jackal",
+          desc: "kill all crewmates and <#FF1919>impostors</> to win",
+          color: "#00BBF4",
+        },
+        {
+          name: "Sidekick",
+          desc: "help your <#00BBF4>jackal</> to kill everyone",
+          color: "#00BBF4",
+        },
+        {
+          name: "Medic",
+          desc: "create a shild to protect a person",
+          color: "#3AFFC9",
+        },
+        {
+          name: "Mayor",
+          desc: "your vote counts twice",
+          color: "#03332B",
+        },
+        {
+          name: "Seer",
+          desc: "you will see players die",
+          color: "#41C16C",
+        },
+        {
+          name: "Hacker",
+          desc: "hack systems to find the <#FF1919>impostors</>",
+          color: "#00F500",
+        },
+        {
+          name: "Snitch",
+          desc: "finish your tasks to find the <#FF1919>impostors</>",
+          color: "#A3FF00",
+        },
+        {
+          name: "Lighter",
+          desc: "your light never goes out",
+          color: "#EBE0B5",
+        },
+        {
+          name: "Shifter",
+          desc: "shift your role",
+          color: "#666666",
+        },
+        {
+          name: "Security Guard",
+          desc: "seal vents and place cameras",
+          color: "#CEB851",
+        },
+        {
+          name: "Nice Guesser",
+          desc: "guess and shoot",
+          color: "#FFFF00",
+        },
+        {
+          name: "Sheriff",
+          desc: "shoot the <#FF1919>imposters</>",
+          color: "#FDC900",
+        },
+        {
+          name: "Arsonist",
+          desc: "let them burn",
+          color: "#FD6700",
+        },
+        {
+          name: "Spy",
+          desc: "confuse the <#FF1919>imposters</>",
+          color: "#FF1919",
+        },
+      ];
+
+      const panel = document.querySelector("#panel");
+      const width = document.querySelector("#canvas-width");
+      const height = document.querySelector("#canvas-height");
+      const role_S = document.querySelector("#role-size");
+      const desc_S = document.querySelector("#description-size");
+
+      const c = document.getElementById("myCanvas");
+      const image = document.getElementById("img");
+      const ctx = c.getContext("2d");
+
+      // https://mrcoles.com/multi-colored-text-canvas/
+      function fillMixedText(ctx, args, x, y) {
+        let defaultFillStyle = ctx.fillStyle;
+        let defaultFont = ctx.font;
+
+        ctx.save();
+        args.forEach(({ text, fillStyle, font }) => {
+          ctx.fillStyle = fillStyle || defaultFillStyle;
+          ctx.font = font || defaultFont;
+          ctx.fillText(text, x, y);
+          x += ctx.measureText(text).width;
+        });
+        ctx.restore();
+      };
+
+      function drawRole(role, description, color, i) {
+        const x = i % width.value;
+        const y = Math.floor(i / width.value);
+
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.rect(x * 300, y * 200, 300, 200);
+        ctx.fill();
+
+        ctx.textAlign = "center";
+
+        ctx.fillStyle = color;
+        ctx.font = `${role_S.value}px VT323`;
+        ctx.fillText(role.toUpperCase(), x * 300 + 150, y * 200 + 40);
+
+        // ctx.fillStyle = "white";
+        // ctx.font = `${desc_S.value}px VT323`;
+        // ctx.fillText(
+        //   description.toUpperCase(),
+        //   x * 300 + 150,
+        //   y * 200 + 60
+        // );
+
+        fillMixedText(
+          ctx,
+          description.split(" ").map((word) => {
+            return {
+              text: word.replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$2").toUpperCase() + " ",
+              fillStyle: word.includes("</>")
+                ? word.replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$1")
+                : "white",
+              font: `${desc_S.value}px VT323`,
+            };
+          }),
+          x * 300 + 150,
+          y * 200 + 60
+        );
+
+        ctx.fillStyle = color;
+        // ctx.filter = "blur(10px)";
+        ctx.beginPath();
+        ctx.ellipse(
+          x * 300 + 150,
+          y * 200 + 130,
+          40,
+          200,
+          (1 / 2) * Math.PI,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        ctx.filter = "blur(0px)";
+        ctx.drawImage(image, x * 300 + 120, y * 200 + 100, 70, 90);
+      }
+
+      function start() {
+        c.width = width.value * 300;
+        c.height = height.value * 200;
+
+        ctx.clearRect(0, 0, c.width, c.height);
+
+        // for (let i = 0; i <= width.value; i++) {
+        //   for (let j = 0; j <= height.value; j++) {
+        //     drawRole(
+        //       roles[i + j].name,
+        //       roles[i + j].desc,
+        //       roles[i + j].color,
+        //       i,
+        //       j
+        //     );
+        //   }
+        // }
+
+        roles.forEach(({ name, desc, color }, i) => {
+          drawRole(name, desc, color, i);
+        });
+      }
+
+      window.onload = () => {
+        start();
+      };
+
+      width.addEventListener("change", () => {
+        height.value = Math.ceil(roles.length / width.value);
+        start();
+      });
+      height.addEventListener("change", () => {
+        width.value = Math.ceil(roles.length / height.value);
+        start();
+      });
+      role_S.addEventListener("change", () => {
+        start();
+      });
+      desc_S.addEventListener("change", () => {
+        start();
+      });
+    </script>
+  </body>
+</html>
