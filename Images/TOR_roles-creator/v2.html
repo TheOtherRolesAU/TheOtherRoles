@@ -109,7 +109,7 @@
           color: "#FF1919",
         },
         {
-          name: "Imp<#FF02C2>Lover</>",
+          name: "Imp <#FF02C2>Lover</>",
           desc: "you are in <#FF02C2>love</> with <#FF02C2>eisbison</>",
           color: "#FF1919",
         },
@@ -253,7 +253,7 @@
           x += ctx.measureText(text).width;
         });
         ctx.restore();
-      };
+      }
 
       function drawRole(role, description, color, i) {
         const x = i % width.value;
@@ -266,9 +266,26 @@
 
         ctx.textAlign = "center";
 
-        ctx.fillStyle = color;
-        ctx.font = `${role_S.value}px VT323`;
-        ctx.fillText(role.toUpperCase(), x * 300 + 150, y * 200 + 40);
+        // ctx.fillStyle = color;
+        // ctx.font = `${role_S.value}px VT323`;
+        // ctx.fillText(role.toUpperCase(), x * 300 + 150, y * 200 + 40);
+
+        fillMixedText(
+          ctx,
+          role.split(" ").map((word) => {
+            return {
+              text: word
+                .replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$2")
+                .toUpperCase(),
+              fillStyle: word.includes("</>")
+                ? word.replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$1")
+                : color,
+              font: `${role_S.value}px VT323`,
+            };
+          }),
+          x * 300 + 150,
+          y * 200 + 40
+        );
 
         // ctx.fillStyle = "white";
         // ctx.font = `${desc_S.value}px VT323`;
@@ -282,7 +299,9 @@
           ctx,
           description.split(" ").map((word) => {
             return {
-              text: word.replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$2").toUpperCase() + " ",
+              text: word
+                .replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$2")
+                .toUpperCase(),
               fillStyle: word.includes("</>")
                 ? word.replace(/<(#[a-zA-Z0-9]{6})>([a-zA-Z]*)<\/>/, "$1")
                 : "white",
