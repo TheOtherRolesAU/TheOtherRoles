@@ -15,9 +15,9 @@
   <body>
     <div id="panel">
       Width:
-      <input type="number" value="2" placeholder="Width" id="canvas-width" />
+      <input type="number" value="6" placeholder="Width" id="canvas-width" />
       Height:
-      <input type="number" value="2" placeholder="Height" id="canvas-height" />
+      <input type="number" value="" placeholder="Height" id="canvas-height" />
       Role Size:
       <input type="number" value="40" placeholder="Role Size" id="role-size" />
       Description Size:
@@ -181,6 +181,7 @@
       }
 
       window.onload = () => {
+        height.value = Math.ceil(roles.length / width.value);
         start();
       };
 
