@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roles Overview</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <body>
+      <svg width="1000" height="1000">
+        Sorry, your browser does not support inline SVG.
+      </svg>
+
+      <script src="./roles.js"></script>
+      <script>
+        window.onload = () => {
+          document.querySelector("svg").style.width = 6 * 300 + "px";
+          document.querySelector("svg").style.heigth =
+            Math.ceil(roles.length / width) * 200 + 200 +"px";
+        };
+        const width = 6;
+
+        roles.forEach(({ name, desc, color }, i) => {
+          const x = i % width;
+          const y = Math.floor(i / width);
+
+          document.querySelector("svg").innerHTML += `
+          <g>
+            <rect x="${x * 300}" y="${
+            y * 200
+          }" width="300" height="200" style="fill: black" />
+            <text
+              x="${x * 300 + 150}"
+              y="${y * 200 + 30}"
+              fill="${color}"
+              text-anchor="middle"
+              style="font-size: 40px; font-family: VT323"
+            >
+              ${name}
+            </text>
+            <text
+              x="${x * 300 + 150}"
+              y="${y * 200 + 50}"
+              fill="white"
+              text-anchor="middle"
+              style="font-size: 20px; font-family: VT323"
+            >
+            ${desc}
+              <tspan fill="blue"></tspan>
+            </text>
+            <ellipse
+              cx="${x * 300 + 150}"
+              cy="${y * 200 + 130}"
+              rx="150"
+              ry="40"
+              style="fill: ${color}; filter: blur(10px)"
+            />
+            <image href="./Grey-Among-Us-clipart-transparent.png" height="100" x="${
+              x * 300 + 110
+            }" y="${y * 200 + 90}">
+          </g>
+          `;
+        });
+      </script>
+    </body>
+  </body>
+</html>
