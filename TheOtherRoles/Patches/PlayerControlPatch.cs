@@ -813,7 +813,10 @@ namespace TheOtherRoles.Patches {
         public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
             if (Vampire.vampire != null && Vampire.vampire == source && Vampire.bitten != null && Vampire.bitten == target)
                 source = target;
-            
+
+            if (Roles.Ninja.ninja != null && Roles.Ninja.ninja == source && !Roles.Ninja.moveToPlayer) 
+                source = target;
+
             if (Warlock.warlock != null && Warlock.warlock == source && Warlock.curseKillTarget != null && Warlock.curseKillTarget == target) {
                 source = target;
                 Warlock.curseKillTarget = null; // Reset here

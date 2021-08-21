@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Ninja,
         Crewmate,
         Impostor
     }
@@ -97,7 +98,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        NinjaExpand
     }
 
     public static class RPCProcedure {
@@ -236,6 +238,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Bait:
                         Bait.bait = player;
+                        break;
+                    case RoleId.Ninja:
+                        Roles.Ninja.ninja = player;
                         break;
                     }
                 }
@@ -570,7 +575,8 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+            if (player == Roles.Ninja.ninja) Roles.Ninja.clearAndReload();
+
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
@@ -702,6 +708,10 @@ namespace TheOtherRoles
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+        }
+
+        public static void ninjaExpand() {
+            Roles.Ninja.ninjaExpand();
         }
     }   
 
@@ -864,6 +874,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.NinjaExpand:
+                    RPCProcedure.ninjaExpand();
                     break;
             }
         }

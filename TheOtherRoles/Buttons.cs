@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton ninjaExpandButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -68,6 +69,9 @@ namespace TheOtherRoles
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
+
+            ninjaExpandButton.MaxTimer = Roles.Ninja.cooldown;
+            ninjaExpandButton.EffectDuration = Roles.Ninja.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -779,6 +783,29 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+
+            // Ninja Expand
+            ninjaExpandButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.NinjaExpand, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.ninjaExpand();
+                },
+                () => { return Roles.Ninja.ninja != null && Roles.Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    ninjaExpandButton.Timer = ninjaExpandButton.MaxTimer;
+                    ninjaExpandButton.isEffectActive = false;
+                    ninjaExpandButton.killButtonManager.TimerText.color = Palette.EnabledColor;
+                },
+                Roles.Ninja.getButtonSprite(),
+                 new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F,
+                true,
+                Roles.Ninja.duration,
+                () => { ninjaExpandButton.Timer = ninjaExpandButton.MaxTimer; }
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
