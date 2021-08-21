@@ -54,6 +54,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Roles.Chamaleon.clearAndReload();
         }
 
         public static class Jester {

@@ -308,6 +308,8 @@ namespace TheOtherRoles.Patches {
             camouflageAndMorphActions();
             // Mini
             miniUpdate();
+            // Chamaleon
+            Roles.Chamaleon.chamaleonAction();
         }
     }
 }

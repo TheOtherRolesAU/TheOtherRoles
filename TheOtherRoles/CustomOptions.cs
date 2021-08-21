@@ -166,6 +166,11 @@ namespace TheOtherRoles {
         public static CustomOption baitHighlightAllVents;
         public static CustomOption baitReportDelay;
 
+        public static CustomOption chamaleonSpawnRate;
+        public static CustomOption chamaleonCooldown;
+        public static CustomOption chamaleonDuration;
+        public static CustomOption chamaleonRootTime;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -233,6 +238,11 @@ namespace TheOtherRoles {
             bountyHunterPunishmentTime = CustomOption.Create(323, "Additional Cooldown After Killing Others", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
+
+            chamaleonSpawnRate = CustomOption.Create(400, cs(Roles.Chamaleon.color, "Chamaleon"), rates, null, true);
+            chamaleonCooldown = CustomOption.Create(401, "Chamaleon Cooldown", 30f, 10f, 60f, 2.5f, chamaleonSpawnRate);
+            chamaleonDuration = CustomOption.Create(402, "Chamaleon Duration", 10f, 1f, 20f, 1f, chamaleonSpawnRate);
+            chamaleonRootTime = CustomOption.Create(403, "Chamaleon Root Time", 10f, 0f, 20f, 1f, chamaleonSpawnRate);
 
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
@@ -658,9 +668,9 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 35;
-            int detailedSettingsP1 = roleSettingsLines + 37;
-            int detailedSettingsP2 = detailedSettingsP1 + 38;
+            int roleSettingsLines = defaultSettingsLines + 38;
+            int detailedSettingsP1 = roleSettingsLines + 41;
+            int detailedSettingsP2 = detailedSettingsP1 + 42;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -677,10 +687,10 @@ namespace TheOtherRoles {
                 gap = 5;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 18;
+                gap = 19;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 22;
+                gap = 23;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {

@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton chamaleonHideButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -68,6 +69,9 @@ namespace TheOtherRoles
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
+
+            chamaleonHideButton.MaxTimer = Roles.Chamaleon.cooldown;
+            chamaleonHideButton.EffectDuration = Roles.Chamaleon.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -779,6 +783,39 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+
+            // Chamaleon Hide
+            chamaleonHideButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ChamaleonHide, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.chamaleonHide();
+
+                    if(Roles.Chamaleon.rootTime > 0) {
+                        PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the chamaleon is not just running straight into the next object
+                        PlayerControl.LocalPlayer.moveable = false;
+                        HudManager.Instance.StartCoroutine(Effects.Lerp(Roles.Chamaleon.rootTime, new Action<float>((p) => { // Delayed action
+                            if(p == 1f) {
+                                PlayerControl.LocalPlayer.moveable = true;
+                            }
+                        })));
+                    }
+                },
+                () => { return Roles.Chamaleon.chamaleon != null && Roles.Chamaleon.chamaleon == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    chamaleonHideButton.Timer = chamaleonHideButton.MaxTimer;
+                    chamaleonHideButton.isEffectActive = false;
+                    chamaleonHideButton.killButtonManager.TimerText.color = Palette.EnabledColor;
+                },
+                Roles.Chamaleon.getButtonSprite(),
+                 new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F,
+                true,
+                Roles.Chamaleon.duration,
+                () => { chamaleonHideButton.Timer = chamaleonHideButton.MaxTimer; }
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
