@@ -11,8 +11,7 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles {
     enum RoleId {
         Jester,
         Mayor,
@@ -48,12 +47,12 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Trapper,
         Crewmate,
         Impostor
     }
 
-    enum CustomRPC
-    {
+    enum CustomRPC {
         // Main Controls
 
         ResetVaribles = 50,
@@ -97,14 +96,15 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        TrapBody
     }
 
     public static class RPCProcedure {
 
         // Main Controls
 
-        public static void resetVariables() {
+        public static void resetVariables () {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
             clearAndReloadMapOptions();
@@ -113,16 +113,14 @@ namespace TheOtherRoles
             setCustomButtonCooldowns();
         }
 
-        public static void shareOptionSelection(uint id, uint selection) {
+        public static void shareOptionSelection (uint id, uint selection) {
             CustomOption option = CustomOption.options.FirstOrDefault(option => option.id == (int)id);
             option.updateSelection((int)selection);
         }
 
-        public static void forceEnd() {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (!player.Data.IsImpostor)
-                {
+        public static void forceEnd () {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (!player.Data.IsImpostor) {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
                     player.Data.IsDead = true;
@@ -130,128 +128,131 @@ namespace TheOtherRoles
             }
         }
 
-        public static void setRole(byte roleId, byte playerId, byte flag) {
+        public static void setRole (byte roleId, byte playerId, byte flag) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == playerId) {
-                    switch((RoleId)roleId) {
-                    case RoleId.Jester:
-                        Jester.jester = player;
-                        break;
-                    case RoleId.Mayor:
-                        Mayor.mayor = player;
-                        break;
-                    case RoleId.Engineer:
-                        Engineer.engineer = player;
-                        break;
-                    case RoleId.Sheriff:
-                        Sheriff.sheriff = player;
-                        break;
-                    case RoleId.Lighter:
-                        Lighter.lighter = player;
-                        break;
-                    case RoleId.Godfather:
-                        Godfather.godfather = player;
-                        break;
-                    case RoleId.Mafioso:
-                        Mafioso.mafioso = player;
-                        break;
-                    case RoleId.Janitor:
-                        Janitor.janitor = player;
-                        break;
-                    case RoleId.Detective:
-                        Detective.detective = player;
-                        break;
-                    case RoleId.TimeMaster:
-                        TimeMaster.timeMaster = player;
-                        break;
-                    case RoleId.Medic:
-                        Medic.medic = player;
-                        break;
-                    case RoleId.Shifter:
-                        Shifter.shifter = player;
-                        break;
-                    case RoleId.Swapper:
-                        Swapper.swapper = player;
-                        break;
-                    case RoleId.Lover:
-                        if (flag == 0) Lovers.lover1 = player;
-                        else Lovers.lover2 = player;
-                        break;
-                    case RoleId.Seer:
-                        Seer.seer = player;
-                        break;
-                    case RoleId.Morphling:
-                        Morphling.morphling = player;
-                        break;
-                    case RoleId.Camouflager:
-                        Camouflager.camouflager = player;
-                        break;
-                    case RoleId.Hacker:
-                        Hacker.hacker = player;
-                        break;
-                    case RoleId.Mini:
-                        Mini.mini = player;
-                        break;
-                    case RoleId.Tracker:
-                        Tracker.tracker = player;
-                        break;
-                    case RoleId.Vampire:
-                        Vampire.vampire = player;
-                        break;
-                    case RoleId.Snitch:
-                        Snitch.snitch = player;
-                        break;
-                    case RoleId.Jackal:
-                        Jackal.jackal = player;
-                        break;
-                    case RoleId.Sidekick:
-                        Sidekick.sidekick = player;
-                        break;
-                    case RoleId.Eraser:
-                        Eraser.eraser = player;
-                        break;
-                    case RoleId.Spy:
-                        Spy.spy = player;
-                        break;
-                    case RoleId.Trickster:
-                        Trickster.trickster = player;
-                        break;
-                    case RoleId.Cleaner:
-                        Cleaner.cleaner = player;
-                        break;
-                    case RoleId.Warlock:
-                        Warlock.warlock = player;
-                        break;
-                    case RoleId.SecurityGuard:
-                        SecurityGuard.securityGuard = player;
-                        break;
-                    case RoleId.Arsonist:
-                        Arsonist.arsonist = player;
-                        break;
-                    case RoleId.Guesser:
-                        Guesser.guesser = player;
-                        break;
-                    case RoleId.BountyHunter:
-                        BountyHunter.bountyHunter = player;
-                        break;
-                    case RoleId.Bait:
-                        Bait.bait = player;
-                        break;
+                    switch ((RoleId)roleId) {
+                        case RoleId.Jester:
+                            Jester.jester = player;
+                            break;
+                        case RoleId.Mayor:
+                            Mayor.mayor = player;
+                            break;
+                        case RoleId.Engineer:
+                            Engineer.engineer = player;
+                            break;
+                        case RoleId.Sheriff:
+                            Sheriff.sheriff = player;
+                            break;
+                        case RoleId.Lighter:
+                            Lighter.lighter = player;
+                            break;
+                        case RoleId.Godfather:
+                            Godfather.godfather = player;
+                            break;
+                        case RoleId.Mafioso:
+                            Mafioso.mafioso = player;
+                            break;
+                        case RoleId.Janitor:
+                            Janitor.janitor = player;
+                            break;
+                        case RoleId.Detective:
+                            Detective.detective = player;
+                            break;
+                        case RoleId.TimeMaster:
+                            TimeMaster.timeMaster = player;
+                            break;
+                        case RoleId.Medic:
+                            Medic.medic = player;
+                            break;
+                        case RoleId.Shifter:
+                            Shifter.shifter = player;
+                            break;
+                        case RoleId.Swapper:
+                            Swapper.swapper = player;
+                            break;
+                        case RoleId.Lover:
+                            if (flag == 0) Lovers.lover1 = player;
+                            else Lovers.lover2 = player;
+                            break;
+                        case RoleId.Seer:
+                            Seer.seer = player;
+                            break;
+                        case RoleId.Morphling:
+                            Morphling.morphling = player;
+                            break;
+                        case RoleId.Camouflager:
+                            Camouflager.camouflager = player;
+                            break;
+                        case RoleId.Hacker:
+                            Hacker.hacker = player;
+                            break;
+                        case RoleId.Mini:
+                            Mini.mini = player;
+                            break;
+                        case RoleId.Tracker:
+                            Tracker.tracker = player;
+                            break;
+                        case RoleId.Vampire:
+                            Vampire.vampire = player;
+                            break;
+                        case RoleId.Snitch:
+                            Snitch.snitch = player;
+                            break;
+                        case RoleId.Jackal:
+                            Jackal.jackal = player;
+                            break;
+                        case RoleId.Sidekick:
+                            Sidekick.sidekick = player;
+                            break;
+                        case RoleId.Eraser:
+                            Eraser.eraser = player;
+                            break;
+                        case RoleId.Spy:
+                            Spy.spy = player;
+                            break;
+                        case RoleId.Trickster:
+                            Trickster.trickster = player;
+                            break;
+                        case RoleId.Cleaner:
+                            Cleaner.cleaner = player;
+                            break;
+                        case RoleId.Warlock:
+                            Warlock.warlock = player;
+                            break;
+                        case RoleId.SecurityGuard:
+                            SecurityGuard.securityGuard = player;
+                            break;
+                        case RoleId.Arsonist:
+                            Arsonist.arsonist = player;
+                            break;
+                        case RoleId.Guesser:
+                            Guesser.guesser = player;
+                            break;
+                        case RoleId.BountyHunter:
+                            BountyHunter.bountyHunter = player;
+                            break;
+                        case RoleId.Bait:
+                            Bait.bait = player;
+                            break;
+                        case RoleId.Trapper:
+                            Trapper.trapper = player;
+                            break;
                     }
                 }
         }
 
-        public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
+        public static void versionHandshake (int major, int minor, int build, int revision, Guid guid, int clientId) {
             System.Version ver;
-            if (revision < 0) 
+            if (revision < 0)
                 ver = new System.Version(major, minor, build);
-            else 
+            else
                 ver = new System.Version(major, minor, build, revision);
 
             GameStartManagerPatch.playerVersions[clientId] = new GameStartManagerPatch.PlayerVersion(ver, guid);
         }
 
-        public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {
+        public static void useUncheckedVent (int ventId, byte playerId, byte isEnter) {
             PlayerControl player = Helpers.playerById(playerId);
             if (player == null) return;
             // Fill dummy MessageReader and call MyPhysics.HandleRpc as the corountines cannot be accessed
@@ -266,13 +267,13 @@ namespace TheOtherRoles
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
-        public static void uncheckedMurderPlayer(byte sourceId, byte targetId) {
+        public static void uncheckedMurderPlayer (byte sourceId, byte targetId) {
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
             if (source != null && target != null) source.MurderPlayer(target);
         }
 
-        public static void uncheckedCmdReportDeadBody(byte sourceId, byte targetId) {
+        public static void uncheckedCmdReportDeadBody (byte sourceId, byte targetId) {
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
             if (source != null && target != null) source.ReportDeadBody(target.Data);
@@ -281,16 +282,16 @@ namespace TheOtherRoles
 
         // Role functionality
 
-        public static void engineerFixLights() {
+        public static void engineerFixLights () {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
 
-        public static void engineerUsedRepair() {
+        public static void engineerUsedRepair () {
             Engineer.usedRepair = true;
         }
 
-        public static void cleanBody(byte playerId) {
+        public static void cleanBody (byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
@@ -298,20 +299,26 @@ namespace TheOtherRoles
             }
         }
 
-        public static void sheriffKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
+        public static void trapBody (byte playerId) {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; i++) {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
+                    Trapper.trapbody = Helpers.playerById(playerId);
+            }
+        }
+
+        public static void sheriffKill (byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId) {
                     Sheriff.sheriff.MurderPlayer(player);
                     return;
                 }
             }
         }
 
-        public static void timeMasterRewindTime() {
+        public static void timeMasterRewindTime () {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
-            if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
+            if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
                 resetTimeMasterButton();
             }
             HudManager.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
@@ -331,20 +338,20 @@ namespace TheOtherRoles
             PlayerControl.LocalPlayer.moveable = false;
         }
 
-        public static void timeMasterShield() {
+        public static void timeMasterShield () {
             TimeMaster.shieldActive = true;
             HudManager.Instance.StartCoroutine(Effects.Lerp(TimeMaster.shieldDuration, new Action<float>((p) => {
                 if (p == 1f) TimeMaster.shieldActive = false;
             })));
         }
 
-        public static void medicSetShielded(byte shieldedId) {
+        public static void medicSetShielded (byte shieldedId) {
             Medic.usedShield = true;
             Medic.shielded = Helpers.playerById(shieldedId);
             Medic.futureShielded = null;
         }
 
-        public static void shieldedMurderAttempt() {
+        public static void shieldedMurderAttempt () {
             if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.Instance?.FullScreen != null) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(0.5f, new Action<float>((p) => {
@@ -355,14 +362,14 @@ namespace TheOtherRoles
                             renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(p * 2 * 0.75f));
                     } else {
                         if (renderer != null)
-                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01((1-p) * 2 * 0.75f));
+                            renderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
                     }
                     if (p == 1f && renderer != null) renderer.enabled = false;
                 })));
             }
         }
 
-        public static void shifterShift(byte targetId) {
+        public static void shifterShift (byte targetId) {
             PlayerControl oldShifter = Shifter.shifter;
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null || oldShifter == null) return;
@@ -426,20 +433,20 @@ namespace TheOtherRoles
                 Guesser.guesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player)
                 Bait.bait = oldShifter;
-            
+
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
         }
 
-        public static void swapperSwap(byte playerId1, byte playerId2) {
+        public static void swapperSwap (byte playerId1, byte playerId2) {
             if (MeetingHud.Instance) {
                 Swapper.playerId1 = playerId1;
                 Swapper.playerId2 = playerId2;
             }
         }
 
-        public static void morphlingMorph(byte playerId) {  
+        public static void morphlingMorph (byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (Morphling.morphling == null || target == null) return;
 
@@ -447,13 +454,13 @@ namespace TheOtherRoles
             Morphling.morphTarget = target;
         }
 
-        public static void camouflagerCamouflage() {
+        public static void camouflagerCamouflage () {
             if (Camouflager.camouflager == null) return;
 
             Camouflager.camouflageTimer = Camouflager.duration;
         }
 
-        public static void vampireSetBitten(byte targetId, byte reset) {
+        public static void vampireSetBitten (byte targetId, byte reset) {
             if (reset != 0) {
                 Vampire.bitten = null;
                 return;
@@ -462,59 +469,53 @@ namespace TheOtherRoles
             if (Vampire.vampire == null) return;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == targetId && !player.Data.IsDead) {
-                        Vampire.bitten = player;
+                    Vampire.bitten = player;
                 }
             }
         }
 
-        public static void vampireTryKill() {
+        public static void vampireTryKill () {
             if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead) {
                 Vampire.vampire.MurderPlayer(Vampire.bitten);
             }
             Vampire.bitten = null;
         }
 
-        public static void placeGarlic(byte[] buff) {
+        public static void placeGarlic (byte[] buff) {
             Vector3 position = Vector3.zero;
-            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
-            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
             new Garlic(position);
         }
 
-        public static void trackerUsedTracker(byte targetId) {
+        public static void trackerUsedTracker (byte targetId) {
             Tracker.usedTracker = true;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
         }
 
-        public static void jackalKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
+        public static void jackalKill (byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId) {
                     Jackal.jackal.MurderPlayer(player);
                     return;
                 }
             }
         }
 
-        public static void sidekickKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
+        public static void sidekickKill (byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId) {
                     Sidekick.sidekick.MurderPlayer(player);
                     return;
                 }
             }
         }
 
-        public static void jackalCreatesSidekick(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
+        public static void jackalCreatesSidekick (byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                if (player.PlayerId == targetId) {
                     if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
                         Jackal.fakeSidekick = player;
                     } else {
@@ -528,15 +529,15 @@ namespace TheOtherRoles
             }
         }
 
-        public static void sidekickPromotes() {
+        public static void sidekickPromotes () {
             Jackal.removeCurrentJackal();
             Jackal.jackal = Sidekick.sidekick;
             Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
             Sidekick.clearAndReload();
             return;
         }
-        
-        public static void erasePlayerRoles(byte playerId, bool ignoreLovers = false) {
+
+        public static void erasePlayerRoles (byte playerId, bool ignoreLovers = false) {
             PlayerControl player = Helpers.playerById(playerId);
             if (player == null) return;
 
@@ -570,13 +571,14 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+            if (player == Trapper.trapper) Trapper.clearAndReload();
+
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (player == Guesser.guesser) Guesser.clearAndReload();
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
-                Lovers.clearAndReload(); 
+                Lovers.clearAndReload();
             }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
@@ -589,40 +591,40 @@ namespace TheOtherRoles
             if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
         }
 
-        public static void setFutureErased(byte playerId) {
+        public static void setFutureErased (byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
-            if (Eraser.futureErased == null) 
+            if (Eraser.futureErased == null)
                 Eraser.futureErased = new List<PlayerControl>();
             if (player != null) {
                 Eraser.futureErased.Add(player);
             }
         }
 
-        public static void setFutureShifted(byte playerId) {
+        public static void setFutureShifted (byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
         }
 
-        public static void setFutureShielded(byte playerId) {
+        public static void setFutureShielded (byte playerId) {
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
         }
-        
-        public static void placeJackInTheBox(byte[] buff) {
+
+        public static void placeJackInTheBox (byte[] buff) {
             Vector3 position = Vector3.zero;
-            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
-            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
             new JackInTheBox(position);
         }
 
-        public static void lightsOut() {
+        public static void lightsOut () {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if (PlayerControl.LocalPlayer.Data.IsImpostor) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
 
-        public static void warlockCurseKill(byte targetId) {
+        public static void warlockCurseKill (byte targetId) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == targetId) {
                     Warlock.curseKillTarget = player;
@@ -632,16 +634,16 @@ namespace TheOtherRoles
             }
         }
 
-        public static void placeCamera(byte[] buff) {
-            var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
+        public static void placeCamera (byte[] buff) {
+            var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>();
             if (referenceCamera == null) return; // Mira HQ
 
             SecurityGuard.remainingScrews -= SecurityGuard.camPrice;
             SecurityGuard.placedCameras++;
 
             Vector3 position = Vector3.zero;
-            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
-            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(position.x, position.y, referenceCamera.transform.position.z - 1f);
@@ -658,13 +660,13 @@ namespace TheOtherRoles
             MapOptions.camerasToAdd.Add(camera);
         }
 
-        public static void sealVent(int ventId) {
+        public static void sealVent (int ventId) {
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
             if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
-                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
+                PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>();
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
@@ -675,11 +677,11 @@ namespace TheOtherRoles
             MapOptions.ventsToSeal.Add(vent);
         }
 
-        public static void arsonistWin() {
+        public static void arsonistWin () {
             Arsonist.triggerArsonistWin = true;
         }
 
-        public static void guesserShoot(byte playerId) {
+        public static void guesserShoot (byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
@@ -694,22 +696,20 @@ namespace TheOtherRoles
                         pva.Overlay.gameObject.SetActive(true);
                     }
                 }
-                if (AmongUsClient.Instance.AmHost) 
+                if (AmongUsClient.Instance.AmHost)
                     MeetingHud.Instance.CheckForEndVoting();
             }
             if (HudManager.Instance != null && Guesser.guesser != null)
-                if (PlayerControl.LocalPlayer == target) 
+                if (PlayerControl.LocalPlayer == target)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
-                else if (partner != null && PlayerControl.LocalPlayer == partner) 
+                else if (partner != null && PlayerControl.LocalPlayer == partner)
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
-    }   
+    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    class RPCHandlerPatch
-    {
-        static void Postfix([HarmonyArgument(0)]byte callId, [HarmonyArgument(1)]MessageReader reader)
-        {
+    class RPCHandlerPatch {
+        static void Postfix ([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader) {
             byte packetId = callId;
             switch (packetId) {
 
@@ -864,6 +864,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.TrapBody:
+                    RPCProcedure.trapBody(reader.ReadByte());
                     break;
             }
         }

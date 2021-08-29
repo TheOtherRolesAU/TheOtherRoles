@@ -166,6 +166,9 @@ namespace TheOtherRoles {
         public static CustomOption baitHighlightAllVents;
         public static CustomOption baitReportDelay;
 
+        public static CustomOption trapperSpawnRate;
+        public static CustomOption trapperCooldown;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -223,7 +226,7 @@ namespace TheOtherRoles {
             cleanerSpawnRate = CustomOption.Create(260, cs(Cleaner.color, "Cleaner"), rates, null, true);
             cleanerCooldown = CustomOption.Create(261, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
 
-            warlockSpawnRate = CustomOption.Create(270, cs(Cleaner.color, "Warlock"), rates, null, true);
+            warlockSpawnRate = CustomOption.Create(270, cs(Warlock.color, "Warlock"), rates, null, true);
             warlockCooldown = CustomOption.Create(271, "Warlock Cooldown", 30f, 10f, 60f, 2.5f, warlockSpawnRate);
             warlockRootTime = CustomOption.Create(272, "Warlock Root Time", 5f, 0f, 15f, 1f, warlockSpawnRate);
 
@@ -234,6 +237,8 @@ namespace TheOtherRoles {
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
+            trapperSpawnRate = CustomOption.Create(440, cs(Trapper.color, "Trapper"), rates, null, true);
+            trapperCooldown = CustomOption.Create(441, "Trapper Cooldown", 30f, 10f, 60f, 2.5f, trapperSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
@@ -658,9 +663,9 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 19;
-            int roleSettingsLines = defaultSettingsLines + 35;
-            int detailedSettingsP1 = roleSettingsLines + 37;
-            int detailedSettingsP2 = detailedSettingsP1 + 38;
+            int roleSettingsLines = defaultSettingsLines + 36;
+            int detailedSettingsP1 = roleSettingsLines + 38;
+            int detailedSettingsP2 = detailedSettingsP1 + 39;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -677,10 +682,10 @@ namespace TheOtherRoles {
                 gap = 5;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 18;
+                gap = 19;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 22;
+                gap = 23;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {

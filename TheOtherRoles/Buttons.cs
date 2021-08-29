@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton trapperTrapButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -59,6 +60,8 @@ namespace TheOtherRoles
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
+            trapperTrapButton.MaxTimer = Trapper.cooldown;
+            
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -779,6 +782,43 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+
+            // Trapper Trap Button
+            trapperTrapButton = new CustomButton(
+                () => {
+                    foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+                    {
+                        if (collider2D.tag == "DeadBody")
+                        {
+                            DeadBody component = collider2D.GetComponent<DeadBody>();
+                            if (component && !component.Reported)
+                            {
+                                Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+                                Vector2 truePosition2 = component.TruePosition;
+                                if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
+                                {
+                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrapBody, Hazel.SendOption.Reliable, -1);
+                                    writer.Write(playerInfo.PlayerId);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                    RPCProcedure.trapBody(playerInfo.PlayerId);
+
+                                    Trapper.trapper.killTimer = trapperTrapButton.Timer = trapperTrapButton.MaxTimer;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                },
+                () => { return Trapper.trapper != null && Trapper.trapper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
+                () => { trapperTrapButton.Timer = trapperTrapButton.MaxTimer; },
+                Trapper.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

@@ -54,6 +54,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Trapper.clearAndReload();
         }
 
         public static class Jester {
@@ -1024,6 +1025,29 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+        }
+    }
+
+    public static class Trapper {
+        public static PlayerControl trapper;
+        public static PlayerControl trapbody;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            trapper = null;
+            trapbody = null;
+            cooldown = CustomOptionHolder.trapperCooldown.getFloat();
         }
     }
 }

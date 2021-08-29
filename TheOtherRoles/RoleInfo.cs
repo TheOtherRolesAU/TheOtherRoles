@@ -60,6 +60,7 @@ namespace TheOtherRoles
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
+        public static RoleInfo trapper = new RoleInfo("Trapper", Trapper.color, "Kill everyone and trap bodies", "Trap dead bodies", RoleId.Trapper);
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
             impostor,
@@ -100,7 +101,8 @@ namespace TheOtherRoles
             spy,
             securityGuard,
             bountyHunter,
-            bait
+            bait,
+            trapper
         };
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
@@ -141,6 +143,7 @@ namespace TheOtherRoles
             if (p == Guesser.guesser) infos.Add(p.Data.IsImpostor ? badGuesser : goodGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Bait.bait) infos.Add(bait);
+            if (p == Trapper.trapper) infos.Add(trapper);
 
             // Default roles
             if (infos.Count == 0 && p.Data.IsImpostor) infos.Add(impostor); // Just Impostor
