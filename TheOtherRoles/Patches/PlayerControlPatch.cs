@@ -72,9 +72,17 @@ namespace TheOtherRoles.Patches {
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
                 }
 
-                if (hasVisibleShield) {
+                bool witchShieldActive = false;
+                if(Camouflager.camouflageTimer <= 0f && Roles.Witch.shielded != null && ((target == Roles.Witch.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Roles.Witch.shielded))) {
+                    if(Roles.Witch.showShielded) witchShieldActive = true;
+                }
+
+                if(hasVisibleShield) {
                     target.myRend.material.SetFloat("_Outline", 1f);
                     target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                } else if(witchShieldActive) {
+                    target.myRend.material.SetFloat("_Outline", 1f);
+                    target.myRend.material.SetColor("_OutlineColor", Roles.Witch.shieldedColor);
                 } else {
                     target.myRend.material.SetFloat("_Outline", 0f);
                 }
@@ -666,7 +674,8 @@ namespace TheOtherRoles.Patches {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
-            if (isMedicReport || isDetectiveReport)
+            bool isWitchReport = Roles.Witch.witch != null && Roles.Witch.witch == PlayerControl.LocalPlayer && __instance.PlayerId == Roles.Witch.witch.PlayerId;
+            if (isMedicReport || isDetectiveReport || isWitchReport)
             {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == target?.PlayerId)?.FirstOrDefault();
 
@@ -685,6 +694,28 @@ namespace TheOtherRoles.Patches {
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";
                         }
+                    } else if(isWitchReport) {
+                        String murderRole = "";
+                        foreach(PlayerControl player in PlayerControl.AllPlayerControls) {
+                            if(player.PlayerId == deadPlayer.killerIfExisting.PlayerId) {
+                                if(player == Morphling.morphling) murderRole = "Morphling";
+                                else if(player == Camouflager.camouflager) murderRole = "Camouflager";
+                                else if(player == Godfather.godfather) murderRole = "Godfather";
+                                else if(player == Mafioso.mafioso) murderRole = "Mafioso";
+                                else if(player == Janitor.janitor) murderRole = "Janitor";
+                                else if(player == Vampire.vampire) murderRole = "Vampire";
+                                else if(player == Eraser.eraser) murderRole = "Eraser";
+                                else if(player == Trickster.trickster) murderRole = "Trickster";
+                                else if(player == Cleaner.cleaner) murderRole = "Cleaner";
+                                else if(player == Warlock.warlock) murderRole = "Warlock";
+                                else if(player == Jackal.jackal) murderRole = "Jackal";
+                                else if(player == Sidekick.sidekick) murderRole = "Sidekick";
+                                else if(player == Sheriff.sheriff) murderRole = "Sheriff";
+                                else if(player == Guesser.guesser) murderRole = "Evil Guesser";
+                                else murderRole = "Imposter"; // If no role was assign on the murder
+                            }
+                        }
+                        msg = $"Body Report: The killer appears to be a " + murderRole;
                     }
 
                     if (!string.IsNullOrWhiteSpace(msg))

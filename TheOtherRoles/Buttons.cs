@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton witchShieldButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -68,6 +69,8 @@ namespace TheOtherRoles
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
+
+            witchShieldButton.MaxTimer = 0f;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -779,6 +782,25 @@ namespace TheOtherRoles
                         }
                     }
                 }
+            );
+
+            // Witch Shield
+            witchShieldButton = new CustomButton(
+                () => {
+                    witchShieldButton.Timer = 0f;
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WitchSetShielded, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Roles.Witch.witch.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.witchSetShielded(PlayerControl.LocalPlayer.PlayerId);
+                },
+                () => { return Roles.Witch.witch != null && Roles.Witch.witch == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return !Roles.Witch.usedShield && PlayerControl.LocalPlayer.CanMove; },
+                () => { },
+                Roles.Witch.getButtonSprite(),
+                new Vector3(-1.3f, 0, 0),
+                __instance,
+                KeyCode.Q
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

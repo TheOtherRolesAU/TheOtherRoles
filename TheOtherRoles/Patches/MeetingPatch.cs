@@ -385,6 +385,8 @@ namespace TheOtherRoles.Patches {
                 if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
                 target = meetingTarget;
+                // Remove witch shield
+                Roles.Witch.shielded = null;
             }
         }
 

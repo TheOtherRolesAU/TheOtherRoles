@@ -118,7 +118,9 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
             } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Bait.bait, Bait.color);
-            }
+            } else if (Roles.Witch.witch != null && Roles.Witch.witch == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Roles.Witch.witch, Roles.Witch.color);
+    }
 
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
@@ -177,6 +179,10 @@ namespace TheOtherRoles.Patches {
             if (Medic.shielded.Data.IsDead || Medic.medic == null || Medic.medic.Data.IsDead) {
                 Medic.shielded = null;
             }
+        }
+
+        static void updateWitchShielded() {
+            if(Roles.Witch.shielded == null) return;
         }
 
         static void timerUpdate() {
@@ -298,6 +304,7 @@ namespace TheOtherRoles.Patches {
             resetNameTagsAndColors();
             setNameColors();
             updateShielded();
+            updateWitchShielded();
             setNameTags();
 
             // Impostors

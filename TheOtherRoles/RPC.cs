@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Witch,
         Crewmate,
         Impostor
     }
@@ -97,7 +98,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        WitchSetShielded
     }
 
     public static class RPCProcedure {
@@ -236,6 +238,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Bait:
                         Bait.bait = player;
+                        break;
+                    case RoleId.Witch:
+                        Roles.Witch.witch = player;
                         break;
                     }
                 }
@@ -426,7 +431,9 @@ namespace TheOtherRoles
                 Guesser.guesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player)
                 Bait.bait = oldShifter;
-            
+            if (Roles.Witch.witch != null && Roles.Witch.witch == player)
+                Roles.Witch.witch = oldShifter;
+
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
@@ -558,6 +565,7 @@ namespace TheOtherRoles
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
             if (player == Bait.bait) Bait.clearAndReload();
+            if (player == Roles.Witch.witch) Roles.Witch.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -606,7 +614,7 @@ namespace TheOtherRoles
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
         }
-        
+
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -703,6 +711,12 @@ namespace TheOtherRoles
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
+
+        public static void witchSetShielded(byte shieldedId) {
+            Roles.Witch.usedShield = true;
+            Roles.Witch.shielded = Helpers.playerById(shieldedId);
+        }
+
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -864,6 +878,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.WitchSetShielded:
+                    RPCProcedure.witchSetShielded(reader.ReadByte());
                     break;
             }
         }

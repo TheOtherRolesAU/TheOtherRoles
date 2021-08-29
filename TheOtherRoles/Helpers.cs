@@ -102,7 +102,7 @@ namespace TheOtherRoles {
         }
 
         public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
-            // Block impostor shielded kill
+            // Block impostor shielded kill by medic
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -123,6 +123,10 @@ namespace TheOtherRoles {
                 }
                 return false;
             }
+            //Block imposter shielded kill by witch
+            else if (Roles.Witch.shielded != null && Roles.Witch.shielded == target) {
+                return false;
+            }
             return true;
         }
 
@@ -140,6 +144,7 @@ namespace TheOtherRoles {
                 RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
             }
         }
+
 
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
