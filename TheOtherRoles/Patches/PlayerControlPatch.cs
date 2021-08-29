@@ -659,6 +659,9 @@ namespace TheOtherRoles.Patches {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
                     string msg = "";
 
+                    if (isTrapped)
+                        Trapper.trapper.MurderPlayer(__instance);
+
                     if (isMedicReport) {
                         msg = $"Body Report: Killed {Math.Round(timeSinceDeath / 1000)}s ago!";
                     } else if (isDetectiveReport) {
@@ -681,9 +684,6 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
-
-                if (isTrapped)
-                    Trapper.trapper.MurderPlayer(__instance);
             }
         }
     }
