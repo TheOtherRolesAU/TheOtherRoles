@@ -651,16 +651,12 @@ namespace TheOtherRoles.Patches {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
-            bool isTrapped = Trapper.trapper != null && Trapper.trapbody != null && Trapper.trapbody.PlayerId == target.PlayerId;
-            if (isMedicReport || isDetectiveReport || isTrapped) {
+            if (isMedicReport || isDetectiveReport) {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == target?.PlayerId)?.FirstOrDefault();
 
                 if (deadPlayer != null && deadPlayer.killerIfExisting != null) {
                     float timeSinceDeath = ((float)(DateTime.UtcNow - deadPlayer.timeOfDeath).TotalMilliseconds);
                     string msg = "";
-
-                    if (isTrapped)
-                        Trapper.trapper.MurderPlayer(__instance);
 
                     if (isMedicReport) {
                         msg = $"Body Report: Killed {Math.Round(timeSinceDeath / 1000)}s ago!";

@@ -385,6 +385,9 @@ namespace TheOtherRoles.Patches {
                 if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
                 target = meetingTarget;
+
+                if (Trapper.trapper != null && Trapper.trapbody != null && Trapper.trapbody.PlayerId == meetingTarget.PlayerId)
+                    Trapper.trapper.RpcMurderPlayer(__instance);
             }
         }
 
