@@ -54,6 +54,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Madmate.clearAndReload();
         }
 
         public static class Jester {
@@ -144,6 +145,7 @@ namespace TheOtherRoles
             public static float cooldown = 30f;
             public static bool canKillNeutrals = false;
             public static bool spyCanDieToSheriff = false;
+            public static bool madmateCanDieToSheriff = false;
 
             public static PlayerControl currentTarget;
 
@@ -153,6 +155,7 @@ namespace TheOtherRoles
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
+                madmateCanDieToSheriff = CustomOptionHolder.madmateCanDieToSheriff.getBool();
             }
         }
 
@@ -1024,6 +1027,22 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+        }
+    }
+
+    public static class Madmate {
+        public static PlayerControl madmate;
+        public static Color color = Palette.ImpostorRed;
+
+        public static bool canEnterVents = false;
+        public static bool hasImpostorVision = false;
+        public static bool canSabotage = false;
+
+        public static void clearAndReload() {
+            madmate = null;
+            canEnterVents = CustomOptionHolder.madmateCanEnterVents.getBool();
+            hasImpostorVision = CustomOptionHolder.madmateHasImpostorVision.getBool();
+            canSabotage = CustomOptionHolder.madmateCanSabotage.getBool();
         }
     }
 }

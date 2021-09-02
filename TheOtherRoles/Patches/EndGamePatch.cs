@@ -72,6 +72,7 @@ namespace TheOtherRoles.Patches {
             if (Sidekick.sidekick != null) notWinners.Add(Sidekick.sidekick);
             if (Jackal.jackal != null) notWinners.Add(Jackal.jackal);
             if (Arsonist.arsonist != null) notWinners.Add(Arsonist.arsonist);
+            if (Madmate.madmate != null) notWinners.Add(Madmate.madmate);
             notWinners.AddRange(Jackal.formerJackals);
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -153,6 +154,15 @@ namespace TheOtherRoles.Patches {
                     wpdFormerJackal.IsImpostor = false; 
                     TempData.winners.Add(wpdFormerJackal);
                 }
+            } else {
+              // Madmate wins if team impostors wins
+              foreach (WinningPlayerData winner in TempData.winners) {
+                  if (winner.IsImpostor) {
+                    WinningPlayerData wpd = new WinningPlayerData(Madmate.madmate.Data);
+                    TempData.winners.Add(wpd);
+                    break;
+                  }
+              }
             }
 
             // Reset Settings

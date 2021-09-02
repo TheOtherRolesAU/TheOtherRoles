@@ -57,6 +57,7 @@ namespace TheOtherRoles
         public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
         public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
         public static RoleInfo bait = new RoleInfo("Bait", Bait.color, "Bait your enemies", "Bait your enemies", RoleId.Bait);
+        public static RoleInfo madmate = new RoleInfo("Madmate", Madmate.color, "Help the <color=#FF1919FF>Impostors</color>", "Help the Impostors", RoleId.Madmate);
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
@@ -100,7 +101,8 @@ namespace TheOtherRoles
             spy,
             securityGuard,
             bountyHunter,
-            bait
+            bait,
+            madmate
         };
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
@@ -141,6 +143,7 @@ namespace TheOtherRoles
             if (p == Guesser.guesser) infos.Add(p.Data.IsImpostor ? badGuesser : goodGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Bait.bait) infos.Add(bait);
+            if (p == Madmate.madmate) infos.Add(madmate);
 
             // Default roles
             if (infos.Count == 0 && p.Data.IsImpostor) infos.Add(impostor); // Just Impostor

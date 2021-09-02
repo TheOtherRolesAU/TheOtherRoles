@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Madmate,
         Crewmate,
         Impostor
     }
@@ -236,6 +237,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Bait:
                         Bait.bait = player;
+                        break;
+                    case RoleId.Madmate:
+                        Madmate.madmate = player;
                         break;
                     }
                 }
@@ -426,6 +430,8 @@ namespace TheOtherRoles
                 Guesser.guesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player)
                 Bait.bait = oldShifter;
+            if (Madmate.madmate != null && Madmate.madmate == player)
+                Madmate.madmate = oldShifter;
             
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
@@ -558,6 +564,7 @@ namespace TheOtherRoles
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
             if (player == Bait.bait) Bait.clearAndReload();
+            if (player == Madmate.madmate) Madmate.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
