@@ -44,6 +44,6 @@ namespace TheOtherRoles {
                 return false;
             }
         }
-        
+
     }
 }

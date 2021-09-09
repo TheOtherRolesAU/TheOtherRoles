@@ -10,8 +10,7 @@ using System.Linq;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
-    class HudManagerUpdatePatch
-    {
+    class HudManagerUpdatePatch {
         public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
             if (!MapOptions.hidePlayerNames) return false; // All names are visible
             else if (source == null || target == null) return true;
@@ -29,7 +28,8 @@ namespace TheOtherRoles.Patches {
                 player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
                 if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
                     player.nameText.color = Palette.ImpostorRed;
-                } else {
+                }
+                else {
                     player.nameText.color = Color.white;
                 }
             }
@@ -40,7 +40,8 @@ namespace TheOtherRoles.Patches {
                         player.NameText.text = playerControl.Data.PlayerName;
                         if (PlayerControl.LocalPlayer.Data.IsImpostor && playerControl.Data.IsImpostor) {
                             player.NameText.color = Palette.ImpostorRed;
-                        } else {
+                        }
+                        else {
                             player.NameText.color = Color.white;
                         }
                     }
@@ -55,7 +56,7 @@ namespace TheOtherRoles.Patches {
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                         PlayerControl playerControl = Helpers.playerById((byte)player.TargetPlayerId);
                         if (playerControl != null && playerControl.Data.IsImpostor)
-                            player.NameText.color =  Palette.ImpostorRed;
+                            player.NameText.color = Palette.ImpostorRed;
                     }
             }
 
@@ -76,11 +77,11 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
-            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) 
+            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
-            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer) 
+            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
-            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer) 
+            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Detective.detective, Detective.color);
             else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer)
                 setPlayerNameColor(TimeMaster.timeMaster, TimeMaster.color);
@@ -91,12 +92,12 @@ namespace TheOtherRoles.Patches {
             else if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Swapper.swapper, Swapper.color);
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
-                setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Seer.seer, Seer.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
+            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
-            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
+            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
             else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
                 // Jackal can see his sidekick

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\black\\Source\\Repos\\Blackarchr\\TheOtherRoles-1\\TheOtherRoles\\TheOtherRoles.csproj": {}
+    "C:\\Users\\black\\source\\repos\\Blackarchr\\Torturer\\TheOtherRoles\\TheOtherRoles.csproj": {}
   },
   "projects": {
-    "C:\\Users\\black\\Source\\Repos\\Blackarchr\\TheOtherRoles-1\\TheOtherRoles\\TheOtherRoles.csproj": {
+    "C:\\Users\\black\\source\\repos\\Blackarchr\\Torturer\\TheOtherRoles\\TheOtherRoles.csproj": {
       "version": "2.8.1",
       "restore": {
-        "projectUniqueName": "C:\\Users\\black\\Source\\Repos\\Blackarchr\\TheOtherRoles-1\\TheOtherRoles\\TheOtherRoles.csproj",
+        "projectUniqueName": "C:\\Users\\black\\source\\repos\\Blackarchr\\Torturer\\TheOtherRoles\\TheOtherRoles.csproj",
         "projectName": "TheOtherRoles",
-        "projectPath": "C:\\Users\\black\\Source\\Repos\\Blackarchr\\TheOtherRoles-1\\TheOtherRoles\\TheOtherRoles.csproj",
+        "projectPath": "C:\\Users\\black\\source\\repos\\Blackarchr\\Torturer\\TheOtherRoles\\TheOtherRoles.csproj",
         "packagesPath": "C:\\Users\\black\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\black\\Source\\Repos\\Blackarchr\\TheOtherRoles-1\\TheOtherRoles\\obj\\",
+        "outputPath": "C:\\Users\\black\\source\\repos\\Blackarchr\\Torturer\\TheOtherRoles\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\black\\AppData\\Roaming\\NuGet\\NuGet.Config",

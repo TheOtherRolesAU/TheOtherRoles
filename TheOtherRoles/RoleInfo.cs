@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles {
     class RoleInfo {
         public Color color;
         public string name;
         public string introDescription;
         public string shortDescription;
         public RoleId roleId;
+        public static string roleName;
 
         RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId) {
             this.color = color;
@@ -24,7 +24,7 @@ namespace TheOtherRoles
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester);
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
-        public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
+        public static RoleInfo engineer = new RoleInfo("Engineer", Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
         public static RoleInfo sheriff = new RoleInfo("Sheriff", Sheriff.color, "Shoot the <color=#FF1919FF>Impostors</color>", "Shoot the Impostors", RoleId.Sheriff);
         public static RoleInfo lighter = new RoleInfo("Lighter", Lighter.color, "Your light never goes out", "Your light never goes out", RoleId.Lighter);
         public static RoleInfo godfather = new RoleInfo("Godfather", Godfather.color, "Kill all Crewmates", "Kill all Crewmates", RoleId.Godfather);
@@ -38,6 +38,7 @@ namespace TheOtherRoles
         public static RoleInfo cleaner = new RoleInfo("Cleaner", Cleaner.color, "Kill everyone and leave no traces", "Clean up dead bodies", RoleId.Cleaner);
         public static RoleInfo warlock = new RoleInfo("Warlock", Warlock.color, "Curse other players and kill everyone", "Curse and kill everyone", RoleId.Warlock);
         public static RoleInfo bountyHunter = new RoleInfo("Bounty Hunter", BountyHunter.color, "Hunt your Bounty down", "Hunt your Bounty down", RoleId.BountyHunter);
+        public static RoleInfo torturer = new RoleInfo("Torturer", Torturer.color, "Torture the Crew to get Infromation about their Roles", "Torture the Crew", RoleId.Torturer);
         public static RoleInfo detective = new RoleInfo("Detective", Detective.color, "Find the <color=#FF1919FF>Impostors</color> by examining footprints", "Examine footprints", RoleId.Detective);
         public static RoleInfo timeMaster = new RoleInfo("Time Master", TimeMaster.color, "Save yourself with your time shield", "Use your time shield", RoleId.TimeMaster);
         public static RoleInfo medic = new RoleInfo("Medic", Medic.color, "Protect someone with your shield", "Protect other players", RoleId.Medic);
@@ -74,6 +75,7 @@ namespace TheOtherRoles
             cleaner,
             warlock,
             bountyHunter,
+            torturer,
             niceMini,
             evilMini,
             goodGuesser,
@@ -99,7 +101,6 @@ namespace TheOtherRoles
             snitch,
             spy,
             securityGuard,
-            bountyHunter,
             bait
         };
 
@@ -141,15 +142,37 @@ namespace TheOtherRoles
             if (p == Guesser.guesser) infos.Add(p.Data.IsImpostor ? badGuesser : goodGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Bait.bait) infos.Add(bait);
+            if (p == Torturer.torturer) infos.Add(torturer);
 
             // Default roles
             if (infos.Count == 0 && p.Data.IsImpostor) infos.Add(impostor); // Just Impostor
             if (infos.Count == 0 && !p.Data.IsImpostor) infos.Add(crewmate); // Just Crewmate
 
             // Modifier
-            if (p == Lovers.lover1|| p == Lovers.lover2) infos.Add(lover);
+            if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
 
             return infos;
+        }
+
+        public static bool isCrew(PlayerControl p) {
+            if (p == Jester.jester || p == Arsonist.arsonist || p == Jackal.jackal || p == Sidekick.sidekick || p.Data.IsImpostor || p == Spy.spy) return false;
+            else return true;
+        }
+
+        public static String GetRole(PlayerControl p) {
+            roleName = String.Join("", getRoleInfoForPlayer(p).Select(x => x.name).ToArray());
+            if (roleName.Contains("Lover")) roleName.Replace("Lover", "");
+            return roleName;
+        }
+
+        public static String GetCrewRole() {
+            string rndmRole = ((Crewroles)new System.Random().Next(Enum.GetNames(typeof(Crewroles)).Length)).ToString();
+            if (rndmRole.Equals(roleName)) return GetCrewRole();
+            else return rndmRole.Replace("_", " ");
+        }
+
+        public static String GetNeutralRole() {
+            return ((Neutralroles)new System.Random().Next(Enum.GetNames(typeof(Neutralroles)).Length)).ToString();
         }
     }
 }

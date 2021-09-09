@@ -12,11 +12,9 @@ using System.IO;
 using UnityEngine;
 using TheOtherRoles.Objects;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles {
     [HarmonyPatch]
-    public static class TheOtherRoles
-    {
+    public static class TheOtherRoles {
         public static System.Random rnd = new System.Random((int)DateTime.Now.Ticks);
 
         public static void clearAndReloadRoles() {
@@ -54,6 +52,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Torturer.clearAndReload();
         }
 
         public static class Jester {
@@ -159,7 +158,7 @@ namespace TheOtherRoles
         public static class Lighter {
             public static PlayerControl lighter;
             public static Color color = new Color32(238, 229, 190, byte.MaxValue);
-            
+
             public static float lighterModeLightsOnVision = 2f;
             public static float lighterModeLightsOffVision = 0.75f;
 
@@ -337,9 +336,9 @@ namespace TheOtherRoles
         }
 
         public static bool existingWithKiller() {
-            return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
+            return existing() && (lover1 == Jackal.jackal || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
-                               || lover1.Data.IsImpostor      || lover2.Data.IsImpostor);
+                               || lover1.Data.IsImpostor || lover2.Data.IsImpostor);
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
@@ -539,7 +538,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
 
         public static float updateIntervall = 5f;
-        public static bool resetTargetAfterMeeting = false;
+        public static int resetTarget = 0;
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
@@ -567,7 +566,7 @@ namespace TheOtherRoles
             resetTracked();
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
-            resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
+            resetTarget = CustomOptionHolder.trackerResetTarget.getSelection();
         }
     }
 
@@ -1024,6 +1023,61 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+        }
+    }
+
+    public static class Torturer {
+        public static PlayerControl torturer;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float cooldown = 30f;
+        public static float duration = 5f;
+        public static bool chatcommand = true;
+
+        public static PlayerControl torturedPlayer;
+        public static PlayerControl currentTarget;
+        public static Sprite tortureSprite;
+        public static Sprite torturePlayerSprite;
+
+        public static Sprite getTortureSprite() {
+            if (tortureSprite) return tortureSprite;
+            tortureSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TortureButton.png", 115f);
+            return tortureSprite;
+        }
+
+        public static Sprite getTorturePlayerSprite() {
+            if (torturePlayerSprite) return torturePlayerSprite;
+            torturePlayerSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SelectPlayer.png", 115f);
+            return torturePlayerSprite;
+        }
+
+        public static void sendChatInfo() {
+            string msg;
+            if (RoleInfo.isCrew(torturedPlayer)) {
+                if (new System.Random().Next(2) == 0) msg = RoleInfo.GetRole(torturedPlayer) + " | " + RoleInfo.GetNeutralRole() + " | " + RoleInfo.GetCrewRole();
+                else msg = RoleInfo.GetCrewRole() + " | " + RoleInfo.GetNeutralRole() + " | " + RoleInfo.GetRole(torturedPlayer);
+            }
+            else if (torturedPlayer.Data.IsImpostor || torturedPlayer == Spy.spy) msg = "Imposter oder Spy";
+            else msg = RoleInfo.GetCrewRole() + " | " + RoleInfo.GetRole(torturedPlayer) + " | " + RoleInfo.GetCrewRole();
+            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{torturedPlayer.name}: {msg}");
+        }
+
+        public static void useChatCommand(string message) {
+            if (chatcommand && !Torturer.torturer.Data.IsDead) { // Checks weather Chatcommand Option is activated and if Torturer is still Alive
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SendRole, Hazel.SendOption.Reliable, -1);
+                writer.Write(message);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sendRole(message);
+            }
+        }
+
+        public static void clearAndReload() {
+            torturer = null;
+            torturedPlayer = null;
+            currentTarget = null;
+            cooldown = CustomOptionHolder.torturerCooldown.getFloat();
+            duration = CustomOptionHolder.tortureDuration.getFloat();
+            chatcommand = CustomOptionHolder.torturerChatcommand.getBool();
         }
     }
 }

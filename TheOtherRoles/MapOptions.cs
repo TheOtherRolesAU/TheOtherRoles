@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 
-namespace TheOtherRoles{
+namespace TheOtherRoles {
     static class MapOptions {
         // Set values
         public static int maxNumberOfMeetings = 10;
@@ -22,7 +22,7 @@ namespace TheOtherRoles{
         public static List<Vent> ventsToSeal = new List<Vent>();
         public static Dictionary<byte, PoolablePlayer> playerIcons = new Dictionary<byte, PoolablePlayer>();
 
-public static void clearAndReloadMapOptions() {
+        public static void clearAndReloadMapOptions() {
             meetingsCount = 0;
             camerasToAdd = new List<SurvCamera>();
             ventsToSeal = new List<Vent>();
@@ -38,4 +38,4 @@ public static void clearAndReloadMapOptions() {
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
         }
     }
-} 
+}

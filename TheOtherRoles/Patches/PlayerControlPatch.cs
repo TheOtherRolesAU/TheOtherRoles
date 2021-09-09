@@ -517,11 +517,16 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void torturerSetTarget() {
+            if (Torturer.torturer == null || Torturer.torturer != PlayerControl.LocalPlayer) return;
+            if (Torturer.torturedPlayer == null) Torturer.currentTarget = setTarget();
+        }
+
         static void baitUpdate() {
             if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
 
             // Bait report
-            if (Bait.bait.Data.IsDead && !Bait.reported) {
+            if (Bait.bait.Data.IsDead && !Bait.reported && MeetingHud.Instance == null) { // Fixing Dead Shifter shifted Bait resulting in a Report called on meeting end
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
                 if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
@@ -616,6 +621,8 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
+                // Torturer
+                torturerSetTarget();
                 // Bait
                 baitUpdate();
             } 

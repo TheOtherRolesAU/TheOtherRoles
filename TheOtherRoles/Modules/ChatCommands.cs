@@ -38,7 +38,7 @@ namespace TheOtherRoles.Modules {
                                 handled = true;
                             }
                         }
-                    }
+                    } 
                 }
                 
                 if (AmongUsClient.Instance.GameMode == GameModes.FreePlay) {
@@ -65,6 +65,12 @@ namespace TheOtherRoles.Modules {
                         PlayerControl.LocalPlayer.transform.position = target.transform.position;
                         handled = true;
                     }
+                }
+
+                if (text.ToLower().StartsWith("/role ") && PlayerControl.LocalPlayer == Torturer.torturer) {
+                    string message = text.Substring(6).ToLower();
+                    Torturer.useChatCommand(message);
+                    handled = true;
                 }
 
                 if (handled) {

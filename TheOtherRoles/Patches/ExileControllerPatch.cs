@@ -51,6 +51,14 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+            // Medic shield
+            if (Medic.medic != null && Medic.futureShielded != null && !Medic.medic.Data.IsDead) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
+                writer.Write(Medic.futureShielded.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.medicSetShielded(Medic.futureShielded.PlayerId);
+            }
+
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {

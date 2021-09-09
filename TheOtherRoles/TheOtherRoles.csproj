@@ -1,29 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>2.8.1</Version>
-        <Description>TheOtherRoles</Description>
-        <Authors>Eisbison</Authors>
-    </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<Version>2.8.1</Version>
+		<Description>TheOtherRoles</Description>
+		<Authors>Eisbison</Authors>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants);STEAM</DefineConstants>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <EmbeddedResource Include="Resources\CustomHats\*.png" />
-        <EmbeddedResource Include="Resources\*.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
-    </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\CustomHats\*.png" />
+		<EmbeddedResource Include="Resources\*.png" />
+		<EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/core/*.dll"/>
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll"/>
-    </ItemGroup>
+	<ItemGroup>
+		<Reference Include="$(AmongUs)/BepInEx/core/*.dll"/>
+		<Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll"/>
+	</ItemGroup>
 
-    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-        <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
-    </Target>
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<Message Text="Second occurrence" />
+		<Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
+	</Target>
 </Project>

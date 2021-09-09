@@ -14,12 +14,10 @@ using UnhollowerBaseLib;
 using UnityEngine;
 using TheOtherRoles.Modules;
 
-namespace TheOtherRoles
-{
+namespace TheOtherRoles {
     [BepInPlugin(Id, "The Other Roles", VersionString)]
     [BepInProcess("Among Us.exe")]
-    public class TheOtherRolesPlugin : BasePlugin
-    {
+    public class TheOtherRolesPlugin : BasePlugin {
         public const string Id = "me.eisbison.theotherroles";
         public const string VersionString = "2.8.1";
         public static System.Version Version = System.Version.Parse(VersionString);
@@ -33,7 +31,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> StreamerMode { get; set; }
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
-        public static ConfigEntry<bool> GhostsSeeVotes{ get; set; }
+        public static ConfigEntry<bool> GhostsSeeVotes { get; set; }
         public static ConfigEntry<bool> ShowRoleSummary { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
@@ -63,7 +61,7 @@ namespace TheOtherRoles
             ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
-            
+
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
@@ -89,10 +87,8 @@ namespace TheOtherRoles
 
     // Deactivate bans, since I always leave my local testing game and ban myself
     [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
-    public static class AmBannedPatch
-    {
-        public static void Postfix(out bool __result)
-        {
+    public static class AmBannedPatch {
+        public static void Postfix(out bool __result) {
             __result = false;
         }
     }
@@ -105,48 +101,45 @@ namespace TheOtherRoles
             }
         }
     }
-    
+
     // Debugging tools
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
-    public static class DebugManager
-    {
+    public static class DebugManager {
         private static readonly System.Random random = new System.Random((int)DateTime.Now.Ticks);
         private static List<PlayerControl> bots = new List<PlayerControl>();
 
-        public static void Postfix(KeyboardJoystick __instance)
-        {
+        public static void Postfix(KeyboardJoystick __instance) {
             if (!TheOtherRolesPlugin.DebugMode.Value) return;
 
             // Spawn dummys
             if (Input.GetKeyDown(KeyCode.F)) {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
-                var i = playerControl.PlayerId = (byte) GameData.Instance.GetAvailableId();
+                var i = playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
                 bots.Add(playerControl);
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
-                
+
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
-                playerControl.SetColor((byte) random.Next(Palette.PlayerColors.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.Instance.AllHats.Count), playerControl.Data.ColorId);
-                playerControl.SetPet((uint) random.Next(HatManager.Instance.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.Instance.AllSkins.Count));
+                playerControl.SetColor((byte)random.Next(Palette.PlayerColors.Length));
+                playerControl.SetHat((uint)random.Next(HatManager.Instance.AllHats.Count), playerControl.Data.ColorId);
+                playerControl.SetPet((uint)random.Next(HatManager.Instance.AllPets.Count));
+                playerControl.SetSkin((uint)random.Next(HatManager.Instance.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
             // Terminate round
-            if(Input.GetKeyDown(KeyCode.L)) {
+            if (Input.GetKeyDown(KeyCode.L)) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.forceEnd();
             }
         }
 
-        public static string RandomString(int length)
-        {
+        public static string RandomString(int length) {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
