@@ -548,7 +548,7 @@ are hidden and all players have the same color.\
 |----------|:-------------:|
 | 魔術師生成機率 | -
 | 魔術師冷卻 | -
-| Camo持續時間 | Time players stay camouflaged
+| 迷彩持續時間 | Time players stay camouflaged
 -----------------------
 
 ## 吸血鬼
@@ -864,7 +864,7 @@ The 迷你 cannot be killed until it turns 18 years old, however it can be voted
 | 名稱 | 描述 |
 |----------|:-------------:|
 | 迷你生成機率 | -
-| 迷你  | 迷你 Growing Up Duration
+| 迷你成長時間  | 迷你 Growing Up Duration
 -----------------------
 
 ## 醫生
@@ -883,12 +883,12 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 
 
 ### 遊戲選項
-| 名稱 | 描述 | Options |
+| 名稱 | 描述 | 選項 |
 |----------|:-------------:|:-------------:|
 | 醫生生成機率 | - | -
 | 顯示被上盾者 | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | 裝盾玩家可看到謀殺未遂 | Whether a shielded player sees if someone tries to kill him | True/false |
-| Shield Will Be Set After Next Meeting | - | True/false
+| 盾在會議後生效 | - | True/false
 -----------------------
 
 ## 市長
@@ -942,8 +942,8 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Shifter 生成機率 | -
-| Shifter Shifts Modifiers | Sets if 戀人 and/or Medic Shield will be shifted
+| 轉職者生成機率 | -
+| 轉職者轉移調整 | Sets if 戀人 and/or Medic Shield will be shifted
 -----------------------
 
 ## 時間管理大師
@@ -965,10 +965,10 @@ The Time Master won't be affected by the rewind.\
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
-| Time Master 生成機率 | - |
-| Time Master 冷卻 | - |
-| Rewind持續時間 | How much time to rewind |
-| Time Master Shield持續時間 |
+| 時間管理大師生成機率 | - |
+| 時間管理大師冷卻 | - |
+| 回溯時間 | How much time to rewind |
+| 回溯時間護盾持續時間 |
 -----------------------
 
 ## 掉包者
@@ -981,9 +981,9 @@ and can't fix lights and comms.
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Swapper 生成機率 | -
-| Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
-| Swapper can only swap others | Sets whether the Swapper can swap himself or not
+| 掉包者生成機率 | -
+| 掉包者可召開緊急會議 | Option to disable the emergency button for the Swapper
+| 掉包者只可掉包其他人的票 | Sets whether the Swapper can swap himself or not
 -----------------------
 
 ## 追踪者
@@ -996,9 +996,9 @@ The arrow updates it's position every few seconds (configurable).
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Tracker 生成機率 | -
-| Tracker Update Intervall | Sets how often the position is being updated
-| Tracker Reset Target After Meeting | -
+| 追踪者生成機率 | -
+| 追踪更新間隔 | Sets how often the position is being updated
+| 會議後重置追踪 | -
 -----------------------
 
 ## 密探
@@ -1009,14 +1009,14 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Snitch 生成機率 | -
-| Task Count Where The Snitch Will Be Revealed | -
-| Include Team Jackal | -
-| Use Different Arrow Color For Team Jackal | -
+| 密探生成機率 | -
+| 告密者可看到偽裝者在哪的任務數 | -
+| 包含豺狼團隊 | -
+| 對豺狼團隊使用不同顏色的箭頭 | -
 -----------------------
 
 ## 豺狼
-### **Team: Jackal**
+### **隊伍:豺狼**
 The Jackal is part of an extra team, that tries to eliminate all the other players.\
 The Jackal has no tasks and can kill 偽裝者s, Crewmates and Neutrals.\
 The Jackal (if allowed by the options) can select another player to be his Sidekick.
@@ -1051,14 +1051,14 @@ If both 偽裝者s and Jackals are in the game the game continues even if all Cr
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Jackal 生成機率 | - |
-| Jackal/Sidekick Kill 冷卻 | Kill 冷卻 |
-| Jackal Create Sidekick 冷卻 | Cooldown before a Sidekick can be created |
-| Jackal can use vents | Yes/No |
-| Jackal can create a Sidekick | Yes/No |
-| Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
-| Jackals can make an 偽裝者 to his Sidekick | Yes/No (to prevent a Jackal from turning an 偽裝者 into a Sidekick, if he uses the ability on an 偽裝者 he sees the 偽裝者 as Sidekick, but the 偽裝者 isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
-| Jackal and Sidekick have 偽裝者 vision | - |
+| 豺狼生成機率 | - |
+| 豺狼/跟班殺人冷卻 | Kill 冷卻 |
+| 狐狼製造跟班冷卻 | Cooldown before a Sidekick can be created |
+| 豺狼可使用通風口 | Yes/No |
+| 豺狼可製造跟班跟班 | Yes/No |
+| 在豺狼死亡後跟班可升職成豺狼 | Yes/No (to prevent the Jackal team from growing) |
+| 跟班可以殺人 | Yes/No (to prevent a Jackal from turning an 偽裝者 into a Sidekick, if he uses the ability on an 偽裝者 he sees the 偽裝者 as Sidekick, but the 偽裝者 isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
+| 豺狼與跟班有偽裝者視野 | - |
 -----------------------
 
 ## 跟班
@@ -1092,11 +1092,11 @@ There are two possibilities (depending on the set options):
 ### 遊戲選項
 | 名稱 | 描述
 |----------|:-------------:|
-| Spy 生成機率 |
-| Spy Can Die To Sheriff |
-| 偽裝者s Can Kill Anyone If There Is A Spy | This allows the 偽裝者s to kill both the Spy and their 偽裝者 partners
-| Spy Can Enter Vents | Allow the Spy to enter/exit vents (but not actually move to connected vents)
-| Spy Has 偽裝者 Vision | Give the Spy the same vision as the 偽裝者s have
+| 間諜生成機率 |
+| 間諜可被警長殺死 |
+| 如果偽裝者中有間諜可以殺死任何人 | This allows the 偽裝者s to kill both the Spy and their 偽裝者 partners
+| 間諜可進入通風口 | Allow the Spy to enter/exit vents (but not actually move to connected vents)
+| 間諜有偽裝者視野 | Give the Spy the same vision as the 偽裝者s have
 -----------------------
 
 ## 守衛
@@ -1117,9 +1117,9 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 |----------|:-------------:|
 | 守衛生成機率 |
 | 守衛冷卻 |
-| 守衛Number Of Screws | The number of screws that a Security Guard can use in a game
-| Number Of Screws Per Cam | The number of screws it takes to place a camera
-| Number Of Screws Per Vent | The number of screws it takes to seal a vent
+| 初始守衛螺絲數量 | The number of screws that a Security Guard can use in a game
+| 設置攝影機消耗螺絲數量 | The number of screws it takes to place a camera
+| 封鎖通風口消耗螺絲數量 | The number of screws it takes to seal a vent
 -----------------------
 
 ## 誘餌

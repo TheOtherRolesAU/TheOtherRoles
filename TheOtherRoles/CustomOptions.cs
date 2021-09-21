@@ -235,8 +235,8 @@ namespace TheOtherRoles {
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "指示箭頭更新間隔", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
 
-            miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "迷你船員"), rates, null, true);
-            miniGrowingUpDuration = CustomOption.Create(181, "迷你船員成長時間", 400f, 100f, 1500f, 100f, miniSpawnRate);
+            miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "迷你"), rates, null, true);
+            miniGrowingUpDuration = CustomOption.Create(181, "迷你成長時間", 400f, 100f, 1500f, 100f, miniSpawnRate);
 
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "戀人"), rates, null, true);
             loversImpLoverRate = CustomOption.Create(51, "一個戀人是偽裝者的機率", rates, loversSpawnRate);
@@ -257,7 +257,7 @@ namespace TheOtherRoles {
 
             jackalSpawnRate = CustomOption.Create(220, cs(Jackal.color, "豺狼"), rates, null, true);
             jackalKillCooldown = CustomOption.Create(221, "豺狼/跟班殺人冷卻", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
-            jackalCreateSidekickCooldown = CustomOption.Create(222, "狐狼製造跟班冷卻", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
+            jackalCreateSidekickCooldown = CustomOption.Create(222, "豺狼製造跟班冷卻", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
             jackalCanUseVents = CustomOption.Create(223, "豺狼可使用通風口", true, jackalSpawnRate);
             jackalCanCreateSidekick = CustomOption.Create(224, "豺狼可製造跟班跟班", false, jackalSpawnRate);
             sidekickPromotesToJackal = CustomOption.Create(225, "在豺狼死亡後跟班可升職成豺狼", false, jackalSpawnRate);
@@ -323,7 +323,7 @@ namespace TheOtherRoles {
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "密探"), rates, null, true);
             snitchLeftTasksForReveal = CustomOption.Create(211, "告密者可看到偽裝者在哪的任務數", 1f, 0f, 5f, 1f, snitchSpawnRate);
             snitchIncludeTeamJackal = CustomOption.Create(212, "包含豺狼團隊", false, snitchSpawnRate);
-            snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, "隊豺狼團隊使用不同顏色的箭頭", true, snitchIncludeTeamJackal);
+            snitchTeamJackalUseDifferentArrowColor = CustomOption.Create(213, "對豺狼團隊使用不同顏色的箭頭", true, snitchIncludeTeamJackal);
 
             spySpawnRate = CustomOption.Create(240, cs(Spy.color, "間諜"), rates, null, true);
             spyCanDieToSheriff = CustomOption.Create(241, "間諜可被警長殺死", false, spySpawnRate);

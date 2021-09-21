@@ -52,7 +52,7 @@ namespace TheOtherRoles
         public static RoleInfo jackal = new RoleInfo("豺狼", Jackal.color, "殺死所有船員與<color=#FF1919FF>偽裝者</color>來勝利", "殺死所有人", RoleId.Jackal);
         public static RoleInfo sidekick = new RoleInfo("跟班", Sidekick.color, "幫助你的豺狼殺死所有人", "幫助你的豺狼殺死所有人", RoleId.Sidekick);
         public static RoleInfo spy = new RoleInfo("間諜", Spy.color, "讓<color=#FF1919FF>偽裝者</color>混亂", "讓偽裝者混亂", RoleId.Spy);
-        public static RoleInfo securityGuard = new RoleInfo("守衛", SecurityGuard.color, "封鎖通風口跟放置攝像頭", "封鎖通風口跟放置攝像頭", RoleId.SecurityGuard);
+        public static RoleInfo securityGuard = new RoleInfo("守衛", SecurityGuard.color, "封鎖通風口跟放置攝影機", "封鎖通風口跟放置攝影機", RoleId.SecurityGuard);
         public static RoleInfo arsonist = new RoleInfo("縱火狂", Arsonist.color, "燒了大家", "燒了大家", RoleId.Arsonist);
         public static RoleInfo goodGuesser = new RoleInfo("好賭徒", Guesser.color, "猜測並放逐", "猜測並放逐", RoleId.Guesser);
         public static RoleInfo badGuesser = new RoleInfo("壞賭徒", Palette.ImpostorRed, "猜測並放逐", "猜測並放逐", RoleId.Guesser);
