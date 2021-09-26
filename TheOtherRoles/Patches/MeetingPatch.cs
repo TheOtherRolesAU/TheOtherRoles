@@ -254,6 +254,7 @@ namespace TheOtherRoles.Patches {
             Transform selectedButton = null;
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
+                if (CustomOptionHolder.guesserSpawnRate.getBool() && roleInfo.roleId == RoleId.Spy) continue;
                 if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
                 Transform buttonParent = (new GameObject()).transform;
                 buttonParent.SetParent(container);

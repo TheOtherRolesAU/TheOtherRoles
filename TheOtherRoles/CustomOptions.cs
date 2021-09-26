@@ -54,6 +54,7 @@ namespace TheOtherRoles {
         public static CustomOption guesserIsImpGuesserRate;
         public static CustomOption guesserNumberOfShots;
         public static CustomOption guesserInfoInGhostChat;
+        public static CustomOption guesserCantGuessSpy;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
@@ -144,6 +145,7 @@ namespace TheOtherRoles {
         public static CustomOption spyImpostorsCanKillAnyone;
         public static CustomOption spyCanEnterVents;
         public static CustomOption spyHasImpostorVision;
+
 
         public static CustomOption tricksterSpawnRate;
         public static CustomOption tricksterPlaceBoxCooldown;
@@ -250,6 +252,7 @@ namespace TheOtherRoles {
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
             guesserNumberOfShots = CustomOption.Create(312, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
             guesserInfoInGhostChat = CustomOption.Create(313, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
+            guesserCantGuessSpy = CustomOption.Create(314, "Guesser Can't Guess Spy", true, guesserSpawnRate); 
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
@@ -344,7 +347,7 @@ namespace TheOtherRoles {
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
             baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
             baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned (No Report)", false, baitSpawnRate);
-            baitShowKillFlash = CustomOption.Create(335, "Show Flash to Baits Killer", true, baitSpawnRate);
+            baitShowKillFlash = CustomOption.Create(334, "Show Flash to Baits Killer", true, baitSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
