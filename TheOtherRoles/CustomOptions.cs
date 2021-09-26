@@ -146,7 +146,6 @@ namespace TheOtherRoles {
         public static CustomOption spyCanEnterVents;
         public static CustomOption spyHasImpostorVision;
 
-
         public static CustomOption tricksterSpawnRate;
         public static CustomOption tricksterPlaceBoxCooldown;
         public static CustomOption tricksterLightsOutCooldown;
@@ -347,7 +346,7 @@ namespace TheOtherRoles {
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
             baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
             baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned (No Report)", false, baitSpawnRate);
-            baitShowKillFlash = CustomOption.Create(334, "Show Flash to Baits Killer", true, baitSpawnRate);
+            baitShowKillFlash = CustomOption.Create(335, "Show Flash to Baits Killer", true, baitSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
