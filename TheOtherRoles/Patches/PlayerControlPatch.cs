@@ -521,11 +521,11 @@ namespace TheOtherRoles.Patches {
             if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
 
             // Bait report
-            if (Bait.bait.Data.IsDead && !Bait.reported) {
+            if (Bait.bait.Data.IsDead && !Bait.reported && !Bait.wasCleaned) {
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
                 if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
-                    
+                   
                     Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
                     RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
 

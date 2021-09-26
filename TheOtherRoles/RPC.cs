@@ -295,6 +295,7 @@ namespace TheOtherRoles
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
                     UnityEngine.Object.Destroy(array[i].gameObject);
+                if (Bait.bait != null && playerId == Bait.bait.PlayerId) Bait.wasCleaned = true;
             }
         }
 
