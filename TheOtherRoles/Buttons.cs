@@ -29,6 +29,7 @@ namespace TheOtherRoles
         private static CustomButton eraserButton;
         private static CustomButton placeJackInTheBoxButton;        
         private static CustomButton lightsOutButton;
+        private static CustomButton doppelgangerCopyButton;
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
@@ -55,6 +56,7 @@ namespace TheOtherRoles
             eraserButton.MaxTimer = Eraser.cooldown;
             placeJackInTheBoxButton.MaxTimer = Trickster.placeBoxCooldown;
             lightsOutButton.MaxTimer = Trickster.lightsOutCooldown;
+            doppelgangerCopyButton.MaxTimer = 0f;
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
@@ -111,7 +113,11 @@ namespace TheOtherRoles
                         }
                     }
                 },
-                () => { return Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    return (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer 
+                           || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer 
+                           && Doppelganger.copiedRole == RoleInfo.engineer) && !PlayerControl.LocalPlayer.Data.IsDead;
+                },
                 () => {
                     bool sabotageActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
@@ -167,7 +173,9 @@ namespace TheOtherRoles
             // Sheriff Kill
             sheriffKillButton = new CustomButton(
                 () => {
-                    if (Medic.shielded != null && Medic.shielded == Sheriff.currentTarget) {
+                    if (Medic.shielded != null && Medic.shielded == Sheriff.currentTarget && PlayerControl.LocalPlayer == Sheriff.sheriff
+                        || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer && Medic.shielded != null
+                           && Medic.shielded == Doppelganger.currentTarget) {
                         MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
                         RPCProcedure.shieldedMurderAttempt();
@@ -175,25 +183,38 @@ namespace TheOtherRoles
                     }
 
                     byte targetId = 0;
-                    if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) || 
+                    if (PlayerControl.LocalPlayer == Sheriff.sheriff && ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) || 
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
                         (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget)) ||
-                        (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget)) {
+                        (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
+                    } else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                               && Doppelganger.copiedRole == RoleInfo.sheriff && ((Doppelganger.currentTarget.Data.IsImpostor && (Doppelganger.currentTarget != Mini.mini || Mini.isGrownUp())) ||
+                        (Sheriff.spyCanDieToSheriff && Spy.spy == Doppelganger.currentTarget) ||
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget)) ||
+                        (Jackal.jackal == Doppelganger.currentTarget || Sidekick.sidekick == Doppelganger.currentTarget)))
+                    {
+                        targetId = Doppelganger.currentTarget.PlayerId;
                     }
                     else {
                         targetId = PlayerControl.LocalPlayer.PlayerId;
                     }
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.Reliable, -1);
                     killWriter.Write(targetId);
+                    killWriter.Write(PlayerControl.LocalPlayer.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.sheriffKill(targetId);
+                    RPCProcedure.sheriffKill(targetId, PlayerControl.LocalPlayer.PlayerId);
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer; 
-                    Sheriff.currentTarget = null;
+                    if (PlayerControl.LocalPlayer == Sheriff.sheriff) Sheriff.currentTarget = null;
+                    if (PlayerControl.LocalPlayer == Doppelganger.doppelganger) Doppelganger.currentTarget = null;
                 },
-                () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => { return ((Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) || (Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                               && Doppelganger.copiedRole == RoleInfo.sheriff)) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (PlayerControl.LocalPlayer == Sheriff.sheriff) return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                    return Doppelganger.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.renderer.sprite,
                 new Vector3(-1.3f, 0, 0),
@@ -259,6 +280,24 @@ namespace TheOtherRoles
                 () => { return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
                 () => { },
                 Shifter.getButtonSprite(),
+                new Vector3(-1.3f, 0, 0),
+                __instance,
+                KeyCode.Q
+            );
+
+            // Doppelganger Copy
+            doppelgangerCopyButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureDoppelgangerTarget, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Doppelganger.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.setFutureDoppelgangerTarget(Doppelganger.currentTarget.PlayerId);
+                },
+                () => { return Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                        && !PlayerControl.LocalPlayer.Data.IsDead && !Doppelganger.hasCopied; },
+                () => { return Doppelganger.currentTarget && Doppelganger.copyTarget == null && PlayerControl.LocalPlayer.CanMove; },
+                () => { },
+                Doppelganger.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
                 __instance,
                 KeyCode.Q

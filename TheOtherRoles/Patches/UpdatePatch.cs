@@ -118,7 +118,8 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
             } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Bait.bait, Bait.color);
-            }
+            } else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer)
+                setPlayerNameColor(Doppelganger.doppelganger, Doppelganger.color);
 
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {

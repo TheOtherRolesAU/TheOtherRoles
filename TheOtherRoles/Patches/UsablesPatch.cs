@@ -29,6 +29,9 @@ namespace TheOtherRoles.Patches {
                 roleCouldUse = true;
             else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
                 roleCouldUse = true;
+            else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger == @object
+                     && (Doppelganger.copiedRole == RoleInfo.engineer))
+                roleCouldUse = true;
             else if (pc.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
@@ -198,7 +201,9 @@ namespace TheOtherRoles.Patches {
             if (__instance.state == 1) {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(0, maxNumberOfMeetings - meetingsCount);
-                int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
+                int remaining = Mathf.Min(localRemaining, (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer
+                                                           || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.mayor
+                                                           && Doppelganger.doppelganger == PlayerControl.LocalPlayer) ? 1 : teamRemaining);
                 __instance.NumberText.text = $"{localRemaining.ToString()} and the ship has {teamRemaining.ToString()}";
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);

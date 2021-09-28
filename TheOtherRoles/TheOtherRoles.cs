@@ -54,6 +54,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Doppelganger.clearAndReload();
         }
 
         public static class Jester {
@@ -1029,6 +1030,33 @@ namespace TheOtherRoles
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
             canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getBool();
+        }
+    }
+
+    public static class Doppelganger
+    {
+        public static PlayerControl doppelganger;
+        public static Color color = new Color32(127, 127, 127, byte.MaxValue);
+        public static PlayerControl copyTarget;
+        public static PlayerControl currentTarget;
+        public static bool hasCopied = false;
+        public static RoleInfo copiedRole = null;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShiftButton.png", 115f); // TODO: real, distinct sprite for button needed
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            doppelganger = null;
+            currentTarget = null;
+            copyTarget = null;
+            hasCopied = false;
+            copiedRole = null;
         }
     }
 }

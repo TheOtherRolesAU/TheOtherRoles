@@ -30,7 +30,9 @@ namespace TheOtherRoles.Patches {
                         if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected) continue;
 
                         int currentVotes;
-                        int additionalVotes = (Mayor.mayor != null && Mayor.mayor.PlayerId == playerVoteArea.TargetPlayerId) ? 2 : 1; // Mayor vote
+                        int additionalVotes = (Mayor.mayor != null && Mayor.mayor.PlayerId == playerVoteArea.TargetPlayerId
+                                               || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.mayor
+                                               && Doppelganger.doppelganger.PlayerId == playerVoteArea.TargetPlayerId) ? 2 : 1; // Mayor vote
                         if (dictionary.TryGetValue(playerVoteArea.VotedFor, out currentVotes))
                             dictionary[playerVoteArea.VotedFor] = currentVotes + additionalVotes;
                         else
@@ -137,6 +139,7 @@ namespace TheOtherRoles.Patches {
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
                     bool mayorFirstVoteDisplayed = false;
+                    bool doppelgangerMayorFirstVoteDisplayed = false;
                     for (int j = 0; j < states.Length; j++) {
                         MeetingHud.VoterState voterState = states[j];
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
@@ -155,6 +158,12 @@ namespace TheOtherRoles.Patches {
                         if (Mayor.mayor != null && voterState.VoterId == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
                             mayorFirstVoteDisplayed = true;
                             j--;    
+                        }
+                        if (Doppelganger.doppelganger != null && voterState.VoterId == (sbyte)Doppelganger.doppelganger.PlayerId
+                            && !doppelgangerMayorFirstVoteDisplayed && Doppelganger.copiedRole == RoleInfo.mayor)
+                        {
+                            doppelgangerMayorFirstVoteDisplayed = true;
+                            j--;
                         }
                     }
                 }
@@ -283,12 +292,17 @@ namespace TheOtherRoles.Patches {
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
-                        target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
+                        // Add doppelganger as guessable role, even after copy!
+                        if (!(mainRoleInfo == roleInfo || roleInfo == RoleInfo.doppelganger && Doppelganger.doppelganger != null && target == Doppelganger.doppelganger))
+                        {
+                            target = PlayerControl.LocalPlayer;  // Guess is incorrect!
+                        } 
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
-                        writer.Write(target.PlayerId);
+                        writer.Write((byte)target.PlayerId);
+                        writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.guesserShoot(target.PlayerId);
+                        RPCProcedure.guesserShoot(target.PlayerId, PlayerControl.LocalPlayer.PlayerId);
 
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
@@ -347,10 +361,12 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots >= 0) {
+            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots >= 0
+                || Doppelganger.doppelganger != null && PlayerControl.LocalPlayer == Doppelganger.doppelganger && !Doppelganger.doppelganger.Data.IsDead &&
+                Doppelganger.copiedRole == RoleInfo.goodGuesser) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
+                    if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId) continue;
 
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);

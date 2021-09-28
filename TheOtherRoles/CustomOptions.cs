@@ -170,6 +170,8 @@ namespace TheOtherRoles {
         public static CustomOption baitShowKillFlash;
         public static CustomOption baitCanBeCleaned;
 
+        public static CustomOption doppelgangerSpawnRate;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -348,6 +350,8 @@ namespace TheOtherRoles {
             baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned (No Report)", false, baitSpawnRate);
             baitShowKillFlash = CustomOption.Create(335, "Show Flash to Baits Killer", true, baitSpawnRate);
 
+            doppelgangerSpawnRate = CustomOption.Create(340, cs(Doppelganger.color, "Doppelganger"), rates, null, true);
+
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", false);
@@ -358,7 +362,8 @@ namespace TheOtherRoles {
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
             blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
-            
+            blockedRolePairings.Add((byte)RoleId.Shifter, new[] { (byte)RoleId.Doppelganger });
+            blockedRolePairings.Add((byte)RoleId.Doppelganger, new[] { (byte)RoleId.Shifter });
         }
     }
 

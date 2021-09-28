@@ -130,7 +130,13 @@ namespace TheOtherRoles.Patches {
             if (Shifter.futureShift == null) setPlayerOutline(Shifter.currentTarget, Shifter.color);
         }
 
-        
+        static void doppelgangerSetTarget()
+        {
+            if (Doppelganger.doppelganger == null || Doppelganger.doppelganger != PlayerControl.LocalPlayer) return;
+            Doppelganger.currentTarget = setTarget();
+            if (Doppelganger.copyTarget == null) setPlayerOutline(Doppelganger.currentTarget, Doppelganger.color);
+        }
+
         static void morphlingSetTarget() {
             if (Morphling.morphling == null || Morphling.morphling != PlayerControl.LocalPlayer) return;
             Morphling.currentTarget = setTarget();
@@ -618,6 +624,8 @@ namespace TheOtherRoles.Patches {
                 bountyHunterUpdate();
                 // Bait
                 baitUpdate();
+                // Doppelganger
+                doppelgangerSetTarget();
             } 
         }
     }

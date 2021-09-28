@@ -13,7 +13,7 @@ using System;
 
 namespace TheOtherRoles
 {
-    enum RoleId {
+    public enum RoleId {
         Jester,
         Mayor,
         Engineer,
@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Doppelganger,
         Crewmate,
         Impostor
     }
@@ -97,7 +98,9 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        DoppelgangerCopy,
+        SetFutureDoppelgangerTarget
     }
 
     public static class RPCProcedure {
@@ -237,6 +240,9 @@ namespace TheOtherRoles
                     case RoleId.Bait:
                         Bait.bait = player;
                         break;
+                    case RoleId.Doppelganger:
+                        Doppelganger.doppelganger = player;
+                        break;
                     }
                 }
         }
@@ -299,15 +305,16 @@ namespace TheOtherRoles
             }
         }
 
-        public static void sheriffKill(byte targetId) {
+        public static void sheriffKill(byte targetId, byte sheriffId) {
+            PlayerControl target = null;
+            PlayerControl sheriff = null;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (player.PlayerId == targetId)
-                {
-                    Sheriff.sheriff.MurderPlayer(player);
-                    return;
-                }
+                if (player.PlayerId == targetId) target = player;
+                if (player.PlayerId == sheriffId) sheriff = player;
             }
+            sheriff.MurderPlayer(target);
+            return;
         }
 
         public static void timeMasterRewindTime() {
@@ -361,6 +368,26 @@ namespace TheOtherRoles
                     if (p == 1f && renderer != null) renderer.enabled = false;
                 })));
             }
+        }
+
+        public static void doppelgangerCopy(byte targetId)
+        {
+            PlayerControl oldDoppelganger = Doppelganger.doppelganger;
+            PlayerControl player = Helpers.playerById(targetId);
+            if (player == null || oldDoppelganger == null) return;
+            Doppelganger.copyTarget = null;
+            // Suicide (exile) when impostor or impostor variants
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist)
+            {
+                oldDoppelganger.Exiled();
+                return;
+            }
+            Doppelganger.hasCopied = true;
+            // Copy role
+            Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
+            // Set cooldown to max
+            if (PlayerControl.LocalPlayer == oldDoppelganger)
+                CustomButton.ResetAllCooldowns();
         }
 
         public static void shifterShift(byte targetId) {
@@ -571,8 +598,9 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+
             // Other roles
+            if (player == Doppelganger.doppelganger) Doppelganger.clearAndReload();
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (player == Guesser.guesser) Guesser.clearAndReload();
@@ -601,6 +629,11 @@ namespace TheOtherRoles
 
         public static void setFutureShifted(byte playerId) {
             Shifter.futureShift = Helpers.playerById(playerId);
+        }
+
+        public static void setFutureDoppelgangerTarget(byte playerId)
+        {
+            Doppelganger.copyTarget = Helpers.playerById(playerId);
         }
 
         public static void setFutureShielded(byte playerId) {
@@ -680,17 +713,18 @@ namespace TheOtherRoles
             Arsonist.triggerArsonistWin = true;
         }
 
-        public static void guesserShoot(byte playerId) {
-            PlayerControl target = Helpers.playerById(playerId);
+        public static void guesserShoot(byte targetId, byte guesserId) {
+            PlayerControl target = Helpers.playerById(targetId);
+            PlayerControl guesser = Helpers.playerById(guesserId);
             if (target == null) return;
             target.Exiled();
             PlayerControl partner = target.getPartner(); // Lover check
-            byte partnerId = partner != null ? partner.PlayerId : playerId;
+            byte partnerId = partner != null ? partner.PlayerId : targetId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
-                    if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                    if (pva.TargetPlayerId == targetId || pva.TargetPlayerId == partnerId && CustomOptionHolder.loversBothDie.getBool()) {
                         pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
                     }
@@ -698,10 +732,13 @@ namespace TheOtherRoles
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
             }
-            if (HudManager.Instance != null && Guesser.guesser != null)
-                if (PlayerControl.LocalPlayer == target) 
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
-                else if (partner != null && PlayerControl.LocalPlayer == partner) 
+            if (HudManager.Instance != null && Guesser.guesser != null || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.goodGuesser)
+                if (PlayerControl.LocalPlayer == target)
+                {
+
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(guesser.Data, target.Data);
+                }
+                else if (partner != null && PlayerControl.LocalPlayer == partner && CustomOptionHolder.loversBothDie.getBool())
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
         }
     }   
@@ -779,7 +816,7 @@ namespace TheOtherRoles
                     RPCProcedure.cleanBody(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffKill:
-                    RPCProcedure.sheriffKill(reader.ReadByte());
+                    RPCProcedure.sheriffKill(reader.ReadByte(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
@@ -795,6 +832,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DoppelgangerCopy:
+                    RPCProcedure.doppelgangerCopy(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SwapperSwap:
                     byte playerId1 = reader.ReadByte();
@@ -864,7 +904,10 @@ namespace TheOtherRoles
                     RPCProcedure.arsonistWin();
                     break;
                 case (byte)CustomRPC.GuesserShoot:
-                    RPCProcedure.guesserShoot(reader.ReadByte());
+                    RPCProcedure.guesserShoot(reader.ReadByte(), reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureDoppelgangerTarget:
+                    RPCProcedure.setFutureDoppelgangerTarget(reader.ReadByte());
                     break;
             }
         }

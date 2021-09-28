@@ -32,6 +32,16 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.shifterShift(Shifter.futureShift.PlayerId);
             }
             Shifter.futureShift = null;
+            
+            // Doppelganger Copy
+            if (Doppelganger.doppelganger != null && AmongUsClient.Instance.AmHost && Doppelganger.copyTarget != null)
+            { // We need to send the RPC from the host here, to make sure that the order of shifting, copying and erasing is correct (for that reason the futureShifted, copyTarget and futureErased are being synced)
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DoppelgangerCopy, Hazel.SendOption.Reliable, -1);
+                writer.Write(Doppelganger.copyTarget.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.doppelgangerCopy(Doppelganger.copyTarget.PlayerId);
+            }
+            Doppelganger.copyTarget = null;
 
             // Eraser erase
             if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
