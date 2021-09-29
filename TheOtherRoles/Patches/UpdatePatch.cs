@@ -173,10 +173,14 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateShielded() {
-            if (Medic.shielded == null) return;
+            if (Medic.shielded == null && Doppelganger.medicShielded == null) return;
 
-            if (Medic.shielded.Data.IsDead || Medic.medic == null || Medic.medic.Data.IsDead) {
+            if (Medic.shielded != null && Medic.shielded.Data.IsDead || Medic.medic == null || Medic.medic.Data.IsDead) {
                 Medic.shielded = null;
+            }
+            if (Doppelganger.medicShielded != null && Doppelganger.medicShielded.Data.IsDead || Doppelganger.doppelganger == null || Doppelganger.doppelganger.Data.IsDead)
+            {
+                Doppelganger.medicShielded = null;
             }
         }
 

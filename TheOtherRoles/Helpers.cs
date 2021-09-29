@@ -103,10 +103,12 @@ namespace TheOtherRoles {
 
         public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
-            if (Medic.shielded != null && Medic.shielded == target) {
+            if (Medic.shielded != null && Medic.shielded == target ||
+                Doppelganger.medicShielded != null && Doppelganger.medicShielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shieldedMurderAttempt();
+                RPCProcedure.shieldedMurderAttempt(target.PlayerId);
 
                 return false;
             }
@@ -115,11 +117,14 @@ namespace TheOtherRoles {
                 return false;
             }
             // Block Time Master with time shield kill
-            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
-                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
+            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target
+                     || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.timeMaster
+                        && Doppelganger.timeMasterShieldActive && Doppelganger.doppelganger == target) {
+                if (!isMeetingStart) { // Only rewind if the attempt was not called because a meeting started 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    writer.Write((byte)target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterRewindTime();
+                    RPCProcedure.timeMasterRewindTime(target.PlayerId);
                 }
                 return false;
             }

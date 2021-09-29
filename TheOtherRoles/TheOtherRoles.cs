@@ -1042,9 +1042,16 @@ namespace TheOtherRoles
         public static bool hasCopied = false;
         public static RoleInfo copiedRole = null;
 
-        // Parameters needed from other roles.
+        // Parameters needed from other roles. Some don't need to be initialized, as they will be copied too!
+        public static int guesserRemainingShots;
+        public static bool engineerUsedRepair;
+        public static PlayerControl medicShielded;
+        public static PlayerControl medicFutureShielded;
+        public static bool medicUsedShield;
+        public static int securityGuardRemainingScrews;
         public static bool baitWasCleaned;
         public static bool baitReported;
+        public static bool timeMasterShieldActive;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()
@@ -1063,7 +1070,10 @@ namespace TheOtherRoles
             copiedRole = null;
             baitWasCleaned = false;
             baitReported = false;
-
+            timeMasterShieldActive = false;
+            medicShielded = null;
+            medicFutureShielded = null;
+            medicUsedShield = false;
         }
     }
 }

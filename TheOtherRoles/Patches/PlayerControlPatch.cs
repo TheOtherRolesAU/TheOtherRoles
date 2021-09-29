@@ -66,10 +66,10 @@ namespace TheOtherRoles.Patches {
                 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
-                if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
+                if (Camouflager.camouflageTimer <= 0f && (Medic.shielded != null || Doppelganger.medicShielded != null) && (((target == Medic.shielded || target == Doppelganger.medicShielded) && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
-                        || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
-                        || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
+                        || (Medic.showShielded == 1 && ((PlayerControl.LocalPlayer == target && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Doppelganger.medicShielded)) || PlayerControl.LocalPlayer == Medic.medic && target == Medic.shielded || PlayerControl.LocalPlayer == Doppelganger.doppelganger && target == Doppelganger.medicShielded)) // Shielded + Medic
+                        || (Medic.showShielded == 2 && (PlayerControl.LocalPlayer == Medic.medic && target == Medic.shielded || PlayerControl.LocalPlayer == Doppelganger.doppelganger && target == Doppelganger.medicShielded)); // Medic only
                 }
 
                 if (hasVisibleShield) {
@@ -134,7 +134,13 @@ namespace TheOtherRoles.Patches {
         {
             if (Doppelganger.doppelganger == null || Doppelganger.doppelganger != PlayerControl.LocalPlayer) return;
             Doppelganger.currentTarget = setTarget();
-            if (Doppelganger.copyTarget == null) setPlayerOutline(Doppelganger.currentTarget, Doppelganger.color);
+            if (Doppelganger.copiedRole == null && Doppelganger.copyTarget == null) setPlayerOutline(Doppelganger.currentTarget, Doppelganger.color);
+            if (Doppelganger.copiedRole != null)
+            {
+                if (Doppelganger.copiedRole == RoleInfo.medic && !Doppelganger.medicUsedShield || Doppelganger.copiedRole == RoleInfo.sheriff
+                    || Doppelganger.copiedRole == RoleInfo.tracker && Tracker.tracked == null)
+                    setPlayerOutline(Doppelganger.currentTarget, Doppelganger.copiedRole.color);
+            }
         }
 
         static void morphlingSetTarget() {

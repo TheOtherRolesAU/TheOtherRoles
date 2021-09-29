@@ -318,9 +318,17 @@ namespace TheOtherRoles
             return;
         }
 
-        public static void timeMasterRewindTime() {
+        public static void timeMasterRewindTime(byte masterId) {
+            
+
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
-            if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
+            Doppelganger.timeMasterShieldActive = false; // Doesn't hurt to deactivate this one too.
+            
+            /*if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
+                resetTimeMasterButton();
+            }*/
+            if (masterId == PlayerControl.LocalPlayer.PlayerId)
+            {
                 resetTimeMasterButton();
             }
             HudManager.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
@@ -329,7 +337,8 @@ namespace TheOtherRoles
                 if (p == 1f) HudManager.Instance.FullScreen.enabled = false;
             })));
 
-            if (TimeMaster.timeMaster == null || PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+            // if (TimeMaster.timeMaster == null || PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+            if (masterId == PlayerControl.LocalPlayer.PlayerId) return; // Time Master himself does not rewind
 
             TimeMaster.isRewinding = true;
 
@@ -340,21 +349,40 @@ namespace TheOtherRoles
             PlayerControl.LocalPlayer.moveable = false;
         }
 
-        public static void timeMasterShield() {
-            TimeMaster.shieldActive = true;
+        public static void timeMasterShield(byte playerId) {
+            bool isDoppelganger = Doppelganger.doppelganger != null && playerId == Doppelganger.doppelganger.PlayerId;
+            if (!isDoppelganger)
+                TimeMaster.shieldActive = true;
+            if (isDoppelganger)
+                Doppelganger.timeMasterShieldActive = true;
             HudManager.Instance.StartCoroutine(Effects.Lerp(TimeMaster.shieldDuration, new Action<float>((p) => {
-                if (p == 1f) TimeMaster.shieldActive = false;
+                if (p == 1f)
+                {
+                    if (!isDoppelganger)
+                        TimeMaster.shieldActive = false;
+                    if (isDoppelganger)
+                        Doppelganger.timeMasterShieldActive = false;
+                }
             })));
         }
 
-        public static void medicSetShielded(byte shieldedId) {
-            Medic.usedShield = true;
-            Medic.shielded = Helpers.playerById(shieldedId);
-            Medic.futureShielded = null;
+        public static void medicSetShielded(byte shieldedId, byte medicId) {
+            if (Medic.medic != null && Medic.medic.PlayerId == medicId)
+            {
+                Medic.usedShield = true;
+                Medic.shielded = Helpers.playerById(shieldedId);
+                Medic.futureShielded = null;
+            } else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger.PlayerId == medicId)
+            {
+                if (Medic.medic != null && shieldedId == Medic.medic.PlayerId) return;
+                Doppelganger.medicUsedShield = true;
+                Doppelganger.medicShielded = Helpers.playerById(shieldedId);
+                Doppelganger.medicFutureShielded = null;
+            }
         }
 
-        public static void shieldedMurderAttempt() {
-            if (Medic.shielded != null && Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded && HudManager.Instance?.FullScreen != null) {
+        public static void shieldedMurderAttempt(byte playerId) {
+            if (PlayerControl.LocalPlayer.PlayerId == playerId && Medic.showAttemptToShielded && HudManager.Instance?.FullScreen != null) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(0.5f, new Action<float>((p) => {
                     var renderer = HudManager.Instance.FullScreen;
@@ -386,11 +414,30 @@ namespace TheOtherRoles
             Doppelganger.hasCopied = true;
             // Copy role
             Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
-
             // Dont copy the spy
             if (Doppelganger.copiedRole == RoleInfo.spy) Doppelganger.copiedRole = RoleInfo.crewmate;
-            // Set cooldown to max
-            if (PlayerControl.LocalPlayer == oldDoppelganger)
+            
+            // For certain roles, copy some of their variables.
+            if (Doppelganger.copiedRole == RoleInfo.goodGuesser)
+                Doppelganger.guesserRemainingShots = Guesser.remainingShots;
+            if (Doppelganger.copiedRole == RoleInfo.engineer)
+                    Doppelganger.engineerUsedRepair = Engineer.usedRepair;
+            if (Doppelganger.copiedRole == RoleInfo.medic)
+            {
+                Doppelganger.medicShielded = Medic.shielded;
+                Doppelganger.medicFutureShielded = Medic.futureShielded;
+                Doppelganger.medicUsedShield = Medic.usedShield;
+            }
+            //if (Doppelganger.copiedRole == RoleInfo.tracker)
+            // If no retrack: track same target if already tracked. Get own target if not already tracked.
+            // If retrack: obv only get own target.
+            if (Doppelganger.copiedRole == RoleInfo.securityGuard)  // copy screws
+                Doppelganger.securityGuardRemainingScrews = SecurityGuard.remainingScrews;
+
+
+
+                // Set cooldown to max
+                if (PlayerControl.LocalPlayer == oldDoppelganger)
                 CustomButton.ResetAllCooldowns();
         }
 
@@ -640,9 +687,18 @@ namespace TheOtherRoles
             Doppelganger.copyTarget = Helpers.playerById(playerId);
         }
 
-        public static void setFutureShielded(byte playerId) {
-            Medic.futureShielded = Helpers.playerById(playerId);
-            Medic.usedShield = true;
+        public static void setFutureShielded(byte playerId, byte medicId) {
+            
+            if (Medic.medic != null && Medic.medic.PlayerId == medicId)
+            {
+                Medic.futureShielded = Helpers.playerById(playerId);
+                Medic.usedShield = true;
+            } else
+            {
+                if (Medic.medic != null && playerId == Medic.medic.PlayerId) return;
+                Doppelganger.medicFutureShielded = Helpers.playerById(playerId);
+                Doppelganger.medicUsedShield = true;
+            }
         }
         
         public static void placeJackInTheBox(byte[] buff) {
@@ -823,16 +879,16 @@ namespace TheOtherRoles
                     RPCProcedure.sheriffKill(reader.ReadByte(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
-                    RPCProcedure.timeMasterRewindTime();
+                    RPCProcedure.timeMasterRewindTime(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.TimeMasterShield:
-                    RPCProcedure.timeMasterShield();
+                    RPCProcedure.timeMasterShield(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
-                    RPCProcedure.medicSetShielded(reader.ReadByte());
+                    RPCProcedure.medicSetShielded(reader.ReadByte(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
-                    RPCProcedure.shieldedMurderAttempt();
+                    RPCProcedure.shieldedMurderAttempt(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(reader.ReadByte());
@@ -887,7 +943,7 @@ namespace TheOtherRoles
                     RPCProcedure.setFutureShifted(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
-                    RPCProcedure.setFutureShielded(reader.ReadByte());
+                    RPCProcedure.setFutureShielded(reader.ReadByte(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());

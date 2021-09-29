@@ -20,8 +20,18 @@ namespace TheOtherRoles.Patches {
             if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null && !Medic.medic.Data.IsDead) { // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
                 writer.Write(Medic.futureShielded.PlayerId);
+                writer.Write(Medic.medic.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.medicSetShielded(Medic.futureShielded.PlayerId);
+                RPCProcedure.medicSetShielded(Medic.futureShielded.PlayerId, Medic.medic.PlayerId);
+            }
+            // Doppelganger Medic shield
+            if (Doppelganger.doppelganger != null && AmongUsClient.Instance.AmHost && Doppelganger.medicFutureShielded != null && !Doppelganger.doppelganger.Data.IsDead)
+            { // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
+                writer.Write(Medic.futureShielded.PlayerId);
+                writer.Write(Doppelganger.doppelganger.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.medicSetShielded(Medic.futureShielded.PlayerId, Doppelganger.doppelganger.PlayerId);
             }
 
             // Shifter shift

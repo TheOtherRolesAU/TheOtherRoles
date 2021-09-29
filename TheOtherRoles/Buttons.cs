@@ -173,12 +173,17 @@ namespace TheOtherRoles
             // Sheriff Kill
             sheriffKillButton = new CustomButton(
                 () => {
-                    if (Medic.shielded != null && Medic.shielded == Sheriff.currentTarget && PlayerControl.LocalPlayer == Sheriff.sheriff
+                if ((Medic.shielded != null && Medic.shielded == Sheriff.currentTarget
+                     || Doppelganger.doppelganger != null &&  Doppelganger.copiedRole == RoleInfo.medic && Doppelganger.medicShielded != null 
+                        && Doppelganger.medicShielded == Sheriff.currentTarget)
+                         && PlayerControl.LocalPlayer == Sheriff.sheriff
                         || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer && Medic.shielded != null
                            && Medic.shielded == Doppelganger.currentTarget) {
+                        byte sheriffTargetId = PlayerControl.LocalPlayer == Sheriff.sheriff ? Sheriff.sheriff.PlayerId : Doppelganger.doppelganger.PlayerId; 
                         MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                        attemptWriter.Write(sheriffTargetId);
                         AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
-                        RPCProcedure.shieldedMurderAttempt();
+                        RPCProcedure.shieldedMurderAttempt(sheriffTargetId);
                         return;    
                     }
 
@@ -226,10 +231,14 @@ namespace TheOtherRoles
             timeMasterShieldButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterShield, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterShield();
+                    
+                    RPCProcedure.timeMasterShield(PlayerControl.LocalPlayer.PlayerId);
                 },
-                () => { return TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer
+                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer 
+                                   && Doppelganger.copiedRole == RoleInfo.timeMaster) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
@@ -249,17 +258,23 @@ namespace TheOtherRoles
             medicShieldButton = new CustomButton(
                 () => {
                     medicShieldButton.Timer = 0f;
- 
+                    byte medicTargetId = PlayerControl.LocalPlayer == Medic.medic ? Medic.currentTarget.PlayerId : Doppelganger.currentTarget.PlayerId;
+
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, Medic.setShieldAfterMeeting ? (byte)CustomRPC.SetFutureShielded : (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Medic.currentTarget.PlayerId);
+                    writer.Write(medicTargetId);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     if (Medic.setShieldAfterMeeting)
-                        RPCProcedure.setFutureShielded(Medic.currentTarget.PlayerId);
+                        RPCProcedure.setFutureShielded(medicTargetId, PlayerControl.LocalPlayer.PlayerId);
                     else
-                        RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
+                        RPCProcedure.medicSetShielded(medicTargetId, PlayerControl.LocalPlayer.PlayerId);
                 },
-                () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => { return (Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer
+                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                                   && Doppelganger.copiedRole == RoleInfo.medic) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Medic.medic != null && PlayerControl.LocalPlayer == Medic.medic && !Medic.usedShield && Medic.currentTarget
+                                || Doppelganger.doppelganger != null && !Doppelganger.medicUsedShield && Doppelganger.currentTarget && PlayerControl.LocalPlayer == Doppelganger.doppelganger)
+                                && PlayerControl.LocalPlayer.CanMove; },
                 () => {},
                 Medic.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
