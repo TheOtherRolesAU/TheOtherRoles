@@ -1132,6 +1132,20 @@ The Bait is a Crewmate that if killed, forces the killer to self report the body
 Additionally, the Bait can see if someone is inside a vent (depending on the options the exact vent gets
 an outline or all vents do).
 
+## Doppelganger
+### **Team: Crewmates**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The Bait is a Crewmate that can copy another crewmates role (the new role will be his second role and added after the next meeting). The behavior is as follows:
+
+- Copy an impostor or neutral: die
+- Copy Spy or Swapper: become a crewmate
+- Copy any other crewmate role: Become their double with the same abilities.
+- 
+
+
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
