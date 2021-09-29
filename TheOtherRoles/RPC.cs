@@ -302,6 +302,7 @@ namespace TheOtherRoles
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
                     UnityEngine.Object.Destroy(array[i].gameObject);
                 if (Bait.bait != null && playerId == Bait.bait.PlayerId) Bait.wasCleaned = true;
+                if (Doppelganger.doppelganger != null && playerId == Doppelganger.doppelganger.PlayerId) Doppelganger.baitWasCleaned = true;
             }
         }
 
@@ -385,6 +386,9 @@ namespace TheOtherRoles
             Doppelganger.hasCopied = true;
             // Copy role
             Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
+
+            // Dont copy the spy
+            if (Doppelganger.copiedRole == RoleInfo.spy) Doppelganger.copiedRole = RoleInfo.crewmate;
             // Set cooldown to max
             if (PlayerControl.LocalPlayer == oldDoppelganger)
                 CustomButton.ResetAllCooldowns();

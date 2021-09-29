@@ -146,7 +146,7 @@ namespace TheOtherRoles
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
                                     if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
-
+                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && !Bait.canBeCleaned && Doppelganger.copiedRole == RoleInfo.bait) continue;
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
@@ -370,7 +370,9 @@ namespace TheOtherRoles
                 () => {
                     Hacker.hackerTimer = Hacker.duration;
                 },
-                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer
+                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                                  && Doppelganger.copiedRole == RoleInfo.hacker) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     hackerButton.Timer = hackerButton.MaxTimer;
@@ -396,8 +398,11 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.trackerUsedTracker(Tracker.currentTarget.PlayerId);
                 },
-                () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker; },
+                () => { return (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer
+                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                       && Doppelganger.copiedRole == RoleInfo.tracker) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && (Tracker.currentTarget != null && !Tracker.usedTracker
+                        || Doppelganger.currentTarget != null && !Tracker.usedTracker); }, // TODO: seperate tracking...
                 () => { if(Tracker.resetTargetAfterMeeting) Tracker.resetTracked(); },
                 Tracker.getButtonSprite(),
                 new Vector3(-1.3f, 0, 0),
@@ -563,7 +568,10 @@ namespace TheOtherRoles
                 () => {
                     Lighter.lighterTimer = Lighter.duration;
                 },
-                () => { return Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer
+                                  || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                                  && Doppelganger.copiedRole == RoleInfo.lighter)
+                                && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     lighterButton.Timer = lighterButton.MaxTimer;
@@ -657,7 +665,7 @@ namespace TheOtherRoles
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
                                     if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
-
+                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && !Bait.canBeCleaned && Doppelganger.copiedRole == RoleInfo.bait) continue;
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);

@@ -1042,6 +1042,10 @@ namespace TheOtherRoles
         public static bool hasCopied = false;
         public static RoleInfo copiedRole = null;
 
+        // Parameters needed from other roles.
+        public static bool baitWasCleaned;
+        public static bool baitReported;
+
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()
         {
@@ -1057,6 +1061,9 @@ namespace TheOtherRoles
             copyTarget = null;
             hasCopied = false;
             copiedRole = null;
+            baitWasCleaned = false;
+            baitReported = false;
+
         }
     }
 }

@@ -254,7 +254,9 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
         class VitalsMinigameStartPatch {
             static void Postfix(VitalsMinigame __instance) {
-                if (Hacker.hacker != null && PlayerControl.LocalPlayer == Hacker.hacker) {
+                if (Hacker.hacker != null && PlayerControl.LocalPlayer == Hacker.hacker
+                    || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                       && Doppelganger.copiedRole == RoleInfo.hacker) {
                     hackerTexts = new List<TMPro.TextMeshPro>();
                     foreach (VitalsPanel panel in __instance.vitals) {
                         TMPro.TextMeshPro text = UnityEngine.Object.Instantiate(__instance.SabText, panel.transform);
@@ -275,7 +277,10 @@ namespace TheOtherRoles.Patches {
             static void Postfix(VitalsMinigame __instance) {
                 // Hacker show time since death
                 
-                if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0) {
+                if ((Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer
+                    || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                       && Doppelganger.copiedRole == RoleInfo.hacker)
+                    && Hacker.hackerTimer > 0) {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
                         GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
@@ -399,7 +404,9 @@ namespace TheOtherRoles.Patches {
             private static Material newMat;
             static void Postfix(CounterArea __instance) {
                 // Hacker display saved colors on the admin panel
-                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
+                bool showHackerInfo = (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer
+                                       || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
+                                          && Doppelganger.copiedRole == RoleInfo.hacker) && Hacker.hackerTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
 
@@ -449,7 +456,9 @@ namespace TheOtherRoles.Patches {
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
                         camera.orthographicSize = 2.35f;
-                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
+                        RenderTexture temporary = RenderTexture.GetTemporary(
+                            
+                            6, 256, 16, (RenderTextureFormat)0);
                         __instance.textures[i] = temporary;
                         camera.targetTexture = temporary;
                     }

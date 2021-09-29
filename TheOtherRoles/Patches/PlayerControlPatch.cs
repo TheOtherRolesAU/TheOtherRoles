@@ -155,8 +155,12 @@ namespace TheOtherRoles.Patches {
             if (!Tracker.usedTracker) setPlayerOutline(Tracker.currentTarget, Tracker.color);
         }
 
-        static void detectiveUpdateFootPrints() {            
-            if (Detective.detective == null || Detective.detective != PlayerControl.LocalPlayer) return;
+        static void detectiveUpdateFootPrints() {
+            if (Detective.detective == null || Detective.detective != PlayerControl.LocalPlayer)
+            {
+                if (Doppelganger.doppelganger == null || Doppelganger.doppelganger != PlayerControl.LocalPlayer || Doppelganger.copiedRole != RoleInfo.detective)
+                    return;
+            }
 
             Detective.timer -= Time.fixedDeltaTime;
             if (Detective.timer <= 0f) {
@@ -292,7 +296,9 @@ namespace TheOtherRoles.Patches {
         static void trackerUpdate() {
             if (Tracker.arrow?.arrow == null) return;
 
-            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) {
+            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker
+                
+                ) {
                 Tracker.arrow.arrow.SetActive(false);
                 return;
             }
@@ -436,7 +442,9 @@ namespace TheOtherRoles.Patches {
 
             foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
 
-            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
+            if ((Snitch.snitch == null || Snitch.snitch.Data.IsDead) && (Doppelganger.doppelganger == null 
+                                                                         || Doppelganger.copiedRole != RoleInfo.snitch
+                                                                         || Doppelganger.doppelganger.Data.IsDead)) return;
 
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
             int numberOfTasks = playerTotal - playerCompleted;
@@ -524,14 +532,17 @@ namespace TheOtherRoles.Patches {
         }
 
         static void baitUpdate() {
-            if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
+            if ((Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) && (Doppelganger.doppelganger == null || Doppelganger.copiedRole != RoleInfo.bait
+                                                                                  || Doppelganger.doppelganger != PlayerControl.LocalPlayer)) return;
 
             // Bait report
-            if (Bait.bait.Data.IsDead && !Bait.reported && !Bait.wasCleaned) {
+            if (Bait.bait == PlayerControl.LocalPlayer && Bait.bait.Data.IsDead && !Bait.reported && !Bait.wasCleaned)
+            {
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
-                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
-                   
+                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f)
+                {
+
                     Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
                     RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
 
@@ -542,8 +553,24 @@ namespace TheOtherRoles.Patches {
                     Bait.reported = true;
                 }
             }
+            else if (Doppelganger.doppelganger == PlayerControl.LocalPlayer && Doppelganger.doppelganger.Data.IsDead && !Doppelganger.baitReported && !Doppelganger.baitWasCleaned)
+            {
+                Bait.reportDelay -= Time.fixedDeltaTime;
+                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Doppelganger.doppelganger.PlayerId)?.FirstOrDefault();
+                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f)
+                {
 
-            // Bait Vents
+                    Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                    RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Doppelganger.doppelganger.PlayerId);
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
+                    writer.Write(deadPlayer.killerIfExisting.PlayerId);
+                    writer.Write(Doppelganger.doppelganger.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    Doppelganger.baitReported = true;
+                }
+            }
+                    // Bait Vents
             if (ShipStatus.Instance?.AllVents != null) {
                 var ventsWithPlayers = new List<int>();
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
@@ -674,6 +701,13 @@ namespace TheOtherRoles.Patches {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
+            // Handle Doppelganger reports:
+            isMedicReport = isMedicReport || (Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.medic &&
+                                              Doppelganger.doppelganger == PlayerControl.LocalPlayer && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
+
+            isDetectiveReport = isDetectiveReport || (Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.detective &&
+                                                      Doppelganger.doppelganger == PlayerControl.LocalPlayer && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
+
             if (isMedicReport || isDetectiveReport)
             {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == target?.PlayerId)?.FirstOrDefault();
@@ -767,7 +801,9 @@ namespace TheOtherRoles.Patches {
             }
 
             // Seer show flash and add dead player position
-            if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
+            if ((Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target
+                 || Doppelganger.doppelganger != null && PlayerControl.LocalPlayer == Doppelganger.doppelganger && !Doppelganger.doppelganger.Data.IsDead
+                     && Doppelganger.doppelganger != target && Doppelganger.copiedRole == RoleInfo.seer) && Seer.mode <= 1) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     var renderer = HudManager.Instance.FullScreen;
@@ -800,7 +836,8 @@ namespace TheOtherRoles.Patches {
             }
 
             // Show flash on bait kill to the killer if enabled
-            if (Bait.bait != null && PlayerControl.LocalPlayer == deadPlayer.killerIfExisting && target == Bait.bait
+            if ((Bait.bait != null || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.bait) 
+                && PlayerControl.LocalPlayer == deadPlayer.killerIfExisting && (target == Bait.bait || target == Doppelganger.doppelganger)
                 && CustomOptionHolder.baitShowKillFlash.getBool() && __instance == PlayerControl.LocalPlayer) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
