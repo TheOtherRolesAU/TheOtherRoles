@@ -31,6 +31,8 @@ Even more roles are coming soon :)
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
 |  |  [Bait](#bait) |  |
+|  |  [Doppelganger](#doppelganger) |  |
+
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
