@@ -56,7 +56,26 @@ namespace TheOtherRoles.Patches {
                         dictionary[swapped2.TargetPlayerId] = tmp;
                     }
                 }
+                // Doppelganger Swapper swap votes (again)
+                if (Doppelganger.doppelganger != null && !Doppelganger.doppelganger.Data.IsDead && Doppelganger.copiedRole == RoleInfo.swapper)
+                {
+                    PlayerVoteArea swapped1 = null;
+                    PlayerVoteArea swapped2 = null;
+                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+                    {
+                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId1) swapped1 = playerVoteArea;
+                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId2) swapped2 = playerVoteArea;
+                    }
 
+                    if (swapped1 != null && swapped2 != null)
+                    {
+                        if (!dictionary.ContainsKey(swapped1.TargetPlayerId)) dictionary[swapped1.TargetPlayerId] = 0;
+                        if (!dictionary.ContainsKey(swapped2.TargetPlayerId)) dictionary[swapped2.TargetPlayerId] = 0;
+                        int tmp = dictionary[swapped1.TargetPlayerId];
+                        dictionary[swapped1.TargetPlayerId] = dictionary[swapped2.TargetPlayerId];
+                        dictionary[swapped2.TargetPlayerId] = tmp;
+                    }
+                }
                 return dictionary;
             }
 
@@ -116,6 +135,9 @@ namespace TheOtherRoles.Patches {
 
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
+                PlayerVoteArea swapped3 = null;
+                PlayerVoteArea swapped4 = null;
+
                 foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
@@ -125,6 +147,18 @@ namespace TheOtherRoles.Patches {
                     __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
                     __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
                 }
+                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+                {
+                    if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId1) swapped3 = playerVoteArea;
+                    if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId2) swapped4 = playerVoteArea;
+                }
+                bool doSwapAgain = swapped3 != null && swapped4 != null && Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.swapper && !Doppelganger.doppelganger.Data.IsDead;
+                if (doSwapAgain)
+                {
+                    __instance.StartCoroutine(Effects.Slide3D(swapped3.transform, swapped3.transform.localPosition, swapped4.transform.localPosition, 1.5f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapped4.transform, swapped4.transform.localPosition, swapped3.transform.localPosition, 1.5f));
+                }
+
 
 
                 __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
@@ -135,6 +169,9 @@ namespace TheOtherRoles.Patches {
                     // Swapper change playerVoteArea that gets the votes
                     if (doSwap && playerVoteArea.TargetPlayerId == swapped1.TargetPlayerId) playerVoteArea = swapped2;
                     else if (doSwap && playerVoteArea.TargetPlayerId == swapped2.TargetPlayerId) playerVoteArea = swapped1;
+                    if (doSwapAgain && playerVoteArea.TargetPlayerId == swapped3.TargetPlayerId) playerVoteArea = swapped4;
+                    else if (doSwapAgain && playerVoteArea.TargetPlayerId == swapped4.TargetPlayerId) playerVoteArea = swapped3;
+
 
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
@@ -178,6 +215,8 @@ namespace TheOtherRoles.Patches {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
                 Swapper.playerId2 = Byte.MaxValue;
+                Doppelganger.swapperPlayerId1 = Byte.MaxValue;
+                Doppelganger.swapperPlayerId2 = Byte.MaxValue;
 
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
@@ -222,9 +261,10 @@ namespace TheOtherRoles.Patches {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
                         writer.Write((byte)firstPlayer.TargetPlayerId);
                         writer.Write((byte)secondPlayer.TargetPlayerId);
+                        writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-                        RPCProcedure.swapperSwap((byte)firstPlayer.TargetPlayerId, (byte)secondPlayer.TargetPlayerId);
+                        RPCProcedure.swapperSwap((byte)firstPlayer.TargetPlayerId, (byte)secondPlayer.TargetPlayerId, PlayerControl.LocalPlayer.PlayerId);
                     }
                 }
             }
@@ -333,13 +373,15 @@ namespace TheOtherRoles.Patches {
 
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Add Swapper Buttons
-            if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead) {
+            if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead || 
+                Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer && Doppelganger.copiedRole == RoleInfo.swapper && !Doppelganger.doppelganger.Data.IsDead) {
                 selections = new bool[__instance.playerStates.Length];
                 renderers = new SpriteRenderer[__instance.playerStates.Length];
 
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+                    if (playerVoteArea.AmDead || (PlayerControl.LocalPlayer == Swapper.swapper && playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+                    if (playerVoteArea.AmDead || (PlayerControl.LocalPlayer == Doppelganger.doppelganger && playerVoteArea.TargetPlayerId == Doppelganger.doppelganger.PlayerId && Swapper.canOnlySwapOthers)) continue;
 
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject checkbox = UnityEngine.Object.Instantiate(template);

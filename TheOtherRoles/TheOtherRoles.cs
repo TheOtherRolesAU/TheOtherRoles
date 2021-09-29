@@ -1052,6 +1052,10 @@ namespace TheOtherRoles
         public static bool baitWasCleaned;
         public static bool baitReported;
         public static bool timeMasterShieldActive;
+        public static byte swapperPlayerId1 = Byte.MaxValue;
+        public static byte swapperPlayerId2 = Byte.MaxValue;
+
+
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()
@@ -1074,6 +1078,8 @@ namespace TheOtherRoles
             medicShielded = null;
             medicFutureShielded = null;
             medicUsedShield = false;
+            swapperPlayerId1 = Byte.MaxValue;
+            swapperPlayerId2 = Byte.MaxValue;
         }
     }
 }

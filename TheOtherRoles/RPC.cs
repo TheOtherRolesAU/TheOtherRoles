@@ -415,7 +415,7 @@ namespace TheOtherRoles
             // Copy role
             Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
             // Dont copy the spy
-            if (Doppelganger.copiedRole == RoleInfo.spy) Doppelganger.copiedRole = RoleInfo.crewmate;
+            if (Doppelganger.copiedRole == RoleInfo.spy || Doppelganger.copiedRole == RoleInfo.swapper) Doppelganger.copiedRole = RoleInfo.crewmate;
             
             // For certain roles, copy some of their variables.
             if (Doppelganger.copiedRole == RoleInfo.goodGuesser)
@@ -511,10 +511,17 @@ namespace TheOtherRoles
                 CustomButton.ResetAllCooldowns();
         }
 
-        public static void swapperSwap(byte playerId1, byte playerId2) {
+        public static void swapperSwap(byte playerId1, byte playerId2, byte swapperId) {
             if (MeetingHud.Instance) {
-                Swapper.playerId1 = playerId1;
-                Swapper.playerId2 = playerId2;
+                if (Swapper.swapper != null && Swapper.swapper.PlayerId == swapperId)
+                {
+                    Swapper.playerId1 = playerId1;
+                    Swapper.playerId2 = playerId2;
+                } else
+                {
+                    Doppelganger.swapperPlayerId1 = playerId1;
+                    Doppelganger.swapperPlayerId2 = playerId2;
+                }
             }
         }
 
@@ -899,7 +906,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SwapperSwap:
                     byte playerId1 = reader.ReadByte();
                     byte playerId2 = reader.ReadByte();
-                    RPCProcedure.swapperSwap(playerId1, playerId2);
+                    byte swapperId = reader.ReadByte();
+                    RPCProcedure.swapperSwap(playerId1, playerId2, swapperId);
                     break;
                 case (byte)CustomRPC.MorphlingMorph:
                     RPCProcedure.morphlingMorph(reader.ReadByte());
