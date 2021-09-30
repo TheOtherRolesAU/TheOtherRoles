@@ -58,6 +58,7 @@ namespace TheOtherRoles
         public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
         public static RoleInfo bait = new RoleInfo("Bait", Bait.color, "Bait your enemies", "Bait your enemies", RoleId.Bait);
         public static RoleInfo doppelganger = new RoleInfo("Doppelganger", Doppelganger.color, "Become someones Role-Double", "Become someones Role-Double", RoleId.Doppelganger);
+        public static RoleInfo doppelgangerShort = new RoleInfo("#2", Doppelganger.color, "You're a copy", "You're a copy", RoleId.Doppelganger);
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
@@ -148,8 +149,12 @@ namespace TheOtherRoles
                 if (Doppelganger.copiedRole != null)
                 {
                     infos.Add(Doppelganger.copiedRole);
+                    infos.Add(doppelgangerShort);
                 }
-                infos.Add(doppelganger);
+                else
+                {
+                    infos.Add(doppelganger);
+                }
             }
 
             // Default roles

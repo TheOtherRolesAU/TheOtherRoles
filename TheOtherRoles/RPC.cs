@@ -292,8 +292,16 @@ namespace TheOtherRoles
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
 
-        public static void engineerUsedRepair() {
-            Engineer.usedRepair = true;
+        public static void engineerUsedRepair(byte engineerId) {
+            if (Engineer.engineer != null && Engineer.engineer.PlayerId == engineerId)
+            {
+                Engineer.usedRepair = true;
+            }
+            else
+            {
+                Doppelganger.engineerUsedRepair = true;
+            }
+            
         }
 
         public static void cleanBody(byte playerId) {
@@ -433,6 +441,11 @@ namespace TheOtherRoles
             // If retrack: obv only get own target.
             if (Doppelganger.copiedRole == RoleInfo.securityGuard)  // copy screws
                 Doppelganger.securityGuardRemainingScrews = SecurityGuard.remainingScrews;
+            if (Doppelganger.copiedRole == RoleInfo.tracker)
+            {
+                Doppelganger.trackerTracked = Tracker.tracked;
+                Doppelganger.trackerUsedTracker = Tracker.usedTracker;
+            }
 
 
 
@@ -567,11 +580,21 @@ namespace TheOtherRoles
             new Garlic(position);
         }
 
-        public static void trackerUsedTracker(byte targetId) {
-            Tracker.usedTracker = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                if (player.PlayerId == targetId)
-                    Tracker.tracked = player;
+        public static void trackerUsedTracker(byte targetId, byte trackerId) {
+            if (Tracker.tracker != null && Tracker.tracker.PlayerId == trackerId)
+            {
+                Tracker.usedTracker = true;
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    if (player.PlayerId == targetId)
+                        Tracker.tracked = player;
+            } else
+            {
+                Doppelganger.trackerUsedTracker = true;
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                    if (player.PlayerId == targetId)
+                        Doppelganger.trackerTracked = player;
+            }
+            
         }
 
         public static void jackalKill(byte targetId) {
@@ -733,11 +756,20 @@ namespace TheOtherRoles
             }
         }
 
-        public static void placeCamera(byte[] buff) {
+        public static void placeCamera(byte[] buff, byte securityGuardId) {
             var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             if (referenceCamera == null) return; // Mira HQ
 
-            SecurityGuard.remainingScrews -= SecurityGuard.camPrice;
+            if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard.PlayerId == securityGuardId)
+            {
+                SecurityGuard.remainingScrews -= SecurityGuard.camPrice;
+            }
+            else
+            {
+                Doppelganger.securityGuardRemainingScrews -= SecurityGuard.camPrice;
+            }
+
+
             SecurityGuard.placedCameras++;
 
             Vector3 position = Vector3.zero;
@@ -750,7 +782,7 @@ namespace TheOtherRoles
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
 
-            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+            if (PlayerControl.LocalPlayer.PlayerId == securityGuardId) {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
             } else {
@@ -759,12 +791,19 @@ namespace TheOtherRoles
             MapOptions.camerasToAdd.Add(camera);
         }
 
-        public static void sealVent(int ventId) {
+        public static void sealVent(int ventId, byte securityGuardId) {
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
             if (vent == null) return;
 
-            SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
-            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
+            if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard.PlayerId == securityGuardId)
+            {
+                SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
+            } else
+            {
+                Doppelganger.securityGuardRemainingScrews -= SecurityGuard.ventPrice;
+            }
+            
+            if (PlayerControl.LocalPlayer.PlayerId == securityGuardId) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
@@ -787,7 +826,13 @@ namespace TheOtherRoles
             target.Exiled();
             PlayerControl partner = target.getPartner(); // Lover check
             byte partnerId = partner != null ? partner.PlayerId : targetId;
-            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            if (Guesser.guesser != null && Guesser.guesser.PlayerId == guesserId)
+            {
+                Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            } else
+            {
+                Doppelganger.guesserRemainingShots = Mathf.Max(0, Doppelganger.guesserRemainingShots - 1);
+            }
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
@@ -877,7 +922,7 @@ namespace TheOtherRoles
                     RPCProcedure.engineerFixLights();
                     break;
                 case (byte)CustomRPC.EngineerUsedRepair:
-                    RPCProcedure.engineerUsedRepair();
+                    RPCProcedure.engineerUsedRepair(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
@@ -927,7 +972,7 @@ namespace TheOtherRoles
                     RPCProcedure.placeGarlic(reader.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
-                    RPCProcedure.trackerUsedTracker(reader.ReadByte());
+                    RPCProcedure.trackerUsedTracker(reader.ReadByte(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalKill:
                     RPCProcedure.jackalKill(reader.ReadByte());
@@ -963,10 +1008,10 @@ namespace TheOtherRoles
                     RPCProcedure.warlockCurseKill(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceCamera:
-                    RPCProcedure.placeCamera(reader.ReadBytesAndSize());
+                    RPCProcedure.placeCamera(reader.ReadBytesAndSize(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SealVent:
-                    RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    RPCProcedure.sealVent(reader.ReadPackedInt32(), reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();

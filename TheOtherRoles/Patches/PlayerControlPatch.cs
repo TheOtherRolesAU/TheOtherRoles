@@ -252,7 +252,8 @@ namespace TheOtherRoles.Patches {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
                     try {
                         if (vent?.myRend?.material != null) {
-                            if (Engineer.engineer != null && Engineer.engineer.inVent) {
+                            if (Engineer.engineer != null && Engineer.engineer.inVent ||
+                                Doppelganger.doppelganger != null && Doppelganger.doppelganger.inVent && Doppelganger.copiedRole == RoleInfo.engineer) {
                                 vent.myRend.material.SetFloat("_Outline", 1f);
                                 vent.myRend.material.SetColor("_OutlineColor", Engineer.color);
                             } else if (vent.myRend.material.GetColor("_AddColor") != Color.red) {
@@ -300,34 +301,46 @@ namespace TheOtherRoles.Patches {
         }
 
         static void trackerUpdate() {
-            if (Tracker.arrow?.arrow == null) return;
+            if (Tracker.arrow?.arrow == null && Doppelganger.trackerArrow?.arrow == null) return;
 
-            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker
-                
-                ) {
+            if ((Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) && (PlayerControl.LocalPlayer != Doppelganger.doppelganger || Doppelganger.copiedRole != RoleInfo.tracker)) {
                 Tracker.arrow.arrow.SetActive(false);
                 return;
             }
+            // To save some lines, use the determine the arrow and target by the player role. Local player is tracker or doppelganger!
+            Arrow trackerArrow;
+            PlayerControl tracked;
+            if (PlayerControl.LocalPlayer == Tracker.tracker)
+            {
+                trackerArrow = Tracker.arrow;
+                tracked = Tracker.tracked;
 
-            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead) {
+            } else
+            {
+                trackerArrow = Doppelganger.trackerArrow;
+                tracked = Doppelganger.trackerTracked;
+            }
+
+
+            if (tracked != null && !PlayerControl.LocalPlayer.Data.IsDead) {
                 Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
                 if (Tracker.timeUntilUpdate <= 0f) {
-                    bool trackedOnMap = !Tracker.tracked.Data.IsDead;
-                    Vector3 position = Tracker.tracked.transform.position;
+                    bool trackedOnMap = !tracked.Data.IsDead;
+                    Vector3 position = tracked.transform.position;
                     if (!trackedOnMap) { // Check for dead body
-                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
+                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == tracked.PlayerId);
                         if (body != null) {
                             trackedOnMap = true;
                             position = body.transform.position;
                         }
                     }
 
-                    Tracker.arrow.Update(position);
-                    Tracker.arrow.arrow.SetActive(trackedOnMap);
+                    trackerArrow.Update(position);
+                    trackerArrow.arrow.SetActive(trackedOnMap);
                     Tracker.timeUntilUpdate = Tracker.updateIntervall;
                 } else {
-                    Tracker.arrow.Update();
+                    trackerArrow.Update();
                 }
             }
         }
@@ -376,6 +389,7 @@ namespace TheOtherRoles.Patches {
                 if (meetingInfo == null && playerVoteArea != null) {
                     meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
                     meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                    if (p == Doppelganger.doppelganger && Doppelganger.copiedRole != null) meetingInfo.fontSize *= 0.8f;
                     meetingInfo.fontSize *= 0.75f;
                     meetingInfo.gameObject.name = "Info";
                 }
@@ -414,7 +428,9 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void securityGuardSetTarget() {
-            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
+            if ((SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer) && (Doppelganger.doppelganger == null ||Doppelganger.copiedRole != RoleInfo.securityGuard || PlayerControl.LocalPlayer != Doppelganger.doppelganger)
+                || (ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null)
+               ) return;
 
             Vent target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
@@ -428,7 +444,14 @@ namespace TheOtherRoles.Patches {
                     target = vent;
                 }
             }
-            SecurityGuard.ventTarget = target;
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard)
+            {
+                SecurityGuard.ventTarget = target;
+            } else
+            {
+                Doppelganger.securityGuardVentTarget = target;
+            }
+
         }
 
         public static void arsonistSetTarget() {
@@ -445,17 +468,28 @@ namespace TheOtherRoles.Patches {
         static void snitchUpdate()
         {
             if (Snitch.localArrows == null) return;
+            if (Doppelganger.snitchLocalArrows == null) return;
 
             foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
+            foreach (Arrow arrow in Doppelganger.snitchLocalArrows) arrow.arrow.SetActive(false);
 
             if ((Snitch.snitch == null || Snitch.snitch.Data.IsDead) && (Doppelganger.doppelganger == null 
                                                                          || Doppelganger.copiedRole != RoleInfo.snitch
                                                                          || Doppelganger.doppelganger.Data.IsDead)) return;
-
-            var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+            int playerCompleted, playerTotal, doppelgangerCompleted;
+            if (Snitch.snitch != null)
+            {
+                (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+            } else
+            {
+                playerCompleted = 0;
+                (doppelgangerCompleted, playerTotal) = TasksHandler.taskInfo(Doppelganger.doppelganger.Data);
+            }
             int numberOfTasks = playerTotal - playerCompleted;
+            int doppelgangerNumberOfTasks = playerTotal - (Doppelganger.doppelganger != null ? TasksHandler.taskInfo(Doppelganger.doppelganger.Data).Item1: 0);
 
-            if (numberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)))) {
+            // show snitch position to evil roles
+            if (!Snitch.snitch.Data.IsDead && numberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)))) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null)
                 {
@@ -463,17 +497,34 @@ namespace TheOtherRoles.Patches {
                     Snitch.localArrows[0].Update(Snitch.snitch.transform.position);
                 }
             }
-            else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0)
+            if (!Doppelganger.doppelganger.Data.IsDead && doppelgangerNumberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick))))
+            {
+                if (Doppelganger.snitchLocalArrows.Count == 0) Doppelganger.snitchLocalArrows.Add(new Arrow(Color.blue));
+                if (Doppelganger.snitchLocalArrows.Count != 0 && Doppelganger.snitchLocalArrows[0] != null)
+                {
+                    Doppelganger.snitchLocalArrows[0].arrow.SetActive(true);
+                    Doppelganger.snitchLocalArrows[0].Update(Doppelganger.doppelganger.transform.position);
+                }
+            }
+
+            if (PlayerControl.LocalPlayer.Data.IsDead) return;
+
+
+            // snitch show arrows for evil roles
+            else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0 || Doppelganger.doppelganger == PlayerControl.LocalPlayer && Doppelganger.copiedRole == RoleInfo.snitch && doppelgangerNumberOfTasks == 0)
             {
                 int arrowIndex = 0;
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls)
                 {
-                    if (!p.Data.IsDead && (p.Data.IsImpostor || (Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick)))) {
-                        if (arrowIndex >= Snitch.localArrows.Count) {
+                    if (!p.Data.IsDead && (p.Data.IsImpostor || (Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick))))
+                    {
+                        if (arrowIndex >= Snitch.localArrows.Count)
+                        {
                             if (Snitch.teamJackalUseDifferentArrowColor && (p == Jackal.jackal || p == Sidekick.sidekick)) Snitch.localArrows.Add(new Arrow(Jackal.color));
                             else Snitch.localArrows.Add(new Arrow(Palette.ImpostorRed));
                         }
-                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
+                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null)
+                        {
                             Snitch.localArrows[arrowIndex].arrow.SetActive(true);
                             Snitch.localArrows[arrowIndex].Update(p.transform.position);
                         }

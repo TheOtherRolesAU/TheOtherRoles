@@ -137,26 +137,71 @@ namespace TheOtherRoles.Patches {
                 PlayerVoteArea swapped2 = null;
                 PlayerVoteArea swapped3 = null;
                 PlayerVoteArea swapped4 = null;
+                PlayerVoteArea swapThreeway1 = null;
+                PlayerVoteArea swapThreeway2 = null;
+                PlayerVoteArea swapThreeway3 = null;
 
                 foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
                 bool doSwap = swapped1 != null && swapped2 != null && Swapper.swapper != null && !Swapper.swapper.Data.IsDead;
-                if (doSwap) {
-                    __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
-                    __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
-                }
                 foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
                 {
                     if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId1) swapped3 = playerVoteArea;
                     if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId2) swapped4 = playerVoteArea;
                 }
                 bool doSwapAgain = swapped3 != null && swapped4 != null && Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.swapper && !Doppelganger.doppelganger.Data.IsDead;
+                bool doSwapThreeway = false;  // Use swapped 1, swapped 2 and swapped 3!
+                if (doSwap && doSwapAgain)  // There might be a conflict here!
+                {
+                    if (swapped1 == swapped3 && swapped2 == swapped4 || swapped1 == swapped4 && swapped2 == swapped3)  // Swap back and forth -> no swap!!
+                    {
+                        doSwap = doSwapAgain = false;
+                    }
+                    else if (swapped1 == swapped3 || swapped2 == swapped3 || swapped1 == swapped4 || swapped2 == swapped4)    
+                    {
+                        doSwap = doSwapAgain = false;
+                        doSwapThreeway = true;
+                        // we swap 1 -> 3,  2 -> 1, 3 -> 2
+                        if (swapped1 == swapped3 || swapped2 == swapped3)
+                        {
+                            if (swapped1 == swapped3) {
+                                swapThreeway1 = swapped2;
+                                swapThreeway2 = swapped1;
+                            } else
+                            {
+                                swapThreeway1 = swapped1;
+                                swapThreeway2 = swapped2;
+                            }
+                            swapThreeway3 = swapped4;
+                        } else if (swapped1 == swapped4 || swapped2 == swapped4)
+                        {
+                            swapThreeway1 = swapped1;
+                            swapThreeway2 = swapped4;
+                            if (swapped1 == swapped4)
+                            {
+                                swapThreeway1 = swapped2;
+                            }
+                            swapThreeway3 = swapped3;
+                        }
+                    }
+                }
+                if (doSwap)
+                {
+                    __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
+                }
                 if (doSwapAgain)
                 {
                     __instance.StartCoroutine(Effects.Slide3D(swapped3.transform, swapped3.transform.localPosition, swapped4.transform.localPosition, 1.5f));
                     __instance.StartCoroutine(Effects.Slide3D(swapped4.transform, swapped4.transform.localPosition, swapped3.transform.localPosition, 1.5f));
+                }
+                if (doSwapThreeway)
+                {
+                    __instance.StartCoroutine(Effects.Slide3D(swapThreeway1.transform, swapThreeway1.transform.localPosition, swapThreeway3.transform.localPosition, 1.5f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapThreeway2.transform, swapThreeway2.transform.localPosition, swapThreeway1.transform.localPosition, 1.5f));
+                    __instance.StartCoroutine(Effects.Slide3D(swapThreeway3.transform, swapThreeway3.transform.localPosition, swapThreeway2.transform.localPosition, 1.5f));
                 }
 
 
@@ -172,6 +217,9 @@ namespace TheOtherRoles.Patches {
                     if (doSwapAgain && playerVoteArea.TargetPlayerId == swapped3.TargetPlayerId) playerVoteArea = swapped4;
                     else if (doSwapAgain && playerVoteArea.TargetPlayerId == swapped4.TargetPlayerId) playerVoteArea = swapped3;
 
+                    if (doSwapThreeway && playerVoteArea.TargetPlayerId == swapThreeway1.TargetPlayerId) playerVoteArea = swapThreeway2;
+                    else if (doSwapThreeway && playerVoteArea.TargetPlayerId == swapThreeway2.TargetPlayerId) playerVoteArea = swapThreeway3;
+                    else if (doSwapThreeway && playerVoteArea.TargetPlayerId == swapThreeway3.TargetPlayerId) playerVoteArea = swapThreeway1;
 
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
@@ -403,9 +451,9 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots >= 0
+            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots > 0
                 || Doppelganger.doppelganger != null && PlayerControl.LocalPlayer == Doppelganger.doppelganger && !Doppelganger.doppelganger.Data.IsDead &&
-                Doppelganger.copiedRole == RoleInfo.goodGuesser) {
+                Doppelganger.copiedRole == RoleInfo.goodGuesser && Doppelganger.guesserRemainingShots > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId) continue;

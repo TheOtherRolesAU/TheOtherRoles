@@ -1054,6 +1054,11 @@ namespace TheOtherRoles
         public static bool timeMasterShieldActive;
         public static byte swapperPlayerId1 = Byte.MaxValue;
         public static byte swapperPlayerId2 = Byte.MaxValue;
+        public static Vent securityGuardVentTarget;
+        public static PlayerControl trackerTracked;
+        public static bool trackerUsedTracker = false;
+        public static Arrow trackerArrow = new Arrow(Color.blue);
+        public static List<Arrow> snitchLocalArrows = new List<Arrow>();
 
 
 
@@ -1061,7 +1066,7 @@ namespace TheOtherRoles
         public static Sprite getButtonSprite()
         {
             if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShiftButton.png", 115f); // TODO: real, distinct sprite for button needed
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CopyButton.png", 115f);
             return buttonSprite;
         }
 
@@ -1080,6 +1085,24 @@ namespace TheOtherRoles
             medicUsedShield = false;
             swapperPlayerId1 = Byte.MaxValue;
             swapperPlayerId2 = Byte.MaxValue;
+            securityGuardVentTarget = null;
+            trackerTracked = null;
+            trackerUsedTracker = false;
+            if (snitchLocalArrows != null)
+            {
+                foreach (Arrow arrow in snitchLocalArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            snitchLocalArrows = new List<Arrow>();
+        }
+        public static void trackerResetTracked()
+        {
+            currentTarget = trackerTracked = null;
+            trackerUsedTracker = false;
+            if (trackerArrow?.arrow != null) UnityEngine.Object.Destroy(trackerArrow.arrow);
+            trackerArrow = new Arrow(Color.blue);
+            if (trackerArrow.arrow != null) trackerArrow.arrow.SetActive(false);
         }
     }
 }
