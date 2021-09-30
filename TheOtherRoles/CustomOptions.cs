@@ -171,6 +171,7 @@ namespace TheOtherRoles {
         public static CustomOption baitCanBeCleaned;
 
         public static CustomOption doppelgangerSpawnRate;
+        public static CustomOption doppelgangerCanBeGuesser;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -351,6 +352,7 @@ namespace TheOtherRoles {
             baitShowKillFlash = CustomOption.Create(335, "Show Flash to Baits Killer", true, baitSpawnRate);
 
             doppelgangerSpawnRate = CustomOption.Create(340, cs(Doppelganger.color, "Doppelganger"), rates, null, true);
+            doppelgangerCanBeGuesser = CustomOption.Create(341, "Doppelganger can be guesser", true, doppelgangerSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

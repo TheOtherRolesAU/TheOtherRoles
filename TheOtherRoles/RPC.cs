@@ -423,7 +423,9 @@ namespace TheOtherRoles
             // Copy role
             Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
             // Dont copy the spy
-            if (Doppelganger.copiedRole == RoleInfo.spy || Doppelganger.copiedRole == RoleInfo.swapper) Doppelganger.copiedRole = RoleInfo.crewmate;
+            if (Doppelganger.copiedRole == RoleInfo.spy || Doppelganger.copiedRole == RoleInfo.swapper
+                || Doppelganger.copiedRole == RoleInfo.goodGuesser && !Doppelganger.canBeGuesser
+                ) Doppelganger.copiedRole = RoleInfo.crewmate;
             
             // For certain roles, copy some of their variables.
             if (Doppelganger.copiedRole == RoleInfo.goodGuesser)
@@ -436,9 +438,7 @@ namespace TheOtherRoles
                 Doppelganger.medicFutureShielded = Medic.futureShielded;
                 Doppelganger.medicUsedShield = Medic.usedShield;
             }
-            //if (Doppelganger.copiedRole == RoleInfo.tracker)
-            // If no retrack: track same target if already tracked. Get own target if not already tracked.
-            // If retrack: obv only get own target.
+
             if (Doppelganger.copiedRole == RoleInfo.securityGuard)  // copy screws
                 Doppelganger.securityGuardRemainingScrews = SecurityGuard.remainingScrews;
             if (Doppelganger.copiedRole == RoleInfo.tracker)
@@ -447,10 +447,8 @@ namespace TheOtherRoles
                 Doppelganger.trackerUsedTracker = Tracker.usedTracker;
             }
 
-
-
-                // Set cooldown to max
-                if (PlayerControl.LocalPlayer == oldDoppelganger)
+            // Set cooldown to max
+            if (PlayerControl.LocalPlayer == oldDoppelganger)
                 CustomButton.ResetAllCooldowns();
         }
 
