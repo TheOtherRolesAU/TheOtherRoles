@@ -1139,6 +1139,10 @@ an outline or all vents do).
 | Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
 | Bait Report Delay | -
 
+
+-----------------------
+
+
 ## Doppelganger
 ### **Team: Crewmates**
 \
