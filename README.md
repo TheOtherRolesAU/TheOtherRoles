@@ -31,6 +31,8 @@ Even more roles are coming soon :)
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
 |  |  [Bait](#bait) |  |
+|  |  [Doppelganger](#doppelganger) |  |
+
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
@@ -1136,6 +1138,29 @@ an outline or all vents do).
 | Bait Spawn Chance | -
 | Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
 | Bait Report Delay | -
+
+
+-----------------------
+
+
+## Doppelganger
+### **Team: Crewmates**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The Doppelganger is a Crewmate that can copy another crewmates role (the new role will be his second role and added **after the next meeting**). The behavior is as follows:
+
+- Copy an impostor or neutral: die
+- Copy Spy or Swapper: become a crewmate
+- Copy any other crewmate role: Become their double with the same abilities. (It will be an exact copy **at the time of the meeting**. E.g. if the engineer has already used their fix, the doppelganger will not have a fix. If the security guard has e.g. 3 screws left, the doppelganger will also have 3 screws, that they can use separately. If the medic has used their shield, the doppelganger cannot distribute another shield, but becomes a second medic for the shieled player)
+- The medic doppelganger cannot shield the original medic, the other way around is possible. (Cyclic shields would be overpowered)
+- The doppelganger can be guessed for both roles!
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Doppelganger Spawn Chance | -
+
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
