@@ -1160,6 +1160,7 @@ The Doppelganger is a Crewmate that can copy another crewmates role (the new rol
 | Name | Description
 |----------|:-------------:|
 | Doppelganger Spawn Chance | -
+| Doppelganger Can Be Guesser | if set to true, the doppelganger can copy the Good Guesser role
 
 
 # Source code
