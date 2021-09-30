@@ -940,6 +940,8 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 - One time use abilities (e.g. shielding a player or Engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
 can only use them, if the previous player did not used them before)
 
+- If there is a Doppelganger in the game, there can't be a Shifter!
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
@@ -1148,7 +1150,11 @@ an outline or all vents do).
 \
 Created by  [gendelo3](https://github.com/gendelo3)\
 \
-The Doppelganger is a Crewmate that can copy another crewmates role (the new role will be his second role and added **after the next meeting**). The behavior is as follows:
+The Doppelganger is a Crewmate that can copy another crewmates role, similar to the shifer (the new role will be his second role and added **after the next meeting**).
+
+- If there is a Shifter in the game, there can't be a Doppelganger!
+
+The behavior is as follows:
 
 - Copy an impostor or neutral: die
 - Copy Spy or Swapper: become a crewmate
