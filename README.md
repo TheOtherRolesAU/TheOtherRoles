@@ -1158,7 +1158,7 @@ The behavior is as follows:
 
 - Copy an impostor or neutral: die
 - Copy Spy or Swapper: become a crewmate
-- Copy any other crewmate role: Become their double with the same abilities. (It will be an exact copy **at the time of the meeting**. E.g. if the engineer has already used their fix, the doppelganger will not have a fix. If the security guard has e.g. 3 screws left, the doppelganger will also have 3 screws, that they can use separately. If the medic has used their shield, the doppelganger cannot distribute another shield, but becomes a second medic for the shieled player)
+- Copy any other crewmate role: Become their double with the same abilities. (It will be an exact copy **at the time of the meeting**. E.g. if the engineer has already used their fix, the doppelganger will not have a fix. If the security guard has e.g. 3 screws left, the doppelganger will also have 3 screws, that they can use separately. If the medic has used their shield, the doppelganger cannot distribute another shield, but becomes a second medic for the shielded player)
 - The medic doppelganger cannot shield the original medic, the other way around is possible. (Cyclic shields would be overpowered)
 - The doppelganger can be guessed for both roles!
 
