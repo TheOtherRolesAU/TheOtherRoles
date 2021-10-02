@@ -1166,7 +1166,7 @@ The behavior is as follows:
 | Name | Description
 |----------|:-------------:|
 | Doppelganger Spawn Chance | -
-| Doppelganger Can Be Guesser | if set to true, the doppelganger can copy the Good Guesser role
+| Doppelganger Can Be Guesser | if set to true, the doppelganger can copy the Nice Guesser role
 
 
 # Source code
