@@ -116,8 +116,7 @@ namespace TheOtherRoles
                 },
                 () => {
                     return (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer 
-                           || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer 
-                           && Doppelganger.copiedRole == RoleInfo.engineer) && !PlayerControl.LocalPlayer.Data.IsDead;
+                           || Doppelganger.isRoleAndLocalPlayer(RoleInfo.engineer)) && !PlayerControl.LocalPlayer.Data.IsDead;
                 },
                 () => {
                     bool sabotageActive = false;
@@ -196,8 +195,7 @@ namespace TheOtherRoles
                         (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget)) ||
                         (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
-                    } else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                               && Doppelganger.copiedRole == RoleInfo.sheriff && ((Doppelganger.currentTarget.Data.IsImpostor && (Doppelganger.currentTarget != Mini.mini || Mini.isGrownUp())) ||
+                    } else if (Doppelganger.isRoleAndLocalPlayer(RoleInfo.sheriff) && ((Doppelganger.currentTarget.Data.IsImpostor && (Doppelganger.currentTarget != Mini.mini || Mini.isGrownUp())) ||
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Doppelganger.currentTarget) ||
                         (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget)) ||
                         (Jackal.jackal == Doppelganger.currentTarget || Sidekick.sidekick == Doppelganger.currentTarget)))
@@ -217,8 +215,7 @@ namespace TheOtherRoles
                     if (PlayerControl.LocalPlayer == Sheriff.sheriff) Sheriff.currentTarget = null;
                     if (PlayerControl.LocalPlayer == Doppelganger.doppelganger) Doppelganger.currentTarget = null;
                 },
-                () => { return ((Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) || (Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                               && Doppelganger.copiedRole == RoleInfo.sheriff)) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return ((Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) || (Doppelganger.isRoleAndLocalPlayer(RoleInfo.sheriff))) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     if (PlayerControl.LocalPlayer == Sheriff.sheriff) return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove;
                     return Doppelganger.currentTarget && PlayerControl.LocalPlayer.CanMove;
@@ -240,8 +237,7 @@ namespace TheOtherRoles
                     RPCProcedure.timeMasterShield(PlayerControl.LocalPlayer.PlayerId);
                 },
                 () => { return (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer
-                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer 
-                                   && Doppelganger.copiedRole == RoleInfo.timeMaster) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.timeMaster)) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
@@ -273,8 +269,7 @@ namespace TheOtherRoles
                         RPCProcedure.medicSetShielded(medicTargetId, PlayerControl.LocalPlayer.PlayerId);
                 },
                 () => { return (Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer
-                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                                   && Doppelganger.copiedRole == RoleInfo.medic) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.medic)) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return (Medic.medic != null && PlayerControl.LocalPlayer == Medic.medic && !Medic.usedShield && Medic.currentTarget
                                 || Doppelganger.doppelganger != null && !Doppelganger.medicUsedShield && Doppelganger.currentTarget && PlayerControl.LocalPlayer == Doppelganger.doppelganger)
                                 && PlayerControl.LocalPlayer.CanMove; },
@@ -389,8 +384,7 @@ namespace TheOtherRoles
                     Hacker.hackerTimer = Hacker.duration;
                 },
                 () => { return (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer
-                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                                  && Doppelganger.copiedRole == RoleInfo.hacker) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.hacker)) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     hackerButton.Timer = hackerButton.MaxTimer;
@@ -419,8 +413,7 @@ namespace TheOtherRoles
                     RPCProcedure.trackerUsedTracker(target.PlayerId, PlayerControl.LocalPlayer.PlayerId);
                 },
                 () => { return (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer
-                                || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                       && Doppelganger.copiedRole == RoleInfo.tracker) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.tracker)) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove && (Tracker.currentTarget != null && !Tracker.usedTracker
                         || Doppelganger.currentTarget != null && !Doppelganger.trackerUsedTracker); }, 
                 () => { if (Tracker.resetTargetAfterMeeting)
@@ -593,8 +586,7 @@ namespace TheOtherRoles
                     Lighter.lighterTimer = Lighter.duration;
                 },
                 () => { return (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer
-                                  || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer
-                                  && Doppelganger.copiedRole == RoleInfo.lighter)
+                                  || Doppelganger.isRoleAndLocalPlayer(RoleInfo.lighter))
                                 && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
@@ -792,7 +784,7 @@ namespace TheOtherRoles
                     securityGuardButton.Timer = securityGuardButton.MaxTimer;
                 },
                 () => { return !PlayerControl.LocalPlayer.Data.IsDead && (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice)
-                              || Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer && Doppelganger.copiedRole == RoleInfo.securityGuard && Doppelganger.securityGuardRemainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice)); },
+                              || Doppelganger.isRoleAndLocalPlayer(RoleInfo.securityGuard) && Doppelganger.securityGuardRemainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice)); },
                 () => {
                     int remainingScrews = PlayerControl.LocalPlayer == SecurityGuard.securityGuard ? SecurityGuard.remainingScrews : Doppelganger.securityGuardRemainingScrews;
                     securityGuardButton.killButtonManager.renderer.sprite = ((PlayerControl.LocalPlayer == SecurityGuard.securityGuard && SecurityGuard.ventTarget == null || PlayerControl.LocalPlayer == Doppelganger.doppelganger && Doppelganger.securityGuardVentTarget == null) && PlayerControl.GameOptions.MapId != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 

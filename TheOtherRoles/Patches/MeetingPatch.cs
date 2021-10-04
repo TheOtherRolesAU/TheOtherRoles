@@ -421,8 +421,8 @@ namespace TheOtherRoles.Patches {
 
         static void populateButtonsPostfix(MeetingHud __instance) {
             // Add Swapper Buttons
-            if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead || 
-                Doppelganger.doppelganger != null && Doppelganger.doppelganger == PlayerControl.LocalPlayer && Doppelganger.copiedRole == RoleInfo.swapper && !Doppelganger.doppelganger.Data.IsDead) {
+            if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead ||
+                Doppelganger.isRoleAndLocalPlayer(RoleInfo.swapper) && !Doppelganger.doppelganger.Data.IsDead) {
                 selections = new bool[__instance.playerStates.Length];
                 renderers = new SpriteRenderer[__instance.playerStates.Length];
 
@@ -452,8 +452,7 @@ namespace TheOtherRoles.Patches {
 
             // Add Guesser Buttons
             if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots > 0
-                || Doppelganger.doppelganger != null && PlayerControl.LocalPlayer == Doppelganger.doppelganger && !Doppelganger.doppelganger.Data.IsDead &&
-                Doppelganger.copiedRole == RoleInfo.goodGuesser && Doppelganger.guesserRemainingShots > 0) {
+                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && !Doppelganger.doppelganger.Data.IsDead && Doppelganger.guesserRemainingShots > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId) continue;

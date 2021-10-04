@@ -759,11 +759,9 @@ namespace TheOtherRoles.Patches {
             bool isMedicReport = Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer && __instance.PlayerId == Detective.detective.PlayerId;
             // Handle Doppelganger reports:
-            isMedicReport = isMedicReport || (Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.medic &&
-                                              Doppelganger.doppelganger == PlayerControl.LocalPlayer && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
+            isMedicReport = isMedicReport || (Doppelganger.isRoleAndLocalPlayer(RoleInfo.medic) && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
 
-            isDetectiveReport = isDetectiveReport || (Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.detective &&
-                                                      Doppelganger.doppelganger == PlayerControl.LocalPlayer && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
+            isDetectiveReport = isDetectiveReport || (Doppelganger.isRoleAndLocalPlayer(RoleInfo.detective) && __instance.PlayerId == Doppelganger.doppelganger.PlayerId);
 
             if (isMedicReport || isDetectiveReport)
             {
@@ -859,8 +857,8 @@ namespace TheOtherRoles.Patches {
 
             // Seer show flash and add dead player position
             if ((Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target
-                 || Doppelganger.doppelganger != null && PlayerControl.LocalPlayer == Doppelganger.doppelganger && !Doppelganger.doppelganger.Data.IsDead
-                     && Doppelganger.doppelganger != target && Doppelganger.copiedRole == RoleInfo.seer) && Seer.mode <= 1) {
+                 || Doppelganger.isRoleAndLocalPlayer(RoleInfo.seer) && !Doppelganger.doppelganger.Data.IsDead
+                     && Doppelganger.doppelganger != target) && Seer.mode <= 1) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     var renderer = HudManager.Instance.FullScreen;

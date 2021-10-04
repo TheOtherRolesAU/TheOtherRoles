@@ -1098,6 +1098,7 @@ namespace TheOtherRoles
             }
             snitchLocalArrows = new List<Arrow>();
         }
+        
         public static void trackerResetTracked()
         {
             currentTarget = trackerTracked = null;
@@ -1105,6 +1106,11 @@ namespace TheOtherRoles
             if (trackerArrow?.arrow != null) UnityEngine.Object.Destroy(trackerArrow.arrow);
             trackerArrow = new Arrow(Color.blue);
             if (trackerArrow.arrow != null) trackerArrow.arrow.SetActive(false);
+        }
+
+        public static bool isRoleAndLocalPlayer(RoleInfo roleInfo)
+        {
+            return doppelganger != null && doppelganger == PlayerControl.LocalPlayer && copiedRole == roleInfo;
         }
     }
 }
