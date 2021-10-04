@@ -940,6 +940,8 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 - One time use abilities (e.g. shielding a player or Engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
 can only use them, if the previous player did not used them before)
 
+- If there is a Doppelganger in the game, there can't be a Shifter!
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
@@ -1146,13 +1148,17 @@ an outline or all vents do).
 ## Doppelganger
 ### **Team: Crewmates**
 \
-Created by  [Mallöris](https://github.com/Mallaris)\
+Created by  [gendelo3](https://github.com/gendelo3)\
 \
-The Doppelganger is a Crewmate that can copy another crewmates role (the new role will be his second role and added **after the next meeting**). The behavior is as follows:
+The Doppelganger is a Crewmate that can copy another crewmates role, similar to the shifer (the new role will be his second role and added **after the next meeting**).
+
+- If there is a Shifter in the game, there can't be a Doppelganger!
+
+The behavior is as follows:
 
 - Copy an impostor or neutral: die
 - Copy Spy or Swapper: become a crewmate
-- Copy any other crewmate role: Become their double with the same abilities. (It will be an exact copy **at the time of the meeting**. E.g. if the engineer has already used their fix, the doppelganger will not have a fix. If the security guard has e.g. 3 screws left, the doppelganger will also have 3 screws, that they can use separately. If the medic has used their shield, the doppelganger cannot distribute another shield, but becomes a second medic for the shieled player)
+- Copy any other crewmate role: Become their double with the same abilities. (It will be an exact copy **at the time of the meeting**. E.g. if the engineer has already used their fix, the doppelganger will not have a fix. If the security guard has e.g. 3 screws left, the doppelganger will also have 3 screws, that they can use separately. If the medic has used their shield, the doppelganger cannot distribute another shield, but becomes a second medic for the shielded player)
 - The medic doppelganger cannot shield the original medic, the other way around is possible. (Cyclic shields would be overpowered)
 - The doppelganger can be guessed for both roles!
 
@@ -1160,6 +1166,7 @@ The Doppelganger is a Crewmate that can copy another crewmates role (the new rol
 | Name | Description
 |----------|:-------------:|
 | Doppelganger Spawn Chance | -
+| Doppelganger Can Be Guesser | if set to true, the doppelganger can copy the Nice Guesser role
 
 
 # Source code
