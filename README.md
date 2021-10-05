@@ -1148,7 +1148,7 @@ an outline or all vents do).
 ## Doppelganger
 ### **Team: Crewmates**
 \
-Created by  [gendelo3](https://github.com/gendelo3)\
+Created by  [gendelo3](https://github.com/gendelo3), idea by Mr_Fluff\
 \
 The Doppelganger is a Crewmate that can copy another crewmates role, similar to the shifer (the new role will be his second role and added **after the next meeting**).
 
