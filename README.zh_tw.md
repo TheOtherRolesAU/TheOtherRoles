@@ -515,12 +515,12 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 百變怪是個偽裝者他可以掃描玩家的外觀。在任意時間之後可以變形成這種外觀 10 秒。
 \
 **NOTE:**
-- They shrink to the size of the 迷你 when they copies its look.
-- The Hacker sees the new color on the admin table.
-- The color of the footprints changes accordingly (also the ones that were already on the ground).
-- The other 偽裝者 still sees that they are an 偽裝者 (the name remains red).
-- The shield indicator changes accordingly (the Morphling gains or loses the shield indicator)
-- Tracker and Snitch arrows keep working.
+- 當複製迷你的外觀時會縮小到迷你的大小。
+- 駭客在管理表上將看到新的顏色。
+- 腳印的顏色會相應發生變化(也包括已經在地面上的腳印)。
+- 偽裝者夥伴仍能看到是偽裝者(名字仍是紅色)。
+- 護盾相應變化(百變怪獲得或失去護盾)。
+- 追踪者及密探箭頭正常工作。
 
 ### 遊戲選項
 | 名稱 | 描述 |
@@ -532,35 +532,34 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 
 ## 魔術師
 ### **隊伍:偽裝者**
-The 魔術師 is an 偽裝者 which can additionally activate a camouflage mode.
-The camouflage mode lasts for 10s and while it is active, all player names/pets/hats
-are hidden and all players have the same color.\
+魔術師是個偽裝者，可以額外發動迷彩模式。
+迷彩模式持續 10 秒，發動時所有玩家姓名/寵物/帽子都會被隱藏，且所有玩家的顏色都相同。\
 \
 **NOTE:**
-- The 迷你 will look like all the other players
-- The color of the footprints turns gray (also the ones that were already on the ground).
-- The Hacker sees gray icons on the admin table
-- The shield is not visible anymore
-- Tracker and Snitch arrows keep working
+- 迷你看起來像其他玩家。
+- 腳印的顏色變成灰色(包括已經在地上的腳印)。
+- 駭客在管理表上將看到灰色圖標。
+- 盾牌不再可見。
+- 追踪者及密探箭頭正常工作。
 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
 | 魔術師生成機率 | -
 | 魔術師冷卻 | -
-| 迷彩持續時間 | Time players stay camouflaged
+| 迷彩持續時間 | 玩家保持迷彩的時長
 -----------------------
 
 ## 吸血鬼
 ### **隊伍:偽裝者**
-The Vampire is an 偽裝者, that can bite other player. Bitten players die after a configurable amount of time.\
-If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
-If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
+吸血鬼是個偽裝者，可以咬其他玩家。 被咬傷的玩家會在設定的時間後死亡。\
+如果吸血鬼出現機率大於 0 (即使遊戲中沒有吸血鬼)，所有玩家都可以放置一個大蒜。\
+如果受害者靠近大蒜，"咬按鈕"會變成原"殺人按鈕"，吸血鬼只能執行正常的殺人。 \
 \
 **NOTE:**
-- If a bitten player is still alive when a meeting is being called, he dies at the start of the meeting.
-- The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
-- If there is a Vampire in the game, there can't be a Warlock
+- 如果在召開會議時被咬的玩家還活著，他會在會議開始時死亡。
+- 咬人冷卻時間與殺人冷卻時間相同(如果吸血鬼咬目標則外加死亡延遲時間)。
+- 如果遊戲中有吸血鬼，就不可能有咒詛師
 
 ### 遊戲選項
 | 名稱 | 描述 |
@@ -568,7 +567,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 | 吸血鬼生成機率 | -
 | 吸血鬼死亡延遲 | -
 | 吸血鬼冷卻 | 設置殺人/咬人冷卻時間
-| 吸血鬼可在大蒜附近殺人 | The Vampire can never bite when his victim is near a garlic. If this option is set to true, he can still perform a normal kill there.
+| 吸血鬼可在大蒜附近殺人 | 當受害者靠近大蒜時，吸血鬼永遠不會咬人。如果此選項設置為開，他仍然可以在那裡執行正常的殺人。
 -----------------------
 
 ## 抹除者
@@ -707,39 +706,39 @@ You can only shoot during the voting time.
 
 ## 戀人
 ### **隊伍:戀人(與第二隊伍)**
-There are always two 戀人 which are linked together.\
-Their primary goal is it to stay alive together until the end of the game.\
-If one Lover dies (and the option is activated), the other Lover suicides.\
-You can select if 戀人 are able to have a second role (could be a Neutral, Crewmate or 偽裝者 Role)\
-You can specify the chance of one Lover being an 偽裝者.\
-The 戀人 never know the role of their partner, they only see who their partner is.\
-The 戀人 win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead 偽裝者 Lover can win with the 偽裝者s, an Arsonist Lover can still achieve an Arsonist win)\
-If one of the 戀人 is a killer (i.e. Jackal/Sidekick/偽裝者), they can achieve a "戀人 solo win" where only the 戀人 win.\
-If there is no killer among the 戀人 (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
-If there's an team 偽裝者/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as he's alive. If the Lover dies, his tasks will also be counted.\
+總有兩個情人。\
+主要目標是一起活到遊戲結束。\
+如果一個情人死了(並且雙死選項被打開)，另一個情人會自殺。\
+您可以選擇戀人是否可以擔任第二個角色(可以是中立、船員或冒名頂替者角色)。\
+您可以設定一個情人成為偽裝者的機率。\
+戀人不知道他們伴侶的職業，只知道伴侶是誰。\
+如果在遊戲結束時他們都還活著，則戀人獲勝。他們也可以用他們原來的團隊獲勝(例如，一個死得去的偽裝者可以用偽裝者獲勝，縱火狂戀人仍可以贏縱火狂的勝利）\
+如果其中一個戀人是殺手(即豺狼/跟班/偽裝者)，他們可以實現只有戀人獲勝的"戀人獨贏"。\
+如果情人中沒有殺手(例如縱火狂戀人+船員戀人)，並且遊戲結束時他們都還活著，則他們與船員一起獲勝。\
+如果遊戲中有一個團隊偽裝者/豺狼戀人，只要他還活著，就不會計算船員情人的任務(任務勝利)。如果情人死了，他的任務才會被計算在內。\
 \
 **NOTE:**
-- In a 2 Cremates vs 2 偽裝者s (or 2 members of team Jackal) and the 戀人 are not in the same team, the game is not automatically over since the 戀人 can still achieve a solo win. E.g. if there are the following roles 偽裝者 + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the 偽裝者s or 戀人 win.
-- The 戀人 can change if the Shifter takes the role of a 戀人
+- 在 2 船員 vs 2 偽裝者(或豺狼團隊的 2 名成員)和戀人不在同一個團隊中，遊戲不會自動結束，因為戀人仍然可以取得單人勝利。例如:如果還剩下以下角色 偽裝者+偽裝者戀人+戀人+船員，則遊戲不會結束，下一個殺人將決定偽裝者或戀人勝利。
+- 如果轉職者轉移戀人，戀人將轉移。
 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
 | 戀人生成機率 | -
 | 一個戀人是偽裝者的機率 | -
-| 戀人雙死 | Whether the second Lover suicides, if the first one dies
-| 戀人可有其他職業 | If set to true, the 戀人 can have a second role
+| 戀人雙死 | 如果第一個情人死了，第二個情人是否自殺
+| 戀人可有其他職業 | 如果設置為開，戀人可以有第二個職業
 -----------------------
 
 
 ## 警長
 ### **隊伍:船員**
-The Sheriff has the ability to kill 偽裝者s.
-If they try to kill a Crewmate, they die instead.
+警長有能力殺死偽裝者。
+如果試圖射殺一名船員，他們反而會死。
 
 **NOTE:**
-- If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
-- If the Sheriff shoots a 迷你 偽裝者, the Sheriff dies if the 迷你 is still growing up. If it's 18, the 迷你 偽裝者 dies.
+- 如果警長射殺醫生保護的人，警長和被保護的人**都不會死**。
+- 如果警長射殺迷你偽裝者，如果迷你還在成長，警長就會死亡。如果 18 歲成年，則迷你偽裝者死亡。
 
 ### 遊戲選項
 | 名稱 | 描述 |
@@ -846,40 +845,40 @@ The Lighter can turn on his Lighter every now and then, which increases his visi
 ## 迷你
 ### **隊伍:船員或偽裝者**
 迷你可以是船員(67%機率)或是偽裝者(33%機率)。\
-The 迷你's character is smaller and hence visible to everyone in the game.\
-The 迷你 cannot be killed until it turns 18 years old, however it can be voted out.\
+迷你的角色較小，對每個人都可見。\
+迷你到 18 歲成年前不會被殺死，但可以被票出。\
 **迷你偽裝者:**
-- While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
-- If it gets thrown out of the ship, everything is fine.
+- 成長時殺人冷卻加倍，成年後則是 2/3 的時間。
+- 如果他被票出船外，一切正常。
 
 **迷你船員:**
-- The Crewmate 迷你 aims to play out the strength its invincibility in the early game.
-- If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a 迷你.
+- 迷你船員的目標是在遊戲前期發揮其無敵的力量。
+- 如果他在 18 歲成年前被扔出船，那麼每個人都會輸。所以請你投票之前三思而後行。
 
 **NOTE:**
-- 偽裝者s can't kill the 迷你 (the button does not work) until it turns 18
-- The Sheriff can kill the 偽裝者 迷你, but only if it's fully grown up
+- 偽裝者不能殺死迷你(按鈕不起作用)直到他 18 歲成年。
+- 警長可以射殺迷你偽裝者，但前提是他成年了。
 
 ### 遊戲選項
 | 名稱 | 描述 |
 |----------|:-------------:|
 | 迷你生成機率 | -
-| 迷你成長時間  | 迷你 Growing Up Duration
+| 迷你成長時間  | 迷你成長時長
 -----------------------
 
 ## 醫生
 ### **隊伍:船員**
-The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
-The shielded player can still be voted out and might also be an 偽裝者.\
-If set in the options, the shielded player will get a red flash on their screen if someone (偽裝者, Sheriff, ...) tried to murder them.
-If the Medic dies, the shield disappears with them.\
-The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded 偽裝者.\
-The Medic's other feature shows when they report a corpse: they will see how long ago the player died
+醫生可以在每場比賽中上盾(玩家周圍發光)一名玩家，這使玩家無法被殺死。\
+被上盾的玩家仍然可以被票出，也可能是一個偽裝者。\
+如果在選項中設定開啟，有人(偽裝者、警長...)試圖謀殺他們，被上盾的玩家將在螢幕上閃爍紅色。
+如果醫生死了，盾也會隨之消失。\
+如果警長試圖殺死一個有盾的船員，他們不會死，如果他們試圖殺死一個有盾的偽裝者，他們也不會執行射殺。\
+醫生的另一個功能是在他們舉報屍體時可以看到玩家死了多久
 \
 **NOTE:**
-- If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
-- If the Shifter has a shield or their target has a Shield, the shielded player switches.
-- Shields set after the next meeting, will be set before a possible shift is being performed.
+- 如果被上盾的玩家是戀人而另一個戀人死亡，仍會自殺。
+- 如果轉職者有盾或他們的目標有盾，則盾轉移。
+- 盾在會議後生效，在進行可能的轉移之前生效。
 
 
 ### 遊戲選項
@@ -888,7 +887,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | 醫生生成機率 | - | -
 | 顯示被上盾者 | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | 裝盾玩家可看到謀殺未遂 | Whether a shielded player sees if someone tries to kill him | True/false |
-| 盾在會議後生效 | - | True/false
+| 盾在會議後生效 | - | 開/關
 -----------------------
 
 ## 市長
@@ -943,7 +942,7 @@ The **special interactions** with the Shifter are noted in the chapters of the r
 | 名稱 | 描述
 |----------|:-------------:|
 | 轉職者生成機率 | -
-| 轉職者轉移調整 | Sets if 戀人 and/or Medic Shield will be shifted
+| 轉職者轉移調整 | 設定戀人和/或醫生盾是否會轉移
 -----------------------
 
 ## 時間管理大師
@@ -1062,7 +1061,7 @@ If both 偽裝者s and Jackals are in the game the game continues even if all Cr
 -----------------------
 
 ## 跟班
-### **Team: Jackal**
+### **隊伍:豺狼**
 Gets assigned to a player during the game by the "Create Sidekick Action" of the Jackal and joins the Jackal in his quest to eliminate all other players.\
 Upon the death of the Jackal (depending on the options), he might get promoted to Jackal himself and potentially even assign a Sidekick of his own.
 \
