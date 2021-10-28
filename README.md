@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.6.30s| v2.8.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.1/TheOtherRoles.zip)
 | 2021.6.30s| v2.8.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.0/TheOtherRoles.zip)
 | 2021.6.30s| v2.7.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.3/TheOtherRoles.zip)
 | 2021.6.15s| v2.7.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.7.1/TheOtherRoles.zip)
@@ -80,6 +81,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **New Role:** [Vulture](#vulture) created by [Mallöris](https://github.com/Mallaris) 
 - Added Jackal Option: "Jackal Can See If Engineer Is In A Vent" (feature created by [Mallöris](https://github.com/Mallaris))
   
+**Hotfix 2.8.1**
+- Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
+
 **Version 2.8.0**
 - **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris) 
 - Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
