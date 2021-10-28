@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\MediumButton.png" />
       <None Remove="Resources\VultureButton.png" />
     </ItemGroup>
 

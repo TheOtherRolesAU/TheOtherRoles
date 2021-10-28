@@ -55,6 +55,7 @@ namespace TheOtherRoles
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
             Vulture.clearAndReload();
+            Medium.clearAndReload();
         }
 
         public static class Jester {
@@ -1059,6 +1060,49 @@ namespace TheOtherRoles
                         UnityEngine.Object.Destroy(arrow.arrow);
             }
             localArrows = new List<Arrow>();
+        }
+    }
+
+
+    public static class Medium {
+        public static PlayerControl medium;
+        public static DeadPlayer target;
+        public static DeadPlayer soulTarget;
+        public static Color color = new Color32(98, 120, 115, byte.MaxValue);
+        public static List<Tuple<DeadPlayer, Vector3>> deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+        public static List<Tuple<DeadPlayer, Vector3>> featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+        public static List<SpriteRenderer> souls = new List<SpriteRenderer>();
+        public static DateTime meetingStartTime = new DateTime();
+
+        public static float cooldown = 30f;
+        public static float duration = 3f;
+        public static bool oneTimeUse = false;
+
+        private static Sprite soulSprite;
+        public static Sprite getSoulSprite() {
+            if (soulSprite) return soulSprite;
+            soulSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Soul.png", 500f);
+            return soulSprite;
+        }
+
+        private static Sprite question;
+        public static Sprite getQuestionSprite() {
+            if (question) return question;
+            question = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MediumButton.png", 200f);
+            return question;
+        }
+
+        public static void clearAndReload() {
+            medium = null;
+            target = null;
+            soulTarget = null;
+            deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+            featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+            souls = new List<SpriteRenderer>();
+            meetingStartTime = new DateTime();
+            cooldown = CustomOptionHolder.mediumCooldown.getFloat();
+            duration = CustomOptionHolder.mediumDuration.getFloat();
+            oneTimeUse = CustomOptionHolder.mediumOneTimeUse.getBool();
         }
     }
 }

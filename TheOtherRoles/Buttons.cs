@@ -34,6 +34,7 @@ namespace TheOtherRoles
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
         public static CustomButton vultureEatButton;
+        public static CustomButton mediumButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -60,6 +61,7 @@ namespace TheOtherRoles
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
+            mediumButton.MaxTimer = Medium.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -69,6 +71,7 @@ namespace TheOtherRoles
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
+            mediumButton.EffectDuration = Medium.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -822,6 +825,90 @@ namespace TheOtherRoles
                 new Vector3(-1.3f, 0f, 0f),
                 __instance,
                 KeyCode.F
+            );
+
+            // Medium button
+            mediumButton = new CustomButton(
+                () => {
+                    if (Medium.target != null) {
+                        Medium.soulTarget = Medium.target;
+                        mediumButton.HasEffect = true;
+                    }
+                },
+                () => { return Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (mediumButton.isEffectActive && Medium.target != Medium.soulTarget) {
+                        Medium.soulTarget = null;
+                        mediumButton.Timer = 0f;
+                        mediumButton.isEffectActive = false;
+                    }
+                    return Medium.target != null && PlayerControl.LocalPlayer.CanMove;
+                },
+                () => {
+
+                    mediumButton.Timer = mediumButton.MaxTimer;
+                    mediumButton.isEffectActive = false;
+                    Medium.soulTarget = null;
+
+
+                },
+                Medium.getQuestionSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q,
+                true,
+                Medium.duration,
+                () => {
+
+                    // Questions
+                    string msg = "";
+
+                    int randomNumber = Medium.target.player.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(4) : TheOtherRoles.rnd.Next(5);
+                    string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
+                    float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
+
+                    if (randomNumber == 0) msg = "What is your Name? My name is " + Medium.target.player.Data.PlayerName;
+                    else if (randomNumber == 1) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player);
+                    else if (randomNumber == 2) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color";
+                    else if (randomNumber == 3) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started";
+                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting); //exlude mini 
+
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
+
+                    // Remove soul
+                    if (Medium.oneTimeUse) {
+                        float closestDistance = float.MaxValue;
+                        SpriteRenderer target = null;
+
+                        foreach ((DeadPlayer db, Vector3 ps) in Medium.deadBodies) {
+                            if (db == Medium.target) {
+                                Tuple<DeadPlayer, Vector3> deadBody = Tuple.Create(db, ps);
+                                Medium.deadBodies.Remove(deadBody);
+                                break;
+                            }
+
+                        }
+                        foreach (SpriteRenderer rend in Medium.souls) {
+                            float distance = Vector2.Distance(rend.transform.position, PlayerControl.LocalPlayer.GetTruePosition());
+                            if (distance < closestDistance) {
+                                closestDistance = distance;
+                                target = rend;
+                            }
+                        }
+
+                        HudManager.Instance.StartCoroutine(Effects.Lerp(5f, new Action<float>((p) => {
+                            if (target != null) {
+                                var tmp = target.color;
+                                tmp.a = Mathf.Clamp01(1 - p);
+                                target.color = tmp;
+                            }
+                            if (p == 1f && target != null && target.gameObject != null) UnityEngine.Object.Destroy(target.gameObject);
+                        })));
+
+                        Medium.souls.Remove(target);
+                    }
+                    mediumButton.Timer = mediumButton.MaxTimer;
+                }
             );
 
 

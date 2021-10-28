@@ -120,6 +120,8 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Bait.bait, Bait.color);
             } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
+            } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Medium.medium, Medium.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors

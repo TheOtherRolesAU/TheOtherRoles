@@ -564,6 +564,23 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        public static void mediumSetTarget() {
+            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+
+            DeadPlayer target = null;
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            float closestDistance = float.MaxValue;
+            float usableDistance = ShipStatus.Instance.AllVents.FirstOrDefault().UsableDistance;
+            foreach ((DeadPlayer dp, Vector3 ps) in Medium.deadBodies) {
+                float distance = Vector2.Distance(ps, truePosition);
+                if (distance <= usableDistance && distance < closestDistance) {
+                    closestDistance = distance;
+                    target = dp;
+                }
+            }
+            Medium.target = target;
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -625,6 +642,8 @@ namespace TheOtherRoles.Patches {
                 baitUpdate();
                 // Vulture
                 vultureUpdate();
+                // Medium
+                mediumSetTarget();
             } 
         }
     }
@@ -799,6 +818,11 @@ namespace TheOtherRoles.Patches {
                 })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            // Medium add body
+            if (Medium.deadBodies != null) {
+                Medium.featureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
+            }
 
             // Mini set adapted kill cooldown
             if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor && Mini.mini == __instance) {

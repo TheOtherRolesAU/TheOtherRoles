@@ -49,6 +49,7 @@ namespace TheOtherRoles
         BountyHunter,
         Bait,
         Vulture,
+        Medium,
         Crewmate,
         Impostor
     }
@@ -241,6 +242,9 @@ namespace TheOtherRoles
                     case RoleId.Vulture:
                         Vulture.vulture = player;
                         break;
+                    case RoleId.Medium:
+                        Medium.medium = player;
+                        break;
                     }
                 }
         }
@@ -431,7 +435,9 @@ namespace TheOtherRoles
                 Guesser.guesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player)
                 Bait.bait = oldShifter;
-            
+            if (Medium.medium != null && Medium.medium == player)
+                Medium.medium = oldShifter;
+
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
@@ -563,6 +569,7 @@ namespace TheOtherRoles
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
             if (player == Bait.bait) Bait.clearAndReload();
+            if (player == Medium.medium) Medium.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
