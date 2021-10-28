@@ -551,6 +551,18 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
+        static void vultureUpdate() {
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.vulture.Data.IsDead || Vulture.deadBodyPositions == null || Vulture.localArrows == null) return;
+            int index = 0;
+            foreach (DeadBody p in Vulture.deadBodyPositions) {
+                if (Vulture.deadBodyPositions.Count != Vulture.localArrows.Count) {
+                    Vulture.localArrows.Add(new Arrow(Vulture.color));
+                    Vulture.localArrows[index].arrow.SetActive(true);
+                }
+                if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(p.transform.position);
+                index++;
+            }
+        }
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -611,6 +623,8 @@ namespace TheOtherRoles.Patches {
                 bountyHunterUpdate();
                 // Bait
                 baitUpdate();
+                // Vulture
+                vultureUpdate();
             } 
         }
     }
@@ -753,8 +767,15 @@ namespace TheOtherRoles.Patches {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer; 
-            
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
+            // Vulture Button Sync
+            if (Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture && __instance == Vulture.vulture && HudManagerStartPatch.vultureEatButton != null)
+                HudManagerStartPatch.vultureEatButton.Timer = Vulture.cooldown;
+            // Add Vulture Dead Body
+            DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == target.PlayerId);
+            if (Vulture.deadBodyPositions != null) Vulture.deadBodyPositions.Add(body);
+
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
                 if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {

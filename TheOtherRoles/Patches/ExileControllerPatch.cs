@@ -151,6 +151,13 @@ namespace TheOtherRoles.Patches {
             // Force Bounty Hunter Bounty Update
             if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
                 BountyHunter.bountyUpdateTimer = 0f;
+
+            //Vulture Clear DeadBodys
+            if (Vulture.deadBodyPositions != null && Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture) {
+                Vulture.deadBodyPositions = new List<DeadBody>();
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+            }
         }
     }
 

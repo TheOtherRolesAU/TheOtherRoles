@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Vulture,
         Crewmate,
         Impostor
     }
@@ -96,7 +97,8 @@ namespace TheOtherRoles
         PlaceCamera,
         SealVent,
         ArsonistWin,
-        GuesserShoot
+        GuesserShoot,
+        VultureWin
     }
 
     public static class RPCProcedure {
@@ -236,6 +238,9 @@ namespace TheOtherRoles
                     case RoleId.Bait:
                         Bait.bait = player;
                         break;
+                    case RoleId.Vulture:
+                        Vulture.vulture = player;
+                        break;
                     }
                 }
         }
@@ -285,8 +290,16 @@ namespace TheOtherRoles
         public static void cleanBody(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
+                    // Vulture Eat ---
+                    if (Vulture.deadBodyPositions != null && Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture) {
+                        Vulture.deadBodyPositions.RemoveAll(x => x.ParentId == array[i].ParentId);
+                        foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                        Vulture.localArrows = new List<Arrow>();
+                    }
+                    // ---
                     UnityEngine.Object.Destroy(array[i].gameObject);
+                }     
             }
         }
 
@@ -363,7 +376,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
                 oldShifter.Exiled();
                 return;
             }
@@ -579,6 +592,7 @@ namespace TheOtherRoles
             }
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
             if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
+            if (player == Vulture.vulture) Vulture.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -669,6 +683,10 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
+        }
+
+        public static void vultureWin() {
+            Vulture.triggerVultureWin = true;
         }
 
         public static void guesserShoot(byte playerId) {
@@ -851,6 +869,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.GuesserShoot:
                     RPCProcedure.guesserShoot(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.VultureWin:
+                    RPCProcedure.vultureWin();
                     break;
             }
         }

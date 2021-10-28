@@ -54,6 +54,7 @@ namespace TheOtherRoles
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Bait.clearAndReload();
+            Vulture.clearAndReload();
         }
 
         public static class Jester {
@@ -1024,6 +1025,40 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+        }
+    }
+
+    public static class Vulture {
+        public static PlayerControl vulture;
+        public static Color color = new Color32(139, 69, 19, byte.MaxValue);
+        public static List<Arrow> localArrows = new List<Arrow>();
+        public static float cooldown = 30f;
+        public static int vultureNumberToWin = 4;
+        public static int eatenBodies = 0;
+        public static bool triggerVultureWin = false;
+        public static List<DeadBody> deadBodyPositions = new List<DeadBody>();
+        public static bool canUseVents = false;
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.VultureButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            vulture = null;
+            vultureNumberToWin = Mathf.RoundToInt(CustomOptionHolder.vultureNumberToWin.getFloat());
+            eatenBodies = 0;
+            cooldown = CustomOptionHolder.vultureCooldown.getFloat();
+            deadBodyPositions = new List<DeadBody>();
+            triggerVultureWin = false;
+            canUseVents = CustomOptionHolder.vultureCanUseVents.getBool();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localArrows = new List<Arrow>();
         }
     }
 }
