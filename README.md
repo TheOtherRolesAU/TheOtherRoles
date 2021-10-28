@@ -78,15 +78,15 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.9.0**
-- **New Role:** [Medium](#medium) created by [Mallöris](https://github.com/Mallaris) 
-- **New Role:** [Vulture](#vulture) created by [Mallöris](https://github.com/Mallaris) 
+- **New Role:** [Medium](#medium) created by [Mallöris](https://github.com/Mallaris)
+- **New Role:** [Vulture](#vulture) created by [Mallöris](https://github.com/Mallaris)
 - Added Jackal Option: "Jackal Can See If Engineer Is In A Vent" (feature created by [Mallöris](https://github.com/Mallaris))
-  
+
 **Hotfix 2.8.1**
 - Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
 
 **Version 2.8.0**
-- **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris) 
+- **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris)
 - Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
 - Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
 - Added Medic Option: "Shield Will Be Set After Next Meeting" (feature created by [Mallöris](https://github.com/Mallaris))
@@ -106,7 +106,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the [garlics](#vampire) were not displayed properly
 
 **Version 2.7.0**
-- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris) 
+- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris)
 - Added more new [colors](#colors) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
 - Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
@@ -1175,15 +1175,15 @@ Created by  [Mallöris](https://github.com/Mallaris)\
 \
 The Vulture does not have any tasks, he has to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
-When a player dies, the Vulture gets an arrow pointing to the corpse.\
+When a player dies, the Vulture gets an arrow pointing to the corpse.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Vulture Spawn Chance | -
 | Vulture Countdown | -
-| Vulture Corpses Needed To Be Eaten | - Corpes needed to be eaten to win the game
-| Vulture Can Use Vents | 
+| Vulture Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
+| Vulture Can Use Vents | -
 -----------------------
 
 # Source code
