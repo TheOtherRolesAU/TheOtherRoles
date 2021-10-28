@@ -1173,7 +1173,7 @@ What is your killers role? (mini exluded)
 \
 Created by  [Mallöris](https://github.com/Mallaris)\
 \
-The Arsonist does not have any tasks, he has to win the game as a solo.\
+The Vulture does not have any tasks, he has to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
 When a player dies, the Vulture gets an arrow pointing to the corpse.\
 
