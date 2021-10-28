@@ -433,8 +433,11 @@ namespace TheOtherRoles
                 SecurityGuard.securityGuard = oldShifter;
             if (Guesser.guesser != null && Guesser.guesser == player)
                 Guesser.guesser = oldShifter;
-            if (Bait.bait != null && Bait.bait == player)
+            if (Bait.bait != null && Bait.bait == player) {
                 Bait.bait = oldShifter;
+                if (Bait.bait.Data.IsDead) Bait.reported = true;
+            }
+                
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
 
