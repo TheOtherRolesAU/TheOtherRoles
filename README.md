@@ -17,7 +17,7 @@ Even more roles are coming soon :)
 | [Evil Guesser](#guesser) | [Nice Guesser](#guesser) | [Jester](#jester) |  |
 | [Bounty Hunter](#bounty-hunter) | [Detective](#detective) | [Jackal](#jackal) |  |
 | [Camouflager](#camouflager) | [Engineer](#engineer) | [Sidekick](#sidekick) |  |
-| [Cleaner](#cleaner) | [Hacker](#hacker) |  |  |
+| [Cleaner](#cleaner) | [Hacker](#hacker) | [Vulture](#vulture) |  |
 | [Eraser](#eraser) | [Lighter](#lighter) |  |  |
 | [Godfather (Mafia)](#mafia) | [Mayor](#mayor) |  |  |
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
@@ -31,6 +31,7 @@ Even more roles are coming soon :)
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
 |  |  [Bait](#bait) |  |
+|  |  [Medium](#medium) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
@@ -74,6 +75,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.9.0**
+- **New Role:** [Medium](#medium) created by [Mallöris](https://github.com/Mallaris) 
+- **New Role:** [Vulture](#vulture) created by [Mallöris](https://github.com/Mallaris) 
+- Added Jackal Option: "Jackal Can See If Engineer Is In A Vent" (feature created by [Mallöris](https://github.com/Mallaris))
+  
 **Version 2.8.0**
 - **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris) 
 - Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
@@ -1054,6 +1060,7 @@ If both Impostors and Jackals are in the game the game continues even if all Cre
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other ) |
 | Jackal and Sidekick have Impostor vision | - |
+| Jackal and Sidekick can see engineer vent | - | If set to true, team Jackal will see vents highlited like Impostors if an Engineer is inside one
 -----------------------
 
 ## Sidekick
@@ -1132,6 +1139,47 @@ an outline or all vents do).
 | Bait Spawn Chance | -
 | Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
 | Bait Report Delay | -
+-----------------------
+
+## Medium
+### **Team: Crewmates**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
+
+Questions: What is your name?
+What is your Role?
+What is your killer's color type?
+When did you die?
+What is your killers role? (mini exluded)
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Bait Spawn Chance | -
+| Medium Cooldown | -
+| Medium Duration | The time it takes to question a soul
+| Medium Each Soul Can Only Be Questioned Once | If set to true, souls can only be questioned once and then disappear
+-----------------------
+
+## Vulture
+### **Team: Neutral**
+\
+Created by  [Mallöris](https://github.com/Mallaris)\
+\
+The Arsonist does not have any tasks, he has to win the game as a solo.\
+The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
+When a player dies, the Vulture gets an arrow pointing to the corpse.\
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Vulture Spawn Chance | -
+| Vulture Countdown | -
+| Vulture Corpses Needed To Be Eaten | - Corpes needed to be eaten to win the game
+| Vulture Can Use Vents | 
+-----------------------
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
