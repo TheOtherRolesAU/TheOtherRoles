@@ -78,18 +78,18 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.9.0**
-- **New Role:** [Medium](#medium) created by [Mallöris](https://github.com/Mallaris)
-- **New Role:** [Vulture](#vulture) created by [Mallöris](https://github.com/Mallaris)
-- Added Jackal Option: "Jackal Can See If Engineer Is In A Vent" (feature created by [Mallöris](https://github.com/Mallaris))
+- **New Role:** [Medium](#medium)
+- **New Role:** [Vulture](#vulture)
+- Added Jackal Option: "Jackal Can See If Engineer Is In A Vent"
 
 **Hotfix 2.8.1**
 - Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
 
 **Version 2.8.0**
-- **New Role:** [Bait](#bait) created by [Mallöris](https://github.com/Mallaris)
+- **New Role:** [Bait](#bait)
 - Added Tracker Option: "Tracker Reset Target After Meeting" (feature created by [MaximeGillot](https://github.com/MaximeGillot))
-- Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal" (feature created by [Mallöris](https://github.com/Mallaris))
-- Added Medic Option: "Shield Will Be Set After Next Meeting" (feature created by [Mallöris](https://github.com/Mallaris))
+- Added Snitch Options: "Include Team Jackal" and "Use Different Arrow Color For Team Jackal"
+- Added Medic Option: "Shield Will Be Set After Next Meeting"
 
 **Version 2.7.3**
 - Updated to Among Us v2021.6.30
@@ -106,7 +106,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the [garlics](#vampire) were not displayed properly
 
 **Version 2.7.0**
-- **New Role:** [Bounty Hunter](#bounty-hunter) created by [Mallöris](https://github.com/Mallaris)
+- **New Role:** [Bounty Hunter](#bounty-hunter)
 - Added more new [colors](#colors) (Thanks to [Drakoni](https://twitter.com/Drakoni13) for sorting them)
 - Added a setting to the [Shifter](#shifter), that will prevent [Medic Shield](#medic) & [Lover](#lovers) Roles to be shifted
 - Changed [Jackal](#jackal) & [Sidekick](#sidekick) to always be killable by [Sheriff](#sheriff)
@@ -1064,7 +1064,7 @@ If both Impostors and Jackals are in the game the game, continues even if all Cr
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
 | Jackal and Sidekick have Impostor vision | - |
-| Jackal and Sidekick can see engineer vent | - | If set to true, team Jackal will see vents highlited like Impostors if an Engineer is inside one
+| Jackal and Sidekick Can See Engineer Vent | - | If set to true, team Jackal will see vents highlited like Impostors if an Engineer is inside one
 -----------------------
 
 ## Sidekick
