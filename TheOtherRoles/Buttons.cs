@@ -787,10 +787,8 @@ namespace TheOtherRoles
 
             // Vulture Eat
             vultureEatButton = new CustomButton(
-                () =>
-                {
+                () => {
                     Vulture.eatenBodies++;
-                    bool triggerWin = Vulture.eatenBodies == Vulture.vultureNumberToWin ? true : false;
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask)) {
                         if (collider2D.tag == "DeadBody") {
                             DeadBody component = collider2D.GetComponent<DeadBody>();
@@ -806,12 +804,13 @@ namespace TheOtherRoles
                                     RPCProcedure.cleanBody(playerInfo.PlayerId);
 
                                     Vulture.cooldown = vultureEatButton.Timer = vultureEatButton.MaxTimer;
+                                    Vulture.eatenBodies++;
                                     break;
                                 }
                             }
                         }
                     }
-                    if (triggerWin) {
+                    if (Vulture.eatenBodies == Vulture.vultureNumberToWin) {
                         MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VultureWin, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                         RPCProcedure.vultureWin();

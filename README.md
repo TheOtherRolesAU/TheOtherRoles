@@ -1181,7 +1181,7 @@ When a player dies, the Vulture gets an arrow pointing to the corpse.
 |----------|:-------------:|
 | Vulture Spawn Chance | -
 | Vulture Countdown | -
-| Vulture Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
+| Number Of Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
 | Vulture Can Use Vents | -
 -----------------------
 

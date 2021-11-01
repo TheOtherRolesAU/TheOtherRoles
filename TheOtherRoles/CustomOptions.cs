@@ -354,7 +354,7 @@ namespace TheOtherRoles {
 
             vultureSpawnRate = CustomOption.Create(340, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
-            vultureNumberToWin = CustomOption.Create(342, "Corpses needed to be eaten", 4f, 0f, 5f, 1f, vultureSpawnRate);
+            vultureNumberToWin = CustomOption.Create(342, "Number Of Corpses Needed To Be Eaten", 4f, 0f, 5f, 1f, vultureSpawnRate);
             vultureCanUseVents = CustomOption.Create(343, "Vulture Can Use Vents", true, vultureSpawnRate);
 
             mediumSpawnRate = CustomOption.Create(360, cs(Medium.color, "Medium"), rates, null, true);
