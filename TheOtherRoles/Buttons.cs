@@ -844,12 +844,9 @@ namespace TheOtherRoles
                     return Medium.target != null && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => {
-
                     mediumButton.Timer = mediumButton.MaxTimer;
                     mediumButton.isEffectActive = false;
                     Medium.soulTarget = null;
-
-
                 },
                 Medium.getQuestionSprite(),
                 new Vector3(-1.3f, 0f, 0f),
@@ -858,14 +855,14 @@ namespace TheOtherRoles
                 true,
                 Medium.duration,
                 () => {
-
-                    // Questions
+                    mediumButton.Timer = mediumButton.MaxTimer;
+                    if (Medium.target == null || Medium.target.player == null) return;
                     string msg = "";
 
                     int randomNumber = Medium.target.player.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(4) : TheOtherRoles.rnd.Next(5);
                     string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
                     float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
-
+                
                     if (randomNumber == 0) msg = "What is your Name? My name is " + Medium.target.player.Data.PlayerName;
                     else if (randomNumber == 1) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player);
                     else if (randomNumber == 2) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color";
@@ -906,7 +903,6 @@ namespace TheOtherRoles
 
                         Medium.souls.Remove(target);
                     }
-                    mediumButton.Timer = mediumButton.MaxTimer;
                 }
             );
 
