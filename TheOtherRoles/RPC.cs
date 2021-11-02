@@ -303,13 +303,6 @@ namespace TheOtherRoles
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
-                    // Vulture Eat ---
-                    if (Vulture.deadBodyPositions != null && Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture) {
-                        Vulture.deadBodyPositions.RemoveAll(x => x.ParentId == array[i].ParentId);
-                        foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
-                        Vulture.localArrows = new List<Arrow>();
-                    }
-                    // ---
                     UnityEngine.Object.Destroy(array[i].gameObject);
                 }     
             }

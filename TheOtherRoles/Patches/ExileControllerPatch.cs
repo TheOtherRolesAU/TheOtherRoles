@@ -152,13 +152,6 @@ namespace TheOtherRoles.Patches {
             if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
                 BountyHunter.bountyUpdateTimer = 0f;
 
-            // Vulture Clear DeadBodies
-            if (Vulture.deadBodyPositions != null && Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture) {
-                Vulture.deadBodyPositions = new List<DeadBody>();
-                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
-                Vulture.localArrows = new List<Arrow>();
-            }
-
             // Medium spawn souls
             if (Medium.medium != null && PlayerControl.LocalPlayer == Medium.medium) {
                 if (Medium.souls != null) {

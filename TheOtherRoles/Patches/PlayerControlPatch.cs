@@ -559,14 +559,28 @@ namespace TheOtherRoles.Patches {
             }
         }
         static void vultureUpdate() {
-            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.vulture.Data.IsDead || Vulture.deadBodyPositions == null || Vulture.localArrows == null) return;
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.deadBodyPositions == null || Vulture.localArrows == null) return;
+            if (Vulture.vulture.Data.IsDead) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+                return; 
+            }
+
+            DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            bool arrowUpdate = Vulture.localArrows.Count != deadBodies.Count();
             int index = 0;
-            foreach (DeadBody p in Vulture.deadBodyPositions) {
-                if (Vulture.deadBodyPositions.Count != Vulture.localArrows.Count) {
+
+            if (arrowUpdate) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+            }
+            
+            foreach (DeadBody db in deadBodies) {
+                if (arrowUpdate) {
                     Vulture.localArrows.Add(new Arrow(Vulture.color));
                     Vulture.localArrows[index].arrow.SetActive(true);
                 }
-                if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(p.transform.position);
+                if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(db.transform.position);
                 index++;
             }
         }
