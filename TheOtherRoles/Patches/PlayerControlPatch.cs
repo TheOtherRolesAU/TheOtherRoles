@@ -784,10 +784,6 @@ namespace TheOtherRoles.Patches {
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
 
-            // Vulture Button Sync
-            if (Vulture.vulture != null && PlayerControl.LocalPlayer == Vulture.vulture && __instance == Vulture.vulture && HudManagerStartPatch.vultureEatButton != null)
-                HudManagerStartPatch.vultureEatButton.Timer = Vulture.cooldown;
-
             // Add Vulture Dead Body
             DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == target.PlayerId);
             if (Vulture.deadBodyPositions != null) Vulture.deadBodyPositions.Add(body);
