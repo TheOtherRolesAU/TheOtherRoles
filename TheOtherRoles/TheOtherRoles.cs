@@ -1039,7 +1039,6 @@ namespace TheOtherRoles
         public static int vultureNumberToWin = 4;
         public static int eatenBodies = 0;
         public static bool triggerVultureWin = false;
-        public static List<DeadBody> deadBodyPositions = new List<DeadBody>();
         public static bool canUseVents = false;
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -1053,7 +1052,6 @@ namespace TheOtherRoles
             vultureNumberToWin = Mathf.RoundToInt(CustomOptionHolder.vultureNumberToWin.getFloat());
             eatenBodies = 0;
             cooldown = CustomOptionHolder.vultureCooldown.getFloat();
-            deadBodyPositions = new List<DeadBody>();
             triggerVultureWin = false;
             canUseVents = CustomOptionHolder.vultureCanUseVents.getBool();
             if (localArrows != null) {

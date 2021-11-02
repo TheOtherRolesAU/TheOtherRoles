@@ -559,7 +559,7 @@ namespace TheOtherRoles.Patches {
             }
         }
         static void vultureUpdate() {
-            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.deadBodyPositions == null || Vulture.localArrows == null) return;
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null) return;
             if (Vulture.vulture.Data.IsDead) {
                 foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
                 Vulture.localArrows = new List<Arrow>();
@@ -797,10 +797,6 @@ namespace TheOtherRoles.Patches {
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
-
-            // Add Vulture Dead Body
-            DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == target.PlayerId);
-            if (Vulture.deadBodyPositions != null) Vulture.deadBodyPositions.Add(body);
 
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
