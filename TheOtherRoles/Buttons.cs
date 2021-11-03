@@ -789,7 +789,6 @@ namespace TheOtherRoles
             // Vulture Eat
             vultureEatButton = new CustomButton(
                 () => {
-                    Vulture.eatenBodies++;
                     foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask)) {
                         if (collider2D.tag == "DeadBody") {
                             DeadBody component = collider2D.GetComponent<DeadBody>();

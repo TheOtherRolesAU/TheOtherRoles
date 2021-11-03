@@ -1072,7 +1072,7 @@ namespace TheOtherRoles
         public static List<Tuple<DeadPlayer, Vector3>> deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
         public static List<Tuple<DeadPlayer, Vector3>> featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
         public static List<SpriteRenderer> souls = new List<SpriteRenderer>();
-        public static DateTime meetingStartTime = new DateTime();
+        public static DateTime meetingStartTime = DateTime.UtcNow;
 
         public static float cooldown = 30f;
         public static float duration = 3f;
@@ -1088,7 +1088,7 @@ namespace TheOtherRoles
         private static Sprite question;
         public static Sprite getQuestionSprite() {
             if (question) return question;
-            question = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MediumButton.png", 200f);
+            question = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MediumButton.png", 115f);
             return question;
         }
 
@@ -1099,7 +1099,7 @@ namespace TheOtherRoles
             deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
             featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
             souls = new List<SpriteRenderer>();
-            meetingStartTime = new DateTime();
+            meetingStartTime = DateTime.UtcNow;
             cooldown = CustomOptionHolder.mediumCooldown.getFloat();
             duration = CustomOptionHolder.mediumDuration.getFloat();
             oneTimeUse = CustomOptionHolder.mediumOneTimeUse.getBool();
