@@ -232,7 +232,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
+            if ((Jackal.canSeeEngineerVent && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)) || PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
                     try {
                         if (vent?.myRend?.material != null) {
@@ -525,7 +525,14 @@ namespace TheOtherRoles.Patches {
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
                 if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
-                    deadPlayer.killerIfExisting.CmdReportDeadBody(Bait.bait.Data);
+                    
+                    Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                    RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
+                    writer.Write(deadPlayer.killerIfExisting.PlayerId);
+                    writer.Write(Bait.bait.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                     Bait.reported = true;
                 }
             }
@@ -550,6 +557,49 @@ namespace TheOtherRoles.Patches {
                     }
                 }
             }
+        }
+        static void vultureUpdate() {
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null) return;
+            if (Vulture.vulture.Data.IsDead) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+                return; 
+            }
+
+            DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            bool arrowUpdate = Vulture.localArrows.Count != deadBodies.Count();
+            int index = 0;
+
+            if (arrowUpdate) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+            }
+            
+            foreach (DeadBody db in deadBodies) {
+                if (arrowUpdate) {
+                    Vulture.localArrows.Add(new Arrow(Vulture.color));
+                    Vulture.localArrows[index].arrow.SetActive(true);
+                }
+                if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(db.transform.position);
+                index++;
+            }
+        }
+
+        public static void mediumSetTarget() {
+            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+
+            DeadPlayer target = null;
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            float closestDistance = float.MaxValue;
+            float usableDistance = ShipStatus.Instance.AllVents.FirstOrDefault().UsableDistance;
+            foreach ((DeadPlayer dp, Vector3 ps) in Medium.deadBodies) {
+                float distance = Vector2.Distance(ps, truePosition);
+                if (distance <= usableDistance && distance < closestDistance) {
+                    closestDistance = distance;
+                    target = dp;
+                }
+            }
+            Medium.target = target;
         }
 
         public static void Postfix(PlayerControl __instance) {
@@ -611,6 +661,10 @@ namespace TheOtherRoles.Patches {
                 bountyHunterUpdate();
                 // Bait
                 baitUpdate();
+                // Vulture
+                vultureUpdate();
+                // Medium
+                mediumSetTarget();
             } 
         }
     }
@@ -630,18 +684,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
-            // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
-                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.vampireTryKill();
-            } else {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
-                writer.Write(byte.MaxValue);
-                writer.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
-            }
+            Helpers.handleVampireBiteOnBodyReport();
         }
     }
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcMurderPlayer))]
@@ -753,8 +796,8 @@ namespace TheOtherRoles.Patches {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer; 
-            
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
                 if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
@@ -778,6 +821,11 @@ namespace TheOtherRoles.Patches {
                 })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            // Medium add body
+            if (Medium.deadBodies != null) {
+                Medium.featureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
+            }
 
             // Mini set adapted kill cooldown
             if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor && Mini.mini == __instance) {
