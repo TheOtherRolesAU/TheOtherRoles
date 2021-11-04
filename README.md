@@ -81,6 +81,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
 - Added Jackal Option: "Jackal Can See If Engineer Is In A Vent"
+- Fixed a bug that occured when the Shifter shifted the Bait
 
 **Hotfix 2.8.1**
 - Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
