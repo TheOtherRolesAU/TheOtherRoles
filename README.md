@@ -81,6 +81,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
 - Added Jackal Option: "Jackal Can See If Engineer Is In A Vent"
+- Added Guesser Option: "Guesser Can Shoot Multiple Times Per Meeting"
 - Fixed a bug that occured when the Shifter shifted the Bait
 
 **Hotfix 2.8.1**
@@ -690,8 +691,8 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ## Guesser
 ### **Team: Crewmates or Impostors**
 The Guesser can be a Crewmate or an Impostor (depending on the settings).\
-The Guesser can shoot a player during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
-You can select how many players can be shot per meeting and how many players can be shot per game.\
+The Guesser can shoot players during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
+You can select how many players can be shot per game and if multiple players can be shot during a single meeting.\
 The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.\
 \
@@ -708,6 +709,7 @@ You can only shoot during the voting time.\
 | Chance That The Guesser Is An Impostor | -
 | Guesser Number Of Shots Per Game| -
 | Guesser Number Of Shots Per Meeting| -
+| Guesser Can Shoot Multiple Times Per Meeting| -
 
 -----------------------
 
