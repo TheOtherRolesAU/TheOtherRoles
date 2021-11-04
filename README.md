@@ -1164,7 +1164,7 @@ What is your killers role? (mini exluded)
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Bait Spawn Chance | -
+| Medium Spawn Chance | -
 | Medium Cooldown | -
 | Medium Duration | The time it takes to question a soul
 | Medium Each Soul Can Only Be Questioned Once | If set to true, souls can only be questioned once and then disappear
