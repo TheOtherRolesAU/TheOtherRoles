@@ -605,8 +605,8 @@ namespace TheOtherRoles.Patches {
         static void morphlingAndCamouflagerUpdate() {
             float oldCamouflageTimer = Camouflager.camouflageTimer;
             float oldMorphTimer = Morphling.morphTimer;
-            Camouflager.camouflageTimer -= Time.fixedDeltaTime;
-            Morphling.morphTimer -= Time.fixedDeltaTime;
+            Camouflager.camouflageTimer = Mathf.Max(0f, Camouflager.camouflageTimer - Time.fixedDeltaTime);
+            Morphling.morphTimer = Mathf.Max(0f, Morphling.morphTimer - Time.fixedDeltaTime);
 
             
             // Camouflage reset and set Morphling look if necessary
