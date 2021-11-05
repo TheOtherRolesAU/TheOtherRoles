@@ -460,7 +460,7 @@ namespace TheOtherRoles
 
             Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
-            if (Camouflager.camouflageTimer > 0f)
+            if (Camouflager.camouflageTimer <= 0f)
                 Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
         }
 
