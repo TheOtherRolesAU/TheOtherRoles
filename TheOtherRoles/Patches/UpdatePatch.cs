@@ -12,21 +12,11 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
     {
-        public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
-            if (!MapOptions.hidePlayerNames) return false; // All names are visible
-            else if (source == null || target == null) return true;
-            else if (source == target) return false; // Player sees his own name
-            else if (source.Data.IsImpostor && (target.Data.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
-            else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
-            else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
-            return true;
-        }
-
         static void resetNameTagsAndColors() {
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
+                player.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
                 if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
                     player.nameText.color = Palette.ImpostorRed;
                 } else {
@@ -191,10 +181,7 @@ namespace TheOtherRoles.Patches {
 
         static void camouflageAndMorphActions() {
             float oldCamouflageTimer = Camouflager.camouflageTimer;
-            float oldMorphTimer = Morphling.morphTimer;
-
             Camouflager.camouflageTimer -= Time.deltaTime;
-            Morphling.morphTimer -= Time.deltaTime;
 
             // Morphling player size not done here
 
