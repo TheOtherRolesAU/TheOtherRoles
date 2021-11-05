@@ -411,12 +411,7 @@ namespace TheOtherRoles
             morphTarget = null;
             morphTimer = 0f;
             if (morphling == null) return;
-            morphling.SetName(morphling.Data.PlayerName);
-            morphling.SetHat(morphling.Data.HatId, (int)morphling.Data.ColorId);
-            Helpers.setSkinWithAnim(morphling.MyPhysics, morphling.Data.SkinId);
-            morphling.SetPet(morphling.Data.PetId);
-            morphling.CurrentPet.Visible = morphling.Visible;
-            morphling.SetColor(morphling.Data.ColorId);
+            morphling.setDefaultLook();
         }
 
         public static void clearAndReload() {
@@ -460,17 +455,8 @@ namespace TheOtherRoles
 
         public static void resetCamouflage() {
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                if (p == null) continue;
-                if (Morphling.morphling == null || Morphling.morphling != p) {
-                    p.SetName(p.Data.PlayerName);
-                    p.SetHat(p.Data.HatId, (int)p.Data.ColorId);
-                    Helpers.setSkinWithAnim(p.MyPhysics, p.Data.SkinId);
-                    p.SetPet(p.Data.PetId);
-                    p.CurrentPet.Visible = p.Visible;
-                    p.SetColor(p.Data.ColorId);
-                }
-            }
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                p.setDefaultLook();
         }
 
         public static void clearAndReload() {

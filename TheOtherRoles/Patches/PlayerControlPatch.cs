@@ -602,6 +602,27 @@ namespace TheOtherRoles.Patches {
             Medium.target = target;
         }
 
+        static void morphlingAndCamouflagerUpdate() {
+            float oldCamouflageTimer = Camouflager.camouflageTimer;
+            float oldMorphTimer = Morphling.morphTimer;
+            Camouflager.camouflageTimer -= Time.fixedDeltaTime;
+            Morphling.morphTimer -= Time.fixedDeltaTime;
+
+            
+            // Camouflage reset and set Morphling look if necessary
+            if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
+                Camouflager.resetCamouflage();
+                if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
+                    PlayerControl target = Morphling.morphTarget;
+                    Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+                }
+            }
+
+            // Morphling reset (only if camouflage is inactive)
+            if (Camouflager.camouflageTimer <= 0f && oldMorphTimer > 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null)
+                Morphling.resetMorph();
+        }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -665,6 +686,8 @@ namespace TheOtherRoles.Patches {
                 vultureUpdate();
                 // Medium
                 mediumSetTarget();
+                // Morphling and Camouflager
+                morphlingAndCamouflagerUpdate();
             } 
         }
     }

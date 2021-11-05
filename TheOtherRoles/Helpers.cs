@@ -236,7 +236,11 @@ namespace TheOtherRoles {
             return true;
         }
 
-        public static void setLook(PlayerControl target, String playerName, int colorId, uint hatId, uint skinId, uint petId) {
+        public static void setDefaultLook(this PlayerControl target) {
+            target.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+        }
+
+        public static void setLook(this PlayerControl target, String playerName, int colorId, uint hatId, uint skinId, uint petId) {
             target.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName;
             target.myRend.material.SetColor("_BackColor", Palette.ShadowColors[colorId]);
             target.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[colorId]);
