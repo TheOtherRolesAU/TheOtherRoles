@@ -1027,7 +1027,8 @@ namespace TheOtherRoles
         public static int vultureNumberToWin = 4;
         public static int eatenBodies = 0;
         public static bool triggerVultureWin = false;
-        public static bool canUseVents = false;
+        public static bool canUseVents = true;
+        public static bool showArrows = true;
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -1042,6 +1043,7 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.vultureCooldown.getFloat();
             triggerVultureWin = false;
             canUseVents = CustomOptionHolder.vultureCanUseVents.getBool();
+            showArrows = CustomOptionHolder.vultureShowArrows.getBool();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
                     if (arrow?.arrow != null)

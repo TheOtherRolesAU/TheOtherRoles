@@ -559,7 +559,7 @@ namespace TheOtherRoles.Patches {
             }
         }
         static void vultureUpdate() {
-            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null) return;
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
             if (Vulture.vulture.Data.IsDead) {
                 foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
                 Vulture.localArrows = new List<Arrow>();
