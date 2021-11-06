@@ -1158,7 +1158,7 @@ Created by [Mallöris](https://github.com/Mallaris)\
 \
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
 
-Questions: What is your name?
+Questions:
 What is your Role?
 What is your killer's color type?
 When did you die?
