@@ -1180,7 +1180,7 @@ Created by [Mallöris](https://github.com/Mallaris)\
 \
 The Vulture does not have any tasks, he has to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
-When a player dies, the Vulture gets an arrow pointing to the corpse.
+Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.
 
 ### Game Options
 | Name | Description |
@@ -1189,6 +1189,7 @@ When a player dies, the Vulture gets an arrow pointing to the corpse.
 | Vulture Countdown | -
 | Number Of Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
 | Vulture Can Use Vents | -
+| Show Arrows Pointing Towards The Corpes | -
 -----------------------
 
 # Source code
