@@ -16,7 +16,10 @@ namespace TheOtherRoles.Patches {
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
+                String playerName = player.Data.PlayerName;
+                if (Morphling.morphTimer > 0f && Morphling.morphling == player && Morphling.morphTarget != null) playerName = Morphling.morphTarget.Data.PlayerName; // Temporary hotfix for the Morphling's name
+
+                player.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : playerName;
                 if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
                     player.nameText.color = Palette.ImpostorRed;
                 } else {
