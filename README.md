@@ -79,7 +79,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.9.1**
+- Fixed a bug where [Camouflager](#camouflager) & [Morphling](#morphling) causing hard laggs
+- Fixed a bug where [Medium](#medium) did not exlude the Evil [Mini](#mini)
+- [Vulture](#vulture) "Number Of Corpses Needed To Be Eaten" max value extended to 10
+- Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
+- Removed Medium Question: "What is your name?" (name of the soul is added after each question)
 
+  
 **Version 2.9.0**
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
@@ -421,6 +427,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
+[Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role come from **Slushygoose**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
