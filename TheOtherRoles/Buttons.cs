@@ -859,15 +859,16 @@ namespace TheOtherRoles
                     if (Medium.target == null || Medium.target.player == null) return;
                     string msg = "";
 
-                    int randomNumber = Medium.target.player.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(4) : TheOtherRoles.rnd.Next(5);
+                    int randomNumber = Medium.target.killerIfExisting?.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(3) : TheOtherRoles.rnd.Next(4);
                     string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
                     float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
-                
-                    if (randomNumber == 0) msg = "What is your Name? My name is " + Medium.target.player.Data.PlayerName;
-                    else if (randomNumber == 1) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player);
-                    else if (randomNumber == 2) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color";
-                    else if (randomNumber == 3) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started";
-                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting); //exlude mini 
+                    string name = " (" + Medium.target.player.Data.PlayerName + ")";
+
+
+                    if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player) + name;
+                    else if (randomNumber == 1) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color" + name;
+                    else if (randomNumber == 2) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started" + name;
+                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting) + name; //exlude mini 
 
                     DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
 

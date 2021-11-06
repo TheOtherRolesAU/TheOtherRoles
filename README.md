@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.6.30s| v2.9.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.1/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.0/TheOtherRoles.zip)
 | 2021.6.30s| v2.8.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.1/TheOtherRoles.zip)
 | 2021.6.30s| v2.8.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.8.0/TheOtherRoles.zip)
@@ -77,6 +78,14 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 2.9.1**
+- Fixed a bug where [Camouflager](#camouflager) & [Morphling](#morphling) caused performance issues
+- Fixed a bug where [Medium](#medium) did not exlude the Evil [Mini](#mini)
+- [Vulture](#vulture) "Number Of Corpses Needed To Be Eaten" max value extended to 10
+- Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
+- Removed Medium Question: "What is your name?" (name of the soul is added after each question)
+
+  
 **Version 2.9.0**
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
@@ -418,6 +427,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env I
 [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role come from **Slushiegoose**\
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
+[Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role come from **Slushygoose**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
@@ -1155,7 +1165,7 @@ Created by [Mallöris](https://github.com/Mallaris)\
 \
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
 
-Questions: What is your name?
+Questions:
 What is your Role?
 What is your killer's color type?
 When did you die?
@@ -1164,7 +1174,7 @@ What is your killers role? (mini exluded)
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Bait Spawn Chance | -
+| Medium Spawn Chance | -
 | Medium Cooldown | -
 | Medium Duration | The time it takes to question a soul
 | Medium Each Soul Can Only Be Questioned Once | If set to true, souls can only be questioned once and then disappear
@@ -1177,7 +1187,7 @@ Created by [Mallöris](https://github.com/Mallaris)\
 \
 The Vulture does not have any tasks, he has to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
-When a player dies, the Vulture gets an arrow pointing to the corpse.
+Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.
 
 ### Game Options
 | Name | Description |
@@ -1186,6 +1196,7 @@ When a player dies, the Vulture gets an arrow pointing to the corpse.
 | Vulture Countdown | -
 | Number Of Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
 | Vulture Can Use Vents | -
+| Show Arrows Pointing Towards The Corpes | -
 -----------------------
 
 # Source code
