@@ -227,7 +227,8 @@ namespace TheOtherRoles {
         }
 
         public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
-            if (!MapOptions.hidePlayerNames) return false; // All names are visible
+            if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
+            else if (!MapOptions.hidePlayerNames) return false; // All names are visible
             else if (source == null || target == null) return true;
             else if (source == target) return false; // Player sees his own name
             else if (source.Data.IsImpostor && (target.Data.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
