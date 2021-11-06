@@ -79,7 +79,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.9.1**
-- Fixed a bug where [Camouflager](#camouflager) & [Morphling](#morphling) causing hard laggs
+- Fixed a bug where [Camouflager](#camouflager) & [Morphling](#morphling) caused performance issues
 - Fixed a bug where [Medium](#medium) did not exlude the Evil [Mini](#mini)
 - [Vulture](#vulture) "Number Of Corpses Needed To Be Eaten" max value extended to 10
 - Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
