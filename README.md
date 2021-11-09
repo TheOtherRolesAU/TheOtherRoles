@@ -81,7 +81,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 2.10.0**
--
+- Add new option: Allow Parallel MedBay Scans
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
@@ -446,6 +446,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (Every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left. Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can also see the name of the Spy and everyone can still see the age of the mini.
+- **Allow Parallel MedBay Scans:** Allows players to perform their MedBay scans at the same time
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Of Remaining Tasks**
