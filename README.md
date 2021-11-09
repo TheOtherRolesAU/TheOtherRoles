@@ -82,6 +82,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.10.0**
 - Add new option: Allow Parallel MedBay Scans
+- Add new Guesser option: "Guesses Visible In Ghost Chat"
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
@@ -728,8 +729,8 @@ You can only shoot during the voting time.\
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
 | Guesser Number Of Shots Per Game| -
-| Guesser Number Of Shots Per Meeting| -
 | Guesser Can Shoot Multiple Times Per Meeting| -
+| Guesses Visible In Ghost Chat| -
 
 -----------------------
 

@@ -292,11 +292,15 @@ namespace TheOtherRoles.Patches {
                         else
                             __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
-                        // Shoot player
+                        // Shoot player and send chat info if activated
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId);
+                        if (Guesser.showInfoInGhostChat) {
+                            string msg = $"Guesser guessed the role {roleInfo.name} for {target.name}!";
+                            target.RpcSendChat(msg);  // As the target is dead at this point, only ghosts will see the message.
+                        }
                     }
                 }));
 
