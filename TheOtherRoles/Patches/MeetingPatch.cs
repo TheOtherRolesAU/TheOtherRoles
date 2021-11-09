@@ -350,7 +350,8 @@ namespace TheOtherRoles.Patches {
             List<Transform> buttons = new List<Transform>();
             Transform selectedButton = null;
 
-            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
+            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos)
+            {
                 if (CustomOptionHolder.guesserCantGuessSpy.getBool() && roleInfo.roleId == RoleId.Spy) continue;
                 if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
                 Transform buttonParent = (new GameObject()).transform;
@@ -359,7 +360,7 @@ namespace TheOtherRoles.Patches {
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 buttons.Add(button);
-                int row = i/4, col = i%4;
+                int row = i / 4, col = i % 4;
                 buttonParent.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
                 buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
@@ -369,13 +370,17 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    if (selectedButton != button) {
+                button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() =>
+                {
+                    if (selectedButton != button)
+                    {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
-                    } else {
+                    }
+                    else
+                    {
                         PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0) return;
 
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                         if (mainRoleInfo == null) return;
@@ -384,8 +389,7 @@ namespace TheOtherRoles.Patches {
                         if (!(mainRoleInfo == roleInfo || roleInfo == RoleInfo.doppelganger && Doppelganger.doppelganger != null && target == Doppelganger.doppelganger))
                         {
                             target = PlayerControl.LocalPlayer;  // Guess is incorrect!
-                        } 
-
+                        }
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
@@ -399,8 +403,8 @@ namespace TheOtherRoles.Patches {
                         writer.Write((byte)target.PlayerId);
                         writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.guesserShoot(target.PlayerId);
-                        
+                        RPCProcedure.guesserShoot(target.PlayerId, PlayerControl.LocalPlayer.PlayerId);
+
                         // Guesser info posted to ghost chat
                         if (CustomOptionHolder.guesserInfoInGhostChat.getBool())
                         {
