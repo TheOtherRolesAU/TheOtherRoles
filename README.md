@@ -83,7 +83,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 2.10.0**
 - Add new option: Allow Parallel MedBay Scans
 - Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
-- During meetings the [Detective](#detective) and the [Hacker](#hacker) now display, whether a player wears a darker or lighter color
+- During meetings the [Detective](#detective), [Hacker](#hacker) and [Medium](#medium) now display, whether a player wears a darker or lighter color
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
@@ -1178,6 +1178,7 @@ an outline or all vents do).
 Created by [Mallöris](https://github.com/Mallaris)\
 \
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
+During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 Questions:
 What is your Role?
