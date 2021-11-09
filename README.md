@@ -82,7 +82,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.10.0**
 - Add new option: Allow Parallel MedBay Scans
-- Add new [Guesser](#guesser) options: "Guesses Visible In Ghost Chat" and "Guesses Ignore The Medic Shield"
+- Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat" and "Guesses Ignore The Medic Shield"
+- Add new [Guesser](#guesser) option: "Guesses Ignore The Medic Shield". If this option is set to false, no matter what the Guesser guessed, no one will die and the shielded player/Medic might be notified
+- Add new [Medic](#medic) option: "Medic Sees Murder Attempt On Shielded Player". This includes attempts from any kind of killer (Sheriff, Jackal, Guesser if the shield is not being ignored, ...)
 - During meetings the [Detective](#detective) and the [Hacker](#hacker) now display, whether a player wears a darker or lighter color
 
 **Hotfix 2.9.2**
@@ -717,7 +719,7 @@ The Guesser can shoot players during the meeting, by guessing its role. If the g
 You can select how many players can be shot per game and if multiple players can be shot during a single meeting.\
 The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.\
-Depending on the options, the Guesser can't guess the shielded player (no one will die, independently of what the Guesser guessed).\
+Depending on the options, the Guesser can't guess the shielded player and depending on the Medic options the Medic/shielded player might be notified (no one will die, independently of what the Guesser guessed).\
 \
 **NOTE:**
 - The vote of a shot player, won't be counted
@@ -904,9 +906,10 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
 ### **Team: Crewmates**
 The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
 The shielded player can still be voted out and might also be an Impostor.\
-If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
+If set in the options, the shielded player and/or the Medic will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
 If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
+Depending on the options, guesses from the Guesser will be blocked by the shield and the shielded player/medic might be notified.\
 The Medic's other feature shows when they report a corpse: they will see how long ago the player died.
 \
 **NOTE:**
@@ -922,6 +925,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
 | Shield Will Be Set After Next Meeting | - | True/false
+| Medic Sees Murder Attempt On Shielded Player | - | If anyone tries to harm the shielded player (Impostor, Sheriff, Guesser, ...), the Medic will see a red flash
 -----------------------
 
 ## Mayor

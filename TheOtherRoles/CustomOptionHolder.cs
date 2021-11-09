@@ -118,6 +118,7 @@ namespace TheOtherRoles {
         public static CustomOption medicShowShielded;
         public static CustomOption medicShowAttemptToShielded;
         public static CustomOption medicSetShieldAfterMeeting;
+        public static CustomOption medicShowAttemptToMedic;
 
         public static CustomOption swapperSpawnRate;
         public static CustomOption swapperCanCallEmergency;
@@ -327,6 +328,7 @@ namespace TheOtherRoles {
             medicShowShielded = CustomOption.Create(143, "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"}, medicSpawnRate);
             medicShowAttemptToShielded = CustomOption.Create(144, "Shielded Player Sees Murder Attempt", false, medicSpawnRate);
             medicSetShieldAfterMeeting = CustomOption.Create(145, "Shield Will Be Set After The Next Meeting", false, medicSpawnRate);
+            medicShowAttemptToMedic = CustomOption.Create(146, "Medic Sees Murder Attempt On Shielded Player", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
             swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
