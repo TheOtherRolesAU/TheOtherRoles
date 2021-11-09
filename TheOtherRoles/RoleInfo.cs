@@ -105,7 +105,7 @@ namespace TheOtherRoles
             spy,
             securityGuard,
             bait,
-            medium
+            medium,
             doppelganger
         };
 

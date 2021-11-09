@@ -198,11 +198,11 @@ namespace TheOtherRoles
                     if (PlayerControl.LocalPlayer == Sheriff.sheriff && ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) || 
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
                         (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget)) ||
-                        (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget)) {
+                        (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     } else if (Doppelganger.isRoleAndLocalPlayer(RoleInfo.sheriff) && ((Doppelganger.currentTarget.Data.IsImpostor && (Doppelganger.currentTarget != Mini.mini || Mini.isGrownUp())) ||
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Doppelganger.currentTarget) ||
-                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget || Vulture.vulture == Doppelganger.currentTarget)) ||
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget)) ||
                         (Jackal.jackal == Doppelganger.currentTarget || Sidekick.sidekick == Doppelganger.currentTarget)))
                     {
                         targetId = Doppelganger.currentTarget.PlayerId;
