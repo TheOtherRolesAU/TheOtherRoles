@@ -82,7 +82,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 2.10.0**
 - Add new option: Allow Parallel MedBay Scans
-- Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
+- Add new [Guesser](#guesser) options: "Guesses Visible In Ghost Chat" and "Guesses Ignore The Medic Shield"
 - During meetings the [Detective](#detective) and the [Hacker](#hacker) now display, whether a player wears a darker or lighter color
 
 **Hotfix 2.9.2**
@@ -717,6 +717,7 @@ The Guesser can shoot players during the meeting, by guessing its role. If the g
 You can select how many players can be shot per game and if multiple players can be shot during a single meeting.\
 The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.\
+Depending on the options, the Guesser can't guess the shielded player (no one will die, independently of what the Guesser guessed).\
 \
 **NOTE:**
 - The vote of a shot player, won't be counted
@@ -732,6 +733,7 @@ You can only shoot during the voting time.\
 | Guesser Number Of Shots Per Game| -
 | Guesser Can Shoot Multiple Times Per Meeting| -
 | Guesses Visible In Ghost Chat| -
+| Guesses Ignore The Medic Shield| -
 
 -----------------------
 
