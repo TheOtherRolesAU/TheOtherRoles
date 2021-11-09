@@ -173,6 +173,8 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
+                Lawyer.meetings++;
         }
     }
 

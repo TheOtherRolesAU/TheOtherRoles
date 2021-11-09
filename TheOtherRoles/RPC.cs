@@ -50,6 +50,8 @@ namespace TheOtherRoles
         Bait,
         Vulture,
         Medium,
+        Lawyer,
+        Pursuer,
         Crewmate,
         Impostor
     }
@@ -100,7 +102,12 @@ namespace TheOtherRoles
         SealVent,
         ArsonistWin,
         GuesserShoot,
-        VultureWin
+        VultureWin,
+        LawyerWin,
+        LawyerSetTarget,
+        LawyerPromotesToPursuer,
+        SetBlanked,
+        RemoveBlanked
     }
 
     public static class RPCProcedure {
@@ -246,6 +253,12 @@ namespace TheOtherRoles
                     case RoleId.Medium:
                         Medium.medium = player;
                         break;
+                    case RoleId.Lawyer:
+                        Lawyer.lawyer = player;
+                        break;
+                    case RoleId.Pursuer:
+                        Pursuer.pursuer = player;
+                        break;
                     }
                 }
         }
@@ -381,7 +394,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer) {
                 oldShifter.Exiled();
                 return;
             }
@@ -608,6 +621,8 @@ namespace TheOtherRoles
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
             if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
             if (player == Vulture.vulture) Vulture.clearAndReload();
+            if (player == Lawyer.lawyer) Lawyer.clearAndReload();
+            if (player == Pursuer.pursuer) Pursuer.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -704,6 +719,21 @@ namespace TheOtherRoles
             Vulture.triggerVultureWin = true;
         }
 
+        public static void lawyerWin() {
+            Lawyer.triggerLawyerWin = true;
+        }
+
+        public static void lawyerSetTarget(byte playerId) {
+            Lawyer.target = Helpers.playerById(playerId);
+        }
+
+        public static void lawyerPromotesToPursuer() {
+            PlayerControl player = Lawyer.lawyer;
+            Lawyer.clearAndReload();
+            Pursuer.pursuer = player;
+            return;
+        }
+
         public static void guesserShoot(byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
@@ -727,6 +757,22 @@ namespace TheOtherRoles
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (partner != null && PlayerControl.LocalPlayer == partner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+        }
+
+        public static void setBlanked(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+
+            Pursuer.blankedList.Add(target);
+            
+        }
+
+        public static void removeBlanked(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null || Pursuer.blankedList.Contains(target)) return;
+
+            Pursuer.blankedList.Remove(target);
+
         }
     }   
 
@@ -893,6 +939,22 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
                     break;
+                case (byte)CustomRPC.LawyerWin:
+                    RPCProcedure.lawyerWin();
+                    break; 
+                case (byte)CustomRPC.LawyerSetTarget:
+                    RPCProcedure.lawyerSetTarget(reader.ReadByte()); 
+                    break;
+                case (byte)CustomRPC.LawyerPromotesToPursuer:
+                    RPCProcedure.lawyerPromotesToPursuer();
+                    break;
+                case (byte)CustomRPC.SetBlanked:
+                    RPCProcedure.setBlanked(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.RemoveBlanked:
+                    RPCProcedure.removeBlanked(reader.ReadByte());
+                    break;
+
             }
         }
     }

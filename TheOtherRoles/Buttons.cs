@@ -35,7 +35,9 @@ namespace TheOtherRoles
         public static CustomButton arsonistButton;
         public static CustomButton vultureEatButton;
         public static CustomButton mediumButton;
+        public static CustomButton pursuerButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
+        public static TMPro.TMP_Text pursuerButtonBlanksText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -63,6 +65,7 @@ namespace TheOtherRoles
             arsonistButton.MaxTimer = Arsonist.cooldown;
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
+            pursuerButton.MaxTimer = Pursuer.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -907,6 +910,38 @@ namespace TheOtherRoles
                 }
             );
 
+            // Pursuer button
+            pursuerButton = new CustomButton(
+                () => {
+                    if (Pursuer.target != null) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable);
+                        writer.Write(Pursuer.target.PlayerId);
+                        RPCProcedure.sealVent(Pursuer.target.PlayerId);
+                        Pursuer.target = null;
+                    }
+                    Pursuer.blanks++;
+                    pursuerButton.Timer = pursuerButton.MaxTimer;
+                },
+                () => { return Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Pursuer.blanks < Pursuer.blanksNumber; },
+                () => {
+                    pursuerButton.killButtonManager.renderer.sprite = Pursuer.blank;
+                    if (pursuerButtonBlanksText != null) pursuerButtonBlanksText.text = $"{Pursuer.blanksNumber - Pursuer.blanks}";
+
+                    return Pursuer.blanksNumber > Pursuer.blanks && PlayerControl.LocalPlayer.CanMove && Pursuer.target != null;
+                },
+                () => { pursuerButton.Timer = pursuerButton.MaxTimer; },
+                Pursuer.getTargetSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q
+            );
+
+            // Pursuer button blanks left
+            pursuerButtonBlanksText = GameObject.Instantiate(pursuerButton.killButtonManager.TimerText, pursuerButton.killButtonManager.TimerText.transform.parent);
+            pursuerButtonBlanksText.text = "";
+            pursuerButtonBlanksText.enableWordWrapping = false;
+            pursuerButtonBlanksText.transform.localScale = Vector3.one * 0.5f;
+            pursuerButtonBlanksText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();
