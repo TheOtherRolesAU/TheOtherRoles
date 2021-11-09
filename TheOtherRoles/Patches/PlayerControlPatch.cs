@@ -232,7 +232,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void engineerUpdate() {
-            if (PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
+            if ((Jackal.canSeeEngineerVent && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)) || PlayerControl.LocalPlayer.Data.IsImpostor && ShipStatus.Instance?.AllVents != null) {
                 foreach (Vent vent in ShipStatus.Instance.AllVents) {
                     try {
                         if (vent?.myRend?.material != null) {
@@ -558,6 +558,70 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
+        static void vultureUpdate() {
+            if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
+            if (Vulture.vulture.Data.IsDead) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+                return; 
+            }
+
+            DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            bool arrowUpdate = Vulture.localArrows.Count != deadBodies.Count();
+            int index = 0;
+
+            if (arrowUpdate) {
+                foreach (Arrow arrow in Vulture.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Vulture.localArrows = new List<Arrow>();
+            }
+            
+            foreach (DeadBody db in deadBodies) {
+                if (arrowUpdate) {
+                    Vulture.localArrows.Add(new Arrow(Vulture.color));
+                    Vulture.localArrows[index].arrow.SetActive(true);
+                }
+                if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(db.transform.position);
+                index++;
+            }
+        }
+
+        public static void mediumSetTarget() {
+            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+
+            DeadPlayer target = null;
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            float closestDistance = float.MaxValue;
+            float usableDistance = ShipStatus.Instance.AllVents.FirstOrDefault().UsableDistance;
+            foreach ((DeadPlayer dp, Vector3 ps) in Medium.deadBodies) {
+                float distance = Vector2.Distance(ps, truePosition);
+                if (distance <= usableDistance && distance < closestDistance) {
+                    closestDistance = distance;
+                    target = dp;
+                }
+            }
+            Medium.target = target;
+        }
+
+        static void morphlingAndCamouflagerUpdate() {
+            float oldCamouflageTimer = Camouflager.camouflageTimer;
+            float oldMorphTimer = Morphling.morphTimer;
+            Camouflager.camouflageTimer = Mathf.Max(0f, Camouflager.camouflageTimer - Time.fixedDeltaTime);
+            Morphling.morphTimer = Mathf.Max(0f, Morphling.morphTimer - Time.fixedDeltaTime);
+
+            
+            // Camouflage reset and set Morphling look if necessary
+            if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
+                Camouflager.resetCamouflage();
+                if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
+                    PlayerControl target = Morphling.morphTarget;
+                    Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+                }
+            }
+
+            // Morphling reset (only if camouflage is inactive)
+            if (Camouflager.camouflageTimer <= 0f && oldMorphTimer > 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null)
+                Morphling.resetMorph();
+        }
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -618,6 +682,12 @@ namespace TheOtherRoles.Patches {
                 bountyHunterUpdate();
                 // Bait
                 baitUpdate();
+                // Vulture
+                vultureUpdate();
+                // Medium
+                mediumSetTarget();
+                // Morphling and Camouflager
+                morphlingAndCamouflagerUpdate();
             } 
         }
     }
@@ -749,8 +819,8 @@ namespace TheOtherRoles.Patches {
 
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer; 
-            
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
                 if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
@@ -774,6 +844,11 @@ namespace TheOtherRoles.Patches {
                 })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            // Medium add body
+            if (Medium.deadBodies != null) {
+                Medium.featureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
+            }
 
             // Mini set adapted kill cooldown
             if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor && Mini.mini == __instance) {

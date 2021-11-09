@@ -33,6 +33,8 @@ namespace TheOtherRoles
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
         public static CustomButton arsonistButton;
+        public static CustomButton vultureEatButton;
+        public static CustomButton mediumButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
 
         public static void setCustomButtonCooldowns() {
@@ -59,6 +61,8 @@ namespace TheOtherRoles
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
+            vultureEatButton.MaxTimer = Vulture.cooldown;
+            mediumButton.MaxTimer = Medium.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -68,6 +72,7 @@ namespace TheOtherRoles
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
+            mediumButton.EffectDuration = Medium.duration;
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -175,7 +180,7 @@ namespace TheOtherRoles
                     byte targetId = 0;
                     if ((Sheriff.currentTarget.Data.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) || 
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
-                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget)) ||
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget)) ||
                         (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget)) {
                         targetId = Sheriff.currentTarget.PlayerId;
                     }
@@ -780,6 +785,128 @@ namespace TheOtherRoles
                     }
                 }
             );
+
+            // Vulture Eat
+            vultureEatButton = new CustomButton(
+                () => {
+                    foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask)) {
+                        if (collider2D.tag == "DeadBody") {
+                            DeadBody component = collider2D.GetComponent<DeadBody>();
+                            if (component && !component.Reported) {
+                                Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+                                Vector2 truePosition2 = component.TruePosition;
+                                if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false)) {
+                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
+                                    writer.Write(playerInfo.PlayerId);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                    RPCProcedure.cleanBody(playerInfo.PlayerId);
+
+                                    Vulture.cooldown = vultureEatButton.Timer = vultureEatButton.MaxTimer;
+                                    Vulture.eatenBodies++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (Vulture.eatenBodies == Vulture.vultureNumberToWin) {
+                        MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VultureWin, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(winWriter);
+                        RPCProcedure.vultureWin();
+                        return;
+                    }
+                },
+                () => { return Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return __instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
+                () => { vultureEatButton.Timer = vultureEatButton.MaxTimer; },
+                Vulture.getButtonSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.F
+            );
+
+            // Medium button
+            mediumButton = new CustomButton(
+                () => {
+                    if (Medium.target != null) {
+                        Medium.soulTarget = Medium.target;
+                        mediumButton.HasEffect = true;
+                    }
+                },
+                () => { return Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (mediumButton.isEffectActive && Medium.target != Medium.soulTarget) {
+                        Medium.soulTarget = null;
+                        mediumButton.Timer = 0f;
+                        mediumButton.isEffectActive = false;
+                    }
+                    return Medium.target != null && PlayerControl.LocalPlayer.CanMove;
+                },
+                () => {
+                    mediumButton.Timer = mediumButton.MaxTimer;
+                    mediumButton.isEffectActive = false;
+                    Medium.soulTarget = null;
+                },
+                Medium.getQuestionSprite(),
+                new Vector3(-1.3f, 0f, 0f),
+                __instance,
+                KeyCode.Q,
+                true,
+                Medium.duration,
+                () => {
+                    mediumButton.Timer = mediumButton.MaxTimer;
+                    if (Medium.target == null || Medium.target.player == null) return;
+                    string msg = "";
+
+                    int randomNumber = Medium.target.killerIfExisting?.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(3) : TheOtherRoles.rnd.Next(4);
+                    string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
+                    float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
+                    string name = " (" + Medium.target.player.Data.PlayerName + ")";
+
+
+                    if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player) + name;
+                    else if (randomNumber == 1) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color" + name;
+                    else if (randomNumber == 2) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started" + name;
+                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting) + name; //exlude mini 
+
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
+
+                    // Remove soul
+                    if (Medium.oneTimeUse) {
+                        float closestDistance = float.MaxValue;
+                        SpriteRenderer target = null;
+
+                        foreach ((DeadPlayer db, Vector3 ps) in Medium.deadBodies) {
+                            if (db == Medium.target) {
+                                Tuple<DeadPlayer, Vector3> deadBody = Tuple.Create(db, ps);
+                                Medium.deadBodies.Remove(deadBody);
+                                break;
+                            }
+
+                        }
+                        foreach (SpriteRenderer rend in Medium.souls) {
+                            float distance = Vector2.Distance(rend.transform.position, PlayerControl.LocalPlayer.GetTruePosition());
+                            if (distance < closestDistance) {
+                                closestDistance = distance;
+                                target = rend;
+                            }
+                        }
+
+                        HudManager.Instance.StartCoroutine(Effects.Lerp(5f, new Action<float>((p) => {
+                            if (target != null) {
+                                var tmp = target.color;
+                                tmp.a = Mathf.Clamp01(1 - p);
+                                target.color = tmp;
+                            }
+                            if (p == 1f && target != null && target.gameObject != null) UnityEngine.Object.Destroy(target.gameObject);
+                        })));
+
+                        Medium.souls.Remove(target);
+                    }
+                }
+            );
+
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

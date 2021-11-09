@@ -29,6 +29,8 @@ namespace TheOtherRoles.Patches {
                 roleCouldUse = true;
             else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
                 roleCouldUse = true;
+            else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == @object)
+                roleCouldUse = true;
             else if (pc.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
