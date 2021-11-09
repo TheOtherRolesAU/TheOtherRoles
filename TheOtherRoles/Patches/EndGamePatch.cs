@@ -17,7 +17,8 @@ namespace TheOtherRoles.Patches {
         TeamJackalWin = 11,
         MiniLose = 12,
         JesterWin = 13,
-        ArsonistWin = 14
+        ArsonistWin = 14,
+        VultureWin = 15
     }
 
     enum WinCondition {
@@ -27,7 +28,8 @@ namespace TheOtherRoles.Patches {
         JesterWin,
         JackalWin,
         MiniLose,
-        ArsonistWin
+        ArsonistWin,
+        VultureWin
     }
 
     static class AdditionalTempData {
@@ -66,12 +68,13 @@ namespace TheOtherRoles.Patches {
                 AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted });
             }
 
-            // Remove Jester, Arsonist, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
+            // Remove Jester, Arsonist, Vulture, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
             List<PlayerControl> notWinners = new List<PlayerControl>();
             if (Jester.jester != null) notWinners.Add(Jester.jester);
             if (Sidekick.sidekick != null) notWinners.Add(Sidekick.sidekick);
             if (Jackal.jackal != null) notWinners.Add(Jackal.jackal);
             if (Arsonist.arsonist != null) notWinners.Add(Arsonist.arsonist);
+            if (Vulture.vulture != null) notWinners.Add(Vulture.vulture);
             notWinners.AddRange(Jackal.formerJackals);
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -85,6 +88,7 @@ namespace TheOtherRoles.Patches {
             bool miniLose = Mini.mini != null && gameOverReason == (GameOverReason)CustomGameOverReason.MiniLose;
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.DidHumansWin(gameOverReason) && !Lovers.existingWithKiller())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead) || (Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead));
+            bool vultureWin = Vulture.vulture != null && gameOverReason == (GameOverReason)CustomGameOverReason.VultureWin;
 
             // Mini lose
             if (miniLose) {
@@ -109,6 +113,14 @@ namespace TheOtherRoles.Patches {
                 WinningPlayerData wpd = new WinningPlayerData(Arsonist.arsonist.Data);
                 TempData.winners.Add(wpd);
                 AdditionalTempData.winCondition = WinCondition.ArsonistWin;
+            }
+
+            // Vulture win
+            else if (vultureWin) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Vulture.vulture.Data);
+                TempData.winners.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.VultureWin;
             }
 
             // Lovers win conditions
@@ -177,6 +189,10 @@ namespace TheOtherRoles.Patches {
                 textRenderer.text = "Arsonist Wins";
                 textRenderer.color = Arsonist.color;
             }
+            else if (AdditionalTempData.winCondition == WinCondition.VultureWin) {
+                textRenderer.text = "Vulture Wins";
+                textRenderer.color = Vulture.color;
+            }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 textRenderer.text = "Lovers And Crewmates Win";
                 textRenderer.color = Lovers.color;
@@ -234,6 +250,7 @@ namespace TheOtherRoles.Patches {
             if (CheckAndEndGameForMiniLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
             if (CheckAndEndGameForArsonistWin(__instance)) return false;
+            if (CheckAndEndGameForVultureWin(__instance)) return false;
             if (CheckAndEndGameForSabotageWin(__instance)) return false;
             if (CheckAndEndGameForTaskWin(__instance)) return false;
             if (CheckAndEndGameForLoverWin(__instance, statistics)) return false;
@@ -265,6 +282,15 @@ namespace TheOtherRoles.Patches {
             if (Arsonist.triggerArsonistWin) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ArsonistWin, false);
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckAndEndGameForVultureWin(ShipStatus __instance) {
+            if (Vulture.triggerVultureWin) {
+                __instance.enabled = false;
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.VultureWin, false);
                 return true;
             }
             return false;

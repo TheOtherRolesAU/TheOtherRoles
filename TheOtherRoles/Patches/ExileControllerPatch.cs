@@ -151,6 +151,28 @@ namespace TheOtherRoles.Patches {
             // Force Bounty Hunter Bounty Update
             if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
                 BountyHunter.bountyUpdateTimer = 0f;
+
+            // Medium spawn souls
+            if (Medium.medium != null && PlayerControl.LocalPlayer == Medium.medium) {
+                if (Medium.souls != null) {
+                    foreach (SpriteRenderer sr in Medium.souls) UnityEngine.Object.Destroy(sr.gameObject);
+                    Medium.souls = new List<SpriteRenderer>();
+                }
+
+                if (Medium.featureDeadBodies != null) {
+                    foreach ((DeadPlayer db, Vector3 ps) in Medium.featureDeadBodies) {
+                        GameObject s = new GameObject();
+                        s.transform.position = ps;
+                        s.layer = 5;
+                        var rend = s.AddComponent<SpriteRenderer>();
+                        rend.sprite = Medium.getSoulSprite();
+                        Medium.souls.Add(rend);
+                    }
+                    Medium.deadBodies = Medium.featureDeadBodies;
+                    Medium.featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+                }
+            }
+
         }
     }
 
