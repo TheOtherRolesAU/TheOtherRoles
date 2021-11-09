@@ -57,6 +57,8 @@ namespace TheOtherRoles
         public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
         public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
         public static RoleInfo bait = new RoleInfo("Bait", Bait.color, "Bait your enemies", "Bait your enemies", RoleId.Bait);
+        public static RoleInfo vulture = new RoleInfo("Vulture", Vulture.color, "Eat Corpses to win", "Eat dead bodies", RoleId.Vulture);
+        public static RoleInfo medium = new RoleInfo("Medium", Medium.color, "Question the souls of the dead to gain informations", "Question the souls", RoleId.Medium);
         public static RoleInfo doppelganger = new RoleInfo("Doppelganger", Doppelganger.color, "Become someones Role-Double", "Become someones Role-Double", RoleId.Doppelganger);
         public static RoleInfo doppelgangerShort = new RoleInfo("#2", Doppelganger.color, "You're a copy", "You're a copy", RoleId.Doppelganger);
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
@@ -85,6 +87,7 @@ namespace TheOtherRoles
             arsonist,
             jackal,
             sidekick,
+            vulture,
             crewmate,
             shifter,
             mayor,
@@ -101,8 +104,8 @@ namespace TheOtherRoles
             snitch,
             spy,
             securityGuard,
-            bountyHunter,
             bait,
+            medium,
             doppelganger
         };
 
@@ -144,6 +147,8 @@ namespace TheOtherRoles
             if (p == Guesser.guesser) infos.Add(p.Data.IsImpostor ? badGuesser : goodGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Bait.bait) infos.Add(bait);
+            if (p == Vulture.vulture) infos.Add(vulture);
+            if (p == Medium.medium) infos.Add(medium);
             if (p == Doppelganger.doppelganger)
             {
                 if (Doppelganger.copiedRole != null)
@@ -165,6 +170,13 @@ namespace TheOtherRoles
             if (p == Lovers.lover1|| p == Lovers.lover2) infos.Add(lover);
 
             return infos;
+        }
+
+        public static String GetRole(PlayerControl p) {
+            string roleName;
+            roleName = String.Join("", getRoleInfoForPlayer(p).Select(x => x.name).ToArray());
+            if (roleName.Contains("Lover")) roleName.Replace("Lover", "");
+            return roleName;
         }
     }
 }

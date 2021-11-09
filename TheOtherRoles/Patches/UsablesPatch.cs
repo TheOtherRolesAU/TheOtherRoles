@@ -29,6 +29,8 @@ namespace TheOtherRoles.Patches {
                 roleCouldUse = true;
             else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
                 roleCouldUse = true;
+            else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == @object)
+                roleCouldUse = true;
             else if (Doppelganger.doppelganger != null && Doppelganger.doppelganger == @object
                      && (Doppelganger.copiedRole == RoleInfo.engineer))
                 roleCouldUse = true;
@@ -456,9 +458,7 @@ namespace TheOtherRoles.Patches {
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
                         camera.orthographicSize = 2.35f;
-                        RenderTexture temporary = RenderTexture.GetTemporary(
-                            
-                            6, 256, 16, (RenderTextureFormat)0);
+                        RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
                         __instance.textures[i] = temporary;
                         camera.targetTexture = temporary;
                     }

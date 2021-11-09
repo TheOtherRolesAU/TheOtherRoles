@@ -48,6 +48,8 @@ namespace TheOtherRoles
         Guesser,
         BountyHunter,
         Bait,
+        Vulture,
+        Medium,
         Doppelganger,
         Crewmate,
         Impostor
@@ -99,6 +101,7 @@ namespace TheOtherRoles
         SealVent,
         ArsonistWin,
         GuesserShoot,
+        VultureWin,
         DoppelgangerCopy,
         SetFutureDoppelgangerTarget
     }
@@ -240,6 +243,12 @@ namespace TheOtherRoles
                     case RoleId.Bait:
                         Bait.bait = player;
                         break;
+                    case RoleId.Vulture:
+                        Vulture.vulture = player;
+                        break;
+                    case RoleId.Medium:
+                        Medium.medium = player;
+                        break;
                     case RoleId.Doppelganger:
                         Doppelganger.doppelganger = player;
                         break;
@@ -307,8 +316,9 @@ namespace TheOtherRoles
         public static void cleanBody(byte playerId) {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; i++) {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
                     UnityEngine.Object.Destroy(array[i].gameObject);
+                }
                 if (Bait.bait != null && playerId == Bait.bait.PlayerId) Bait.wasCleaned = true;
                 if (Doppelganger.doppelganger != null && playerId == Doppelganger.doppelganger.PlayerId) Doppelganger.baitWasCleaned = true;
             }
@@ -461,7 +471,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist) {
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
                 oldShifter.Exiled();
                 return;
             }
@@ -514,9 +524,14 @@ namespace TheOtherRoles
                 SecurityGuard.securityGuard = oldShifter;
             if (Guesser.guesser != null && Guesser.guesser == player)
                 Guesser.guesser = oldShifter;
-            if (Bait.bait != null && Bait.bait == player)
+            if (Bait.bait != null && Bait.bait == player) {
                 Bait.bait = oldShifter;
-            
+                if (Bait.bait.Data.IsDead) Bait.reported = true;
+            }
+                
+            if (Medium.medium != null && Medium.medium == player)
+                Medium.medium = oldShifter;
+
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
@@ -542,12 +557,16 @@ namespace TheOtherRoles
 
             Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
+            if (Camouflager.camouflageTimer <= 0f)
+                Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
         }
 
         public static void camouflagerCamouflage() {
             if (Camouflager.camouflager == null) return;
 
             Camouflager.camouflageTimer = Camouflager.duration;
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                player.setLook("", 6, 0, 0, 0);
         }
 
         public static void vampireSetBitten(byte targetId, byte reset) {
@@ -665,6 +684,7 @@ namespace TheOtherRoles
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
             if (player == Bait.bait) Bait.clearAndReload();
+            if (player == Medium.medium) Medium.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -695,6 +715,7 @@ namespace TheOtherRoles
             }
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
             if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
+            if (player == Vulture.vulture) Vulture.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -815,6 +836,10 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
+        }
+
+        public static void vultureWin() {
+            Vulture.triggerVultureWin = true;
         }
 
         public static void guesserShoot(byte targetId, byte guesserId) {
@@ -1019,6 +1044,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureDoppelgangerTarget:
                     RPCProcedure.setFutureDoppelgangerTarget(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.VultureWin:
+                    RPCProcedure.vultureWin();
                     break;
             }
         }
