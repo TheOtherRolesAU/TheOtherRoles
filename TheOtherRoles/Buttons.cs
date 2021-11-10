@@ -912,7 +912,7 @@ namespace TheOtherRoles
                         mediumButton.HasEffect = true;
                     }
                 },
-                () => { return Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.medium)) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     if (mediumButton.isEffectActive && Medium.target != Medium.soulTarget) {
                         Medium.soulTarget = null;
@@ -944,9 +944,9 @@ namespace TheOtherRoles
 
 
                     if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player) + name;
-                    else if (randomNumber == 1) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color" + name;
+                    else if (randomNumber == 1) msg = "What is your killer's color type? My killer is a " + typeOfColor + " color" + name;
                     else if (randomNumber == 2) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started" + name;
-                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting) + name; //exlude mini 
+                    else msg = "What is your killer's role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting) + name; //exlude mini 
 
                     DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
 

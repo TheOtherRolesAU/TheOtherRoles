@@ -174,7 +174,7 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.bountyUpdateTimer = 0f;
 
             // Medium spawn souls
-            if (Medium.medium != null && PlayerControl.LocalPlayer == Medium.medium) {
+            if (Medium.medium != null && PlayerControl.LocalPlayer == Medium.medium || Doppelganger.isRoleAndLocalPlayer(RoleInfo.medium)) {
                 if (Medium.souls != null) {
                     foreach (SpriteRenderer sr in Medium.souls) UnityEngine.Object.Destroy(sr.gameObject);
                     Medium.souls = new List<SpriteRenderer>();

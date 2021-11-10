@@ -1053,8 +1053,6 @@ namespace TheOtherRoles
         public static Arrow trackerArrow = new Arrow(Color.blue);
         public static List<Arrow> snitchLocalArrows = new List<Arrow>();
 
-
-
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()
         {

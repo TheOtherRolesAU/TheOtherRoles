@@ -676,7 +676,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void mediumSetTarget() {
-            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+            if (Medium.medium != PlayerControl.LocalPlayer && !Doppelganger.isRoleAndLocalPlayer(RoleInfo.medium) || PlayerControl.LocalPlayer.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
 
             DeadPlayer target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
