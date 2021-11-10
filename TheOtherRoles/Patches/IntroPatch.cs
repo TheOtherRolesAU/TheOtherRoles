@@ -17,10 +17,10 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
-                    PlayerControl.SetPlayerMaterialColors(data.ColorId, player.Body);
-                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.SkinId);
-                    player.HatSlot.SetHat(data.HatId, data.ColorId);
-                    PlayerControl.SetPetImage(data.PetId, data.ColorId, player.PetSlot);
+                    PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, player.Body);
+                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.DefaultOutfit.SkinId);
+                    player.HatSlot.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
+                    PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, player.PetSlot);
                     player.NameText.text = data.PlayerName;
                     player.SetFlipX(true);
                     MapOptions.playerIcons[p.PlayerId] = player;
@@ -45,7 +45,7 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.bountyUpdateTimer = 0f;
                 if (HudManager.Instance != null) {
                     Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
-                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(HudManager.Instance.KillButton.TimerText, HudManager.Instance.transform);
+                    BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(((ActionButton)HudManager.Instance.KillButton).cooldownTimerText, HudManager.Instance.transform);
                     BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
@@ -81,12 +81,12 @@ namespace TheOtherRoles.Patches {
             RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
 
             if (roleInfo != null) {
-                __instance.Title.text = roleInfo.name;
+                __instance.TeamTitle.text = roleInfo.name;
                 __instance.ImpostorText.gameObject.SetActive(true);
                 __instance.ImpostorText.text = roleInfo.introDescription;
                 if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor) {
                     // For native Crewmate or Impostor do not modify the colors
-                    __instance.Title.color = roleInfo.color;
+                    __instance.TeamTitle.color = roleInfo.color;
                     __instance.BackgroundBar.material.color = roleInfo.color;
                 }
             }
