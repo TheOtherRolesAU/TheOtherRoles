@@ -124,7 +124,7 @@ namespace TheOtherRoles
         public static void forceEnd() {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (!player.Data.IsImpostor)
+                if (!player.Data.Role.IsImpostor)
                 {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
@@ -381,7 +381,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
                 oldShifter.Exiled();
                 return;
             }
@@ -534,7 +534,7 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
                         Jackal.fakeSidekick = player;
                     } else {
                         player.RemoveInfected();
@@ -638,7 +638,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if(PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }

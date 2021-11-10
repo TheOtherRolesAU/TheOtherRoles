@@ -33,9 +33,9 @@ namespace TheOtherRoles.Patches {
         private static RoleAssignmentData getRoleAssignmentData() {
             // Get the players that we want to assign the roles to. Crewmate and Neutral roles are assigned to natural crewmates. Impostor roles to impostors.
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.Data.IsImpostor);
+            crewmates.RemoveAll(x => x.Data.Role.IsImpostor);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.Data.IsImpostor);
+            impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
 
             var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
             var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();

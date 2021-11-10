@@ -341,7 +341,7 @@ namespace TheOtherRoles
         public static bool existingWithKiller() {
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
-                               || lover1.Data.IsImpostor      || lover2.Data.IsImpostor);
+                               || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
