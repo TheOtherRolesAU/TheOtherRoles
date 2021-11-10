@@ -131,9 +131,6 @@ namespace TheOtherRoles
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
                 playerControl.SetColor((byte) random.Next(Palette.PlayerColors.Length));
-                playerControl.SetHat((uint) random.Next(HatManager.Instance.AllHats.Count), playerControl.Data.ColorId);
-                playerControl.SetPet((uint) random.Next(HatManager.Instance.AllPets.Count));
-                playerControl.SetSkin((uint) random.Next(HatManager.Instance.AllSkins.Count));
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
