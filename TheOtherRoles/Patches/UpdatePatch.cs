@@ -211,12 +211,10 @@ namespace TheOtherRoles.Patches {
                 enabled = false;
             else if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                 enabled = false;
-            enabled &= __instance.UseButton.isActiveAndEnabled;
             
-            __instance.KillButton.gameObject.SetActive(enabled);
-            __instance.KillButton.renderer.enabled = enabled;
-            __instance.KillButton.isActive = enabled;
-            __instance.KillButton.enabled = enabled;
+            var button = (ActionButton)__instance.KillButton;
+            if (enabled) button.Show();
+            else button.Hide();
         }
 
         static void Postfix(HudManager __instance)
