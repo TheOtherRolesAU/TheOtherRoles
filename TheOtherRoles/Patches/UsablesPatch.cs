@@ -107,23 +107,25 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(VentButton), nameof(VentButton.SetTarget))]
+    class UseButtonSetTargetPatch {
+        static void Postfix(VentButton __instance) {
+            // Trickster render special vent button
+            if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer && __instance.currentTarget != null && __instance.currentTarget.gameObject != null) {
+                var useButton = ((ActionButton)__instance);
+                if (__instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_")) {
+                    useButton.graphic.sprite = Trickster.getTricksterVentButtonSprite();
+                } else {
+                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                }
+            }
+        }
+    }
+
+
     [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
     class UseButtonSetTargetPatch {
         static void Postfix(UseButtonManager __instance) {
-            // Trickster render special vent button
-            if (__instance.currentTarget != null && Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                Vent possibleVent =  __instance.currentTarget.TryCast<Vent>();
-                if (possibleVent != null && possibleVent.gameObject != null) {
-                    var useButton = __instance.currentButtonShown;
-                    if (possibleVent.gameObject.name.StartsWith("JackInTheBoxVent_")) {
-                        useButton.graphic.sprite = Trickster.getTricksterVentButtonSprite();
-                        useButton.text.enabled = false; // clear text;
-                    } else {
-                        useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
-                        useButton.text.enabled = false;
-                    }
-                }
-            }
 
             // Jester sabotage
             if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.CanMove) {
