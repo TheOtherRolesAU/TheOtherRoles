@@ -330,7 +330,7 @@ namespace TheOtherRoles.Modules {
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
                     colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => { __instance.SelectHat(hat); }));
-                    colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.ColorId);
+                    colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId);
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
                     __instance.ColorChips.Add(colorChip);
@@ -339,11 +339,6 @@ namespace TheOtherRoles.Modules {
             }
 
             public static bool Prefix(HatsTab __instance) {
-                PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.Data.ColorId, __instance.DemoImage);
-                __instance.HatImage.SetHat(SaveManager.LastHat, PlayerControl.LocalPlayer.Data.ColorId);
-                PlayerControl.SetSkinImage(SaveManager.LastSkin, __instance.SkinImage);
-                PlayerControl.SetPetImage(SaveManager.LastPet, PlayerControl.LocalPlayer.Data.ColorId, __instance.PetImage);
-
                 HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>>();
                 hatsTabCustomTexts = new List<TMPro.TMP_Text>();
@@ -380,8 +375,6 @@ namespace TheOtherRoles.Modules {
                     YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
 
-                // __instance.scroller.YBounds.max = -(__instance.YStart - (float)(unlockedHats.Length / this.NumPerRow) * this.YOffset) - 3f;
-                // __instance.scroller.YBounds.max = YOffset * -0.875f; // probably needs to fix up the entire messed math to solve this correctly
                 __instance.scroller.YBounds.max = -(YOffset + 4.1f); 
                 return false;
             }
