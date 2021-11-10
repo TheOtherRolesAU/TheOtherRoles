@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches {
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
-                if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.IsImpostor))
+                if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.Role.IsImpostor))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if(untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -614,7 +614,7 @@ namespace TheOtherRoles.Patches {
                 Camouflager.resetCamouflage();
                 if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
                     PlayerControl target = Morphling.morphTarget;
-                    Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+                    Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
                 }
             }
 
@@ -750,7 +750,7 @@ namespace TheOtherRoles.Patches {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
                             msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.name}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.DefaultOutfit.ColorId) ? "lighter" : "darker";
                             msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";
@@ -784,7 +784,7 @@ namespace TheOtherRoles.Patches {
             // Allow everyone to murder players
             resetToCrewmate = !__instance.Data.Role.IsImpostor;
             resetToDead = __instance.Data.IsDead;
-            __instance.Data.Role.IsImpostor = true;
+            __instance.Data.Role.TeamType = RoleTeamTypes.Impostor;
             __instance.Data.IsDead = false;
         }
 
@@ -795,7 +795,7 @@ namespace TheOtherRoles.Patches {
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Reset killer to crewmate if resetToCrewmate
-            if (resetToCrewmate) __instance.Data.Role.IsImpostor = false;
+            if (resetToCrewmate) __instance.Data.Role.TeamType = RoleTeamTypes.Crewmate;
             if (resetToDead) __instance.Data.IsDead = true;
 
             // Remove fake tasks when player dies
@@ -922,22 +922,6 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CanMove), MethodType.Getter)]
-    class PlayerControlCanMovePatch {
-        public static bool Prefix(PlayerControl __instance, ref bool __result)
-        {
-            __result = __instance.moveable &&
-                !Minigame.Instance &&
-                (!DestroyableSingleton<HudManager>.InstanceExists || (!DestroyableSingleton<HudManager>.Instance.Chat.IsOpen && !DestroyableSingleton<HudManager>.Instance.KillOverlay.IsOpen && !DestroyableSingleton<HudManager>.Instance.GameMenu.IsOpen)) &&
-                (!MapBehaviour.Instance || !MapBehaviour.Instance.IsOpenStopped) &&
-                !MeetingHud.Instance &&
-                !CustomPlayerMenu.Instance &&
-                !ExileController.Instance &&
-                !IntroCutscene.Instance;
-            return false;
         }
     }
 }

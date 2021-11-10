@@ -860,7 +860,7 @@ namespace TheOtherRoles
                     string msg = "";
 
                     int randomNumber = Medium.target.killerIfExisting?.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(3) : TheOtherRoles.rnd.Next(4);
-                    string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.ColorId) ? "lighter" : "darker";
+                    string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.DefaultOutfit.ColorId) ? "lighter" : "darker";
                     float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
                     string name = " (" + Medium.target.player.Data.PlayerName + ")";
 
