@@ -238,17 +238,17 @@ namespace TheOtherRoles {
         }
 
         public static void setDefaultLook(this PlayerControl target) {
-            target.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+            target.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
-        public static void setLook(this PlayerControl target, String playerName, int colorId, uint hatId, uint skinId, uint petId) {
+        public static void setLook(this PlayerControl target, String playerName, int colorId, string hatId, string skinId, string petId) {
             target.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName;
             target.myRend.material.SetColor("_BackColor", Palette.ShadowColors[colorId]);
             target.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[colorId]);
             target.HatRenderer.SetHat(hatId, colorId);
-            target.nameText.transform.localPosition = new Vector3(0f, ((hatId == 0U) ? 0.7f : 1.05f) * 2f, -0.5f);
+            target.nameText.transform.localPosition = new Vector3(0f, (String.IsNullOrEmpty(hatId) ? 0.7f : 1.05f) * 2f, -0.5f);
 
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)skinId];
+            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
@@ -266,7 +266,7 @@ namespace TheOtherRoles {
             spriteAnim.m_animator.Update(0f);
 
             if (target.CurrentPet) UnityEngine.Object.Destroy(target.CurrentPet.gameObject);
-            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[(int)petId]);
+            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.GetPetById(petId).PetPrefab);
             target.CurrentPet.transform.position = target.transform.position;
             target.CurrentPet.Source = target;
             target.CurrentPet.Visible = target.Visible;
