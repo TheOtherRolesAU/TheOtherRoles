@@ -31,7 +31,7 @@ namespace TheOtherRoles.Patches {
                 roleCouldUse = true;
             else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == @object)
                 roleCouldUse = true;
-            else if (pc.IsImpostor) {
+            else if (pc.Role.IsImpostor) {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
                 else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
@@ -108,66 +108,27 @@ namespace TheOtherRoles.Patches {
     }
 
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.SetTarget))]
-    class UseButtonSetTargetPatch {
+    class VentButtonSetTargetPatch {
         static void Postfix(VentButton __instance) {
             // Trickster render special vent button
             if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                var useButton = ((ActionButton)__instance);
                 if (__instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_") && __instance.currentTarget != null && __instance.currentTarget.gameObject != null)
-                    useButton.graphic.sprite = Trickster.getTricksterVentButtonSprite();
+                    __instance.graphic.sprite = Trickster.getTricksterVentButtonSprite();
                 else
-                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                    __instance.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
             }
         }
     }
 
-
-    [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.SetTarget))]
-    class UseButtonSetTargetPatch {
-        static void Postfix(UseButtonManager __instance) {
-
-            // Jester sabotage
-            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && PlayerControl.LocalPlayer.CanMove) {
-                var useButton = __instance.currentButtonShown;
-                if (!Jester.jester.Data.IsDead && __instance.currentTarget == null) { // no target, so sabotage
-                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.SabotageButton);
-                    useButton.graphic.color = UseButtonManager.EnabledColor;
-                    useButton.text.enabled = false;
-                } else {
-                    useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
-                    useButton.text.enabled = false;
-                }
-            }
-
-            // Mafia sabotage button render patch
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
+    class SabotageButtonRefreshPatch {
+        static void Postfix() {
+            // Mafia disable sabotage button for Janitor and sometimes for Mafioso
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
-            if (__instance.currentTarget == null && (blockSabotageJanitor || blockSabotageMafioso)) {
-                var useButton = __instance.currentButtonShown;
-                useButton.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.UseButton);
-                useButton.graphic.color = UseButtonManager.DisabledColor;
-                useButton.text.enabled = false;
+            if (blockSabotageJanitor || blockSabotageMafioso) {
+                HudManager.Instance.SabotageButton.SetDisabled();
             }
-
-        }
-    }
-    
-    [HarmonyPatch(typeof(UseButtonManager), nameof(UseButtonManager.DoClick))]
-    class UseButtonDoClickPatch {
-        static bool Prefix(UseButtonManager __instance) { 
-            if (__instance.currentTarget != null) return true;
-            // Jester sabotage
-            if (Jester.canSabotage && Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) {
-                Action<MapBehaviour> action = m => m.ShowInfectedMap() ;
-                DestroyableSingleton<HudManager>.Instance.ShowMap(action);
-                return false;
-            }
-            // Mafia sabotage button click patch
-            bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
-            bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
-            if (blockSabotageJanitor || blockSabotageMafioso) return false;
-
-            return true;
         }
     }
 
@@ -367,9 +328,9 @@ namespace TheOtherRoles.Patches {
                                     if (component) {
                                         GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                         if (playerInfo != null) {
-                                            var color = Palette.PlayerColors[playerInfo.ColorId];
+                                            var color = Palette.PlayerColors[playerInfo.DefaultOutfit.ColorId];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(playerInfo.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                                color = Helpers.isLighterColor(playerInfo.DefaultOutfit.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                             roomColors.Add(color);
                                         }
                                     }

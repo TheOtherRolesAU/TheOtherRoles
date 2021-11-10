@@ -212,9 +212,8 @@ namespace TheOtherRoles.Patches {
             else if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                 enabled = false;
             
-            var button = (ActionButton)__instance.KillButton;
-            if (enabled) button.Show();
-            else button.Hide();
+            if (enabled) __instance.KillButton.Show();
+            else __instance.KillButton.Hide();
         }
 
         static void Postfix(HudManager __instance)

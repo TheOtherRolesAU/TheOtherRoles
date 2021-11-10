@@ -8,7 +8,7 @@ using System;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Patches {
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetInfected))]
+    [HarmonyPatch(typeof(PlayerControl), nameof(RoleManager.SelectRoles))]
     class SetInfectedPatch
     {
 
