@@ -8,12 +8,9 @@ using System;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Patches {
-    [HarmonyPatch(typeof(PlayerControl), nameof(RoleManager.SelectRoles))]
-    class SetInfectedPatch
-    {
-
-        public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
-        {
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
+    class RoleManagerSelectRolesPatch {
+        public static void Postfix() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
