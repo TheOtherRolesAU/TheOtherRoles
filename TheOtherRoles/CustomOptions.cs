@@ -599,8 +599,8 @@ namespace TheOtherRoles {
         }
     }
 
-    [HarmonyPatch(typeof(GameSettingMenu), "OnEnable")]
-    class GameSettingMenuPatch {
+    [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
+    class GameSettingMenuStartPatch {
         public static void Prefix(GameSettingMenu __instance) {
             __instance.HideForOnline = new Transform[]{};
         }
