@@ -461,7 +461,7 @@ namespace TheOtherRoles
             Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
             if (Camouflager.camouflageTimer <= 0f)
-                Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+                Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
         public static void camouflagerCamouflage() {
@@ -469,7 +469,7 @@ namespace TheOtherRoles
 
             Camouflager.camouflageTimer = Camouflager.duration;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                player.setLook("", 6, 0, 0, 0);
+                player.setLook("", 6, "", "", "");
         }
 
         public static void vampireSetBitten(byte targetId, byte reset) {
