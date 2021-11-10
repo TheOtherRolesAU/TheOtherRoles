@@ -838,7 +838,7 @@ namespace TheOtherRoles
         public static void resetCurse() {
             HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
             HudManagerStartPatch.warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
-            HudManagerStartPatch.warlockCurseButton.killButtonManager.TimerText.color = Palette.EnabledColor;
+            HudManagerStartPatch.warlockCurseButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
