@@ -126,7 +126,7 @@ namespace TheOtherRoles
                 },
                 () => {},
                 Engineer.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -162,7 +162,7 @@ namespace TheOtherRoles
                 () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
                 () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer; },
                 Janitor.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -199,7 +199,7 @@ namespace TheOtherRoles
                 () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(0f, 1f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -219,7 +219,7 @@ namespace TheOtherRoles
                     timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 TimeMaster.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q, 
                 true,
@@ -244,7 +244,7 @@ namespace TheOtherRoles
                 () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => {},
                 Medic.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -262,7 +262,7 @@ namespace TheOtherRoles
                 () => { return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove; },
                 () => { },
                 Shifter.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -293,7 +293,7 @@ namespace TheOtherRoles
                     Morphling.sampledTarget = null;
                 },
                 Morphling.getSampleSprite(),
-                 new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F,
                 true,
@@ -321,7 +321,7 @@ namespace TheOtherRoles
                     camouflagerButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Camouflager.getButtonSprite(),
-                 new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F,
                 true,
@@ -342,7 +342,7 @@ namespace TheOtherRoles
                     hackerButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Hacker.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q,
                 true,
@@ -364,7 +364,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker; },
                 () => { if(Tracker.resetTargetAfterMeeting) Tracker.resetTracked(); },
                 Tracker.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -428,7 +428,7 @@ namespace TheOtherRoles
                     vampireKillButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Vampire.getButtonSprite(),
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(0, 1f, 0),
                 __instance,
                 KeyCode.Q,
                 false,
@@ -455,7 +455,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && !Vampire.localPlacedGarlic; },
                 () => { },
                 Vampire.getGarlicButtonSprite(),
-                Vector3.zero,
+                new Vector3(0, -0.06f, 0),
                 __instance,
                 null,
                 true
@@ -474,7 +474,7 @@ namespace TheOtherRoles
                 () => { return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
                 Jackal.getSidekickButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -495,7 +495,7 @@ namespace TheOtherRoles
                 () => { return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(0, 1f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -517,7 +517,7 @@ namespace TheOtherRoles
                 () => { return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
-                new Vector3(-1.3f, 0, 0),
+                new Vector3(0, 1f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -535,7 +535,7 @@ namespace TheOtherRoles
                     lighterButton.actionButton.graphic.color = Palette.EnabledColor;
                 },
                 Lighter.getButtonSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q,
                 true,
@@ -558,7 +558,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null; },
                 () => { eraserButton.Timer = eraserButton.MaxTimer;},
                 Eraser.getButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -581,7 +581,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && !JackInTheBox.hasJackInTheBoxLimitReached(); },
                 () => { placeJackInTheBoxButton.Timer = placeJackInTheBoxButton.MaxTimer;},
                 Trickster.getPlaceBoxButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -600,13 +600,14 @@ namespace TheOtherRoles
                     lightsOutButton.actionButton.graphic.color = Palette.EnabledColor;
                 },
                 Trickster.getLightsOutButtonSprite(),
-                 new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F,
                 true,
                 Trickster.lightsOutDuration,
                 () => { lightsOutButton.Timer = lightsOutButton.MaxTimer; }
             );
+
             // Cleaner Clean
             cleanerCleanButton = new CustomButton(
                 () => {
@@ -638,7 +639,7 @@ namespace TheOtherRoles
                 () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
                 () => { cleanerCleanButton.Timer = cleanerCleanButton.MaxTimer; },
                 Cleaner.getButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -685,7 +686,7 @@ namespace TheOtherRoles
                     Warlock.curseVictimTarget = null;
                 },
                 Warlock.getCurseButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -723,7 +724,7 @@ namespace TheOtherRoles
                 },
                 () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
                 SecurityGuard.getPlaceCameraButtonSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
@@ -768,7 +769,7 @@ namespace TheOtherRoles
                     Arsonist.douseTarget = null;
                 },
                 Arsonist.getDouseSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q,
                 true,
@@ -821,7 +822,7 @@ namespace TheOtherRoles
                 () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
                 () => { vultureEatButton.Timer = vultureEatButton.MaxTimer; },
                 Vulture.getButtonSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -849,7 +850,7 @@ namespace TheOtherRoles
                     Medium.soulTarget = null;
                 },
                 Medium.getQuestionSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q,
                 true,

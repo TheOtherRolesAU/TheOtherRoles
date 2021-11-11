@@ -43,7 +43,7 @@ namespace TheOtherRoles.Objects {
             this.hotkey = hotkey;
             Timer = 16.2f;
             buttons.Add(this);
-            actionButton = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
+            actionButton = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.KillButton.transform.parent);
             PassiveButton button = actionButton.GetComponent<PassiveButton>();
             this.showButtonText = actionButton.graphic.sprite == Sprite;
             button.OnClick = new Button.ButtonClickedEvent();
