@@ -56,7 +56,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch]
     class IntroPatch {
-        public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+        public static void setupIntroTeamIcons(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             // Intro solo teams
             if (PlayerControl.LocalPlayer == Jester.jester || PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Arsonist.arsonist || PlayerControl.LocalPlayer == Vulture.vulture) {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
@@ -76,48 +76,57 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        public static void setupIntroRole(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
+        public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
             RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
-
-            if (roleInfo != null) {
-                __instance.TeamTitle.text = roleInfo.name;
-                __instance.ImpostorText.gameObject.SetActive(true);
-                __instance.ImpostorText.text = roleInfo.introDescription;
-                if (roleInfo.roleId != RoleId.Crewmate && roleInfo.roleId != RoleId.Impostor) {
-                    // For native Crewmate or Impostor do not modify the colors
-                    __instance.TeamTitle.color = roleInfo.color;
-                    __instance.BackgroundBar.material.color = roleInfo.color;
-                }
+            if (roleInfo == null) return;
+            if (roleInfo.isNeutral) {
+                var neutralColor = new Color32(76, 84, 78, 255);
+                __instance.BackgroundBar.material.color = neutralColor;
+                __instance.TeamTitle.text = "Neutral";
+                __instance.TeamTitle.color = neutralColor;
             }
+        }
 
-            if (infos.Any(info => info.roleId == RoleId.Lover)) {
-                var loversText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.ImpostorText, __instance.ImpostorText.transform.parent);
-                loversText.transform.localPosition += Vector3.down * 3f;
-                PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                loversText.text = Helpers.cs(Lovers.color, $"♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
+        class SetUpRoleTextPatch {
+            public static void Postfix(IntroCutscene __instance) {
+                List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
+                RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
+
+                if (roleInfo != null) {
+                    __instance.RoleText.text = roleInfo.name;
+                    __instance.RoleText.color = roleInfo.color;
+                    __instance.RoleBlurbText.text = roleInfo.introDescription;
+                    __instance.RoleBlurbText.color = roleInfo.color;
+                }
+
+                if (infos.Any(info => info.roleId == RoleId.Lover)) {
+                    PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                    __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                } 
             }
         }
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
         class BeginCrewmatePatch {
             public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+                setupIntroTeamIcons(__instance, ref yourTeam);
             }
 
             public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroRole(__instance, ref yourTeam);
+                setupIntroTeam(__instance, ref yourTeam);
             }
         }
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
         class BeginImpostorPatch {
             public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+                setupIntroTeamIcons(__instance, ref yourTeam);
             }
 
             public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroRole(__instance, ref yourTeam);
+                setupIntroTeam(__instance, ref yourTeam);
             }
         }
     }
