@@ -524,8 +524,8 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 ### **Team: Impostors**
 The Mafia are a group of three Impostors.\
 The Godfather works like a normal Impostor.\
-The Mafioso is an Impostor who cannot kill nor sabotage until the Godfather is dead.\
-The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
+The Mafioso is an Impostor who cannot kill until the Godfather is dead.\
+The Janitor is an Impostor who cannot kill, but they can hide dead bodies instead.\
 \
 **NOTE:**
 - There have to be 3 Impostors activated for the mafia to spawn.
