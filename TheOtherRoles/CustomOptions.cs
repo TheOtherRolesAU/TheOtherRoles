@@ -505,7 +505,7 @@ namespace TheOtherRoles {
 
             var torTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
             var torTabHighlight = torTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
-            torTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 900f);
+            torTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TabIcon.png", 100f);
     
             gameTab.transform.position += Vector3.left * 0.5f;
             torTab.transform.position += Vector3.right * 0.5f;
