@@ -606,6 +606,7 @@ namespace TheOtherRoles {
         }
 
         public static void Postfix(GameSettingMenu __instance) {
+            // Setup mapNameTransform
             var mapNameTransform = __instance.AllItems.FirstOrDefault(x => x.gameObject.activeSelf && x.name.Equals("MapName", StringComparison.OrdinalIgnoreCase));
             if (mapNameTransform == null) return;
 
@@ -617,6 +618,41 @@ namespace TheOtherRoles {
                 options.Add(kvp);
             }
             mapNameTransform.GetComponent<KeyValueOption>().Values = options;
+
+            // Setup TOR tab
+            var roleTab = GameObject.Find("RoleTab");
+            var gameTab = GameObject.Find("GameTab");
+
+            var torTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
+            torTab.transform.FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
+
+
+            gameTab.transform.position += Vector3.left * 0.5f;
+            torTab.transform.position += Vector3.right * 0.5f;
+            roleTab.transform.position += Vector3.left * 0.5f;  
+
+            var tabs = new GameObject[]{gameTab, roleTab, torTab};
+            for (int i = 0; i < tabs.Length; i++) {
+                var button = tabs[i].GetComponentInChildren<PassiveButton>();
+                if (button == null) continue;
+                button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    System.Console.WriteLine(i);
+                    __instance.RegularGameSettings.SetActive(false);
+                    __instance.RolesSettings.gameObject.SetActive(false);
+                    __instance.GameSettingsHightlight.enabled = false;
+                    __instance.RolesSettingsHightlight.enabled = false;
+                    if (i == 0) {
+                        __instance.RegularGameSettings.SetActive(true);
+                        __instance.GameSettingsHightlight.enabled = true;  
+                    } else if (i == 1) {
+                        __instance.RolesSettings.gameObject.SetActive(true);
+                        __instance.RolesSettingsHightlight.enabled = true;
+                    } else if (i == 2) {
+
+                    }
+               }));
+            }
         }
     }
 
