@@ -82,6 +82,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.0.0**
 - Update to Among Us version v2021.11.9s
+- Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage

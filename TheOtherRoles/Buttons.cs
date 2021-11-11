@@ -128,7 +128,7 @@ namespace TheOtherRoles
                 Engineer.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             // Janitor Clean
@@ -164,7 +164,7 @@ namespace TheOtherRoles
                 Janitor.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             // Sheriff Kill
@@ -221,7 +221,7 @@ namespace TheOtherRoles
                 TimeMaster.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q, 
+                KeyCode.F, 
                 true,
                 TimeMaster.shieldDuration,
                 () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer; }
@@ -246,7 +246,7 @@ namespace TheOtherRoles
                 Medic.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             
@@ -264,7 +264,7 @@ namespace TheOtherRoles
                 Shifter.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             // Morphling morph
@@ -344,7 +344,7 @@ namespace TheOtherRoles
                 Hacker.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q,
+                KeyCode.F,
                 true,
                 0f,
                 () => {
@@ -366,7 +366,7 @@ namespace TheOtherRoles
                 Tracker.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             vampireKillButton = new CustomButton(
@@ -537,7 +537,7 @@ namespace TheOtherRoles
                 Lighter.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q,
+                KeyCode.F,
                 true,
                 Lighter.duration,
                 () => { lighterButton.Timer = lighterButton.MaxTimer; }
@@ -726,7 +726,7 @@ namespace TheOtherRoles
                 SecurityGuard.getPlaceCameraButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
             
             // Security Guard button screws counter
@@ -771,7 +771,7 @@ namespace TheOtherRoles
                 Arsonist.getDouseSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q,
+                KeyCode.F,
                 true,
                 Arsonist.duration,
                 () => {
@@ -852,7 +852,7 @@ namespace TheOtherRoles
                 Medium.getQuestionSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q,
+                KeyCode.F,
                 true,
                 Medium.duration,
                 () => {
