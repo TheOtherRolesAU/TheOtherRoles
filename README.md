@@ -83,6 +83,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 3.0.0**
 - Update to Among Us version v2021.11.9s
 - Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
+- For now we removed the option "Jester Can Sabotage"
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
@@ -785,8 +786,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Name | Description |
 |----------|:-------------:|
 | Jester Spawn Chance | -
-| Jester can call emergency meeting | Option to disable the emergency button for the Jester
-| Jester can sabotage | Option to allow the Jester to sabotage
+| Jester Can Call Emergency Meeting | Option to disable the emergency button for the Jester
 -----------------------
 
 ## Arsonist
