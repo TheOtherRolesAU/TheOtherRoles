@@ -272,5 +272,28 @@ namespace TheOtherRoles {
             target.CurrentPet.Visible = target.Visible;
             PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
         }
+
+        public static bool roleCanUseVents(this PlayerControl player) {
+            bool roleCouldUse = false;
+            if (Engineer.engineer != null && Engineer.engineer == player)
+                roleCouldUse = true;
+            else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == player)
+                roleCouldUse = true;
+            else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == player)
+                roleCouldUse = true;
+            else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == player)
+                roleCouldUse = true;
+            else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
+                roleCouldUse = true;
+            else if (player.Data?.Role != null && player.Data.Role.IsImpostor) {
+                if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
+                    roleCouldUse = false;
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
+                    roleCouldUse = false;
+                else
+                    roleCouldUse = true;
+            }
+            return roleCouldUse;
+        }
     }
 }

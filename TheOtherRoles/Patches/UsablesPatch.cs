@@ -19,26 +19,7 @@ namespace TheOtherRoles.Patches {
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
 
-
-            bool roleCouldUse = false;
-            if (Engineer.engineer != null && Engineer.engineer == @object)
-                roleCouldUse = true;
-            else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == @object)
-                roleCouldUse = true;
-            else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == @object)
-                roleCouldUse = true;
-            else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == @object)
-                roleCouldUse = true;
-            else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == @object)
-                roleCouldUse = true;
-            else if (pc.Role.IsImpostor) {
-                if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
-                    roleCouldUse = false;
-                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
-                    roleCouldUse = false;
-                else
-                    roleCouldUse = true;
-            }
+            bool roleCouldUse = @object.roleCanUseVents();
 
             var usableDistance = __instance.UsableDistance;
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
