@@ -488,16 +488,66 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     class GameOptionsMenuStartPatch {
         public static void Postfix(GameOptionsMenu __instance) {
+            if (GameObject.Find("TORSettings") != null) { // Settings setup has already been performed, fixing the title of the tab and returning
+                GameObject.Find("TORSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("The Other Roles Settings");
+                return;
+            }
+
+            // Setup TOR tab
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
+            var gameSettings = GameObject.Find("Game Settings");
+            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+            var torSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
+            var torMenu = torSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            torSettings.name = "TORSettings";
 
-            List<OptionBehaviour> allOptions = __instance.Children.ToList();
+            var roleTab = GameObject.Find("RoleTab");
+            var gameTab = GameObject.Find("GameTab");
+
+            var torTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
+            var torTabHighlight = torTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
+            torTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 900f);
+    
+            gameTab.transform.position += Vector3.left * 0.5f;
+            torTab.transform.position += Vector3.right * 0.5f;
+            roleTab.transform.position += Vector3.left * 0.5f;  
+
+            var tabs = new GameObject[]{gameTab, roleTab, torTab};
+            for (int i = 0; i < tabs.Length; i++) {
+                var button = tabs[i].GetComponentInChildren<PassiveButton>();
+                if (button == null) continue;
+                int copiedIndex = i;
+                button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    gameSettingMenu.RegularGameSettings.SetActive(false);
+                    gameSettingMenu.RolesSettings.gameObject.SetActive(false);
+                    torSettings.gameObject.SetActive(false);
+                    gameSettingMenu.GameSettingsHightlight.enabled = false;
+                    gameSettingMenu.RolesSettingsHightlight.enabled = false;
+                    torTabHighlight.enabled = false;
+                    if (copiedIndex == 0) {
+                        gameSettingMenu.RegularGameSettings.SetActive(true);
+                        gameSettingMenu.GameSettingsHightlight.enabled = true;  
+                    } else if (copiedIndex == 1) {
+                        gameSettingMenu.RolesSettings.gameObject.SetActive(true);
+                        gameSettingMenu.RolesSettingsHightlight.enabled = true;
+                    } else if (copiedIndex == 2) {
+                        torSettings.gameObject.SetActive(true);
+                        torTabHighlight.enabled = true;
+                    }
+               }));
+            }
+
+            foreach (OptionBehaviour option in torMenu.GetComponentsInChildren<OptionBehaviour>())
+                UnityEngine.Object.Destroy(option.gameObject);
+            List<OptionBehaviour> torOptions = new List<OptionBehaviour>();
+
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
-                    StringOption stringOption = UnityEngine.Object.Instantiate(template, template.transform.parent);
-                    allOptions.Add(stringOption);
-
+                    StringOption stringOption = UnityEngine.Object.Instantiate(template, torMenu.transform);
+                    torOptions.Add(stringOption);
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
                     stringOption.TitleText.text = option.name;
                     stringOption.Value = stringOption.oldValue = option.selection;
@@ -507,17 +557,20 @@ namespace TheOtherRoles {
                 }
                 option.optionBehaviour.gameObject.SetActive(true);
             }
-            
-            var commonTasksOption = allOptions.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
+
+            torMenu.Children = torOptions.ToArray();
+            torSettings.gameObject.SetActive(false);
+
+            // Adapt task count for main options
+
+            var commonTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
             if(commonTasksOption != null) commonTasksOption.ValidRange = new FloatRange(0f, 4f);
 
-            var shortTasksOption = allOptions.FirstOrDefault(x => x.name == "NumShortTasks").TryCast<NumberOption>();
+            var shortTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumShortTasks").TryCast<NumberOption>();
             if(shortTasksOption != null) shortTasksOption.ValidRange = new FloatRange(0f, 23f);
 
-            var longTasksOption = allOptions.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
+            var longTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
             if(longTasksOption != null) longTasksOption.ValidRange = new FloatRange(0f, 15f);
-            
-            __instance.Children = allOptions.ToArray();
         }
     }
 
@@ -575,12 +628,14 @@ namespace TheOtherRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
+            if (__instance.Children.Length < 100) return; // TODO: Introduce a cleaner way to seperate the TOR settings from the game settings
+
             __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
 
-            float offset = -7.85f;
+            float offset = 2.75f;
             foreach (CustomOption option in CustomOption.options) {
                 if (option?.optionBehaviour != null && option.optionBehaviour.gameObject != null) {
                     bool enabled = true;
@@ -618,41 +673,6 @@ namespace TheOtherRoles {
                 options.Add(kvp);
             }
             mapNameTransform.GetComponent<KeyValueOption>().Values = options;
-
-            // Setup TOR tab
-            var roleTab = GameObject.Find("RoleTab");
-            var gameTab = GameObject.Find("GameTab");
-
-            var torTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
-            torTab.transform.FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
-
-
-            gameTab.transform.position += Vector3.left * 0.5f;
-            torTab.transform.position += Vector3.right * 0.5f;
-            roleTab.transform.position += Vector3.left * 0.5f;  
-
-            var tabs = new GameObject[]{gameTab, roleTab, torTab};
-            for (int i = 0; i < tabs.Length; i++) {
-                var button = tabs[i].GetComponentInChildren<PassiveButton>();
-                if (button == null) continue;
-                button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    System.Console.WriteLine(i);
-                    __instance.RegularGameSettings.SetActive(false);
-                    __instance.RolesSettings.gameObject.SetActive(false);
-                    __instance.GameSettingsHightlight.enabled = false;
-                    __instance.RolesSettingsHightlight.enabled = false;
-                    if (i == 0) {
-                        __instance.RegularGameSettings.SetActive(true);
-                        __instance.GameSettingsHightlight.enabled = true;  
-                    } else if (i == 1) {
-                        __instance.RolesSettings.gameObject.SetActive(true);
-                        __instance.RolesSettingsHightlight.enabled = true;
-                    } else if (i == 2) {
-
-                    }
-               }));
-            }
         }
     }
 
