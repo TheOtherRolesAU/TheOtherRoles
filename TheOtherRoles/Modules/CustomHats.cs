@@ -284,10 +284,10 @@ namespace TheOtherRoles.Modules {
                     float xpos = __instance.XRange.Lerp((i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
                     float ypos = offset - (i / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
-                    if (ext != null) {
-                        Transform background = colorChip.transform.FindChild("Background");
-                        Transform foreground = colorChip.transform.FindChild("ForeGround");
+                    Transform background = colorChip.transform.FindChild("Background");
+                    Transform foreground = colorChip.transform.FindChild("ForeGround");
 
+                    if (ext != null) {
                         if (background != null) {
                             background.localPosition = Vector3.down * 0.243f;
                             background.localScale = new Vector3(background.localScale.x, 0.8f, background.localScale.y);
@@ -313,7 +313,7 @@ namespace TheOtherRoles.Modules {
                     colorChip.Tag = hat;
                     __instance.ColorChips.Add(colorChip);
                 }
-                return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 1.25f;
+                return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 1.75f;
             }
 
             public static void Postfix(HatsTab __instance) {
@@ -365,26 +365,27 @@ namespace TheOtherRoles.Modules {
                 for (int i = 0; i < __instance.ColorChips.Count; i++)
                 {
                     ColorChip colorChip = __instance.ColorChips[i];
-                    // colorChip.PlayerEquippedForeground.SetActive(hatById == (HatBehaviour)colorChip.Tag);
-                    // colorChip.SelectionHighlight.gameObject.SetActive(__instance.currentHat == (HatBehaviour)colorChip.Tag);
+
+                    var hatBehaviour = colorChip.Tag.TryCast<HatBehaviour>();
+                    if (hatBehaviour == null) continue;
+
+                    colorChip.PlayerEquippedForeground.SetActive(hatById == hatBehaviour);
+                    colorChip.SelectionHighlight.gameObject.SetActive(__instance.currentHat == hatBehaviour);
                 }
                 return false;
             }
-        }
 
-        // [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.Update))]
-        // public class HatsTabUpdatePatch {
-        //     public static void Postfix(HatsTab __instance) {
-        //         // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
-        //         foreach (TMPro.TMP_Text customText in hatsTabCustomTexts) {
-        //             if (customText != null && customText.transform != null && customText.gameObject != null) {
-        //                 bool active = customText.transform.position.y <= 3.75f && customText.transform.position.y >= 0.3f;
-        //                 float epsilon = Mathf.Min(Mathf.Abs(customText.transform.position.y - 3.75f), Mathf.Abs(customText.transform.position.y - 0.35f));
-        //                 if (active != customText.gameObject.active && epsilon > 0.1f) customText.gameObject.SetActive(active);
-        //             }
-        //         }
-        //     }
-        // }
+            public static void Postfix(HatsTab __instance) {
+                // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
+                foreach (TMPro.TMP_Text customText in hatsTabCustomTexts) {
+                    if (customText != null && customText.transform != null && customText.gameObject != null) {
+                        bool active = customText.transform.position.y <= 3.75f && customText.transform.position.y >= 0.3f;
+                        float epsilon = Mathf.Min(Mathf.Abs(customText.transform.position.y - 3.75f), Mathf.Abs(customText.transform.position.y - 0.35f));
+                        if (active != customText.gameObject.active && epsilon > 0.1f) customText.gameObject.SetActive(active);
+                    }
+                }
+            }
+        }
     }
 
     public class CustomHatLoader {
