@@ -142,7 +142,6 @@ namespace TheOtherRoles.Objects {
                 Vector3 pos = hudManager.UseButton.transform.localPosition;
                 if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
                 actionButton.transform.localPosition = pos + PositionOffset;
-                if (hudManager.KillButton != null) hudManager.KillButton.transform.localPosition = hudManager.UseButton.transform.localPosition - new Vector3(1.3f, 0, 0); // Align the kill button (because it's on another position depending on the screen resolution)
             }
             if (CouldUse()) {
                 actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.EnabledColor;
