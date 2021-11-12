@@ -486,7 +486,6 @@ namespace TheOtherRoles {
            }
         }
     }
-}
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     class GameOptionsMenuStartPatch {
