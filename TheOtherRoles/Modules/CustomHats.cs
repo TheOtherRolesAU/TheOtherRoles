@@ -284,6 +284,14 @@ namespace TheOtherRoles.Modules {
                     float xpos = __instance.XRange.Lerp((i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
                     float ypos = offset - (i / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
+                    if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard) {
+                        colorChip.Button.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                        colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+                    } else {
+                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                    }
+                    colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                     Transform background = colorChip.transform.FindChild("Background");
                     Transform foreground = colorChip.transform.FindChild("ForeGround");
 
@@ -307,11 +315,14 @@ namespace TheOtherRoles.Modules {
                     }
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
-                    colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => { __instance.SelectHat(hat); }));
                     colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId);
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
+                    colorChip.SelectionHighlight.gameObject.SetActive(false);
                     __instance.ColorChips.Add(colorChip);
+
+                    TheOtherRolesPlugin.Logger.LogError(colorChip.PlayerEquippedForeground == null);
+                    TheOtherRolesPlugin.Logger.LogError(colorChip.SelectionHighlight  == null);
                 }
                 return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 1.75f;
             }
@@ -368,6 +379,12 @@ namespace TheOtherRoles.Modules {
 
                     var hatBehaviour = colorChip.Tag.TryCast<HatBehaviour>();
                     if (hatBehaviour == null) continue;
+                    return false;
+
+                    TheOtherRolesPlugin.Logger.LogError(colorChip.PlayerEquippedForeground == null);
+                    TheOtherRolesPlugin.Logger.LogError(colorChip.SelectionHighlight  == null);
+                    if (colorChip.PlayerEquippedForeground == null) return false;
+
 
                     colorChip.PlayerEquippedForeground.SetActive(hatById == hatBehaviour);
                     colorChip.SelectionHighlight.gameObject.SetActive(__instance.currentHat == hatBehaviour);
