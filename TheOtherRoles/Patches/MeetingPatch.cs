@@ -40,9 +40,10 @@ namespace TheOtherRoles.Patches {
                     }
                 }
                 // Swapper swap votes
+                PlayerVoteArea swapped1 = null;
+                PlayerVoteArea swapped2 = null;
                 if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead) {
-                    PlayerVoteArea swapped1 = null;
-                    PlayerVoteArea swapped2 = null;
+                    
                     foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
                         if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                         if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
@@ -59,21 +60,69 @@ namespace TheOtherRoles.Patches {
                 // Doppelganger Swapper swap votes (again)
                 if (Doppelganger.doppelganger != null && !Doppelganger.doppelganger.Data.IsDead && Doppelganger.copiedRole == RoleInfo.swapper)
                 {
-                    PlayerVoteArea swapped1 = null;
-                    PlayerVoteArea swapped2 = null;
+                    PlayerVoteArea swapped3 = null;
+                    PlayerVoteArea swapped4 = null;
                     foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
                     {
-                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId1) swapped1 = playerVoteArea;
-                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId2) swapped2 = playerVoteArea;
+                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId1) swapped3 = playerVoteArea;
+                        if (playerVoteArea.TargetPlayerId == Doppelganger.swapperPlayerId2) swapped4 = playerVoteArea;
                     }
 
-                    if (swapped1 != null && swapped2 != null)
+                    bool doubleSwap = swapped1 == swapped3 && swapped2 == swapped4 || swapped1 == swapped4 && swapped2 == swapped3;  // swap back and forth
+                    bool chainedSwap = !doubleSwap && (swapped1 == swapped3 || swapped2 == swapped3 || swapped1 == swapped4 || swapped2 == swapped4);
+
+                    if (swapped3 != null && swapped4 != null && !chainedSwap)
                     {
-                        if (!dictionary.ContainsKey(swapped1.TargetPlayerId)) dictionary[swapped1.TargetPlayerId] = 0;
-                        if (!dictionary.ContainsKey(swapped2.TargetPlayerId)) dictionary[swapped2.TargetPlayerId] = 0;
-                        int tmp = dictionary[swapped1.TargetPlayerId];
-                        dictionary[swapped1.TargetPlayerId] = dictionary[swapped2.TargetPlayerId];
-                        dictionary[swapped2.TargetPlayerId] = tmp;
+                        if (!dictionary.ContainsKey(swapped3.TargetPlayerId)) dictionary[swapped3.TargetPlayerId] = 0;
+                        if (!dictionary.ContainsKey(swapped4.TargetPlayerId)) dictionary[swapped4.TargetPlayerId] = 0;
+                        int tmp = dictionary[swapped3.TargetPlayerId];
+                        dictionary[swapped3.TargetPlayerId] = dictionary[swapped4.TargetPlayerId];
+                        dictionary[swapped4.TargetPlayerId] = tmp;
+                    }
+
+                    // only relevant, if the doppelganger swaps exactly one of the swapper's targets resulting in a chained swap.
+                    if (chainedSwap && swapped3 != null && swapped4 != null)
+                    {
+                        PlayerVoteArea middle;
+                        PlayerVoteArea end1;
+                        PlayerVoteArea end2;
+
+                        // decide who is who in the swap: Swapper swaps first, and doppelganger second
+                        // this means, we only have to swap the "ends" of the chain, if it is a chain"
+                        if (swapped1 == swapped3 || swapped1 == swapped4)
+                        {
+                            middle = swapped1;
+                            end1 = swapped2;
+                            if (swapped1 == swapped3)
+                            {
+                                end2 = swapped4;
+                            }
+                            else
+                            {
+                                end2 = swapped3;
+                            }
+                        }
+                        else  // swapped 2 is middle
+                        {
+                            middle = swapped2;
+                            end1 = swapped1;
+                            if (swapped2 == swapped3)
+                            {
+                                end2 = swapped4;
+                            }
+                            else
+                            {
+                                end2 = swapped3;
+                            }
+                        }
+                        // Do three way swap of votes!
+                        if (!dictionary.ContainsKey(middle.TargetPlayerId)) dictionary[middle.TargetPlayerId] = 0;
+                        if (!dictionary.ContainsKey(end1.TargetPlayerId)) dictionary[end1.TargetPlayerId] = 0;
+                        if (!dictionary.ContainsKey(end2.TargetPlayerId)) dictionary[end2.TargetPlayerId] = 0;
+                        int tmp = dictionary[end1.TargetPlayerId];
+                        // dictionary[middle.TargetPlayerId] = dictionary[end1.TargetPlayerId];
+                        dictionary[end1.TargetPlayerId] = dictionary[end2.TargetPlayerId];
+                        dictionary[end2.TargetPlayerId] = tmp;
                     }
                 }
                 return dictionary;

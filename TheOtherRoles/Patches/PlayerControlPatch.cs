@@ -593,7 +593,7 @@ namespace TheOtherRoles.Patches {
                                                                                   || Doppelganger.doppelganger != PlayerControl.LocalPlayer)) return;
 
             // Bait report
-            if (Bait.bait == PlayerControl.LocalPlayer && Bait.bait.Data.IsDead && !Bait.reported && !Bait.wasCleaned)
+            if (Bait.bait == PlayerControl.LocalPlayer && Bait.bait.Data.IsDead && !Bait.reported && (!Bait.wasCleaned || Bait.canBeCleaned == 2))
             {
                 Bait.reportDelay -= Time.fixedDeltaTime;
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();

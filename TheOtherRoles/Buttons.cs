@@ -152,8 +152,8 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
-                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && !Bait.canBeCleaned && Doppelganger.copiedRole == RoleInfo.bait) continue;
+                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && Bait.canBeCleaned == 0) continue;
+                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && Bait.canBeCleaned == 0 && Doppelganger.copiedRole == RoleInfo.bait) continue;
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
@@ -202,7 +202,7 @@ namespace TheOtherRoles
                         targetId = Sheriff.currentTarget.PlayerId;
                     } else if (Doppelganger.isRoleAndLocalPlayer(RoleInfo.sheriff) && ((Doppelganger.currentTarget.Data.IsImpostor && (Doppelganger.currentTarget != Mini.mini || Mini.isGrownUp())) ||
                         (Sheriff.spyCanDieToSheriff && Spy.spy == Doppelganger.currentTarget) ||
-                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget)) ||
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Doppelganger.currentTarget || Jester.jester == Doppelganger.currentTarget || Vulture.vulture == Doppelganger.currentTarget)) ||
                         (Jackal.jackal == Doppelganger.currentTarget || Sidekick.sidekick == Doppelganger.currentTarget)))
                     {
                         targetId = Doppelganger.currentTarget.PlayerId;
@@ -685,8 +685,8 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
-                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && !Bait.canBeCleaned && Doppelganger.copiedRole == RoleInfo.bait) continue;
+                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && Bait.canBeCleaned == 0) continue;
+                                    if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && Bait.canBeCleaned == 0 && Doppelganger.copiedRole == RoleInfo.bait) continue;
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
@@ -875,6 +875,12 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false)) {
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+
+                                    if (!Vulture.vultureCanAlwaysEatBait)
+                                    {
+                                        if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && Bait.canBeCleaned == 0) continue;
+                                        if (Doppelganger.doppelganger != null && component.ParentId == Doppelganger.doppelganger.PlayerId && Bait.canBeCleaned == 0 && Doppelganger.copiedRole == RoleInfo.bait) continue;
+                                    }
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);

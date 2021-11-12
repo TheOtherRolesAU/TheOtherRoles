@@ -1007,7 +1007,7 @@ namespace TheOtherRoles
         public static PlayerControl bait;
         public static Color color = new Color32(0, 247, 255, byte.MaxValue);
 
-        public static bool canBeCleaned = false;
+        public static int canBeCleaned = 0;
         public static bool wasCleaned = false;
 
         public static bool highlightAllVents = false;
@@ -1021,7 +1021,7 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
-            canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getBool();
+            canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getSelection();
         }
     }
 
@@ -1114,6 +1114,9 @@ namespace TheOtherRoles
         public static bool triggerVultureWin = false;
         public static bool canUseVents = true;
         public static bool showArrows = true;
+
+        public static bool vultureCanAlwaysEatBait = true;
+
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;

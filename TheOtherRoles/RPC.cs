@@ -424,7 +424,7 @@ namespace TheOtherRoles
             if (player == null || oldDoppelganger == null) return;
             Doppelganger.copyTarget = null;
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist)
+            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture)
             {
                 oldDoppelganger.Exiled();
                 return;
@@ -433,7 +433,7 @@ namespace TheOtherRoles
             // Copy role
             Doppelganger.copiedRole = RoleInfo.getRoleInfoForPlayer(player).FirstOrDefault();
             // Dont copy the spy
-            if (Doppelganger.copiedRole == RoleInfo.spy || Doppelganger.copiedRole == RoleInfo.swapper
+            if (Doppelganger.copiedRole == RoleInfo.spy
                 || Doppelganger.copiedRole == RoleInfo.goodGuesser && !Doppelganger.canBeGuesser
                 ) Doppelganger.copiedRole = RoleInfo.crewmate;
             
@@ -543,7 +543,7 @@ namespace TheOtherRoles
                 {
                     Swapper.playerId1 = playerId1;
                     Swapper.playerId2 = playerId2;
-                } else
+                } else  // must be the Doppelganger swapper
                 {
                     Doppelganger.swapperPlayerId1 = playerId1;
                     Doppelganger.swapperPlayerId2 = playerId2;
