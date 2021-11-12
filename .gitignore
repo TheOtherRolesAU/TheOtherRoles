@@ -2,4 +2,4 @@
 .vscode/tasks.json
 bin
 obj
-.gitignore
+/TheOtherRoles/Properties/launchSettings.json
