@@ -323,6 +323,7 @@ namespace TheOtherRoles.Modules {
             public static void Postfix(HatsTab __instance) {
                 for (int i = 0; i < __instance.scroller.Inner.childCount; i++)
                     UnityEngine.Object.Destroy(__instance.scroller.Inner.GetChild(i).gameObject);
+                __instance.ColorChips = new Il2CppSystem.Collections.Generic.List<ColorChip>();
 
                 HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>>();
@@ -354,29 +355,10 @@ namespace TheOtherRoles.Modules {
                     YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
 
-                __instance.scroller.YBounds.max = -(YOffset + 4.1f); 
+                __instance.scroller.YBounds.max = -(YOffset + 4.1f);
             }
         }
 
-
-        [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.Update))]
-        public class HatsTabUpdatePatch {
-            public static bool Prefix(HatsTab __instance) {
-                PlayerControl.SetPlayerMaterialColors(__instance.HasLocalPlayer() ? PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor), __instance.PlayerPreview.Body);
-                HatBehaviour hatById = DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat);
-                __instance.currentHatIsEquipped = (SaveManager.LastHat == __instance.currentHat.ProdId);
-                for (int i = 0; i < __instance.ColorChips.Count; i++)
-                {
-                    ColorChip colorChip = __instance.ColorChips[i];
-
-                    var hatBehaviour = colorChip.Tag.TryCast<HatBehaviour>();
-                    if (hatBehaviour == null) continue;
-                    colorChip.PlayerEquippedForeground.SetActive(hatById == hatBehaviour);
-                    colorChip.SelectionHighlight.gameObject.SetActive(__instance.currentHat == hatBehaviour);
-                }
-                return false;
-            }
-        }
     }
 
     public class CustomHatLoader {
