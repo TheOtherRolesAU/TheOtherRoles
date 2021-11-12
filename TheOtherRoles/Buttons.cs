@@ -416,10 +416,14 @@ namespace TheOtherRoles
                 },
                 () => { return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics)
+                    if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics) {
                         vampireKillButton.actionButton.graphic.sprite = __instance.KillButton.graphic.sprite;
-                    else
+                        vampireKillButton.showButtonText = true;
+                    }
+                    else {
                         vampireKillButton.actionButton.graphic.sprite = Vampire.getButtonSprite();
+                        vampireKillButton.showButtonText = false;
+                    }
                     return Vampire.currentTarget != null && PlayerControl.LocalPlayer.CanMove && (!Vampire.targetNearGarlic || Vampire.canKillNearGarlics);
                 },
                 () => {

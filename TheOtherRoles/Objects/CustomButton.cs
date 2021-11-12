@@ -20,7 +20,7 @@ namespace TheOtherRoles.Objects {
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
-        private bool showButtonText = false;
+        public bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
         private HudManager hudManager;
