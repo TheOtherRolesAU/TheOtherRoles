@@ -1216,7 +1216,7 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 \
 Created by  [gendelo3](https://github.com/gendelo3), idea by Mr_Fluff\
 \
-The Doppelganger is a Crewmate that can copy another crewmates role, similar to the shifer (the new role will be his second role and added **after the next meeting**).
+The Doppelganger is a Crewmate that can copy another crewmates role, similar to the shifter (the new role will be his second role and added **after the next meeting**).
 
 - If there is a Shifter in the game, there can't be a Doppelganger! (and vice versa)
 
