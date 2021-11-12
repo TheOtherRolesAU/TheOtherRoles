@@ -2,3 +2,6 @@
 .vscode/tasks.json
 TODO
 Images/.DS_Store
+/TheOtherRoles/bin
+/TheOtherRoles/obj
+/TheOtherRoles/Properties

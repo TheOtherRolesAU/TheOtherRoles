@@ -144,7 +144,7 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
+                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && Bait.canBeCleaned == 0) continue;
 
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
@@ -622,7 +622,7 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && !Bait.canBeCleaned) continue;
+                                    if (Bait.bait != null && component.ParentId == Bait.bait.PlayerId && Bait.canBeCleaned == 0) continue;
 
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
 

@@ -360,7 +360,7 @@ namespace TheOtherRoles {
             baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
             baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
-            baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned (No Report)", false, baitSpawnRate);
+            baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned", new string[] { "Off", "On (No Report)", "On (With Report)" }, baitSpawnRate);
 
             mediumSpawnRate = CustomOption.Create(360, cs(Medium.color, "Medium"), rates, null, true);
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
