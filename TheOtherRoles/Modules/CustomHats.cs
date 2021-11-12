@@ -256,8 +256,6 @@ namespace TheOtherRoles.Modules {
             }     
         }
 
-        private static List<TMPro.TMP_Text> hatsTabCustomTexts = new List<TMPro.TMP_Text>();
-
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
         public class HatsTabOnEnablePatch {
             public static string innerslothPackageName = "Innersloth Hats";
@@ -275,7 +273,6 @@ namespace TheOtherRoles.Modules {
                     title.enableAutoSizing = false;
                     __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { title.SetText(packageName); })));
                     offset -= 0.8f * __instance.YOffset;
-                    hatsTabCustomTexts.Add(title);
                 }
                 for (int i = 0; i < hats.Count; i++) {
                     HatBehaviour hat = hats[i].Item1;
@@ -310,7 +307,6 @@ namespace TheOtherRoles.Modules {
                             description.alignment = TMPro.TextAlignmentOptions.Center;
                             description.transform.localScale = Vector3.one * 0.65f;
                             __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { description.SetText($"{hat.name}\nby {ext.author}"); })));
-                            hatsTabCustomTexts.Add(description);
                         }
                     }
                     
@@ -320,9 +316,6 @@ namespace TheOtherRoles.Modules {
                     colorChip.Tag = hat;
                     colorChip.SelectionHighlight.gameObject.SetActive(false);
                     __instance.ColorChips.Add(colorChip);
-
-                    TheOtherRolesPlugin.Logger.LogError(colorChip.PlayerEquippedForeground == null);
-                    TheOtherRolesPlugin.Logger.LogError(colorChip.SelectionHighlight  == null);
                 }
                 return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 1.75f;
             }
@@ -333,7 +326,6 @@ namespace TheOtherRoles.Modules {
 
                 HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>>();
-                hatsTabCustomTexts = new List<TMPro.TMP_Text>();
 
                 foreach (HatBehaviour hatBehaviour in unlockedHats) {
                     HatExtension ext = hatBehaviour.getHatExtension();
@@ -379,28 +371,10 @@ namespace TheOtherRoles.Modules {
 
                     var hatBehaviour = colorChip.Tag.TryCast<HatBehaviour>();
                     if (hatBehaviour == null) continue;
-                    return false;
-
-                    TheOtherRolesPlugin.Logger.LogError(colorChip.PlayerEquippedForeground == null);
-                    TheOtherRolesPlugin.Logger.LogError(colorChip.SelectionHighlight  == null);
-                    if (colorChip.PlayerEquippedForeground == null) return false;
-
-
                     colorChip.PlayerEquippedForeground.SetActive(hatById == hatBehaviour);
                     colorChip.SelectionHighlight.gameObject.SetActive(__instance.currentHat == hatBehaviour);
                 }
                 return false;
-            }
-
-            public static void Postfix(HatsTab __instance) {
-                // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
-                foreach (TMPro.TMP_Text customText in hatsTabCustomTexts) {
-                    if (customText != null && customText.transform != null && customText.gameObject != null) {
-                        bool active = customText.transform.position.y <= 3.75f && customText.transform.position.y >= 0.3f;
-                        float epsilon = Mathf.Min(Mathf.Abs(customText.transform.position.y - 3.75f), Mathf.Abs(customText.transform.position.y - 0.35f));
-                        if (active != customText.gameObject.active && epsilon > 0.1f) customText.gameObject.SetActive(active);
-                    }
-                }
             }
         }
     }
