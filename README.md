@@ -821,11 +821,10 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ## Engineer
 ### **Team: Crewmates**
-The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
-The Engineer can use vents. If the Engineer is inside a vent, the Impostors will see a blue outline
-around all vents on the map (in order to warn them).
-Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
-you can double-click on the tasks instead.
+The Engineer (if alive) can fix a certain amount of sabotages per game from anywhere on the map.\
+The Engineer can use vents.\
+If the Engineer is inside a vent, depending on the options the members of the team Jackal/Impostors will see a blue outline around all vents on the map (in order to warn them).
+Because of the vents the Engineer might not be able to start some tasks using the "Use" button, you can double-click on the tasks instead.\
 \
 **NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
@@ -834,6 +833,9 @@ you can double-click on the tasks instead.
 | Name | Description |
 |----------|:-------------:|
 | Engineer Spawn Chance | -
+| Number Of Sabotage Fixes| -
+| Impostors See Vents Highlighted | -
+| Jackal and Sidekick See Vents Highlighted | -
 -----------------------
 
 ## Detective
@@ -1087,7 +1089,6 @@ If both Impostors and Jackals are in the game the game, continues even if all Cr
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
 | Jackal and Sidekick have Impostor vision | - |
-| Jackal and Sidekick Can See Engineer Vent | - | If set to true, team Jackal will see vents highlited like Impostors if an Engineer is inside one
 -----------------------
 
 ## Sidekick

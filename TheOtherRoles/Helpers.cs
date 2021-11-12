@@ -238,15 +238,14 @@ namespace TheOtherRoles {
         }
 
         public static void setDefaultLook(this PlayerControl target) {
-            target.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
+            target.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
-        public static void setLook(this PlayerControl target, String playerName, int colorId, string hatId, string skinId, string petId) {
-            target.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName;
-            target.myRend.material.SetColor("_BackColor", Palette.ShadowColors[colorId]);
-            target.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[colorId]);
-            target.HatRenderer.SetHat(hatId, colorId);
-            target.nameText.transform.localPosition = new Vector3(0f, (String.IsNullOrEmpty(hatId) ? 0.7f : 1.05f) * 2f, -0.5f);
+        public static void setLook(this PlayerControl target, String playerName, int colorId, string hatId, string visorId, string skinId, string petId) {
+            target.RawSetColor(colorId);
+            target.RawSetVisor(visorId);
+            target.RawSetHat(hatId, colorId);
+            target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
 
             SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
             PlayerPhysics playerPhysics = target.MyPhysics;

@@ -84,8 +84,11 @@ namespace TheOtherRoles
         public static class Engineer {
             public static PlayerControl engineer;
             public static Color color = new Color32(0, 40, 245, byte.MaxValue);
-            public static bool usedRepair;
             private static Sprite buttonSprite;
+
+            public static int remainingFixes = 1;           
+            public static bool highlightForImpostors = true;
+            public static bool highlightForTeamJackal = true; 
 
             public static Sprite getButtonSprite() {
                 if (buttonSprite) return buttonSprite;
@@ -95,7 +98,9 @@ namespace TheOtherRoles
 
             public static void clearAndReload() {
                 engineer = null;
-                usedRepair = false;
+                remainingFixes = Mathf.RoundToInt(CustomOptionHolder.engineerNumberOfFixes.getFloat());
+                highlightForImpostors = CustomOptionHolder.engineerHighlightForImpostors.getBool();
+                highlightForTeamJackal = CustomOptionHolder.engineerHighlightForTeamJackal.getBool();
             }
         }
 
@@ -637,7 +642,6 @@ namespace TheOtherRoles
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
         public static bool hasImpostorVision = false;
-        public static bool canSeeEngineerVent = false;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -666,7 +670,6 @@ namespace TheOtherRoles
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
-            canSeeEngineerVent = CustomOptionHolder.jackalCanSeeEngineerVent.getBool();
         }
         
     }
