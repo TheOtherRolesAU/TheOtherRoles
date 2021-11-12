@@ -78,29 +78,6 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint SkinId) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)SkinId];
-            AnimationClip clip = null;
-            var spriteAnim = playerPhysics.Skin.animator;
-            var anim = spriteAnim.m_animator;
-            var skinLayer = playerPhysics.Skin;
-
-            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
-            if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
-            else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
-            else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.ExitVentAnim) clip = nextSkin.ExitVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
-            else clip = nextSkin.IdleAnim;
-
-            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            skinLayer.skin = nextSkin;
-
-            spriteAnim.Play(clip, 1f);
-            anim.Play("a", 0, progress % 1);
-            anim.Update(0f);
-        }
-
         public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
@@ -191,7 +168,7 @@ namespace TheOtherRoles {
         }
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || Jackal.formerJackals.Contains(player));
+            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
@@ -247,6 +224,53 @@ namespace TheOtherRoles {
                 }
             }
             return result;
+        }
+
+        public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
+            if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
+            else if (!MapOptions.hidePlayerNames) return false; // All names are visible
+            else if (source == null || target == null) return true;
+            else if (source == target) return false; // Player sees his own name
+            else if (source.Data.IsImpostor && (target.Data.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
+            else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
+            else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
+            return true;
+        }
+
+        public static void setDefaultLook(this PlayerControl target) {
+            target.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+        }
+
+        public static void setLook(this PlayerControl target, String playerName, int colorId, uint hatId, uint skinId, uint petId) {
+            target.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName;
+            target.myRend.material.SetColor("_BackColor", Palette.ShadowColors[colorId]);
+            target.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[colorId]);
+            target.HatRenderer.SetHat(hatId, colorId);
+            target.nameText.transform.localPosition = new Vector3(0f, ((hatId == 0U) ? 0.7f : 1.05f) * 2f, -0.5f);
+
+            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)skinId];
+            PlayerPhysics playerPhysics = target.MyPhysics;
+            AnimationClip clip = null;
+            var spriteAnim = playerPhysics.Skin.animator;
+            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
+            if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
+            else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
+            else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.ExitVentAnim) clip = nextSkin.ExitVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
+            else clip = nextSkin.IdleAnim;
+            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            playerPhysics.Skin.skin = nextSkin;
+            spriteAnim.Play(clip, 1f);
+            spriteAnim.m_animator.Play("a", 0, progress % 1);
+            spriteAnim.m_animator.Update(0f);
+
+            if (target.CurrentPet) UnityEngine.Object.Destroy(target.CurrentPet.gameObject);
+            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[(int)petId]);
+            target.CurrentPet.transform.position = target.transform.position;
+            target.CurrentPet.Source = target;
+            target.CurrentPet.Visible = target.Visible;
+            PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
         }
     }
 }
