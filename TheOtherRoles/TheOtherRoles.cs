@@ -56,6 +56,7 @@ namespace TheOtherRoles
             Bait.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
+            Witch.clearAndReload();
         }
 
         public static class Jester {
@@ -1095,4 +1096,39 @@ namespace TheOtherRoles
             oneTimeUse = CustomOptionHolder.mediumOneTimeUse.getBool();
         }
     }
+
+
+    public static class Witch
+    {
+        public static PlayerControl witch;
+        public static Color color = Palette.ImpostorRed;
+
+        public static List<PlayerControl> futureSpelled = new List<PlayerControl>();
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+        public static float cooldownAddition = 10f;
+        public static float currentCooldownAddition = 0f;
+        public static bool canSpellAnyone = false;
+        public static Color spellColor = Palette.Black;// new Color32(0, 0, 0, byte.MaxValue); //Palette.FromHex(077077077);
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpellButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            witch = null;
+            futureSpelled = new List<PlayerControl>();
+            currentTarget = null;
+            cooldown = CustomOptionHolder.witchCooldown.getFloat();
+            cooldownAddition = CustomOptionHolder.witchAdditionalCooldown.getFloat();
+            currentCooldownAddition = CustomOptionHolder.witchCooldown.getFloat();
+            canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
+        }
+    }
+
+    // Alex2911 End
 }

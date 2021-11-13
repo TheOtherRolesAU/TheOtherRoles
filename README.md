@@ -706,6 +706,25 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 | Bounty Hunter Arrow Update Interval | Sets how often the position is being updated
 -----------------------
 
+## Witch
+### **Team: Impostors**
+The Witch is an Impostor who has the ability to spell other player.\
+On the next meeting the spellled player will be marked and will die right after the meeting.\
+If the spelled player has a lover, the lover dies too.
+
+\
+**NOTE:**
+- The Kill and Spell cooldown are shared. The Witch can either kill or spell within the same cooldown. After each use, the ability cooldown starts again and the cooldown will increase by the predefined addition. 
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Witch Spawn Chance | -
+| Witch Spell Cooldown | Cooldown for spell on other players
+| Witch Spell Cooldown Addition | The Cooldown will be increased by x seconds after each spell 
+| Witch can spell anyone | If On, the Witch can use the ability to spell any other player. If off, the Witch can't spell on other Imposter or Jackals.
+-----------------------
+
 
 ## Guesser
 ### **Team: Crewmates or Impostors**

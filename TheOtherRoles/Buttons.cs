@@ -36,7 +36,7 @@ namespace TheOtherRoles
         public static CustomButton vultureEatButton;
         public static CustomButton mediumButton;
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
-
+        public static CustomButton witchSpellButton;
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
@@ -76,6 +76,8 @@ namespace TheOtherRoles
 
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
+
+            witchSpellButton.MaxTimer = Witch.cooldown;
         }
 
         public static void resetTimeMasterButton() {
@@ -905,6 +907,28 @@ namespace TheOtherRoles
                         Medium.souls.Remove(target);
                     }
                 }
+            );
+
+
+
+            // Witch Spell button
+            witchSpellButton = new CustomButton(
+                () => {
+                    witchSpellButton.MaxTimer += 10;
+                    witchSpellButton.Timer = witchSpellButton.MaxTimer;
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Witch.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
+                },
+                () => { return Witch.witch != null && Witch.witch == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Witch.currentTarget != null; },
+                () => { witchSpellButton.Timer = witchSpellButton.MaxTimer; },
+                Witch.getButtonSprite(),
+                new Vector3(-1.3f, 1.3f, 0f),
+                __instance,
+                KeyCode.F
             );
 
 

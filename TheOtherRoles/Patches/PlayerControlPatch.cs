@@ -623,6 +623,16 @@ namespace TheOtherRoles.Patches {
                 Morphling.resetMorph();
         }
 
+        static void witchSetTarget()
+        {
+            if (Witch.witch == null || Witch.witch != PlayerControl.LocalPlayer) return;
+            List<PlayerControl> untargetables = new List<PlayerControl>();
+            if (Spy.spy != null) untargetables.Add(Spy.spy);
+            Witch.currentTarget = setTarget(onlyCrewmates: !Witch.canSpellAnyone, untargetablePlayers: Witch.canSpellAnyone ? new List<PlayerControl>() : untargetables);
+            setPlayerOutline(Witch.currentTarget, Witch.color);
+        }
+
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -688,6 +698,8 @@ namespace TheOtherRoles.Patches {
                 mediumSetTarget();
                 // Morphling and Camouflager
                 morphlingAndCamouflagerUpdate();
+                // Witch
+                witchSetTarget();
             } 
         }
     }

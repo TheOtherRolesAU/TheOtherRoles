@@ -272,5 +272,10 @@ namespace TheOtherRoles {
             target.CurrentPet.Visible = target.Visible;
             PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
         }
+
+        public static bool canBeSpelled(this PlayerControl player)
+        {
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
+        }
     }
 }

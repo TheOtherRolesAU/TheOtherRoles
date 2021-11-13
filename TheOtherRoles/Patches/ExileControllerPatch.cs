@@ -51,6 +51,24 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+
+            // Witch spell
+            if (Witch.witch != null && AmongUsClient.Instance.AmHost && Witch.futureSpelled != null)
+            {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced), same for Spell - Thanks for the Code :) 
+                foreach (PlayerControl target in Witch.futureSpelled)
+                {
+                    if (target != null && target.canBeErased())
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SpellPlayerRoles, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.spellPlayerRoles(target.PlayerId);
+                    }
+                }
+            }
+            Witch.futureSpelled = new List<PlayerControl>();
+
+
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {

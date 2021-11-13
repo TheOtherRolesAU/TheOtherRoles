@@ -131,8 +131,32 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
+            // Witch - Usericon ändern
+            if (Witch.witch != null)
+            {
+                if (Witch.futureSpelled.Count > 0)
+                {
+                    foreach (PlayerControl target in Witch.futureSpelled)
+                    {
+                        if (target != null && target.canBeSpelled())
+                        {
+
+                            if (MeetingHud.Instance != null)
+                            {
+                                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                                {
+                                    if (target.PlayerId == player.TargetPlayerId)
+                                    {
+                                        player.NameText.text = "* " + target.Data.PlayerName + " *";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             // Crewmate roles with no changes: Mini
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter,  Witch and Mafioso
         }
 
         static void setNameTags() {

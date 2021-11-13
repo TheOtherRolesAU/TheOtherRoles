@@ -51,7 +51,8 @@ namespace TheOtherRoles
         Vulture,
         Medium,
         Crewmate,
-        Impostor
+        Impostor,
+        Witch
     }
 
     enum CustomRPC
@@ -93,6 +94,8 @@ namespace TheOtherRoles
         SetFutureErased,
         SetFutureShifted,
         SetFutureShielded,
+        SpellPlayerRoles,
+        SetFutureSpelled,
         PlaceJackInTheBox,
         LightsOut,
         WarlockCurseKill,
@@ -245,6 +248,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Medium:
                         Medium.medium = player;
+                        break;
+                    case RoleId.Witch:
+                        Witch.witch = player;
                         break;
                     }
                 }
@@ -590,7 +596,8 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
-        
+            if (player == Witch.witch) Witch.clearAndReload();
+
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
@@ -627,7 +634,27 @@ namespace TheOtherRoles
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
         }
-        
+
+        public static void spellPlayerRoles(byte playerId, bool ignoreLovers = false)
+        {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (player == null) return;
+            player.Exiled();
+            return;
+        }
+
+        public static void setFutureSpelled(byte playerId)
+        {
+            PlayerControl player = Helpers.playerById(playerId);
+            if (Witch.futureSpelled == null)
+                Witch.futureSpelled = new List<PlayerControl>();
+            if (player != null)
+            {
+                Witch.futureSpelled.Add(player);
+            }
+        }
+
+
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -892,6 +919,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
+                    break;
+                case (byte)CustomRPC.SpellPlayerRoles:
+                    RPCProcedure.spellPlayerRoles(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureSpelled:
+                    RPCProcedure.setFutureSpelled(reader.ReadByte());
                     break;
             }
         }
