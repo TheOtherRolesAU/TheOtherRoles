@@ -764,7 +764,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcMurderPlayer))]
     class RpcMurderPlayer {
         public static bool Prefix([HarmonyArgument(0)]PlayerControl target) {
-            if (Helpers.handleMurderAttempt(target)) { // Custom checks
+            if (Helpers.handleMurderAttempt(target, PlayerControl.LocalPlayer) == Murder.PerformKill) { // Custom checks
                 if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini || BountyHunter.bountyHunter != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) { // Not checked by official servers
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                     writer.Write(PlayerControl.LocalPlayer.PlayerId);

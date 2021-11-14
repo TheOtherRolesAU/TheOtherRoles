@@ -12,6 +12,12 @@ using HarmonyLib;
 using Hazel;
 
 namespace TheOtherRoles {
+
+    public enum Murder {
+        PerformKill,
+        SuppressKill,
+        BlankKill
+    }
     public static class Helpers {
 
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
@@ -78,18 +84,28 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
+        public static Murder handleMurderAttempt(PlayerControl target, PlayerControl killer, bool isMeetingStart = false) {
+            // Handle blank shot
+            bool blankShot = false;
+            if (Pursuer.blankedList.Contains(killer)) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.RemoveBlanked, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.removeBlanked(killer.PlayerId);
+
+                blankShot = true;
+            }
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
 
-                return false;
+                return Murder.SuppressKill;
             }
             // Block impostor not fully grown mini kill
             else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
-                return false;
+                return Murder.SuppressKill;
             }
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
@@ -98,14 +114,23 @@ namespace TheOtherRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.timeMasterRewindTime();
                 }
-                return false;
+                return Murder.SuppressKill;
             }
-            return true;
+
+            if (blankShot) {
+                if (killer.Data.IsImpostor) killer.SetKillTimer(PlayerControl.GameOptions.KillCooldown);
+
+                return Murder.BlankKill;
+                     
+            }
+
+
+            return Murder.PerformKill;
         }
 
         public static void handleVampireBiteOnBodyReport() {
             // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, Vampire.vampire, true) == Murder.PerformKill) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();

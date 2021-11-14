@@ -769,7 +769,7 @@ namespace TheOtherRoles
 
         public static void removeBlanked(byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
-            if (target == null || Pursuer.blankedList.Contains(target)) return;
+            if (target == null || !Pursuer.blankedList.Contains(target)) return;
 
             Pursuer.blankedList.Remove(target);
 
