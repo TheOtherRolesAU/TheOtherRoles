@@ -36,14 +36,16 @@ namespace TheOtherRoles.Patches {
         private static TextBoxTMP ipField;
         private static TextBoxTMP portField;
 
-        public static void Postfix(RegionMenu __instance)
-        {
+        public static void Postfix(RegionMenu __instance) {
             var template = DestroyableSingleton<JoinGameButton>.Instance;
+            if (template == null || template.GameIdText == null) return;
 
             if (ipField == null || ipField.gameObject == null) {
                 ipField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
                 ipField.gameObject.name = "IpTextBox";
-                UnityEngine.Object.DestroyImmediate(ipField.transform.FindChild("arrowEnter").gameObject);
+                var arrow = ipField.transform.FindChild("arrowEnter");
+                if (arrow == null || arrow.gameObject == null) return;
+                UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
                 ipField.transform.localPosition = new Vector3(0, -1f, -100f);
                 ipField.characterLimit = 30;
@@ -70,10 +72,13 @@ namespace TheOtherRoles.Patches {
                     __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
                 }
             }
+
             if (portField == null || portField.gameObject == null) {
                 portField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
                 portField.gameObject.name = "PortTextBox";
-                UnityEngine.Object.DestroyImmediate(portField.transform.FindChild("arrowEnter").gameObject);
+                var arrow = portField.transform.FindChild("arrowEnter");
+                if (arrow == null || arrow.gameObject == null) return;
+                UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
                 portField.transform.localPosition = new Vector3(0, -1.75f, -100f);
                 portField.characterLimit = 5;
