@@ -756,16 +756,16 @@ namespace TheOtherRoles {
             } else if (counter == 1) {
                 hudString = hudString.Substring(end1 + 1, end2 - end1);
                 // Temporary fix, should add a new CustomOption for spaces
-                int gap = 1;
+                int gap = 2;
                 int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 5;
+                gap = 6;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 18;
+                gap = 19;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 23;
+                gap = 24;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
