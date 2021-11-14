@@ -82,8 +82,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.0.0**
 - Update to Among Us version v2021.11.9.5s
+- **Note:** We wanted to update as fast as possible, that's why you can't use both the Innersloth and mod roles at the same time. We'll make that possible in the future, but there are various things that need to be modified (e.g. Shifter, Guesser, ...) to make that work, so that'll take a little longer. Also, be aware that this version might contain more bugs than usual because Innersloth changed a lot of things and we might have missed some of them.
 - Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
 - For now we removed the option "Jester Can Sabotage"
+- The Sheriff now always dies, when he tries to kill a not fully grown Mini
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
