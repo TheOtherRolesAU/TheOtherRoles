@@ -91,6 +91,8 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
         class SetUpRoleTextPatch {
             public static void Postfix(IntroCutscene __instance) {
+                if (!CustomOptionHolder.activateRoles.getBool()) return; // Don't override the intro of the vanilla roles
+
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
                 RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
 
