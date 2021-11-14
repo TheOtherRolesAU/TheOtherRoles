@@ -32,10 +32,12 @@ namespace TheOtherRoles.Objects {
             Update(target);
         }
 
-        public void Update(Vector3 target)
+        public void Update(Vector3 target, Color? color = null)
         {
             if (arrow == null) return;
             oldTarget = target;
+
+            if (color.HasValue) image.color = color.Value;
 
             Camera main = Camera.main;
             Vector2 vector = target - main.transform.position;
