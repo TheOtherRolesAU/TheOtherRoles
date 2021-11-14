@@ -15,6 +15,7 @@ namespace TheOtherRoles {
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
+        public static CustomOption activateRoles;
         public static CustomOption crewmateRolesCountMin;
         public static CustomOption crewmateRolesCountMax;
         public static CustomOption neutralRolesCountMin;
@@ -59,7 +60,6 @@ namespace TheOtherRoles {
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
-        public static CustomOption jesterCanSabotage;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -76,7 +76,6 @@ namespace TheOtherRoles {
         public static CustomOption jackalPromotedFromSidekickCanCreateSidekick;
         public static CustomOption jackalCanCreateSidekickFromImpostor;
         public static CustomOption jackalAndSidekickHaveImpostorVision;
-        public static CustomOption jackalCanSeeEngineerVent;
 
         public static CustomOption bountyHunterSpawnRate;
         public static CustomOption bountyHunterBountyDuration;
@@ -91,6 +90,9 @@ namespace TheOtherRoles {
         public static CustomOption mayorSpawnRate;
 
         public static CustomOption engineerSpawnRate;
+        public static CustomOption engineerNumberOfFixes;
+        public static CustomOption engineerHighlightForImpostors;
+        public static CustomOption engineerHighlightForTeamJackal;
 
         public static CustomOption sheriffSpawnRate;
         public static CustomOption sheriffCooldown;
@@ -204,6 +206,7 @@ namespace TheOtherRoles {
             
             // Role Options
             presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
+            activateRoles = CustomOption.Create(7, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
 
             // Using new id's for the options to not break compatibilty with older versions
             crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
@@ -270,7 +273,6 @@ namespace TheOtherRoles {
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
-            jesterCanSabotage = CustomOption.Create(62, "Jester can sabotage", true, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
@@ -287,7 +289,6 @@ namespace TheOtherRoles {
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, "Jackals Promoted From Sidekick Can Create A Sidekick", true, jackalSpawnRate);
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, "Jackals Can Make An Impostor To His Sidekick", true, jackalSpawnRate);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
-            jackalCanSeeEngineerVent = CustomOption.Create(431, "Jackal Can See If Engineer Is In A Vent", false, jackalSpawnRate);
 
             vultureSpawnRate = CustomOption.Create(340, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
@@ -301,6 +302,9 @@ namespace TheOtherRoles {
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
 
             engineerSpawnRate = CustomOption.Create(90, cs(Engineer.color, "Engineer"), rates, null, true);
+            engineerNumberOfFixes = CustomOption.Create(91, "Number Of Sabotage Fixes", 1f, 0f, 3f, 1f, engineerSpawnRate);
+            engineerHighlightForImpostors = CustomOption.Create(92, "Impostors See Vents Highlighted", true, engineerSpawnRate);
+            engineerHighlightForTeamJackal = CustomOption.Create(93, "Jackal and Sidekick See Vents Highlighted ", true, engineerSpawnRate);
 
             sheriffSpawnRate = CustomOption.Create(100, cs(Sheriff.color, "Sheriff"), rates, null, true);
             sheriffCooldown = CustomOption.Create(101, "Sheriff Cooldown", 30f, 10f, 60f, 2.5f, sheriffSpawnRate);
