@@ -172,7 +172,7 @@ namespace TheOtherRoles.Patches {
                 if (MeetingHud.Instance != null) {
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                         var target = Helpers.playerById(player.TargetPlayerId);
-                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.ColorId) ? "L" : "D")})";
+                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
                     }
                 }
             }
