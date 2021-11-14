@@ -381,7 +381,7 @@ namespace TheOtherRoles
                     () => {
                         trackerFindButton.Timer = trackerFindButton.MaxTimer;
                         trackerFindButton.isEffectActive = false;
-                        trackerFindButton.killButtonManager.TimerText.color = Palette.EnabledColor;
+                        trackerFindButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     },
                    Tracker.getButtonSpritePathfinding(),
                     new Vector3(-2.6f, 0, 0),
