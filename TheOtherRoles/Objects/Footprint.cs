@@ -26,7 +26,7 @@ namespace TheOtherRoles.Objects {
             if (anonymousFootprints)
                 this.color = Palette.PlayerColors[6];
             else
-                this.color = Palette.PlayerColors[(int) player.Data.ColorId];
+                this.color = Palette.PlayerColors[(int) player.Data.DefaultOutfit.ColorId];
 
             footprint = new GameObject("Footprint");
             Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
@@ -48,7 +48,7 @@ namespace TheOtherRoles.Objects {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
                 if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)
-                    c = Palette.ShadowColors[Morphling.morphTarget.Data.ColorId];
+                    c = Palette.ShadowColors[Morphling.morphTarget.Data.DefaultOutfit.ColorId];
                 else if (Camouflager.camouflageTimer > 0)
                     c = Palette.PlayerColors[6];
             }
