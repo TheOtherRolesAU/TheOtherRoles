@@ -37,12 +37,6 @@ namespace TheOtherRoles.Modules {
             public string condition { get; set;}
             public Sprite FlipImage { get; set;}
             public Sprite BackFlipImage { get; set;}
-
-            public bool isUnlocked() {
-                if (condition == null || condition.ToLower() == "none") 
-                    return true;
-                return false;
-            }
         }
 
         public class CustomHat { 
@@ -142,7 +136,7 @@ namespace TheOtherRoles.Modules {
                 }
             }
 
-            HatBehaviour hat = new HatBehaviour();
+            HatBehaviour hat = ScriptableObject.CreateInstance<HatBehaviour>();
             hat.MainImage = CreateHatSprite(ch.resource, fromDisk);
             if (ch.backresource != null) {
                 hat.BackImage = CreateHatSprite(ch.backresource, fromDisk);
@@ -156,6 +150,7 @@ namespace TheOtherRoles.Modules {
             hat.InFront = !ch.behind;
             hat.NoBounce = !ch.bounce;
             hat.ChipOffset = new Vector2(0f, 0.2f);
+            hat.Free = true;
 
             if (ch.adaptive && hatShader != null)
                 hat.AltShader = hatShader;
@@ -200,17 +195,6 @@ namespace TheOtherRoles.Modules {
                 if (RUNNING) return;
                 RUNNING = true; // prevent simultanious execution
                 try {
-                    if (!LOADED) {
-                        Assembly assembly = Assembly.GetExecutingAssembly();
-                        string hatres = $"{assembly.GetName().Name}.Resources.CustomHats";
-                        string[] hats = (from r in assembly.GetManifestResourceNames()
-                                            where r.StartsWith(hatres) && r.EndsWith(".png")
-                                            select r).ToArray<string>();
-
-                        List<CustomHat> customhats = createCustomHatDetails(hats);
-                        foreach (CustomHat ch in customhats)
-                            __instance.AllHats.Add(CreateHatBehaviour(ch));
-                    }
                     while (CustomHatLoader.hatdetails.Count > 0) {
                         __instance.AllHats.Add(CreateHatBehaviour(CustomHatLoader.hatdetails[0]));
                         CustomHatLoader.hatdetails.RemoveAt(0);
@@ -252,9 +236,9 @@ namespace TheOtherRoles.Modules {
             }
         }
 
-        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(uint), typeof(int) })]
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(HatBehaviour), typeof(int) })]
         private static class HatParentSetHatPatch {
-            static void Postfix(HatParent __instance, [HarmonyArgument(0)]uint hatId, [HarmonyArgument(1)]int color) {
+            static void Postfix(HatParent __instance, HatBehaviour hat, int color) {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
                     try {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
@@ -272,8 +256,6 @@ namespace TheOtherRoles.Modules {
             }     
         }
 
-        private static List<TMPro.TMP_Text> hatsTabCustomTexts = new List<TMPro.TMP_Text>();
-
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
         public class HatsTabOnEnablePatch {
             public static string innerslothPackageName = "Innersloth Hats";
@@ -287,12 +269,10 @@ namespace TheOtherRoles.Modules {
                     TMPro.TMP_Text title = UnityEngine.Object.Instantiate<TMPro.TMP_Text>(textTemplate, __instance.scroller.Inner);
                     title.transform.localPosition = new Vector3(2.25f, YStart, -1f);
                     title.transform.localScale = Vector3.one * 1.5f;
-                    // title.currentFontSize
                     title.fontSize *= 0.5f;
                     title.enableAutoSizing = false;
                     __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { title.SetText(packageName); })));
                     offset -= 0.8f * __instance.YOffset;
-                    hatsTabCustomTexts.Add(title);
                 }
                 for (int i = 0; i < hats.Count; i++) {
                     HatBehaviour hat = hats[i].Item1;
@@ -301,13 +281,21 @@ namespace TheOtherRoles.Modules {
                     float xpos = __instance.XRange.Lerp((i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
                     float ypos = offset - (i / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
-                    if (ext != null) {
-                        Transform background = colorChip.transform.FindChild("Background");
-                        Transform foreground = colorChip.transform.FindChild("ForeGround");
+                    if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard) {
+                        colorChip.Button.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                        colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+                    } else {
+                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                    }
+                    colorChip.Button.ClickMask = __instance.scroller.Hitbox;
+                    Transform background = colorChip.transform.FindChild("Background");
+                    Transform foreground = colorChip.transform.FindChild("ForeGround");
 
+                    if (ext != null) {
                         if (background != null) {
-                            background.localScale = new Vector3(1, 1.5f, 1);
                             background.localPosition = Vector3.down * 0.243f;
+                            background.localScale = new Vector3(background.localScale.x, 0.8f, background.localScale.y);
                         }
                         if (foreground != null) {
                             foreground.localPosition = Vector3.down * 0.243f;
@@ -315,38 +303,30 @@ namespace TheOtherRoles.Modules {
                 
                         if (textTemplate != null) {
                             TMPro.TMP_Text description = UnityEngine.Object.Instantiate<TMPro.TMP_Text>(textTemplate, colorChip.transform);
-                            description.transform.localPosition = new Vector3(0f, -0.75f, -1f);
-                            description.transform.localScale = Vector3.one * 0.7f;
+                            description.transform.localPosition = new Vector3(0f, -0.65f, -1f);
+                            description.alignment = TMPro.TextAlignmentOptions.Center;
+                            description.transform.localScale = Vector3.one * 0.65f;
                             __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => { description.SetText($"{hat.name}\nby {ext.author}"); })));
-                            hatsTabCustomTexts.Add(description);
-                        }
-
-                        if (!ext.isUnlocked()) { // Hat is locked
-                            UnityEngine.Object.Destroy(colorChip.Button);
-                            var overlay = UnityEngine.Object.Instantiate(colorChip.InUseForeground, colorChip.transform);
-                            overlay.SetActive(true);
                         }
                     }
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
-                    colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => { __instance.SelectHat(hat); }));
-                    colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.ColorId);
+                    colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId);
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
+                    colorChip.SelectionHighlight.gameObject.SetActive(false);
                     __instance.ColorChips.Add(colorChip);
                 }
-                return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 0.85f;
+                return offset - ((hats.Count - 1) / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset - 1.75f;
             }
 
-            public static bool Prefix(HatsTab __instance) {
-                PlayerControl.SetPlayerMaterialColors(PlayerControl.LocalPlayer.Data.ColorId, __instance.DemoImage);
-                __instance.HatImage.SetHat(SaveManager.LastHat, PlayerControl.LocalPlayer.Data.ColorId);
-                PlayerControl.SetSkinImage(SaveManager.LastSkin, __instance.SkinImage);
-                PlayerControl.SetPetImage(SaveManager.LastPet, PlayerControl.LocalPlayer.Data.ColorId, __instance.PetImage);
+            public static void Postfix(HatsTab __instance) {
+                for (int i = 0; i < __instance.scroller.Inner.childCount; i++)
+                    UnityEngine.Object.Destroy(__instance.scroller.Inner.GetChild(i).gameObject);
+                __instance.ColorChips = new Il2CppSystem.Collections.Generic.List<ColorChip>();
 
                 HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatBehaviour, HatExtension>>>();
-                hatsTabCustomTexts = new List<TMPro.TMP_Text>();
 
                 foreach (HatBehaviour hatBehaviour in unlockedHats) {
                     HatExtension ext = hatBehaviour.getHatExtension();
@@ -363,12 +343,7 @@ namespace TheOtherRoles.Modules {
                 }
 
                 float YOffset = __instance.YStart;
-
-                var hatButton = GameObject.Find("HatButton");
-
-                if (hatButton != null && hatButton.transform.FindChild("ButtonText_TMP") != null) {
-                    textTemplate = hatButton.transform.FindChild("ButtonText_TMP").GetComponent<TMPro.TMP_Text>();
-                }
+                textTemplate = GameObject.Find("HatsGroup").transform.FindChild("Text").GetComponent<TMPro.TMP_Text>();
 
                 var orderedKeys = packages.Keys.OrderBy((string x) => {
                     if (x == innerslothPackageName) return 1000;
@@ -380,26 +355,10 @@ namespace TheOtherRoles.Modules {
                     YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
 
-                // __instance.scroller.YBounds.max = -(__instance.YStart - (float)(unlockedHats.Length / this.NumPerRow) * this.YOffset) - 3f;
-                // __instance.scroller.YBounds.max = YOffset * -0.875f; // probably needs to fix up the entire messed math to solve this correctly
-                __instance.scroller.YBounds.max = -(YOffset + 4.1f); 
-                return false;
+                __instance.scroller.YBounds.max = -(YOffset + 4.1f);
             }
         }
 
-        [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.Update))]
-        public class HatsTabUpdatePatch {
-            public static void Postfix(HatsTab __instance) {
-                // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
-                foreach (TMPro.TMP_Text customText in hatsTabCustomTexts) {
-                    if (customText != null && customText.transform != null && customText.gameObject != null) {
-                        bool active = customText.transform.position.y <= 3.75f && customText.transform.position.y >= 0.3f;
-                        float epsilon = Mathf.Min(Mathf.Abs(customText.transform.position.y - 3.75f), Mathf.Abs(customText.transform.position.y - 0.35f));
-                        if (active != customText.gameObject.active && epsilon > 0.1f) customText.gameObject.SetActive(active);
-                    }
-                }
-            }
-        }
     }
 
     public class CustomHatLoader {
