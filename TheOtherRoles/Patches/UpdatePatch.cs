@@ -180,6 +180,7 @@ namespace TheOtherRoles.Patches {
             Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
+            Tracker.pathfinderTimer -= Time.deltaTime;
         }
 
         public static void miniUpdate() {

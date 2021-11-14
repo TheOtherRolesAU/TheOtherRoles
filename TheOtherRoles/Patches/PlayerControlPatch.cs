@@ -623,6 +623,37 @@ namespace TheOtherRoles.Patches {
                 Morphling.resetMorph();
         }
 
+
+
+
+        static void pathfinderUpdate()
+        {
+
+            if (Tracker.deadBodyPositions == null) return;
+
+            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) return;
+
+            foreach (Arrow arrow in Tracker.localArrows) arrow.arrow.SetActive(false);
+            if (Tracker.pathfinderTimer < 0) return;
+
+            Tracker.localArrows = new List<Arrow>();
+            int arrowIndex = 0;
+            foreach (Vector3 pos in Tracker.deadBodyPositions)
+            {
+                Tracker.localArrows.Add(new Arrow(Color.magenta));
+                if (arrowIndex < Tracker.localArrows.Count && Tracker.localArrows[arrowIndex] != null)
+                {
+                    Vector3 position = pos;
+                    position.y = (float)position.y - (float)0.300;
+
+                    Tracker.localArrows[arrowIndex].arrow.SetActive(true);
+                    Tracker.localArrows[arrowIndex].Update(position);
+                }
+                arrowIndex++;
+            }
+
+
+        }
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -653,6 +684,8 @@ namespace TheOtherRoles.Patches {
                 detectiveUpdateFootPrints();
                 // Tracker
                 trackerSetTarget();
+                // Pathfinder
+                pathfinderUpdate();
                 // Vampire
                 vampireSetTarget();
                 Garlic.UpdateAll();
@@ -802,6 +835,10 @@ namespace TheOtherRoles.Patches {
             if (target.hasFakeTasks())
                 target.clearAllTasks();
 
+            if (Tracker.tracker != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead && Tracker.tracker != target)
+            {
+                Tracker.deadBodyPositions.Add(target.transform.position);
+            }
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
