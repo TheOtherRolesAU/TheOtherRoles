@@ -714,18 +714,23 @@ namespace TheOtherRoles.Patches {
             Helpers.handleVampireBiteOnBodyReport();
         }
     }
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcMurderPlayer))]
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckMurder))]
     class RpcMurderPlayer {
-        public static bool Prefix([HarmonyArgument(0)]PlayerControl target) {
-            if (Helpers.handleMurderAttempt(target)) { // Custom checks
-                if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini || BountyHunter.bountyHunter != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) { // Not checked by official servers
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target) {
+            PlayerControl killer = __instance;
+            if (AmongUsClient.Instance.IsGameOver || !AmongUsClient.Instance.AmHost) return false;
+            if (!target || killer.Data.IsDead || killer.Data.Disconnected) return false; // Allow non Impostor kills compared to vanilla code
+            if (target.Data == null || target.Data.IsDead)  return false; // Allow killing players in vents compared to vanilla code
+
+            if (Helpers.handleMurderAttempt(killer, target)) { // Custom checks
+                if (Mini.mini != null && killer == Mini.mini || BountyHunter.bountyHunter != null && killer == BountyHunter.bountyHunter) { // Not checked by official servers
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(killer.PlayerId);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, target.PlayerId);
+                    RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId);
                 } else { // Checked by official servers
-                    return true;
+                    killer.RpcMurderPlayer(target);
                 }
             }
             return false;

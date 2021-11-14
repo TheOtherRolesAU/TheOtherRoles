@@ -371,7 +371,7 @@ namespace TheOtherRoles
 
             vampireKillButton = new CustomButton(
                 () => {
-                    if (Helpers.handleMurderAttempt(Vampire.currentTarget)) {
+                    if (Helpers.handleMurderAttempt(Vampire.vampire, Vampire.currentTarget)) {
                         if (Vampire.targetNearGarlic) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.vampire.PlayerId);
@@ -392,7 +392,7 @@ namespace TheOtherRoles
 
                             HudManager.Instance.StartCoroutine(Effects.Lerp(Vampire.delay, new Action<float>((p) => { // Delayed action
                                 if (p == 1f) {
-                                    if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten)) {
+                                    if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.vampire, Vampire.bitten)) {
                                         // Perform kill
                                         MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
@@ -486,7 +486,7 @@ namespace TheOtherRoles
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
-                    if (!Helpers.handleMurderAttempt(Jackal.currentTarget)) return;
+                    if (!Helpers.handleMurderAttempt(Jackal.jackal, Jackal.currentTarget)) return;
                     byte targetId = Jackal.currentTarget.PlayerId;
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalKill, Hazel.SendOption.Reliable, -1);
                     killWriter.Write(targetId);
@@ -507,7 +507,7 @@ namespace TheOtherRoles
             // Sidekick Kill
             sidekickKillButton = new CustomButton(
                 () => {
-                    if (!Helpers.handleMurderAttempt(Sidekick.currentTarget)) return;
+                    if (!Helpers.handleMurderAttempt(Sidekick.sidekick, Sidekick.currentTarget)) return;
                     byte targetId = Sidekick.currentTarget.PlayerId;
                     MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickKill, Hazel.SendOption.Reliable, -1);
                     killWriter.Write(targetId);
@@ -656,7 +656,7 @@ namespace TheOtherRoles
                         Warlock.curseVictim = Warlock.currentTarget;
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
-                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.handleMurderAttempt(Warlock.curseVictimTarget)) {
+                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.handleMurderAttempt(Warlock.warlock, Warlock.curseVictimTarget)) {
                         // Curse Kill
                         Warlock.curseKillTarget = Warlock.curseVictimTarget;
 
