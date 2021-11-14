@@ -746,10 +746,12 @@ namespace TheOtherRoles {
             int roleSettingsLines = defaultSettingsLines + 38;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
+            int detailedSettingsP3 = detailedSettingsP2 + 42;
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
@@ -773,10 +775,12 @@ namespace TheOtherRoles {
             } else if (counter == 3) {
                 hudString = hudString.Substring(end3 + 1, end4 - end3);
             } else if (counter == 4) {
-                hudString = hudString.Substring(end4 + 1);
+                hudString = hudString.Substring(end4 + 1, end5 - end4);
+            } else if (counter == 5) {
+                hudString = hudString.Substring(end5 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/5)";
+            hudString += $"\n Press tab for more... ({counter+1}/6)";
             __result = hudString;
         }
     }
@@ -787,7 +791,7 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance)
         {
             if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 5;
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 6;
             }
         }
     }
