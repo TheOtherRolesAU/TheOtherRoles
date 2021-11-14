@@ -102,7 +102,7 @@ namespace TheOtherRoles.Patches {
         static void Postfix(VentButton __instance) {
             // Trickster render special vent button
             if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                if (__instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_") && __instance.currentTarget != null && __instance.currentTarget.gameObject != null)
+                if (__instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_"))
                     __instance.graphic.sprite = Trickster.getTricksterVentButtonSprite();
                 else
                     __instance.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
