@@ -284,7 +284,7 @@ namespace TheOtherRoles {
                 roleCouldUse = true;
             else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
                 roleCouldUse = true;
-            else if (player.Data?.Role != null && player.Data.Role.IsImpostor) {
+            else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;
                 else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
