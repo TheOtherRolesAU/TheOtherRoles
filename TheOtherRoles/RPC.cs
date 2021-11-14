@@ -127,7 +127,7 @@ namespace TheOtherRoles
         public static void forceEnd() {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                if (!player.Data.IsImpostor)
+                if (!player.Data.Role.IsImpostor)
                 {
                     player.RemoveInfected();
                     player.MurderPlayer(player);
@@ -302,7 +302,7 @@ namespace TheOtherRoles
         }
 
         public static void engineerUsedRepair() {
-            Engineer.usedRepair = true;
+            Engineer.remainingFixes--;
         }
 
         public static void cleanBody(byte playerId) {
@@ -387,7 +387,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
                 oldShifter.Exiled();
                 return;
             }
@@ -467,7 +467,7 @@ namespace TheOtherRoles
             Morphling.morphTimer = Morphling.duration;
             Morphling.morphTarget = target;
             if (Camouflager.camouflageTimer <= 0f)
-                Morphling.morphling.setLook(target.Data.PlayerName, target.Data.ColorId, target.Data.HatId, target.Data.SkinId, target.Data.PetId);
+                Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
         public static void camouflagerCamouflage() {
@@ -475,7 +475,7 @@ namespace TheOtherRoles
 
             Camouflager.camouflageTimer = Camouflager.duration;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                player.setLook("", 6, 0, 0, 0);
+                player.setLook("", 6, "", "", "", "");
         }
 
         public static void vampireSetBitten(byte targetId, byte reset) {
@@ -540,7 +540,7 @@ namespace TheOtherRoles
             {
                 if (player.PlayerId == targetId)
                 {
-                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.IsImpostor) {
+                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
                         Jackal.fakeSidekick = player;
                     } else {
                         player.RemoveInfected();
@@ -665,7 +665,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if(PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
