@@ -887,7 +887,7 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
   - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
 
 **NOTE:**
-- Impostors can't kill the Mini (the button does not work) until it turns 18
+- If the Sheriff tries to kill the Mini before it's fully grown, he dies, no matter if the Mini is a Crewmate or Impostor
 - The Sheriff can kill the Impostor Mini, but only if it's fully grown up
 
 ### Game Options
