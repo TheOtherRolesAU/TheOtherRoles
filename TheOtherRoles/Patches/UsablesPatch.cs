@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace TheOtherRoles.Patches {
 
-    [HarmonyPatch(typeof(Vent), "CanUse")]
+    [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
         public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
@@ -54,7 +54,7 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(Vent), "Use")]
+    [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             bool canUse;
@@ -85,6 +85,15 @@ namespace TheOtherRoles.Patches {
             }
             __instance.SetButtons(isEnter && canMoveInVents);
             return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
+    class VentButtonVisibilityPatch {
+        static void Postfix(PlayerControl __instance) {
+            if (__instance.AmOwner && __instance.roleCanUseVents() && HudManager.Instance.ReportButton.isActiveAndEnabled) {
+                HudManager.Instance.ImpostorVentButton.Show();
+            }
         }
     }
 
