@@ -83,7 +83,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.1.0**
 - Add new option: Allow Parallel MedBay Scans
-- Add new Guesser option: "Guesses Visible In Ghost Chat"
+- Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
+- During meetings the [Detective](#detective), [Hacker](#hacker) and [Medium](#medium) now display, whether a player wears a darker or lighter color
 
 **Version 3.0.0**
 - Updated to Among Us version v2021.11.9.5s
@@ -855,6 +856,7 @@ The Detective's other feature shows when they report a corpse: they receive clue
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
+- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -950,6 +952,7 @@ Otherwise he sees the same information as everyone else.
 **NOTE:**
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
+- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -1183,6 +1186,7 @@ an outline or all vents do).
 Created by [Mallöris](https://github.com/Mallaris)\
 \
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
+During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 Questions:
 What is your Role?
