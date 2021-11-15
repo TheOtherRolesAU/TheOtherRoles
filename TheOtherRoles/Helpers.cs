@@ -78,33 +78,10 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void setSkinWithAnim(PlayerPhysics playerPhysics, uint SkinId) {
-            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.AllSkins[(int)SkinId];
-            AnimationClip clip = null;
-            var spriteAnim = playerPhysics.Skin.animator;
-            var anim = spriteAnim.m_animator;
-            var skinLayer = playerPhysics.Skin;
-
-            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
-            if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
-            else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
-            else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.ExitVentAnim) clip = nextSkin.ExitVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
-            else clip = nextSkin.IdleAnim;
-
-            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            skinLayer.skin = nextSkin;
-
-            spriteAnim.Play(clip, 1f);
-            anim.Play("a", 0, progress % 1);
-            anim.Update(0f);
-        }
-
-        public static bool handleMurderAttempt(PlayerControl target, bool isMeetingStart = false) {
+        public static bool handleMurderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
 
@@ -117,7 +94,7 @@ namespace TheOtherRoles {
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
                 if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.timeMasterRewindTime();
                 }
@@ -128,7 +105,7 @@ namespace TheOtherRoles {
 
         public static void handleVampireBiteOnBodyReport() {
             // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.bitten, true)) {
+            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.vampire, Vampire.bitten, true)) {
                 MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                 RPCProcedure.vampireTryKill();
@@ -191,7 +168,7 @@ namespace TheOtherRoles {
         }
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || Jackal.formerJackals.Contains(player));
+            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
@@ -247,6 +224,75 @@ namespace TheOtherRoles {
                 }
             }
             return result;
+        }
+
+        public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
+            if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
+            else if (!MapOptions.hidePlayerNames) return false; // All names are visible
+            else if (source == null || target == null) return true;
+            else if (source == target) return false; // Player sees his own name
+            else if (source.Data.Role.IsImpostor && (target.Data.Role.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
+            else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
+            else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
+            return true;
+        }
+
+        public static void setDefaultLook(this PlayerControl target) {
+            target.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
+        }
+
+        public static void setLook(this PlayerControl target, String playerName, int colorId, string hatId, string visorId, string skinId, string petId) {
+            target.RawSetColor(colorId);
+            target.RawSetVisor(visorId);
+            target.RawSetHat(hatId, colorId);
+            target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
+
+            SkinData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(skinId);
+            PlayerPhysics playerPhysics = target.MyPhysics;
+            AnimationClip clip = null;
+            var spriteAnim = playerPhysics.Skin.animator;
+            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
+            if (currentPhysicsAnim == playerPhysics.RunAnim) clip = nextSkin.RunAnim;
+            else if (currentPhysicsAnim == playerPhysics.SpawnAnim) clip = nextSkin.SpawnAnim;
+            else if (currentPhysicsAnim == playerPhysics.EnterVentAnim) clip = nextSkin.EnterVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.ExitVentAnim) clip = nextSkin.ExitVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.IdleAnim) clip = nextSkin.IdleAnim;
+            else clip = nextSkin.IdleAnim;
+            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            playerPhysics.Skin.skin = nextSkin;
+            spriteAnim.Play(clip, 1f);
+            spriteAnim.m_animator.Play("a", 0, progress % 1);
+            spriteAnim.m_animator.Update(0f);
+
+            if (target.CurrentPet) UnityEngine.Object.Destroy(target.CurrentPet.gameObject);
+            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.GetPetById(petId).PetPrefab);
+            target.CurrentPet.transform.position = target.transform.position;
+            target.CurrentPet.Source = target;
+            target.CurrentPet.Visible = target.Visible;
+            PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
+        }
+
+        public static bool roleCanUseVents(this PlayerControl player) {
+            bool roleCouldUse = false;
+            if (Engineer.engineer != null && Engineer.engineer == player)
+                roleCouldUse = true;
+            else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == player)
+                roleCouldUse = true;
+            else if (Sidekick.canUseVents && Sidekick.sidekick != null && Sidekick.sidekick == player)
+                roleCouldUse = true;
+            else if (Spy.canEnterVents && Spy.spy != null && Spy.spy == player)
+                roleCouldUse = true;
+            else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
+                roleCouldUse = true;
+            else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
+                if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
+                    roleCouldUse = false;
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
+                    roleCouldUse = false;
+                else
+                    roleCouldUse = true;
+            }
+            return roleCouldUse;
         }
     }
 }

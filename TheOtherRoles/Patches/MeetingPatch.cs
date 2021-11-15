@@ -95,7 +95,7 @@ namespace TheOtherRoles.Patches {
             public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
                 if (!PlayerControl.GameOptions.AnonymousVotes || (PlayerControl.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes))
-                    PlayerControl.SetPlayerMaterialColors(voterPlayer.ColorId, spriteRenderer);
+                    PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
                 else
                     PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
                 spriteRenderer.transform.SetParent(parent);
@@ -226,8 +226,7 @@ namespace TheOtherRoles.Patches {
             if (guesserUI != null || !(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted)) return;
             __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(false));
 
-            Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("Background"), __instance.transform);
-            container.FindChild("BlackBG").gameObject.SetActive(false);
+            Transform container = UnityEngine.Object.Instantiate(__instance.transform.FindChild("PhoneUI"), __instance.transform);
             container.transform.localPosition = new Vector3(0, 0, -5f);
             guesserUI = container.gameObject;
 
@@ -284,14 +283,19 @@ namespace TheOtherRoles.Patches {
 
                         target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
 
+                        // Reset the GUI
+                        __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
+                        UnityEngine.Object.Destroy(container.gameObject);
+                        if (Guesser.hasMultipleShotsPerMeeting && Guesser.remainingShots > 1 && target != PlayerControl.LocalPlayer)
+                            __instance.playerStates.ToList().ForEach(x => { if (x.TargetPlayerId == target.PlayerId && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+                        else
+                            __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+
+                        // Shoot player
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId);
-
-                        __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
-                        UnityEngine.Object.Destroy(container.gameObject);
-                        __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                     }
                 }));
 
@@ -338,7 +342,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots >= 0) {
+            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == Guesser.guesser.PlayerId) continue;
@@ -379,6 +383,8 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
+                // Medium meeting start time
+                Medium.meetingStartTime = DateTime.UtcNow;
                 // Reset vampire bitten
                 Vampire.bitten = null;
                 // Count meetings

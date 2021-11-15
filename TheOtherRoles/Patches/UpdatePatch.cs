@@ -12,22 +12,15 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
     {
-        public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
-            if (!MapOptions.hidePlayerNames) return false; // All names are visible
-            else if (source == null || target == null) return true;
-            else if (source == target) return false; // Player sees his own name
-            else if (source.Data.IsImpostor && (target.Data.IsImpostor || target == Spy.spy)) return false; // Members of team Impostors see the names of Impostors/Spies
-            else if ((source == Lovers.lover1 || source == Lovers.lover2) && (target == Lovers.lover1 || target == Lovers.lover2)) return false; // Members of team Lovers see the names of each other
-            else if ((source == Jackal.jackal || source == Sidekick.sidekick) && (target == Jackal.jackal || target == Sidekick.sidekick || target == Jackal.fakeSidekick)) return false; // Members of team Jackal see the names of each other
-            return true;
-        }
-
         static void resetNameTagsAndColors() {
             Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                player.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : player.Data.PlayerName;
-                if (PlayerControl.LocalPlayer.Data.IsImpostor && player.Data.IsImpostor) {
+                String playerName = player.Data.PlayerName;
+                if (Morphling.morphTimer > 0f && Morphling.morphling == player && Morphling.morphTarget != null) playerName = Morphling.morphTarget.Data.PlayerName; // Temporary hotfix for the Morphling's name
+
+                player.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : playerName;
+                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor) {
                     player.nameText.color = Palette.ImpostorRed;
                 } else {
                     player.nameText.color = Color.white;
@@ -38,7 +31,7 @@ namespace TheOtherRoles.Patches {
                     PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
                     if (playerControl != null) {
                         player.NameText.text = playerControl.Data.PlayerName;
-                        if (PlayerControl.LocalPlayer.Data.IsImpostor && playerControl.Data.IsImpostor) {
+                        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && playerControl.Data.Role.IsImpostor) {
                             player.NameText.color = Palette.ImpostorRed;
                         } else {
                             player.NameText.color = Color.white;
@@ -46,15 +39,15 @@ namespace TheOtherRoles.Patches {
                     }
                 }
             }
-            if (PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !x.Data.IsImpostor);
+                impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
                 foreach (PlayerControl player in impostors)
                     player.nameText.color = Palette.ImpostorRed;
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                         PlayerControl playerControl = Helpers.playerById((byte)player.TargetPlayerId);
-                        if (playerControl != null && playerControl.Data.IsImpostor)
+                        if (playerControl != null && playerControl.Data.Role.IsImpostor)
                             player.NameText.color =  Palette.ImpostorRed;
                     }
             }
@@ -115,9 +108,13 @@ namespace TheOtherRoles.Patches {
             } else if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
             } else if (Guesser.guesser != null && Guesser.guesser == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.IsImpostor ? Palette.ImpostorRed : Guesser.color);
+                setPlayerNameColor(Guesser.guesser, Guesser.guesser.Data.Role.IsImpostor ? Palette.ImpostorRed : Guesser.color);
             } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Bait.bait, Bait.color);
+            } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Vulture.vulture, Vulture.color);
+            } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Medium.medium, Medium.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
@@ -130,7 +127,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // No else if here, as the Impostors need the Spy name to be colored
-            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
@@ -140,7 +137,7 @@ namespace TheOtherRoles.Patches {
 
         static void setNameTags() {
             // Mafia
-            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.IsImpostor) {
+            if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                     if (Godfather.godfather != null && Godfather.godfather == player)
                             player.nameText.text = player.Data.PlayerName + " (G)";
@@ -185,74 +182,6 @@ namespace TheOtherRoles.Patches {
             Trickster.lightsOutTimer -= Time.deltaTime;
         }
 
-        static void camouflageAndMorphActions() {
-            float oldCamouflageTimer = Camouflager.camouflageTimer;
-            float oldMorphTimer = Morphling.morphTimer;
-
-            Camouflager.camouflageTimer -= Time.deltaTime;
-            Morphling.morphTimer -= Time.deltaTime;
-
-            // Morphling player size not done here
-
-            // Set morphling morphed look
-            if (Morphling.morphTimer > 0f && Camouflager.camouflageTimer <= 0f) {
-                if (Morphling.morphling != null && Morphling.morphTarget != null) {
-                    Morphling.morphling.nameText.text = hidePlayerName(PlayerControl.LocalPlayer, Morphling.morphling) ? "" : Morphling.morphTarget.Data.PlayerName;
-                    Morphling.morphling.myRend.material.SetColor("_BackColor", Palette.ShadowColors[Morphling.morphTarget.Data.ColorId]);
-                    Morphling.morphling.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[Morphling.morphTarget.Data.ColorId]);
-                    Morphling.morphling.HatRenderer.SetHat(Morphling.morphTarget.Data.HatId, Morphling.morphTarget.Data.ColorId);
-                    Morphling.morphling.nameText.transform.localPosition = new Vector3(0f, ((Morphling.morphTarget.Data.HatId == 0U) ? 0.7f : 1.05f) * 2f, -0.5f);
-
-                    if (Morphling.morphling.MyPhysics.Skin.skin.ProdId != DestroyableSingleton<HatManager>.Instance.AllSkins[(int)Morphling.morphTarget.Data.SkinId].ProdId) {
-                        Helpers.setSkinWithAnim(Morphling.morphling.MyPhysics, Morphling.morphTarget.Data.SkinId);
-                    }
-                    if (Morphling.morphling.CurrentPet == null || Morphling.morphling.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[(int)Morphling.morphTarget.Data.PetId].ProdId) {
-                        if (Morphling.morphling.CurrentPet) UnityEngine.Object.Destroy(Morphling.morphling.CurrentPet.gameObject);
-                        Morphling.morphling.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[(int)Morphling.morphTarget.Data.PetId]);
-                        Morphling.morphling.CurrentPet.transform.position = Morphling.morphling.transform.position;
-                        Morphling.morphling.CurrentPet.Source = Morphling.morphling;
-                        Morphling.morphling.CurrentPet.Visible = Morphling.morphling.Visible;
-                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.Data.ColorId, Morphling.morphling.CurrentPet.rend);
-                    } else if (Morphling.morphling.CurrentPet) {
-                        PlayerControl.SetPlayerMaterialColors(Morphling.morphTarget.Data.ColorId, Morphling.morphling.CurrentPet.rend);
-                    }
-                }
-            }
-
-            // Set camouflaged look (overrides morphling morphed look if existent)
-            if (Camouflager.camouflageTimer > 0f) {
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    p.nameText.text = "";
-                    p.myRend.material.SetColor("_BackColor", Palette.PlayerColors[6]);
-                    p.myRend.material.SetColor("_BodyColor", Palette.PlayerColors[6]);
-                    p.HatRenderer.SetHat(0, 0);
-                    Helpers.setSkinWithAnim(p.MyPhysics, 0);
-                    bool spawnPet = false;
-                    if (p.CurrentPet == null) spawnPet = true;
-                    else if (p.CurrentPet.ProdId != DestroyableSingleton<HatManager>.Instance.AllPets[0].ProdId) {
-                        UnityEngine.Object.Destroy(p.CurrentPet.gameObject);
-                        spawnPet = true;
-                    }
-
-                    if (spawnPet) {
-                        p.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.AllPets[0]);
-                        p.CurrentPet.transform.position = p.transform.position;
-                        p.CurrentPet.Source = p;
-                    }
-                }
-            } 
-            
-            // Everyone but morphling reset
-            if (oldCamouflageTimer > 0f && Camouflager.camouflageTimer <= 0f) {
-                Camouflager.resetCamouflage();
-            }
-
-            // Morphling reset
-            if ((oldMorphTimer > 0f || oldCamouflageTimer > 0f) && Camouflager.camouflageTimer <= 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null) {
-                Morphling.resetMorph();
-            }
-        }
-
         public static void miniUpdate() {
             if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
                 
@@ -274,7 +203,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
-            if (!PlayerControl.LocalPlayer.Data.IsImpostor) return;
+            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor) return;
             bool enabled = true;
             if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer)
                 enabled = false;
@@ -282,12 +211,9 @@ namespace TheOtherRoles.Patches {
                 enabled = false;
             else if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                 enabled = false;
-            enabled &= __instance.UseButton.isActiveAndEnabled;
             
-            __instance.KillButton.gameObject.SetActive(enabled);
-            __instance.KillButton.renderer.enabled = enabled;
-            __instance.KillButton.isActive = enabled;
-            __instance.KillButton.enabled = enabled;
+            if (enabled) __instance.KillButton.Show();
+            else __instance.KillButton.Hide();
         }
 
         static void Postfix(HudManager __instance)
@@ -304,8 +230,6 @@ namespace TheOtherRoles.Patches {
             updateImpostorKillButton(__instance);
             // Timer updates
             timerUpdate();
-            // Camouflager and Morphling
-            camouflageAndMorphActions();
             // Mini
             miniUpdate();
         }
