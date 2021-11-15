@@ -83,6 +83,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.1.0**
 - Add new option: Allow Parallel MedBay Scans
+- Add new Guesser option: "Guesses Visible In Ghost Chat"
 
 **Version 3.0.0**
 - Updated to Among Us version v2021.11.9.5s
@@ -736,8 +737,8 @@ You can only shoot during the voting time.\
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
 | Guesser Number Of Shots Per Game| -
-| Guesser Number Of Shots Per Meeting| -
 | Guesser Can Shoot Multiple Times Per Meeting| -
+| Guesses Visible In Ghost Chat| -
 
 -----------------------
 

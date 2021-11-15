@@ -949,6 +949,7 @@ namespace TheOtherRoles
 
         public static int remainingShots = 2;
         public static bool hasMultipleShotsPerMeeting = false;
+        public static bool showInfoInGhostChat = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -961,6 +962,7 @@ namespace TheOtherRoles
             
             remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
+            showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
         }
     }
 
