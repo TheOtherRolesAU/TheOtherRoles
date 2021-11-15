@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches {
             
             if (player == null || player.IsDead) // IsDead
                 __result = __instance.MaxLightRadius;
-            else if (player.IsImpostor
+            else if (player.Role.IsImpostor
                 || (Jackal.jackal != null && Jackal.jackal.PlayerId == player.PlayerId && Jackal.hasImpostorVision)
                 || (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == player.PlayerId && Sidekick.hasImpostorVision)
                 || (Spy.spy != null && Spy.spy.PlayerId == player.PlayerId && Spy.hasImpostorVision)) // Impostor, Jackal/Sidekick or Spy with Impostor vision

@@ -8,17 +8,21 @@ using System;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Patches {
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSetInfected))]
-    class SetInfectedPatch
-    {
+    [HarmonyPatch(typeof(RoleOptionsData), nameof(RoleOptionsData.GetNumPerGame))]
+    class RoleOptionsDataGetNumPerGamePatch{
+        public static void Postfix(ref int __result) {
+            if (CustomOptionHolder.activateRoles.getBool()) __result = 0; // Deactivate Vanilla Roles if the mod roles are active
+        }
+    }
 
-        public static void Postfix([HarmonyArgument(0)]Il2CppReferenceArray<GameData.PlayerInfo> infected)
-        {
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
+    class RoleManagerSelectRolesPatch {
+        public static void Postfix() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
 
-            if (!DestroyableSingleton<TutorialManager>.InstanceExists) // Don't assign Roles in Tutorial
+            if (!DestroyableSingleton<TutorialManager>.InstanceExists && CustomOptionHolder.activateRoles.getBool()) // Don't assign Roles in Tutorial or if deactivated
                 assignRoles();
         }
 
@@ -33,9 +37,9 @@ namespace TheOtherRoles.Patches {
         private static RoleAssignmentData getRoleAssignmentData() {
             // Get the players that we want to assign the roles to. Crewmate and Neutral roles are assigned to natural crewmates. Impostor roles to impostors.
             List<PlayerControl> crewmates = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            crewmates.RemoveAll(x => x.Data.IsImpostor);
+            crewmates.RemoveAll(x => x.Data.Role.IsImpostor);
             List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-            impostors.RemoveAll(x => !x.Data.IsImpostor);
+            impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
 
             var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
             var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();

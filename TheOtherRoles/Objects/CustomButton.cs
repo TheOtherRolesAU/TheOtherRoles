@@ -9,7 +9,7 @@ namespace TheOtherRoles.Objects {
     public class CustomButton
     {
         public static List<CustomButton> buttons = new List<CustomButton>();
-        public KillButtonManager killButtonManager;
+        public ActionButton actionButton;
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
@@ -20,7 +20,7 @@ namespace TheOtherRoles.Objects {
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
-        private bool showButtonText = false;
+        public bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
         private HudManager hudManager;
@@ -43,9 +43,9 @@ namespace TheOtherRoles.Objects {
             this.hotkey = hotkey;
             Timer = 16.2f;
             buttons.Add(this);
-            killButtonManager = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.transform);
-            this.showButtonText = killButtonManager.renderer.sprite == Sprite;
-            PassiveButton button = killButtonManager.GetComponent<PassiveButton>();
+            actionButton = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.KillButton.transform.parent);
+            PassiveButton button = actionButton.GetComponent<PassiveButton>();
+            this.showButtonText = actionButton.graphic.sprite == Sprite;
             button.OnClick = new Button.ButtonClickedEvent();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
@@ -59,12 +59,12 @@ namespace TheOtherRoles.Objects {
         {
             if (this.Timer < 0f && HasButton() && CouldUse())
             {
-                killButtonManager.renderer.color = new Color(1f, 1f, 1f, 0.3f);
+                actionButton.graphic.color = new Color(1f, 1f, 1f, 0.3f);
                 this.OnClick();
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.Timer = this.EffectDuration;
-                    killButtonManager.TimerText.color = new Color(0F, 0.8F, 0F);
+                    actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
                     this.isEffectActive = true;
                 }
             }
@@ -72,7 +72,7 @@ namespace TheOtherRoles.Objects {
 
         public static void HudUpdate()
         {
-            buttons.RemoveAll(item => item.killButtonManager == null);
+            buttons.RemoveAll(item => item.actionButton == null);
         
             for (int i = 0; i < buttons.Count; i++)
             {
@@ -88,7 +88,7 @@ namespace TheOtherRoles.Objects {
         }
 
         public static void MeetingEndedUpdate() {
-            buttons.RemoveAll(item => item.killButtonManager == null);
+            buttons.RemoveAll(item => item.actionButton == null);
             for (int i = 0; i < buttons.Count; i++)
             {
                 try
@@ -120,11 +120,11 @@ namespace TheOtherRoles.Objects {
 
         public void setActive(bool isActive) {
             if (isActive) {
-                killButtonManager.gameObject.SetActive(true);
-                killButtonManager.renderer.enabled = true;
+                actionButton.gameObject.SetActive(true);
+                actionButton.graphic.enabled = true;
             } else {
-                killButtonManager.gameObject.SetActive(false);
-                killButtonManager.renderer.enabled = false;
+                actionButton.gameObject.SetActive(false);
+                actionButton.graphic.enabled = false;
             }
         }
 
@@ -136,20 +136,19 @@ namespace TheOtherRoles.Objects {
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
 
-            killButtonManager.renderer.sprite = Sprite;
-            killButtonManager.killText.enabled = showButtonText; // Only show the text if it's a kill button
+            actionButton.graphic.sprite = Sprite;
+            actionButton.buttonLabelText.enabled = showButtonText; // Only show the text if it's a kill button
             if (hudManager.UseButton != null) {
                 Vector3 pos = hudManager.UseButton.transform.localPosition;
                 if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
-                killButtonManager.transform.localPosition = pos + PositionOffset;
-                if (hudManager.KillButton != null) hudManager.KillButton.transform.localPosition = hudManager.UseButton.transform.localPosition - new Vector3(1.3f, 0, 0); // Align the kill button (because it's on another position depending on the screen resolution)
+                actionButton.transform.localPosition = pos + PositionOffset;
             }
             if (CouldUse()) {
-                killButtonManager.renderer.color = killButtonManager.killText.color = Palette.EnabledColor;
-                killButtonManager.renderer.material.SetFloat("_Desat", 0f);
+                actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.EnabledColor;
+                actionButton.graphic.material.SetFloat("_Desat", 0f);
             } else {
-                killButtonManager.renderer.color = killButtonManager.killText.color = Palette.DisabledClear;
-                killButtonManager.renderer.material.SetFloat("_Desat", 1f);
+                actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.DisabledClear;
+                actionButton.graphic.material.SetFloat("_Desat", 1f);
             }
 
             if (Timer >= 0) {
@@ -161,11 +160,11 @@ namespace TheOtherRoles.Objects {
             
             if (Timer <= 0 && HasEffect && isEffectActive) {
                 isEffectActive = false;
-                killButtonManager.TimerText.color = Palette.EnabledColor;
+                actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 OnEffectEnds();
             }
         
-            killButtonManager.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
+            actionButton.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();

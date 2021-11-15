@@ -65,13 +65,11 @@ namespace TheOtherRoles
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
-            public static bool canSabotage = true;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
-                canSabotage = CustomOptionHolder.jesterCanSabotage.getBool();
             }
         }
 
@@ -87,8 +85,11 @@ namespace TheOtherRoles
         public static class Engineer {
             public static PlayerControl engineer;
             public static Color color = new Color32(0, 40, 245, byte.MaxValue);
-            public static bool usedRepair;
             private static Sprite buttonSprite;
+
+            public static int remainingFixes = 1;           
+            public static bool highlightForImpostors = true;
+            public static bool highlightForTeamJackal = true; 
 
             public static Sprite getButtonSprite() {
                 if (buttonSprite) return buttonSprite;
@@ -98,7 +99,9 @@ namespace TheOtherRoles
 
             public static void clearAndReload() {
                 engineer = null;
-                usedRepair = false;
+                remainingFixes = Mathf.RoundToInt(CustomOptionHolder.engineerNumberOfFixes.getFloat());
+                highlightForImpostors = CustomOptionHolder.engineerHighlightForImpostors.getBool();
+                highlightForTeamJackal = CustomOptionHolder.engineerHighlightForTeamJackal.getBool();
             }
         }
 
@@ -342,7 +345,7 @@ namespace TheOtherRoles
         public static bool existingWithKiller() {
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
-                               || lover1.Data.IsImpostor      || lover2.Data.IsImpostor);
+                               || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 
         public static bool hasAliveKillingLover(this PlayerControl player) {
@@ -640,7 +643,6 @@ namespace TheOtherRoles
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
         public static bool hasImpostorVision = false;
-        public static bool canSeeEngineerVent = false;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -669,7 +671,6 @@ namespace TheOtherRoles
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
-            canSeeEngineerVent = CustomOptionHolder.jackalCanSeeEngineerVent.getBool();
         }
         
     }
@@ -839,7 +840,7 @@ namespace TheOtherRoles
         public static void resetCurse() {
             HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
             HudManagerStartPatch.warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
-            HudManagerStartPatch.warlockCurseButton.killButtonManager.TimerText.color = Palette.EnabledColor;
+            HudManagerStartPatch.warlockCurseButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
@@ -1037,7 +1038,7 @@ namespace TheOtherRoles
 
         // Parameters needed from other roles. Some don't need to be initialized, as they will be copied too!
         public static int guesserRemainingShots;
-        public static bool engineerUsedRepair;
+        public static int engineerRemainingFixes;
         public static PlayerControl medicShielded;
         public static PlayerControl medicFutureShielded;
         public static bool medicUsedShield;
