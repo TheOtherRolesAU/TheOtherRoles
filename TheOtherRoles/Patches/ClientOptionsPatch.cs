@@ -18,7 +18,7 @@ namespace TheOtherRoles.Patches {
         private static ToggleButtonBehaviour showRoleSummaryButton;
 
         public static float xOffset = 1.75f;
-        public static float yOffset = -0.5f;
+        public static float yOffset = -0.25f;
 
         private static void updateToggle(ToggleButtonBehaviour button, string text, bool on) {
             if (button == null || button.gameObject == null) return;
@@ -45,9 +45,9 @@ namespace TheOtherRoles.Patches {
 
         public static void Postfix(OptionsMenuBehaviour __instance) {
             if (__instance.CensorChatButton != null) {
-                if (origin == null) origin = __instance.CensorChatButton.transform.localPosition + Vector3.up * 0.25f;
+                if (origin == null) origin = __instance.CensorChatButton.transform.localPosition + Vector3.up * 0.075f;
                 __instance.CensorChatButton.transform.localPosition = origin.Value + Vector3.left * xOffset;
-                __instance.CensorChatButton.transform.localScale = Vector3.one * 2f / 3f;
+                __instance.CensorChatButton.transform.localScale = Vector3.one * 0.5f;
             }
 
             if ((streamerModeButton == null || streamerModeButton.gameObject == null)) {
