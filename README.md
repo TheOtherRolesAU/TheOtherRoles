@@ -87,6 +87,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Add new [Guesser](#guesser) option: "Guesses Ignore The Medic Shield". If this option is set to false, no matter what the Guesser guessed, no one will die and the shielded player/Medic might be notified
 - Add new [Medic](#medic) option: "Medic Sees Murder Attempt On Shielded Player". This includes attempts from any kind of killer (Sheriff, Jackal, Guesser if the shield is not being ignored, ...)
 - During meetings the [Detective](#detective), [Hacker](#hacker) and [Medium](#medium) now display, whether a player wears a darker or lighter color
+- **Tracker:** The Tracker has been reworked by [Alex2911](https://github.com/Alex2911). The Tracker now has an additional optional ability that tracks all corpses on the map for a few seconds.
 
 **Version 3.0.0**
 - Updated to Among Us version v2021.11.9.5s
@@ -1035,10 +1036,10 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
-The Tracker can select one player to track.
-Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
+The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates its position every few seconds (configurable).
+Depending on the options, the Tracker has another ability: He can track all corpses on the map for a set amount of time.
 
 ### Game Options
 | Name | Description
@@ -1046,6 +1047,9 @@ The arrow updates its position every few seconds (configurable).
 | Tracker Spawn Chance | -
 | Tracker Update Interval | Sets how often the position is being updated
 | Tracker Reset Target After Meeting | -
+| Tracker Can Track Corpses | -
+| Corpses Tracking Cooldown | -
+| Corpses Tracking Duration | -
 -----------------------
 
 ## Snitch
