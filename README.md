@@ -39,6 +39,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.0.0/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.2/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.1/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.0/TheOtherRoles.zip)
@@ -79,6 +80,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.0.0**
+- Update to Among Us version v2021.11.9.5s
+- **Note:** We wanted to update as fast as possible, that's why you can't use both the Innersloth and mod roles at the same time. We'll make that possible in the future, but there are various things that need to be modified (e.g. Shifter, Guesser, ...) to make that work, so that'll take a little longer. Also, be aware that this version might contain more bugs than usual because Innersloth changed a lot of things and we might have missed some of them.
+- Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
+- For now we removed the option "Jester Can Sabotage"
+- The Sheriff now always dies, when he tries to kill a not fully grown Mini
 
 **Hotfix 2.9.2**
 - Fixed a bug where the names of all players were visible during camouflage
@@ -521,8 +529,8 @@ Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically res
 ### **Team: Impostors**
 The Mafia are a group of three Impostors.\
 The Godfather works like a normal Impostor.\
-The Mafioso is an Impostor who cannot kill nor sabotage until the Godfather is dead.\
-The Janitor is an Impostor who cannot kill nor sabotage, but they can hide dead bodies instead.\
+The Mafioso is an Impostor who cannot kill until the Godfather is dead.\
+The Janitor is an Impostor who cannot kill, but they can hide dead bodies instead.\
 \
 **NOTE:**
 - There have to be 3 Impostors activated for the mafia to spawn.
@@ -781,8 +789,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 | Name | Description |
 |----------|:-------------:|
 | Jester Spawn Chance | -
-| Jester can call emergency meeting | Option to disable the emergency button for the Jester
-| Jester can sabotage | Option to allow the Jester to sabotage
+| Jester Can Call Emergency Meeting | Option to disable the emergency button for the Jester
 -----------------------
 
 ## Arsonist
@@ -817,11 +824,10 @@ The Seer gets a blue flash on his screen, if a player dies somewhere on the map.
 
 ## Engineer
 ### **Team: Crewmates**
-The Engineer (if alive) can fix one sabotage per game from anywhere on the map.\
-The Engineer can use vents. If the Engineer is inside a vent, the Impostors will see a blue outline
-around all vents on the map (in order to warn them).
-Because of the vents the Engineer might not be able to start some tasks using the "Use" button,
-you can double-click on the tasks instead.
+The Engineer (if alive) can fix a certain amount of sabotages per game from anywhere on the map.\
+The Engineer can use vents.\
+If the Engineer is inside a vent, depending on the options the members of the team Jackal/Impostors will see a blue outline around all vents on the map (in order to warn them).
+Because of the vents the Engineer might not be able to start some tasks using the "Use" button, you can double-click on the tasks instead.\
 \
 **NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
@@ -830,6 +836,9 @@ you can double-click on the tasks instead.
 | Name | Description |
 |----------|:-------------:|
 | Engineer Spawn Chance | -
+| Number Of Sabotage Fixes| -
+| Impostors See Vents Highlighted | -
+| Jackal and Sidekick See Vents Highlighted | -
 -----------------------
 
 ## Detective
@@ -881,7 +890,7 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
   - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
 
 **NOTE:**
-- Impostors can't kill the Mini (the button does not work) until it turns 18
+- If the Sheriff tries to kill the Mini before it's fully grown, he dies, no matter if the Mini is a Crewmate or Impostor
 - The Sheriff can kill the Impostor Mini, but only if it's fully grown up
 
 ### Game Options
@@ -1085,7 +1094,6 @@ If both Impostors and Jackals are in the game the game, continues even if all Cr
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to his Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if he uses the ability on an Impostor he sees the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
 | Jackal and Sidekick have Impostor vision | - |
-| Jackal and Sidekick Can See Engineer Vent | - | If set to true, team Jackal will see vents highlited like Impostors if an Engineer is inside one
 -----------------------
 
 ## Sidekick
