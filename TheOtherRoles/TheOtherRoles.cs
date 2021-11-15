@@ -252,6 +252,7 @@ namespace TheOtherRoles
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
+        public static bool showAttemptToMedic = false;
         public static bool setShieldAfterMeeting = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
@@ -272,6 +273,7 @@ namespace TheOtherRoles
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
         }
     }
@@ -993,6 +995,8 @@ namespace TheOtherRoles
 
         public static int remainingShots = 2;
         public static bool hasMultipleShotsPerMeeting = false;
+        public static bool showInfoInGhostChat = true;
+        public static bool killsThroughShield = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1005,6 +1009,8 @@ namespace TheOtherRoles
             
             remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
+            showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
+            killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
         }
     }
 
