@@ -19,8 +19,8 @@ namespace TheOtherRoles
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton hackerButton;
-        private static CustomButton trackerButton;
-        private static CustomButton trackerFindButton;
+        private static CustomButton trackerTrackPlayerButton;
+        private static CustomButton trackerTrackCorpsesButton;
         private static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
         private static CustomButton jackalKillButton;
@@ -49,7 +49,7 @@ namespace TheOtherRoles
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
-            trackerButton.MaxTimer = 0f;
+            trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
@@ -64,6 +64,8 @@ namespace TheOtherRoles
             arsonistButton.MaxTimer = Arsonist.cooldown;
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
+            trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
+
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
@@ -73,8 +75,7 @@ namespace TheOtherRoles
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
             mediumButton.EffectDuration = Medium.duration;
-            trackerFindButton.MaxTimer = Tracker.cooldown;
-            trackerFindButton.EffectDuration = Tracker.duration;
+            trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
@@ -354,7 +355,7 @@ namespace TheOtherRoles
             );
 
             // Tracker button
-            trackerButton = new CustomButton(
+            trackerTrackPlayerButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrackerUsedTracker, Hazel.SendOption.Reliable, -1);
                     writer.Write(Tracker.currentTarget.PlayerId);
@@ -370,35 +371,26 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
-            if (Tracker.showCorps == true)
-            { 
-                trackerFindButton = new CustomButton(
-                    () => {
-                        Tracker.pathfinderTimer = Tracker.duration;
-                    },
-                    () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                    () => { return PlayerControl.LocalPlayer.CanMove; },
-                    () => {
-                        trackerFindButton.Timer = trackerFindButton.MaxTimer;
-                        trackerFindButton.isEffectActive = false;
-                        trackerFindButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
-                    },
-                   Tracker.getButtonSpritePathfinding(),
-                    new Vector3(-2.6f, 0, 0),
-                    __instance,
-                    KeyCode.E,
-                    true,
-                    0f,
-                    () => {
-                        trackerFindButton.Timer = trackerFindButton.MaxTimer;
-                    }
-                );
-            }
-
-
-
-
-
+            trackerTrackCorpsesButton = new CustomButton(
+                () => { Tracker.corpsesTrackingTimer = Tracker.corpsesTrackingDuration; },
+                () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Tracker.canTrackCorpses; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
+                    trackerTrackCorpsesButton.isEffectActive = false;
+                    trackerTrackCorpsesButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                Tracker.getTrackCorpsesButtonSprite(),
+                new Vector3(-2.7f, -0.06f, 0),
+                __instance,
+                KeyCode.Q,
+                true,
+                Tracker.corpsesTrackingDuration,
+                () => {
+                    trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
+                }
+            );
+    
             vampireKillButton = new CustomButton(
                 () => {
                     if (Helpers.handleMurderAttempt(Vampire.vampire, Vampire.currentTarget)) {

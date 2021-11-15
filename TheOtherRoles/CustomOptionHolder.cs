@@ -139,9 +139,10 @@ namespace TheOtherRoles {
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
         public static CustomOption trackerResetTargetAfterMeeting;
-        public static CustomOption trackerCooldown;
-        public static CustomOption trackerPathfindingDuration;
-        public static CustomOption trackerEnablePathfinding;
+        public static CustomOption trackerCanTrackCorpses;
+        public static CustomOption trackerCorpsesTrackingCooldown;
+        public static CustomOption trackerCorpsesTrackingDuration;
+
         public static CustomOption snitchSpawnRate;
         public static CustomOption snitchLeftTasksForReveal;
         public static CustomOption snitchIncludeTeamJackal;
@@ -353,9 +354,9 @@ namespace TheOtherRoles {
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
             trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
-            trackerEnablePathfinding = CustomOption.Create(203, "Tracker turn on find corps", true, trackerSpawnRate);
-            trackerCooldown = CustomOption.Create(204, "Tracker Cooldown find corps", 30f, 0f, 60f, 5f, trackerEnablePathfinding);
-            trackerPathfindingDuration = CustomOption.Create(205, "Tracker corps finding duration", 5f, 2.5f, 30f, 2.5f, trackerEnablePathfinding);
+            trackerCanTrackCorpses = CustomOption.Create(203, "Tracker Can Track Corpses", true, trackerSpawnRate);
+            trackerCorpsesTrackingCooldown = CustomOption.Create(204, "Corpses Tracking Cooldown", 30f, 0f, 60f, 5f, trackerCanTrackCorpses);
+            trackerCorpsesTrackingDuration = CustomOption.Create(205, "Corpses Tracking Duration", 5f, 2.5f, 30f, 2.5f, trackerCanTrackCorpses);
                            
             snitchSpawnRate = CustomOption.Create(210, cs(Snitch.color, "Snitch"), rates, null, true);
             snitchLeftTasksForReveal = CustomOption.Create(211, "Task Count Where The Snitch Will Be Revealed", 1f, 0f, 5f, 1f, snitchSpawnRate);

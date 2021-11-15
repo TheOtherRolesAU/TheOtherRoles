@@ -286,32 +286,59 @@ namespace TheOtherRoles.Patches {
         }
 
         static void trackerUpdate() {
-            if (Tracker.arrow?.arrow == null) return;
+            // Handle player tracking
+            if (Tracker.arrow?.arrow != null) {
+                if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) {
+                    Tracker.arrow.arrow.SetActive(false);
+                    return;
+                }
 
-            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) {
-                Tracker.arrow.arrow.SetActive(false);
-                return;
+                if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead) {
+                    Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
+
+                    if (Tracker.timeUntilUpdate <= 0f) {
+                        bool trackedOnMap = !Tracker.tracked.Data.IsDead;
+                        Vector3 position = Tracker.tracked.transform.position;
+                        if (!trackedOnMap) { // Check for dead body
+                            DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
+                            if (body != null) {
+                                trackedOnMap = true;
+                                position = body.transform.position;
+                            }
+                        }
+
+                        Tracker.arrow.Update(position);
+                        Tracker.arrow.arrow.SetActive(trackedOnMap);
+                        Tracker.timeUntilUpdate = Tracker.updateIntervall;
+                    } else {
+                        Tracker.arrow.Update();
+                    }
+                }
             }
 
-            if (Tracker.tracker != null && Tracker.tracked != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead) {
-                Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
+            // Handle corpses tracking
+            if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) {
+                if (Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead) {
+                    DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+                    bool arrowsCountChanged = Tracker.localArrows.Count != deadBodies.Count();
+                    int index = 0;
 
-                if (Tracker.timeUntilUpdate <= 0f) {
-                    bool trackedOnMap = !Tracker.tracked.Data.IsDead;
-                    Vector3 position = Tracker.tracked.transform.position;
-                    if (!trackedOnMap) { // Check for dead body
-                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
-                        if (body != null) {
-                            trackedOnMap = true;
-                            position = body.transform.position;
-                        }
+                    if (arrowsCountChanged) {
+                        foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                        Tracker.localArrows = new List<Arrow>();
                     }
-
-                    Tracker.arrow.Update(position);
-                    Tracker.arrow.arrow.SetActive(trackedOnMap);
-                    Tracker.timeUntilUpdate = Tracker.updateIntervall;
-                } else {
-                    Tracker.arrow.Update();
+                    foreach (DeadBody db in deadBodies) {
+                        if (arrowsCountChanged) {
+                            Tracker.localArrows.Add(new Arrow(Tracker.color));
+                            Tracker.localArrows[index].arrow.SetActive(true);
+                        }
+                        if (Tracker.localArrows[index] != null) Tracker.localArrows[index].Update(db.transform.position);
+                        index++;
+                    }
+                } else { 
+                    foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                    Tracker.localArrows = new List<Arrow>();
+                    return; 
                 }
             }
         }
@@ -562,6 +589,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
+
         static void vultureUpdate() {
             if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
             if (Vulture.vulture.Data.IsDead) {
@@ -627,37 +655,6 @@ namespace TheOtherRoles.Patches {
                 Morphling.resetMorph();
         }
 
-
-
-
-        static void pathfinderUpdate()
-        {
-
-            if (Tracker.deadBodyPositions == null) return;
-
-            if (Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) return;
-
-            foreach (Arrow arrow in Tracker.localArrows) arrow.arrow.SetActive(false);
-            if (Tracker.pathfinderTimer < 0) return;
-
-            Tracker.localArrows = new List<Arrow>();
-            int arrowIndex = 0;
-            foreach (Vector3 pos in Tracker.deadBodyPositions)
-            {
-                Tracker.localArrows.Add(new Arrow(Color.magenta));
-                if (arrowIndex < Tracker.localArrows.Count && Tracker.localArrows[arrowIndex] != null)
-                {
-                    Vector3 position = pos;
-                    position.y = (float)position.y - (float)0.300;
-
-                    Tracker.localArrows[arrowIndex].arrow.SetActive(true);
-                    Tracker.localArrows[arrowIndex].Update(position);
-                }
-                arrowIndex++;
-            }
-
-
-        }
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -688,8 +685,6 @@ namespace TheOtherRoles.Patches {
                 detectiveUpdateFootPrints();
                 // Tracker
                 trackerSetTarget();
-                // Pathfinder
-                pathfinderUpdate();
                 // Vampire
                 vampireSetTarget();
                 Garlic.UpdateAll();
@@ -844,10 +839,6 @@ namespace TheOtherRoles.Patches {
             if (target.hasFakeTasks())
                 target.clearAllTasks();
 
-            if (Tracker.tracker != null && PlayerControl.LocalPlayer == Tracker.tracker && !Tracker.tracker.Data.IsDead && Tracker.tracker != target)
-            {
-                Tracker.deadBodyPositions.Add(target.transform.position);
-            }
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;

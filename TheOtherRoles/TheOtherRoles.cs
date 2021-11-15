@@ -531,30 +531,26 @@ namespace TheOtherRoles
         public static PlayerControl tracker;
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
         public static List<Arrow> localArrows = new List<Arrow>();
-        public static List<Vector3> deadBodyPositions = new List<Vector3>();
-
-        public static float cooldown = 30f;
-        public static float duration = 10f;
-        public static float pathfinderTimer = 0f;
-        public static bool showHints = false;
-
-
 
         public static float updateIntervall = 5f;
         public static bool resetTargetAfterMeeting = false;
+        public static bool canTrackCorpses = false;
+        public static float corpsesTrackingCooldown = 30f;
+        public static float corpsesTrackingDuration = 5f;
+        public static float corpsesTrackingTimer = 0f;
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
         public static bool usedTracker = false;
         public static float timeUntilUpdate = 0f;
         public static Arrow arrow = new Arrow(Color.blue);
-        public static bool showCorps = false;
-        private static Sprite buttonSpritePathfinding;
-        public static Sprite getButtonSpritePathfinding()
+
+        private static Sprite trackCorpsesButtonSprite;
+        public static Sprite getTrackCorpsesButtonSprite()
         {
-            if (buttonSpritePathfinding) return buttonSpritePathfinding;
-            buttonSpritePathfinding = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PathfindButton.png", 115f);
-            return buttonSpritePathfinding;
+            if (trackCorpsesButtonSprite) return trackCorpsesButtonSprite;
+            trackCorpsesButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PathfindButton.png", 115f);
+            return trackCorpsesButtonSprite;
         }
 
         private static Sprite buttonSprite;
@@ -562,18 +558,6 @@ namespace TheOtherRoles
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TrackerButton.png", 115f);
             return buttonSprite;
-        }
-
-        public static void resetPaths()
-        {
-            if (localArrows != null)
-            {
-                foreach (Arrow arrow in localArrows)
-                    if (arrow?.arrow != null)
-                        UnityEngine.Object.Destroy(arrow.arrow);
-            }
-            localArrows = new List<Arrow>();
-            showHints = false;
         }
 
         public static void resetTracked() {
@@ -590,21 +574,15 @@ namespace TheOtherRoles
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
-
-            deadBodyPositions = new List<Vector3>();
-            if (localArrows != null)
-            {
+            if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
                     if (arrow?.arrow != null)
                         UnityEngine.Object.Destroy(arrow.arrow);
             }
-            localArrows = new List<Arrow>();
-            pathfinderTimer = 0f;
-            cooldown = CustomOptionHolder.trackerCooldown.getFloat();
-            duration = CustomOptionHolder.trackerPathfindingDuration.getFloat();
-            showCorps = CustomOptionHolder.trackerEnablePathfinding.getBool();
-
-
+            corpsesTrackingTimer = 0f;
+            corpsesTrackingCooldown = CustomOptionHolder.trackerCorpsesTrackingCooldown.getFloat();
+            corpsesTrackingDuration = CustomOptionHolder.trackerCorpsesTrackingDuration.getFloat();
+            canTrackCorpses = CustomOptionHolder.trackerCanTrackCorpses.getBool();
         }
     }
 

@@ -170,12 +170,6 @@ namespace TheOtherRoles.Patches {
                 Swapper.playerId1 = Byte.MaxValue;
                 Swapper.playerId2 = Byte.MaxValue;
 
-                if (Tracker.tracker != null)
-                {
-                    Tracker.resetPaths();
-                    Tracker.deadBodyPositions = new List<Vector3>();
-                }
-
                 // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
                 if (exiled != null)
