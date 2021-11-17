@@ -54,7 +54,7 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(Vent), "CanUse")]
+    [HarmonyPatch(typeof(Vent), "Use")]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             bool canUse;
