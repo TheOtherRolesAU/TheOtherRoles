@@ -65,6 +65,7 @@ namespace TheOtherRoles
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
+            witchSpellButton.MaxTimer = Witch.cooldown; 
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -78,8 +79,6 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
-
-            witchSpellButton.MaxTimer = Witch.cooldown;
         }
 
         public static void resetTimeMasterButton() {
@@ -932,6 +931,7 @@ namespace TheOtherRoles
                 () => {
                     witchSpellButton.MaxTimer += 10;
                     witchSpellButton.Timer = witchSpellButton.MaxTimer;
+                    Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
                     writer.Write(Witch.currentTarget.PlayerId);
@@ -942,7 +942,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && Witch.currentTarget != null; },
                 () => { witchSpellButton.Timer = witchSpellButton.MaxTimer; },
                 Witch.getButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
