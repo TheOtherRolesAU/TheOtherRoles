@@ -87,7 +87,7 @@ namespace TheOtherRoles.Patches {
 
                 // Client update with handshake infos
                 if (!AmongUsClient.Instance.AmHost) {
-                    if (!playerVersions.ContainsKey(AmongUsClient.Instance.HostId) || TheOtherRolesPlugin.Version.CompareTo((PlayerVersion)playerVersions[AmongUsClient.Instance.HostId]) != 0) {
+                    if (!playerVersions.ContainsKey(AmongUsClient.Instance.HostId) || TheOtherRolesPlugin.Version.CompareTo(playerVersions[AmongUsClient.Instance.HostId].version) != 0) {
                         kickingTimer += Time.deltaTime;
                         TheOtherRolesPlugin.Logger.LogError(Time.deltaTime);
                         TheOtherRolesPlugin.Logger.LogError(kickingTimer);
