@@ -54,9 +54,10 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(Vent), "Use")]
+    [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
+            TheOtherRolesPlugin.Logger.LogError("her");
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
