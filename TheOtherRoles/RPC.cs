@@ -671,8 +671,8 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             target.Exiled();
-            PlayerControl partner = target.getPartner(); // Lover check
-            byte partnerId = partner != null ? partner.PlayerId : playerId;
+            PlayerControl dyingLoverPartner = Lovers.bothDie ? target.getPartner() : null; // Lover check
+            byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : playerId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
@@ -688,8 +688,8 @@ namespace TheOtherRoles
             if (HudManager.Instance != null && Guesser.guesser != null)
                 if (PlayerControl.LocalPlayer == target) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
-                else if (partner != null && PlayerControl.LocalPlayer == partner) 
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(partner.Data, partner.Data);
+                else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner) 
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
         }
     }   
 
