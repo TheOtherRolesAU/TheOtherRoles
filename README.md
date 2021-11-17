@@ -83,8 +83,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.1.1**
-- Fixing a bug where you were unable to connect to custom servers
-- Enabling the option "Guesses Visible In Ghost Chat" doesn't result in a ban of the Guesser anymore
+- Fixed a bug where you were unable to connect to custom servers
+- Fixed a bug where option "Guesses Visible In Ghost Chat" doesn't result in a ban of the Guesser anymore
+- Fixed a bug where the Spy was always on the same position on the intro screen
 
 **Version 3.1.0**
 - Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
