@@ -1044,7 +1044,7 @@ and can't fix lights and comms.
 The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates its position every few seconds (configurable).
-Depending on the options, the Tracker has another ability: He can track all corpses on the map for a set amount of time.
+Depending on the options, the Tracker has another ability: He can track all corpses on the map for a set amount of time. He will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
 ### Game Options
 | Name | Description

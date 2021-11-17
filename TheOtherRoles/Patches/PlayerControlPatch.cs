@@ -317,29 +317,25 @@ namespace TheOtherRoles.Patches {
             }
 
             // Handle corpses tracking
-            if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) {
-                if (Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead) {
-                    DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
-                    bool arrowsCountChanged = Tracker.localArrows.Count != deadBodies.Count();
-                    int index = 0;
+            if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead) {
+                bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count();
+                int index = 0;
 
-                    if (arrowsCountChanged) {
-                        foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
-                        Tracker.localArrows = new List<Arrow>();
-                    }
-                    foreach (DeadBody db in deadBodies) {
-                        if (arrowsCountChanged) {
-                            Tracker.localArrows.Add(new Arrow(Tracker.color));
-                            Tracker.localArrows[index].arrow.SetActive(true);
-                        }
-                        if (Tracker.localArrows[index] != null) Tracker.localArrows[index].Update(db.transform.position);
-                        index++;
-                    }
-                } else { 
+                if (arrowsCountChanged) {
                     foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
                     Tracker.localArrows = new List<Arrow>();
-                    return; 
                 }
+                foreach (Vector3 position in Tracker.deadBodyPositions) {
+                    if (arrowsCountChanged) {
+                        Tracker.localArrows.Add(new Arrow(Tracker.color));
+                        Tracker.localArrows[index].arrow.SetActive(true);
+                    }
+                    if (Tracker.localArrows[index] != null) Tracker.localArrows[index].Update(position);
+                    index++;
+                }
+            } else if (Tracker.localArrows.Count > 0) { 
+                foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Tracker.localArrows = new List<Arrow>();
             }
         }
 
@@ -859,6 +855,9 @@ namespace TheOtherRoles.Patches {
                 })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            // Tracker store body positions
+            if (Tracker.deadBodyPositions != null) Tracker.deadBodyPositions.Add(target.transform.position);
 
             // Medium add body
             if (Medium.deadBodies != null) {

@@ -538,6 +538,7 @@ namespace TheOtherRoles
         public static float corpsesTrackingCooldown = 30f;
         public static float corpsesTrackingDuration = 5f;
         public static float corpsesTrackingTimer = 0f;
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
@@ -579,6 +580,7 @@ namespace TheOtherRoles
                     if (arrow?.arrow != null)
                         UnityEngine.Object.Destroy(arrow.arrow);
             }
+            deadBodyPositions = new List<Vector3>();
             corpsesTrackingTimer = 0f;
             corpsesTrackingCooldown = CustomOptionHolder.trackerCorpsesTrackingCooldown.getFloat();
             corpsesTrackingDuration = CustomOptionHolder.trackerCorpsesTrackingDuration.getFloat();
