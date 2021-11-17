@@ -110,6 +110,19 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
+    class KillButtonDoClickPatch {
+        public static bool Prefix(KillButton __instance) {
+            if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
+                // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
+                Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget);
+                __instance.SetTarget(null);
+            }
+            return false;
+        }
+    }
+
+
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
         static void Postfix() {

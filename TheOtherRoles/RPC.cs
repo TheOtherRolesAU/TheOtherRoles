@@ -58,7 +58,7 @@ namespace TheOtherRoles
     {
         // Main Controls
 
-        ResetVaribles = 50,
+        ResetVaribles = 60,
         ShareOptionSelection,
         ForceEnd,
         SetRole,
@@ -69,10 +69,9 @@ namespace TheOtherRoles
 
         // Role functionality
 
-        EngineerFixLights = 81,
+        EngineerFixLights = 91,
         EngineerUsedRepair,
         CleanBody,
-        SheriffKill,
         MedicSetShielded,
         ShieldedMurderAttempt,
         TimeMasterShield,
@@ -83,10 +82,7 @@ namespace TheOtherRoles
         CamouflagerCamouflage,
         TrackerUsedTracker,
         VampireSetBitten,
-        VampireTryKill,
         PlaceGarlic,
-        JackalKill,
-        SidekickKill,
         JackalCreatesSidekick,
         SidekickPromotes,
         ErasePlayerRoles,
@@ -308,17 +304,6 @@ namespace TheOtherRoles
             }
         }
 
-        public static void sheriffKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
-                    Sheriff.sheriff.MurderPlayer(player);
-                    return;
-                }
-            }
-        }
-
         public static void timeMasterRewindTime() {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
             if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
@@ -491,13 +476,6 @@ namespace TheOtherRoles
             }
         }
 
-        public static void vampireTryKill() {
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead) {
-                Vampire.vampire.MurderPlayer(Vampire.bitten);
-            }
-            Vampire.bitten = null;
-        }
-
         public static void placeGarlic(byte[] buff) {
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -510,28 +488,6 @@ namespace TheOtherRoles
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
-        }
-
-        public static void jackalKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
-                    Jackal.jackal.MurderPlayer(player);
-                    return;
-                }
-            }
-        }
-
-        public static void sidekickKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
-                    Sidekick.sidekick.MurderPlayer(player);
-                    return;
-                }
-            }
         }
 
         public static void jackalCreatesSidekick(byte targetId) {
@@ -807,9 +763,6 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
                     break;
-                case (byte)CustomRPC.SheriffKill:
-                    RPCProcedure.sheriffKill(reader.ReadByte());
-                    break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
                     break;
@@ -841,20 +794,11 @@ namespace TheOtherRoles
                     byte reset = reader.ReadByte();
                     RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
-                case (byte)CustomRPC.VampireTryKill:
-                    RPCProcedure.vampireTryKill();
-                    break;
                 case (byte)CustomRPC.PlaceGarlic:
                     RPCProcedure.placeGarlic(reader.ReadBytesAndSize());
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
-                    break;
-                case (byte)CustomRPC.JackalKill:
-                    RPCProcedure.jackalKill(reader.ReadByte());
-                    break;
-                case (byte)CustomRPC.SidekickKill:
-                    RPCProcedure.sidekickKill(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
                     RPCProcedure.jackalCreatesSidekick(reader.ReadByte());
