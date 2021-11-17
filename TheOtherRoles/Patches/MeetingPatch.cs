@@ -425,10 +425,23 @@ namespace TheOtherRoles.Patches {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
                     }
+
                     else
                     {
                         PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 && Guesser.guesser == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots <= 0) return;
+
+                        if (!Guesser.killsThroughShield && target == Medic.shielded)
+                        { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
+                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
+                            UnityEngine.Object.Destroy(container.gameObject);
+
+                            MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                            murderAttemptWriter.Write(target.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
+                            RPCProcedure.shieldedMurderAttempt(target.PlayerId);
+                            return;
+                        }
 
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                         if (mainRoleInfo == null) return;
@@ -438,27 +451,25 @@ namespace TheOtherRoles.Patches {
                         {
                             target = PlayerControl.LocalPlayer;  // Guess is incorrect!
                         }
+
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
-                        if (Guesser.hasMultipleShotsPerMeeting && Guesser.remainingShots > 1 && target != PlayerControl.LocalPlayer)
+                        if (Guesser.hasMultipleShotsPerMeeting && (PlayerControl.LocalPlayer == Guesser.guesser && Guesser.remainingShots > 1 
+                                                                   || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots > 1)  && target != PlayerControl.LocalPlayer)
                             __instance.playerStates.ToList().ForEach(x => { if (x.TargetPlayerId == target.PlayerId && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                         else
                             __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
-                        // Shoot player
+                        // Shoot player and send chat info if activated
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
                         writer.Write((byte)target.PlayerId);
                         writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId, PlayerControl.LocalPlayer.PlayerId);
-
-                        // Guesser info posted to ghost chat
-                        if (CustomOptionHolder.guesserInfoInGhostChat.getBool())
-                        {
-                            string msg = $"Guesser guessed {target.name} as {roleInfo.name} ";
-                            msg += (target != PlayerControl.LocalPlayer ? "and was correct!" : "but was wrong!");
-                            target.RpcSendChat(msg);  // The target is dead at this point, so only ghosts will see the message.
+                        if (Guesser.showInfoInGhostChat) {
+                            string msg = $"Guesser guessed the role {roleInfo.name} for {target.name}!";
+                            target.RpcSendChat(msg);  // As the target is dead at this point, only ghosts will see the message.
                         }
                     }
                 }));
@@ -471,7 +482,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
         class PlayerVoteAreaSelectPatch {
             static bool Prefix(MeetingHud __instance) {
-                return !(PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer == Guesser.guesser && guesserUI != null);
+                return !(PlayerControl.LocalPlayer != null && (PlayerControl.LocalPlayer == Guesser.guesser || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser)) && guesserUI != null);
             }
         }
 

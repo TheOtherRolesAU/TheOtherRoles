@@ -303,12 +303,16 @@ namespace TheOtherRoles.Patches {
         }
 
         static void trackerUpdate() {
+            // Handle player tracking
+
             if (Tracker.arrow?.arrow == null && Doppelganger.trackerArrow?.arrow == null) return;
 
             if ((Tracker.tracker == null || PlayerControl.LocalPlayer != Tracker.tracker) && (PlayerControl.LocalPlayer != Doppelganger.doppelganger || Doppelganger.copiedRole != RoleInfo.tracker)) {
                 Tracker.arrow.arrow.SetActive(false);
                 return;
-            }
+
+                }
+
             // To save some lines, determine the arrow and target by the player role. Local player is tracker or doppelganger!
             Arrow trackerArrow;
             PlayerControl tracked;
@@ -323,27 +327,53 @@ namespace TheOtherRoles.Patches {
                 tracked = Doppelganger.trackerTracked;
             }
 
-
             if (tracked != null && !PlayerControl.LocalPlayer.Data.IsDead) {
-                Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
+                    Tracker.timeUntilUpdate -= Time.fixedDeltaTime;
 
-                if (Tracker.timeUntilUpdate <= 0f) {
-                    bool trackedOnMap = !tracked.Data.IsDead;
-                    Vector3 position = tracked.transform.position;
-                    if (!trackedOnMap) { // Check for dead body
-                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == tracked.PlayerId);
-                        if (body != null) {
-                            trackedOnMap = true;
-                            position = body.transform.position;
+                    if (Tracker.timeUntilUpdate <= 0f)
+                    {
+                        bool trackedOnMap = !Tracker.tracked.Data.IsDead;
+                        Vector3 position = Tracker.tracked.transform.position;
+                        if (!trackedOnMap)
+                        { // Check for dead body
+                            DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Tracker.tracked.PlayerId);
+                            if (body != null)
+                            {
+                                trackedOnMap = true;
+                                position = body.transform.position;
+                            }
                         }
-                    }
 
-                    trackerArrow.Update(position);
-                    trackerArrow.arrow.SetActive(trackedOnMap);
-                    Tracker.timeUntilUpdate = Tracker.updateIntervall;
-                } else {
-                    trackerArrow.Update();
+                        Tracker.arrow.Update(position);
+                        Tracker.arrow.arrow.SetActive(trackedOnMap);
+                        Tracker.timeUntilUpdate = Tracker.updateIntervall;
+                    }
+                    else
+                    {
+                        Tracker.arrow.Update();
+                    }
                 }
+
+                // Handle corpses tracking
+                if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead) {
+                bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count();
+                int index = 0;
+
+                if (arrowsCountChanged) {
+                    foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                    Tracker.localArrows = new List<Arrow>();
+                }
+                foreach (Vector3 position in Tracker.deadBodyPositions) {
+                    if (arrowsCountChanged) {
+                        Tracker.localArrows.Add(new Arrow(Tracker.color));
+                        Tracker.localArrows[index].arrow.SetActive(true);
+                    }
+                    if (Tracker.localArrows[index] != null) Tracker.localArrows[index].Update(position);
+                    index++;
+                }
+            } else if (Tracker.localArrows.Count > 0) { 
+                foreach (Arrow arrow in Tracker.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Tracker.localArrows = new List<Arrow>();
             }
         }
 
@@ -650,6 +680,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
+
         static void vultureUpdate() {
             if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
             if (Vulture.vulture.Data.IsDead) {
@@ -804,28 +835,6 @@ namespace TheOtherRoles.Patches {
             Helpers.handleVampireBiteOnBodyReport();
         }
     }
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckMurder))]
-    class RpcMurderPlayer {
-        public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target) {
-            PlayerControl killer = __instance;
-            if (AmongUsClient.Instance.IsGameOver || !AmongUsClient.Instance.AmHost) return false;
-            if (!target || killer.Data.IsDead || killer.Data.Disconnected) return false; // Allow non Impostor kills compared to vanilla code
-            if (target.Data == null || target.Data.IsDead)  return false; // Allow killing players in vents compared to vanilla code
-
-            if (Helpers.handleMurderAttempt(killer, target)) { // Custom checks
-                if (Mini.mini != null && killer == Mini.mini || BountyHunter.bountyHunter != null && killer == BountyHunter.bountyHunter) { // Not checked by official servers
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                    writer.Write(killer.PlayerId);
-                    writer.Write(target.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId);
-                } else { // Checked by official servers
-                    killer.RpcMurderPlayer(target);
-                }
-            }
-            return false;
-        }
-    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.LocalPlayer.CmdReportDeadBody))]
     class BodyReportPatch
@@ -950,6 +959,9 @@ namespace TheOtherRoles.Patches {
                 })));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            // Tracker store body positions
+            if (Tracker.deadBodyPositions != null) Tracker.deadBodyPositions.Add(target.transform.position);
 
             // Medium add body
             if (Medium.deadBodies != null) {
