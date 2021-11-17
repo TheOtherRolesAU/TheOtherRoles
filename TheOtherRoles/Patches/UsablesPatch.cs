@@ -54,17 +54,15 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
+    [HarmonyPatch(typeof(Vent), "CanUse")]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
-            bool canMoveInVents = true;
+            bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy;
             if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
-            if (Spy.spy == PlayerControl.LocalPlayer) {
-                canMoveInVents = false;
-            }
+
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
             
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
