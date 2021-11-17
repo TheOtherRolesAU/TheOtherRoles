@@ -687,6 +687,15 @@ namespace TheOtherRoles
                     HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
                 else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
+            
+            var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
+            if (Guesser.showInfoInGhostChat && mainRoleInfo != null && PlayerControl.LocalPlayer.Data.IsDead) {
+                string msg = $"Guesser guessed the role {mainRoleInfo.name} for {target.Data.PlayerName}!";
+                if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(Guesser.guesser, msg);
+                if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
+                    DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
+            }
         }
     }   
 
