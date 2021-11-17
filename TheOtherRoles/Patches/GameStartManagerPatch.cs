@@ -89,8 +89,6 @@ namespace TheOtherRoles.Patches {
                 if (!AmongUsClient.Instance.AmHost) {
                     if (!playerVersions.ContainsKey(AmongUsClient.Instance.HostId) || TheOtherRolesPlugin.Version.CompareTo(playerVersions[AmongUsClient.Instance.HostId].version) != 0) {
                         kickingTimer += Time.deltaTime;
-                        TheOtherRolesPlugin.Logger.LogError(Time.deltaTime);
-                        TheOtherRolesPlugin.Logger.LogError(kickingTimer);
                         if (kickingTimer > 10) {
                             kickingTimer = 0;
 			                AmongUsClient.Instance.ExitGame(DisconnectReasons.ExitGame);
