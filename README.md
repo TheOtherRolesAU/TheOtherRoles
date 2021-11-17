@@ -82,7 +82,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
-**Version 3.1.1**
+**Hotfix 3.1.1**
 - Bug fix: You're again able to connect to custom servers
 - Bug fix: The option "Guesses Visible In Ghost Chat" doesn't result in a ban of the Guesser anymore
 - Bug fix: The position of the Spy on the intro screen is again random
