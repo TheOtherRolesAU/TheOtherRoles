@@ -99,13 +99,14 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.SetTarget))]
     class VentButtonSetTargetPatch {
+        static Sprite defaultVentSprite = null;
         static void Postfix(VentButton __instance) {
             // Trickster render special vent button
             if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                if (__instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_"))
-                    __instance.graphic.sprite = Trickster.getTricksterVentButtonSprite();
-                else
-                    __instance.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                if (defaultVentSprite == null) defaultVentSprite = __instance.graphic.sprite;
+                bool isSpecialVent = __instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_");
+                __instance.graphic.sprite = isSpecialVent ?  Trickster.getTricksterVentButtonSprite() : defaultVentSprite;
+                __instance.buttonLabelText.enabled = !isSpecialVent;
             }
         }
     }
