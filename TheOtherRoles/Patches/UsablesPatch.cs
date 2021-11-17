@@ -54,10 +54,18 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(VentButton), nameof(VentButton.DoClick))]
+    class VentButtonDoClickPatch {
+        static  bool Prefix(VentButton __instance) {
+            // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
+		    if (__instance.currentTarget != null) __instance.currentTarget.Use();
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
-            TheOtherRolesPlugin.Logger.LogError("her");
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
