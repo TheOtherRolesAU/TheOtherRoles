@@ -253,9 +253,6 @@ namespace TheOtherRoles
             else 
                 ver = new System.Version(major, minor, build, revision);
             GameStartManagerPatch.playerVersions[clientId] = new GameStartManagerPatch.PlayerVersion(ver, guid);
-
-            if (AmongUsClient.Instance.AmHost && clientId != AmongUsClient.Instance.ClientId) // Host returns version whenever another player sends one
-                Helpers.shareGameVersion();
         }
 
         public static void useUncheckedVent(int ventId, byte playerId, byte isEnter) {

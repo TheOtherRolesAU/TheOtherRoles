@@ -15,6 +15,15 @@ namespace TheOtherRoles.Patches {
         private static bool versionSent = false;
         private static string lobbyCodeText = "";
 
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
+        public class AmongUsClientOnPlayerJoinedPatch {
+            public static void Postfix() {
+                if (PlayerControl.LocalPlayer != null) {
+                    Helpers.shareGameVersion();
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
         public class GameStartManagerStartPatch {
             public static void Postfix(GameStartManager __instance) {
@@ -37,7 +46,7 @@ namespace TheOtherRoles.Patches {
             private static string currentText = "";
         
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance ) return; // Not host or no instance
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
             }
 
