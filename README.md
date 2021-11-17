@@ -86,7 +86,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Bug fix: You're again able to connect to custom servers
 - Bug fix: The option "Guesses Visible In Ghost Chat" doesn't result in a ban of the Guesser anymore
 - Bug fix: The position of the Spy on the intro screen is again random
-- Bug fix: The Spy can't move between vents anymore
+- Bug fix: Readded some venting rules that were lost (Spy can't move between vents, only Trickster can use boxes, ...)
 
 **Version 3.1.0**
 - Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
