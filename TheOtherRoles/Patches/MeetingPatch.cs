@@ -306,10 +306,6 @@ namespace TheOtherRoles.Patches {
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId);
-                        if (Guesser.showInfoInGhostChat) {
-                            string msg = $"Guesser guessed the role {roleInfo.name} for {target.name}!";
-                            target.RpcSendChat(msg);  // As the target is dead at this point, only ghosts will see the message.
-                        }
                     }
                 }));
 
