@@ -115,16 +115,26 @@ namespace TheOtherRoles.Patches {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
 
-                // Allow the start for this version to test the feature, blocking it with the next version
-                // if (AmongUsClient.Instance.AmHost) {
-                //     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
-                //         if (client.Character == null) continue;
-                //         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                //         if (dummyComponent != null && dummyComponent.enabled) continue;
-                //         if (!playerVersions.ContainsKey(client.Id) || (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch))
-                //             continueStart = false;
-                //     }
-                // }
+                if (AmongUsClient.Instance.AmHost) {
+                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                        if (client.Character == null) continue;
+                        var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+                        if (dummyComponent != null && dummyComponent.enabled)
+                            continue;
+                        
+                        if (!playerVersions.ContainsKey(client.Id)) {
+                            continueStart = false;
+                            break;
+                        }
+                        
+                        PlayerVersion PV = playerVersions[client.Id];
+                        int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
+                        if (diff != 0 || !PV.GuidMatches()) {
+                            continueStart = false;
+                            break;
+                        }
+                    }
+                }
                 return continueStart;
             }
         }
