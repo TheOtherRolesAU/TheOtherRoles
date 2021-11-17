@@ -82,6 +82,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.1.0**
+- Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
+- **NOTE:** Do not combine modded and unmodded versions of the game (even if you don't activate anything). Because of the kicking fix, your kills won't be performed for players that do not share the exact same modded version.
+- Bug fix: Bounty Hunter kills do not result in players being kicked anymore
 - Add new option: Allow Parallel MedBay Scans
 - Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
 - Add new [Guesser](#guesser) option: "Guesses Ignore The Medic Shield". If this option is set to false, no matter what the Guesser guessed, no one will die and the shielded player/Medic might be notified
