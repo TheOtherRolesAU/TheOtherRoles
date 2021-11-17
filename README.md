@@ -84,12 +84,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 3.1.0**
 - Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
 - **NOTE:** Do not combine modded and unmodded versions of the game (even if you don't activate anything). Because of the kicking fix, your kills won't be performed for players that do not share the exact same modded version. Due to this you now can't start a game as the host, if not everyone in the lobby has the same version of the mod. Additionally you'll be kicked out of a lobby after 10 seconds, if the host doesn't have the mod installed (or the same mod version).
+- **Tracker:** The Tracker has been reworked by [Alex2911](https://github.com/Alex2911). The Tracker now has an additional optional ability that tracks all corpses on the map for a few seconds.
 - Add new option: Allow Parallel MedBay Scans
 - Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
 - Add new [Guesser](#guesser) option: "Guesses Ignore The Medic Shield". If this option is set to false, no matter what the Guesser guessed, no one will die and the shielded player/Medic might be notified
 - Add new [Medic](#medic) option: "Medic Sees Murder Attempt On Shielded Player". This includes attempts from any kind of killer (Sheriff, Jackal, Guesser if the shield is not being ignored, ...)
 - During meetings the [Detective](#detective), [Hacker](#hacker) and [Medium](#medium) now display, whether a player wears a darker or lighter color
-- Bug fix: Bounty Hunter kills do not result in players being kicked anymore
+- Bug fix: Bounty Hunter, Mini and Engineer in vent kills do not result in players being kicked anymore
 - Bug fix: The Trickster vent button now doesn't show the text "vent" twice anymore
 - Bug fix: Fixed the visual bug where both Lovers always showed dead during the meeting after a correct guess of one of them even if the option "Both Lovers Die" was disabled
 
@@ -1040,10 +1041,10 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
-The Tracker can select one player to track.
-Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
+The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates its position every few seconds (configurable).
+Depending on the options, the Tracker has another ability: He can track all corpses on the map for a set amount of time. He will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
 ### Game Options
 | Name | Description
@@ -1051,6 +1052,9 @@ The arrow updates its position every few seconds (configurable).
 | Tracker Spawn Chance | -
 | Tracker Update Interval | Sets how often the position is being updated
 | Tracker Reset Target After Meeting | -
+| Tracker Can Track Corpses | -
+| Corpses Tracking Cooldown | -
+| Corpses Tracking Duration | -
 -----------------------
 
 ## Snitch
