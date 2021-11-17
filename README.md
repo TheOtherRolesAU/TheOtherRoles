@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.0.0/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.2/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.1/TheOtherRoles.zip)
@@ -80,8 +81,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 3.1.0**
+- Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
+- **NOTE:** Do not combine modded and unmodded versions of the game (even if you don't activate anything). Because of the kicking fix, your kills won't be performed for players that do not share the exact same modded version. Due to this you now can't start a game as the host, if not everyone in the lobby has the same version of the mod. Additionally you'll be kicked out of a lobby after 10 seconds, if the host doesn't have the mod installed (or the same mod version).
+- **Tracker:** The Tracker has been reworked by [Alex2911](https://github.com/Alex2911). The Tracker now has an additional optional ability that tracks all corpses on the map for a few seconds.
+- Add new option: Allow Parallel MedBay Scans
+- Add new [Guesser](#guesser) option: "Guesses Visible In Ghost Chat"
+- Add new [Guesser](#guesser) option: "Guesses Ignore The Medic Shield". If this option is set to false, no matter what the Guesser guessed, no one will die and the shielded player/Medic might be notified
+- Add new [Medic](#medic) option: "Medic Sees Murder Attempt On Shielded Player". This includes attempts from any kind of killer (Sheriff, Jackal, Guesser if the shield is not being ignored, ...)
+- During meetings the [Detective](#detective), [Hacker](#hacker) and [Medium](#medium) now display, whether a player wears a darker or lighter color
+- Bug fix: Bounty Hunter, Mini and Engineer in vent kills do not result in players being kicked anymore
+- Bug fix: The Trickster vent button now doesn't show the text "vent" twice anymore
+- Bug fix: Fixed the visual bug where both Lovers always showed dead during the meeting after a correct guess of one of them even if the option "Both Lovers Die" was disabled
+
 **Version 3.0.0**
-- Update to Among Us version v2021.11.9.5s
+- Updated to Among Us version v2021.11.9.5s
 - **Note:** We wanted to update as fast as possible, that's why you can't use both the Innersloth and mod roles at the same time. We'll make that possible in the future, but there are various things that need to be modified (e.g. Shifter, Guesser, ...) to make that work, so that'll take a little longer. Also, be aware that this version might contain more bugs than usual because Innersloth changed a lot of things and we might have missed some of them.
 - Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
 - For now we removed the option "Jester Can Sabotage"
@@ -450,6 +464,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (Every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left. Impostor and Jackal meetings also count)
 - **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, he'll vote himself.
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can also see the name of the Spy and everyone can still see the age of the mini.
+- **Allow Parallel MedBay Scans:** Allows players to perform their MedBay scans at the same time
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
 - **Ghosts Can See The Number Of Remaining Tasks**
@@ -718,6 +733,7 @@ The Guesser can shoot players during the meeting, by guessing its role. If the g
 You can select how many players can be shot per game and if multiple players can be shot during a single meeting.\
 The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
 You can only shoot during the voting time.\
+Depending on the options, the Guesser can't guess the shielded player and depending on the Medic options the Medic/shielded player might be notified (no one will die, independently of what the Guesser guessed).\
 \
 **NOTE:**
 - The vote of a shot player, won't be counted
@@ -731,8 +747,9 @@ You can only shoot during the voting time.\
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
 | Guesser Number Of Shots Per Game| -
-| Guesser Number Of Shots Per Meeting| -
 | Guesser Can Shoot Multiple Times Per Meeting| -
+| Guesses Visible In Ghost Chat| -
+| Guesses Ignore The Medic Shield| -
 
 -----------------------
 
@@ -849,6 +866,7 @@ The Detective's other feature shows when they report a corpse: they receive clue
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
+- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -903,9 +921,10 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
 ### **Team: Crewmates**
 The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
 The shielded player can still be voted out and might also be an Impostor.\
-If set in the options, the shielded player will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
+If set in the options, the shielded player and/or the Medic will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.
 If the Medic dies, the shield disappears with them.\
 The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
+Depending on the options, guesses from the Guesser will be blocked by the shield and the shielded player/medic might be notified.\
 The Medic's other feature shows when they report a corpse: they will see how long ago the player died.
 \
 **NOTE:**
@@ -921,6 +940,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill him | True/false |
 | Shield Will Be Set After Next Meeting | - | True/false
+| Medic Sees Murder Attempt On Shielded Player | - | If anyone tries to harm the shielded player (Impostor, Sheriff, Guesser, ...), the Medic will see a red flash
 -----------------------
 
 ## Mayor
@@ -944,6 +964,7 @@ Otherwise he sees the same information as everyone else.
 **NOTE:**
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
+- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -1020,10 +1041,10 @@ and can't fix lights and comms.
 
 ## Tracker
 ### **Team: Crewmates**
-The Tracker can select one player to track.
-Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
+The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.
 An arrow points to the last tracked position of the player.
 The arrow updates its position every few seconds (configurable).
+Depending on the options, the Tracker has another ability: He can track all corpses on the map for a set amount of time. He will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
 ### Game Options
 | Name | Description
@@ -1031,6 +1052,9 @@ The arrow updates its position every few seconds (configurable).
 | Tracker Spawn Chance | -
 | Tracker Update Interval | Sets how often the position is being updated
 | Tracker Reset Target After Meeting | -
+| Tracker Can Track Corpses | -
+| Corpses Tracking Cooldown | -
+| Corpses Tracking Duration | -
 -----------------------
 
 ## Snitch
@@ -1177,6 +1201,7 @@ an outline or all vents do).
 Created by [Mallöris](https://github.com/Mallaris)\
 \
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
+During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 Questions:
 What is your Role?

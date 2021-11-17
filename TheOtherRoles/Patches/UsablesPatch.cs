@@ -99,16 +99,30 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.SetTarget))]
     class VentButtonSetTargetPatch {
+        static Sprite defaultVentSprite = null;
         static void Postfix(VentButton __instance) {
             // Trickster render special vent button
             if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                if (__instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_"))
-                    __instance.graphic.sprite = Trickster.getTricksterVentButtonSprite();
-                else
-                    __instance.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                if (defaultVentSprite == null) defaultVentSprite = __instance.graphic.sprite;
+                bool isSpecialVent = __instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_");
+                __instance.graphic.sprite = isSpecialVent ?  Trickster.getTricksterVentButtonSprite() : defaultVentSprite;
+                __instance.buttonLabelText.enabled = !isSpecialVent;
             }
         }
     }
+
+    [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
+    class KillButtonDoClickPatch {
+        public static bool Prefix(KillButton __instance) {
+            if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
+                // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
+                Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget);
+                __instance.SetTarget(null);
+            }
+            return false;
+        }
+    }
+
 
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
@@ -447,4 +461,15 @@ namespace TheOtherRoles.Patches {
             }
         }
     }
+
+    [HarmonyPatch(typeof(MedScanMinigame), nameof(MedScanMinigame.FixedUpdate))]
+    class MedScanMinigameFixedUpdatePatch {
+        static void Prefix(MedScanMinigame __instance) {
+            if (MapOptions.allowParallelMedBayScans) {
+                __instance.medscan.CurrentUser = PlayerControl.LocalPlayer.PlayerId;
+                __instance.medscan.UsersList.Clear();
+            }
+        }
+    }
+
 }

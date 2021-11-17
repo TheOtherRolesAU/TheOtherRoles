@@ -14,14 +14,6 @@ namespace TheOtherRoles.Modules {
         public static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11, 13, 14, 17 };
         public static uint pickableColors = (uint)Palette.ColorNames.Length;
 
-        /* version 1
-        private static readonly List<int> ORDER = new List<int>() { 7, 17, 5, 33, 4, 
-                                                                    30, 0, 19, 27, 3,
-                                                                    13, 25, 18, 15, 23,
-                                                                    8, 32, 1, 21, 31,
-                                                                    10, 34, 12, 14, 28,
-                                                                    22, 29, 11, 26, 2,
-                                                                    20, 24, 9, 16, 6 }; */
         private static readonly List<int> ORDER = new List<int>() { 7, 14, 5, 33, 4, 
                                                                     30, 0, 19, 27, 3,
                                                                     17, 25, 18, 13, 23,

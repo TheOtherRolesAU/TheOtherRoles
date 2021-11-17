@@ -132,6 +132,9 @@ namespace TheOtherRoles.Patches {
                 Seer.deadBodyPositions = new List<Vector3>();
             }
 
+            // Tracker reset deadBodyPositions
+            Tracker.deadBodyPositions = new List<Vector3>();
+
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 int visibleCounter = 0;

@@ -278,6 +278,16 @@ namespace TheOtherRoles.Patches {
                         PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
                         if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
 
+                        if (!Guesser.killsThroughShield && target == Medic.shielded) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
+                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
+                            UnityEngine.Object.Destroy(container.gameObject);
+
+                            MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                            AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
+                            RPCProcedure.shieldedMurderAttempt();
+                            return;
+                        }
+
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
@@ -291,11 +301,15 @@ namespace TheOtherRoles.Patches {
                         else
                             __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
-                        // Shoot player
+                        // Shoot player and send chat info if activated
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.guesserShoot(target.PlayerId);
+                        if (Guesser.showInfoInGhostChat) {
+                            string msg = $"Guesser guessed the role {roleInfo.name} for {target.name}!";
+                            target.RpcSendChat(msg);  // As the target is dead at this point, only ghosts will see the message.
+                        }
                     }
                 }));
 
