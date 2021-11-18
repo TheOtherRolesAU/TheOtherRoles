@@ -92,7 +92,7 @@ namespace TheOtherRoles.Patches {
 
         static void WrapUpPostfix(GameData.PlayerInfo exiled) {
             // Mini exile lose condition
-            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.IsImpostor) {
+            if (exiled != null && Mini.mini != null && Mini.mini.PlayerId == exiled.PlayerId && !Mini.isGrownUp() && !Mini.mini.Data.Role.IsImpostor) {
                 Mini.triggerMiniLose = true;
             }
             // Jester win condition
@@ -104,7 +104,7 @@ namespace TheOtherRoles.Patches {
             CustomButton.MeetingEndedUpdate();
 
             // Mini set adapted cooldown
-            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.IsImpostor) {
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.Role.IsImpostor) {
                 var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
                 Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
             }
@@ -131,6 +131,9 @@ namespace TheOtherRoles.Patches {
                 }
                 Seer.deadBodyPositions = new List<Vector3>();
             }
+
+            // Tracker reset deadBodyPositions
+            Tracker.deadBodyPositions = new List<Vector3>();
 
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
