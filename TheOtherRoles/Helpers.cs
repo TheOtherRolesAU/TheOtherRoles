@@ -78,44 +78,14 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static bool handleMurderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
-            // Block impostor shielded kill
-            if (Medic.shielded != null && Medic.shielded == target) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shieldedMurderAttempt();
-
-                return false;
-            }
-            // Block impostor not fully grown mini kill
-            else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
-                return false;
-            }
-            // Block Time Master with time shield kill
-            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
-                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.timeMasterRewindTime();
-                }
-                return false;
-            }
-            return true;
-        }
-
         public static void handleVampireBiteOnBodyReport() {
-            // Murder the bitten player before the meeting starts or reset the bitten player
-            if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.vampire, Vampire.bitten, true)) {
-                MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                RPCProcedure.vampireTryKill();
-            } else {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
-                writer.Write(byte.MaxValue);
-                writer.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
-            }
+            // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
+            Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+            writer.Write(byte.MaxValue);
+            writer.Write(byte.MaxValue);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
         }
 
         public static void refreshRoleDescription(PlayerControl player) {
@@ -293,6 +263,64 @@ namespace TheOtherRoles {
                     roleCouldUse = true;
             }
             return roleCouldUse;
+        }
+
+        public static bool checkMuderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
+            // Modified vanilla checks
+            if (AmongUsClient.Instance.IsGameOver) return false;
+            if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return false; // Allow non Impostor kills compared to vanilla code
+            if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return false; // Allow killing players in vents compared to vanilla code
+
+            // Block impostor shielded kill
+            if (Medic.shielded != null && Medic.shielded == target) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.shieldedMurderAttempt();
+                return false;
+            }
+
+            // Block impostor not fully grown mini kill
+            else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
+                return false;
+            }
+
+            // Block Time Master with time shield kill
+            else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
+                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.timeMasterRewindTime();
+                }
+                return false;
+            }
+            return true;
+        }
+
+        public static bool checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false)  {
+            // The local player checks for the validity of the kill and performs it afterwards (different to vanilla, where the host performs all the checks)
+            // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
+
+            bool attemptIsSuccessful = checkMuderAttempt(killer, target, isMeetingStart);
+            if (attemptIsSuccessful) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                writer.Write(target.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId);
+            }
+            return attemptIsSuccessful;            
+        }
+    
+        public static void shareGameVersion() {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
+            writer.Write((byte)TheOtherRolesPlugin.Version.Major);
+            writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
+            writer.Write((byte)TheOtherRolesPlugin.Version.Build);
+            writer.WritePacked(AmongUsClient.Instance.ClientId);
+            writer.Write((byte)(TheOtherRolesPlugin.Version.Revision < 0 ? 0xFF : TheOtherRolesPlugin.Version.Revision));
+            writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, TheOtherRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
         }
     }
 }

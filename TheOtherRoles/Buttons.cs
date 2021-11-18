@@ -19,7 +19,8 @@ namespace TheOtherRoles
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton hackerButton;
-        private static CustomButton trackerButton;
+        private static CustomButton trackerTrackPlayerButton;
+        private static CustomButton trackerTrackCorpsesButton;
         private static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
         private static CustomButton jackalKillButton;
@@ -48,7 +49,7 @@ namespace TheOtherRoles
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
-            trackerButton.MaxTimer = 0f;
+            trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
@@ -63,6 +64,7 @@ namespace TheOtherRoles
             arsonistButton.MaxTimer = Arsonist.cooldown;
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
+            trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -73,7 +75,7 @@ namespace TheOtherRoles
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
             arsonistButton.EffectDuration = Arsonist.duration;
             mediumButton.EffectDuration = Medium.duration;
-
+            trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
@@ -170,6 +172,7 @@ namespace TheOtherRoles
             // Sheriff Kill
             sheriffKillButton = new CustomButton(
                 () => {
+                    // Not using Helpers.checkMuderAttemptAndKill here, since the Sheriff can kill himself eventhough he has a shield, ...
                     if (Medic.shielded != null && Medic.shielded == Sheriff.currentTarget) {
                         MessageWriter attemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(attemptWriter);
@@ -187,10 +190,12 @@ namespace TheOtherRoles
                     else {
                         targetId = PlayerControl.LocalPlayer.PlayerId;
                     }
-                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffKill, Hazel.SendOption.Reliable, -1);
+
+                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    killWriter.Write(Sheriff.sheriff.Data.PlayerId);
                     killWriter.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.sheriffKill(targetId);
+                    RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId);
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer; 
                     Sheriff.currentTarget = null;
@@ -353,7 +358,7 @@ namespace TheOtherRoles
             );
 
             // Tracker button
-            trackerButton = new CustomButton(
+            trackerTrackPlayerButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrackerUsedTracker, Hazel.SendOption.Reliable, -1);
                     writer.Write(Tracker.currentTarget.PlayerId);
@@ -369,9 +374,29 @@ namespace TheOtherRoles
                 KeyCode.F
             );
 
+            trackerTrackCorpsesButton = new CustomButton(
+                () => { Tracker.corpsesTrackingTimer = Tracker.corpsesTrackingDuration; },
+                () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Tracker.canTrackCorpses; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
+                    trackerTrackCorpsesButton.isEffectActive = false;
+                    trackerTrackCorpsesButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                Tracker.getTrackCorpsesButtonSprite(),
+                new Vector3(-2.7f, -0.06f, 0),
+                __instance,
+                KeyCode.Q,
+                true,
+                Tracker.corpsesTrackingDuration,
+                () => {
+                    trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
+                }
+            );
+    
             vampireKillButton = new CustomButton(
                 () => {
-                    if (Helpers.handleMurderAttempt(Vampire.vampire, Vampire.currentTarget)) {
+                    if (Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget)) {
                         if (Vampire.targetNearGarlic) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.vampire.PlayerId);
@@ -392,19 +417,13 @@ namespace TheOtherRoles
 
                             HudManager.Instance.StartCoroutine(Effects.Lerp(Vampire.delay, new Action<float>((p) => { // Delayed action
                                 if (p == 1f) {
-                                    if (Vampire.bitten != null && !Vampire.bitten.Data.IsDead && Helpers.handleMurderAttempt(Vampire.vampire, Vampire.bitten)) {
-                                        // Perform kill
-                                        MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireTryKill, Hazel.SendOption.Reliable, -1);
-                                        AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                                        RPCProcedure.vampireTryKill();
-                                    } else {
-                                        // Notify players about clearing bitten
-                                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
-                                        writer.Write(byte.MaxValue);
-                                        writer.Write(byte.MaxValue);
-                                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                                        RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
-                                    }
+                                    // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
+                                    Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten);
+                                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+                                    writer.Write(byte.MaxValue);
+                                    writer.Write(byte.MaxValue);
+                                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                    RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
                                 }
                             })));
 
@@ -486,12 +505,8 @@ namespace TheOtherRoles
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
-                    if (!Helpers.handleMurderAttempt(Jackal.jackal, Jackal.currentTarget)) return;
-                    byte targetId = Jackal.currentTarget.PlayerId;
-                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalKill, Hazel.SendOption.Reliable, -1);
-                    killWriter.Write(targetId);
-                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.jackalKill(targetId);
+                    if (!Helpers.checkMuderAttemptAndKill(Jackal.jackal, Jackal.currentTarget)) return;
+
                     jackalKillButton.Timer = jackalKillButton.MaxTimer; 
                     Jackal.currentTarget = null;
                 },
@@ -507,12 +522,7 @@ namespace TheOtherRoles
             // Sidekick Kill
             sidekickKillButton = new CustomButton(
                 () => {
-                    if (!Helpers.handleMurderAttempt(Sidekick.sidekick, Sidekick.currentTarget)) return;
-                    byte targetId = Sidekick.currentTarget.PlayerId;
-                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickKill, Hazel.SendOption.Reliable, -1);
-                    killWriter.Write(targetId);
-                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.sidekickKill(targetId);
+                    if (!Helpers.checkMuderAttemptAndKill(Sidekick.sidekick, Sidekick.currentTarget)) return;
 
                     sidekickKillButton.Timer = sidekickKillButton.MaxTimer; 
                     Sidekick.currentTarget = null;
@@ -656,8 +666,9 @@ namespace TheOtherRoles
                         Warlock.curseVictim = Warlock.currentTarget;
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
-                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.handleMurderAttempt(Warlock.warlock, Warlock.curseVictimTarget)) {
+                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget)) {
                         // Curse Kill
+                        // Not using Helpers.checkMuderAttemptAndKill here directly, since we need to share the Warlock.curseKillTarget
                         Warlock.curseKillTarget = Warlock.curseVictimTarget;
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
