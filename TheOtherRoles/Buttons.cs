@@ -964,7 +964,8 @@ namespace TheOtherRoles
                     }
                     Witch.spellCastingTarget = null;
                     witchSpellButton.Timer = witchSpellButton.MaxTimer;
-                    Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                    if (Witch.triggerBothCooldowns)
+                        Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
                 }
             );
 

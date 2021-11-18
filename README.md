@@ -736,17 +736,18 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ### **Team: Impostors**
 The Witch is an Impostor who has the ability to cast a spell on other players.\
 During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
-Casting a spell will also trigger the kill button on cooldown and vice versa (but the two cooldowns may vary).\
-Casting a spell will increase the cooldown of the ability by a configuarble amount of time.\
+There are multiple options listed down below with which you can configure to fit your taste.
 \
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Witch Spawn Chance | -
-| Witch Spell Cooldown | Cooldown for spell on other players
-| Witch Spell Cooldown Addition | The Cooldown will be increased by x seconds after each spell 
+| Witch Spell Casting Cooldown | -
+| Witch Additional Cooldown | The spell casting cooldown will be increased by the amount you set here after each spell 
 | Witch Can Spell Everyone | If set to false, the witch can't spell the Spy and other Impostors
+| Witch Spell Casting Duration | The time that you need to stay next to the target in order to cast a spell on it
+| Trigger Both Cooldowns | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary)
 -----------------------
 
 
