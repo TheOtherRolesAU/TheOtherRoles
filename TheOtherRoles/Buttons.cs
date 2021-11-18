@@ -694,11 +694,12 @@ namespace TheOtherRoles
                                 })));
                             }
                         }
-
-                        Warlock.curseVictim = null;
-                        Warlock.curseVictimTarget = null;
-                        warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
-                        Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
+                        if (murder == MurderAttemptResult.PerformKill ||murder == MurderAttemptResult.BlankKill) {
+                            Warlock.curseVictim = null;
+                            Warlock.curseVictimTarget = null;
+                            warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
+                            Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
+                        }
                     }
                 },
                 () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
