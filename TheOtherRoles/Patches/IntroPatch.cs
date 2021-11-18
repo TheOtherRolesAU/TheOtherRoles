@@ -67,9 +67,10 @@ namespace TheOtherRoles.Patches {
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
-                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                var fakeImpostorTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>(); // The local player always has to be the first one in the list (to be displayed in the center)
+                fakeImpostorTeam.Add(PlayerControl.LocalPlayer);
                 foreach (PlayerControl p in players) {
-                    if (p == Spy.spy || p.Data.Role.IsImpostor)
+                    if (PlayerControl.LocalPlayer != p && (p == Spy.spy || p.Data.Role.IsImpostor))
                         fakeImpostorTeam.Add(p);
                 }
                 yourTeam = fakeImpostorTeam;
