@@ -351,6 +351,20 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            // Add overlay for spelled players
+            if (Witch.witch != null && Witch.futureSpelled != null) {
+                foreach (PlayerVoteArea pva in __instance.playerStates) {
+                    if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId)) {
+                        SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                        rend.transform.SetParent(pva.transform);
+                        rend.gameObject.layer = pva.Megaphone.gameObject.layer;
+                        // TODO: Add a proper sprite and adapt the position
+                        rend.transform.localPosition = new Vector3(0, 0, -1f);
+                        rend.sprite = Witch.getSpelledOverlaySprite();
+                    }
+                }
+            }
+
             // Add Guesser Buttons
             if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
