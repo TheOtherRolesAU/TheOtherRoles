@@ -355,7 +355,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 // Handle corpses tracking
-                if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && Tracker.corpsesTrackingTimer >= 0f && !Tracker.tracker.Data.IsDead) {
+                if ((Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.tracker)) && Tracker.corpsesTrackingTimer >= 0f && !PlayerControl.LocalPlayer.Data.IsDead) {
                 bool arrowsCountChanged = Tracker.localArrows.Count != Tracker.deadBodyPositions.Count();
                 int index = 0;
 
