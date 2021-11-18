@@ -225,13 +225,12 @@ namespace TheOtherRoles.Patches {
                     var taskInfo = data.TasksTotal > 0 ? $" - <color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
                     
                     // Add color to the players names, if they have won.
-                    string nameString;
                     Color nameColor = Color.white;  // White is for losers.
                     foreach (WinningPlayerData winner in TempData.winners)
                     {
                         if (data.PlayerName == winner.PlayerName) nameColor = textRenderer.color;  // This will be the color of the winning team (custom win condition) or blue for winning clients, red for losing clients (no custom win condition).
-                    }                    
-                    nameString = Helpers.cs(nameColor, data.PlayerName);
+                    }
+                    string nameString = Helpers.cs(nameColor, data.PlayerName);
                     roleSummaryText.AppendLine($"{nameString} - {roles}{taskInfo}");
                 }
                 TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
