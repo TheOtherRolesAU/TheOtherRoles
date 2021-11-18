@@ -399,8 +399,8 @@ namespace TheOtherRoles
     
             vampireKillButton = new CustomButton(
                 () => {
-                    Murder murder = Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget);
-                    if (murder == Murder.PerformKill) {
+                    MurderAttemptResult murder = Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget);
+                    if (murder == MurderAttemptResult.PerformKill) {
                         if (Vampire.targetNearGarlic) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.vampire.PlayerId);
@@ -433,7 +433,7 @@ namespace TheOtherRoles
 
                             vampireKillButton.HasEffect = true; // Trigger effect on this click
                         }
-                    } else if (murder == Murder.BlankKill) {
+                    } else if (murder == MurderAttemptResult.BlankKill) {
                         vampireKillButton.Timer = vampireKillButton.MaxTimer;
                         vampireKillButton.HasEffect = false;
                     } else {
@@ -512,7 +512,7 @@ namespace TheOtherRoles
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
-                    if (Helpers.checkMuderAttemptAndKill(Jackal.jackal, Jackal.currentTarget) == Murder.SuppressKill) return;
+                    if (Helpers.checkMuderAttemptAndKill(Jackal.jackal, Jackal.currentTarget) == MurderAttemptResult.SuppressKill) return;
 
                     jackalKillButton.Timer = jackalKillButton.MaxTimer; 
                     Jackal.currentTarget = null;
@@ -529,7 +529,7 @@ namespace TheOtherRoles
             // Sidekick Kill
             sidekickKillButton = new CustomButton(
                 () => {
-                    if (Helpers.checkMuderAttemptAndKill(Sidekick.sidekick, Sidekick.currentTarget) == Murder.BlankKill) return;
+                    if (Helpers.checkMuderAttemptAndKill(Sidekick.sidekick, Sidekick.currentTarget) == MurderAttemptResult.BlankKill) return;
                     sidekickKillButton.Timer = sidekickKillButton.MaxTimer; 
                     Sidekick.currentTarget = null;
                 },
@@ -673,11 +673,11 @@ namespace TheOtherRoles
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
                     } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null) {
-                        Murder murder = Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget);
+                        MurderAttemptResult murder = Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget);
                         // Curse Kill
                         // Not using Helpers.checkMuderAttemptAndKill here directly, since we need to share the Warlock.curseKillTarget
 
-                        if (murder == Murder.PerformKill) {
+                        if (murder == MurderAttemptResult.PerformKill) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
                             writer.Write(Warlock.curseKillTarget.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);

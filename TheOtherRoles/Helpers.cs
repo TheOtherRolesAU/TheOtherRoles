@@ -13,7 +13,7 @@ using Hazel;
 
 namespace TheOtherRoles {
 
-    public enum Murder {
+    public enum MurderAttemptResult {
         PerformKill,
         SuppressKill,
         BlankKill
@@ -271,11 +271,11 @@ namespace TheOtherRoles {
             return roleCouldUse;
         }
 
-        public static Murder checkMuderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
+        public static MurderAttemptResult checkMuderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
             // Modified vanilla checks
-            if (AmongUsClient.Instance.IsGameOver) return Murder.SuppressKill;
-            if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return Murder.SuppressKill; // Allow non Impostor kills compared to vanilla code
-            if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return Murder.SuppressKill; // Allow killing players in vents compared to vanilla code
+            if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
+            if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
+            if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
 
             // Handle blank shot
             if (Pursuer.blankedList.Contains(killer)) {
@@ -284,7 +284,7 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.removeBlanked(killer.PlayerId);
 
-                return Murder.BlankKill;
+                return MurderAttemptResult.BlankKill;
             }
 
             // Block impostor shielded kill
@@ -292,12 +292,12 @@ namespace TheOtherRoles {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
-                return Murder.SuppressKill;
+                return MurderAttemptResult.SuppressKill;
             }
 
             // Block impostor not fully grown mini kill
             else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
-                return Murder.SuppressKill;
+                return MurderAttemptResult.SuppressKill;
             }
 
             // Block Time Master with time shield kill
@@ -307,17 +307,17 @@ namespace TheOtherRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.timeMasterRewindTime();
                 }
-                return Murder.SuppressKill;
+                return MurderAttemptResult.SuppressKill;
             }
-            return Murder.PerformKill;
+            return MurderAttemptResult.PerformKill;
         }
 
-        public static Murder checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false)  {
+        public static MurderAttemptResult checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false)  {
             // The local player checks for the validity of the kill and performs it afterwards (different to vanilla, where the host performs all the checks)
             // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
 
-            Murder murder = checkMuderAttempt(killer, target, isMeetingStart);
-            if (murder == Murder.PerformKill) {
+            MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
+            if (murder == MurderAttemptResult.PerformKill) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
