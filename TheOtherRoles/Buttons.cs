@@ -399,7 +399,8 @@ namespace TheOtherRoles
     
             vampireKillButton = new CustomButton(
                 () => {
-                    if (Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget)) {
+                    Murder murder = Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget);
+                    if (murder == Murder.PerformKill) {
                         if (Vampire.targetNearGarlic) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.vampire.PlayerId);
@@ -432,8 +433,11 @@ namespace TheOtherRoles
 
                             vampireKillButton.HasEffect = true; // Trigger effect on this click
                         }
+                    } else if (murder == Murder.BlankKill) {
+                        vampireKillButton.Timer = vampireKillButton.MaxTimer;
+                        vampireKillButton.HasEffect = false;
                     } else {
-                        vampireKillButton.HasEffect = false; // Block effect if no action was fired
+                        vampireKillButton.HasEffect = false;
                     }
                 },
                 () => { return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
@@ -668,32 +672,33 @@ namespace TheOtherRoles
                         Warlock.curseVictim = Warlock.currentTarget;
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
-                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null && Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget) != Murder.SuppressKill) {
+                    } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null) {
+                        Murder murder = Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget);
                         // Curse Kill
                         // Not using Helpers.checkMuderAttemptAndKill here directly, since we need to share the Warlock.curseKillTarget
-                        Warlock.curseKillTarget = Warlock.curseVictimTarget;
 
-                        if (Helpers.handleMurderAttempt(Warlock.curseVictimTarget, Warlock.warlock) == Murder.PerformKill) {
+                        if (murder == Murder.PerformKill) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
                             writer.Write(Warlock.curseKillTarget.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.warlockCurseKill(Warlock.curseKillTarget.PlayerId);
+                            RPCProcedure.warlockCurseKill(Warlock.curseVictimTarget.PlayerId);
+
+                            
+                            if(Warlock.rootTime > 0) {
+                                PlayerControl.LocalPlayer.moveable = false;
+                                PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
+                                HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
+                                    if (p == 1f) {
+                                        PlayerControl.LocalPlayer.moveable = true;
+                                    }
+                                })));
+                            }
                         }
 
                         Warlock.curseVictim = null;
                         Warlock.curseVictimTarget = null;
                         warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
                         Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
-
-                        if(Warlock.rootTime > 0) {
-                            PlayerControl.LocalPlayer.moveable = false;
-                            PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
-                            HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
-                                if (p == 1f) {
-                                    PlayerControl.LocalPlayer.moveable = true;
-                                }
-                            })));
-                        }
                     }
                 },
                 () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
@@ -931,7 +936,6 @@ namespace TheOtherRoles
             pursuerButton = new CustomButton(
                 () => {
                     if (Pursuer.target != null) {
-
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                         writer.Write(Pursuer.target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -946,7 +950,7 @@ namespace TheOtherRoles
                 },
                 () => { return Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Pursuer.blanks < Pursuer.blanksNumber; },
                 () => {
-                    pursuerButton.killButtonManager.renderer.sprite = Pursuer.blank;
+                    pursuerButton.actionButton.graphic.sprite = Pursuer.blank;
                     if (pursuerButtonBlanksText != null) pursuerButtonBlanksText.text = $"{Pursuer.blanksNumber - Pursuer.blanks}";
 
                     return Pursuer.blanksNumber > Pursuer.blanks && PlayerControl.LocalPlayer.CanMove && Pursuer.target != null;
@@ -959,7 +963,7 @@ namespace TheOtherRoles
             );
 
             // Pursuer button blanks left
-            pursuerButtonBlanksText = GameObject.Instantiate(pursuerButton.killButtonManager.TimerText, pursuerButton.killButtonManager.TimerText.transform.parent);
+            pursuerButtonBlanksText = GameObject.Instantiate(pursuerButton.actionButton.cooldownTimerText, pursuerButton.actionButton.cooldownTimerText.transform.parent);
             pursuerButtonBlanksText.text = "";
             pursuerButtonBlanksText.enableWordWrapping = false;
             pursuerButtonBlanksText.transform.localScale = Vector3.one * 0.5f;
