@@ -50,9 +50,9 @@ namespace TheOtherRoles
         Bait,
         Vulture,
         Medium,
+        Witch,
         Crewmate,
-        Impostor,
-        Witch
+        Impostor
     }
 
     enum CustomRPC
@@ -90,7 +90,6 @@ namespace TheOtherRoles
         SetFutureErased,
         SetFutureShifted,
         SetFutureShielded,
-        SpellPlayerRoles,
         SetFutureSpelled,
         PlaceJackInTheBox,
         LightsOut,
@@ -595,21 +594,11 @@ namespace TheOtherRoles
             Medic.usedShield = true;
         }
 
-        public static void spellPlayerRoles(byte playerId, bool ignoreLovers = false)
-        {
-            PlayerControl player = Helpers.playerById(playerId);
-            if (player == null) return;
-            player.Exiled();
-            return;
-        }
-
-        public static void setFutureSpelled(byte playerId)
-        {
+        public static void setFutureSpelled(byte playerId) {
             PlayerControl player = Helpers.playerById(playerId);
             if (Witch.futureSpelled == null)
                 Witch.futureSpelled = new List<PlayerControl>();
-            if (player != null)
-            {
+            if (player != null) {
                 Witch.futureSpelled.Add(player);
             }
         }
@@ -876,9 +865,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
-                    break;
-                case (byte)CustomRPC.SpellPlayerRoles:
-                    RPCProcedure.spellPlayerRoles(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());

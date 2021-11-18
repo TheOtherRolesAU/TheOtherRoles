@@ -1129,8 +1129,7 @@ namespace TheOtherRoles
     }
 
 
-    public static class Witch
-    {
+    public static class Witch {
         public static PlayerControl witch;
         public static Color color = Palette.ImpostorRed;
 
@@ -1140,17 +1139,15 @@ namespace TheOtherRoles
         public static float cooldownAddition = 10f;
         public static float currentCooldownAddition = 0f;
         public static bool canSpellAnyone = false;
-        public static Color spellColor = Palette.Black;// new Color32(0, 0, 0, byte.MaxValue); //Palette.FromHex(077077077);
+        public static Color spellColor = Palette.Black;
         private static Sprite buttonSprite;
-        public static Sprite getButtonSprite()
-        {
+        public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpellButton.png", 115f);
             return buttonSprite;
         }
 
-        public static void clearAndReload()
-        {
+        public static void clearAndReload() {
             witch = null;
             futureSpelled = new List<PlayerControl>();
             currentTarget = null;
@@ -1160,6 +1157,4 @@ namespace TheOtherRoles
             canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
         }
     }
-
-    // Alex2911 End
 }

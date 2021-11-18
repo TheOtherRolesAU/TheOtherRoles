@@ -242,10 +242,6 @@ namespace TheOtherRoles {
             PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
         }
 
-        public static bool canBeSpelled(this PlayerControl player) {
-            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
-        }
-
         public static bool roleCanUseVents(this PlayerControl player) {
             bool roleCouldUse = false;
             if (Engineer.engineer != null && Engineer.engineer == player)

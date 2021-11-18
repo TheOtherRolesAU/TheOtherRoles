@@ -180,9 +180,8 @@ namespace TheOtherRoles.Patches {
             // Witch
             if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                    if (Witch.futureSpelled.Any(x => x.PlayerId == player.TargetPlayerId) {
+                    if (Witch.futureSpelled.Any(x => x.PlayerId == player.TargetPlayerId))
                         player.NameText.text = $"🔥{player.NameText.text}🔥";
-                    }
                 }
             }
         }

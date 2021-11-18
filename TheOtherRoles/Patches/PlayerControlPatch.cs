@@ -651,8 +651,7 @@ namespace TheOtherRoles.Patches {
                 Morphling.resetMorph();
         }
 
-        static void witchSetTarget()
-        {
+        static void witchSetTarget() {
             if (Witch.witch == null || Witch.witch != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables = new List<PlayerControl>();
             if (Spy.spy != null) untargetables.Add(Spy.spy);
@@ -843,6 +842,11 @@ namespace TheOtherRoles.Patches {
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
+
+            // Witch Button Sync
+            if (Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null) 
+                HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
 
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
