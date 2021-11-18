@@ -11,8 +11,18 @@ namespace TheOtherRoles.Patches {
     public class GameStartManagerPatch  {
         public static Dictionary<int, PlayerVersion> playerVersions = new Dictionary<int, PlayerVersion>();
         private static float timer = 600f;
+        private static float kickingTimer = 0f;
         private static bool versionSent = false;
         private static string lobbyCodeText = "";
+
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
+        public class AmongUsClientOnPlayerJoinedPatch {
+            public static void Postfix() {
+                if (PlayerControl.LocalPlayer != null) {
+                    Helpers.shareGameVersion();
+                }
+            }
+        }
 
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
         public class GameStartManagerStartPatch {
@@ -21,6 +31,8 @@ namespace TheOtherRoles.Patches {
                 versionSent = false;
                 // Reset lobby countdown timer
                 timer = 600f; 
+                // Reset kicking timer
+                kickingTimer = 0f;
                 // Copy lobby code
                 string code = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
                 GUIUtility.systemCopyBuffer = code;
@@ -34,7 +46,7 @@ namespace TheOtherRoles.Patches {
             private static string currentText = "";
         
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance) return; // Not host or no instance
+                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance ) return; // Not host or no instance
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
             }
 
@@ -42,15 +54,7 @@ namespace TheOtherRoles.Patches {
                 // Send version as soon as PlayerControl.LocalPlayer exists
                 if (PlayerControl.LocalPlayer != null && !versionSent) {
                     versionSent = true;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
-                    writer.Write((byte)TheOtherRolesPlugin.Version.Major);
-                    writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
-                    writer.Write((byte)TheOtherRolesPlugin.Version.Build);
-                    writer.WritePacked(AmongUsClient.Instance.ClientId);
-                    writer.Write((byte)(TheOtherRolesPlugin.Version.Revision < 0 ? 0xFF : TheOtherRolesPlugin.Version.Revision));
-                    writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, TheOtherRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
+                    Helpers.shareGameVersion();
                 }
 
                 // Host update with version handshake infos
@@ -81,12 +85,32 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                     if (blockStart) {
-                        // __instance.StartButton.color = Palette.DisabledClear; // Allow the start for this version to test the feature, blocking it with the next version
+                        __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
-                        // __instance.StartButton.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear); // Allow the start for this version to test the feature, blocking it with the next version
+                        __instance.StartButton.color = __instance.startLabelText.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
+                    }
+                }
+
+                // Client update with handshake infos
+                if (!AmongUsClient.Instance.AmHost) {
+                    if (!playerVersions.ContainsKey(AmongUsClient.Instance.HostId) || TheOtherRolesPlugin.Version.CompareTo(playerVersions[AmongUsClient.Instance.HostId].version) != 0) {
+                        kickingTimer += Time.deltaTime;
+                        if (kickingTimer > 10) {
+                            kickingTimer = 0;
+			                AmongUsClient.Instance.ExitGame(DisconnectReasons.ExitGame);
+                            SceneChanger.ChangeScene("MainMenu");
+                        }
+
+                        __instance.GameStartText.text = $"<color=#FF0000FF>The host has no or a different version of The Other Roles\nYou will be kicked in {Math.Round(10 - kickingTimer)}s</color>";
+                        __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
+                    } else {
+                        __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
+                        if (__instance.startState != GameStartManager.StartingStates.Countdown) {
+                            __instance.GameStartText.text = String.Empty;
+                        }
                     }
                 }
 
@@ -115,16 +139,26 @@ namespace TheOtherRoles.Patches {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
 
-                // Allow the start for this version to test the feature, blocking it with the next version
-                // if (AmongUsClient.Instance.AmHost) {
-                //     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
-                //         if (client.Character == null) continue;
-                //         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                //         if (dummyComponent != null && dummyComponent.enabled) continue;
-                //         if (!playerVersions.ContainsKey(client.Id) || (playerVersions[client.Id].Item1 != TheOtherRolesPlugin.Major || playerVersions[client.Id].Item2 != TheOtherRolesPlugin.Minor || playerVersions[client.Id].Item3 != TheOtherRolesPlugin.Patch))
-                //             continueStart = false;
-                //     }
-                // }
+                if (AmongUsClient.Instance.AmHost) {
+                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                        if (client.Character == null) continue;
+                        var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+                        if (dummyComponent != null && dummyComponent.enabled)
+                            continue;
+                        
+                        if (!playerVersions.ContainsKey(client.Id)) {
+                            continueStart = false;
+                            break;
+                        }
+                        
+                        PlayerVersion PV = playerVersions[client.Id];
+                        int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
+                        if (diff != 0 || !PV.GuidMatches()) {
+                            continueStart = false;
+                            break;
+                        }
+                    }
+                }
                 return continueStart;
             }
         }
