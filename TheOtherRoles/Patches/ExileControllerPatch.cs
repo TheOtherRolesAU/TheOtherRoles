@@ -55,7 +55,7 @@ namespace TheOtherRoles.Patches {
             // Witch cast spell
             if (Witch.witch != null && Witch.futureSpelled != null) {
                 foreach (PlayerControl target in Witch.futureSpelled) {
-                    if (target != null) {
+                    if (target != null && !target.Data.IsDead) {
                         target.Exiled();
                     }
                 }
