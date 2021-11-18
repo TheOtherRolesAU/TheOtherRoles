@@ -959,9 +959,9 @@ namespace TheOtherRoles
                 },
                 () => { pursuerButton.Timer = pursuerButton.MaxTimer; },
                 Pursuer.getTargetSprite(),
-                new Vector3(-1.3f, 0f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.Q
+                KeyCode.F
             );
 
             // Pursuer button blanks left
