@@ -181,6 +181,8 @@ namespace TheOtherRoles.Patches {
             TMPro.TMP_Text textRenderer = bonusText.GetComponent<TMPro.TMP_Text>();
             textRenderer.text = "";
 
+            Color originalRendererColor = textRenderer.color;
+
             if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
                 textRenderer.text = "Jester Wins";
                 textRenderer.color = Jester.color;
@@ -228,7 +230,13 @@ namespace TheOtherRoles.Patches {
                     Color nameColor = Color.white;  // White is for losers.
                     foreach (WinningPlayerData winner in TempData.winners)
                     {
-                        if (data.PlayerName == winner.PlayerName) nameColor = textRenderer.color;  // This will be the color of the winning team (custom win condition) or blue for winning clients, red for losing clients (no custom win condition).
+                        if (data.PlayerName == winner.PlayerName) {
+                            nameColor = textRenderer.color;  // This will be the color of the winning team (custom win condition) or blue for winning clients, red for losing clients (no custom win condition).
+                            if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin && !data.Roles.Contains(RoleInfo.lover))
+                            {
+                                nameColor = originalRendererColor;  // Crewmates are not the same color as lovers in Lovers and Crewmates win Scenario
+                            }
+                        }
                     }
                     string nameString = Helpers.cs(nameColor, data.PlayerName);
                     roleSummaryText.AppendLine($"{nameString} - {roles}{taskInfo}");
