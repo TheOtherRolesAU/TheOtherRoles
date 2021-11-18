@@ -278,7 +278,7 @@ namespace TheOtherRoles {
             if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
 
             // Handle blank shot
-            if (Pursuer.blankedList.Contains(killer)) {
+            if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write((byte)0);
