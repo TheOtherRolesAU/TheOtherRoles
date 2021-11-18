@@ -39,6 +39,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.1/TheOtherRoles.zip)
+| 2021.11.9.5s| v3.1.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.1/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.0.0/TheOtherRoles.zip)
 | 2021.6.30s| v2.9.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v2.9.2/TheOtherRoles.zip)
@@ -81,6 +83,15 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Hotfix 3.1.2**
+- Don't ask, just update. I messed up.
+
+**Hotfix 3.1.1**
+- Bug fix: You're again able to connect to custom servers
+- Bug fix: The option "Guesses Visible In Ghost Chat" doesn't result in a ban of the Guesser anymore
+- Bug fix: The position of the Spy on the intro screen is again random
+- Bug fix: Re-added some venting rules that were lost (Spy can't move between vents, only Trickster can use boxes, ...)
 
 **Version 3.1.0**
 - Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
