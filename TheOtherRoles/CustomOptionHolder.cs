@@ -84,6 +84,12 @@ namespace TheOtherRoles {
         public static CustomOption bountyHunterShowArrow;
         public static CustomOption bountyHunterArrowUpdateIntervall;
 
+        public static CustomOption witchSpawnRate;
+        public static CustomOption witchCooldown;
+        public static CustomOption witchAdditionalCooldown;
+        public static CustomOption witchCanSpellAnyone;
+        public static CustomOption witchSpellCastingDuration;
+
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
 
@@ -194,12 +200,6 @@ namespace TheOtherRoles {
         public static CustomOption allowParallelMedBayScans;
 
 
-
-        public static CustomOption witchSpawnRate;
-        public static CustomOption witchCooldown;
-        public static CustomOption witchAdditionalCooldown;
-        public static CustomOption witchCanSpellAnyone;
-
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
 
         public static string cs(Color c, string s) {
@@ -266,8 +266,9 @@ namespace TheOtherRoles {
 
             witchSpawnRate = CustomOption.Create(350, cs(Witch.color, "Witch"), rates, null, true);
             witchCooldown = CustomOption.Create(351, "Witch Cooldown", 30f, 10f, 120f, 5f, witchSpawnRate);
-            witchAdditionalCooldown = CustomOption.Create(352, "Witch Additional Cooldown", 10f, 10f, 60f, 5f, witchSpawnRate);
-            witchCanSpellAnyone = CustomOption.Create(353, "Witch Can Spell Anyone", false, witchSpawnRate);
+            witchAdditionalCooldown = CustomOption.Create(352, "Additional Cooldown", 10f, 0f, 60f, 5f, witchSpawnRate);
+            witchCanSpellAnyone = CustomOption.Create(353, "Can Spell Anyone", false, witchSpawnRate);
+            witchSpellCastingDuration = CustomOption.Create(354, "Spell Casting Duration", 2f, 0f, 10f, 1f, witchSpawnRate);
 
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);

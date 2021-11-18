@@ -1135,11 +1135,13 @@ namespace TheOtherRoles
 
         public static List<PlayerControl> futureSpelled = new List<PlayerControl>();
         public static PlayerControl currentTarget;
+        public static PlayerControl spellCastingTarget;
         public static float cooldown = 30f;
+        public static float spellCastingDuration = 2f;
         public static float cooldownAddition = 10f;
         public static float currentCooldownAddition = 0f;
         public static bool canSpellAnyone = false;
-        public static Color spellColor = Palette.Black;
+
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -1150,11 +1152,12 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             witch = null;
             futureSpelled = new List<PlayerControl>();
-            currentTarget = null;
+            currentTarget = spellCastingTarget = null;
             cooldown = CustomOptionHolder.witchCooldown.getFloat();
             cooldownAddition = CustomOptionHolder.witchAdditionalCooldown.getFloat();
             currentCooldownAddition = CustomOptionHolder.witchCooldown.getFloat();
             canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
+            spellCastingDuration = CustomOptionHolder.witchSpellCastingDuration.getFloat();
         }
     }
 }

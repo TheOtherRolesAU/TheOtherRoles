@@ -653,9 +653,14 @@ namespace TheOtherRoles.Patches {
 
         static void witchSetTarget() {
             if (Witch.witch == null || Witch.witch != PlayerControl.LocalPlayer) return;
-            List<PlayerControl> untargetables = new List<PlayerControl>();
-            if (Spy.spy != null) untargetables.Add(Spy.spy);
-            Witch.currentTarget = setTarget(onlyCrewmates: !Witch.canSpellAnyone, untargetablePlayers: Witch.canSpellAnyone ? new List<PlayerControl>() : untargetables);
+            List<PlayerControl> untargetables;
+            if (Witch.spellCastingTarget != null)
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId).ToList(); // Don't switch the target from the the one you're currently casting a spell on
+            else {
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => Witch.futureSpelled.Any(y => y == x)).ToList(); // Target anyone that hasn't already been spelled
+                if (Spy.spy != null && !Witch.canSpellAnyone) untargetables.Add(Spy.spy);
+            }
+            Witch.currentTarget = setTarget(onlyCrewmates: !Witch.canSpellAnyone, untargetablePlayers: untargetables);
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
