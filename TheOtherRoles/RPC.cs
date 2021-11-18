@@ -103,7 +103,6 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
-        RemoveBlanked
     }
 
     public static class RPCProcedure {
@@ -728,20 +727,11 @@ namespace TheOtherRoles
             }
         }
 
-        public static void setBlanked(byte playerId) {
+        public static void setBlanked(byte playerId, byte value) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
-
-            Pursuer.blankedList.Add(target);
-            
-        }
-
-        public static void removeBlanked(byte playerId) {
-            PlayerControl target = Helpers.playerById(playerId);
-            if (target == null || !Pursuer.blankedList.Contains(target)) return;
-
-            Pursuer.blankedList.Remove(target);
-
+            Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
+            if (value > 0) Pursuer.blankedList.Add(target);            
         }
     }   
 
@@ -906,10 +896,9 @@ namespace TheOtherRoles
                     RPCProcedure.lawyerPromotesToPursuer();
                     break;
                 case (byte)CustomRPC.SetBlanked:
-                    RPCProcedure.setBlanked(reader.ReadByte());
-                    break;
-                case (byte)CustomRPC.RemoveBlanked:
-                    RPCProcedure.removeBlanked(reader.ReadByte());
+                    var pid = reader.ReadByte();
+                    var blankedValue = reader.ReadByte();
+                    RPCProcedure.setBlanked(pid, blankedValue);
                     break;
 
             }

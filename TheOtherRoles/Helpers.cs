@@ -279,10 +279,11 @@ namespace TheOtherRoles {
 
             // Handle blank shot
             if (Pursuer.blankedList.Contains(killer)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.RemoveBlanked, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
+                writer.Write((byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.removeBlanked(killer.PlayerId);
+                RPCProcedure.setBlanked(killer.PlayerId, 0);
 
                 return MurderAttemptResult.BlankKill;
             }

@@ -938,8 +938,9 @@ namespace TheOtherRoles
                     if (Pursuer.target != null) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                         writer.Write(Pursuer.target.PlayerId);
+                        writer.Write(Byte.MaxValue);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.setBlanked(Pursuer.target.PlayerId);
+                        RPCProcedure.setBlanked(Pursuer.target.PlayerId, Byte.MaxValue);
 
                         Pursuer.target = null;
 
