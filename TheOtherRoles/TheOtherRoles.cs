@@ -252,6 +252,7 @@ namespace TheOtherRoles
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
+        public static bool showAttemptToMedic = false;
         public static bool setShieldAfterMeeting = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
@@ -272,6 +273,7 @@ namespace TheOtherRoles
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
         }
     }
@@ -528,15 +530,29 @@ namespace TheOtherRoles
     public static class Tracker {
         public static PlayerControl tracker;
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
+        public static List<Arrow> localArrows = new List<Arrow>();
 
         public static float updateIntervall = 5f;
         public static bool resetTargetAfterMeeting = false;
+        public static bool canTrackCorpses = false;
+        public static float corpsesTrackingCooldown = 30f;
+        public static float corpsesTrackingDuration = 5f;
+        public static float corpsesTrackingTimer = 0f;
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
         public static bool usedTracker = false;
         public static float timeUntilUpdate = 0f;
         public static Arrow arrow = new Arrow(Color.blue);
+
+        private static Sprite trackCorpsesButtonSprite;
+        public static Sprite getTrackCorpsesButtonSprite()
+        {
+            if (trackCorpsesButtonSprite) return trackCorpsesButtonSprite;
+            trackCorpsesButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PathfindButton.png", 115f);
+            return trackCorpsesButtonSprite;
+        }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -559,6 +575,16 @@ namespace TheOtherRoles
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            deadBodyPositions = new List<Vector3>();
+            corpsesTrackingTimer = 0f;
+            corpsesTrackingCooldown = CustomOptionHolder.trackerCorpsesTrackingCooldown.getFloat();
+            corpsesTrackingDuration = CustomOptionHolder.trackerCorpsesTrackingDuration.getFloat();
+            canTrackCorpses = CustomOptionHolder.trackerCanTrackCorpses.getBool();
         }
     }
 
@@ -949,6 +975,8 @@ namespace TheOtherRoles
 
         public static int remainingShots = 2;
         public static bool hasMultipleShotsPerMeeting = false;
+        public static bool showInfoInGhostChat = true;
+        public static bool killsThroughShield = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -961,6 +989,8 @@ namespace TheOtherRoles
             
             remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
+            showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
+            killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
         }
     }
 

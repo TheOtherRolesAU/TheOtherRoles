@@ -166,6 +166,16 @@ namespace TheOtherRoles.Patches {
                         if (Lovers.lover1.PlayerId == player.TargetPlayerId || Lovers.lover2.PlayerId == player.TargetPlayerId)
                             player.NameText.text += suffix;
             }
+
+            // Hacker and Detective
+            if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead && (PlayerControl.LocalPlayer == Hacker.hacker || PlayerControl.LocalPlayer == Detective.detective || PlayerControl.LocalPlayer == Medium.medium)) {
+                if (MeetingHud.Instance != null) {
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                        var target = Helpers.playerById(player.TargetPlayerId);
+                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
+                    }
+                }
+            }
         }
 
         static void updateShielded() {
@@ -180,6 +190,7 @@ namespace TheOtherRoles.Patches {
             Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
+            Tracker.corpsesTrackingTimer -= Time.deltaTime;
         }
 
         public static void miniUpdate() {
