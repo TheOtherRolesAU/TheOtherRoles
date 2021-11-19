@@ -674,6 +674,8 @@ namespace TheOtherRoles
                         warlockCurseButton.Timer = 1f;
                     } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null) {
                         MurderAttemptResult murder = Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget);
+                        if (murder == MurderAttemptResult.SuppressKill) return; 
+
                         // Curse Kill
                         // Not using Helpers.checkMuderAttemptAndKill here directly, since we need to share the Warlock.curseKillTarget
 
@@ -683,23 +685,23 @@ namespace TheOtherRoles
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.warlockCurseKill(Warlock.curseVictimTarget.PlayerId);
 
-                            
-                            if(Warlock.rootTime > 0) {
-                                PlayerControl.LocalPlayer.moveable = false;
-                                PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
-                                HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
-                                    if (p == 1f) {
-                                        PlayerControl.LocalPlayer.moveable = true;
-                                    }
-                                })));
-                            }
+                        }  
+
+                        if(Warlock.rootTime > 0) {
+                            PlayerControl.LocalPlayer.moveable = false;
+                            PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object
+                            HudManager.Instance.StartCoroutine(Effects.Lerp(Warlock.rootTime, new Action<float>((p) => { // Delayed action
+                                if (p == 1f) {
+                                    PlayerControl.LocalPlayer.moveable = true;
+                                }
+                            })));
                         }
-                        if (murder == MurderAttemptResult.PerformKill ||murder == MurderAttemptResult.BlankKill) {
-                            Warlock.curseVictim = null;
-                            Warlock.curseVictimTarget = null;
-                            warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
-                            Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
-                        }
+                        
+                        Warlock.curseVictim = null;
+                        Warlock.curseVictimTarget = null;
+                        warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
+                        Warlock.warlock.killTimer = warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
+                        
                     }
                 },
                 () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
