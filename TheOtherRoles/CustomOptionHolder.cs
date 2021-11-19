@@ -269,7 +269,7 @@ namespace TheOtherRoles {
             witchCooldown = CustomOption.Create(351, "Witch Spell Casting Cooldown", 30f, 10f, 120f, 5f, witchSpawnRate);
             witchAdditionalCooldown = CustomOption.Create(352, "Witch Additional Cooldown", 10f, 0f, 60f, 5f, witchSpawnRate);
             witchCanSpellAnyone = CustomOption.Create(353, "Witch Can Spell Anyone", false, witchSpawnRate);
-            witchSpellCastingDuration = CustomOption.Create(354, "Spell Casting Duration", 2f, 0f, 10f, 1f, witchSpawnRate);
+            witchSpellCastingDuration = CustomOption.Create(354, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
             witchTriggerBothCooldowns = CustomOption.Create(355, "Trigger Both Cooldowns", true, witchSpawnRate);
 
 

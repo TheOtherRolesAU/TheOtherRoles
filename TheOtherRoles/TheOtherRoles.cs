@@ -1153,7 +1153,7 @@ namespace TheOtherRoles
         private static Sprite spelledOverlaySprite;
         public static Sprite getSpelledOverlaySprite() {
             if (spelledOverlaySprite) return spelledOverlaySprite;
-            spelledOverlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpellButton.png", 115f);
+            spelledOverlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpelledIcon.png", 115f);
             return spelledOverlaySprite;
         }
 
