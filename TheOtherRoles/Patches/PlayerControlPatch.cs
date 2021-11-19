@@ -662,7 +662,7 @@ namespace TheOtherRoles.Patches {
             if (Lawyer.target == null) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && ((p.Data.Role.IsImpostor && p != Mini.mini) || p == Jester.jester || p == Jackal.jackal || p == Sidekick.sidekick || p == Arsonist.arsonist || p == Vulture.vulture)) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Sidekick.sidekick )) possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) return;
                 Lawyer.target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
