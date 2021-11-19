@@ -260,8 +260,8 @@ namespace TheOtherRoles.Patches {
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 buttons.Add(button);
-                int row = i/4, col = i%4;
-                buttonParent.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
+                int row = i/5, col = i%5;
+                buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
                 buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
