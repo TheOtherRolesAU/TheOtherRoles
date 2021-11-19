@@ -664,8 +664,8 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     if (!p.Data.IsDead && !p.Data.Disconnected && ((p.Data.Role.IsImpostor && p != Mini.mini) || p == Jester.jester || p == Jackal.jackal || p == Sidekick.sidekick || p == Arsonist.arsonist || p == Vulture.vulture)) possibleTargets.Add(p);
                 }
+                if (possibleTargets.Count == 0) return;
                 Lawyer.target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
-                if (Lawyer.target == null) return;
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerSetTarget, Hazel.SendOption.Reliable, -1);
                 writer.Write(Lawyer.target.PlayerId);
@@ -674,7 +674,7 @@ namespace TheOtherRoles.Patches {
                 return;
             }
 
-            // meeting win
+            // Meeting win
             if (Lawyer.winsAfterMeetings && Lawyer.neededMeetings == Lawyer.meetings) {
                 MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerWin, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(winWriter);
@@ -682,7 +682,7 @@ namespace TheOtherRoles.Patches {
                 return;
             }
 
-            // promote to Pursuer
+            // Promote to Pursuer
             if (Lawyer.target.Data.IsDead || Lawyer.target.Data.Disconnected) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
