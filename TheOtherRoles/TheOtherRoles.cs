@@ -1174,7 +1174,7 @@ namespace TheOtherRoles
 
         public static Sprite getTargetSprite() {
             if (blank) return blank;
-            blank = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MediumButton.png", 115f);
+            blank = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PursuerButton.png", 115f);
             return blank;
         }
 
