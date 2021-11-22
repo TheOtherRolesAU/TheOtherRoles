@@ -27,15 +27,4 @@ namespace TheOtherRoles.Patches {
             return true;
         }
     }
-
-    [HarmonyPatch(typeof(InnerNet.InnerNetClient), nameof(InnerNet.InnerNetClient.SetEndpoint))]
-	public static class InnerNetClientSetEndPointPatch
-	{
-		public static void Prefix(InnerNet.InnerNetClient __instance, ref string addr, ref ushort port) {
-			ServerManager mgr = DestroyableSingleton<ServerManager>.Instance;
-			if (string.Equals(addr, mgr.OnlineNetAddress, System.StringComparison.Ordinal) && __instance.GameMode == GameModes.OnlineGame) {
-				port = mgr.OnlineNetPort;
-			}
-		}
-	}
 }
