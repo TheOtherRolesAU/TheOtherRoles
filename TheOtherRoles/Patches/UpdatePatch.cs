@@ -172,18 +172,19 @@ namespace TheOtherRoles.Patches {
             }
 
             // Lawyer
-            if (Lawyer.lawyer != null && Lawyer.target != null && (Lawyer.targetKnows && PlayerControl.LocalPlayer == Lawyer.target) || Lawyer.lawyer == PlayerControl.LocalPlayer) {
+            if (PlayerControl.LocalPlayer != null && Lawyer.lawyer != null && Lawyer.target != null && (Lawyer.targetKnows && PlayerControl.LocalPlayer == Lawyer.target) || Lawyer.lawyer == PlayerControl.LocalPlayer) {
                 string suffix = Helpers.cs(Lawyer.color, " §");
-                Lawyer.target.nameText.text += suffix;
+                if (Lawyer.lawyer == PlayerControl.LocalPlayer || (Lawyer.target == PlayerControl.LocalPlayer && !Lawyer.lawyer.Data.IsDead)) Lawyer.target.nameText.text += suffix;
                 if (Lawyer.lawyer == PlayerControl.LocalPlayer) Lawyer.lawyer.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                        if (Lawyer.lawyer == PlayerControl.LocalPlayer && (Lawyer.lawyer.PlayerId == player.TargetPlayerId || Lawyer.target.PlayerId == player.TargetPlayerId))
+                        if (Lawyer.lawyer == PlayerControl.LocalPlayer && (Lawyer.lawyer.PlayerId == player.TargetPlayerId || Lawyer.target.PlayerId == player.TargetPlayerId && !Lawyer.target.Data.Disconnected))
                             player.NameText.text += suffix;
-                        else if (Lawyer.target == PlayerControl.LocalPlayer && Lawyer.target.PlayerId == player.TargetPlayerId)
+                        else if (Lawyer.target == PlayerControl.LocalPlayer && Lawyer.target.PlayerId == player.TargetPlayerId && Lawyer.lawyer.Data.IsDead)
                             player.NameText.text += suffix;
             }
+            
 
             // Hacker and Detective
             if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead && (PlayerControl.LocalPlayer == Hacker.hacker || PlayerControl.LocalPlayer == Detective.detective || PlayerControl.LocalPlayer == Medium.medium)) {

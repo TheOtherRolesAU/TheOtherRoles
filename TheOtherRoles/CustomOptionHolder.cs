@@ -309,8 +309,8 @@ namespace TheOtherRoles {
 
             lawyerSpawnRate = CustomOption.Create(350, cs(Lawyer.color, "Lawyer"), rates, null, true);
             lawyerTargetKnows = CustomOption.Create(351, "Lawyer Target Knows", true, lawyerSpawnRate);
-            lawyerWinsAfterMeetings = CustomOption.Create(352, "Lawyer Wins After Meetings", true, lawyerSpawnRate);
-            lawyerNeededMeetings = CustomOption.Create(353, "Lawyer Needed Meetings To Win", 4f, 0f, 10f, 1f, lawyerWinsAfterMeetings);
+            lawyerWinsAfterMeetings = CustomOption.Create(352, "Lawyer Wins After Meetings", false, lawyerSpawnRate);
+            lawyerNeededMeetings = CustomOption.Create(353, "Lawyer Needed Meetings To Win", 4f, 0f, 15f, 1f, lawyerWinsAfterMeetings);
             lawyerVision = CustomOption.Create(354, "Lawyer Vision", 1f, 0.25f, 3f, 0.25f, lawyerSpawnRate);
             pursuerCooldown = CustomOption.Create(355, "Pursuer Blank Cooldown", 30f, 5f, 60f, 2.5f, lawyerSpawnRate);
             pursuerBlanksNumber = CustomOption.Create(356, "Pursuer Number Of Blanks", 5f, 0f, 20f, 1f, lawyerSpawnRate);

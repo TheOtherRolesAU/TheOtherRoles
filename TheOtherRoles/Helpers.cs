@@ -339,5 +339,16 @@ namespace TheOtherRoles {
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, TheOtherRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
         }
+
+        public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
+            List<PlayerControl> team = new List<PlayerControl>();
+            foreach(PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (player.Data.Role.IsImpostor && player.Data.Role.IsImpostor) team.Add(p);
+                else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
+                else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
+            }
+            
+            return team;
+        }
     }
 }

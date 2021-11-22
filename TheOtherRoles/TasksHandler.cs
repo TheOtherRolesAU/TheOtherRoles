@@ -35,7 +35,7 @@ namespace TheOtherRoles {
                 __instance.CompletedTasks = 0;
                 for (int i = 0; i < __instance.AllPlayers.Count; i++) {
                     GameData.PlayerInfo playerInfo = __instance.AllPlayers[i];
-                    if (playerInfo.Object && playerInfo.Object.hasAliveKillingLover() || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId)
+                    if (playerInfo.Object && playerInfo.Object.hasAliveKillingLover() || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId || playerInfo.PlayerId == Pursuer.pursuer?.PlayerId)
                         continue;
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
                     __instance.TotalTasks += playerTotal;

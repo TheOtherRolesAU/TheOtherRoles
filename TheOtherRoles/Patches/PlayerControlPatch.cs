@@ -656,13 +656,13 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void lawyerUpdate() {
-            if (Lawyer.lawyer == null || Lawyer.lawyer != PlayerControl.LocalPlayer || Lawyer.lawyer.Data.IsDead) return;
+            if (Lawyer.lawyer == null || Lawyer.lawyer != PlayerControl.LocalPlayer) return;
 
             // set target
-            if (Lawyer.target == null) {
+            if (Lawyer.target == null && !Lawyer.target.Data.IsDead) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Sidekick.sidekick )) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Sidekick.sidekick || Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) return;
                 Lawyer.target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
@@ -675,7 +675,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Meeting win
-            if (Lawyer.winsAfterMeetings && Lawyer.neededMeetings == Lawyer.meetings) {
+            if (Lawyer.winsAfterMeetings && Lawyer.neededMeetings == Lawyer.meetings && !Lawyer.target.Data.IsDead) {
                 MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerWin, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                 RPCProcedure.lawyerWin();
@@ -986,6 +986,14 @@ namespace TheOtherRoles.Patches {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
+            }
+
+            // Pursuer promotion trigger on exile
+            if (__instance == Lawyer.target) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.lawyerPromotesToPursuer();
+                return;
             }
         }
     }
