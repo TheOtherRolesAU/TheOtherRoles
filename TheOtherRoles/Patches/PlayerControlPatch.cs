@@ -394,7 +394,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
-                string roleNames = String.Join(" ", RoleInfo.getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+                string roleNames = RoleInfo.GetRole(p);
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                 string playerInfoText = "";
@@ -659,7 +659,7 @@ namespace TheOtherRoles.Patches {
             if (Lawyer.lawyer == null || Lawyer.lawyer != PlayerControl.LocalPlayer) return;
 
             // set target
-            if (Lawyer.target == null && !Lawyer.target.Data.IsDead) {
+            if (Lawyer.target == null) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Sidekick.sidekick || Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) possibleTargets.Add(p);

@@ -161,15 +161,15 @@ namespace TheOtherRoles
 
             // Modifier
             if (p == Lovers.lover1|| p == Lovers.lover2) infos.Add(lover);
-            if (p == Lawyer.target) infos.Add(lover);
 
             return infos;
         }
 
         public static String GetRole(PlayerControl p) {
             string roleName;
-            roleName = String.Join("", getRoleInfoForPlayer(p).Select(x => x.name).ToArray());
-            if (roleName.Contains("Lover")) roleName.Replace("Lover ", "");
+            roleName = String.Join("", getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
+            if (roleName.Contains("Lover")) roleName.Replace("Lover", Helpers.cs(Lovers.color, " Lover"));
+            if (p.PlayerId == Lawyer.target?.PlayerId) roleName += Helpers.cs(Pursuer.color, " §");
             return roleName;
         }
     }
