@@ -664,17 +664,17 @@ namespace TheOtherRoles
             Vulture.triggerVultureWin = true;
         }
 
-        public static void guesserShoot(byte playerId) {
-            PlayerControl target = Helpers.playerById(playerId);
-            if (target == null) return;
-            target.Exiled();
-            PlayerControl dyingLoverPartner = Lovers.bothDie ? target.getPartner() : null; // Lover check
-            byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : playerId;
+        public static void guesserShoot(byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
+            PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
+            if (dyingTarget == null ) return;
+            dyingTarget.Exiled();
+            PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
+            byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
-            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(target.KillSfx, false, 0.8f);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
-                    if (pva.TargetPlayerId == playerId || pva.TargetPlayerId == partnerId) {
+                    if (pva.TargetPlayerId == dyingTargetId || pva.TargetPlayerId == partnerId) {
                         pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
                     }
@@ -683,14 +683,15 @@ namespace TheOtherRoles
                     MeetingHud.Instance.CheckForEndVoting();
             }
             if (HudManager.Instance != null && Guesser.guesser != null)
-                if (PlayerControl.LocalPlayer == target) 
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, target.Data);
+                if (PlayerControl.LocalPlayer == dyingTarget) 
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, dyingTarget.Data);
                 else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
             
-            var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
-            if (Guesser.showInfoInGhostChat && mainRoleInfo != null && PlayerControl.LocalPlayer.Data.IsDead) {
-                string msg = $"Guesser guessed the role {mainRoleInfo.name} for {target.Data.PlayerName}!";
+            PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
+            if (Guesser.showInfoInGhostChat && PlayerControl.LocalPlayer.Data.IsDead && guessedTarget != null) {
+                RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
+                string msg = $"Guesser guessed the role {roleInfo?.name ?? ""} for {guessedTarget.Data.PlayerName}!";
                 if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
                     DestroyableSingleton<HudManager>.Instance.Chat.AddChat(Guesser.guesser, msg);
                 if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -845,7 +846,10 @@ namespace TheOtherRoles
                     RPCProcedure.arsonistWin();
                     break;
                 case (byte)CustomRPC.GuesserShoot:
-                    RPCProcedure.guesserShoot(reader.ReadByte());
+                    byte dyingTarget = reader.ReadByte();
+                    byte guessedTarget = reader.ReadByte();
+                    byte guessedRoleId = reader.ReadByte();
+                    RPCProcedure.guesserShoot(dyingTarget, guessedTarget, guessedRoleId);
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
