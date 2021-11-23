@@ -18,7 +18,7 @@ Even more roles are coming soon :)
 | [Bounty Hunter](#bounty-hunter) | [Detective](#detective) | [Jackal](#jackal) |  |
 | [Camouflager](#camouflager) | [Engineer](#engineer) | [Sidekick](#sidekick) |  |
 | [Cleaner](#cleaner) | [Hacker](#hacker) | [Vulture](#vulture) |  |
-| [Eraser](#eraser) | [Lighter](#lighter) |  |  |
+| [Eraser](#eraser) | [Lighter](#lighter) | [Lawyer](#lawyer) |  |
 | [Godfather (Mafia)](#mafia) | [Mayor](#mayor) |  |  |
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
 | [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
@@ -1246,6 +1246,49 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 | Number Of Corpses Needed To Be Eaten | Corpes needed to be eaten to win the game
 | Vulture Can Use Vents | -
 | Show Arrows Pointing Towards The Corpes | -
+-----------------------
+
+## Lawyer
+### **Team: Lawyer**
+The Lawyer is a neutral role that tries to win with or without his client. \
+The Lawyer gets assigned a target that needs to kill him, depending on the settings the player knows that he is the client, but doesn't know who the Lawyer is. \
+If his client dies or gets voted out, the Lawyer gets demoted to the role: [Pursuer](#pursuer) \
+
+Lawyer possible win conditions:
+1 - Lawyer alive & client alive + client win (sabotage win exluded) | Lawyer takes over a solo Lawyer win \
+2 - "Lawyer Wins After Meetings" is set to true and number of meetings reached + Lawyer alive & client alive | Lawyer takes over a solo Lawyer win \
+3 - Lawyer dead & client alive + client win (sabotage win exluded) | Lawyer & Client double win (team client + Lawyer win) \
+
+note: 
+- The client can only be Impostor, Jackal & Sidekick (Lover`s exluded). If the client disconnects, he get assigned a new client \
+- Lawyer can already do the pursuer tasks (wont count to progress bar) \
+- If "Lawyer Target Knows" is set to off, nobody knows there is a Lawyer which makes it much easier to get the Lawyer win \
+
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Lawyer Target Knows | Target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
+| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
+| Lawyer Needed Meetings To Win | -
+| Lawyer Vision | Pursuer has normal vision
+| Pursuer Blank Cooldwon | -
+| Pursuer Number Of Blanks | -
+-----------------------
+
+## Pursuer
+### **Team: Lawyer**
+The Pursuer is still a neutral role, but has different conditions now. \
+His vision will be set to crewmate vision and also gains a new blank ability. \
+Blank ability: He can fill a killers gun with a blank, so if he tries to kill someone, the kill cooldown is triggered (includes timeshield, Medic shield, curse, etc.) but without the murder.  \
+
+Pursuer win conditions:
+4 - Pursuer did all tasks & stay alive till the end + crew win | Crew & Pursuer double win \
+
+note:
+- Blank works for every kill action (Sheriff exluded) \
+- Pursuer tasks wont count to progress bar \
+
 -----------------------
 
 # Source code
