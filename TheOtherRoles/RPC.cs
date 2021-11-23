@@ -688,7 +688,6 @@ namespace TheOtherRoles
 
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
-            TheOtherRolesPlugin.Logger.LogError("Promoted");
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
             return;
