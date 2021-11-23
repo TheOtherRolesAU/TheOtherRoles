@@ -263,6 +263,8 @@ namespace TheOtherRoles.Modules {
 
             public static float createHatPackage(List<System.Tuple<HatBehaviour, HatExtension>> hats, string packageName, float YStart, HatsTab __instance) {
                 bool isDefaultPackage = innerslothPackageName == packageName;
+                if (!isDefaultPackage)
+                    hats = hats.OrderBy(x => x.Item1.name).ToList();
                 float offset = YStart;
 
                 if (textTemplate != null) {
