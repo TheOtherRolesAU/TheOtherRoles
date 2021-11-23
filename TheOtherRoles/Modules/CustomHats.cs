@@ -236,9 +236,9 @@ namespace TheOtherRoles.Modules {
             }
         }
 
-        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(HatBehaviour), typeof(int) })]
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(string), typeof(int) })]
         private static class HatParentSetHatPatch {
-            static void Postfix(HatParent __instance, HatBehaviour hat, int color) {
+            static void Postfix(HatParent __instance, string hatId, int color) {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
                     try {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
