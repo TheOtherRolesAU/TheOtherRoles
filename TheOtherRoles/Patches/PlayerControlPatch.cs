@@ -683,7 +683,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Promote to Pursuer
-            if (Lawyer.target.Data.IsDead || Lawyer.target.Data.Disconnected) {
+            if (Lawyer.target.Data.Disconnected) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
