@@ -879,12 +879,11 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.sidekickPromotes();
             }
 
-            // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
+            // Pursuer promotion trigger on murder (the host sends the call such that everyone recieves the update before a possible game End)
             if (target == Lawyer.target && AmongUsClient.Instance.AmHost) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
-                return;
             }
 
             // Cleaner Button Sync
@@ -997,11 +996,10 @@ namespace TheOtherRoles.Patches {
             }
 
             // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
-            if (__instance == Lawyer.target || AmongUsClient.Instance.AmHost) {
+            if (__instance == Lawyer.target && AmongUsClient.Instance.AmHost) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
-                return;
             }
         }
     }
