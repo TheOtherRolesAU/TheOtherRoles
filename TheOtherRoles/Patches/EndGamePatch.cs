@@ -18,7 +18,8 @@ namespace TheOtherRoles.Patches {
         MiniLose = 12,
         JesterWin = 13,
         ArsonistWin = 14,
-        VultureWin = 15
+        VultureWin = 15,
+        LawyerSoloWin = 16
     }
 
     enum WinCondition {
@@ -29,16 +30,22 @@ namespace TheOtherRoles.Patches {
         JackalWin,
         MiniLose,
         ArsonistWin,
-        VultureWin
+        VultureWin,
+        LawyerSoloWin,
+        AdditionalDeadLawyerWin,
+        AdditionalAliveLawyerWin,
+        AdditionalAlivePursuerWin
     }
 
     static class AdditionalTempData {
         // Should be implemented using a proper GameOverReason in the future
         public static WinCondition winCondition = WinCondition.Default;
+        public static List<WinCondition> additionalWinConditions = new List<WinCondition>();
         public static List<PlayerRoleInfo> playerRoles = new List<PlayerRoleInfo>();
 
         public static void clear() {
             playerRoles.Clear();
+            additionalWinConditions.Clear();
             winCondition = WinCondition.Default;
         }
 
@@ -75,6 +82,9 @@ namespace TheOtherRoles.Patches {
             if (Jackal.jackal != null) notWinners.Add(Jackal.jackal);
             if (Arsonist.arsonist != null) notWinners.Add(Arsonist.arsonist);
             if (Vulture.vulture != null) notWinners.Add(Vulture.vulture);
+            if (Lawyer.lawyer != null) notWinners.Add(Lawyer.lawyer);
+            if (Pursuer.pursuer != null) notWinners.Add(Pursuer.pursuer);
+
             notWinners.AddRange(Jackal.formerJackals);
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -89,6 +99,7 @@ namespace TheOtherRoles.Patches {
             bool loversWin = Lovers.existingAndAlive() && (gameOverReason == (GameOverReason)CustomGameOverReason.LoversWin || (TempData.DidHumansWin(gameOverReason) && !Lovers.existingWithKiller())); // Either they win if they are among the last 3 players, or they win if they are both Crewmates and both alive and the Crew wins (Team Imp/Jackal Lovers can only win solo wins)
             bool teamJackalWin = gameOverReason == (GameOverReason)CustomGameOverReason.TeamJackalWin && ((Jackal.jackal != null && !Jackal.jackal.Data.IsDead) || (Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead));
             bool vultureWin = Vulture.vulture != null && gameOverReason == (GameOverReason)CustomGameOverReason.VultureWin;
+            bool lawyerSoloWin = Lawyer.lawyer != null && gameOverReason == (GameOverReason)CustomGameOverReason.LawyerSoloWin;
 
             // Mini lose
             if (miniLose) {
@@ -133,6 +144,8 @@ namespace TheOtherRoles.Patches {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
+                        else if (p == Pursuer.pursuer && !Pursuer.pursuer.Data.IsDead)
+                            TempData.winners.Add(new WinningPlayerData(p.Data));
                         else if (p != Jester.jester && p != Jackal.jackal && p != Sidekick.sidekick && p != Arsonist.arsonist && !Jackal.formerJackals.Contains(p) && !p.Data.Role.IsImpostor)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
                     }
@@ -167,6 +180,38 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            // Lawyer solo win
+            else if (lawyerSoloWin) {
+                TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
+                WinningPlayerData wpd = new WinningPlayerData(Lawyer.lawyer.Data);
+                TempData.winners.Add(wpd);
+                AdditionalTempData.winCondition = WinCondition.LawyerSoloWin;
+            }
+
+            // Possible Additional winner: Lawyer
+            if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
+                if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
+                    TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
+                if (!Lawyer.lawyer.Data.IsDead) { // Lawyer wins with the winning team but steals the win from his client
+                    WinningPlayerData client = null;
+                    foreach (WinningPlayerData winner in TempData.winners) {
+                        if (winner.PlayerName == Lawyer.target.Data.PlayerName) client = winner;
+                    }
+                    if (client != null) TempData.winners.Remove(client);
+                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAliveLawyerWin);
+                } else {
+                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalDeadLawyerWin);
+                }
+
+            }
+
+            // Possible Additional winner: Pursuer
+            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead) {
+                if (!TempData.winners.ToArray().Any(x => x.PlayerName == Pursuer.pursuer.Data.PlayerName))
+                    TempData.winners.Add(new WinningPlayerData(Pursuer.pursuer.Data));
+                AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAlivePursuerWin);
+            }
+
             // Reset Settings
             RPCProcedure.resetVariables();
         }
@@ -176,7 +221,7 @@ namespace TheOtherRoles.Patches {
     public class EndGameManagerSetUpPatch {
         public static void Postfix(EndGameManager __instance) {
             GameObject bonusText = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
-            bonusText.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y - 0.8f, __instance.WinText.transform.position.z);
+            bonusText.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y - 0.5f, __instance.WinText.transform.position.z);
             bonusText.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             TMPro.TMP_Text textRenderer = bonusText.GetComponent<TMPro.TMP_Text>();
             textRenderer.text = "";
@@ -192,6 +237,10 @@ namespace TheOtherRoles.Patches {
             else if (AdditionalTempData.winCondition == WinCondition.VultureWin) {
                 textRenderer.text = "Vulture Wins";
                 textRenderer.color = Vulture.color;
+            }
+            else if (AdditionalTempData.winCondition == WinCondition.LawyerSoloWin) {
+                textRenderer.text = "Lawyer Wins";
+                textRenderer.color = Lawyer.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 textRenderer.text = "Lovers And Crewmates Win";
@@ -210,6 +259,16 @@ namespace TheOtherRoles.Patches {
             else if (AdditionalTempData.winCondition == WinCondition.MiniLose) {
                 textRenderer.text = "Mini died";
                 textRenderer.color = Mini.color;
+            }
+
+            foreach (WinCondition cond in AdditionalTempData.additionalWinConditions) {
+                if (cond == WinCondition.AdditionalAliveLawyerWin) {
+                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer stole the win of the client")}";
+                } else if (cond == WinCondition.AdditionalDeadLawyerWin) {
+                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer kept the client alive")}";
+                } else if (cond == WinCondition.AdditionalAlivePursuerWin) {
+                    textRenderer.text += $"\n{Helpers.cs(Pursuer.color, "Pursuer survived")}";
+                }
             }
 
             if (MapOptions.showRoleSummary) {
@@ -249,6 +308,7 @@ namespace TheOtherRoles.Patches {
             var statistics = new PlayerStatistics(__instance);
             if (CheckAndEndGameForMiniLose(__instance)) return false;
             if (CheckAndEndGameForJesterWin(__instance)) return false;
+            if (CheckAndEndGameForLawyerMeetingWin(__instance)) return false;
             if (CheckAndEndGameForArsonistWin(__instance)) return false;
             if (CheckAndEndGameForVultureWin(__instance)) return false;
             if (CheckAndEndGameForSabotageWin(__instance)) return false;
@@ -291,6 +351,15 @@ namespace TheOtherRoles.Patches {
             if (Vulture.triggerVultureWin) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.VultureWin, false);
+                return true;
+            }
+            return false;
+        }
+        
+        private static bool CheckAndEndGameForLawyerMeetingWin(ShipStatus __instance) {
+            if (Lawyer.triggerLawyerWin) {
+                __instance.enabled = false;
+                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LawyerSoloWin, false);
                 return true;
             }
             return false;

@@ -56,6 +56,8 @@ namespace TheOtherRoles
             Bait.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
+            Lawyer.clearAndReload();
+            Pursuer.clearAndReload();
             Witch.clearAndReload();
         }
 
@@ -1128,6 +1130,65 @@ namespace TheOtherRoles
         }
     }
 
+    public static class Lawyer {
+        public static PlayerControl lawyer;
+        public static PlayerControl target;
+        public static Color color = new Color32(82, 0, 110, byte.MaxValue);
+        public static Sprite targetSprite;
+        public static bool triggerLawyerWin = false;
+        public static int meetings = 0;
+
+        public static bool targetKnows = false;
+        public static float vision = 1f;
+        public static bool winsAfterMeetings = false;
+        public static int neededMeetings = 4;
+
+        public static Sprite getTargetSprite() {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("", 150f);
+            return targetSprite;
+        }
+
+        public static void clearAndReload() {
+            lawyer = null;
+            target = null;
+            triggerLawyerWin = false;
+            meetings = 0;
+
+            targetKnows = CustomOptionHolder.lawyerTargetKnows.getBool();
+            winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
+            neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
+            vision = CustomOptionHolder.lawyerVision.getFloat();
+        }
+    }
+
+    public static class Pursuer {
+        public static PlayerControl pursuer;
+        public static PlayerControl target;
+        public static Color color = new Color32(82, 0, 110, byte.MaxValue);
+        public static List<PlayerControl> blankedList = new List<PlayerControl>();
+        public static int blanks = 0;
+        public static Sprite blank;
+
+        public static float cooldown = 30f;
+        public static int blanksNumber = 5;
+
+        public static Sprite getTargetSprite() {
+            if (blank) return blank;
+            blank = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PursuerButton.png", 115f);
+            return blank;
+        }
+
+        public static void clearAndReload() {
+            pursuer = null;
+            target = null;
+            blankedList = new List<PlayerControl>();
+            blanks = 0;
+
+            cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
+            blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());
+        }
+    }
 
     public static class Witch {
         public static PlayerControl witch;

@@ -50,6 +50,8 @@ namespace TheOtherRoles
         Bait,
         Vulture,
         Medium,
+        Lawyer,
+        Pursuer,
         Witch,
         Crewmate,
         Impostor
@@ -67,6 +69,7 @@ namespace TheOtherRoles
         UseUncheckedVent,
         UncheckedMurderPlayer,
         UncheckedCmdReportDeadBody,
+        UncheckedExilePlayer,
 
         // Role functionality
 
@@ -98,7 +101,11 @@ namespace TheOtherRoles
         SealVent,
         ArsonistWin,
         GuesserShoot,
-        VultureWin
+        VultureWin,
+        LawyerWin,
+        LawyerSetTarget,
+        LawyerPromotesToPursuer,
+        SetBlanked,
     }
 
     public static class RPCProcedure {
@@ -244,6 +251,12 @@ namespace TheOtherRoles
                     case RoleId.Medium:
                         Medium.medium = player;
                         break;
+                    case RoleId.Lawyer:
+                        Lawyer.lawyer = player;
+                        break;
+                    case RoleId.Pursuer:
+                        Pursuer.pursuer = player;
+                        break;
                     case RoleId.Witch:
                         Witch.witch = player;
                         break;
@@ -287,6 +300,10 @@ namespace TheOtherRoles
             if (source != null && target != null) source.ReportDeadBody(target.Data);
         }
 
+        public static void uncheckedExilePlayer(byte targetId) {
+            PlayerControl target = Helpers.playerById(targetId);
+            if (target != null) target.Exiled();
+        }
 
         // Role functionality
 
@@ -375,7 +392,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture) {
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer) {
                 oldShifter.Exiled();
                 return;
             }
@@ -570,6 +587,8 @@ namespace TheOtherRoles
             if (player == Sidekick.sidekick) Sidekick.clearAndReload();
             if (player == BountyHunter.bountyHunter) BountyHunter.clearAndReload();
             if (player == Vulture.vulture) Vulture.clearAndReload();
+            if (player == Lawyer.lawyer) Lawyer.clearAndReload();
+            if (player == Pursuer.pursuer) Pursuer.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -670,10 +689,28 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p != Arsonist.arsonist) p.Exiled();
+            }
         }
 
         public static void vultureWin() {
             Vulture.triggerVultureWin = true;
+        }
+
+        public static void lawyerWin() {
+            Lawyer.triggerLawyerWin = true;
+        }
+
+        public static void lawyerSetTarget(byte playerId) {
+            Lawyer.target = Helpers.playerById(playerId);
+        }
+
+        public static void lawyerPromotesToPursuer() {
+            PlayerControl player = Lawyer.lawyer;
+            Lawyer.clearAndReload();
+            Pursuer.pursuer = player;
+            return;
         }
 
         public static void guesserShoot(byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
@@ -682,6 +719,7 @@ namespace TheOtherRoles
             dyingTarget.Exiled();
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
+
             Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
@@ -709,6 +747,13 @@ namespace TheOtherRoles
                 if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                     DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
             }
+        }
+
+        public static void setBlanked(byte playerId, byte value) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
+            if (value > 0) Pursuer.blankedList.Add(target);            
         }
     }   
 
@@ -766,6 +811,10 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
+                    break;
+                case (byte)CustomRPC.UncheckedExilePlayer:
+                    byte exileTarget = reader.ReadByte();
+                    RPCProcedure.uncheckedExilePlayer(exileTarget);
                     break;
                 case (byte)CustomRPC.UncheckedCmdReportDeadBody:
                     byte reportSource = reader.ReadByte();
@@ -865,6 +914,20 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
+                    break;
+                case (byte)CustomRPC.LawyerWin:
+                    RPCProcedure.lawyerWin();
+                    break; 
+                case (byte)CustomRPC.LawyerSetTarget:
+                    RPCProcedure.lawyerSetTarget(reader.ReadByte()); 
+                    break;
+                case (byte)CustomRPC.LawyerPromotesToPursuer:
+                    RPCProcedure.lawyerPromotesToPursuer();
+                    break;
+                case (byte)CustomRPC.SetBlanked:
+                    var pid = reader.ReadByte();
+                    var blankedValue = reader.ReadByte();
+                    RPCProcedure.setBlanked(pid, blankedValue);
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
