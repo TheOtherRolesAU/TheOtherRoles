@@ -133,6 +133,8 @@ namespace TheOtherRoles.Patches {
                         Warlock.warlock.killTimer = HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
                     else if (PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.Role.IsImpostor)
                         Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp() ? 0.66f : 2f));
+                    else if (PlayerControl.LocalPlayer == Witch.witch)
+                        Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
                 }
                 __instance.SetTarget(null);
             }
