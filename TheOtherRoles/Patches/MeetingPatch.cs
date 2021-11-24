@@ -358,7 +358,6 @@ namespace TheOtherRoles.Patches {
                         SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
-                        // TODO: Add a proper sprite and adapt the position
                         rend.transform.localPosition = new Vector3(-1.21f, -0.12f, -1f);
                         rend.sprite = Witch.getSpelledOverlaySprite();
                     }
