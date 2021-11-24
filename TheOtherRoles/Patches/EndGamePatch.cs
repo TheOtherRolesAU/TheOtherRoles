@@ -136,9 +136,10 @@ namespace TheOtherRoles.Patches {
             // Lawyer win
             else if (lawyerWin) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                WinningPlayerData wpd = new WinningPlayerData(Lawyer.lawyer.Data);
-                TempData.winners.Add(wpd);
-                if (!Lawyer.lawyer.Data.IsDead) AdditionalTempData.winCondition = WinCondition.LawyerSoloWin;
+                TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
+                if (!Lawyer.lawyer.Data.IsDead){
+                    AdditionalTempData.winCondition = WinCondition.LawyerSoloWin;
+                }
                 else {
                     TempData.winners.Add(new WinningPlayerData(Lawyer.target.Data));
                     foreach (PlayerControl p in Helpers.getKillerTeamMembers(Lawyer.target)) TempData.winners.Add(new WinningPlayerData(p.Data));
