@@ -1005,14 +1005,14 @@ namespace TheOtherRoles
                 true,
                 Witch.spellCastingDuration,
                 () => {
-                    if (Witch.spellCastingTarget != null) {
+                    if (Witch.spellCastingTarget != null && Helpers.checkMuderAttempt(Witch.witch, Witch.spellCastingTarget) == MurderAttemptResult.PerformKill) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
                         writer.Write(Witch.currentTarget.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
-                        witchSpellButton.MaxTimer += Witch.cooldownAddition;
                     }
                     Witch.spellCastingTarget = null;
+                    witchSpellButton.MaxTimer += Witch.cooldownAddition;
                     witchSpellButton.Timer = witchSpellButton.MaxTimer;
                     if (Witch.triggerBothCooldowns)
                         Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;

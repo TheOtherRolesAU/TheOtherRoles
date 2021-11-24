@@ -69,6 +69,7 @@ namespace TheOtherRoles
         UseUncheckedVent,
         UncheckedMurderPlayer,
         UncheckedCmdReportDeadBody,
+        UncheckedExilePlayer,
 
         // Role functionality
 
@@ -299,6 +300,10 @@ namespace TheOtherRoles
             if (source != null && target != null) source.ReportDeadBody(target.Data);
         }
 
+        public static void uncheckedExilePlayer(byte targetId) {
+            PlayerControl target = Helpers.playerById(targetId);
+            if (target != null) target.Exiled();
+        }
 
         // Role functionality
 
@@ -803,6 +808,10 @@ namespace TheOtherRoles
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
                     RPCProcedure.uncheckedMurderPlayer(source, target);
+                    break;
+                case (byte)CustomRPC.UncheckedExilePlayer:
+                    byte exileTarget = reader.ReadByte();
+                    RPCProcedure.uncheckedExilePlayer(exileTarget);
                     break;
                 case (byte)CustomRPC.UncheckedCmdReportDeadBody:
                     byte reportSource = reader.ReadByte();
