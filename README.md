@@ -748,9 +748,12 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ### **Team: Impostors**
 The Witch is an Impostor who has the ability to cast a spell on other players.\
 During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
-There are multiple options listed down below with which you can configure to fit your taste.
+There are multiple options listed down below with which you can configure to fit your taste.\
 \
+**NOTE:**
+- Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated). This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).
 
+\
 ### Game Options
 | Name | Description |
 |----------|:-------------:|

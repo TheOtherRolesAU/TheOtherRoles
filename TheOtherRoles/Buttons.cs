@@ -1005,17 +1005,23 @@ namespace TheOtherRoles
                 true,
                 Witch.spellCastingDuration,
                 () => {
-                    if (Witch.spellCastingTarget != null && Helpers.checkMuderAttempt(Witch.witch, Witch.spellCastingTarget) == MurderAttemptResult.PerformKill) {
+                    if (Witch.spellCastingTarget == null) return;
+                    MurderAttemptResult attempt = Helpers.checkMuderAttempt(Witch.witch, Witch.spellCastingTarget);
+                    if (attempt == MurderAttemptResult.PerformKill) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
                         writer.Write(Witch.currentTarget.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
                     }
+                    if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill) {
+                        witchSpellButton.MaxTimer += Witch.cooldownAddition;
+                        witchSpellButton.Timer = witchSpellButton.MaxTimer;
+                        if (Witch.triggerBothCooldowns)
+                            Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                    } else {
+                        witchSpellButton.Timer = 0f;
+                    }
                     Witch.spellCastingTarget = null;
-                    witchSpellButton.MaxTimer += Witch.cooldownAddition;
-                    witchSpellButton.Timer = witchSpellButton.MaxTimer;
-                    if (Witch.triggerBothCooldowns)
-                        Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
                 }
             );
 
