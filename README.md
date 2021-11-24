@@ -85,6 +85,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.2.0**
+- Bug fix: Choosing an Impostor as a Sidekick won't resulted in an Impostor/Sidekick mix anymore.
 - Bug fix: The Guesser info now shows the right information, when the Guesser guesses the wrong role and kills himself.
 - Bug fix: Hats are being displayed in alphabetic order. Hats demo in freeplay is working again. Fixed a bug where hats would not load when accessed from the main menu.
 

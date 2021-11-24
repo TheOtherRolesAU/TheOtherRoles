@@ -495,21 +495,17 @@ namespace TheOtherRoles
         }
 
         public static void jackalCreatesSidekick(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == targetId)
-                {
-                    if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
-                        Jackal.fakeSidekick = player;
-                    } else {
-                        player.RemoveInfected();
-                        erasePlayerRoles(player.PlayerId, true);
-                        Sidekick.sidekick = player;
-                    }
-                    Jackal.canCreateSidekick = false;
-                    return;
-                }
+            PlayerControl player = Helpers.playerById(targetId);
+            if (player == null) return;
+
+            if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
+                Jackal.fakeSidekick = player;
+            } else {
+                DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+                erasePlayerRoles(player.PlayerId, true);
+                Sidekick.sidekick = player;
             }
+            Jackal.canCreateSidekick = false;
         }
 
         public static void sidekickPromotes() {
