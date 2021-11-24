@@ -23,8 +23,7 @@ namespace TheOtherRoles.Patches
         {
             var serverManager = ServerManager.Instance;
             DnsRegionInfo region = serverManager.CurrentRegion.TryCast<DnsRegionInfo>();
-            if (region == null || !region.Fqdn.EndsWith("among.us"))
-            {
+            if (region == null || !region.Fqdn.EndsWith("among.us")) {
                 var remoteEndPoint = new Il2CppSystem.Net.IPEndPoint(Il2CppSystem.Net.IPAddress.Parse(targetIp), (int)(targetPort - 3));
                 __result = new Hazel.Udp.UnityUdpClientConnection(remoteEndPoint);
                 return false;
