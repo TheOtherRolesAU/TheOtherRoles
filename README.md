@@ -1255,9 +1255,9 @@ The Lawyer gets assigned a target that needs to kill him, depending on the setti
 If his client dies or gets voted out, the Lawyer gets demoted to the role: [Pursuer](#pursuer) 
 
 Lawyer possible win conditions:
-1 - Lawyer alive & client alive + client win (sabotage win exluded) | Lawyer takes over a solo Lawyer win 
-2 - "Lawyer Wins After Meetings" is set to true and number of meetings reached + Lawyer alive & client alive | Lawyer takes over a solo Lawyer win 
-3 - Lawyer dead & client alive + client win (sabotage win exluded) | Lawyer & Client double win (team client + Lawyer win) 
+- Lawyer alive & client alive + client win (sabotage win exluded) | Lawyer takes over a solo Lawyer win
+- "Lawyer Wins After Meetings" is set to true and number of meetings reached + Lawyer alive & client alive | Lawyer takes over a solo Lawyer win 
+- Lawyer dead & client alive + client win (sabotage win exluded) | Lawyer & Client double win (team client + Lawyer win)
 
 note: 
 - The client can only be Impostor, Jackal & Sidekick (Lover`s exluded). If the client disconnects, he get assigned a new client 
@@ -1283,7 +1283,7 @@ His vision will be set to crewmate vision and also gains a new blank ability.
 Blank ability: He can fill a killers gun with a blank, so if he tries to kill someone, the kill cooldown is triggered (includes timeshield, Medic shield, curse, etc.) but without the murder.  
 
 Pursuer win conditions:
-4 - Pursuer did all tasks & stay alive till the end + crew win | Crew & Pursuer double win 
+- Pursuer did all tasks & stay alive till the end + crew win | Crew & Pursuer double win 
 
 note:
 - Blank works for every kill action (Sheriff exluded) 
