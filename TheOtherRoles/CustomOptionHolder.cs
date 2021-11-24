@@ -84,6 +84,13 @@ namespace TheOtherRoles {
         public static CustomOption bountyHunterShowArrow;
         public static CustomOption bountyHunterArrowUpdateIntervall;
 
+        public static CustomOption witchSpawnRate;
+        public static CustomOption witchCooldown;
+        public static CustomOption witchAdditionalCooldown;
+        public static CustomOption witchCanSpellAnyone;
+        public static CustomOption witchSpellCastingDuration;
+        public static CustomOption witchTriggerBothCooldowns;
+
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
 
@@ -257,6 +264,13 @@ namespace TheOtherRoles {
             bountyHunterPunishmentTime = CustomOption.Create(323, "Additional Cooldown After Killing Others", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
+
+            witchSpawnRate = CustomOption.Create(350, cs(Witch.color, "Witch"), rates, null, true);
+            witchCooldown = CustomOption.Create(351, "Witch Spell Casting Cooldown", 30f, 10f, 120f, 5f, witchSpawnRate);
+            witchAdditionalCooldown = CustomOption.Create(352, "Witch Additional Cooldown", 10f, 0f, 60f, 5f, witchSpawnRate);
+            witchCanSpellAnyone = CustomOption.Create(353, "Witch Can Spell Anyone", false, witchSpawnRate);
+            witchSpellCastingDuration = CustomOption.Create(354, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
+            witchTriggerBothCooldowns = CustomOption.Create(355, "Trigger Both Cooldowns", true, witchSpawnRate);
 
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);

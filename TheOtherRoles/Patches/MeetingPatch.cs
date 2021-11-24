@@ -260,8 +260,8 @@ namespace TheOtherRoles.Patches {
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 buttons.Add(button);
-                int row = i/4, col = i%4;
-                buttonParent.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
+                int row = i/5, col = i%5;
+                buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
                 buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
@@ -348,6 +348,20 @@ namespace TheOtherRoles.Patches {
                     
                     selections[i] = false;
                     renderers[i] = renderer;
+                }
+            }
+
+            // Add overlay for spelled players
+            if (Witch.witch != null && Witch.futureSpelled != null) {
+                foreach (PlayerVoteArea pva in __instance.playerStates) {
+                    if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId)) {
+                        SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                        rend.transform.SetParent(pva.transform);
+                        rend.gameObject.layer = pva.Megaphone.gameObject.layer;
+                        // TODO: Add a proper sprite and adapt the position
+                        rend.transform.localPosition = new Vector3(-1.21f, -0.12f, -1f);
+                        rend.sprite = Witch.getSpelledOverlaySprite();
+                    }
                 }
             }
 

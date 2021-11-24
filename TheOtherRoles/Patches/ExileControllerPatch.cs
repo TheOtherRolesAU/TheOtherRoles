@@ -51,6 +51,18 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+
+            // Witch cast spell
+            if (Witch.witch != null && Witch.futureSpelled != null) {
+                foreach (PlayerControl target in Witch.futureSpelled) {
+                    if (target != null && !target.Data.IsDead) {
+                        target.Exiled();
+                    }
+                }
+            }
+            Witch.futureSpelled = new List<PlayerControl>();
+
+
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {
