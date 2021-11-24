@@ -26,7 +26,7 @@ Even more roles are coming soon :)
 | [Trickster](#trickster) | [Sheriff](#sheriff) |  |  |
 | [Vampire](#vampire) | [Shifter](#shifter) |  |  |
 | [Warlock](#warlock) | [Snitch](#snitch) |  |  |
-|  | [Spy](#spy) |  |  |
+| [Witch](#witch) | [Spy](#spy) |  |  |
 |  | [Swapper](#swapper) |  |  |
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
@@ -734,6 +734,24 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 | Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
 | Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
 | Bounty Hunter Arrow Update Interval | Sets how often the position is being updated
+-----------------------
+
+## Witch
+### **Team: Impostors**
+The Witch is an Impostor who has the ability to cast a spell on other players.\
+During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
+There are multiple options listed down below with which you can configure to fit your taste.
+\
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Witch Spawn Chance | -
+| Witch Spell Casting Cooldown | -
+| Witch Additional Cooldown | The spell casting cooldown will be increased by the amount you set here after each spell 
+| Witch Can Spell Everyone | If set to false, the witch can't spell the Spy and other Impostors
+| Witch Spell Casting Duration | The time that you need to stay next to the target in order to cast a spell on it
+| Trigger Both Cooldowns | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary)
 -----------------------
 
 

@@ -37,6 +37,8 @@ namespace TheOtherRoles
         public static CustomButton vultureEatButton;
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
+        public static CustomButton witchSpellButton;
+
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text pursuerButtonBlanksText;
 
@@ -68,6 +70,7 @@ namespace TheOtherRoles
             mediumButton.MaxTimer = Medium.cooldown;
             pursuerButton.MaxTimer = Pursuer.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
+            witchSpellButton.MaxTimer = Witch.cooldown; 
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -79,6 +82,7 @@ namespace TheOtherRoles
             arsonistButton.EffectDuration = Arsonist.duration;
             mediumButton.EffectDuration = Medium.duration;
             trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
+            witchSpellButton.EffectDuration = Witch.spellCastingDuration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
@@ -971,6 +975,49 @@ namespace TheOtherRoles
             pursuerButtonBlanksText.enableWordWrapping = false;
             pursuerButtonBlanksText.transform.localScale = Vector3.one * 0.5f;
             pursuerButtonBlanksText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
+
+            // Witch Spell button
+            witchSpellButton = new CustomButton(
+                () => {
+                    if (Witch.currentTarget != null) {
+                        Witch.spellCastingTarget = Witch.currentTarget;
+                    }
+                },
+                () => { return Witch.witch != null && Witch.witch == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (witchSpellButton.isEffectActive && Witch.spellCastingTarget != Witch.currentTarget) {
+                        Witch.spellCastingTarget = null;
+                        witchSpellButton.Timer = 0f;
+                        witchSpellButton.isEffectActive = false;
+                    }
+                    return PlayerControl.LocalPlayer.CanMove && Witch.currentTarget != null;
+                },
+                () => {
+                    witchSpellButton.Timer = witchSpellButton.MaxTimer;
+                    witchSpellButton.isEffectActive = false;
+                    Witch.spellCastingTarget = null;
+                },
+                Witch.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                Witch.spellCastingDuration,
+                () => {
+                    if (Witch.spellCastingTarget != null) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
+                        writer.Write(Witch.currentTarget.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
+                        witchSpellButton.MaxTimer += Witch.cooldownAddition;
+                    }
+                    Witch.spellCastingTarget = null;
+                    witchSpellButton.Timer = witchSpellButton.MaxTimer;
+                    if (Witch.triggerBothCooldowns)
+                        Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                }
+            );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();
