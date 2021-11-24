@@ -1279,25 +1279,22 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 
 ## Lawyer
 ### **Team: Neutral**
-The Lawyer is a neutral role that tries to win with or without his client. 
-The Lawyer gets assigned a target, that he needs to keep alive in order to win. Depending on the settings, the client knows that he's someones client.
+The Lawyer is a neutral role that has a client that can only be an Impostor, Jackal or Sidekick.
+The Lawyer needs to keep his client alive in order to win as a Lawyer. 
 If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
 
 The Lawyer can win in multiple ways:
-- Lawyer alive & client alive + client win (sabotage win exluded) | Lawyer takes over a solo Lawyer win
-- "Lawyer Wins After Meetings" is set to true and number of meetings reached + Lawyer alive & client alive | Lawyer takes over a solo Lawyer win 
-- Lawyer dead & client alive + client win (sabotage win exluded) | Lawyer & Client double win (team client + Lawyer win)
+- Lawyer dead and client alive: The Lawyer wins together with the winning team because he kept his client alive
+- Lawyer alive and client alive: The Lawyer wins with the winning team because he kept his client alive. The client **doesn't** win (even if his Impostor/Team Jackal mate wins). Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
 
 **NOTE:**
-- The client can only be Impostor, Jackal & Sidekick (Lover`s exluded). If the client disconnects, he will turn into the Pursuer
-- Lawyer can already do the Pursuer tasks (won't count to progress bar) 
-- If "Lawyer Target Knows" is set to off, nobody knows there is a Lawyer which makes it much easier to get the Lawyer win 
-
+- If the client disconnects, the Lawyer will also turn into the Pursuer
+- If "Lawyer Target Knows" is set to true, the client will know that he someone is his Lawyer, but he won't know who.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Lawyer Target Knows | Target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
+| Lawyer Target Knows | The arget knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
 | Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
 | Lawyer Needed Meetings To Win | -
 | Lawyer Vision | Pursuer has normal vision
@@ -1307,18 +1304,10 @@ The Lawyer can win in multiple ways:
 
 ## Pursuer
 ### **Team: Neutral**
-The Pursuer is still a neutral role, but has different goals now. 
-His vision will be set to crewmate vision and the Pursuer gains a new ability "Blank". 
-Blank ability: He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts a kill, the killer will miss the target and all cooldowns will be triggered as usual.
+The Pursuer is still a neutral role, but has a different goal to win the game: He has to be alive, when the game ends (no matter who caused the win).
+In order to achieve this goal, the Pursuer has the ability "Blank": He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
 If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
-
-Pursuer win conditions:
-- Pursuer did all tasks & stay alive till the end + crew win | Crew & Pursuer double win 
-
-**Note**
-- Pursuer tasks wont count to progress bar 
-
------------------------
+The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, his tasks won't be counted anymore.
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.

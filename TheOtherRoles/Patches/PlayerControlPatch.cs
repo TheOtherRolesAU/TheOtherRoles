@@ -677,6 +677,7 @@ namespace TheOtherRoles.Patches {
 
             // Meeting win
             if (Lawyer.winsAfterMeetings && Lawyer.neededMeetings == Lawyer.meetings && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
+                Lawyer.winsAfterMeetings = false; // Avoid sending mutliple RPCs until the host finshes the game
                 MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerWin, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(winWriter);
                 RPCProcedure.lawyerWin();

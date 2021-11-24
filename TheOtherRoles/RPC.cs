@@ -689,6 +689,9 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (p != Arsonist.arsonist) p.Exiled();
+            }
         }
 
         public static void vultureWin() {
