@@ -169,7 +169,7 @@ namespace TheOtherRoles
             string roleName;
             roleName = String.Join("", getRoleInfoForPlayer(p).Select(x => Helpers.cs(x.color, x.name)).ToArray());
             if (roleName.Contains("Lover")) roleName.Replace("Lover", Helpers.cs(Lovers.color, " Lover"));
-            if (p.PlayerId == Lawyer.target?.PlayerId) roleName += Helpers.cs(Pursuer.color, " ง");
+            if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId && PlayerControl.LocalPlayer != Lawyer.target) roleName += Helpers.cs(Pursuer.color, " ยง");
             return roleName;
         }
     }

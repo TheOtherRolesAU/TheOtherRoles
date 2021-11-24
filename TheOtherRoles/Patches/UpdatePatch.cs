@@ -172,19 +172,17 @@ namespace TheOtherRoles.Patches {
             }
 
             // Lawyer
-            if (PlayerControl.LocalPlayer != null && Lawyer.lawyer != null && Lawyer.target != null && (Lawyer.targetKnows && PlayerControl.LocalPlayer == Lawyer.target) || Lawyer.lawyer == PlayerControl.LocalPlayer) {
+            bool localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer;
+            bool localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == PlayerControl.LocalPlayer;
+            if (localIsLawyer || localIsKnowingTarget) {
                 string suffix = Helpers.cs(Lawyer.color, " §");
-                if (Lawyer.lawyer == PlayerControl.LocalPlayer || (Lawyer.target == PlayerControl.LocalPlayer && !Lawyer.lawyer.Data.IsDead)) Lawyer.target.nameText.text += suffix;
-                if (Lawyer.lawyer == PlayerControl.LocalPlayer) Lawyer.lawyer.nameText.text += suffix;
+                Lawyer.target.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                        if (Lawyer.lawyer == PlayerControl.LocalPlayer && (Lawyer.lawyer.PlayerId == player.TargetPlayerId || Lawyer.target.PlayerId == player.TargetPlayerId && !Lawyer.target.Data.Disconnected))
-                            player.NameText.text += suffix;
-                        else if (Lawyer.target == PlayerControl.LocalPlayer && Lawyer.target.PlayerId == player.TargetPlayerId && Lawyer.lawyer.Data.IsDead)
+                        if (player.TargetPlayerId == Lawyer.target.PlayerId)
                             player.NameText.text += suffix;
             }
-            
 
             // Hacker and Detective
             if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead && (PlayerControl.LocalPlayer == Hacker.hacker || PlayerControl.LocalPlayer == Detective.detective || PlayerControl.LocalPlayer == Medium.medium)) {
