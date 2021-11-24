@@ -1279,9 +1279,11 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 
 ## Lawyer
 ### **Team: Neutral**
-The Lawyer is a neutral role that has a client that can only be an Impostor, Jackal or Sidekick.
-The Lawyer needs to keep his client alive in order to win as a Lawyer. 
+The Lawyer is a neutral role that has a client.
+The client might be an Impostor, Jackal or Sidekick which is no Lover.
+The Lawyer needs to keep his client alive in order to win as a Lawyer.
 If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
+The main goal of the Lawyer is to win as Lawyer, he is not allowed to betray his client.
 
 The Lawyer can win in multiple ways:
 - Lawyer dead and client alive: The Lawyer wins together with the winning team because he kept his client alive
