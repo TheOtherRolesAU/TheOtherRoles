@@ -651,6 +651,20 @@ namespace TheOtherRoles.Patches {
                 Morphling.resetMorph();
         }
 
+        static void witchSetTarget() {
+            if (Witch.witch == null || Witch.witch != PlayerControl.LocalPlayer) return;
+            List<PlayerControl> untargetables;
+            if (Witch.spellCastingTarget != null)
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Witch.spellCastingTarget.PlayerId).ToList(); // Don't switch the target from the the one you're currently casting a spell on
+            else {
+                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => Witch.futureSpelled.Any(y => y == x)).ToList(); // Target anyone that hasn't already been spelled
+                if (Spy.spy != null && !Witch.canSpellAnyone) untargetables.Add(Spy.spy);
+            }
+            Witch.currentTarget = setTarget(onlyCrewmates: !Witch.canSpellAnyone, untargetablePlayers: untargetables);
+            setPlayerOutline(Witch.currentTarget, Witch.color);
+        }
+
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -716,6 +730,8 @@ namespace TheOtherRoles.Patches {
                 mediumSetTarget();
                 // Morphling and Camouflager
                 morphlingAndCamouflagerUpdate();
+                // Witch
+                witchSetTarget();
             } 
         }
     }
@@ -831,6 +847,11 @@ namespace TheOtherRoles.Patches {
             // Cleaner Button Sync
             if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
                 HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
+
+            // Witch Button Sync
+            if (Witch.triggerBothCooldowns && Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null) 
+                HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
 
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
