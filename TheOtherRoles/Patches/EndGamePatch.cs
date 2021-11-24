@@ -271,18 +271,6 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            foreach (PoolablePlayer pb in GameObject.FindObjectsOfType<PoolablePlayer>()) {
-                pb.NameText.color = Color.white;
-                pb.NameText.transform.localScale *= 0.75f;
-                foreach(var data in AdditionalTempData.playerRoles) {
-                    if (pb.NameText.text == data.PlayerName) {
-                        foreach (RoleInfo roleInfo in data.Roles) {
-                            pb.NameText.text += Helpers.cs(roleInfo.color, $"\n{roleInfo.name}");
-                        }
-                    }
-                }
-            }
-
             if (MapOptions.showRoleSummary) {
                 var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
                 GameObject roleSummary = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
