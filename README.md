@@ -1275,19 +1275,19 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 -----------------------
 
 ## Lawyer
-### **Team: Lawyer**
+### **Team: Neutral**
 The Lawyer is a neutral role that tries to win with or without his client. 
-The Lawyer gets assigned a target that needs to kill him, depending on the settings the player knows that he is the client, but doesn't know who the Lawyer is. 
-If his client dies or gets voted out, the Lawyer gets demoted to the role: [Pursuer](#pursuer) 
+The Lawyer gets assigned a target, that he needs to keep alive in order to win. Depending on the settings, the client knows that he's someones client.
+If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
 
-Lawyer possible win conditions:
+The Lawyer can win in multiple ways:
 - Lawyer alive & client alive + client win (sabotage win exluded) | Lawyer takes over a solo Lawyer win
 - "Lawyer Wins After Meetings" is set to true and number of meetings reached + Lawyer alive & client alive | Lawyer takes over a solo Lawyer win 
 - Lawyer dead & client alive + client win (sabotage win exluded) | Lawyer & Client double win (team client + Lawyer win)
 
-note: 
-- The client can only be Impostor, Jackal & Sidekick (Lover`s exluded). If the client disconnects, he get assigned a new client 
-- Lawyer can already do the pursuer tasks (wont count to progress bar) 
+**NOTE:**
+- The client can only be Impostor, Jackal & Sidekick (Lover`s exluded). If the client disconnects, he will turn into the Pursuer
+- Lawyer can already do the Pursuer tasks (won't count to progress bar) 
 - If "Lawyer Target Knows" is set to off, nobody knows there is a Lawyer which makes it much easier to get the Lawyer win 
 
 
@@ -1303,16 +1303,16 @@ note:
 -----------------------
 
 ## Pursuer
-### **Team: Lawyer**
-The Pursuer is still a neutral role, but has different conditions now. 
-His vision will be set to crewmate vision and also gains a new blank ability. 
-Blank ability: He can fill a killers gun with a blank, so if he tries to kill someone, the kill cooldown is triggered (includes timeshield, Medic shield, curse, etc.) but without the murder.  
+### **Team: Neutral**
+The Pursuer is still a neutral role, but has different goals now. 
+His vision will be set to crewmate vision and the Pursuer gains a new ability "Blank". 
+Blank ability: He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts a kill, the killer will miss the target and all cooldowns will be triggered as usual.
+If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
 
 Pursuer win conditions:
 - Pursuer did all tasks & stay alive till the end + crew win | Crew & Pursuer double win 
 
-note:
-- Blank works for every kill action (Sheriff exluded) 
+**Note**
 - Pursuer tasks wont count to progress bar 
 
 -----------------------
