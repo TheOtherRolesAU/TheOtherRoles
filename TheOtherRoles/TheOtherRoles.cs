@@ -1133,7 +1133,7 @@ namespace TheOtherRoles
     public static class Lawyer {
         public static PlayerControl lawyer;
         public static PlayerControl target;
-        public static Color color = new Color32(82, 0, 110, byte.MaxValue);
+        public static Color color = new Color32(134, 153, 25, byte.MaxValue);
         public static Sprite targetSprite;
         public static bool triggerLawyerWin = false;
         public static int meetings = 0;
@@ -1165,7 +1165,7 @@ namespace TheOtherRoles
     public static class Pursuer {
         public static PlayerControl pursuer;
         public static PlayerControl target;
-        public static Color color = new Color32(82, 0, 110, byte.MaxValue);
+        public static Color color = Lawyer.color;
         public static List<PlayerControl> blankedList = new List<PlayerControl>();
         public static int blanks = 0;
         public static Sprite blank;
