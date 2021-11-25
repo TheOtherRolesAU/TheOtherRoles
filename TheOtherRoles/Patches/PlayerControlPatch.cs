@@ -609,7 +609,7 @@ namespace TheOtherRoles.Patches {
 
             foreach (DeadBody db in deadBodies) {
                 if (arrowUpdate) {
-                    Vulture.localArrows.Add(new Arrow(Vulture.color));
+                    Vulture.localArrows.Add(new Arrow(Color.blue));
                     Vulture.localArrows[index].arrow.SetActive(true);
                 }
                 if (Vulture.localArrows[index] != null) Vulture.localArrows[index].Update(db.transform.position);
