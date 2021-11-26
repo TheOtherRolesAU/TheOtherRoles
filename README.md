@@ -18,7 +18,7 @@ Even more roles are coming soon :)
 | [Bounty Hunter](#bounty-hunter) | [Detective](#detective) | [Jackal](#jackal) |  |
 | [Camouflager](#camouflager) | [Engineer](#engineer) | [Sidekick](#sidekick) |  |
 | [Cleaner](#cleaner) | [Hacker](#hacker) | [Vulture](#vulture) |  |
-| [Eraser](#eraser) | [Lighter](#lighter) |  |  |
+| [Eraser](#eraser) | [Lighter](#lighter) | [Lawyer](#lawyer) |  |
 | [Godfather (Mafia)](#mafia) | [Mayor](#mayor) |  |  |
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
 | [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
@@ -26,7 +26,7 @@ Even more roles are coming soon :)
 | [Trickster](#trickster) | [Sheriff](#sheriff) |  |  |
 | [Vampire](#vampire) | [Shifter](#shifter) |  |  |
 | [Warlock](#warlock) | [Snitch](#snitch) |  |  |
-|  | [Spy](#spy) |  |  |
+| [Witch](#witch) | [Spy](#spy) |  |  |
 |  | [Swapper](#swapper) |  |  |
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
@@ -38,6 +38,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.1/TheOtherRoles.zip)
+| 2021.11.9.5s| v3.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.2/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.1/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.0/TheOtherRoles.zip)
@@ -83,6 +85,17 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 3.2.1**
+- Hotfix for 3.2.0
+
+**Version 3.2.0**
+- **New Role:** [Witch](#witch) created by [Alex2911](https://github.com/Alex2911)
+- **New Role:** [Lawyer](#lawyer)
+- Bug fix: Choosing an Impostor as a Sidekick won't resulted in an Impostor/Sidekick mix anymore.
+- Bug fix: The Guesser info now shows the right information, when the Guesser guesses the wrong role and kills himself.
+- Bug fix: Hats are being displayed in alphabetic order. Hats demo in freeplay is working again. Fixed a bug where hats would not load when accessed from the main menu.
+- Bug fix: The Detective now shows the name of the players in any case.
+
 **Hotfix 3.1.2**
 - Don't ask, just update. I messed up.
 
@@ -123,7 +136,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
 - Removed Medium Question: "What is your name?" (name of the soul is added after each question)
 
-  
+
 **Version 2.9.0**
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
@@ -736,6 +749,27 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 | Bounty Hunter Arrow Update Interval | Sets how often the position is being updated
 -----------------------
 
+## Witch
+### **Team: Impostors**
+The Witch is an Impostor who has the ability to cast a spell on other players.\
+During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
+There are multiple options listed down below with which you can configure to fit your taste.\
+\
+**NOTE:**
+- Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated). This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).
+
+\
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Witch Spawn Chance | -
+| Witch Spell Casting Cooldown | -
+| Witch Additional Cooldown | The spell casting cooldown will be increased by the amount you set here after each spell
+| Witch Can Spell Everyone | If set to false, the witch can't spell the Spy and other Impostors
+| Witch Spell Casting Duration | The time that you need to stay next to the target in order to cast a spell on it
+| Trigger Both Cooldowns | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary)
+-----------------------
+
 
 ## Guesser
 ### **Team: Crewmates or Impostors**
@@ -1247,6 +1281,40 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 | Vulture Can Use Vents | -
 | Show Arrows Pointing Towards The Corpes | -
 -----------------------
+
+## Lawyer
+### **Team: Neutral**
+The Lawyer is a neutral role that has a client.
+The client might be an Impostor, Jackal or Sidekick which is no Lover.
+The Lawyer needs to keep his client alive in order to win as a Lawyer.
+If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
+The main goal of the Lawyer is to win as Lawyer, he is not allowed to betray his client.
+
+The Lawyer can win in multiple ways:
+- Lawyer dead and client alive: The Lawyer wins together with the winning team because he kept his client alive
+- Lawyer alive and client alive: The Lawyer wins with the winning team because he kept his client alive. The client **doesn't** win (even if his Impostor/Team Jackal mate wins). Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
+
+**NOTE:**
+- If the client disconnects, the Lawyer will also turn into the Pursuer
+- If "Lawyer Target Knows" is set to true, the client will know that he someone is his Lawyer, but he won't know who.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Lawyer Target Knows | The target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
+| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
+| Lawyer Needed Meetings To Win | -
+| Lawyer Vision | Pursuer has normal vision
+| Pursuer Blank Cooldwon | -
+| Pursuer Number Of Blanks | -
+-----------------------
+
+## Pursuer
+### **Team: Neutral**
+The Pursuer is still a neutral role, but has a different goal to win the game: He has to be alive, when the game ends (no matter who caused the win).
+In order to achieve this goal, the Pursuer has the ability "Blank": He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
+If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
+The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, his tasks won't be counted anymore.
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.

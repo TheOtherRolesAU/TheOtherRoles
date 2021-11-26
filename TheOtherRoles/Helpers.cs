@@ -12,6 +12,12 @@ using HarmonyLib;
 using Hazel;
 
 namespace TheOtherRoles {
+
+    public enum MurderAttemptResult {
+        PerformKill,
+        SuppressKill,
+        BlankKill
+    }
     public static class Helpers {
 
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
@@ -265,50 +271,61 @@ namespace TheOtherRoles {
             return roleCouldUse;
         }
 
-        public static bool checkMuderAttempt(PlayerControl killer, PlayerControl target, bool isMeetingStart = false) {
+        public static MurderAttemptResult checkMuderAttempt(PlayerControl killer, PlayerControl target, bool blockRewind = false) {
             // Modified vanilla checks
-            if (AmongUsClient.Instance.IsGameOver) return false;
-            if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return false; // Allow non Impostor kills compared to vanilla code
-            if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return false; // Allow killing players in vents compared to vanilla code
+            if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
+            if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
+            if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
+
+            // Handle blank shot
+            if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                writer.Write((byte)0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setBlanked(killer.PlayerId, 0);
+
+                return MurderAttemptResult.BlankKill;
+            }
 
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
-                return false;
+                return MurderAttemptResult.SuppressKill;
             }
 
             // Block impostor not fully grown mini kill
             else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
-                return false;
+                return MurderAttemptResult.SuppressKill;
             }
 
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
-                if (!isMeetingStart) { // Only rewind the attempt was not called because a meeting startet 
+                if (!blockRewind) { // Only rewind the attempt was not called because a meeting startet 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.timeMasterRewindTime();
                 }
-                return false;
+                return MurderAttemptResult.SuppressKill;
             }
-            return true;
+            return MurderAttemptResult.PerformKill;
         }
 
-        public static bool checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false)  {
+        public static MurderAttemptResult checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false)  {
             // The local player checks for the validity of the kill and performs it afterwards (different to vanilla, where the host performs all the checks)
             // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
 
-            bool attemptIsSuccessful = checkMuderAttempt(killer, target, isMeetingStart);
-            if (attemptIsSuccessful) {
+            MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
+            if (murder == MurderAttemptResult.PerformKill) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId);
             }
-            return attemptIsSuccessful;            
+            return murder;            
         }
     
         public static void shareGameVersion() {
@@ -321,6 +338,17 @@ namespace TheOtherRoles {
             writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, TheOtherRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);
+        }
+
+        public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
+            List<PlayerControl> team = new List<PlayerControl>();
+            foreach(PlayerControl p in PlayerControl.AllPlayerControls) {
+                if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
+                else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
+                else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
+            }
+            
+            return team;
         }
     }
 }
