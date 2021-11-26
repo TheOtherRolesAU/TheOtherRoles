@@ -1297,7 +1297,7 @@ The Lawyer can win in multiple ways:
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Lawyer Target Knows | The arget knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
+| Lawyer Target Knows | The target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
 | Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
 | Lawyer Needed Meetings To Win | -
 | Lawyer Vision | Pursuer has normal vision
