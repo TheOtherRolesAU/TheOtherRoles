@@ -32,8 +32,8 @@ namespace TheOtherRoles.Patches {
         ArsonistWin,
         VultureWin,
         LawyerSoloWin,
-        AdditionalDeadLawyerWin,
-        AdditionalAliveLawyerWin,
+        AdditionalLawyerBonusWin,
+        AdditionalLawyerStolenWin,
         AdditionalAlivePursuerWin
     }
 
@@ -192,17 +192,18 @@ namespace TheOtherRoles.Patches {
             if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
                 if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
                     TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
-                if (!Lawyer.lawyer.Data.IsDead) { // Lawyer wins with the winning team but steals the win from his client
-                    WinningPlayerData client = null;
-                    foreach (WinningPlayerData winner in TempData.winners) {
-                        if (winner.PlayerName == Lawyer.target.Data.PlayerName) client = winner;
-                    }
-                    if (client != null) TempData.winners.Remove(client);
-                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAliveLawyerWin);
-                } else {
-                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalDeadLawyerWin);
+                WinningPlayerData client = null;
+                foreach (WinningPlayerData winner in TempData.winners) {
+                    if (winner.PlayerName == Lawyer.target.Data.PlayerName)
+                        client = winner;
                 }
 
+                if (!Lawyer.lawyer.Data.IsDead && client != null) { // Lawyer wins with the winning team but steals the win from his client
+                    TempData.winners.Remove(client);
+                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
+                } else {
+                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+                }
             }
 
             // Possible Additional winner: Pursuer
@@ -262,9 +263,9 @@ namespace TheOtherRoles.Patches {
             }
 
             foreach (WinCondition cond in AdditionalTempData.additionalWinConditions) {
-                if (cond == WinCondition.AdditionalAliveLawyerWin) {
+                if (cond == WinCondition.AdditionalLawyerStolenWin) {
                     textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer stole the win of the client")}";
-                } else if (cond == WinCondition.AdditionalDeadLawyerWin) {
+                } else if (cond == WinCondition.AdditionalLawyerBonusWin) {
                     textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer kept the client alive")}";
                 } else if (cond == WinCondition.AdditionalAlivePursuerWin) {
                     textRenderer.text += $"\n{Helpers.cs(Pursuer.color, "Pursuer survived")}";
