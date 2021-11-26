@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.1/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.2/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.1.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.1.1/TheOtherRoles.zip)
@@ -83,6 +84,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.2.1**
+- Hotfix for 3.2.0
 
 **Version 3.2.0**
 - **New Role:** [Witch](#witch) created by [Alex2911](https://github.com/Alex2911)
@@ -132,7 +136,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
 - Removed Medium Question: "What is your name?" (name of the soul is added after each question)
 
-  
+
 **Version 2.9.0**
 - **New Role:** [Medium](#medium)
 - **New Role:** [Vulture](#vulture)
@@ -760,7 +764,7 @@ There are multiple options listed down below with which you can configure to fit
 |----------|:-------------:|
 | Witch Spawn Chance | -
 | Witch Spell Casting Cooldown | -
-| Witch Additional Cooldown | The spell casting cooldown will be increased by the amount you set here after each spell 
+| Witch Additional Cooldown | The spell casting cooldown will be increased by the amount you set here after each spell
 | Witch Can Spell Everyone | If set to false, the witch can't spell the Spy and other Impostors
 | Witch Spell Casting Duration | The time that you need to stay next to the target in order to cast a spell on it
 | Trigger Both Cooldowns | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary)
