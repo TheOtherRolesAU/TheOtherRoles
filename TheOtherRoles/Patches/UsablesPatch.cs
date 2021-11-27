@@ -54,17 +54,24 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(VentButton), nameof(VentButton.DoClick))]
+    class VentButtonDoClickPatch {
+        static  bool Prefix(VentButton __instance) {
+            // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
+		    if (__instance.currentTarget != null) __instance.currentTarget.Use();
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
-            bool canMoveInVents = true;
+            bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy;
             if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
-            if (Spy.spy == PlayerControl.LocalPlayer) {
-                canMoveInVents = false;
-            }
+
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
             
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
@@ -99,16 +106,42 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.SetTarget))]
     class VentButtonSetTargetPatch {
+        static Sprite defaultVentSprite = null;
         static void Postfix(VentButton __instance) {
             // Trickster render special vent button
             if (Trickster.trickster != null && Trickster.trickster == PlayerControl.LocalPlayer) {
-                if (__instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_"))
-                    __instance.graphic.sprite = Trickster.getTricksterVentButtonSprite();
-                else
-                    __instance.graphic.sprite = DestroyableSingleton<TranslationController>.Instance.GetImage(ImageNames.VentButton);
+                if (defaultVentSprite == null) defaultVentSprite = __instance.graphic.sprite;
+                bool isSpecialVent = __instance.currentTarget != null && __instance.currentTarget.gameObject != null && __instance.currentTarget.gameObject.name.StartsWith("JackInTheBoxVent_");
+                __instance.graphic.sprite = isSpecialVent ?  Trickster.getTricksterVentButtonSprite() : defaultVentSprite;
+                __instance.buttonLabelText.enabled = !isSpecialVent;
             }
         }
     }
+
+    [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
+    class KillButtonDoClickPatch {
+        public static bool Prefix(KillButton __instance) {
+            if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
+                // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
+                MurderAttemptResult res = Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget);
+                // Handle blank kill
+                if (res == MurderAttemptResult.BlankKill) {
+                    PlayerControl.LocalPlayer.killTimer = PlayerControl.GameOptions.KillCooldown;
+                    if (PlayerControl.LocalPlayer == Cleaner.cleaner)
+                        Cleaner.cleaner.killTimer = HudManagerStartPatch.cleanerCleanButton.Timer = HudManagerStartPatch.cleanerCleanButton.MaxTimer;
+                    else if (PlayerControl.LocalPlayer == Warlock.warlock)
+                        Warlock.warlock.killTimer = HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
+                    else if (PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.Role.IsImpostor)
+                        Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp() ? 0.66f : 2f));
+                    else if (PlayerControl.LocalPlayer == Witch.witch)
+                        Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+                }
+                __instance.SetTarget(null);
+            }
+            return false;
+        }
+    }
+
 
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
@@ -137,6 +170,11 @@ namespace TheOtherRoles.Patches {
             if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.canCallEmergency) {
                 roleCanCallEmergency = false;
                 statusText = "The Jester can't start an emergency meeting";
+            }
+            // Potentially deactivate emergency button for Lawyer
+            if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer && Lawyer.winsAfterMeetings) {
+                roleCanCallEmergency = false;
+                statusText = "The Lawyer can't start an emergency meeting (" + Lawyer.meetings + "/" + Lawyer.neededMeetings + " meetings)";
             }
 
             if (!roleCanCallEmergency) {
@@ -447,4 +485,15 @@ namespace TheOtherRoles.Patches {
             }
         }
     }
+
+    [HarmonyPatch(typeof(MedScanMinigame), nameof(MedScanMinigame.FixedUpdate))]
+    class MedScanMinigameFixedUpdatePatch {
+        static void Prefix(MedScanMinigame __instance) {
+            if (MapOptions.allowParallelMedBayScans) {
+                __instance.medscan.CurrentUser = PlayerControl.LocalPlayer.PlayerId;
+                __instance.medscan.UsersList.Clear();
+            }
+        }
+    }
+
 }

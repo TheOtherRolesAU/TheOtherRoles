@@ -56,6 +56,9 @@ namespace TheOtherRoles
             Bait.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
+            Lawyer.clearAndReload();
+            Pursuer.clearAndReload();
+            Witch.clearAndReload();
         }
 
         public static class Jester {
@@ -252,6 +255,7 @@ namespace TheOtherRoles
 
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
+        public static bool showAttemptToMedic = false;
         public static bool setShieldAfterMeeting = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
@@ -272,6 +276,7 @@ namespace TheOtherRoles
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
         }
     }
@@ -528,15 +533,29 @@ namespace TheOtherRoles
     public static class Tracker {
         public static PlayerControl tracker;
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
+        public static List<Arrow> localArrows = new List<Arrow>();
 
         public static float updateIntervall = 5f;
         public static bool resetTargetAfterMeeting = false;
+        public static bool canTrackCorpses = false;
+        public static float corpsesTrackingCooldown = 30f;
+        public static float corpsesTrackingDuration = 5f;
+        public static float corpsesTrackingTimer = 0f;
+        public static List<Vector3> deadBodyPositions = new List<Vector3>();
 
         public static PlayerControl currentTarget;
         public static PlayerControl tracked;
         public static bool usedTracker = false;
         public static float timeUntilUpdate = 0f;
         public static Arrow arrow = new Arrow(Color.blue);
+
+        private static Sprite trackCorpsesButtonSprite;
+        public static Sprite getTrackCorpsesButtonSprite()
+        {
+            if (trackCorpsesButtonSprite) return trackCorpsesButtonSprite;
+            trackCorpsesButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PathfindButton.png", 115f);
+            return trackCorpsesButtonSprite;
+        }
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -559,6 +578,16 @@ namespace TheOtherRoles
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            deadBodyPositions = new List<Vector3>();
+            corpsesTrackingTimer = 0f;
+            corpsesTrackingCooldown = CustomOptionHolder.trackerCorpsesTrackingCooldown.getFloat();
+            corpsesTrackingDuration = CustomOptionHolder.trackerCorpsesTrackingDuration.getFloat();
+            canTrackCorpses = CustomOptionHolder.trackerCanTrackCorpses.getBool();
         }
     }
 
@@ -949,6 +978,8 @@ namespace TheOtherRoles
 
         public static int remainingShots = 2;
         public static bool hasMultipleShotsPerMeeting = false;
+        public static bool showInfoInGhostChat = true;
+        public static bool killsThroughShield = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -961,6 +992,8 @@ namespace TheOtherRoles
             
             remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
+            showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
+            killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
         }
     }
 
@@ -1094,6 +1127,112 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.mediumCooldown.getFloat();
             duration = CustomOptionHolder.mediumDuration.getFloat();
             oneTimeUse = CustomOptionHolder.mediumOneTimeUse.getBool();
+        }
+    }
+
+    public static class Lawyer {
+        public static PlayerControl lawyer;
+        public static PlayerControl target;
+        public static Color color = new Color32(134, 153, 25, byte.MaxValue);
+        public static Sprite targetSprite;
+        public static bool triggerLawyerWin = false;
+        public static int meetings = 0;
+
+        public static bool targetKnows = false;
+        public static float vision = 1f;
+        public static bool winsAfterMeetings = false;
+        public static int neededMeetings = 4;
+        public static bool lawyerKnowsRole = false;
+
+        public static Sprite getTargetSprite() {
+            if (targetSprite) return targetSprite;
+            targetSprite = Helpers.loadSpriteFromResources("", 150f);
+            return targetSprite;
+        }
+
+        public static void clearAndReload() {
+            lawyer = null;
+            target = null;
+            triggerLawyerWin = false;
+            meetings = 0;
+
+            targetKnows = CustomOptionHolder.lawyerTargetKnows.getBool();
+            winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
+            neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
+            vision = CustomOptionHolder.lawyerVision.getFloat();
+            lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
+        }
+    }
+
+    public static class Pursuer {
+        public static PlayerControl pursuer;
+        public static PlayerControl target;
+        public static Color color = Lawyer.color;
+        public static List<PlayerControl> blankedList = new List<PlayerControl>();
+        public static int blanks = 0;
+        public static Sprite blank;
+
+        public static float cooldown = 30f;
+        public static int blanksNumber = 5;
+
+        public static Sprite getTargetSprite() {
+            if (blank) return blank;
+            blank = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PursuerButton.png", 115f);
+            return blank;
+        }
+
+        public static void clearAndReload() {
+            pursuer = null;
+            target = null;
+            blankedList = new List<PlayerControl>();
+            blanks = 0;
+
+            cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
+            blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());
+        }
+    }
+
+    public static class Witch {
+        public static PlayerControl witch;
+        public static Color color = Palette.ImpostorRed;
+
+        public static List<PlayerControl> futureSpelled = new List<PlayerControl>();
+        public static PlayerControl currentTarget;
+        public static PlayerControl spellCastingTarget;
+        public static float cooldown = 30f;
+        public static float spellCastingDuration = 2f;
+        public static float cooldownAddition = 10f;
+        public static float currentCooldownAddition = 0f;
+        public static bool canSpellAnyone = false;
+        public static bool triggerBothCooldowns = true;
+        public static bool witchVoteSavesTargets = true;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpellButton.png", 115f);
+            return buttonSprite;
+        }
+
+        private static Sprite spelledOverlaySprite;
+        public static Sprite getSpelledOverlaySprite() {
+            if (spelledOverlaySprite) return spelledOverlaySprite;
+            spelledOverlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SpellButtonMeeting.png", 225f);
+            return spelledOverlaySprite;
+        }
+
+
+        public static void clearAndReload() {
+            witch = null;
+            futureSpelled = new List<PlayerControl>();
+            currentTarget = spellCastingTarget = null;
+            cooldown = CustomOptionHolder.witchCooldown.getFloat();
+            cooldownAddition = CustomOptionHolder.witchAdditionalCooldown.getFloat();
+            currentCooldownAddition = CustomOptionHolder.witchCooldown.getFloat();
+            canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
+            spellCastingDuration = CustomOptionHolder.witchSpellCastingDuration.getFloat();
+            triggerBothCooldowns = CustomOptionHolder.witchTriggerBothCooldowns.getBool();
+            witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
 }

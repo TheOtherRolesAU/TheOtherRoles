@@ -115,6 +115,10 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Medium.medium, Medium.color);
+            } else if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
+            } else if (Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
@@ -132,7 +136,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Crewmate roles with no changes: Mini
-            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter and Mafioso
+            // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter,  Witch and Mafioso
         }
 
         static void setNameTags() {
@@ -166,6 +170,29 @@ namespace TheOtherRoles.Patches {
                         if (Lovers.lover1.PlayerId == player.TargetPlayerId || Lovers.lover2.PlayerId == player.TargetPlayerId)
                             player.NameText.text += suffix;
             }
+
+            // Lawyer
+            bool localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer;
+            bool localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == PlayerControl.LocalPlayer;
+            if (localIsLawyer || localIsKnowingTarget) {
+                string suffix = Helpers.cs(Lawyer.color, " §");
+                Lawyer.target.nameText.text += suffix;
+
+                if (MeetingHud.Instance != null)
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                        if (player.TargetPlayerId == Lawyer.target.PlayerId)
+                            player.NameText.text += suffix;
+            }
+
+            // Hacker and Detective
+            if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead && (PlayerControl.LocalPlayer == Hacker.hacker || PlayerControl.LocalPlayer == Detective.detective || PlayerControl.LocalPlayer == Medium.medium)) {
+                if (MeetingHud.Instance != null) {
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                        var target = Helpers.playerById(player.TargetPlayerId);
+                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
+                    }
+                }
+            }
         }
 
         static void updateShielded() {
@@ -180,6 +207,7 @@ namespace TheOtherRoles.Patches {
             Hacker.hackerTimer -= Time.deltaTime;
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
+            Tracker.corpsesTrackingTimer -= Time.deltaTime;
         }
 
         public static void miniUpdate() {
