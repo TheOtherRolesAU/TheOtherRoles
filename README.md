@@ -92,6 +92,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - We changed the win conditions of the [Lawyer](#lawyer), to make it more viable
 - Bug fix: The Medium now shows the roles of players in the rigth format
 - The name and the role of all winners is now being displayed on the end screen
+- We changed the way settings are being shared among the players (which caused some people to be unable to join the lobby). This might resolve the problem or make it even worse... we'll see.
 
 **Version 3.2.1**
 - Hotfix for 3.2.0
