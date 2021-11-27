@@ -394,7 +394,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
-                string roleNames = RoleInfo.GetRole(p);
+                string roleNames = RoleInfo.GetRolesString(p, true);
                 string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                 string playerInfoText = "";
