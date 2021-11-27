@@ -682,7 +682,7 @@ namespace TheOtherRoles
 
                         if (murder == MurderAttemptResult.PerformKill) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
-                            writer.Write(Warlock.curseKillTarget.PlayerId);
+                            writer.Write(Warlock.curseVictimTarget.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.warlockCurseKill(Warlock.curseVictimTarget.PlayerId);
 
