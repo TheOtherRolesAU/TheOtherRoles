@@ -371,58 +371,58 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void updatePlayerInfo() {
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                if (p != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead) continue;
-
-                Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
-                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (playerInfo == null) {
-                    playerInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
-                    playerInfo.transform.localPosition += Vector3.up * 0.5f;
-                    playerInfo.fontSize *= 0.75f;
-                    playerInfo.gameObject.name = "Info";
-                }
-
-                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
-                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
-                TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (meetingInfo == null && playerVoteArea != null) {
-                    meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                    meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                    meetingInfo.fontSize *= 0.75f;
-                    meetingInfo.gameObject.name = "Info";
-                }
-
-                var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
-                string roleNames = RoleInfo.GetRole(p);
-                string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
-
-                string playerInfoText = "";
-                string meetingInfoText = "";
-                if (p == PlayerControl.LocalPlayer) {
-                    playerInfoText = $"{roleNames}";
-                    if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
-                        TMPro.TextMeshPro tabText = DestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
-                        tabText.SetText($"Tasks {taskInfo}");
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {         
+                if ((Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target) || p == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead) {
+                    Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
+                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (playerInfo == null) {
+                        playerInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                        playerInfo.transform.localPosition += Vector3.up * 0.5f;
+                        playerInfo.fontSize *= 0.75f;
+                        playerInfo.gameObject.name = "Info";
                     }
-                    meetingInfoText = $"{roleNames} {taskInfo}".Trim();
-                }
-                else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
-                    playerInfoText = $"{roleNames} {taskInfo}".Trim();
-                    meetingInfoText = playerInfoText;
-                }
-                else if (MapOptions.ghostsSeeTasks) {
-                    playerInfoText = $"{taskInfo}".Trim();
-                    meetingInfoText = playerInfoText;
-                }
-                else if (MapOptions.ghostsSeeRoles) {
-                    playerInfoText = $"{roleNames}";
-                    meetingInfoText = playerInfoText;
-                }
 
-                playerInfo.text = playerInfoText;
-                playerInfo.gameObject.SetActive(p.Visible);
-                if (meetingInfo != null) meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : meetingInfoText;
+                    PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == p.PlayerId);
+                    Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
+                    TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (meetingInfo == null && playerVoteArea != null) {
+                        meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                        meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                        meetingInfo.fontSize *= 0.75f;
+                        meetingInfo.gameObject.name = "Info";
+                    }
+
+                    var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
+                    string roleNames = RoleInfo.GetRolesString(p, true);
+                    string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
+
+                    string playerInfoText = "";
+                    string meetingInfoText = "";
+                    if (p == PlayerControl.LocalPlayer) {
+                        playerInfoText = $"{roleNames}";
+                        if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
+                            TMPro.TextMeshPro tabText = DestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                            tabText.SetText($"Tasks {taskInfo}");
+                        }
+                        meetingInfoText = $"{roleNames} {taskInfo}".Trim();
+                    }
+                    else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
+                        playerInfoText = $"{roleNames} {taskInfo}".Trim();
+                        meetingInfoText = playerInfoText;
+                    }
+                    else if (MapOptions.ghostsSeeTasks) {
+                        playerInfoText = $"{taskInfo}".Trim();
+                        meetingInfoText = playerInfoText;
+                    }
+                    else if (MapOptions.ghostsSeeRoles || (Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target)) {
+                        playerInfoText = $"{roleNames}";
+                        meetingInfoText = playerInfoText;
+                    }
+
+                    playerInfo.text = playerInfoText;
+                    playerInfo.gameObject.SetActive(p.Visible);
+                    if (meetingInfo != null) meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : meetingInfoText;
+                }                
             }
         }
 

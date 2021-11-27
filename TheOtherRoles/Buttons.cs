@@ -682,7 +682,7 @@ namespace TheOtherRoles
 
                         if (murder == MurderAttemptResult.PerformKill) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
-                            writer.Write(Warlock.curseKillTarget.PlayerId);
+                            writer.Write(Warlock.curseVictimTarget.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.warlockCurseKill(Warlock.curseVictimTarget.PlayerId);
 
@@ -894,10 +894,10 @@ namespace TheOtherRoles
                     string name = " (" + Medium.target.player.Data.PlayerName + ")";
 
 
-                    if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRole(Medium.target.player) + name;
+                    if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRolesString(Medium.target.player, false) + name;
                     else if (randomNumber == 1) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color" + name;
                     else if (randomNumber == 2) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started" + name;
-                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRole(Medium.target.killerIfExisting) + name; //exlude mini 
+                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false) + name; //exlude mini 
 
                     DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
 

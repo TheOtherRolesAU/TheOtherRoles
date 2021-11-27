@@ -372,7 +372,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 39;
+            int roleSettingsLines = defaultSettingsLines + 40;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
             int detailedSettingsP3 = detailedSettingsP2 + 42;
@@ -393,10 +393,10 @@ namespace TheOtherRoles {
                 gap = 6;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 19;
+                gap = 20;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 25;
+                gap = 26;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {

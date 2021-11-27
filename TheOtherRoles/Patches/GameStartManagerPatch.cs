@@ -159,6 +159,17 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
+
+                if (CustomOptionHolder.dynamicMap.getBool()) {
+                    // 0 = Skeld
+                    // 1 = Mira HQ
+                    // 2 = Polus
+                    // 3 = Dleks - deactivated
+                    // 4 = Airship
+                    List<byte> possibleMaps = new List<byte>(){0, 1, 2, 4};
+                    PlayerControl.GameOptions.MapId = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
+                }
+
                 return continueStart;
             }
         }
