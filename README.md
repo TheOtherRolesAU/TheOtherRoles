@@ -87,6 +87,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Hotfix 3.2.2**
+- We changed the win conditions of the [Lawyer](#lawyer), to make it more viable
 - Bug fix: The Medium now shows the roles of players in the rigth format
 
 **Version 3.2.1**
@@ -1291,13 +1292,13 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 ### **Team: Neutral**
 The Lawyer is a neutral role that has a client.
 The client might be an Impostor, Jackal or Sidekick which is no Lover.
-The Lawyer needs to keep his client alive in order to win as a Lawyer.
+The Lawyer needs his client to win in order to win the game.
 If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
 The main goal of the Lawyer is to win as Lawyer, he is not allowed to betray his client.
 
 The Lawyer can win in multiple ways:
-- Lawyer dead and client alive: The Lawyer wins together with the winning team because he kept his client alive
-- Lawyer alive and client alive: The Lawyer wins with the winning team because he kept his client alive. The client **doesn't** win (even if his Impostor/Team Jackal mate wins). Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
+- Lawyer dead, client alive and client team won: The Lawyer wins together with the team of his client
+- Lawyer and client alive and client team won: The Lawyer wins with the team of his client. The client **doesn't** win (even if his Impostor/Team Jackal mate wins), the Lawyer steals his win. Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
 
 **NOTE:**
 - If the client disconnects, the Lawyer will also turn into the Pursuer
