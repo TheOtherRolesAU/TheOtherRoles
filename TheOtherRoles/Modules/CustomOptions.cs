@@ -370,7 +370,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 39;
+            int roleSettingsLines = defaultSettingsLines + 40;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
             int detailedSettingsP3 = detailedSettingsP2 + 42;
