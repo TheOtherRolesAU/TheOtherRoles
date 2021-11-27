@@ -1142,6 +1142,7 @@ namespace TheOtherRoles
         public static float vision = 1f;
         public static bool winsAfterMeetings = false;
         public static int neededMeetings = 4;
+        public static bool lawyerKnowsRole = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1159,6 +1160,7 @@ namespace TheOtherRoles
             winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
             neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
+            lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
         }
     }
 
