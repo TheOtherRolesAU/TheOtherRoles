@@ -87,9 +87,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Hotfix 3.2.2**
+- Bug fix: The Medium now shows the roles of players in the rigth format
 
 **Version 3.2.1**
 - Hotfix for 3.2.0
+- Bug fix: The Warlock is again able to kill with the curse abilty
 
 **Version 3.2.0**
 - **New Role:** [Witch](#witch) created by [Alex2911](https://github.com/Alex2911)
