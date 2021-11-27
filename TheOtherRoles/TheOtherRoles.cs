@@ -1203,6 +1203,7 @@ namespace TheOtherRoles
         public static float currentCooldownAddition = 0f;
         public static bool canSpellAnyone = false;
         public static bool triggerBothCooldowns = true;
+        public static bool witchVoteSavesTargets = true;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -1229,6 +1230,7 @@ namespace TheOtherRoles
             canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
             spellCastingDuration = CustomOptionHolder.witchSpellCastingDuration.getFloat();
             triggerBothCooldowns = CustomOptionHolder.witchTriggerBothCooldowns.getBool();
+            witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
 }

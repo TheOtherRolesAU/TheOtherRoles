@@ -86,7 +86,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
-**Hotfix 3.2.2**
+**Version 3.2.2**
+- Add Witch option: Voting The Witch Saves All The Targets
 - We changed the win conditions of the [Lawyer](#lawyer), to make it more viable
 - Bug fix: The Medium now shows the roles of players in the rigth format
 
@@ -760,9 +761,14 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 The Witch is an Impostor who has the ability to cast a spell on other players.\
 During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
 There are multiple options listed down below with which you can configure to fit your taste.\
+Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated).\
+This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).\
+If the Witch dies before the meeting starts or if the Witch is being guessed during the meeting, the spellbound players will be highlighted but they'll survive in any case.\
+Depending on the options you can choose whether voting the Witch out will save all the spellbound players or not.\
+
 \
 **NOTE:**
-- Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated). This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).
+- The spellbound players will die before the voted player dies (which might trigger e.g. trigger an Impostor win condition, even if the Witch is the one being voted)
 
 \
 ### Game Options
@@ -774,6 +780,7 @@ There are multiple options listed down below with which you can configure to fit
 | Witch Can Spell Everyone | If set to false, the witch can't spell the Spy and other Impostors
 | Witch Spell Casting Duration | The time that you need to stay next to the target in order to cast a spell on it
 | Trigger Both Cooldowns | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary)
+| Voting The Witch Saves All The Targets | If set to true, all the cursed targets will survive at the end of the meeting
 -----------------------
 
 

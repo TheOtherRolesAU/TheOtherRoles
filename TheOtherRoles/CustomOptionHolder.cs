@@ -90,6 +90,7 @@ namespace TheOtherRoles {
         public static CustomOption witchCanSpellAnyone;
         public static CustomOption witchSpellCastingDuration;
         public static CustomOption witchTriggerBothCooldowns;
+        public static CustomOption witchVoteSavesTargets;
 
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
@@ -279,7 +280,7 @@ namespace TheOtherRoles {
             witchCanSpellAnyone = CustomOption.Create(373, "Witch Can Spell Anyone", false, witchSpawnRate);
             witchSpellCastingDuration = CustomOption.Create(374, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
-
+            witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
