@@ -71,6 +71,21 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+
+            // Witch execute casted spells
+            if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
+                foreach (PlayerControl target in Witch.futureSpelled) {
+                    if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedExilePlayer, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.uncheckedExilePlayer(target.PlayerId);
+                    }
+                }
+            }
+            Witch.futureSpelled = new List<PlayerControl>();
+
+
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {
@@ -197,6 +212,8 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
+                Lawyer.meetings++;
         }
     }
 
