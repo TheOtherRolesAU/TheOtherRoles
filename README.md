@@ -89,6 +89,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 3.2.2**
 - Add new option "Play On A Random Map" created by [Alex2911](https://github.com/Alex2911)
 - Add Witch option "Voting The Witch Saves All The Targets"
+- Add Lawyer option "Lawyer Knows Target Role"
 - We changed the win conditions of the [Lawyer](#lawyer), to make it more viable
 - Bug fix: The Medium now shows the roles of players in the right format
 - The name and the role of all winners is now being displayed on the end screen
@@ -762,7 +763,7 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ## Witch
 ### **Team: Impostors**
 The Witch is an Impostor who has the ability to cast a spell on other players.\
-During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
+During the next meeting, the spellbound player will be highlighted and they'll die right after the meeting.\
 There are multiple options listed down below with which you can configure to fit your taste.\
 Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated).\
 This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).\
@@ -1301,36 +1302,37 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 ## Lawyer
 ### **Team: Neutral**
 The Lawyer is a neutral role that has a client.
-The client might be an Impostor, Jackal or Sidekick which is no Lover.
-The Lawyer needs his client to win in order to win the game.
-If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
-The main goal of the Lawyer is to win as Lawyer, he is not allowed to betray his client.
+The client might be an Impostor or Jackal which is no Lover.
+The Lawyer needs their client to win in order to win the game.
+If their client dies or gets voted out, the Lawyer changes their role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
+The main goal of the Lawyer is to win as Lawyer, as it is not allowed to betray their client.
 
 The Lawyer can win in multiple ways:
-- Lawyer dead, client alive and client team won: The Lawyer wins together with the team of his client
-- Lawyer and client alive and client team won: The Lawyer wins with the team of his client. The client **doesn't** win (even if his Impostor/Team Jackal mate wins), the Lawyer steals his win. Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
+- Lawyer dead, client alive and client team won: The Lawyer wins together with the team of the client
+- Lawyer and client alive and client team won: The Lawyer wins with the team of the client. The client **doesn't** win (even if their Impostor/Team Jackal mate wins), the Lawyer steals their win. Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate them soon enough to not get their win stolen.
 
 **NOTE:**
 - If the client disconnects, the Lawyer will also turn into the Pursuer
-- If "Lawyer Target Knows" is set to true, the client will know that he someone is his Lawyer, but he won't know who.
+- If "Lawyer Target Knows" is set to true, the client will know that someone is their Lawyer, but won't know who.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Lawyer Target Knows | The target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
-| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
+| Lawyer Target Knows | The target knows that it is the target (marked with "§", if the Lawyer dies, the mark will disappear)
+| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can't start meetings himself)
 | Lawyer Needed Meetings To Win | -
 | Lawyer Vision | Pursuer has normal vision
-| Pursuer Blank Cooldwon | -
+| Lawyer Knows Target Role | -
+| Pursuer Blank Cooldown | -
 | Pursuer Number Of Blanks | -
 -----------------------
 
 ## Pursuer
 ### **Team: Neutral**
-The Pursuer is still a neutral role, but has a different goal to win the game: He has to be alive, when the game ends (no matter who caused the win).
-In order to achieve this goal, the Pursuer has the ability "Blank": He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
+The Pursuer is still a neutral role, but has a different goal to win the game: Them has to be alive, when the game ends (no matter who caused the win).
+In order to achieve this goal, the Pursuer has the ability "Blank": Them can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
 If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
-The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, his tasks won't be counted anymore.
+The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
