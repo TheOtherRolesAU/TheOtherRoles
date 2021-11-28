@@ -716,9 +716,15 @@ namespace TheOtherRoles
 
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
+            PlayerControl client = Lawyer.target;
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
-            return;
+
+            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
+                    Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
+                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (playerInfo != null) playerInfo.text = "";
+            }
         }
 
         public static void guesserShoot(byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
