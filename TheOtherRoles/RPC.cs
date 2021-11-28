@@ -445,12 +445,14 @@ namespace TheOtherRoles
 
         public static void doppelgangerCopy(byte targetId)
         {
+
             PlayerControl oldDoppelganger = Doppelganger.doppelganger;
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null || oldDoppelganger == null) return;
+
             Doppelganger.copyTarget = null;
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture)
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer)
             {
                 oldDoppelganger.Exiled();
                 return;
@@ -1048,6 +1050,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShifted:
                     RPCProcedure.setFutureShifted(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureDoppelgangerTarget:
+                    RPCProcedure.setFutureDoppelgangerTarget(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte(), reader.ReadByte());
