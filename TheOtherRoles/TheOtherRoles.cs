@@ -1229,6 +1229,7 @@ namespace TheOtherRoles
         public static float vision = 1f;
         public static bool winsAfterMeetings = false;
         public static int neededMeetings = 4;
+        public static bool lawyerKnowsRole = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1246,6 +1247,7 @@ namespace TheOtherRoles
             winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
             neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
+            lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
         }
     }
 
@@ -1290,6 +1292,7 @@ namespace TheOtherRoles
         public static float currentCooldownAddition = 0f;
         public static bool canSpellAnyone = false;
         public static bool triggerBothCooldowns = true;
+        public static bool witchVoteSavesTargets = true;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -1316,6 +1319,7 @@ namespace TheOtherRoles
             canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
             spellCastingDuration = CustomOptionHolder.witchSpellCastingDuration.getFloat();
             triggerBothCooldowns = CustomOptionHolder.witchTriggerBothCooldowns.getBool();
+            witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
 }
