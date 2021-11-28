@@ -979,6 +979,23 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.SetMovement))]
+    class KillAnimationSetMovementPatch {
+        private static int? colorId = null;
+        public static void Prefix(PlayerControl source, bool canMove) {
+            Color color = source.myRend.material.GetColor("_BodyColor");
+            if (color != null && Morphling.morphling != null && source.Data.PlayerId == Morphling.morphling.PlayerId) {
+                var index = Palette.PlayerColors.IndexOf(color);
+                if (index != -1) colorId = index;
+            }
+        }
+
+        public static void Postfix(PlayerControl source, bool canMove) {
+            if (colorId.HasValue) source.RawSetColor(colorId.Value);
+            colorId = null;
+        }
+    }
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class ExilePlayerPatch
     {

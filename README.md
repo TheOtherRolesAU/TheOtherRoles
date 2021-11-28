@@ -89,6 +89,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.2.3**
 - Fixed a bug where the role of a dead client was visible to the Pursuer
+- Fixed a bug where the Morphling changed his color when killing players
 
 **Version 3.2.2**
 - Add new option "Play On A Random Map" created by [Alex2911](https://github.com/Alex2911)
