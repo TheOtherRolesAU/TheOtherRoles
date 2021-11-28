@@ -260,8 +260,8 @@ namespace TheOtherRoles.Patches {
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 buttons.Add(button);
-                int row = i/4, col = i%4;
-                buttonParent.localPosition = new Vector3(-2.725f + 1.83f * col, 1.5f - 0.45f * row, -5);
+                int row = i/5, col = i%5;
+                buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
                 buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
                 label.alignment = TMPro.TextAlignmentOptions.Center;
@@ -275,10 +275,10 @@ namespace TheOtherRoles.Patches {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
                     } else {
-                        PlayerControl target = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 ) return;
+                        PlayerControl focusedTarget = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots <= 0 ) return;
 
-                        if (!Guesser.killsThroughShield && target == Medic.shielded) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
+                        if (!Guesser.killsThroughShield && focusedTarget == Medic.shielded) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
                             __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                             UnityEngine.Object.Destroy(container.gameObject);
 
@@ -288,24 +288,26 @@ namespace TheOtherRoles.Patches {
                             return;
                         }
 
-                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(target).FirstOrDefault();
+                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
-                        target = (mainRoleInfo == roleInfo) ? target : PlayerControl.LocalPlayer;
+                        PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
 
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
-                        if (Guesser.hasMultipleShotsPerMeeting && Guesser.remainingShots > 1 && target != PlayerControl.LocalPlayer)
-                            __instance.playerStates.ToList().ForEach(x => { if (x.TargetPlayerId == target.PlayerId && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
+                        if (Guesser.hasMultipleShotsPerMeeting && Guesser.remainingShots > 1 && dyingTarget != PlayerControl.LocalPlayer)
+                            __instance.playerStates.ToList().ForEach(x => { if (x.TargetPlayerId == dyingTarget.PlayerId && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                         else
                             __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
                         // Shoot player and send chat info if activated
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
-                        writer.Write(target.PlayerId);
+                        writer.Write(dyingTarget.PlayerId);
+                        writer.Write(focusedTarget.PlayerId);
+                        writer.Write((byte)roleInfo.roleId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.guesserShoot(target.PlayerId);
+                        RPCProcedure.guesserShoot(dyingTarget.PlayerId, focusedTarget.PlayerId, (byte)roleInfo.roleId);
                     }
                 }));
 
@@ -348,6 +350,19 @@ namespace TheOtherRoles.Patches {
                     
                     selections[i] = false;
                     renderers[i] = renderer;
+                }
+            }
+
+            // Add overlay for spelled players
+            if (Witch.witch != null && Witch.futureSpelled != null) {
+                foreach (PlayerVoteArea pva in __instance.playerStates) {
+                    if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId)) {
+                        SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                        rend.transform.SetParent(pva.transform);
+                        rend.gameObject.layer = pva.Megaphone.gameObject.layer;
+                        rend.transform.localPosition = new Vector3(-1.21f, -0.12f, -1f);
+                        rend.sprite = Witch.getSpelledOverlaySprite();
+                    }
                 }
             }
 

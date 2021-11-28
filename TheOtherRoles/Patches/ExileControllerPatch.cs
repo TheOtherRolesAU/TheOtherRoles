@@ -13,7 +13,7 @@ using UnityEngine;
 using System.Reflection;
 
 namespace TheOtherRoles.Patches {
-    [HarmonyPatch(typeof(ExileController), "Begin")]
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     class ExileControllerBeginPatch {
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
             // Medic shield
@@ -50,6 +50,21 @@ namespace TheOtherRoles.Patches {
             if (Trickster.trickster != null && JackInTheBox.hasJackInTheBoxLimitReached()) {
                 JackInTheBox.convertToVents();
             }
+
+            // Witch execute casted spells
+            if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
+                if (!Witch.witchVoteSavesTargets || exiled == null || exiled.PlayerId != Witch.witch.PlayerId) {
+                    foreach (PlayerControl target in Witch.futureSpelled) {
+                        if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill) {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedExilePlayer, Hazel.SendOption.Reliable, -1);
+                            writer.Write(target.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.uncheckedExilePlayer(target.PlayerId);
+                        }
+                    }
+                }
+            }
+            Witch.futureSpelled = new List<PlayerControl>();
 
             // SecurityGuard vents and cameras
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
@@ -176,6 +191,8 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
+                Lawyer.meetings++;
         }
     }
 
