@@ -1,5 +1,10 @@
 .vs
 .vscode/tasks.json
+<<<<<<< HEAD
 bin
 obj
 /TheOtherRoles/Properties/launchSettings.json
+=======
+TODO
+.DS_Store
+>>>>>>> 1a56194c635ece812d09c4a110e7df4f26f94201

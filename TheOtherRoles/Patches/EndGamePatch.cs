@@ -180,7 +180,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            // Lawyer solo win
+            // Lawyer solo win 
             else if (lawyerSoloWin) {
                 TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                 WinningPlayerData wpd = new WinningPlayerData(Lawyer.lawyer.Data);
@@ -190,20 +190,21 @@ namespace TheOtherRoles.Patches {
 
             // Possible Additional winner: Lawyer
             if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
-                if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
-                    TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
-                WinningPlayerData client = null;
+                WinningPlayerData winningClient = null;
                 foreach (WinningPlayerData winner in TempData.winners) {
                     if (winner.PlayerName == Lawyer.target.Data.PlayerName)
-                        client = winner;
+                        winningClient = winner;
                 }
-
-                if (!Lawyer.lawyer.Data.IsDead && client != null) { // Lawyer wins with the winning team but steals the win from his client
-                    TempData.winners.Remove(client);
-                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
-                } else {
-                    AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
-                }
+                if (winningClient != null) { // The Lawyer wins if the client is winning (and alive, but if he wasn't the Lawyer shouldn't exist anymore)
+                    if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
+                        TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
+                    if (!Lawyer.lawyer.Data.IsDead) { // The Lawyer steals the clients win
+                        TempData.winners.Remove(winningClient);
+                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
+                    } else { // The Lawyer wins together with the client
+                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+                    }
+                } 
             }
 
             // Possible Additional winner: Pursuer
@@ -221,6 +222,52 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public class EndGameManagerSetUpPatch {
         public static void Postfix(EndGameManager __instance) {
+            // Delete and readd PoolablePlayers always showing the name and role of the player
+            foreach (PoolablePlayer pb in __instance.transform.GetComponentsInChildren<PoolablePlayer>()) {
+                UnityEngine.Object.Destroy(pb.gameObject);
+            }
+            int num = Mathf.CeilToInt(7.5f);
+            List<WinningPlayerData> list = TempData.winners.ToArray().ToList().OrderBy(delegate(WinningPlayerData b)
+            {
+                if (!b.IsYou)
+                {
+                    return 0;
+                }
+                return -1;
+            }).ToList<WinningPlayerData>();
+            for (int i = 0; i < list.Count; i++) {
+                WinningPlayerData winningPlayerData2 = list[i];
+                int num2 = (i % 2 == 0) ? -1 : 1;
+                int num3 = (i + 1) / 2;
+                float num4 = (float)num3 / (float)num;
+                float num5 = Mathf.Lerp(1f, 0.75f, num4);
+                float num6 = (float)((i == 0) ? -8 : -1);
+                PoolablePlayer poolablePlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, __instance.transform);
+                poolablePlayer.transform.localPosition = new Vector3(1f * (float)num2 * (float)num3 * num5, FloatRange.SpreadToEdges(-1.125f, 0f, num3, num), num6 + (float)num3 * 0.01f) * 0.9f;
+                float num7 = Mathf.Lerp(1f, 0.65f, num4) * 0.9f;
+                Vector3 vector = new Vector3(num7, num7, 1f);
+                poolablePlayer.transform.localScale = vector;
+                poolablePlayer.UpdateFromPlayerOutfit(winningPlayerData2, winningPlayerData2.IsDead);
+                if (winningPlayerData2.IsDead) {
+                    poolablePlayer.Body.sprite = __instance.GhostSprite;
+                    poolablePlayer.SetDeadFlipX(i % 2 == 0);
+                } else {
+                    poolablePlayer.SetFlipX(i % 2 == 0);
+                }
+
+                poolablePlayer.NameText.color = Color.white;
+                poolablePlayer.NameText.transform.localScale = new Vector3(1f / vector.x, 1f / vector.y, 1f / vector.z);
+                poolablePlayer.NameText.transform.localPosition = new Vector3(poolablePlayer.NameText.transform.localPosition.x, poolablePlayer.NameText.transform.localPosition.y, -15f);
+                poolablePlayer.NameText.text = winningPlayerData2.PlayerName;
+
+                foreach(var data in AdditionalTempData.playerRoles) {
+                    if (data.PlayerName != winningPlayerData2.PlayerName) continue;
+                    var roles = 
+                    poolablePlayer.NameText.text += $"\n{string.Join("\n", data.Roles.Select(x => Helpers.cs(x.color, x.name)))}";
+                }
+            }
+
+            // Additional code
             GameObject bonusText = UnityEngine.Object.Instantiate(__instance.WinText.gameObject);
             bonusText.transform.position = new Vector3(__instance.WinText.transform.position.x, __instance.WinText.transform.position.y - 0.5f, __instance.WinText.transform.position.z);
             bonusText.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
@@ -264,11 +311,11 @@ namespace TheOtherRoles.Patches {
 
             foreach (WinCondition cond in AdditionalTempData.additionalWinConditions) {
                 if (cond == WinCondition.AdditionalLawyerStolenWin) {
-                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer stole the win of the client")}";
+                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "The Lawyer stole the win from the client")}";
                 } else if (cond == WinCondition.AdditionalLawyerBonusWin) {
-                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "Lawyer kept the client alive")}";
+                    textRenderer.text += $"\n{Helpers.cs(Lawyer.color, "The Lawyer wins with the client")}";
                 } else if (cond == WinCondition.AdditionalAlivePursuerWin) {
-                    textRenderer.text += $"\n{Helpers.cs(Pursuer.color, "Pursuer survived")}";
+                    textRenderer.text += $"\n{Helpers.cs(Pursuer.color, "The Pursuer survived")}";
                 }
             }
 
