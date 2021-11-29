@@ -54,9 +54,26 @@ namespace TheOtherRoles.Patches {
             // Witch execute casted spells
             if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
                 bool exiledIsWitch = exiled != null && exiled.PlayerId == Witch.witch.PlayerId;
-                bool witchDiesWithExiledLover = exiled != null && Lovers.existing() && Lovers.bothDie && (Lovers.lover1.PlayerId == Witch.witch.PlayerId || Lovers.lover2.PlayerId == Witch.witch.PlayerId) && (exiled.PlayerId == Lovers.lover1.PlayerId|| exiled.PlayerId == Lovers.lover2.PlayerId);
-                
-                if (!Witch.witchVoteSavesTargets || !exiledIsWitch || !witchDiesWithExiledLover) {
+                bool witchDiesWithExiledLover = exiled != null && Lovers.existing() && Lovers.bothDie && (Lovers.lover1.PlayerId == Witch.witch.PlayerId || Lovers.lover2.PlayerId == Witch.witch.PlayerId) && (exiled.PlayerId == Lovers.lover1.PlayerId || exiled.PlayerId == Lovers.lover2.PlayerId);
+
+
+                if (witchDiesWithExiledLover && Witch.witchVoteSavesTargets) Witch.futureSpelled = new List<PlayerControl>();
+                if (exiledIsWitch && Witch.witchVoteSavesTargets) Witch.futureSpelled = new List<PlayerControl>();
+                foreach (PlayerControl target in Witch.futureSpelled)
+                {
+                    if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill)
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedExilePlayer, Hazel.SendOption.Reliable, -1);
+                        writer.Write(target.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.uncheckedExilePlayer(target.PlayerId);
+                    }
+                }
+
+                /*
+                if (!Witch.witchVoteSavesTargets) {
+                    if (witchDiesWithExiledLover) Witch.futureSpelled = new List<PlayerControl>();
+                    if (exiledIsWitch) Witch.futureSpelled = new List<PlayerControl>();
                     foreach (PlayerControl target in Witch.futureSpelled) {
                         if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedExilePlayer, Hazel.SendOption.Reliable, -1);
@@ -66,6 +83,7 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
+                */
             }
             Witch.futureSpelled = new List<PlayerControl>();
 
