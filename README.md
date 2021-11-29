@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.11.9.5s| v3.2.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.3/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.2/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.1/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.0/TheOtherRoles.zip)
@@ -85,6 +86,14 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.2.3**
+- Fixed a bug where the role of a dead client was visible to the Pursuer
+- Fixed a bug where the Morphling changed his color when killing players
+- Fixed a bug where voting the Lover partner of a Lover Witch did not safe the spellbound players
+- Fixed a bug where the Vampire would teleport to the bitten player in some cases
+- When the Lawyer dies, the client doesn't have the client mark (§) anymore, making the client aware of the fact that the Lawyer can't steal the win anymore (only relevant if the "Client Knows" option is on)
+- Cleaned up the Guesser UI and the meeting UI
 
 **Version 3.2.2**
 - Add new option "Play On A Random Map" created by [Alex2911](https://github.com/Alex2911)
