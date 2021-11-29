@@ -835,7 +835,6 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl curseVictim;
         public static PlayerControl curseVictimTarget;
-        public static PlayerControl curseKillTarget;
 
         public static float cooldown = 30f;
         public static float rootTime = 5f;
@@ -860,7 +859,6 @@ namespace TheOtherRoles
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
-            curseKillTarget = null;
             cooldown = CustomOptionHolder.warlockCooldown.getFloat();
             rootTime = CustomOptionHolder.warlockRootTime.getFloat();
         }
@@ -872,7 +870,6 @@ namespace TheOtherRoles
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
-            curseKillTarget = null;
         }
     }
 
