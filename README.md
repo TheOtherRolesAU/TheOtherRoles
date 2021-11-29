@@ -91,6 +91,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the role of a dead client was visible to the Pursuer
 - Fixed a bug where the Morphling changed his color when killing players
 - Fixed a bug where voting the Lover partner of a Lover Witch did not safe the spellbound players
+- When the Lawyer dies, the client doesn't have the client mark (§) making the client aware of the fact that the Lawyer can't steal the win anymore (only relevant if the "Client Knows" option is on)
 
 **Version 3.2.2**
 - Add new option "Play On A Random Map" created by [Alex2911](https://github.com/Alex2911)
