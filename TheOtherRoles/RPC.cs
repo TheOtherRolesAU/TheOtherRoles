@@ -97,7 +97,6 @@ namespace TheOtherRoles
         SetFutureSpelled,
         PlaceJackInTheBox,
         LightsOut,
-        WarlockCurseKill,
         PlaceCamera,
         SealVent,
         ArsonistWin,
@@ -302,10 +301,13 @@ namespace TheOtherRoles
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
-        public static void uncheckedMurderPlayer(byte sourceId, byte targetId) {
+        public static void uncheckedMurderPlayer(byte sourceId, byte targetId, byte showAnimation) {
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
-            if (source != null && target != null) source.MurderPlayer(target);
+            if (source != null && target != null) {
+                if (showAnimation == 0) KillAnimationCoPerformKillPatch.hideNextAnimation = true;
+                source.MurderPlayer(target);
+            }
         }
 
         public static void uncheckedCmdReportDeadBody(byte sourceId, byte targetId) {
@@ -597,8 +599,8 @@ namespace TheOtherRoles
                 player.setLook("", 6, "", "", "", "");
         }
 
-        public static void vampireSetBitten(byte targetId, byte reset) {
-            if (reset != 0) {
+        public static void vampireSetBitten(byte targetId, byte performReset) {
+            if (performReset != 0) {
                 Vampire.bitten = null;
                 return;
             }
@@ -773,17 +775,9 @@ namespace TheOtherRoles
             }
         }
 
-        public static void warlockCurseKill(byte targetId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                if (player.PlayerId == targetId) {
-                    Warlock.curseKillTarget = player;
-                    Warlock.warlock.MurderPlayer(player);
-                    return;
-                }
-            }
-        }
-
         public static void placeCamera(byte[] buff, byte securityGuardId) {
+
+
             var referenceCamera = UnityEngine.Object.FindObjectOfType<SurvCamera>(); 
             if (referenceCamera == null) return; // Mira HQ
 
@@ -863,9 +857,15 @@ namespace TheOtherRoles
 
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
+            PlayerControl client = Lawyer.target;
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
-            return;
+
+            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
+                    Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
+                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (playerInfo != null) playerInfo.text = "";
+            }
         }
 
         public static void guesserShoot(byte dyingTargetId, byte guessedTargetId, byte guessedRoleId, byte guesserId) {
@@ -972,7 +972,8 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.UncheckedMurderPlayer:
                     byte source = reader.ReadByte();
                     byte target = reader.ReadByte();
-                    RPCProcedure.uncheckedMurderPlayer(source, target);
+                    byte showAnimation = reader.ReadByte();
+                    RPCProcedure.uncheckedMurderPlayer(source, target, showAnimation);
                     break;
                 case (byte)CustomRPC.UncheckedExilePlayer:
                     byte exileTarget = reader.ReadByte();
@@ -1062,9 +1063,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.LightsOut:
                     RPCProcedure.lightsOut();
-                    break;
-                case (byte)CustomRPC.WarlockCurseKill:
-                    RPCProcedure.warlockCurseKill(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceCamera:
                     RPCProcedure.placeCamera(reader.ReadBytesAndSize(), reader.ReadByte());
