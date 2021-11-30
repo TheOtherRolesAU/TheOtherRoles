@@ -427,7 +427,7 @@ namespace TheOtherRoles.Patches {
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
                     } else {
                         PlayerControl focusedTarget = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || target == null || Guesser.remainingShots <= 0 && Guesser.guesser == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots <= 0) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots <= 0 && Guesser.guesser == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots <= 0) return;
 
                         if (!Guesser.killsThroughShield && (focusedTarget == Medic.shielded || focusedTarget == Doppelganger.medicShielded)) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
                             __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
