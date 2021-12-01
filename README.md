@@ -89,13 +89,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.2.4**
-- I guess I didn't fix the Vampire bug, so here we go again
+- Fixed a bug where the Vampire teleported when the bitten player died
 
 **Version 3.2.3**
 - Fixed a bug where the role of a dead client was visible to the Pursuer
 - Fixed a bug where the Morphling changed their color when killing players
 - Fixed a bug where voting the Lover partner of a Lover Witch did not safe the spellbound players
-- Fixed a bug where the Vampire would teleport to the bitten player in some cases
 - When the Lawyer dies, the client doesn't have the client mark (§) anymore, making the client aware of the fact that the Lawyer can't steal the win anymore (only relevant if the "Client Knows" option is on)
 
 **Version 3.2.2**
