@@ -90,6 +90,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.2.4**
 - Fixed a bug where the Vampire teleported when the bitten player died
+- The settings UI has been improved by [Amsyar Rasyiq](https://github.com/amsyarasyiq)
 
 **Version 3.2.3**
 - Fixed a bug where the role of a dead client was visible to the Pursuer
