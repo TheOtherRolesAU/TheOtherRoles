@@ -1043,6 +1043,7 @@ namespace TheOtherRoles
 
         public static bool highlightAllVents = false;
         public static float reportDelay = 0f;
+        public static bool showKillFlash = true;
 
         public static bool reported = false;
 
@@ -1053,6 +1054,7 @@ namespace TheOtherRoles
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
             canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getSelection();
+            showKillFlash = CustomOptionHolder.baitShowKillFlash.getBool();
         }
     }
 
