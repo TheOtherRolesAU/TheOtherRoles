@@ -90,6 +90,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.2.4**
 - Fixed a bug where the Vampire teleported when the bitten player died
+- The settings UI has been improved by [Amsyar Rasyiq](https://github.com/amsyarasyiq)
+- New option to the Bait "Warn The Killer With A Flash", created by [gendelo3](https://github.com/gendelo3)
 
 **Version 3.2.3**
 - Fixed a bug where the role of a dead client was visible to the Pursuer
@@ -1266,6 +1268,7 @@ an outline or all vents do).
 | Bait Spawn Chance | -
 | Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
 | Bait Report Delay | -
+| Warn The Killer With A Flash | -
 -----------------------
 
 ## Medium
