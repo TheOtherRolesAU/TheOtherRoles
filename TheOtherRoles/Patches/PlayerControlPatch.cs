@@ -1046,19 +1046,17 @@ namespace TheOtherRoles.Patches {
             }
 
             // Show flash on bait kill to the killer if enabled
-            if ((Bait.bait != null || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.bait) 
-                && PlayerControl.LocalPlayer == deadPlayer.killerIfExisting && (target == Bait.bait || target == Doppelganger.doppelganger)
-                && CustomOptionHolder.baitShowKillFlash.getBool() && __instance == PlayerControl.LocalPlayer) {
+            if ((Bait.bait != null && target == Bait.bait || Doppelganger.doppelganger != null && Doppelganger.copiedRole == RoleInfo.bait && target == Doppelganger.doppelganger) 
+                && PlayerControl.LocalPlayer == deadPlayer.killerIfExisting
+                && Bait.showKillFlash && __instance == PlayerControl.LocalPlayer) {
                 HudManager.Instance.FullScreen.enabled = true;
                 HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     var renderer = HudManager.Instance.FullScreen;
-                    if (p < 0.5)
-                    {
+                    if (p < 0.5) {
                         if (renderer != null)
                             renderer.color = new Color(204f / 255f, 102f / 255f, 0f / 255f, Mathf.Clamp01(p * 2 * 0.75f));
                     }
-                    else
-                    {
+                    else {
                         if (renderer != null)
                             renderer.color = new Color(204f / 255f, 102f / 255f, 0f / 255f, Mathf.Clamp01((1 - p) * 2 * 0.75f));
                     }

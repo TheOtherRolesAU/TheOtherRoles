@@ -9,12 +9,10 @@ using System.Reflection;
 using System.Text;
 using static TheOtherRoles.TheOtherRoles;
 
-namespace TheOtherRoles
-{
-    public class CustomOptionHolder
-    {
-        public static string[] rates = new string[] { "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%" };
-        public static string[] presets = new string[] { "Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5" };
+namespace TheOtherRoles {
+    public class CustomOptionHolder {
+        public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
         public static CustomOption activateRoles;
@@ -222,20 +220,17 @@ namespace TheOtherRoles
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
 
-        public static string cs(Color c, string s)
-        {
+        public static string cs(Color c, string s) {
             return string.Format("<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>", ToByte(c.r), ToByte(c.g), ToByte(c.b), ToByte(c.a), s);
         }
-
-        private static byte ToByte(float f)
-        {
+ 
+        private static byte ToByte(float f) {
             f = Mathf.Clamp01(f);
             return (byte)(f * 255);
         }
 
-        public static void Load()
-        {
-
+        public static void Load() {
+            
             // Role Options
             presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
             activateRoles = CustomOption.Create(7, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
@@ -281,7 +276,7 @@ namespace TheOtherRoles
             warlockRootTime = CustomOption.Create(272, "Warlock Root Time", 5f, 0f, 15f, 1f, warlockSpawnRate);
 
             bountyHunterSpawnRate = CustomOption.Create(320, cs(BountyHunter.color, "Bounty Hunter"), rates, null, true);
-            bountyHunterBountyDuration = CustomOption.Create(321, "Duration After Which Bounty Changes", 60f, 10f, 180f, 10f, bountyHunterSpawnRate);
+            bountyHunterBountyDuration = CustomOption.Create(321, "Duration After Which Bounty Changes",  60f, 10f, 180f, 10f, bountyHunterSpawnRate);
             bountyHunterReducedCooldown = CustomOption.Create(322, "Cooldown After Killing Bounty", 2.5f, 0f, 30f, 2.5f, bountyHunterSpawnRate);
             bountyHunterPunishmentTime = CustomOption.Create(323, "Additional Cooldown After Killing Others", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
@@ -308,7 +303,7 @@ namespace TheOtherRoles
             guesserNumberOfShots = CustomOption.Create(312, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
             guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
             guesserShowInfoInGhostChat = CustomOption.Create(314, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
-            guesserKillsThroughShield = CustomOption.Create(315, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
+            guesserKillsThroughShield  = CustomOption.Create(315, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
 
             guesserCantGuessSpy = CustomOption.Create(316, "Guesser Can't Guess Spy", true, guesserSpawnRate);
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
@@ -424,9 +419,8 @@ namespace TheOtherRoles
             baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
             baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
-            baitCanBeCleaned = CustomOption.Create(333, "Bait Can Be Cleaned", new string[] { "Off", "On (No Report)", "On (With Report)" }, baitSpawnRate);
-            baitShowKillFlash = CustomOption.Create(335, "Show Flash to Baits Killer", true, baitSpawnRate);
-
+            baitShowKillFlash = CustomOption.Create(333, "Warn The Killer With A Flash", true, baitSpawnRate);
+            baitCanBeCleaned = CustomOption.Create(335, "Bait Can Be Cleaned", new string[] { "Off", "On (No Report)", "On (With Report)" }, baitSpawnRate);
             doppelgangerSpawnRate = CustomOption.Create(340, cs(Doppelganger.color, "Doppelganger"), rates, null, true);
             doppelgangerCanBeGuesser = CustomOption.Create(341, "Doppelganger can be guesser", true, doppelgangerSpawnRate);
 
