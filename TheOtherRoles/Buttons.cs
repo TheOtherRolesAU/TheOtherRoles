@@ -418,7 +418,6 @@ namespace TheOtherRoles
                     writer.WriteBytesAndSize(buff);
                     writer.EndMessage();
                     RPCProcedure.placeGift(buff);
-                    Santa.hasGift = false;
                 },
                 () => { return Santa.santa != null && Santa.santa == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Santa.hasGift; },
                 () => { return PlayerControl.LocalPlayer.CanMove && Santa.hasGift; },

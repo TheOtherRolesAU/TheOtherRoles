@@ -645,6 +645,7 @@ namespace TheOtherRoles
             position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
             new Gift(position);
             santaCollectGiftButton.Timer = 0f;
+            Santa.hasGift = false;
         }
 
         public static void collectGift(byte giftId, byte playerId)
@@ -655,6 +656,7 @@ namespace TheOtherRoles
             {
                 Santa.giftedPlayer = player;
                 Santa.receivedGift = Santa.selectRandomGift();
+                                    Santa.hasGift = false;
             }
         }
 
