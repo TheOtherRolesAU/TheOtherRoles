@@ -84,6 +84,14 @@ namespace TheOtherRoles {
         public static CustomOption bountyHunterShowArrow;
         public static CustomOption bountyHunterArrowUpdateIntervall;
 
+        public static CustomOption witchSpawnRate;
+        public static CustomOption witchCooldown;
+        public static CustomOption witchAdditionalCooldown;
+        public static CustomOption witchCanSpellAnyone;
+        public static CustomOption witchSpellCastingDuration;
+        public static CustomOption witchTriggerBothCooldowns;
+        public static CustomOption witchVoteSavesTargets;
+
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
 
@@ -175,6 +183,7 @@ namespace TheOtherRoles {
         public static CustomOption baitSpawnRate;
         public static CustomOption baitHighlightAllVents;
         public static CustomOption baitReportDelay;
+        public static CustomOption baitShowKillFlash;
 
         public static CustomOption vultureSpawnRate;
         public static CustomOption vultureCooldown;
@@ -186,14 +195,23 @@ namespace TheOtherRoles {
         public static CustomOption mediumCooldown;
         public static CustomOption mediumDuration;
         public static CustomOption mediumOneTimeUse;
-
         public static CustomOption santaSpawnRate;
+
+        public static CustomOption lawyerSpawnRate;
+        public static CustomOption lawyerTargetKnows;
+        public static CustomOption lawyerWinsAfterMeetings;
+        public static CustomOption lawyerNeededMeetings;
+        public static CustomOption lawyerVision;
+        public static CustomOption lawyerKnowsRole;
+        public static CustomOption pursuerCooldown;
+        public static CustomOption pursuerBlanksNumber;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+        public static CustomOption dynamicMap;
 
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
@@ -260,6 +278,13 @@ namespace TheOtherRoles {
             bountyHunterShowArrow = CustomOption.Create(324, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
             bountyHunterArrowUpdateIntervall = CustomOption.Create(325, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
+            witchSpawnRate = CustomOption.Create(370, cs(Witch.color, "Witch"), rates, null, true);
+            witchCooldown = CustomOption.Create(371, "Witch Spell Casting Cooldown", 30f, 10f, 120f, 5f, witchSpawnRate);
+            witchAdditionalCooldown = CustomOption.Create(372, "Witch Additional Cooldown", 10f, 0f, 60f, 5f, witchSpawnRate);
+            witchCanSpellAnyone = CustomOption.Create(373, "Witch Can Spell Anyone", false, witchSpawnRate);
+            witchSpellCastingDuration = CustomOption.Create(374, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
+            witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
+            witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
@@ -300,6 +325,15 @@ namespace TheOtherRoles {
             vultureNumberToWin = CustomOption.Create(342, "Number Of Corpses Needed To Be Eaten", 4f, 0f, 10f, 1f, vultureSpawnRate);
             vultureCanUseVents = CustomOption.Create(343, "Vulture Can Use Vents", true, vultureSpawnRate);
             vultureShowArrows = CustomOption.Create(344, "Show Arrows Pointing Towards The Corpes", true, vultureSpawnRate);
+
+            lawyerSpawnRate = CustomOption.Create(350, cs(Lawyer.color, "Lawyer"), rates, null, true);
+            lawyerTargetKnows = CustomOption.Create(351, "Lawyer Target Knows", true, lawyerSpawnRate);
+            lawyerWinsAfterMeetings = CustomOption.Create(352, "Lawyer Wins After Meetings", false, lawyerSpawnRate);
+            lawyerNeededMeetings = CustomOption.Create(353, "Lawyer Needed Meetings To Win", 5f, 1f, 15f, 1f, lawyerWinsAfterMeetings);
+            lawyerVision = CustomOption.Create(354, "Lawyer Vision", 1f, 0.25f, 3f, 0.25f, lawyerSpawnRate);
+            lawyerKnowsRole = CustomOption.Create(355, "Lawyer Knows Target Role", false, lawyerSpawnRate);
+            pursuerCooldown = CustomOption.Create(356, "Pursuer Blank Cooldown", 30f, 5f, 60f, 2.5f, lawyerSpawnRate);
+            pursuerBlanksNumber = CustomOption.Create(357, "Pursuer Number Of Blanks", 5f, 0f, 20f, 1f, lawyerSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
@@ -380,6 +414,7 @@ namespace TheOtherRoles {
             baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
             baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
+            baitShowKillFlash = CustomOption.Create(333, "Warn The Killer With A Flash", true, baitSpawnRate);
 
             mediumSpawnRate = CustomOption.Create(360, cs(Medium.color, "Medium"), rates, null, true);
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
@@ -394,6 +429,7 @@ namespace TheOtherRoles {
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
             allowParallelMedBayScans = CustomOption.Create(7, "Allow Parallel MedBay Scans", false);
+            dynamicMap = CustomOption.Create(8, "Play On A Random Map", false, null, false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

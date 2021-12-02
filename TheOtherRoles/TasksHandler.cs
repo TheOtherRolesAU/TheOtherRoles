@@ -35,7 +35,11 @@ namespace TheOtherRoles {
                 __instance.CompletedTasks = 0;
                 for (int i = 0; i < __instance.AllPlayers.Count; i++) {
                     GameData.PlayerInfo playerInfo = __instance.AllPlayers[i];
-                    if (playerInfo.Object && playerInfo.Object.hasAliveKillingLover())
+                    if (playerInfo.Object
+                    && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover
+                    || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId // Tasks of the Lawyer do not count
+                    || (playerInfo.PlayerId == Pursuer.pursuer?.PlayerId && Pursuer.pursuer.Data.IsDead) // Tasks of the Pursuer only count, if he's alive
+                    )
                         continue;
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
                     __instance.TotalTasks += playerTotal;

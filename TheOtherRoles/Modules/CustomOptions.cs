@@ -76,12 +76,14 @@ namespace TheOtherRoles {
 
         public static void ShareOptionSelections() {
             if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null) return;
+            
+            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptions, Hazel.SendOption.Reliable);
+            messageWriter.WritePacked((uint)CustomOption.options.Count);
             foreach (CustomOption option in CustomOption.options) {
-                MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptionSelection, Hazel.SendOption.Reliable);
                 messageWriter.WritePacked((uint)option.id);
                 messageWriter.WritePacked((uint)Convert.ToUInt32(option.selection));
-                messageWriter.EndMessage();
             }
+            messageWriter.EndMessage();
         }
 
         // Getter
@@ -370,7 +372,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 38;
+            int roleSettingsLines = defaultSettingsLines + 40;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
             int detailedSettingsP3 = detailedSettingsP2 + 42;
@@ -391,10 +393,10 @@ namespace TheOtherRoles {
                 gap = 6;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 19;
+                gap = 20;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 24;
+                gap = 26;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
