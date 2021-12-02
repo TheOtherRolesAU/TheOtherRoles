@@ -1126,4 +1126,22 @@ namespace TheOtherRoles
             oneTimeUse = CustomOptionHolder.mediumOneTimeUse.getBool();
         }
     }
+
+    public static class Santa
+    {
+        public static PlayerControl santa;
+        
+        public static Color color = new Color32(140, 0, 0, byte.MaxValue);
+
+        public static bool hasGift;
+        public static PlayerControl giftedPlayer; 
+
+
+        public static void clearAndReload()
+        {
+            santa = null;
+            giftedPlayer = null;
+            hasGift = true;
+        }
+    }
 }

@@ -28,6 +28,7 @@ namespace TheOtherRoles
         Shifter,
         Swapper,
         Lover,
+        Santa,
         Seer,
         Morphling,
         Camouflager,
@@ -175,6 +176,9 @@ namespace TheOtherRoles
                     case RoleId.Lover:
                         if (flag == 0) Lovers.lover1 = player;
                         else Lovers.lover2 = player;
+                        break;
+                    case RoleId.Santa:
+                        Santa.santa = player;
                         break;
                     case RoleId.Seer:
                         Seer.seer = player;
@@ -388,6 +392,8 @@ namespace TheOtherRoles
 
                 if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
                 else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
+
+                if (Santa.santa != null && player == Santa.santa) Santa.santa = oldShifter;
             }
 
             // Shift role

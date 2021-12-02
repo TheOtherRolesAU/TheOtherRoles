@@ -187,6 +187,8 @@ namespace TheOtherRoles {
         public static CustomOption mediumDuration;
         public static CustomOption mediumOneTimeUse;
 
+        public static CustomOption santaSpawnRate;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -383,6 +385,8 @@ namespace TheOtherRoles {
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
+
+            santaSpawnRate = CustomOption.Create(380, cs(Santa.color, "Santa"), rates, null, true);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
