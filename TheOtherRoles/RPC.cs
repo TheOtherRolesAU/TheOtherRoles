@@ -656,7 +656,6 @@ namespace TheOtherRoles
             {
                 Santa.giftedPlayer = player;
                 Santa.receivedGift = Santa.selectRandomGift();
-                                    Santa.hasGift = false;
             }
         }
 
