@@ -99,6 +99,8 @@ namespace TheOtherRoles
         LightsOut,
         PlaceCamera,
         SealVent,
+        PlaceGift,
+        CollectGift,
         ArsonistWin,
         GuesserShoot,
         VultureWin,
@@ -115,6 +117,7 @@ namespace TheOtherRoles
         public static void resetVariables() {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
+            Gift.clearGifts();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -635,6 +638,27 @@ namespace TheOtherRoles
         }
 
 
+        public static void placeGift(byte[] buff)
+        {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
+            new Gift(position);
+            santaCollectGiftButton.Timer = 0f;
+        }
+
+        public static void collectGift(byte giftId, byte playerId)
+        {
+            Gift.collectGift(giftId);
+            PlayerControl player = Helpers.playerById(playerId);
+            if (player == PlayerControl.LocalPlayer)
+            {
+                Santa.giftedPlayer = player;
+                Santa.receivedGift = Santa.selectRandomGift();
+            }
+        }
+
+
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
             position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
@@ -910,6 +934,14 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SealVent:
                     RPCProcedure.sealVent(reader.ReadPackedInt32());
+                    break;
+                case (byte)CustomRPC.PlaceGift:
+                    RPCProcedure.placeGift(reader.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.CollectGift:
+                    byte giftId = reader.ReadByte();
+                    byte collectingPlayerId = reader.ReadByte();
+                    RPCProcedure.collectGift(giftId, collectingPlayerId);
                     break;
                 case (byte)CustomRPC.ArsonistWin:
                     RPCProcedure.arsonistWin();

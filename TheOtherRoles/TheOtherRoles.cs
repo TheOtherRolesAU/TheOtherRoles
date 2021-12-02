@@ -50,6 +50,7 @@ namespace TheOtherRoles
             Cleaner.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
+            Santa.clearAndReload();
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
@@ -1133,11 +1134,27 @@ namespace TheOtherRoles
         public static PlayerControl santa;
         
         public static Color color = new Color32(140, 0, 0, byte.MaxValue);
+        public static float cooldown = 10f;
 
         public static bool hasGift;
-        public static PlayerControl giftedPlayer; 
+        public static PlayerControl giftedPlayer;
 
+        public static Sprite placeGiftButtonSprite;
 
+        public static Sprite getPlaceBoxButtonSprite()
+        {
+            if (!placeGiftButtonSprite) placeGiftButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
+            return placeGiftButtonSprite;
+        }
+
+        public enum Gifts {engineerFix, hackerHack, securityGuardScrew, ventButton};
+        public static Gifts receivedGift;
+
+        public static Gifts selectRandomGift()
+        {
+            var rnd = new System.Random();
+            return (Gifts)rnd.Next(Enum.GetNames(typeof(Gifts)).Length);
+        }
         public static void clearAndReload()
         {
             santa = null;

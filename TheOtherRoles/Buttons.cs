@@ -33,6 +33,9 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
+        public static CustomButton santaPlaceGiftButton;
+        public static CustomButton santaCollectGiftButton;
+        public static CustomButton santaUseGiftButton;
         public static CustomButton arsonistButton;
         public static CustomButton vultureEatButton;
         public static CustomButton mediumButton;
@@ -65,6 +68,9 @@ namespace TheOtherRoles
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
+            santaPlaceGiftButton.MaxTimer = Santa.cooldown;
+            santaCollectGiftButton.MaxTimer = 0f;
+            santaUseGiftButton.MaxTimer = 10f;
             arsonistButton.MaxTimer = Arsonist.cooldown;
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
@@ -398,7 +404,68 @@ namespace TheOtherRoles
                     trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
                 }
             );
-    
+
+            santaPlaceGiftButton = new CustomButton(
+                () => {
+                    santaPlaceGiftButton.Timer = santaPlaceGiftButton.MaxTimer;
+
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceGift, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placeGift(buff);
+                    Santa.hasGift = false;
+                },
+                () => { return Santa.santa != null && Santa.santa == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Santa.hasGift; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Santa.hasGift; },
+                () => { santaPlaceGiftButton.Timer = santaPlaceGiftButton.MaxTimer; },
+                Santa.getPlaceBoxButtonSprite(),
+                new Vector3(-2.7f, 1f, 0),
+                __instance,
+                KeyCode.G
+            );
+
+            santaCollectGiftButton = new CustomButton(
+                () => {
+                    Gift gift = Gift.playerIsNearGift(PlayerControl.LocalPlayer);
+                    santaUseGiftButton.Timer = santaUseGiftButton.MaxTimer;
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CollectGift, Hazel.SendOption.Reliable, -1);
+                    writer.Write(gift.id);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.collectGift(gift.id, PlayerControl.LocalPlayer.PlayerId);
+
+                },
+                () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer != Santa.santa; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return; },
+                Santa.getPlaceBoxButtonSprite(),
+                new Vector3(-2.7f, 1f, 0),
+                __instance,
+                KeyCode.G
+            );
+
+            santaUseGiftButton = new CustomButton(
+                () => {
+                    // TODO: use gift according to gift...
+                    PlayerControl.LocalPlayer.RpcSendChat("I used my gift muhahahah");
+                    Santa.giftedPlayer = null;
+                },
+                () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return; },
+                Santa.getPlaceBoxButtonSprite(),
+                new Vector3(-2.7f, 1f, 0),
+                __instance,
+                KeyCode.G
+);
+
+
+
             vampireKillButton = new CustomButton(
                 () => {
                     MurderAttemptResult murder = Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget);
