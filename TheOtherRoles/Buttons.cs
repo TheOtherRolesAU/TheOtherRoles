@@ -199,8 +199,9 @@ namespace TheOtherRoles
                         MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                         killWriter.Write(Sheriff.sheriff.Data.PlayerId);
                         killWriter.Write(targetId);
+                        killWriter.Write(byte.MaxValue);
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                        RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId);
+                        RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
                     }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
@@ -408,8 +409,9 @@ namespace TheOtherRoles
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.vampire.PlayerId);
                             writer.Write(Vampire.currentTarget.PlayerId);
+                            writer.Write(Byte.MaxValue);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.uncheckedMurderPlayer(Vampire.vampire.PlayerId, Vampire.currentTarget.PlayerId);
+                            RPCProcedure.uncheckedMurderPlayer(Vampire.vampire.PlayerId, Vampire.currentTarget.PlayerId, Byte.MaxValue);
 
                             vampireKillButton.HasEffect = false; // Block effect on this click
                             vampireKillButton.Timer = vampireKillButton.MaxTimer;
@@ -418,14 +420,14 @@ namespace TheOtherRoles
                             // Notify players about bitten
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
                             writer.Write(Vampire.bitten.PlayerId);
-                            writer.Write(0);
+                            writer.Write((byte)0);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             RPCProcedure.vampireSetBitten(Vampire.bitten.PlayerId, 0);
 
                             HudManager.Instance.StartCoroutine(Effects.Lerp(Vampire.delay, new Action<float>((p) => { // Delayed action
                                 if (p == 1f) {
                                     // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
-                                    Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten);
+                                    Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, showAnimation: false);
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
                                     writer.Write(byte.MaxValue);
                                     writer.Write(byte.MaxValue);
@@ -678,20 +680,10 @@ namespace TheOtherRoles
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
                         warlockCurseButton.Timer = 1f;
                     } else if (Warlock.curseVictim != null && Warlock.curseVictimTarget != null) {
-                        MurderAttemptResult murder = Helpers.checkMuderAttempt(Warlock.warlock, Warlock.curseVictimTarget);
+                        MurderAttemptResult murder = Helpers.checkMuderAttemptAndKill(Warlock.warlock, Warlock.curseVictimTarget, showAnimation: false);
                         if (murder == MurderAttemptResult.SuppressKill) return; 
 
-                        // Curse Kill
-                        // Not using Helpers.checkMuderAttemptAndKill here directly, since we need to share the Warlock.curseKillTarget
-
-                        if (murder == MurderAttemptResult.PerformKill) {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.WarlockCurseKill, Hazel.SendOption.Reliable, -1);
-                            writer.Write(Warlock.curseVictimTarget.PlayerId);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.warlockCurseKill(Warlock.curseVictimTarget.PlayerId);
-
-                        }  
-
+                        // If blanked or killed
                         if(Warlock.rootTime > 0) {
                             PlayerControl.LocalPlayer.moveable = false;
                             PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement so the warlock is not just running straight into the next object

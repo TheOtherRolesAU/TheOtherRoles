@@ -835,7 +835,6 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl curseVictim;
         public static PlayerControl curseVictimTarget;
-        public static PlayerControl curseKillTarget;
 
         public static float cooldown = 30f;
         public static float rootTime = 5f;
@@ -860,7 +859,6 @@ namespace TheOtherRoles
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
-            curseKillTarget = null;
             cooldown = CustomOptionHolder.warlockCooldown.getFloat();
             rootTime = CustomOptionHolder.warlockRootTime.getFloat();
         }
@@ -872,7 +870,6 @@ namespace TheOtherRoles
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
-            curseKillTarget = null;
         }
     }
 
@@ -1045,6 +1042,7 @@ namespace TheOtherRoles
 
         public static bool highlightAllVents = false;
         public static float reportDelay = 0f;
+        public static bool showKillFlash = true;
 
         public static bool reported = false;
 
@@ -1054,6 +1052,7 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+            showKillFlash = CustomOptionHolder.baitShowKillFlash.getBool();
             canBeCleaned = CustomOptionHolder.baitCanBeCleaned.getSelection();
         }
     }

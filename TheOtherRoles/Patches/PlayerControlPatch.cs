@@ -942,6 +942,23 @@ namespace TheOtherRoles.Patches {
                 else
                     BountyHunter.bountyHunter.SetKillTimer(PlayerControl.GameOptions.KillCooldown + BountyHunter.punishmentTime); 
             }
+
+            // Show flash on bait kill to the killer if enabled
+            if (Bait.bait != null && target == Bait.bait && Bait.showKillFlash && __instance == PlayerControl.LocalPlayer) {
+                HudManager.Instance.FullScreen.enabled = true;
+                HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
+                    var renderer = HudManager.Instance.FullScreen;
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(204f / 255f, 102f / 255f, 0f / 255f, Mathf.Clamp01(p * 2 * 0.75f));
+                    }
+                    else {
+                        if (renderer != null)
+                            renderer.color = new Color(204f / 255f, 102f / 255f, 0f / 255f, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    }
+                    if (p == 1f && renderer != null) renderer.enabled = false;
+                })));
+            }
         }
     }
 
@@ -962,14 +979,28 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
     class KillAnimationCoPerformKillPatch {
+        public static bool hideNextAnimation = true;
         public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
-            if (Vampire.vampire != null && Vampire.vampire == source && Vampire.bitten != null && Vampire.bitten == target)
+            if (hideNextAnimation)
                 source = target;
-            
-            if (Warlock.warlock != null && Warlock.warlock == source && Warlock.curseKillTarget != null && Warlock.curseKillTarget == target) {
-                source = target;
-                Warlock.curseKillTarget = null; // Reset here
+            hideNextAnimation = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.SetMovement))]
+    class KillAnimationSetMovementPatch {
+        private static int? colorId = null;
+        public static void Prefix(PlayerControl source, bool canMove) {
+            Color color = source.myRend.material.GetColor("_BodyColor");
+            if (color != null && Morphling.morphling != null && source.Data.PlayerId == Morphling.morphling.PlayerId) {
+                var index = Palette.PlayerColors.IndexOf(color);
+                if (index != -1) colorId = index;
             }
+        }
+
+        public static void Postfix(PlayerControl source, bool canMove) {
+            if (colorId.HasValue) source.RawSetColor(colorId.Value);
+            colorId = null;
         }
     }
 
