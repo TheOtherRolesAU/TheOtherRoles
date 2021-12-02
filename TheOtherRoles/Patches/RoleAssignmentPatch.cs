@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,32 +118,23 @@ namespace TheOtherRoles.Patches {
             };
         }
 
-        private static void assignSpecialRoles(RoleAssignmentData data)
-        {
+        private static void assignSpecialRoles(RoleAssignmentData data) {
             // Assign Lovers
-            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10)
-            {
+            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
                 bool isOnlyRole = !CustomOptionHolder.loversCanHaveAnotherRole.getBool();
-                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && (!isOnlyRole || (data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0)) && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10)
-                {
-                    setRoleToRandomPlayer((byte)RoleId.Lover, data.impostors, 0, isOnlyRole);
+                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && (!isOnlyRole || (data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0)) && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
+                    setRoleToRandomPlayer((byte)RoleId.Lover, data.impostors, 0, isOnlyRole); 
                     setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1, isOnlyRole);
-                    if (isOnlyRole)
-                    {
+                    if (isOnlyRole) {
                         data.maxCrewmateRoles--;
                         data.maxImpostorRoles--;
                     }
-                }
-                else if (data.crewmates.Count >= 2 && (isOnlyRole || data.maxCrewmateRoles >= 2))
-                {
-                    byte firstLoverId = setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 0, isOnlyRole);
-                    if (isOnlyRole)
-                    {
+                } else if (data.crewmates.Count >= 2 && (isOnlyRole || data.maxCrewmateRoles >= 2)) {
+                    byte firstLoverId = setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 0, isOnlyRole); 
+                    if (isOnlyRole) {
                         setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1);
                         data.maxCrewmateRoles -= 2;
-                    }
-                    else
-                    {
+                    } else {
                         var crewmatesWithoutFirstLover = data.crewmates.ToList();
                         crewmatesWithoutFirstLover.RemoveAll(p => p.PlayerId == firstLoverId);
                         setRoleToRandomPlayer((byte)RoleId.Lover, crewmatesWithoutFirstLover, 1, false);
@@ -152,8 +143,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Assign Mafia
-            if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10))
-            {
+            if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, data.impostors);
                 setRoleToRandomPlayer((byte)RoleId.Janitor, data.impostors);
                 setRoleToRandomPlayer((byte)RoleId.Mafioso, data.impostors);
