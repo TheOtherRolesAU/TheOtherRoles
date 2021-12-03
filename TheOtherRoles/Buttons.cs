@@ -442,7 +442,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer != Santa.santa; },
                 () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return; },
-                Santa.getPlaceBoxButtonSprite(),
+                Santa.getCollectBoxButtonSprite(),
                 new Vector3(-2.7f, 1f, 0),
                 __instance,
                 KeyCode.G
@@ -457,7 +457,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return; },
-                Santa.getPlaceBoxButtonSprite(),
+                Santa.getUseGiftButtonSprite(),
                 new Vector3(-2.7f, 1f, 0),
                 __instance,
                 KeyCode.G

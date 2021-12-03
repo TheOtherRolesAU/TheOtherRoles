@@ -1140,11 +1140,36 @@ namespace TheOtherRoles
         public static PlayerControl giftedPlayer;
 
         public static Sprite placeGiftButtonSprite;
-
+        public static Sprite collectGiftButtonSprite;
+        public static Sprite useGiftButtonSprite;
+        public static AudioClip santaSleighClip;
+        public static AudioClip santaHohoClip;
         public static Sprite getPlaceBoxButtonSprite()
         {
-            if (!placeGiftButtonSprite) placeGiftButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlaceJackInTheBoxButton.png", 115f);
+            if (!placeGiftButtonSprite) placeGiftButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SantaPlaceGiftButton.png", 115f);
             return placeGiftButtonSprite;
+        }
+        public static Sprite getCollectBoxButtonSprite()
+        {
+            if (!collectGiftButtonSprite) collectGiftButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SantaCollectGiftButton.png", 115f);
+            return collectGiftButtonSprite;
+        }
+        public static Sprite getUseGiftButtonSprite()
+        {
+            if (!useGiftButtonSprite) useGiftButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SantaUseGiftButton.png", 115f);
+            return useGiftButtonSprite;
+        }
+
+        public static AudioClip getSantaSleighClip()
+        {
+            if (!santaSleighClip) santaSleighClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.SantaSleighShort.raw"); // CC0 https://freesound.org/people/soundstack/sounds/255104/ (GPLv3 compatible)
+            return santaSleighClip;
+        }
+
+        public static AudioClip getSantaHohoClip()
+        {
+            if (!santaHohoClip) santaHohoClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.SantaHoho.raw"); // CC0 https://freesound.org/people/canucklovingbrit/sounds/110642/ (GPLv3 compatible)
+            return santaHohoClip;
         }
 
         public enum Gifts {engineerFix, hackerHack, securityGuardScrew, ventButton};
@@ -1160,6 +1185,9 @@ namespace TheOtherRoles
             santa = null;
             giftedPlayer = null;
             hasGift = true;
+            // Load Audio files, as they may cause a tiny lag...
+            getSantaSleighClip();
+            getSantaHohoClip();
         }
     }
    public static class Lawyer {

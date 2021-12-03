@@ -17,7 +17,7 @@ namespace TheOtherRoles.Objects
         public static Sprite getGiftSprite()
         {
             if (giftSprite) return giftSprite;
-            giftSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Garlic.png", 300f);
+            giftSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SantaGift.png", 300f);
             return giftSprite;
         }
 

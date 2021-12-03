@@ -108,7 +108,13 @@ namespace TheOtherRoles.Patches {
                 if (infos.Any(info => info.roleId == RoleId.Lover)) {
                     PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
                     __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
-                } 
+                }
+                if (infos.Any(info => info.roleId == RoleId.Santa))
+                {
+                    __instance.RoleBlurbText.text += Helpers.cs(Santa.color, $"\n You are the Santa");
+                    if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(Santa.getSantaSleighClip(), false, 0.8f);
+                    if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(Santa.getSantaHohoClip(), false, 0.8f);
+                }
             }
         }
 

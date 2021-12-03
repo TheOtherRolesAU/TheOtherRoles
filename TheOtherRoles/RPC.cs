@@ -646,6 +646,9 @@ namespace TheOtherRoles
             new Gift(position);
             santaCollectGiftButton.Timer = 0f;
             Santa.hasGift = false;
+
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(Santa.getSantaSleighClip(), false, 0.8f);
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(Santa.getSantaHohoClip(), false, 0.8f);
         }
 
         public static void collectGift(byte giftId, byte playerId)
@@ -657,6 +660,7 @@ namespace TheOtherRoles
                 Santa.giftedPlayer = player;
                 Santa.receivedGift = Santa.selectRandomGift();
             }
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(Santa.getSantaSleighClip(), false, 0.8f);
         }
 
 
