@@ -292,7 +292,7 @@ namespace TheOtherRoles.Patches {
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
-                        PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
+                        PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : (focusedTarget == Santa.santa && roleInfo == RoleInfo.santa ? focusedTarget : PlayerControl.LocalPlayer);
 
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
