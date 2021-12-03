@@ -1172,13 +1172,28 @@ namespace TheOtherRoles
             return santaHohoClip;
         }
 
-        public enum Gifts {engineerFix, hackerHack, securityGuardScrew, ventButton};
+        public enum Gifts { engineerFix }; // , hackerHack, securityGuardScrew, ventButton};
         public static Gifts receivedGift;
 
         public static Gifts selectRandomGift()
         {
             var rnd = new System.Random();
             return (Gifts)rnd.Next(Enum.GetNames(typeof(Gifts)).Length);
+            // TODO: make this dependant on the roles in the game
+        }
+
+        public static bool giftCanBeUsed()
+        {
+            switch (receivedGift)
+            {
+                case Gifts.engineerFix:
+                    return HudManagerStartPatch.engineerRepairButton.CouldUse();
+                /*case Gifts.securityGuardScrew:
+                    return false;*/
+                default:
+                    return true;
+               
+            }
         }
         public static void clearAndReload()
         {

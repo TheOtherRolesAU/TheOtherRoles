@@ -8,9 +8,9 @@ using TheOtherRoles.Objects;
 namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
-    static class HudManagerStartPatch
+    public static class HudManagerStartPatch
     {
-        private static CustomButton engineerRepairButton;
+        public static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
         private static CustomButton timeMasterShieldButton;
@@ -451,11 +451,16 @@ namespace TheOtherRoles
             santaUseGiftButton = new CustomButton(
                 () => {
                     // TODO: use gift according to gift...
-                    PlayerControl.LocalPlayer.RpcSendChat("I used my gift muhahahah");
                     Santa.giftedPlayer = null;
+                    switch (Santa.receivedGift)
+                    {
+                        case Santa.Gifts.engineerFix:
+                            engineerRepairButton.OnClick();
+                            break;
+                    }
                 },
                 () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove && PlayerControl.LocalPlayer == Santa.giftedPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Santa.giftCanBeUsed(); },
                 () => { return; },
                 Santa.getUseGiftButtonSprite(),
                 new Vector3(-2.7f, 1f, 0),

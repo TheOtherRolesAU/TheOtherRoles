@@ -13,10 +13,10 @@ namespace TheOtherRoles.Objects {
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
-        private Action OnClick;
+        public Action OnClick;
         private Action OnMeetingEnds;
         private Func<bool> HasButton;
-        private Func<bool> CouldUse;
+        public Func<bool> CouldUse;
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
