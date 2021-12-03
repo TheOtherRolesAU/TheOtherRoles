@@ -439,7 +439,7 @@ namespace TheOtherRoles
                     RPCProcedure.collectGift(gift.id, PlayerControl.LocalPlayer.PlayerId);
 
                 },
-                () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer != Santa.santa; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer != Santa.santa && PlayerControl.LocalPlayer != Santa.giftedPlayer; },
                 () => { return PlayerControl.LocalPlayer.CanMove && Gift.playerIsNearGift(PlayerControl.LocalPlayer) != null && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return; },
                 Santa.getCollectBoxButtonSprite(),
