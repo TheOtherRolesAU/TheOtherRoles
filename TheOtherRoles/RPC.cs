@@ -18,6 +18,7 @@ namespace TheOtherRoles
         Mayor,
         Engineer,
         Sheriff,
+        Deputy,
         Lighter,
         Godfather,
         Mafioso,
@@ -83,6 +84,7 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
+        SheriffCreatesDeputy,
         JackalCreatesSidekick,
         SidekickPromotes,
         ErasePlayerRoles,
@@ -144,6 +146,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sheriff:
                         Sheriff.sheriff = player;
+                        break;
+                    case RoleId.Deputy:
+                        Deputy.deputy = player;
                         break;
                     case RoleId.Lighter:
                         Lighter.lighter = player;
@@ -397,6 +402,8 @@ namespace TheOtherRoles
                 Engineer.engineer = oldShifter;
             if (Sheriff.sheriff != null && Sheriff.sheriff == player)
                 Sheriff.sheriff = oldShifter;
+            if (Deputy.deputy != null && Deputy.deputy == player)
+                Deputy.deputy = oldShifter;
             if (Lighter.lighter != null && Lighter.lighter == player)
                 Lighter.lighter = oldShifter;
             if (Detective.detective != null && Detective.detective == player)
@@ -489,6 +496,27 @@ namespace TheOtherRoles
                     Tracker.tracked = player;
         }
 
+        public static void sheriffCreatesDeputy(byte targetId)
+        {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == targetId)
+                {
+                    if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick)
+                    {
+                        Sheriff.fakeDeputy = player;
+                    }
+                    else
+                    {
+                        erasePlayerRoles(player.PlayerId, true);
+                        Sheriff.deputisedPlayer = player;
+                        Deputy.deputy = player;
+                    }
+                    return;
+                }
+            }
+        }
+
         public static void jackalCreatesSidekick(byte targetId) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
@@ -523,6 +551,7 @@ namespace TheOtherRoles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+            if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
@@ -807,6 +836,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SheriffCreatesDeputy:
+                    RPCProcedure.sheriffCreatesDeputy(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
                     RPCProcedure.jackalCreatesSidekick(reader.ReadByte());

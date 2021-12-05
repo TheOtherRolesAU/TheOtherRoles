@@ -24,6 +24,7 @@ namespace TheOtherRoles
             Mayor.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+            Deputy.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
@@ -149,17 +150,58 @@ namespace TheOtherRoles
             public static float cooldown = 30f;
             public static bool canKillNeutrals = false;
             public static bool spyCanDieToSheriff = false;
+            public static bool canCreateDeputy;
+
 
             public static PlayerControl currentTarget;
+
+            public static PlayerControl deputisedPlayer;
+            public static PlayerControl fakeDeputy;
 
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
+                deputisedPlayer = null;
+                fakeDeputy = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
+                canCreateDeputy = CustomOptionHolder.sheriffCanCreateDeputy.getBool();
             }
         }
+
+        public static class Deputy
+        {
+            public static PlayerControl deputy;
+            public static Color color = Sheriff.color;
+
+            public static PlayerControl currentTarget;
+            public static bool promotesToSheriff;
+            public static bool keepsHandcuffsOnPromotion;
+            public static float handcuffDuration;
+            public static float remainingHandcuffs;
+            public static float handcuffCooldown;
+
+            private static Sprite buttonSprite;
+            public static Sprite getButtonSprite()
+            {
+                if (buttonSprite) return buttonSprite; // TODO deputy handcuff sprite
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LighterButton.png", 115f);
+                return buttonSprite;
+            }
+
+            public static void clearAndReload()
+            {
+                deputy = null;
+                currentTarget = null;
+                promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getBool();
+                remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
+                handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
+                keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
+                handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
+            }
+        }
+
 
         public static class Lighter {
             public static PlayerControl lighter;

@@ -13,6 +13,8 @@ namespace TheOtherRoles
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
+        private static CustomButton sheriffDeputyButton;
+        private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
@@ -42,6 +44,8 @@ namespace TheOtherRoles
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
+            sheriffDeputyButton.MaxTimer = 0f;
+            deputyHandcuffButton.MaxTimer = Deputy.handcuffCooldown;
             timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = 0f;
@@ -205,6 +209,60 @@ namespace TheOtherRoles
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0f, 1f, 0),
+                __instance,
+                KeyCode.Q
+            );
+
+            // Sheriff Deputize Button
+            sheriffDeputyButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffCreatesDeputy, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Sheriff.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.sheriffCreatesDeputy(Sheriff.currentTarget.PlayerId);
+                },
+                () => { return Sheriff.canCreateDeputy && Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Sheriff.deputisedPlayer == null; },
+                () => { return Sheriff.canCreateDeputy && Sheriff.currentTarget != null && PlayerControl.LocalPlayer.CanMove ; },
+                () => { sheriffDeputyButton.Timer = sheriffDeputyButton.MaxTimer; },
+                Jackal.getSidekickButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
+
+
+            // Deputy Handcuff
+            deputyHandcuffButton = new CustomButton(
+                () => {
+                    // Deputy handcuff
+                    
+                    byte targetId = 0;
+                    if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
+                        (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
+                        (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget)) ||
+                        (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget))
+                    {
+                        targetId = Sheriff.currentTarget.PlayerId;
+                    }
+                    else
+                    {
+                        targetId = PlayerControl.LocalPlayer.PlayerId;
+                    }
+
+                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    killWriter.Write(Sheriff.sheriff.Data.PlayerId);
+                    killWriter.Write(targetId);
+                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                    RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId);
+
+                    deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer;
+                    Deputy.currentTarget = null;
+                },
+                () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.deputisedPlayer && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.deputisedPlayer && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0  && PlayerControl.LocalPlayer.CanMove; },
+                () => { deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer; },
+                Deputy.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.Q
             );
