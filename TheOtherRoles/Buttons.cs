@@ -239,7 +239,7 @@ namespace TheOtherRoles
             // Deputy Handcuff
             deputyHandcuffButton = new CustomButton(
                 () => {
-                    // Deputy handcuff
+                    // Deputy handcuff TODO 
                     
                     byte targetId = 0;
                     if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
@@ -254,11 +254,11 @@ namespace TheOtherRoles
                         targetId = PlayerControl.LocalPlayer.PlayerId;
                     }
 
-                    MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                    killWriter.Write(Sheriff.sheriff.Data.PlayerId);
-                    killWriter.Write(targetId);
-                    AmongUsClient.Instance.FinishRpcImmediately(killWriter);
-                    RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId);
+                    //MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                    //killWriter.Write(Sheriff.sheriff.Data.PlayerId);
+                    //killWriter.Write(targetId);
+                    //AmongUsClient.Instance.FinishRpcImmediately(killWriter);
+                    //RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId);
 
                     deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer;
                     Deputy.currentTarget = null;

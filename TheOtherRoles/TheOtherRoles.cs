@@ -179,6 +179,7 @@ namespace TheOtherRoles
             public static Color color = Sheriff.color;
 
             public static PlayerControl currentTarget;
+            public static PlayerControl handcuffedPlayer;
             public static bool promotesToSheriff;
             public static bool keepsHandcuffsOnPromotion;
             public static float handcuffDuration;
@@ -197,6 +198,7 @@ namespace TheOtherRoles
             {
                 deputy = null;
                 currentTarget = null;
+                handcuffedPlayer = null;
                 promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getBool();
                 remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();

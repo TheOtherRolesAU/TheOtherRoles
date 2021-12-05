@@ -142,6 +142,13 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Sheriff.currentTarget, Sheriff.color);
         }
 
+        static void deputySetTarget()
+        {
+            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
+            Deputy.currentTarget = setTarget();
+            setPlayerOutline(Deputy.currentTarget, Deputy.color);
+        }
+
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -722,6 +729,8 @@ namespace TheOtherRoles.Patches {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
+                // Sheriff
+                deputySetTarget();
                 // Detective
                 detectiveUpdateFootPrints();
                 // Tracker
