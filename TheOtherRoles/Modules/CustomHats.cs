@@ -236,9 +236,9 @@ namespace TheOtherRoles.Modules {
             }
         }
 
-        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(HatBehaviour), typeof(int) })]
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(string), typeof(int) })]
         private static class HatParentSetHatPatch {
-            static void Postfix(HatParent __instance, HatBehaviour hat, int color) {
+            static void Postfix(HatParent __instance, string hatId, int color) {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
                     try {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
@@ -263,6 +263,8 @@ namespace TheOtherRoles.Modules {
 
             public static float createHatPackage(List<System.Tuple<HatBehaviour, HatExtension>> hats, string packageName, float YStart, HatsTab __instance) {
                 bool isDefaultPackage = innerslothPackageName == packageName;
+                if (!isDefaultPackage)
+                    hats = hats.OrderBy(x => x.Item1.name).ToList();
                 float offset = YStart;
 
                 if (textTemplate != null) {
@@ -311,7 +313,7 @@ namespace TheOtherRoles.Modules {
                     }
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
-                    colorChip.Inner.SetHat(hat, PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId);
+                    colorChip.Inner.SetHat(hat, __instance.HasLocalPlayer() ? PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor));
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
                     colorChip.SelectionHighlight.gameObject.SetActive(false);
