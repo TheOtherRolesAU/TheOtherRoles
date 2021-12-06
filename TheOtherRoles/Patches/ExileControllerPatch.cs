@@ -33,6 +33,14 @@ namespace TheOtherRoles.Patches {
             }
             Shifter.futureShift = null;
 
+            // Sheriff deputize
+            if (Sheriff.deputisedPlayer != null && AmongUsClient.Instance.AmHost && Sheriff.fakeDeputy == null && Deputy.deputy == null)
+            { // We need to send the RPC from the host here, to make sure that the order of shifting, deputizing and erasing is correct (for that reason the futureShifted and futureErased are being synced)
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SheriffCreatesDeputy, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.sheriffCreatesDeputy();
+            }
+
             // Eraser erase
             if (Eraser.eraser != null && AmongUsClient.Instance.AmHost && Eraser.futureErased != null) {  // We need to send the RPC from the host here, to make sure that the order of shifting and erasing is correct (for that reason the futureShifted and futureErased are being synced)
                 foreach (PlayerControl target in Eraser.futureErased) {

@@ -149,6 +149,19 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Deputy.currentTarget, Deputy.color);
         }
 
+        static void deputyCheckPromotion()
+        {
+            // If LocalPlayer is Deputy, the Sheriff is disconnected and Deputy promotion is enabled, then trigger promotion
+            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
+            if (Deputy.deputy.Data.IsDead == true || !Deputy.promotesToSheriff) return;
+            if (Sheriff.sheriff == null || Sheriff.sheriff?.Data?.Disconnected == true)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.deputyPromotes();
+            }
+        }
+
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -237,6 +250,22 @@ namespace TheOtherRoles.Patches {
             if (Spy.spy != null) untargetables.Add(Spy.spy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
+        }
+
+        static void deputyUpdate()
+        {
+            if (Deputy.handcuffedPlayer != null)
+            {
+                Deputy.handcuffTimeRemaining -= Time.fixedDeltaTime;
+                if (Deputy.handcuffTimeRemaining < 0)
+                {
+                    Deputy.handcuffedPlayer = null;
+                }
+                if (Deputy.handcuffedKnows > 0)
+                {
+                    Deputy.handcuffedKnows -= Time.fixedDeltaTime;
+                }
+            }
         }
 
         static void engineerUpdate() {
@@ -729,8 +758,9 @@ namespace TheOtherRoles.Patches {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
-                // Sheriff
+                // Deputy
                 deputySetTarget();
+                deputyUpdate();
                 // Detective
                 detectiveUpdateFootPrints();
                 // Tracker
@@ -880,7 +910,15 @@ namespace TheOtherRoles.Patches {
                     otherLover.MurderPlayer(otherLover);
                 }
             }
-            
+
+            // Deputy promotion trigger on murder
+            if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead && target == Sheriff.sheriff && Sheriff.sheriff == PlayerControl.LocalPlayer)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.deputyPromotes();
+            }
+
             // Sidekick promotion trigger on murder
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && target == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
@@ -1038,6 +1076,14 @@ namespace TheOtherRoles.Patches {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
+            }
+
+            // Deputy promotion trigger on exile
+            if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead && __instance == Sheriff.sheriff && Sheriff.sheriff == PlayerControl.LocalPlayer)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.deputyPromotes();
             }
 
             // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)

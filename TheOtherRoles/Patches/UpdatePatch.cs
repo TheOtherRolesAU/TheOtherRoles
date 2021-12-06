@@ -69,11 +69,20 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
-            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) 
+            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
-            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer) 
+                if (Deputy.deputy != null)
+                {
+                    setPlayerNameColor(Deputy.deputy, Deputy.color);
+                }
+                if (Sheriff.fakeDeputy != null)
+                {
+                    setPlayerNameColor(Sheriff.fakeDeputy, Deputy.color);
+                }
+            }
+            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
-            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer) 
+            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Detective.detective, Detective.color);
             else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer)
                 setPlayerNameColor(TimeMaster.timeMaster, TimeMaster.color);
@@ -84,12 +93,12 @@ namespace TheOtherRoles.Patches {
             else if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Swapper.swapper, Swapper.color);
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
-                setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Seer.seer, Seer.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
+            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
-            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
+            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
             else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
                 // Jackal can see his sidekick
@@ -242,7 +251,76 @@ namespace TheOtherRoles.Patches {
             
             if (enabled) __instance.KillButton.Show();
             else __instance.KillButton.Hide();
+
+            if (Deputy.handcuffedKnows > 0) {
+                if (Deputy.killButtonSpriteBackup == null)
+                {
+                    Deputy.killButtonSpriteBackup = __instance.KillButton.graphic.sprite;
+                }
+                __instance.KillButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
+
+                __instance.KillButton.buttonLabelText.enabled = false;
+            } else if (Deputy.killButtonSpriteBackup != null)  // Make sure we already got the backup ;)
+            {
+                __instance.KillButton.graphic.sprite = Deputy.killButtonSpriteBackup;
+                __instance.KillButton.buttonLabelText.enabled = true;
+            }
         }
+
+        static void updateUseButton(HudManager __instance)
+        {
+            if (Deputy.disablesUse) {
+                if (Deputy.handcuffedKnows > 0) {
+                    if (Deputy.useButtonSpriteBackup == null) {
+                        Deputy.useButtonSpriteBackup = __instance.UseButton.graphic.sprite;
+                    }
+                    __instance.UseButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
+                    __instance.UseButton.buttonLabelText.enabled = false;
+                } else if (Deputy.useButtonSpriteBackup != null) {
+                    __instance.UseButton.graphic.sprite = Deputy.useButtonSpriteBackup;
+                    __instance.UseButton.buttonLabelText.enabled = true;
+                }
+            }
+        }
+
+        static void updateSabotageButton(HudManager __instance) {
+            if (Deputy.disablesSabotage) {
+                if (Deputy.handcuffedKnows > 0) {
+                    if (Deputy.sabotageButtonSpriteBackup == null) {
+                        Deputy.sabotageButtonSpriteBackup = __instance.SabotageButton.graphic.sprite;
+                    }
+                    __instance.SabotageButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
+                    __instance.SabotageButton.buttonLabelText.enabled = false;
+                }
+                else if (Deputy.sabotageButtonSpriteBackup != null) {
+                    __instance.SabotageButton.graphic.sprite = Deputy.sabotageButtonSpriteBackup;
+                    __instance.SabotageButton.buttonLabelText.enabled = true;
+                }
+            }
+        }
+
+        static void updateVentButton(HudManager __instance)
+        {
+            if (Deputy.disablesVents)
+            {
+                if (Deputy.handcuffedKnows > 0)
+                {
+                    if (Deputy.ventButtonSpriteBackup == null)
+                    {
+                        Deputy.ventButtonSpriteBackup = __instance.ImpostorVentButton.graphic.sprite;
+                    }
+                    __instance.ImpostorVentButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
+                    __instance.ImpostorVentButton.buttonLabelText.enabled = false;
+                }
+                else if (Deputy.ventButtonSpriteBackup != null)
+                {
+                    __instance.ImpostorVentButton.graphic.sprite = Deputy.ventButtonSpriteBackup;
+                    __instance.ImpostorVentButton.buttonLabelText.enabled = true;
+                }
+            }
+        }
+
+
 
         static void Postfix(HudManager __instance)
         {
@@ -260,6 +338,12 @@ namespace TheOtherRoles.Patches {
             timerUpdate();
             // Mini
             miniUpdate();
+
+            // Deputy Sabotage, Use and Vent Button Disabling
+            updateUseButton(__instance);
+            updateSabotageButton(__instance);
+            updateVentButton(__instance);
+
         }
     }
 }

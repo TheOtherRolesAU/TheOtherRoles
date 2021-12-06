@@ -89,12 +89,15 @@ namespace TheOtherRoles
         VampireSetBitten,
         PlaceGarlic,
         SheriffCreatesDeputy,
+        DeputyUsedHandcuffs,
+        DeputyPromotes,
         JackalCreatesSidekick,
         SidekickPromotes,
         ErasePlayerRoles,
         SetFutureErased,
         SetFutureShifted,
         SetFutureShielded,
+        SetFutureDeputy,
         SetFutureSpelled,
         PlaceJackInTheBox,
         LightsOut,
@@ -528,25 +531,43 @@ namespace TheOtherRoles
                     Tracker.tracked = player;
         }
 
-        public static void sheriffCreatesDeputy(byte targetId)
+
+        public static void sheriffCreatesDeputy()
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            PlayerControl player = Sheriff.deputisedPlayer;
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick)
             {
-                if (player.PlayerId == targetId)
-                {
-                    if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick)
-                    {
-                        Sheriff.fakeDeputy = player;
-                    }
-                    else
-                    {
-                        erasePlayerRoles(player.PlayerId, true);
-                        Sheriff.deputisedPlayer = player;
-                        Deputy.deputy = player;
-                    }
-                    return;
-                }
+                Sheriff.fakeDeputy = player;
             }
+            else
+            {
+                DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+                erasePlayerRoles(player.PlayerId, true);
+                Deputy.deputy = player;
+                if (Deputy.promotesToSheriff && (Sheriff.sheriff == null || Sheriff.sheriff.Data.IsDead || Sheriff.sheriff.Data.Disconnected == true))
+                    RPCProcedure.deputyPromotes();
+            }
+            return;
+
+        }
+        public static void deputyUsedHandcuffs(byte targetId)
+        {
+            Deputy.remainingHandcuffs--;
+            Deputy.handcuffedPlayer = Helpers.playerById(targetId);
+            Deputy.handcuffTimeRemaining = Deputy.handcuffDuration;
+            if (Deputy.handcuffedPlayer == PlayerControl.LocalPlayer && false)  // Closes Minigames. Is disabled for now, as it would enable too much hard proofing opportunity(?)
+            {
+                if (Minigame.Instance && Deputy.disablesUse)
+                    Minigame.Instance.ForceClose();
+            }
+        }
+
+        public static void deputyPromotes()
+        {
+            Sheriff.removeCurrentSheriff();
+            Sheriff.sheriff = Deputy.deputy;
+            Sheriff.canCreateDeputy = false;
+            Deputy.deputy = null;  // No clear and reload, as we need to keep the number of handcuffs left etc.
         }
 
         public static void jackalCreatesSidekick(byte targetId) {
@@ -578,7 +599,15 @@ namespace TheOtherRoles
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
-            if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+            if (player == Sheriff.sheriff) {
+                if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead){
+                    RPCProcedure.deputyPromotes();
+                    Sheriff.formerSheriff = null; // Still erase the initial sheriff.
+                }
+                else {
+                    Sheriff.clearAndReload();
+                }
+            }
             if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
@@ -646,6 +675,11 @@ namespace TheOtherRoles
         public static void setFutureShielded(byte playerId) {
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
+        }
+
+        public static void setFutureDeputy(byte playerId)
+        {
+            Sheriff.deputisedPlayer = Helpers.playerById(playerId);
         }
 
         public static void setFutureSpelled(byte playerId) {
@@ -905,7 +939,13 @@ namespace TheOtherRoles
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SheriffCreatesDeputy:
-                    RPCProcedure.sheriffCreatesDeputy(reader.ReadByte());
+                    RPCProcedure.sheriffCreatesDeputy();
+                    break;                
+                case (byte)CustomRPC.DeputyUsedHandcuffs:
+                    RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DeputyPromotes:
+                    RPCProcedure.deputyPromotes();
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
                     RPCProcedure.jackalCreatesSidekick(reader.ReadByte());
@@ -924,6 +964,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetFutureDeputy:
+                    RPCProcedure.setFutureDeputy(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());

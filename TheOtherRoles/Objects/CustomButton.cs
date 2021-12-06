@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
     public class CustomButton
@@ -14,6 +15,7 @@ namespace TheOtherRoles.Objects {
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
         private Action OnClick;
+        private Action InitialOnClick;
         private Action OnMeetingEnds;
         private Func<bool> HasButton;
         private Func<bool> CouldUse;
@@ -31,6 +33,7 @@ namespace TheOtherRoles.Objects {
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
+            this.InitialOnClick = OnClick;
             this.HasButton = HasButton;
             this.CouldUse = CouldUse;
             this.PositionOffset = PositionOffset;
@@ -168,6 +171,24 @@ namespace TheOtherRoles.Objects {
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
-        }
+
+            // Deputy handcuff function: Show "HANDCUFFED" instead of button sprite
+            if (Deputy.handcuffedKnows > 0)
+            {
+                actionButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
+                actionButton.buttonLabelText.enabled = false; // Don't show the text if handcuffed.
+            }
+
+            // Deputy disable the button and display Handcuffs instead...
+            if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
+                OnClick = () => {
+                    Deputy.setHandcuffedKnows();
+                };
+            } else
+            {
+                OnClick = InitialOnClick;
+                Deputy.setHandcuffedKnows(0f);
+            }
+         }
     }
 }

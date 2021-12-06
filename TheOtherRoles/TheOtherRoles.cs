@@ -161,11 +161,30 @@ namespace TheOtherRoles
             public static PlayerControl deputisedPlayer;
             public static PlayerControl fakeDeputy;
 
+            public static PlayerControl formerSheriff;  // When deputy gets promoted...
+
+            private static Sprite buttonSprite;
+            public static Sprite getButtonSprite()
+            {
+                if (buttonSprite) return buttonSprite; // proper deputy handcuff sprite
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputizeButton.png", 115f);
+                return buttonSprite;
+            }
+            public static void removeCurrentSheriff()
+            {
+                if (!formerSheriff) formerSheriff = sheriff;
+                sheriff = null;
+                currentTarget = null;
+                fakeDeputy = null;
+                cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+            }
+
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
                 deputisedPlayer = null;
                 fakeDeputy = null;
+                formerSheriff = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
@@ -185,13 +204,39 @@ namespace TheOtherRoles
             public static float handcuffDuration;
             public static float remainingHandcuffs;
             public static float handcuffCooldown;
+            public static float handcuffTimeRemaining;
+            public static float handcuffedKnows;
+
+            // For now, these are no settings, but these params can be used.
+            public static bool disablesUse = false;  // TODO: Backup correct use button sprite, never admin etc. (Current visual bug)
+            public static bool disablesSabotage = true;
+            public static bool disablesVents = true;
+
 
             private static Sprite buttonSprite;
+            private static Sprite handcuffedSprite;
+            public static Sprite killButtonSpriteBackup;
+            public static Sprite sabotageButtonSpriteBackup;
+            public static Sprite useButtonSpriteBackup;
+            public static Sprite ventButtonSpriteBackup;
+
             public static Sprite getButtonSprite()
             {
-                if (buttonSprite) return buttonSprite; // TODO deputy handcuff sprite
-                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LighterButton.png", 115f);
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffButton.png", 115f);
                 return buttonSprite;
+            }
+
+            public static Sprite getHandcuffedButtonSprite()
+            {
+                if (handcuffedSprite) return handcuffedSprite;
+                handcuffedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffed.png", 115f);
+                return handcuffedSprite;
+            }
+
+            public static void setHandcuffedKnows(float value=5f)
+            {
+                handcuffedKnows = value;
             }
 
             public static void clearAndReload()
@@ -199,6 +244,8 @@ namespace TheOtherRoles
                 deputy = null;
                 currentTarget = null;
                 handcuffedPlayer = null;
+                handcuffTimeRemaining = 0f;
+                setHandcuffedKnows(0f);
                 promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getBool();
                 remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();

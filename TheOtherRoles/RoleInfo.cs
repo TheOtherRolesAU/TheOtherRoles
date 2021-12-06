@@ -124,7 +124,7 @@ namespace TheOtherRoles
             if (p == Jester.jester) infos.Add(jester);
             if (p == Mayor.mayor) infos.Add(mayor);
             if (p == Engineer.engineer) infos.Add(engineer);
-            if (p == Sheriff.sheriff) infos.Add(sheriff);
+            if (p == Sheriff.sheriff || p == Sheriff.formerSheriff) infos.Add(sheriff);
             if (p == Deputy.deputy) infos.Add(deputy);
             if (p == Lighter.lighter) infos.Add(lighter);
             if (p == Godfather.godfather) infos.Add(godfather);
