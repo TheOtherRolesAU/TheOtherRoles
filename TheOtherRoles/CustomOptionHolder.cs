@@ -356,7 +356,7 @@ namespace TheOtherRoles {
             sheriffCanKillNeutrals = CustomOption.Create(102, "Sheriff Can Kill Neutrals", false, sheriffSpawnRate);
             sheriffCanCreateDeputy = CustomOption.Create(103, "Sheriff Can Create Deputy", true, sheriffSpawnRate);
 
-            deputyNumberOfHandcuffs = CustomOption.Create(105, "Number Of Handcuffs", 2f, 0f, 5f, 1f, sheriffCanCreateDeputy);
+            deputyNumberOfHandcuffs = CustomOption.Create(105, "Deputy Number Of Handcuffs", 2f, 0f, 10f, 1f, sheriffCanCreateDeputy);
             deputyHandcuffCooldown = CustomOption.Create(106, "Handcuff Cooldown", 30f, 10f, 60f, 2.5f, sheriffCanCreateDeputy);
             deputyHandcuffDuration = CustomOption.Create(107, "Handcuff Duration", 10f, 10f, 120f, 2.5f, sheriffCanCreateDeputy);
             deputyGetsPromoted = CustomOption.Create(108, "Deputy Gets Promoted to Sheriff", true, sheriffCanCreateDeputy);
