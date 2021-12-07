@@ -259,7 +259,7 @@ namespace TheOtherRoles
                         // Could handcuff, but no more than 2 times the same player!
                         byte targetId = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
                         int timesTargetCuffed = Deputy.handcuffedPlayerCounts.ContainsKey(targetId) ? Deputy.handcuffedPlayerCounts[targetId] : 0;
-                        if (timesTargetCuffed >= 2) return false;
+                        if (timesTargetCuffed >= CustomOptionHolder.deputyNumberOfCuffsPerTarget.getFloat()) return false;
                         return true;
                     }
                     return false;

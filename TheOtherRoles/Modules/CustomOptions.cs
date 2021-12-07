@@ -329,7 +329,7 @@ namespace TheOtherRoles {
         {
             StringBuilder sb = new StringBuilder(__result);
             foreach (CustomOption option in CustomOption.options) {
-                if (option.parent == null || option == CustomOptionHolder.deputySpawnRate) {
+                if (option.parent == null) {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
@@ -361,7 +361,7 @@ namespace TheOtherRoles {
             }
             CustomOption parent = null;
             foreach (CustomOption option in CustomOption.options)
-                if (option.parent != null && option != CustomOptionHolder.deputySpawnRate) {
+                if (option.parent != null) {
                     if (option.parent != parent) {
                         sb.AppendLine();
                         parent = option.parent;
@@ -372,7 +372,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 41;
+            int roleSettingsLines = defaultSettingsLines + 40;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
             int detailedSettingsP3 = detailedSettingsP2 + 42;
