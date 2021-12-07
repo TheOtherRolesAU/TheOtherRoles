@@ -7,7 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-
+using TheOtherRoles.Objects;
 
 namespace TheOtherRoles.Patches {
 
@@ -70,6 +70,7 @@ namespace TheOtherRoles.Patches {
             if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesVents)
             {
                 Deputy.setHandcuffedKnows();
+                CustomButton.setAllButtonsHandcuffed(true);
                 return false;
             }
 
@@ -132,6 +133,7 @@ namespace TheOtherRoles.Patches {
                 // Deputy handcuff update.
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
                     Deputy.setHandcuffedKnows();
+                    CustomButton.setAllButtonsHandcuffed(true);
                     return false;
                 }
                 
@@ -166,6 +168,7 @@ namespace TheOtherRoles.Patches {
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesSabotage)
                 {
                     Deputy.setHandcuffedKnows();
+                    CustomButton.setAllButtonsHandcuffed(true);
                     return false;
                 }
             }
@@ -196,6 +199,7 @@ namespace TheOtherRoles.Patches {
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesUse)
                 {
                     Deputy.setHandcuffedKnows();
+                    CustomButton.setAllButtonsHandcuffed(true);
                     return false;
                 }
             }

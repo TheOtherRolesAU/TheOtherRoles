@@ -105,7 +105,7 @@ namespace TheOtherRoles {
         public static CustomOption sheriffSpawnRate;
         public static CustomOption sheriffCooldown;
         public static CustomOption sheriffCanKillNeutrals;
-        public static CustomOption sheriffCanCreateDeputy;
+        public static CustomOption deputySpawnRate;
 
         public static CustomOption deputyNumberOfHandcuffs;
         public static CustomOption deputyHandcuffCooldown;
@@ -354,12 +354,11 @@ namespace TheOtherRoles {
             sheriffSpawnRate = CustomOption.Create(100, cs(Sheriff.color, "Sheriff"), rates, null, true);
             sheriffCooldown = CustomOption.Create(101, "Sheriff Cooldown", 30f, 10f, 60f, 2.5f, sheriffSpawnRate);
             sheriffCanKillNeutrals = CustomOption.Create(102, "Sheriff Can Kill Neutrals", false, sheriffSpawnRate);
-            sheriffCanCreateDeputy = CustomOption.Create(103, "Sheriff Can Create Deputy", true, sheriffSpawnRate);
-
-            deputyNumberOfHandcuffs = CustomOption.Create(105, "Deputy Number Of Handcuffs", 2f, 0f, 10f, 1f, sheriffCanCreateDeputy);
-            deputyHandcuffCooldown = CustomOption.Create(106, "Handcuff Cooldown", 30f, 10f, 60f, 2.5f, sheriffCanCreateDeputy);
-            deputyHandcuffDuration = CustomOption.Create(107, "Handcuff Duration", 10f, 10f, 120f, 2.5f, sheriffCanCreateDeputy);
-            deputyGetsPromoted = CustomOption.Create(108, "Deputy Gets Promoted to Sheriff", true, sheriffCanCreateDeputy);
+            deputySpawnRate = CustomOption.Create(103, cs(Deputy.color, "Sheriff Has A Deputy"), rates, sheriffSpawnRate, true);
+            deputyNumberOfHandcuffs = CustomOption.Create(105, "Deputy Number Of Handcuffs", 2f, 0f, 10f, 1f, deputySpawnRate);
+            deputyHandcuffCooldown = CustomOption.Create(106, "Handcuff Cooldown", 30f, 10f, 60f, 2.5f, deputySpawnRate);
+            deputyHandcuffDuration = CustomOption.Create(107, "Handcuff Duration", 10f, 10f, 120f, 2.5f, deputySpawnRate);
+            deputyGetsPromoted = CustomOption.Create(108, "Deputy Gets Promoted to Sheriff", true, deputySpawnRate);
             deputyKeepsHandcuffs = CustomOption.Create(109, "Deputy Keeps Handcuffs When Promoted", false, deputyGetsPromoted);
             
 

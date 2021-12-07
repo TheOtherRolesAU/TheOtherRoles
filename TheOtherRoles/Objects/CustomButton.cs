@@ -10,6 +10,7 @@ namespace TheOtherRoles.Objects {
     public class CustomButton
     {
         public static List<CustomButton> buttons = new List<CustomButton>();
+        public static List<CustomButton> handcuffedButtons = null;
         public ActionButton actionButton;
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
@@ -28,6 +29,7 @@ namespace TheOtherRoles.Objects {
         private HudManager hudManager;
         private bool mirror;
         private KeyCode? hotkey;
+        private bool cuffed = false;
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false)
         {
@@ -64,6 +66,9 @@ namespace TheOtherRoles.Objects {
             {
                 actionButton.graphic.color = new Color(1f, 1f, 1f, 0.3f);
                 this.OnClick();
+
+                // Deputy skip onClickEvent if handcuffed
+                if (Deputy.handcuffedKnows > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.Timer = this.EffectDuration;
@@ -131,6 +136,67 @@ namespace TheOtherRoles.Objects {
             }
         }
 
+        // Disables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
+        public static void setAllButtonsHandcuffed(bool handcuffed) {
+            if (handcuffed && handcuffedButtons == null)
+            {
+                handcuffedButtons = new List<CustomButton>();
+                int maxI = buttons.Count;
+                for (int i = 0; i < maxI; i++)
+                {
+                    try
+                    {
+                        if (buttons[i].HasButton())  // For each custombutton the player has
+                        {
+                            addReplacementHandcuffedButton(buttons[i]);
+                        }
+                        buttons[i].cuffed = true;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        System.Console.WriteLine("[WARNING] NullReferenceException from MeetingEndedUpdate().HasButton(), if theres only one warning its fine");  // Note: idk what this is good for, but i copied it from above /gendelo
+                    }
+                }
+
+                // Non Custom Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
+                // Kill Button if enabled for the Role
+                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });  // Could use any kill button here, as the position is always the same.
+                // Vent Button if enabled
+                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(-1.8f, 1f, 0), () => { return true; });
+                // Sabotage Button if enabled
+                if (Deputy.disablesSabotage && PlayerControl.LocalPlayer.Data.Role.IsImpostor) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(-0.9f, 1f, 0), () => { return true; });
+                // Use Button if enabled
+                if (Deputy.disablesUse && HudManager.Instance.UseButton.isActiveAndEnabled) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, HudManager.Instance.UseButton.transform.localPosition);
+            }
+            else if (!handcuffed && handcuffedButtons != null)  // Reset to original. Disables the replacements, enables the original buttons.
+            {
+                foreach (var button in handcuffedButtons)
+                {
+                    button.HasButton = () => { return false; };
+                    button.Update(); // To make it disappear properly.
+                }
+                buttons.RemoveRange(buttons.Count - handcuffedButtons.Count, handcuffedButtons.Count);
+                handcuffedButtons = null;
+
+                foreach (var button in buttons)
+                {
+                    button.cuffed = false;
+                }
+            }
+        }
+
+        private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset=null, Func<bool> couldUse=null)
+        {
+            positionOffset = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
+            couldUse = couldUse ?? button.CouldUse;
+            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), (Vector3)positionOffset, button.hudManager, button.hotkey,
+                                                                                        true, Deputy.handcuffTimeRemaining, () => { }, button.mirror);
+            replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
+            replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
+            replacementHandcuffedButton.isEffectActive = true;
+            handcuffedButtons.Add(replacementHandcuffedButton);
+        }
+
         private void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
@@ -138,6 +204,27 @@ namespace TheOtherRoles.Objects {
                 return;
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
+
+            if (Timer >= 0)  // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
+            {
+                if (HasEffect && isEffectActive)
+                    Timer -= Time.deltaTime;
+                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
+                    Timer -= Time.deltaTime;
+            }
+
+            if (Timer <= 0 && HasEffect && isEffectActive)
+            {
+                isEffectActive = false;
+                actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                OnEffectEnds();
+            }
+
+            if (cuffed)
+            {
+                setActive(false);
+                return;
+            }
 
             actionButton.graphic.sprite = Sprite;
             actionButton.buttonLabelText.enabled = showButtonText; // Only show the text if it's a kill button
@@ -154,40 +241,22 @@ namespace TheOtherRoles.Objects {
                 actionButton.graphic.material.SetFloat("_Desat", 1f);
             }
 
-            if (Timer >= 0) {
-                if (HasEffect && isEffectActive)
-                    Timer -= Time.deltaTime;
-                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
-                    Timer -= Time.deltaTime;
-            }
-            
-            if (Timer <= 0 && HasEffect && isEffectActive) {
-                isEffectActive = false;
-                actionButton.cooldownTimerText.color = Palette.EnabledColor;
-                OnEffectEnds();
-            }
+
         
             actionButton.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
 
-            // Deputy handcuff function: Show "HANDCUFFED" instead of button sprite
-            if (Deputy.handcuffedKnows > 0)
-            {
-                actionButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
-                actionButton.buttonLabelText.enabled = false; // Don't show the text if handcuffed.
-            }
-
             // Deputy disable the button and display Handcuffs instead...
             if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
                 OnClick = () => {
                     Deputy.setHandcuffedKnows();
+                    setAllButtonsHandcuffed(true);
                 };
-            } else
+            } else // Reset.
             {
                 OnClick = InitialOnClick;
-                Deputy.setHandcuffedKnows(0f);
             }
          }
     }

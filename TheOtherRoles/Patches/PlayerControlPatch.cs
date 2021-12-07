@@ -256,10 +256,11 @@ namespace TheOtherRoles.Patches {
         {
             if (Deputy.handcuffedPlayer != null)
             {
-                Deputy.handcuffTimeRemaining -= Time.fixedDeltaTime;
                 if (Deputy.handcuffTimeRemaining < 0)
                 {
                     Deputy.handcuffedPlayer = null;
+                    CustomButton.setAllButtonsHandcuffed(false);  // Resets the buttons
+                    Deputy.setHandcuffedKnows(0f);
                 }
                 if (Deputy.handcuffedKnows > 0)
                 {

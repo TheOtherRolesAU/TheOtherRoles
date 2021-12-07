@@ -193,8 +193,15 @@ namespace TheOtherRoles.Patches {
                 var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral ? data.crewmates : data.impostors;
                 var index = rnd.Next(0, rolesToAssign[roleType].Count);
                 var roleId = rolesToAssign[roleType][index];
-                setRoleToRandomPlayer(rolesToAssign[roleType][index], players); 
+                setRoleToRandomPlayer(rolesToAssign[roleType][index], players);
                 rolesToAssign[roleType].RemoveAt(index);
+
+                // If Sheriff is spawned, add deputy, if spawn chance > 0 % for deputy.
+                if (roleId == (byte)RoleId.Sheriff && CustomOptionHolder.deputySpawnRate.getSelection() > 0)
+                {
+                    if (CustomOptionHolder.deputySpawnRate.getSelection() == 10) ensuredCrewmateRoles.Add((byte)RoleId.Deputy);
+                    else data.crewSettings.Add((byte)RoleId.Deputy, CustomOptionHolder.deputySpawnRate.getSelection());
+                }
 
                 if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
                     foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
@@ -225,6 +232,8 @@ namespace TheOtherRoles.Patches {
             List<byte> neutralTickets = data.neutralSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
             List<byte> impostorTickets = data.impSettings.Where(x => x.Value > 0 && x.Value < 10).Select(x => Enumerable.Repeat(x.Key, x.Value)).SelectMany(x => x).ToList();
 
+            bool forceDeputy = false;
+
             // Assign roles until we run out of either players we can assign roles to or run out of roles we can assign to players
             while (
                 (data.impostors.Count > 0 && data.maxImpostorRoles > 0 && impostorTickets.Count > 0) || 
@@ -245,8 +254,22 @@ namespace TheOtherRoles.Patches {
                 var players = roleType == RoleType.Crewmate || roleType == RoleType.Neutral ? data.crewmates : data.impostors;
                 var index = rnd.Next(0, rolesToAssign[roleType].Count);
                 var roleId = rolesToAssign[roleType][index];
-                setRoleToRandomPlayer(rolesToAssign[roleType][index], players);
+                if (forceDeputy && roleType == RoleType.Crewmate) { // This can fail if the sheriff was the last crewmate role to assign. It is what it is.
+                    roleId = (byte)RoleId.Deputy;
+                    forceDeputy = false;
+                }
+                setRoleToRandomPlayer(roleId, players);
                 rolesToAssign[roleType].RemoveAll(x => x == roleId);
+
+                // Sheriff add deputy if spawn chance > 0 % for deputy.
+                if (roleId == (byte)RoleId.Sheriff && CustomOptionHolder.deputySpawnRate.getSelection() > 0) {
+                    if (CustomOptionHolder.deputySpawnRate.getSelection() == 10) forceDeputy = true; // Try to force deputy as next crewmate role;
+                    else {  // Just add tickets, so from now on the deputy gets the "same" chance (but the role is late to the party, so its a bit unfair).
+                        List<byte> temp = new List<byte>();
+                        for (int i = 0; i < CustomOptionHolder.deputySpawnRate.getSelection(); i++) { temp.Add((byte)RoleId.Deputy); }
+                        crewmateTickets.AddRange(temp);
+                    }
+                }
 
                 if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
                     foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {

@@ -532,7 +532,7 @@ namespace TheOtherRoles
         }
 
 
-        public static void sheriffCreatesDeputy()
+        public static void sheriffCreatesDeputy()  // Not Used For Now
         {
             PlayerControl player = Sheriff.deputisedPlayer;
             if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick)
@@ -555,6 +555,9 @@ namespace TheOtherRoles
             Deputy.remainingHandcuffs--;
             Deputy.handcuffedPlayer = Helpers.playerById(targetId);
             Deputy.handcuffTimeRemaining = Deputy.handcuffDuration;
+            int timesTargetCuffed = Deputy.handcuffedPlayerCounts.ContainsKey(targetId) ? Deputy.handcuffedPlayerCounts[targetId] : 0;
+            Deputy.handcuffedPlayerCounts[targetId] = timesTargetCuffed + 1;
+
             if (Deputy.handcuffedPlayer == PlayerControl.LocalPlayer && false)  // Closes Minigames. Is disabled for now, as it would enable too much hard proofing opportunity(?)
             {
                 if (Minigame.Instance && Deputy.disablesUse)
@@ -566,7 +569,8 @@ namespace TheOtherRoles
         {
             Sheriff.removeCurrentSheriff();
             Sheriff.sheriff = Deputy.deputy;
-            Sheriff.canCreateDeputy = false;
+            Sheriff.deputisedPlayer = Deputy.deputy;
+            // Sheriff.canCreateDeputy = false;
             Deputy.deputy = null;  // No clear and reload, as we need to keep the number of handcuffs left etc.
         }
 

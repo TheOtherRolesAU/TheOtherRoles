@@ -71,15 +71,16 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
             else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
-                if (Deputy.deputy != null)
+                /*if (Deputy.deputy != null)  // For now, the Sheriff cannot see the Deputy
                 {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
                 if (Sheriff.fakeDeputy != null)
                 {
                     setPlayerNameColor(Sheriff.fakeDeputy, Deputy.color);
-                }
+                }*/ 
             }
+            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) setPlayerNameColor(Deputy.deputy, Deputy.color);
             else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
             else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
@@ -217,6 +218,7 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
             Tracker.corpsesTrackingTimer -= Time.deltaTime;
+            Deputy.handcuffTimeRemaining -= Time.deltaTime;
         }
 
         public static void miniUpdate() {
@@ -240,7 +242,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
-            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor) return;
+            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor || MeetingHud.Instance) return;
             bool enabled = true;
             if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer)
                 enabled = false;
@@ -252,72 +254,24 @@ namespace TheOtherRoles.Patches {
             if (enabled) __instance.KillButton.Show();
             else __instance.KillButton.Hide();
 
-            if (Deputy.handcuffedKnows > 0) {
-                if (Deputy.killButtonSpriteBackup == null)
-                {
-                    Deputy.killButtonSpriteBackup = __instance.KillButton.graphic.sprite;
-                }
-                __instance.KillButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
-
-                __instance.KillButton.buttonLabelText.enabled = false;
-            } else if (Deputy.killButtonSpriteBackup != null)  // Make sure we already got the backup ;)
-            {
-                __instance.KillButton.graphic.sprite = Deputy.killButtonSpriteBackup;
-                __instance.KillButton.buttonLabelText.enabled = true;
-            }
+            if (Deputy.handcuffedKnows > 0) __instance.KillButton.Hide();
         }
 
-        static void updateUseButton(HudManager __instance)
-        {
-            if (Deputy.disablesUse) {
-                if (Deputy.handcuffedKnows > 0) {
-                    if (Deputy.useButtonSpriteBackup == null) {
-                        Deputy.useButtonSpriteBackup = __instance.UseButton.graphic.sprite;
-                    }
-                    __instance.UseButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
-                    __instance.UseButton.buttonLabelText.enabled = false;
-                } else if (Deputy.useButtonSpriteBackup != null) {
-                    __instance.UseButton.graphic.sprite = Deputy.useButtonSpriteBackup;
-                    __instance.UseButton.buttonLabelText.enabled = true;
-                }
-            }
+        static void updateUseButton(HudManager __instance) {
+            if (Deputy.disablesUse && Deputy.handcuffedKnows > 0 || MeetingHud.Instance) __instance.UseButton.Hide();
+            else __instance.UseButton.Show();
         }
 
         static void updateSabotageButton(HudManager __instance) {
-            if (Deputy.disablesSabotage) {
-                if (Deputy.handcuffedKnows > 0) {
-                    if (Deputy.sabotageButtonSpriteBackup == null) {
-                        Deputy.sabotageButtonSpriteBackup = __instance.SabotageButton.graphic.sprite;
-                    }
-                    __instance.SabotageButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
-                    __instance.SabotageButton.buttonLabelText.enabled = false;
-                }
-                else if (Deputy.sabotageButtonSpriteBackup != null) {
-                    __instance.SabotageButton.graphic.sprite = Deputy.sabotageButtonSpriteBackup;
-                    __instance.SabotageButton.buttonLabelText.enabled = true;
-                }
-            }
+            if (Deputy.disablesSabotage && Deputy.handcuffedKnows > 0 || MeetingHud.Instance) __instance.SabotageButton.Hide();
+            else if (PlayerControl.LocalPlayer.Data.Role.IsImpostor) __instance.SabotageButton.Show();
         }
 
         static void updateVentButton(HudManager __instance)
         {
-            if (Deputy.disablesVents)
-            {
-                if (Deputy.handcuffedKnows > 0)
-                {
-                    if (Deputy.ventButtonSpriteBackup == null)
-                    {
-                        Deputy.ventButtonSpriteBackup = __instance.ImpostorVentButton.graphic.sprite;
-                    }
-                    __instance.ImpostorVentButton.graphic.sprite = Deputy.getHandcuffedButtonSprite();
-                    __instance.ImpostorVentButton.buttonLabelText.enabled = false;
-                }
-                else if (Deputy.ventButtonSpriteBackup != null)
-                {
-                    __instance.ImpostorVentButton.graphic.sprite = Deputy.ventButtonSpriteBackup;
-                    __instance.ImpostorVentButton.buttonLabelText.enabled = true;
-                }
-            }
+            if (Deputy.disablesVents && Deputy.handcuffedKnows > 0 || MeetingHud.Instance) __instance.ImpostorVentButton.Hide();
+            else if (PlayerControl.LocalPlayer.roleCanUseVents()) __instance.ImpostorVentButton.Show();
+
         }
 
 

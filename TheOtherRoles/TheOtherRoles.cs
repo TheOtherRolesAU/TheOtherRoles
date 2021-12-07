@@ -153,7 +153,7 @@ namespace TheOtherRoles
             public static float cooldown = 30f;
             public static bool canKillNeutrals = false;
             public static bool spyCanDieToSheriff = false;
-            public static bool canCreateDeputy;
+            // public static bool canCreateDeputy;
 
 
             public static PlayerControl currentTarget;
@@ -188,7 +188,7 @@ namespace TheOtherRoles
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
-                canCreateDeputy = CustomOptionHolder.sheriffCanCreateDeputy.getBool();
+                // canCreateDeputy = CustomOptionHolder.sheriffHasDeputy.getBool();
             }
         }
 
@@ -209,16 +209,14 @@ namespace TheOtherRoles
 
             // For now, these are no settings, but these params can be used.
             public static bool disablesUse = false;  // TODO: Backup correct use button sprite, never admin etc. (Current visual bug)
-            public static bool disablesSabotage = true;
+            public static bool disablesSabotage = false;  // For now disabled
             public static bool disablesVents = true;
 
 
             private static Sprite buttonSprite;
             private static Sprite handcuffedSprite;
-            public static Sprite killButtonSpriteBackup;
-            public static Sprite sabotageButtonSpriteBackup;
-            public static Sprite useButtonSpriteBackup;
-            public static Sprite ventButtonSpriteBackup;
+            
+            public static Dictionary<byte, int> handcuffedPlayerCounts;
 
             public static Sprite getButtonSprite()
             {
@@ -234,8 +232,9 @@ namespace TheOtherRoles
                 return handcuffedSprite;
             }
 
-            public static void setHandcuffedKnows(float value=5f)
+            public static void setHandcuffedKnows(float value=-1f)
             {
+                if (value == -1f) value = handcuffTimeRemaining;
                 handcuffedKnows = value;
             }
 
@@ -251,6 +250,7 @@ namespace TheOtherRoles
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
                 keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
                 handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
+                handcuffedPlayerCounts = new Dictionary<byte, int>();
             }
         }
 
