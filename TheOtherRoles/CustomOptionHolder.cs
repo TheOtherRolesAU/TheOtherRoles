@@ -360,7 +360,7 @@ namespace TheOtherRoles {
             deputyHandcuffCooldown = CustomOption.Create(105, "Handcuff Cooldown", 30f, 10f, 60f, 2.5f, deputyNumberOfHandcuffs);
             deputyHandcuffDuration = CustomOption.Create(106, "Handcuff Duration", 10f, 10f, 120f, 2.5f, deputyNumberOfHandcuffs);
             deputyNumberOfCuffsPerTarget = CustomOption.Create(107, "Maximum Handcuffs Per Target", 2f, 1f, 10f, 1f, deputyNumberOfHandcuffs);
-            deputyGetsPromoted = CustomOption.Create(108, "Deputy Gets Promoted Tto Sheriff", true, deputySpawnRate);
+            deputyGetsPromoted = CustomOption.Create(108, "Deputy Gets Promoted To Sheriff", true, deputySpawnRate);
             deputyKeepsHandcuffs = CustomOption.Create(109, "Deputy Keeps Handcuffs When Promoted", false, deputyGetsPromoted);
 
             lighterSpawnRate = CustomOption.Create(110, cs(Lighter.color, "Lighter"), rates, null, true);
