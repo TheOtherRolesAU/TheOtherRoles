@@ -45,7 +45,8 @@ namespace TheOtherRoles
         Warlock,
         SecurityGuard,
         Arsonist,
-        Guesser,
+        EvilGuesser,
+        NiceGuesser,
         BountyHunter,
         Bait,
         Vulture,
@@ -243,8 +244,11 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
-                    case RoleId.Guesser:
-                        Guesser.guesser = player;
+                    case RoleId.EvilGuesser:
+                        Guesser.evilGuesser = player;
+                        break;
+                    case RoleId.NiceGuesser:
+                        Guesser.niceGuesser = player;
                         break;
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
@@ -453,8 +457,8 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Guesser.guesser != null && Guesser.guesser == player)
-                Guesser.guesser = oldShifter;
+            if (Guesser.niceGuesser != null && Guesser.niceGuesser == player)
+                Guesser.niceGuesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player) {
                 Bait.bait = oldShifter;
                 if (Bait.bait.Data.IsDead) Bait.reported = true;
@@ -583,7 +587,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
-            if (player == Guesser.guesser) Guesser.clearAndReload();
+            if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
@@ -719,14 +723,14 @@ namespace TheOtherRoles
             }
         }
 
-        public static void guesserShoot(byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
+        public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
             if (dyingTarget == null ) return;
             dyingTarget.Exiled();
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
 
-            Guesser.remainingShots = Mathf.Max(0, Guesser.remainingShots - 1);
+            Guesser.remainingShots(killerId, true);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
@@ -738,9 +742,10 @@ namespace TheOtherRoles
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
             }
-            if (HudManager.Instance != null && Guesser.guesser != null)
+            PlayerControl guesser = Helpers.playerById(killerId);
+            if (HudManager.Instance != null && guesser != null)
                 if (PlayerControl.LocalPlayer == dyingTarget) 
-                    HudManager.Instance.KillOverlay.ShowKillAnimation(Guesser.guesser.Data, dyingTarget.Data);
+                    HudManager.Instance.KillOverlay.ShowKillAnimation(guesser.Data, dyingTarget.Data);
                 else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner) 
                     HudManager.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
             
@@ -749,7 +754,7 @@ namespace TheOtherRoles
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
                 string msg = $"Guesser guessed the role {roleInfo?.name ?? ""} for {guessedTarget.Data.PlayerName}!";
                 if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
-                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(Guesser.guesser, msg);
+                    DestroyableSingleton<HudManager>.Instance.Chat.AddChat(guesser, msg);
                 if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                     DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
             }
@@ -909,10 +914,11 @@ namespace TheOtherRoles
                     RPCProcedure.arsonistWin();
                     break;
                 case (byte)CustomRPC.GuesserShoot:
+                    byte killerId = reader.ReadByte();
                     byte dyingTarget = reader.ReadByte();
                     byte guessedTarget = reader.ReadByte();
                     byte guessedRoleId = reader.ReadByte();
-                    RPCProcedure.guesserShoot(dyingTarget, guessedTarget, guessedRoleId);
+                    RPCProcedure.guesserShoot(killerId, dyingTarget, guessedTarget, guessedRoleId);
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();

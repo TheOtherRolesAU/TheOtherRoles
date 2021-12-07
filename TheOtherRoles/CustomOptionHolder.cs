@@ -57,6 +57,7 @@ namespace TheOtherRoles {
         public static CustomOption guesserHasMultipleShotsPerMeeting;
         public static CustomOption guesserShowInfoInGhostChat;
         public static CustomOption guesserKillsThroughShield;
+        public static CustomOption guesserSpawnBothRate;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
@@ -299,6 +300,7 @@ namespace TheOtherRoles {
             guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
             guesserShowInfoInGhostChat = CustomOption.Create(314, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
             guesserKillsThroughShield  = CustomOption.Create(315, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
+            guesserSpawnBothRate = CustomOption.Create(316, "Both Guesser Spawn Rate", rates, guesserSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
