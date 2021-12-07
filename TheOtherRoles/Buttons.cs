@@ -13,7 +13,6 @@ namespace TheOtherRoles
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
-        private static CustomButton sheriffDeputyButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
@@ -49,7 +48,6 @@ namespace TheOtherRoles
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
-            sheriffDeputyButton.MaxTimer = 0f;
             deputyHandcuffButton.MaxTimer = Deputy.handcuffCooldown;
             timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
@@ -220,25 +218,6 @@ namespace TheOtherRoles
                 KeyCode.Q
             );
 
-            // Sheriff Deputize Button (DISABLED, because the deputy will just spawn as a seperate role)
-            sheriffDeputyButton = new CustomButton(
-                () =>
-                {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureDeputy, Hazel.SendOption.Reliable, -1);
-                    writer.Write(Sheriff.currentTarget.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.setFutureDeputy(Sheriff.currentTarget.PlayerId);
-                },
-                () => { return false; }, // Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Sheriff.deputisedPlayer == null && Sheriff.fakeDeputy == null; },
-                () => { return false; }, //  Sheriff.canCreateDeputy && Sheriff.currentTarget != null && PlayerControl.LocalPlayer.CanMove; },
-                () => { sheriffDeputyButton.Timer = sheriffDeputyButton.MaxTimer; },
-                Sheriff.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
-                __instance,
-                KeyCode.F
-            );
-
-
             // Deputy Handcuff
             deputyHandcuffButton = new CustomButton(
                 () => {
@@ -251,12 +230,12 @@ namespace TheOtherRoles
                     RPCProcedure.deputyUsedHandcuffs(targetId);
                     Deputy.currentTarget = null;
                 },
-                () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.deputisedPlayer && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     if (deputyButtonHandcuffsText != null) deputyButtonHandcuffsText.text = $"{Deputy.remainingHandcuffs}";
-                    if ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.deputisedPlayer && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove)
+                    if ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove)
                     {
-                        // Could handcuff, but no more than 2 times the same player!
+                        // Could handcuff, but no more than <deputyNumberOfCuffsPerTarget> times the same player!
                         byte targetId = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
                         int timesTargetCuffed = Deputy.handcuffedPlayerCounts.ContainsKey(targetId) ? Deputy.handcuffedPlayerCounts[targetId] : 0;
                         if (timesTargetCuffed >= CustomOptionHolder.deputyNumberOfCuffsPerTarget.getFloat()) return false;
@@ -279,7 +258,6 @@ namespace TheOtherRoles
             deputyButtonHandcuffsText.enableWordWrapping = false;
             deputyButtonHandcuffsText.transform.localScale = Vector3.one * 0.5f;
             deputyButtonHandcuffsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
-
 
             // Time Master Rewind Time
             timeMasterShieldButton = new CustomButton(

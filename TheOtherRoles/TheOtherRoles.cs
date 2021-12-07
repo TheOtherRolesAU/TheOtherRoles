@@ -153,44 +153,31 @@ namespace TheOtherRoles
             public static float cooldown = 30f;
             public static bool canKillNeutrals = false;
             public static bool spyCanDieToSheriff = false;
-            // public static bool canCreateDeputy;
-
 
             public static PlayerControl currentTarget;
 
-            public static PlayerControl deputisedPlayer;
-            public static PlayerControl fakeDeputy;
-
+            public static PlayerControl formerDeputy;  // Needed for keeping handcuffs + shifting
             public static PlayerControl formerSheriff;  // When deputy gets promoted...
 
-            private static Sprite buttonSprite;
-            public static Sprite getButtonSprite()
-            {
-                if (buttonSprite) return buttonSprite; // proper deputy handcuff sprite
-                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputizeButton.png", 115f);
-                return buttonSprite;
-            }
             public static void removeCurrentSheriff()
             {
                 if (!formerSheriff) formerSheriff = sheriff;
                 sheriff = null;
                 currentTarget = null;
-                fakeDeputy = null;
                 cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
             }
 
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
-                deputisedPlayer = null;
-                fakeDeputy = null;
+                formerDeputy = null;
                 formerSheriff = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
-                // canCreateDeputy = CustomOptionHolder.sheriffHasDeputy.getBool();
             }
         }
+
 
         public static class Deputy
         {
@@ -207,8 +194,8 @@ namespace TheOtherRoles
             public static float handcuffTimeRemaining;
             public static float handcuffedKnows;
 
-            // For now, these are no settings, but these params can be used.
-            public static bool disablesUse = false;  // TODO: Backup correct use button sprite, never admin etc. (Current visual bug)
+            // For now, these are no settings, but these params can be used. Sabotage and Use are currently untested but might work
+            public static bool disablesUse = false;  
             public static bool disablesSabotage = false;  // For now disabled
             public static bool disablesVents = true;
 

@@ -136,7 +136,7 @@ namespace TheOtherRoles.Objects {
             }
         }
 
-        // Disables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
+        // Disables/ Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
         public static void setAllButtonsHandcuffed(bool handcuffed) {
             if (handcuffed && handcuffedButtons == null)
             {

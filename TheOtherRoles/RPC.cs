@@ -88,7 +88,6 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
-        SheriffCreatesDeputy,
         DeputyUsedHandcuffs,
         DeputyPromotes,
         JackalCreatesSidekick,
@@ -97,7 +96,6 @@ namespace TheOtherRoles
         SetFutureErased,
         SetFutureShifted,
         SetFutureShielded,
-        SetFutureDeputy,
         SetFutureSpelled,
         PlaceJackInTheBox,
         LightsOut,
@@ -435,8 +433,10 @@ namespace TheOtherRoles
                 Mayor.mayor = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
-            if (Sheriff.sheriff != null && Sheriff.sheriff == player)
+            if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
+                if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = oldShifter;  // Shifter also shifts info on promoted deputy (to get handcuffs)
                 Sheriff.sheriff = oldShifter;
+            }
             if (Deputy.deputy != null && Deputy.deputy == player)
                 Deputy.deputy = oldShifter;
             if (Lighter.lighter != null && Lighter.lighter == player)
@@ -531,25 +531,6 @@ namespace TheOtherRoles
                     Tracker.tracked = player;
         }
 
-
-        public static void sheriffCreatesDeputy()  // Not Used For Now
-        {
-            PlayerControl player = Sheriff.deputisedPlayer;
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick)
-            {
-                Sheriff.fakeDeputy = player;
-            }
-            else
-            {
-                DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
-                erasePlayerRoles(player.PlayerId, true);
-                Deputy.deputy = player;
-                if (Deputy.promotesToSheriff && (Sheriff.sheriff == null || Sheriff.sheriff.Data.IsDead || Sheriff.sheriff.Data.Disconnected == true))
-                    RPCProcedure.deputyPromotes();
-            }
-            return;
-
-        }
         public static void deputyUsedHandcuffs(byte targetId)
         {
             Deputy.remainingHandcuffs--;
@@ -569,8 +550,7 @@ namespace TheOtherRoles
         {
             Sheriff.removeCurrentSheriff();
             Sheriff.sheriff = Deputy.deputy;
-            Sheriff.deputisedPlayer = Deputy.deputy;
-            // Sheriff.canCreateDeputy = false;
+            Sheriff.formerDeputy = Deputy.deputy;
             Deputy.deputy = null;  // No clear and reload, as we need to keep the number of handcuffs left etc.
         }
 
@@ -679,11 +659,6 @@ namespace TheOtherRoles
         public static void setFutureShielded(byte playerId) {
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
-        }
-
-        public static void setFutureDeputy(byte playerId)
-        {
-            Sheriff.deputisedPlayer = Helpers.playerById(playerId);
         }
 
         public static void setFutureSpelled(byte playerId) {
@@ -941,10 +916,7 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
-                    break;
-                case (byte)CustomRPC.SheriffCreatesDeputy:
-                    RPCProcedure.sheriffCreatesDeputy();
-                    break;                
+                    break;               
                 case (byte)CustomRPC.DeputyUsedHandcuffs:
                     RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
                     break;
@@ -968,9 +940,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte());
-                    break;
-                case (byte)CustomRPC.SetFutureDeputy:
-                    RPCProcedure.setFutureDeputy(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());
