@@ -174,7 +174,7 @@ namespace TheOtherRoles.Patches {
             // Lawyer
             bool localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer;
             bool localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == PlayerControl.LocalPlayer;
-            if (localIsLawyer || localIsKnowingTarget) {
+            if (localIsLawyer || (localIsKnowingTarget && !Lawyer.lawyer.Data.IsDead)) {
                 string suffix = Helpers.cs(Lawyer.color, " §");
                 Lawyer.target.nameText.text += suffix;
 
