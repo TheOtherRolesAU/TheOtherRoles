@@ -159,10 +159,10 @@ namespace TheOtherRoles
             public static PlayerControl formerDeputy;  // Needed for keeping handcuffs + shifting
             public static PlayerControl formerSheriff;  // When deputy gets promoted...
 
-            public static void removeCurrentSheriff()
+            public static void replaceCurrentSheriff(PlayerControl deputy)
             {
                 if (!formerSheriff) formerSheriff = sheriff;
-                sheriff = null;
+                sheriff = deputy;
                 currentTarget = null;
                 cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
             }
@@ -186,7 +186,7 @@ namespace TheOtherRoles
 
             public static PlayerControl currentTarget;
             public static PlayerControl handcuffedPlayer;
-            public static bool promotesToSheriff;
+            public static int promotesToSheriff; // No: 0, Immediately: 1, After Meeting: 2
             public static bool keepsHandcuffsOnPromotion;
             public static float handcuffDuration;
             public static float remainingHandcuffs;
@@ -198,7 +198,6 @@ namespace TheOtherRoles
             public static bool disablesUse = false;  
             public static bool disablesSabotage = false;  // For now disabled
             public static bool disablesVents = true;
-
 
             private static Sprite buttonSprite;
             private static Sprite handcuffedSprite;
@@ -232,7 +231,7 @@ namespace TheOtherRoles
                 handcuffedPlayer = null;
                 handcuffTimeRemaining = 0f;
                 setHandcuffedKnows(0f);
-                promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getBool();
+                promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getSelection();
                 remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
                 keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();

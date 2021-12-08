@@ -149,12 +149,12 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Deputy.currentTarget, Deputy.color);
         }
 
-        static void deputyCheckPromotion()
+        public static void deputyCheckPromotion(bool isMeeting=false)
         {
             // If LocalPlayer is Deputy, the Sheriff is disconnected and Deputy promotion is enabled, then trigger promotion
             if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
-            if (Deputy.deputy.Data.IsDead == true || !Deputy.promotesToSheriff) return;
-            if (Sheriff.sheriff == null || Sheriff.sheriff?.Data?.Disconnected == true)
+            if (Deputy.promotesToSheriff == 0 || Deputy.deputy.Data.IsDead == true || Deputy.promotesToSheriff == 2 && !isMeeting) return;
+            if (Sheriff.sheriff == null || Sheriff.sheriff?.Data?.Disconnected == true || Sheriff.sheriff.Data.IsDead)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -783,6 +783,8 @@ namespace TheOtherRoles.Patches {
                 impostorSetTarget();
                 // Warlock
                 warlockSetTarget();
+                // Check for deputy promotion on Sheriff disconnect
+                deputyCheckPromotion();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
                 // SecurityGuard
@@ -910,14 +912,6 @@ namespace TheOtherRoles.Patches {
                 if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) {
                     otherLover.MurderPlayer(otherLover);
                 }
-            }
-
-            // Deputy promotion trigger on murder
-            if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead && target == Sheriff.sheriff && Sheriff.sheriff == PlayerControl.LocalPlayer)
-            {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.deputyPromotes();
             }
 
             // Sidekick promotion trigger on murder
@@ -1077,14 +1071,6 @@ namespace TheOtherRoles.Patches {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.sidekickPromotes();
-            }
-
-            // Deputy promotion trigger on exile
-            if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead && __instance == Sheriff.sheriff && Sheriff.sheriff == PlayerControl.LocalPlayer)
-            {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.deputyPromotes();
             }
 
             // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)

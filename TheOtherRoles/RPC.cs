@@ -548,10 +548,12 @@ namespace TheOtherRoles
 
         public static void deputyPromotes()
         {
-            Sheriff.removeCurrentSheriff();
-            Sheriff.sheriff = Deputy.deputy;
-            Sheriff.formerDeputy = Deputy.deputy;
-            Deputy.deputy = null;  // No clear and reload, as we need to keep the number of handcuffs left etc.
+            if (Deputy.deputy != null) {  // Deputy should never be null here, but there appeared to be a race condition during testing, which was removed.
+                Sheriff.replaceCurrentSheriff(Deputy.deputy);
+                Sheriff.formerDeputy = Deputy.deputy;
+                Deputy.deputy = null;
+                // No clear and reload, as we need to keep the number of handcuffs left etc
+            }
         }
 
         public static void jackalCreatesSidekick(byte targetId) {
@@ -583,15 +585,7 @@ namespace TheOtherRoles
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
-            if (player == Sheriff.sheriff) {
-                if (Deputy.promotesToSheriff && Deputy.deputy != null && !Deputy.deputy.Data.IsDead){
-                    RPCProcedure.deputyPromotes();
-                    Sheriff.formerSheriff = null; // Still erase the initial sheriff.
-                }
-                else {
-                    Sheriff.clearAndReload();
-                }
-            }
+            if (player == Sheriff.sheriff) Sheriff.clearAndReload();
             if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
