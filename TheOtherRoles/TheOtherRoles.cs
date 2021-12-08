@@ -1039,6 +1039,7 @@ namespace TheOtherRoles
 
         public static bool highlightAllVents = false;
         public static float reportDelay = 0f;
+        public static bool showKillFlash = true;
 
         public static bool reported = false;
 
@@ -1047,6 +1048,7 @@ namespace TheOtherRoles
             reported = false;
             highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
             reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
+            showKillFlash = CustomOptionHolder.baitShowKillFlash.getBool();
         }
     }
 
@@ -1168,6 +1170,7 @@ namespace TheOtherRoles
         public static List<PlayerControl> blankedList = new List<PlayerControl>();
         public static int blanks = 0;
         public static Sprite blank;
+        public static bool notAckedExiled = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
@@ -1183,6 +1186,7 @@ namespace TheOtherRoles
             target = null;
             blankedList = new List<PlayerControl>();
             blanks = 0;
+            notAckedExiled = false;
 
             cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
             blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());
