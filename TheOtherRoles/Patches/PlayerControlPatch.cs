@@ -685,7 +685,6 @@ namespace TheOtherRoles.Patches {
                 DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
                 Hacker.adminTableEffect = false;
             } else if (Hacker.hackerTimer <= 0 && Hacker.isEffectActive) {
-                hackerTriggerButtons();
                 Hacker.isEffectActive = false;
                 Hacker.toolsCounter++;
                 if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
@@ -704,7 +703,6 @@ namespace TheOtherRoles.Patches {
 
                 Hacker.vitalsEffect = false;
             } else if (Hacker.hackerTimer <= 0 && Hacker.isEffectActive) {
-                hackerTriggerButtons();
                 Hacker.isEffectActive = false;
                 Hacker.toolsCounter++;
                 if (Minigame.Instance) Hacker.vitals.ForceClose();

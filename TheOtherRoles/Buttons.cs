@@ -99,12 +99,6 @@ namespace TheOtherRoles
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
         }
 
-        public static void hackerTriggerButtons() {
-            hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
-            hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
-            hackerButton.Timer = hackerButton.MaxTimer;
-        }
-
         public static void Postfix(HudManager __instance)
         {
             // Engineer Repair
