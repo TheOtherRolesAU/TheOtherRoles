@@ -478,26 +478,53 @@ namespace TheOtherRoles
 
     public static class Hacker {
         public static PlayerControl hacker;
+        public static Minigame vitals = null;
         public static Color color = new Color32(117, 250, 76, byte.MaxValue);
 
         public static float cooldown = 30f;
         public static float duration = 10f;
+        public static float toolsNumber = 5f;
+        public static float toolsCounter = 0f;
         public static bool onlyColorType = false;
         public static float hackerTimer = 0f;
+        public static bool vitalsEffect = false;
+        public static bool adminTableEffect = false;
+        public static bool isEffectActive = false;
 
         private static Sprite buttonSprite;
+        private static Sprite vitalsSprite;
+        private static Sprite adminSprite;
+
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HackerButton.png", 115f);
             return buttonSprite;
         }
 
+        public static Sprite getVitalsSprite() {
+            if (vitalsSprite) return vitalsSprite;
+            vitalsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CamoButton.png", 115f);
+            return vitalsSprite;
+        }
+
+        public static Sprite getAdminSprite() {
+            if (adminSprite) return adminSprite;
+            adminSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CamoButton.png", 115f);
+            return adminSprite;
+        }
+
         public static void clearAndReload() {
             hacker = null;
+            vitals = null;
             hackerTimer = 0f;
+            vitalsEffect = false;
+            adminTableEffect = false;
+            isEffectActive = false;
+            toolsCounter = 0f;
             cooldown = CustomOptionHolder.hackerCooldown.getFloat();
             duration = CustomOptionHolder.hackerHackeringDuration.getFloat();
             onlyColorType = CustomOptionHolder.hackerOnlyColorType.getBool();
+            toolsNumber = CustomOptionHolder.hackerToolsNumber.getFloat();
         }
     }
 

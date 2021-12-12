@@ -19,6 +19,8 @@ namespace TheOtherRoles
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton hackerButton;
+        private static CustomButton hackerVitalsButton;
+        private static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
         private static CustomButton vampireKillButton;
@@ -52,6 +54,8 @@ namespace TheOtherRoles
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
+            hackerVitalsButton.MaxTimer = Hacker.cooldown;
+            hackerAdminTableButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
@@ -74,6 +78,8 @@ namespace TheOtherRoles
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
+            hackerVitalsButton.EffectDuration = Hacker.duration;
+            hackerAdminTableButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
@@ -91,6 +97,12 @@ namespace TheOtherRoles
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        public static void hackerTriggerButtons() {
+            hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+            hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
+            hackerButton.Timer = hackerButton.MaxTimer;
         }
 
         public static void Postfix(HudManager __instance)
@@ -344,7 +356,7 @@ namespace TheOtherRoles
                 () => {
                     Hacker.hackerTimer = Hacker.duration;
                 },
-                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Hacker.toolsCounter < Hacker.toolsNumber; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     hackerButton.Timer = hackerButton.MaxTimer;
@@ -352,15 +364,57 @@ namespace TheOtherRoles
                     hackerButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Hacker.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(0f, 1f, 0),
                 __instance,
                 KeyCode.F,
                 true,
                 0f,
                 () => {
+                    hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+                    hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
                     hackerButton.Timer = hackerButton.MaxTimer;
                 }
             );
+
+            hackerAdminTableButton = new CustomButton(
+               () => {
+                   if (Hacker.hackerTimer <= 0f) {
+                       Hacker.hackerTimer = Hacker.duration;
+                       hackerButton.onClickEvent();
+                   }
+                   Hacker.isEffectActive = true;
+                   Hacker.adminTableEffect = true;
+               },
+               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Hacker.toolsCounter < Hacker.toolsNumber;},
+               () => { return PlayerControl.LocalPlayer.CanMove; },
+               () => {
+                   hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+               },
+               Hacker.getAdminSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.Q
+           );
+
+            hackerVitalsButton = new CustomButton(
+               () => {
+                   if (Hacker.hackerTimer <= 0f) {
+                       Hacker.hackerTimer = Hacker.duration;
+                       hackerButton.onClickEvent();
+                   }
+                   Hacker.isEffectActive = true;
+                   Hacker.vitalsEffect = true;
+               },
+               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Hacker.toolsCounter < Hacker.toolsNumber;},
+               () => { return PlayerControl.LocalPlayer.CanMove; },
+               () => {
+                   hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
+               },
+               Hacker.getVitalsSprite(),
+               new Vector3(-2.7f, -0.06f, 0),
+               __instance,
+               KeyCode.Q
+           );
 
             // Tracker button
             trackerTrackPlayerButton = new CustomButton(

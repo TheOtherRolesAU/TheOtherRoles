@@ -55,7 +55,7 @@ namespace TheOtherRoles.Objects {
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false)
         : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror) { }
 
-        void onClickEvent()
+        public void onClickEvent()
         {
             if (this.Timer < 0f && HasButton() && CouldUse())
             {

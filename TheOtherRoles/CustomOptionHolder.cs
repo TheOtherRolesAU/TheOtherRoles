@@ -143,6 +143,7 @@ namespace TheOtherRoles {
         public static CustomOption hackerCooldown;
         public static CustomOption hackerHackeringDuration;
         public static CustomOption hackerOnlyColorType;
+        public static CustomOption hackerToolsNumber;
 
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
@@ -385,6 +386,7 @@ namespace TheOtherRoles {
             hackerCooldown = CustomOption.Create(171, "Hacker Cooldown", 30f, 0f, 60f, 5f, hackerSpawnRate);
             hackerHackeringDuration = CustomOption.Create(172, "Hacker Duration", 10f, 2.5f, 60f, 2.5f, hackerSpawnRate);
             hackerOnlyColorType = CustomOption.Create(173, "Hacker Only Sees Color Type", false, hackerSpawnRate);
+            hackerToolsNumber = CustomOption.Create(174, "Mobile Gadget Charges", 5f, 1f, 45f, 1f, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
