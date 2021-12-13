@@ -387,7 +387,9 @@ namespace TheOtherRoles
                Hacker.getAdminSprite(),
                new Vector3(-1.8f, -0.06f, 0),
                __instance,
-               KeyCode.Q
+               KeyCode.Q,
+               PlayerControl.GameOptions.MapId == 3 ? true : false,
+               Hacker.getAdminButton().Text.ToString()
            );
 
             hackerVitalsButton = new CustomButton(
@@ -407,7 +409,9 @@ namespace TheOtherRoles
                Hacker.getVitalsSprite(),
                new Vector3(-2.7f, -0.06f, 0),
                __instance,
-               KeyCode.Q
+               KeyCode.Q,
+               false,
+               HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Text.ToString().Replace("LABEL", "")
            );
 
             // Tracker button

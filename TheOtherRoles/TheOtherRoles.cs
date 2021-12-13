@@ -503,14 +503,22 @@ namespace TheOtherRoles
 
         public static Sprite getVitalsSprite() {
             if (vitalsSprite) return vitalsSprite;
-            vitalsSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CamoButton.png", 115f);
+            vitalsSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
             return vitalsSprite;
         }
 
         public static Sprite getAdminSprite() {
-            if (adminSprite) return adminSprite;
-            adminSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CamoButton.png", 115f);
+            adminSprite = getAdminButton().Image;
             return adminSprite;
+        }
+
+        public static UseButtonSettings getAdminButton() {
+            byte mapId = PlayerControl.GameOptions.MapId;
+            UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+            if (mapId == 0 || mapId == 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+            else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+            else if (mapId == 2) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+            return button;
         }
 
         public static void clearAndReload() {
@@ -521,6 +529,7 @@ namespace TheOtherRoles
             adminTableEffect = false;
             isEffectActive = false;
             toolsCounter = 0f;
+            adminSprite = null;
             cooldown = CustomOptionHolder.hackerCooldown.getFloat();
             duration = CustomOptionHolder.hackerHackeringDuration.getFloat();
             onlyColorType = CustomOptionHolder.hackerOnlyColorType.getBool();

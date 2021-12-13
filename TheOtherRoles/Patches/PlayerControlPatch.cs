@@ -692,10 +692,12 @@ namespace TheOtherRoles.Patches {
 
             // Vitals
             else if (!Minigame.Instance && Hacker.hackerTimer > 0 && Hacker.vitalsEffect) {
+                HudManagerStartPatch.Postfix(HudManager.Instance);
+               // Hacker.getAdminSprite();
                 if (Hacker.vitals == null) {
-                    var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
-                    if (e == null || Camera.main == null) return;
-                    Hacker.vitals = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
+                var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
+                if (e == null || Camera.main == null) return;
+                Hacker.vitals = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
                 }
                 Hacker.vitals.transform.SetParent(Camera.main.transform, false);
                 Hacker.vitals.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
