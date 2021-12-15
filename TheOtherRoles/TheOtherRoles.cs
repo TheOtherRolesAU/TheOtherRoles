@@ -979,6 +979,7 @@ namespace TheOtherRoles
         public static bool hasMultipleShotsPerMeeting = false;
         public static bool showInfoInGhostChat = true;
         public static bool killsThroughShield = true;
+        public static bool evilGuesserCanGuessSpy = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1016,6 +1017,7 @@ namespace TheOtherRoles
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
             showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
             killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
+            evilGuesserCanGuessSpy = CustomOptionHolder.guesserEvilCanKillSpy.getBool();
         }
     }
 
