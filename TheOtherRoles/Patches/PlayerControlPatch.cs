@@ -679,36 +679,13 @@ namespace TheOtherRoles.Patches {
 
         public static void hackerUpdate() {
             if (Hacker.hacker == null || PlayerControl.LocalPlayer != Hacker.hacker) return;
-
-            // Admin panel
-            if (Hacker.hackerTimer > 0 && Hacker.adminTableEffect && (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)) {
-                DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
-                Hacker.adminTableEffect = false;
-            } else if (Hacker.hackerTimer <= 0 && Hacker.isEffectActive) {
-                Hacker.isEffectActive = false;
-                Hacker.toolsCounter++;
-                if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
+            var (playerCompleted, _) = TasksHandler.taskInfo(Hacker.hacker.Data);
+            if (playerCompleted == Hacker.rechargedTasks) {
+                Hacker.rechargedTasks += Hacker.rechargeTasksNumber;
+                if (Hacker.toolsNumber > Hacker.chargesVitals) Hacker.chargesVitals++;
+                if (Hacker.toolsNumber > Hacker.chargesAdminTable) Hacker.chargesAdminTable++;
             }
 
-            // Vitals
-            else if (!Minigame.Instance && Hacker.hackerTimer > 0 && Hacker.vitalsEffect) {
-                HudManagerStartPatch.Postfix(HudManager.Instance);
-               // Hacker.getAdminSprite();
-                if (Hacker.vitals == null) {
-                var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
-                if (e == null || Camera.main == null) return;
-                Hacker.vitals = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
-                }
-                Hacker.vitals.transform.SetParent(Camera.main.transform, false);
-                Hacker.vitals.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-                Hacker.vitals.Begin(null);
-
-                Hacker.vitalsEffect = false;
-            } else if (Hacker.hackerTimer <= 0 && Hacker.isEffectActive) {
-                Hacker.isEffectActive = false;
-                Hacker.toolsCounter++;
-                if (Minigame.Instance) Hacker.vitals.ForceClose();
-            }
         }
 
         static void pursuerSetTarget() {
