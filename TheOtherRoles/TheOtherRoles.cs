@@ -478,26 +478,58 @@ namespace TheOtherRoles
 
     public static class Hacker {
         public static PlayerControl hacker;
+        public static Minigame vitals = null;
         public static Color color = new Color32(117, 250, 76, byte.MaxValue);
 
         public static float cooldown = 30f;
         public static float duration = 10f;
+        public static float toolsNumber = 5f;
         public static bool onlyColorType = false;
         public static float hackerTimer = 0f;
+        public static int rechargeTasksNumber = 2;
+        public static int rechargedTasks = 2;
+        public static int chargesVitals = 1;
+        public static int chargesAdminTable = 1;
 
         private static Sprite buttonSprite;
+        private static Sprite vitalsSprite;
+        private static Sprite adminSprite;
+
         public static Sprite getButtonSprite() {
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HackerButton.png", 115f);
             return buttonSprite;
         }
 
+        public static Sprite getVitalsSprite() {
+            if (vitalsSprite) return vitalsSprite;
+            vitalsSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
+            return vitalsSprite;
+        }
+
+        public static Sprite getAdminSprite() {
+            byte mapId = PlayerControl.GameOptions.MapId;
+            UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+            if (mapId == 0 || mapId == 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+            else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+            else if (mapId == 4) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+            adminSprite = button.Image;
+            return adminSprite;
+        }
+
         public static void clearAndReload() {
             hacker = null;
+            vitals = null;
             hackerTimer = 0f;
+            adminSprite = null;
             cooldown = CustomOptionHolder.hackerCooldown.getFloat();
             duration = CustomOptionHolder.hackerHackeringDuration.getFloat();
             onlyColorType = CustomOptionHolder.hackerOnlyColorType.getBool();
+            toolsNumber = CustomOptionHolder.hackerToolsNumber.getFloat();
+            rechargeTasksNumber = Mathf.RoundToInt(CustomOptionHolder.hackerRechargeTasksNumber.getFloat());
+            rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.hackerRechargeTasksNumber.getFloat());
+            chargesVitals = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
+            chargesAdminTable = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
         }
     }
 
@@ -969,14 +1001,17 @@ namespace TheOtherRoles
     }
 
     public static class Guesser {
-        public static PlayerControl guesser;
+        public static PlayerControl niceGuesser;
+        public static PlayerControl evilGuesser;
         public static Color color = new Color32(255, 255, 0, byte.MaxValue);
         private static Sprite targetSprite;
 
-        public static int remainingShots = 2;
+        public static int remainingShotsEvilGuesser = 2;
+        public static int remainingShotsNiceGuesser = 2;
         public static bool hasMultipleShotsPerMeeting = false;
         public static bool showInfoInGhostChat = true;
         public static bool killsThroughShield = true;
+        public static bool evilGuesserCanGuessSpy = true;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -984,13 +1019,37 @@ namespace TheOtherRoles
             return targetSprite;
         }
 
+        public static bool isGuesser (byte playerId) {
+            if ((niceGuesser != null && niceGuesser.PlayerId == playerId) || (evilGuesser != null && evilGuesser.PlayerId == playerId)) return true;
+            return false;
+        }
+
+        public static void clear (byte playerId) {
+            if (niceGuesser != null && niceGuesser.PlayerId == playerId) niceGuesser = null;
+            else if (evilGuesser != null && evilGuesser.PlayerId == playerId) evilGuesser = null;
+        }
+
+        public static int remainingShots(byte playerId, bool shoot = false) {
+            int remainingShots = remainingShotsEvilGuesser;
+            if (niceGuesser.PlayerId == playerId) {
+                remainingShots = remainingShotsNiceGuesser;
+                if (shoot) remainingShotsNiceGuesser = Mathf.Max(0, remainingShotsNiceGuesser - 1);
+            } else if (shoot) {
+                remainingShotsEvilGuesser = Mathf.Max(0, remainingShotsEvilGuesser - 1);
+            }
+            return remainingShots;
+        }
+
         public static void clearAndReload() {
-            guesser = null;
-            
-            remainingShots = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+            niceGuesser = null;
+            evilGuesser = null;
+
+            remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
+            remainingShotsNiceGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
             showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
             killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
+            evilGuesserCanGuessSpy = CustomOptionHolder.guesserEvilCanKillSpy.getBool();
         }
     }
 
@@ -1170,6 +1229,7 @@ namespace TheOtherRoles
         public static List<PlayerControl> blankedList = new List<PlayerControl>();
         public static int blanks = 0;
         public static Sprite blank;
+        public static bool notAckedExiled = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
@@ -1185,6 +1245,7 @@ namespace TheOtherRoles
             target = null;
             blankedList = new List<PlayerControl>();
             blanks = 0;
+            notAckedExiled = false;
 
             cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
             blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());

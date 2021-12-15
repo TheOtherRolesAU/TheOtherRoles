@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
+using System.Linq;
 
 namespace TheOtherRoles
 {
@@ -19,6 +20,8 @@ namespace TheOtherRoles
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
         private static CustomButton hackerButton;
+        private static CustomButton hackerVitalsButton;
+        private static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
         private static CustomButton vampireKillButton;
@@ -41,6 +44,8 @@ namespace TheOtherRoles
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text pursuerButtonBlanksText;
+        public static TMPro.TMP_Text hackerAdminTableChargesText;
+        public static TMPro.TMP_Text hackerVitalsChargesText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -52,6 +57,8 @@ namespace TheOtherRoles
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             hackerButton.MaxTimer = Hacker.cooldown;
+            hackerVitalsButton.MaxTimer = Hacker.cooldown;
+            hackerAdminTableButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
@@ -74,6 +81,8 @@ namespace TheOtherRoles
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
+            hackerVitalsButton.EffectDuration = Hacker.duration;
+            hackerAdminTableButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
@@ -352,15 +361,96 @@ namespace TheOtherRoles
                     hackerButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 Hacker.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(0f, 1f, 0),
                 __instance,
                 KeyCode.F,
                 true,
                 0f,
-                () => {
-                    hackerButton.Timer = hackerButton.MaxTimer;
-                }
+                () => { hackerButton.Timer = hackerButton.MaxTimer;}
             );
+
+            hackerAdminTableButton = new CustomButton(
+               () => {
+                   if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
+                       DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+
+                   Hacker.chargesAdminTable--;
+               },
+               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead;},
+               () => {
+                   if (hackerAdminTableChargesText != null) hackerAdminTableChargesText.text = $"{Hacker.chargesAdminTable} / {Hacker.toolsNumber}";
+                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesAdminTable > 0; 
+               },
+               () => {
+                   hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+                   hackerAdminTableButton.isEffectActive = false;
+                   hackerAdminTableButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+               },
+               Hacker.getAdminSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.Q,
+               true,
+               0f,
+               () => { 
+                   hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+                   if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
+               },
+               PlayerControl.GameOptions.MapId == 3,
+               "ADMIN"
+           );
+
+            // Hacker Admin Table Charges
+            hackerAdminTableChargesText = GameObject.Instantiate(hackerAdminTableButton.actionButton.cooldownTimerText, hackerAdminTableButton.actionButton.cooldownTimerText.transform.parent);
+            hackerAdminTableChargesText.text = "";
+            hackerAdminTableChargesText.enableWordWrapping = false;
+            hackerAdminTableChargesText.transform.localScale = Vector3.one * 0.5f;
+            hackerAdminTableChargesText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
+            hackerVitalsButton = new CustomButton(
+               () => {
+                   if (!Minigame.Instance) {
+                       if (Hacker.vitals == null) {
+                           var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
+                           if (e == null || Camera.main == null) return;
+                           Hacker.vitals = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
+                       }
+                       Hacker.vitals.transform.SetParent(Camera.main.transform, false);
+                       Hacker.vitals.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+                       Hacker.vitals.Begin(null);
+                   }
+                   Hacker.chargesVitals--;
+               },
+               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead;},
+               () => {
+                   if (hackerVitalsChargesText != null) hackerVitalsChargesText.text = $"{Hacker.chargesVitals} / {Hacker.toolsNumber}";
+                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesVitals > 0;
+               },
+               () => {
+                   hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
+                   hackerVitalsButton.isEffectActive = false;
+                   hackerVitalsButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+               },
+               Hacker.getVitalsSprite(),
+               new Vector3(-2.7f, -0.06f, 0),
+               __instance,
+               KeyCode.Q,
+               true,
+               0f,
+               () => { 
+                   hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
+                   if (Minigame.Instance) Hacker.vitals.ForceClose();
+               },
+               false,
+               "VITALS"
+           );
+
+            // Hacker Vitals Charges
+            hackerVitalsChargesText = GameObject.Instantiate(hackerVitalsButton.actionButton.cooldownTimerText, hackerVitalsButton.actionButton.cooldownTimerText.transform.parent);
+            hackerVitalsChargesText.text = "";
+            hackerVitalsChargesText.enableWordWrapping = false;
+            hackerVitalsChargesText.transform.localScale = Vector3.one * 0.5f;
+            hackerVitalsChargesText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Tracker button
             trackerTrackPlayerButton = new CustomButton(
