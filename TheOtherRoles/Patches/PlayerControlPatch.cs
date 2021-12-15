@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
-using static TheOtherRoles.HudManagerStartPatch;
 using TheOtherRoles.Objects;
 using UnityEngine;
 
@@ -678,14 +677,13 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void hackerUpdate() {
-            if (Hacker.hacker == null || PlayerControl.LocalPlayer != Hacker.hacker) return;
+            if (Hacker.hacker == null || PlayerControl.LocalPlayer != Hacker.hacker || Hacker.hacker.Data.IsDead) return;
             var (playerCompleted, _) = TasksHandler.taskInfo(Hacker.hacker.Data);
             if (playerCompleted == Hacker.rechargedTasks) {
                 Hacker.rechargedTasks += Hacker.rechargeTasksNumber;
                 if (Hacker.toolsNumber > Hacker.chargesVitals) Hacker.chargesVitals++;
                 if (Hacker.toolsNumber > Hacker.chargesAdminTable) Hacker.chargesAdminTable++;
             }
-
         }
 
         static void pursuerSetTarget() {
