@@ -208,7 +208,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Possible Additional winner: Pursuer
-            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead) {
+            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead && !Pursuer.notAckedExiled) {
                 if (!TempData.winners.ToArray().Any(x => x.PlayerName == Pursuer.pursuer.Data.PlayerName))
                     TempData.winners.Add(new WinningPlayerData(Pursuer.pursuer.Data));
                 AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAlivePursuerWin);
