@@ -253,6 +253,13 @@ namespace TheOtherRoles.Patches {
                     
                     }
                 }
+
+                //Fix Visor in Vitals
+                foreach (VitalsPanel panel in __instance.vitals) {
+                    if (panel.PlayerIcon != null && panel.PlayerIcon.Skin != null) {
+                         panel.PlayerIcon.Skin.transform.position = new Vector3(0, 0, 0f);
+                    }
+                }
             }
         }
 

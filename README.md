@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.14s| v3.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.4/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.3/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.2/TheOtherRoles.zip)
@@ -87,6 +88,17 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.3.0**
+- Update to Among Us version 2021.12.14s
+- Fixed a bug where the Pursuer won if the Pursuer was the last killed or voted player
+- Fixed a bug where the option "Enable Mod Roles And Block Vanilla Roles" was not set correctly
+- New option for the Guesser "Evil Guesser can guess spy"
+- New option for the Guesser "Other Guesser Spawn Rate"
+- New ability for the Hacker "Mobile Gadgets" (including vitals & admin table)
+- New option for the Hacker "Max Mobile Gadget Charges"
+- New option for the Hacker "Number Of Tasks Needed For Recharging"
+- Fixed some UI bugs during the meeting  
 
 **Version 3.2.4**
 - Fixed a bug where the Vampire teleported when the bitten player died
@@ -825,6 +837,8 @@ Depending on the options, the Guesser can't guess the shielded player and depend
 | Guesser Can Shoot Multiple Times Per Meeting| -
 | Guesses Visible In Ghost Chat| -
 | Guesses Ignore The Medic Shield| -
+| Evil Guesser Can Guess The Spy| -
+| Other Guesser Spawn Rate| -
 
 -----------------------
 
@@ -1035,6 +1049,7 @@ If the Hacker activates the "Hacker mode", the Hacker gets more information than
 Otherwise they see the same information as everyone else.
 **Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
 **Vitals**: The Hacker can see how long dead players have been dead for.\
+The Hacker can access his mobile gadgets (vitals & admin table), with a maximum of charges (uses) and a configurable amount of tasks needed to recharge.\
 \
 **NOTE:**
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
@@ -1048,6 +1063,8 @@ Otherwise they see the same information as everyone else.
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
+| Max Mobile Gadget Charges| -
+| Number Of Tasks Needed For Recharging | Number of tasks to get a charge
 -----------------------
 
 

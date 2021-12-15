@@ -387,9 +387,15 @@ namespace TheOtherRoles.Patches {
                     TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (meetingInfo == null && playerVoteArea != null) {
                         meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                        meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                        meetingInfo.fontSize *= 0.75f;
+                        meetingInfo.transform.localPosition += Vector3.down * 0.10f;
+                        meetingInfo.fontSize *= 0.60f;
                         meetingInfo.gameObject.name = "Info";
+                    }
+
+                    // Set player name higher to align in middle
+                    if (meetingInfo != null && playerVoteArea != null) {
+                        var playerName = playerVoteArea.NameText;
+                        playerName.transform.localPosition = new Vector3(0.3384f, (0.0311f + 0.0683f), -0.1f);    
                     }
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
