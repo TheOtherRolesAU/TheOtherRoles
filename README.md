@@ -1055,6 +1055,7 @@ The Hacker can access his mobile gadgets (vitals & admin table), with a maximum 
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
 - During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
+- The other guesser is just added to the ticket system with the selected spawn rate, independent of the settings above
 
 ### Game Options
 | Name | Description |
