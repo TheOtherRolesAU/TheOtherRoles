@@ -1031,7 +1031,7 @@ namespace TheOtherRoles
 
         public static int remainingShots(byte playerId, bool shoot = false) {
             int remainingShots = remainingShotsEvilGuesser;
-            if (niceGuesser.PlayerId == playerId) {
+            if (niceGuesser != null && niceGuesser.PlayerId == playerId) {
                 remainingShots = remainingShotsNiceGuesser;
                 if (shoot) remainingShotsNiceGuesser = Mathf.Max(0, remainingShotsNiceGuesser - 1);
             } else if (shoot) {
