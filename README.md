@@ -1364,9 +1364,9 @@ The Lawyer can win in multiple ways:
 
 ## Pursuer
 ### **Team: Neutral**
-The Pursuer is still a neutral role, but has a different goal to win the game: Them has to be alive, when the game ends (no matter who caused the win).
-In order to achieve this goal, the Pursuer has the ability "Blank": Them can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
-If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
+The Pursuer is still a neutral role, but has a different goal to win the game; they have to be alive when the game ends (no matter who causes the win).
+In order to achieve this goal, the Pursuer has an ability called "Blank", where they can fill a killers (this also includes the Sheriff) weapon with a blank. So, if the killer attempts to kill someone, the killer will miss their target, and their cooldowns will be triggered as usual.
+If the killer fires the "Blank", shields (e.g. Medic shield or Time Master shield) will not be triggered.
 The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
 
 # Source code
