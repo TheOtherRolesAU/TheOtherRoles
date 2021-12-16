@@ -2,7 +2,6 @@
 // Orginial code was written by 6pak and miniduikboot as part of the Reactor api for Among Us (https://github.com/NuclearPowered/Reactor)
 
 using HarmonyLib;
-using System;
 namespace TheOtherRoles.Patches
 {
     [HarmonyPatch(typeof(InnerNet.InnerNetClient), nameof(InnerNet.InnerNetClient.GetConnectionData))]
