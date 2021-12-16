@@ -38,6 +38,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)
+| 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
+| 2021.12.14s| v3.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.0/TheOtherRoles.zip)
+| 2021.11.9.5s| v3.2.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.4/TheOtherRoles.zip)
+| 2021.11.9.5s| v3.2.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.3/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.2/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.1/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.0/TheOtherRoles.zip)
@@ -86,11 +91,40 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 3.3.2**
+- Fixed a bug where you can't create a lobby on Among Us 2021.12.15
+
+**Version 3.3.1**
+- Fixed a bug where sometimes the Evil Guesser could not guess. Thanks @tomarai
+
+**Version 3.3.0**
+- Update to Among Us version 2021.12.14s
+- Fixed a bug where the Pursuer won if the Pursuer was the last killed or voted player
+- Fixed a bug where the option "Enable Mod Roles And Block Vanilla Roles" was not set correctly
+- New option for the Guesser "Evil Guesser can guess spy"
+- New option for the Guesser "Other Guesser Spawn Rate"
+- New ability for the Hacker "Mobile Gadgets" (including vitals & admin table)
+- New option for the Hacker "Max Mobile Gadget Charges"
+- New option for the Hacker "Number Of Tasks Needed For Recharging"
+- Fixed some UI bugs during the meeting  
+
+**Version 3.2.4**
+- Fixed a bug where the Vampire teleported when the bitten player died
+- The settings UI has been improved by [Amsyar Rasyiq](https://github.com/amsyarasyiq)
+- New option to the Bait "Warn The Killer With A Flash", created by [gendelo3](https://github.com/gendelo3)
+
+**Version 3.2.3**
+- Fixed a bug where the role of a dead client was visible to the Pursuer
+- Fixed a bug where the Morphling changed their color when killing players
+- Fixed a bug where voting the Lover partner of a Lover Witch did not safe the spellbound players
+- When the Lawyer dies, the client doesn't have the client mark (§) anymore, making the client aware of the fact that the Lawyer can't steal the win anymore (only relevant if the "Client Knows" option is on)
+
 **Version 3.2.2**
 - Add new option "Play On A Random Map" created by [Alex2911](https://github.com/Alex2911)
 - Add Witch option "Voting The Witch Saves All The Targets"
+- Add Lawyer option "Lawyer Knows Target Role"
 - We changed the win conditions of the [Lawyer](#lawyer), to make it more viable
-- Bug fix: The Medium now shows the roles of players in the rigth format
+- Bug fix: The Medium now shows the roles of players in the right format
 - The name and the role of all winners is now being displayed on the end screen
 - We changed the way settings are being shared among the players (which caused some people to be unable to join the lobby). This might resolve the problem or make it even worse... we'll see.
 
@@ -762,7 +796,7 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 ## Witch
 ### **Team: Impostors**
 The Witch is an Impostor who has the ability to cast a spell on other players.\
-During the next meeting, the spellbound player will be highlighted and he'll die right after the meeting.\
+During the next meeting, the spellbound player will be highlighted and they'll die right after the meeting.\
 There are multiple options listed down below with which you can configure to fit your taste.\
 Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated).\
 This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).\
@@ -811,6 +845,8 @@ Depending on the options, the Guesser can't guess the shielded player and depend
 | Guesser Can Shoot Multiple Times Per Meeting| -
 | Guesses Visible In Ghost Chat| -
 | Guesses Ignore The Medic Shield| -
+| Evil Guesser Can Guess The Spy| -
+| Other Guesser Spawn Rate| -
 
 -----------------------
 
@@ -1021,6 +1057,7 @@ If the Hacker activates the "Hacker mode", the Hacker gets more information than
 Otherwise they see the same information as everyone else.
 **Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
 **Vitals**: The Hacker can see how long dead players have been dead for.\
+The Hacker can access his mobile gadgets (vitals & admin table), with a maximum of charges (uses) and a configurable amount of tasks needed to recharge.\
 \
 **NOTE:**
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
@@ -1034,6 +1071,8 @@ Otherwise they see the same information as everyone else.
 | Hacker Cooldown| -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
+| Max Mobile Gadget Charges| -
+| Number Of Tasks Needed For Recharging | Number of tasks to get a charge
 -----------------------
 
 
@@ -1254,6 +1293,7 @@ an outline or all vents do).
 | Bait Spawn Chance | -
 | Bait Highlight All Vents | If set to true, all vents will be highlighted if a player is inside of one of them. If set to false, only the vents where players are siting in will be highlighted.
 | Bait Report Delay | -
+| Warn The Killer With A Flash | -
 -----------------------
 
 ## Medium
@@ -1301,36 +1341,37 @@ Depending on the options, when a player dies, the Vulture gets an arrow pointing
 ## Lawyer
 ### **Team: Neutral**
 The Lawyer is a neutral role that has a client.
-The client might be an Impostor, Jackal or Sidekick which is no Lover.
-The Lawyer needs his client to win in order to win the game.
-If his client dies or gets voted out, the Lawyer gets changes his role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
-The main goal of the Lawyer is to win as Lawyer, he is not allowed to betray his client.
+The client might be an Impostor or Jackal which is no Lover.
+The Lawyer needs their client to win in order to win the game.
+If their client dies or gets voted out, the Lawyer changes their role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
+The main goal of the Lawyer is to win as Lawyer, as it is not allowed to betray their client.
 
 The Lawyer can win in multiple ways:
-- Lawyer dead, client alive and client team won: The Lawyer wins together with the team of his client
-- Lawyer and client alive and client team won: The Lawyer wins with the team of his client. The client **doesn't** win (even if his Impostor/Team Jackal mate wins), the Lawyer steals his win. Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate him soon enough to not get his win stolen.
+- Lawyer dead, client alive and client team won: The Lawyer wins together with the team of the client
+- Lawyer and client alive and client team won: The Lawyer wins with the team of the client. The client **doesn't** win (even if their Impostor/Team Jackal mate wins), the Lawyer steals their win. Hence the client should keep the Lawyer alive for some time, to get some help during the meetings, but has to eliminate them soon enough to not get their win stolen.
 
 **NOTE:**
 - If the client disconnects, the Lawyer will also turn into the Pursuer
-- If "Lawyer Target Knows" is set to true, the client will know that he someone is his Lawyer, but he won't know who.
+- If "Lawyer Target Knows" is set to true, the client will know that someone is their Lawyer, but won't know who.
 
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Lawyer Target Knows | The target knows that it is the target (marked with "§", if lawyer dies the mark will disappear)
-| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can`t start meetings himself)
+| Lawyer Target Knows | The target knows that it is the target (marked with "§", if the Lawyer dies, the mark will disappear)
+| Lawyer Wins After Meetings | If set to true, the Lawyer wins after a configurable amount of meetings (can't start meetings himself)
 | Lawyer Needed Meetings To Win | -
 | Lawyer Vision | Pursuer has normal vision
-| Pursuer Blank Cooldwon | -
+| Lawyer Knows Target Role | -
+| Pursuer Blank Cooldown | -
 | Pursuer Number Of Blanks | -
 -----------------------
 
 ## Pursuer
 ### **Team: Neutral**
-The Pursuer is still a neutral role, but has a different goal to win the game: He has to be alive, when the game ends (no matter who caused the win).
-In order to achieve this goal, the Pursuer has the ability "Blank": He can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
-If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
-The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, his tasks won't be counted anymore.
+The Pursuer is still a neutral role, but has a different goal to win the game; they have to be alive when the game ends (no matter who causes the win).
+In order to achieve this goal, the Pursuer has an ability called "Blank", where they can fill a killers (this also includes the Sheriff) weapon with a blank. So, if the killer attempts to kill someone, the killer will miss their target, and their cooldowns will be triggered as usual.
+If the killer fires the "Blank", shields (e.g. Medic shield or Time Master shield) will not be triggered.
+The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
 
 # Source code
 It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
