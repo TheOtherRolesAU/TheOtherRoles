@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
 | 2021.12.14s| v3.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.0/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.4/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.3/TheOtherRoles.zip)
@@ -88,6 +89,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.3.1**
+- Fixed a bug where sometimes the Evil Guesser could not guess. Thanks @tomarai
 
 **Version 3.3.0**
 - Update to Among Us version 2021.12.14s
@@ -1055,7 +1059,6 @@ The Hacker can access his mobile gadgets (vitals & admin table), with a maximum 
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
 - More information about the [colors](#colors)
 - During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
-- The other guesser is just added to the ticket system with the selected spawn rate, independent of the settings above
 
 ### Game Options
 | Name | Description |
@@ -1361,9 +1364,9 @@ The Lawyer can win in multiple ways:
 
 ## Pursuer
 ### **Team: Neutral**
-The Pursuer is still a neutral role, but has a different goal to win the game; they have to be alive when the game ends (no matter who causes the win).
-In order to achieve this goal, the Pursuer has an ability called "Blank", where they can fill a killers (this also includes the Sheriff) weapon with a blank. So, if the killer attempts to kill someone, the killer will miss their target, and their cooldowns will be triggered as usual.
-If the killer fires the "Blank", shields (e.g. Medic shield or Time Master shield) will not be triggered.
+The Pursuer is still a neutral role, but has a different goal to win the game: Them has to be alive, when the game ends (no matter who caused the win).
+In order to achieve this goal, the Pursuer has the ability "Blank": Them can fill a killers (this also includes the Sheriff) weapon with a blank, so if the killer attempts to kill someone, the killer will miss the target and all cooldowns will be triggered as usual.
+If the killer blanks, no shields (e.g. Medic shield or Time Master shield) will be triggered.
 The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
 
 # Source code
