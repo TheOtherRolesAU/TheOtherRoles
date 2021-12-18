@@ -161,9 +161,11 @@ namespace TheOtherRoles.Patches {
 
             // Assign Guesser (chance to be impostor based on setting)
             if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
-                data.impSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection()); // Second guesser
             } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                data.crewSettings.Add((byte)RoleId.Guesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0) data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection()); // Second guesser
             }
         }
 

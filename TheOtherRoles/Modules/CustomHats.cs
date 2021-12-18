@@ -357,7 +357,7 @@ namespace TheOtherRoles.Modules {
                     YOffset = createHatPackage(value, key, YOffset, __instance);
                 }
 
-                __instance.scroller.YBounds.max = -(YOffset + 4.1f);
+                __instance.scroller.ContentYBounds.max = -(YOffset + 4.1f);
             }
         }
 
