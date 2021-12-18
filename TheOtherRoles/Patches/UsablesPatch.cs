@@ -70,7 +70,7 @@ namespace TheOtherRoles.Patches {
             if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesVents)
             {
                 Deputy.setHandcuffedKnows();
-                CustomButton.setAllButtonsHandcuffed(true);
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                 return false;
             }
 
@@ -133,7 +133,7 @@ namespace TheOtherRoles.Patches {
                 // Deputy handcuff update.
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
                     Deputy.setHandcuffedKnows();
-                    CustomButton.setAllButtonsHandcuffed(true);
+                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                     return false;
                 }
                 
@@ -168,7 +168,7 @@ namespace TheOtherRoles.Patches {
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesSabotage)
                 {
                     Deputy.setHandcuffedKnows();
-                    CustomButton.setAllButtonsHandcuffed(true);
+                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                     return false;
                 }
             }
@@ -199,7 +199,7 @@ namespace TheOtherRoles.Patches {
                 if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesUse)
                 {
                     Deputy.setHandcuffedKnows();
-                    CustomButton.setAllButtonsHandcuffed(true);
+                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                     return false;
                 }
             }

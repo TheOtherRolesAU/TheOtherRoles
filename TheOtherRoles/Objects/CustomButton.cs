@@ -18,19 +18,19 @@ namespace TheOtherRoles.Objects {
         private Action OnClick;
         private Action InitialOnClick;
         private Action OnMeetingEnds;
-        private Func<bool> HasButton;
-        private Func<bool> CouldUse;
+        public Func<bool> HasButton;
+        public Func<bool> CouldUse;
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
         public bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
-        private HudManager hudManager;
-        private bool mirror;
-        private KeyCode? hotkey;
+        public HudManager hudManager;
+        public bool mirror;
+        public KeyCode? hotkey;
         private string buttonText;
-        private bool cuffed = false;
+        public bool isHandcuffed = false;
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
@@ -138,68 +138,7 @@ namespace TheOtherRoles.Objects {
             }
         }
 
-        // Disables/ Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
-        public static void setAllButtonsHandcuffed(bool handcuffed) {
-            if (handcuffed && handcuffedButtons == null)
-            {
-                handcuffedButtons = new List<CustomButton>();
-                int maxI = buttons.Count;
-                for (int i = 0; i < maxI; i++)
-                {
-                    try
-                    {
-                        if (buttons[i].HasButton())  // For each custombutton the player has
-                        {
-                            addReplacementHandcuffedButton(buttons[i]);
-                        }
-                        buttons[i].cuffed = true;
-                    }
-                    catch (NullReferenceException)
-                    {
-                        System.Console.WriteLine("[WARNING] NullReferenceException from MeetingEndedUpdate().HasButton(), if theres only one warning its fine");  // Note: idk what this is good for, but i copied it from above /gendelo
-                    }
-                }
-
-                // Non Custom Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
-                // Kill Button if enabled for the Role
-                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });  // Could use any kill button here, as the position is always the same.
-                // Vent Button if enabled
-                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(-1.8f, 1f, 0), () => { return true; });
-                // Sabotage Button if enabled
-                if (Deputy.disablesSabotage && PlayerControl.LocalPlayer.Data.Role.IsImpostor) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, new Vector3(-0.9f, 1f, 0), () => { return true; });
-                // Use Button if enabled
-                if (Deputy.disablesUse && HudManager.Instance.UseButton.isActiveAndEnabled) addReplacementHandcuffedButton(HudManagerStartPatch.arsonistButton, HudManager.Instance.UseButton.transform.localPosition);
-            }
-            else if (!handcuffed && handcuffedButtons != null)  // Reset to original. Disables the replacements, enables the original buttons.
-            {
-                foreach (var button in handcuffedButtons)
-                {
-                    button.HasButton = () => { return false; };
-                    button.Update(); // To make it disappear properly.
-                }
-                buttons.RemoveRange(buttons.Count - handcuffedButtons.Count, handcuffedButtons.Count);
-                handcuffedButtons = null;
-
-                foreach (var button in buttons)
-                {
-                    button.cuffed = false;
-                }
-            }
-        }
-
-        private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset=null, Func<bool> couldUse=null)
-        {
-            positionOffset = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
-            couldUse = couldUse ?? button.CouldUse;
-            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), (Vector3)positionOffset, button.hudManager, button.hotkey,
-                                                                                        true, Deputy.handcuffTimeRemaining, () => { }, button.mirror);
-            replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
-            replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
-            replacementHandcuffedButton.isEffectActive = true;
-            handcuffedButtons.Add(replacementHandcuffedButton);
-        }
-
-        private void Update()
+        public void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
                 setActive(false);
@@ -222,7 +161,7 @@ namespace TheOtherRoles.Objects {
                 OnEffectEnds();
             }
 
-            if (cuffed)
+            if (isHandcuffed)
             {
                 setActive(false);
                 return;
@@ -257,7 +196,7 @@ namespace TheOtherRoles.Objects {
             if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
                 OnClick = () => {
                     Deputy.setHandcuffedKnows();
-                    setAllButtonsHandcuffed(true);
+                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                 };
             } else // Reset.
             {

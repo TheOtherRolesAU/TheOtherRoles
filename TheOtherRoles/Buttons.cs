@@ -5,6 +5,7 @@ using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
@@ -42,6 +43,8 @@ namespace TheOtherRoles
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
+
+        public static List<CustomButton> deputyHandcuffedButtons = null;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text deputyButtonHandcuffsText;
@@ -104,6 +107,69 @@ namespace TheOtherRoles
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
+        {
+            positionOffset = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
+            couldUse = couldUse ?? button.CouldUse;
+            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), (Vector3)positionOffset, button.hudManager, button.hotkey,
+                                                                                        true, Deputy.handcuffTimeRemaining, () => { }, button.mirror);
+            replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
+            replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
+            replacementHandcuffedButton.isEffectActive = true;
+            deputyHandcuffedButtons.Add(replacementHandcuffedButton);
+        }
+        
+        // Disables/ Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
+        public static void setAllButtonsHandcuffedStatus(bool handcuffed)
+        {
+            if (handcuffed && deputyHandcuffedButtons == null)
+            {
+                deputyHandcuffedButtons = new List<CustomButton>();
+                int maxI = CustomButton.buttons.Count;
+                for (int i = 0; i < maxI; i++)
+                {
+                    try
+                    {
+                        if (CustomButton.buttons[i].HasButton())  // For each custombutton the player has
+                        {
+                            addReplacementHandcuffedButton(CustomButton.buttons[i]);
+                        }
+                        CustomButton.buttons[i].isHandcuffed = true;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        System.Console.WriteLine("[WARNING] NullReferenceException from MeetingEndedUpdate().HasButton(), if theres only one warning its fine");  // Note: idk what this is good for, but i copied it from above /gendelo
+                    }
+                }
+
+                // Non Custom Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
+                // Kill Button if enabled for the Role
+                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });  // Could use any kill button here, as the position is always the same.
+                // Vent Button if enabled
+                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0), () => { return true; });
+                // Sabotage Button if enabled
+                if (Deputy.disablesSabotage && PlayerControl.LocalPlayer.Data.Role.IsImpostor) addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, 1f, 0), () => { return true; });
+                // Use Button if enabled
+                if (Deputy.disablesUse && HudManager.Instance.UseButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, HudManager.Instance.UseButton.transform.localPosition);
+            }
+            else if (!handcuffed && deputyHandcuffedButtons != null)  // Reset to original. Disables the replacements, enables the original buttons.
+            {
+                foreach (var button in deputyHandcuffedButtons)
+                {
+                    button.HasButton = () => { return false; };
+                    button.Update(); // To make it disappear properly.
+                }
+                CustomButton.buttons.RemoveRange(CustomButton.buttons.Count - deputyHandcuffedButtons.Count, deputyHandcuffedButtons.Count);
+                deputyHandcuffedButtons = null;
+
+                foreach (var button in CustomButton.buttons)
+                {
+                    button.isHandcuffed = false;
+                }
+            }
+
         }
 
         public static void Postfix(HudManager __instance)
@@ -1151,6 +1217,7 @@ namespace TheOtherRoles
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();
+            deputyHandcuffedButtons = null;
         }
     }
 }
