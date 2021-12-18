@@ -1,3 +1,7 @@
+# This is only a fork of the original mod with some added features / development branches!
+(Check out the original!)
+
+
 ![eisbison banner](./Images/TOR_logo.png)
 <p align="center">
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
@@ -37,12 +41,12 @@ Even more roles are coming soon :)
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
 # Releases
-| Among Us - Version| Mod Version | Link |
-|----------|-------------|-----------------|
-| 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)
+| Among Us - Version| Mod Version | Link | Inofficial Version Link |
+|----------|-------------|-----------------|-----------------|
+| 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)| [Inofficial Download](https://github.com/gendelo3/TheOtherRolesInofficial/releases/download/v.3.3.2/TheOtherRolesInofficial_v3.3.2.zip)
 | 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
 | 2021.12.14s| v3.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.0/TheOtherRoles.zip)
-| 2021.11.9.5s| v3.2.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.4/TheOtherRoles.zip)
+| 2021.11.9.5s| v3.2.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.4/TheOtherRoles.zip)| [Inofficial Download](https://github.com/gendelo3/TheOtherRolesInofficial/releases/download/v3.2.4/TheOtherRolesInofficial_3.2.4.zip)
 | 2021.11.9.5s| v3.2.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.3/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.2/TheOtherRoles.zip)
 | 2021.11.9.5s| v3.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.2.1/TheOtherRoles.zip)
