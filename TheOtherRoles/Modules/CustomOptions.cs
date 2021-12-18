@@ -263,7 +263,7 @@ namespace TheOtherRoles {
         public static void Postfix(GameOptionsMenu __instance) {
             if (__instance.Children.Length < 100) return; // TODO: Introduce a cleaner way to seperate the TOR settings from the game settings
 
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
+            __instance.GetComponentInParent<Scroller>().ContentYBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
