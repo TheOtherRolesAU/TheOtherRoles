@@ -315,10 +315,15 @@ namespace TheOtherRoles.Patches {
                 Doppelganger.swapperPlayerId1 = Byte.MaxValue;
                 Doppelganger.swapperPlayerId2 = Byte.MaxValue;
 
-                // Lovers save next to be exiled, because RPC of ending game comes before RPC of exiled
+                // Lovers & Pursuer save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
-                if (exiled != null)
+                Pursuer.notAckedExiled = false;
+                if (exiled != null) {
                     Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == exiled.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == exiled.PlayerId));
+                    Pursuer.notAckedExiled = (Pursuer.pursuer != null && Pursuer.pursuer.PlayerId == exiled.PlayerId);
+                }
+                    
+                               
             }
         }
 
@@ -398,10 +403,10 @@ namespace TheOtherRoles.Patches {
             List<Transform> buttons = new List<Transform>();
             Transform selectedButton = null;
 
-            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos)
-            {
-                if (CustomOptionHolder.guesserCantGuessSpy.getBool() && roleInfo.roleId == RoleId.Spy) continue;
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == RoleId.Guesser || roleInfo == RoleInfo.niceMini) continue; // Not guessable roles
+            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
+                // Have to swap this around, as the Doppelganger can only copy the nice guesser!
+                RoleId guesserRole = (Guesser.evilGuesser != null && PlayerControl.LocalPlayer.PlayerId == Guesser.evilGuesser.PlayerId) ? RoleId.EvilGuesser :  RoleId.NiceGuesser;
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == guesserRole || roleInfo == RoleInfo.niceMini || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles
                 Transform buttonParent = (new GameObject()).transform;
                 buttonParent.SetParent(container);
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate, buttonParent);
@@ -427,10 +432,10 @@ namespace TheOtherRoles.Patches {
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
                     } else {
                         PlayerControl focusedTarget = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots <= 0 && Guesser.guesser == PlayerControl.LocalPlayer || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots <= 0) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots(PlayerControl.LocalPlayer.PlayerId) <= 0) return;
 
                         if (!Guesser.killsThroughShield && (focusedTarget == Medic.shielded || focusedTarget == Doppelganger.medicShielded)) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
-                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
+                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true)); 
                             UnityEngine.Object.Destroy(container.gameObject);
 
                             MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
@@ -453,20 +458,20 @@ namespace TheOtherRoles.Patches {
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                         UnityEngine.Object.Destroy(container.gameObject);
-                        if (Guesser.hasMultipleShotsPerMeeting && (PlayerControl.LocalPlayer == Guesser.guesser && Guesser.remainingShots > 1 
-                                                                   || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && Doppelganger.guesserRemainingShots > 1)  && dyingTarget != PlayerControl.LocalPlayer)
+                        if (Guesser.hasMultipleShotsPerMeeting && Guesser.remainingShots(PlayerControl.LocalPlayer.PlayerId) > 1 && dyingTarget != PlayerControl.LocalPlayer)
                             __instance.playerStates.ToList().ForEach(x => { if (x.TargetPlayerId == dyingTarget.PlayerId && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
                         else
                             __instance.playerStates.ToList().ForEach(x => { if (x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject); });
 
                         // Shoot player and send chat info if activated
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuesserShoot, Hazel.SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
                         writer.Write(dyingTarget.PlayerId);
                         writer.Write(focusedTarget.PlayerId);
                         writer.Write((byte)roleInfo.roleId);
                         writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.guesserShoot(dyingTarget.PlayerId, focusedTarget.PlayerId, (byte)roleInfo.roleId, PlayerControl.LocalPlayer.PlayerId);
+                        RPCProcedure.guesserShoot(PlayerControl.LocalPlayer.PlayerId, dyingTarget.PlayerId, focusedTarget.PlayerId, (byte)roleInfo.roleId);
                     }
                 }));
 
@@ -478,7 +483,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
         class PlayerVoteAreaSelectPatch {
             static bool Prefix(MeetingHud __instance) {
-                return !(PlayerControl.LocalPlayer != null && (PlayerControl.LocalPlayer == Guesser.guesser || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser)) && guesserUI != null);
+                return !(PlayerControl.LocalPlayer != null && (Guesser.isGuesser(PlayerControl.LocalPlayer.PlayerId) || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser)) && guesserUI != null);
             }
         }
 
@@ -514,6 +519,13 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            //Fix visor in Meetings 
+            foreach (PlayerVoteArea pva in __instance.playerStates) {
+                if(pva.PlayerIcon != null && pva.PlayerIcon.VisorSlot != null){
+                    pva.PlayerIcon.VisorSlot.transform.position += new Vector3(0, 0, -1f);
+                }
+            }
+
             // Add overlay for spelled players
             if (Witch.witch != null && Witch.futureSpelled != null) {
                 foreach (PlayerVoteArea pva in __instance.playerStates) {
@@ -528,8 +540,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.guesser != null && PlayerControl.LocalPlayer == Guesser.guesser && !Guesser.guesser.Data.IsDead && Guesser.remainingShots > 0
-                || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser) && !Doppelganger.doppelganger.Data.IsDead && Doppelganger.guesserRemainingShots > 0) {
+            if ((Guesser.isGuesser(PlayerControl.LocalPlayer.PlayerId) || Doppelganger.isRoleAndLocalPlayer(RoleInfo.goodGuesser)) && !PlayerControl.LocalPlayer.Data.IsDead && Guesser.remainingShots(PlayerControl.LocalPlayer.PlayerId) > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId) continue;
