@@ -160,12 +160,27 @@ namespace TheOtherRoles.Patches {
             }
 
             // Assign Guesser (chance to be impostor based on setting)
-            if (data.impostors.Count > 0 && data.maxImpostorRoles > 0 &&  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) {
-                data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
-                if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection()); // Second guesser
-            } else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {
-                data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
-                if (data.impostors.Count > 0 && data.maxImpostorRoles > 0) data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection()); // Second guesser
+            bool isEvilGuesser = (rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10);
+            if (CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0) {
+                if (rnd.Next(1, 101) <= CustomOptionHolder.guesserSpawnRate.getSelection() * 10) {
+                    if (isEvilGuesser) {
+                        if (data.impostors.Count > 0 && data.maxImpostorRoles > 0) {
+                            byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
+                            data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
+                            data.maxImpostorRoles--;
+                            data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
+                        }
+                    }
+                    else if (data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {                    
+                        byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
+                        data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
+                        data.maxCrewmateRoles--;
+                        data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
+                    }
+                }
+            } else {
+                if (isEvilGuesser) data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnRate.getSelection()); 
+                else data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
             }
         }
 
