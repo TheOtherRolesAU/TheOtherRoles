@@ -197,6 +197,7 @@ namespace TheOtherRoles
             public static bool disablesUse = false;  
             public static bool disablesSabotage = false;  // For now disabled
             public static bool disablesVents = true;
+            public static bool hideCuffedButtons = true;
 
             private static Sprite buttonSprite;
             private static Sprite handcuffedSprite;

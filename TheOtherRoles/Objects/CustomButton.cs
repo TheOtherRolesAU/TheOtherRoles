@@ -160,7 +160,7 @@ namespace TheOtherRoles.Objects {
                 OnEffectEnds();
             }
 
-            if (isHandcuffed)
+            if (Deputy.hideCuffedButtons && isHandcuffed)
             {
                 setActive(false);
                 return;
