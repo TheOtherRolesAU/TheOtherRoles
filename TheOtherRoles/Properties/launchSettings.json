@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "TheOtherRoles": {
+      "commandName": "Executable",
+      "executablePath": "$(AmongUsLatest)/Among Us.exe",
+      "workingDirectory": "$(AmongUsLatest)"
+    }
+  }
+}

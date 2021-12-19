@@ -74,10 +74,6 @@ namespace TheOtherRoles.Patches {
                 /*if (Deputy.deputy != null)  // For now, the Sheriff cannot see the Deputy
                 {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
-                }
-                if (Sheriff.fakeDeputy != null)
-                {
-                    setPlayerNameColor(Sheriff.fakeDeputy, Deputy.color);
                 }*/ 
             }
             else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) setPlayerNameColor(Deputy.deputy, Deputy.color);

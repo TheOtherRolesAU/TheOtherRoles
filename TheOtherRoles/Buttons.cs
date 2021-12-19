@@ -121,7 +121,7 @@ namespace TheOtherRoles
             deputyHandcuffedButtons.Add(replacementHandcuffedButton);
         }
         
-        // Disables/ Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
+        // Disables / Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
         public static void setAllButtonsHandcuffedStatus(bool handcuffed)
         {
             if (handcuffed && deputyHandcuffedButtons == null)
@@ -146,9 +146,10 @@ namespace TheOtherRoles
 
                 // Non Custom Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
                 // Kill Button if enabled for the Role
-                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });  // Could use any kill button here, as the position is always the same.
+                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });
                 // Vent Button if enabled
-                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0), () => { return true; });
+                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0),
+                                                                                                                        couldUse: () => { return HudManager.Instance.ImpostorVentButton.currentTarget != null; });
                 // Sabotage Button if enabled
                 if (Deputy.disablesSabotage && PlayerControl.LocalPlayer.Data.Role.IsImpostor) addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, 1f, 0), () => { return true; });
                 // Use Button if enabled
@@ -169,7 +170,6 @@ namespace TheOtherRoles
                     button.isHandcuffed = false;
                 }
             }
-
         }
 
         public static void Postfix(HudManager __instance)
@@ -286,7 +286,7 @@ namespace TheOtherRoles
                 },
                 () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
-                () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer; },
+                () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0f, 1f, 0),
                 __instance,

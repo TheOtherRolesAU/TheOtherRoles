@@ -178,7 +178,6 @@ namespace TheOtherRoles
             }
         }
 
-
         public static class Deputy
         {
             public static PlayerControl deputy;
@@ -218,10 +217,11 @@ namespace TheOtherRoles
                 return handcuffedSprite;
             }
 
-            public static void setHandcuffedKnows(float value=-1f)
+            // Can be used to enable / disable the handcuff effect on the target's buttons
+            public static void setHandcuffedKnows(bool active=true)
             {
-                if (value == -1f) value = handcuffTimeRemaining;
-                handcuffedKnows = value;
+                handcuffedKnows = active ? handcuffTimeRemaining : 0f;
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
             }
 
             public static void clearAndReload()
@@ -230,7 +230,7 @@ namespace TheOtherRoles
                 currentTarget = null;
                 handcuffedPlayer = null;
                 handcuffTimeRemaining = 0f;
-                setHandcuffedKnows(0f);
+                setHandcuffedKnows(false);
                 promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getSelection();
                 remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
@@ -239,7 +239,6 @@ namespace TheOtherRoles
                 handcuffedPlayerCounts = new Dictionary<byte, int>();
             }
         }
-
 
         public static class Lighter {
             public static PlayerControl lighter;

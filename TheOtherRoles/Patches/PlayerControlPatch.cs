@@ -259,8 +259,8 @@ namespace TheOtherRoles.Patches {
                 if (Deputy.handcuffTimeRemaining < 0)
                 {
                     Deputy.handcuffedPlayer = null;
-                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(false);  // Resets the buttons
-                    Deputy.setHandcuffedKnows(0f);
+                    // Resets the buttons
+                    Deputy.setHandcuffedKnows(false);
                 }
                 if (Deputy.handcuffedKnows > 0)
                 {

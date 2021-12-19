@@ -175,7 +175,6 @@ namespace TheOtherRoles.Patches {
                 PlayerControlFixedUpdatePatch.deputyCheckPromotion(isMeeting: true);
             }
 
-
             // Force Bounty Hunter Bounty Update
             if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
                 BountyHunter.bountyUpdateTimer = 0f;

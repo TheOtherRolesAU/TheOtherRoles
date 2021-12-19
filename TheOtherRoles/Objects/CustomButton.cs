@@ -10,7 +10,6 @@ namespace TheOtherRoles.Objects {
     public class CustomButton
     {
         public static List<CustomButton> buttons = new List<CustomButton>();
-        public static List<CustomButton> handcuffedButtons = null;
         public ActionButton actionButton;
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
@@ -184,8 +183,6 @@ namespace TheOtherRoles.Objects {
                 actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.DisabledClear;
                 actionButton.graphic.material.SetFloat("_Desat", 1f);
             }
-
-
         
             actionButton.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
@@ -196,12 +193,11 @@ namespace TheOtherRoles.Objects {
             if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
                 OnClick = () => {
                     Deputy.setHandcuffedKnows();
-                    HudManagerStartPatch.setAllButtonsHandcuffedStatus(true);
                 };
             } else // Reset.
             {
                 OnClick = InitialOnClick;
             }
-         }
+        }
     }
 }
