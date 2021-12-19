@@ -134,7 +134,7 @@ namespace TheOtherRoles
                     {
                         if (CustomButton.buttons[i].HasButton())  // For each custombutton the player has
                         {
-                            addReplacementHandcuffedButton(CustomButton.buttons[i]);
+                            addReplacementHandcuffedButton(CustomButton.buttons[i]);  // The new buttons are the only non-handcuffed buttons now!
                         }
                         CustomButton.buttons[i].isHandcuffed = true;
                     }
@@ -144,7 +144,7 @@ namespace TheOtherRoles
                     }
                 }
 
-                // Non Custom Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
+                // Non Custom (Vanilla) Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
                 // Kill Button if enabled for the Role
                 if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });
                 // Vent Button if enabled
@@ -157,15 +157,15 @@ namespace TheOtherRoles
             }
             else if (!handcuffed && deputyHandcuffedButtons != null)  // Reset to original. Disables the replacements, enables the original buttons.
             {
-                foreach (var button in deputyHandcuffedButtons)
+                foreach (CustomButton replacementButton in deputyHandcuffedButtons)
                 {
-                    button.HasButton = () => { return false; };
-                    button.Update(); // To make it disappear properly.
+                    replacementButton.HasButton = () => { return false; };
+                    replacementButton.Update(); // To make it disappear properly.
+                    CustomButton.buttons.Remove(replacementButton);
                 }
-                CustomButton.buttons.RemoveRange(CustomButton.buttons.Count - deputyHandcuffedButtons.Count, deputyHandcuffedButtons.Count);
                 deputyHandcuffedButtons = null;
 
-                foreach (var button in CustomButton.buttons)
+                foreach (CustomButton button in CustomButton.buttons)
                 {
                     button.isHandcuffed = false;
                 }
