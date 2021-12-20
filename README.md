@@ -93,10 +93,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.3.3**
-- Changed the Guesser option "Other Guesser Spawn Rate" to "Both Guesser Spawn Rate" (now only take effect when the chance for the first guesser was successful)
 - Fixed a bug where a guessed Guesser could guess
 - Fixed a bug where buttons were visible during the meeting
 - Removed Hacker vitals for Skeld & dlekS
+- Changed the Guesser option "Other Guesser Spawn Rate" to "Both Guesser Spawn Rate" (now only take effect when the chance for the first guesser was successful)
 - Changed Hacker vitals to doorlog for MIRA HQ
   
 **Version 3.3.2**
