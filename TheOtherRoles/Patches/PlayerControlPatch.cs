@@ -387,9 +387,15 @@ namespace TheOtherRoles.Patches {
                     TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (meetingInfo == null && playerVoteArea != null) {
                         meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
-                        meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                        meetingInfo.fontSize *= 0.75f;
+                        meetingInfo.transform.localPosition += Vector3.down * 0.10f;
+                        meetingInfo.fontSize *= 0.60f;
                         meetingInfo.gameObject.name = "Info";
+                    }
+
+                    // Set player name higher to align in middle
+                    if (meetingInfo != null && playerVoteArea != null) {
+                        var playerName = playerVoteArea.NameText;
+                        playerName.transform.localPosition = new Vector3(0.3384f, (0.0311f + 0.0683f), -0.1f);    
                     }
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
@@ -676,6 +682,16 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        public static void hackerUpdate() {
+            if (Hacker.hacker == null || PlayerControl.LocalPlayer != Hacker.hacker || Hacker.hacker.Data.IsDead) return;
+            var (playerCompleted, _) = TasksHandler.taskInfo(Hacker.hacker.Data);
+            if (playerCompleted == Hacker.rechargedTasks) {
+                Hacker.rechargedTasks += Hacker.rechargeTasksNumber;
+                if (Hacker.toolsNumber > Hacker.chargesVitals) Hacker.chargesVitals++;
+                if (Hacker.toolsNumber > Hacker.chargesAdminTable) Hacker.chargesAdminTable++;
+            }
+        }
+
         static void pursuerSetTarget() {
             if (Pursuer.pursuer == null || Pursuer.pursuer != PlayerControl.LocalPlayer) return;
             Pursuer.target = setTarget();
@@ -767,6 +783,7 @@ namespace TheOtherRoles.Patches {
                 pursuerSetTarget();
                 // Witch
                 witchSetTarget();
+                hackerUpdate();
             } 
         }
     }
