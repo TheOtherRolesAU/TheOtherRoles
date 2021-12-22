@@ -277,7 +277,7 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                if (!PlayerControl.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                     if (selectedButton != button) {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
