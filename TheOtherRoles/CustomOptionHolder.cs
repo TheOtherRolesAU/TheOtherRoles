@@ -57,6 +57,8 @@ namespace TheOtherRoles {
         public static CustomOption guesserHasMultipleShotsPerMeeting;
         public static CustomOption guesserShowInfoInGhostChat;
         public static CustomOption guesserKillsThroughShield;
+        public static CustomOption guesserEvilCanKillSpy;
+        public static CustomOption guesserSpawnBothRate;
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
@@ -143,6 +145,8 @@ namespace TheOtherRoles {
         public static CustomOption hackerCooldown;
         public static CustomOption hackerHackeringDuration;
         public static CustomOption hackerOnlyColorType;
+        public static CustomOption hackerToolsNumber;
+        public static CustomOption hackerRechargeTasksNumber;
 
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
@@ -229,7 +233,7 @@ namespace TheOtherRoles {
             
             // Role Options
             presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);
-            activateRoles = CustomOption.Create(7, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
+            activateRoles = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
 
             // Using new id's for the options to not break compatibilty with older versions
             crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
@@ -300,6 +304,8 @@ namespace TheOtherRoles {
             guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
             guesserShowInfoInGhostChat = CustomOption.Create(314, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
             guesserKillsThroughShield  = CustomOption.Create(315, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
+            guesserEvilCanKillSpy  = CustomOption.Create(316, "Evil Guesser Can Guess The Spy", true, guesserSpawnRate);
+            guesserSpawnBothRate = CustomOption.Create(317, "Both Guesser Spawn Rate", rates, guesserSpawnRate);
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
@@ -386,6 +392,8 @@ namespace TheOtherRoles {
             hackerCooldown = CustomOption.Create(171, "Hacker Cooldown", 30f, 0f, 60f, 5f, hackerSpawnRate);
             hackerHackeringDuration = CustomOption.Create(172, "Hacker Duration", 10f, 2.5f, 60f, 2.5f, hackerSpawnRate);
             hackerOnlyColorType = CustomOption.Create(173, "Hacker Only Sees Color Type", false, hackerSpawnRate);
+            hackerToolsNumber = CustomOption.Create(174, "Max Mobile Gadget Charges", 5f, 1f, 30f, 1f, hackerSpawnRate);
+            hackerRechargeTasksNumber = CustomOption.Create(175, "Number Of Tasks Needed For Recharging", 2f, 1f, 5f, 1f, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);

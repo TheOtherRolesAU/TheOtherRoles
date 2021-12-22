@@ -56,8 +56,8 @@ namespace TheOtherRoles
         public static RoleInfo spy = new RoleInfo("Spy", Spy.color, "Confuse the <color=#FF1919FF>Impostors</color>", "Confuse the Impostors", RoleId.Spy);
         public static RoleInfo securityGuard = new RoleInfo("Security Guard", SecurityGuard.color, "Seal vents and place cameras", "Seal vents and place cameras", RoleId.SecurityGuard);
         public static RoleInfo arsonist = new RoleInfo("Arsonist", Arsonist.color, "Let them burn", "Let them burn", RoleId.Arsonist, true);
-        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
-        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.Guesser);
+        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser);
+        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser);
         public static RoleInfo bait = new RoleInfo("Bait", Bait.color, "Bait your enemies", "Bait your enemies", RoleId.Bait);
         public static RoleInfo vulture = new RoleInfo("Vulture", Vulture.color, "Eat Corpses to win", "Eat dead bodies", RoleId.Vulture, true);
         public static RoleInfo medium = new RoleInfo("Medium", Medium.color, "Question the souls of the dead to gain informations", "Question the souls", RoleId.Medium);
@@ -152,7 +152,8 @@ namespace TheOtherRoles
             if (p == Spy.spy) infos.Add(spy);
             if (p == SecurityGuard.securityGuard) infos.Add(securityGuard);
             if (p == Arsonist.arsonist) infos.Add(arsonist);
-            if (p == Guesser.guesser) infos.Add(p.Data.Role.IsImpostor ? badGuesser : goodGuesser);
+            if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
+            if (p == Guesser.evilGuesser) infos.Add(badGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Bait.bait) infos.Add(bait);
             if (p == Vulture.vulture) infos.Add(vulture);
