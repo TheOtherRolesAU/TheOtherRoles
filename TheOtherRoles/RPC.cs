@@ -730,7 +730,6 @@ namespace TheOtherRoles
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
 
-
             Guesser.remainingShots(killerId, true);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
@@ -746,7 +745,7 @@ namespace TheOtherRoles
                     var voteAreaPlayer = Helpers.playerById(pva.TargetPlayerId);
                     if (!voteAreaPlayer.AmOwner) continue;
                     MeetingHud.Instance.ClearVote();
-                    
+
                 }
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
