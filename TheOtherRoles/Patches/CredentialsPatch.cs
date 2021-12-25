@@ -20,7 +20,7 @@ $@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584
 Design by <color=#FCCE03FF>Bavari</color>";
 
 
-        public static string contributorsCredentials = "<size=80%>GitHub Contributors: Alex2911, amsyarasyiq, gendelo3</size>";
+        public static string contributorsCredentials = "<size=60%>GitHub Contributors: Alex2911, amsyarasyiq, gendelo3, MaximeGillot</size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
