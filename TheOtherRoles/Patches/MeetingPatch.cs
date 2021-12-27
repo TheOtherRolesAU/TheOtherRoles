@@ -247,7 +247,7 @@ namespace TheOtherRoles.Patches {
             Transform exitButtonMask = UnityEngine.Object.Instantiate(maskTemplate, exitButtonParent);
             exitButton.gameObject.GetComponent<SpriteRenderer>().sprite = smallButtonTemplate.GetComponent<SpriteRenderer>().sprite;
             exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
-            exitButtonParent.transform.localScale = new Vector3(0.25f, 0.9f, 1);
+            exitButtonParent.transform.localScale = new Vector3(0.217f, 0.9f, 1);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
             exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                 __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
@@ -346,7 +346,7 @@ namespace TheOtherRoles.Patches {
                     GameObject checkbox = UnityEngine.Object.Instantiate(template);
                     checkbox.transform.SetParent(playerVoteArea.transform);
                     checkbox.transform.position = template.transform.position;
-                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1f);
+                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
                     SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
                     renderer.sprite = Swapper.getCheckSprite();
                     renderer.color = Color.red;
@@ -375,7 +375,7 @@ namespace TheOtherRoles.Patches {
                         SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
-                        rend.transform.localPosition = new Vector3(-1.21f, -0.12f, -1f);
+                        rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
                         rend.sprite = Witch.getSpelledOverlaySprite();
                     }
                 }
@@ -390,7 +390,7 @@ namespace TheOtherRoles.Patches {
                     GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
                     GameObject targetBox = UnityEngine.Object.Instantiate(template, playerVoteArea.transform);
                     targetBox.name = "ShootButton";
-                    targetBox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1f);
+                    targetBox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
                     SpriteRenderer renderer = targetBox.GetComponent<SpriteRenderer>();
                     renderer.sprite = Guesser.getTargetSprite();
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
