@@ -38,6 +38,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.15s| v3.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.3/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)
 | 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
@@ -91,6 +92,12 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 3.3.4**
+— Added return Votes in meetings: You'll now get your votes back if your target got shot by the Guesser 
+- New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by Mr_Fluff)
+- Fixed a bug where the Guesser and Swapper UI in meetings was behind the visor cosmetics
+– Changed the position of the Witch icon in meetings for better visibility
 
 **Version 3.3.3**
 - Fixed a bug where a guessed Guesser could guess
