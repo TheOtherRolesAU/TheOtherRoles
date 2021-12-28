@@ -450,6 +450,15 @@ namespace TheOtherRoles.Patches {
             SecurityGuard.ventTarget = target;
         }
 
+        public static void securityGuardUpdate() {
+            if (SecurityGuard.securityGuard == null || PlayerControl.LocalPlayer != SecurityGuard.securityGuard || SecurityGuard.securityGuard.Data.IsDead) return;
+            var (playerCompleted, _) = TasksHandler.taskInfo(SecurityGuard.securityGuard.Data);
+            if (playerCompleted == SecurityGuard.rechargedTasks) {
+                SecurityGuard.rechargedTasks += SecurityGuard.rechargeTasksNumber;
+                if (SecurityGuard.maxCharges > SecurityGuard.charges) SecurityGuard.charges++;
+            }
+        }
+
         public static void arsonistSetTarget() {
             if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables;
@@ -763,6 +772,7 @@ namespace TheOtherRoles.Patches {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
+                securityGuardUpdate();
                 // Arsonist
                 arsonistSetTarget();
                 // Snitch

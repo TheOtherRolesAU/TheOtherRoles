@@ -924,7 +924,13 @@ namespace TheOtherRoles
         public static int ventPrice = 1;
         public static int camPrice = 2;
         public static int placedCameras = 0;
+        public static float duration = 10f;
+        public static int maxCharges = 5;
+        public static int rechargeTasksNumber = 3;
+        public static int rechargedTasks = 3;
+        public static int charges = 1;
         public static Vent ventTarget = null;
+        public static Minigame minigame = null;
 
         private static Sprite closeVentButtonSprite;
         public static Sprite getCloseVentButtonSprite() {
@@ -954,9 +960,29 @@ namespace TheOtherRoles
             return staticVentSealedSprite;
         }
 
+        private static Sprite camSprite;
+        public static Sprite getCamSprite() {
+            if (camSprite) return camSprite;
+            camSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+            return camSprite;
+        }
+
+        private static Sprite logSprite;
+        public static Sprite getLogSprite() {
+            if (logSprite) return logSprite;
+            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            return logSprite;
+        }
+
         public static void clearAndReload() {
             securityGuard = null;
             ventTarget = null;
+            minigame = null;
+            duration = CustomOptionHolder.securityGuardCamDuration.getFloat();
+            maxCharges = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamMaxCharges.getFloat());
+            rechargeTasksNumber = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamRechargeTasksNumber.getFloat());
+            rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamRechargeTasksNumber.getFloat());
+            charges = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamMaxCharges.getFloat()) /2;
             placedCameras = 0;
             cooldown = CustomOptionHolder.securityGuardCooldown.getFloat();
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());

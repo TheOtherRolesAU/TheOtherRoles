@@ -21,7 +21,6 @@ Design by <color=#FCCE03FF>Bavari</color>";
 
 
         public static string contributorsCredentials = "<size=80%>GitHub Contributors: Alex2911, amsyarasyiq, gendelo3</size>";
-
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
         {
@@ -85,7 +84,7 @@ Design by <color=#FCCE03FF>Bavari</color>";
                 var torLogo = new GameObject("bannerLogo_TOR");
                 torLogo.transform.position = Vector3.up;
                 var renderer = torLogo.AddComponent<SpriteRenderer>();
-                renderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);                                
+                renderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
             }
         }
     }
