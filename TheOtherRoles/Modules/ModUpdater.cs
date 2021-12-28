@@ -81,7 +81,8 @@ namespace TheOtherRoles.Modules {
             running = true;
             checkForUpdate().GetAwaiter().GetResult();
             clearOldVersions();
-            DestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
+            if (hasUpdate || TheOtherRolesPlugin.ShowPopUp.Value) DestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
+            TheOtherRolesPlugin.ShowPopUp.Value = hasUpdate;
         }
 
         public static void ExecuteUpdate() {
@@ -139,6 +140,7 @@ namespace TheOtherRoles.Modules {
 update to v{ver} is available</size>
 
 {announcement}";
+
                     JToken assets = data["assets"];
                     if (!assets.HasValues)
                         return false;
@@ -154,7 +156,7 @@ update to v{ver} is available</size>
                         }
                     }
                 }  else {
-                    announcement = $@"<size=150%>Version v{ver}:</size>
+                    announcement = $@"<size=150%>Version {ver}:</size>
 
 {announcement}";
                 }

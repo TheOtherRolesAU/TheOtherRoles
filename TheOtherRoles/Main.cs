@@ -40,6 +40,7 @@ namespace TheOtherRoles
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
+        public static ConfigEntry<bool> ShowPopUp { get; set; }
 
         public static Sprite ModStamp;
 
@@ -62,6 +63,7 @@ namespace TheOtherRoles
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
             ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
+            ShowPopUp = Config.Bind("Custom", "Show PopUp", true);
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
