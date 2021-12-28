@@ -329,7 +329,7 @@ namespace TheOtherRoles {
             vultureCooldown = CustomOption.Create(341, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
             vultureNumberToWin = CustomOption.Create(342, "Number Of Corpses Needed To Be Eaten", 4f, 0f, 10f, 1f, vultureSpawnRate);
             vultureCanUseVents = CustomOption.Create(343, "Vulture Can Use Vents", true, vultureSpawnRate);
-            vultureShowArrows = CustomOption.Create(344, "Show Arrows Pointing Towards The Corpes", true, vultureSpawnRate);
+            vultureShowArrows = CustomOption.Create(344, "Show Arrows Pointing Towards The Corpses", true, vultureSpawnRate);
 
             lawyerSpawnRate = CustomOption.Create(350, cs(Lawyer.color, "Lawyer"), rates, null, true);
             lawyerTargetKnows = CustomOption.Create(351, "Lawyer Target Knows", true, lawyerSpawnRate);
