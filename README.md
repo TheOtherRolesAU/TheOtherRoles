@@ -96,7 +96,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
   
 **Version 3.3.4**
-— Added return Votes in meetings: You'll now get your votes back if your target got shot by the Guesser 
+- Added return Votes in meetings: You'll now get your votes back if your target got shot by the Guesser 
 - New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by Mr_Fluff)
 - Fixed a bug where the Guesser and Swapper UI in meetings was behind the visor cosmetics
 – Changed the position of the Witch icon in meetings for better visibility
