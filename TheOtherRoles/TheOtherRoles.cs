@@ -1021,7 +1021,7 @@ namespace TheOtherRoles
         public static bool showInfoInGhostChat = true;
         public static bool killsThroughShield = true;
         public static bool evilGuesserCanGuessSpy = true;
-
+        public static bool guesserCantGuessSnitch = false;
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
             targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
@@ -1052,7 +1052,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             niceGuesser = null;
             evilGuesser = null;
-
+            guesserCantGuessSnitch = CustomOptionHolder.guesserCantGuessSnitchIfTaksDone.getBool();
             remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             remainingShotsNiceGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
