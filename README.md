@@ -94,7 +94,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
-  
+
 **Version 3.3.4**
 — Added return Votes in meetings: You'll now get your votes back if your target got shot by the Guesser 
 - New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by Mr_Fluff)
@@ -107,7 +107,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Removed Hacker vitals for Skeld & dlekS
 - Changed the Guesser option "Other Guesser Spawn Rate" to "Both Guesser Spawn Rate" (now only take effect when the chance for the first guesser was successful)
 - Changed Hacker vitals to doorlog for MIRA HQ
-  
+
 **Version 3.3.2**
 - Fixed a bug where you can't create a lobby on Among Us 2021.12.15
 

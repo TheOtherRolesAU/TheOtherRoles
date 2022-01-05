@@ -24,6 +24,7 @@ namespace TheOtherRoles
             Mayor.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+            Deputy.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
@@ -155,12 +156,88 @@ namespace TheOtherRoles
 
             public static PlayerControl currentTarget;
 
+            public static PlayerControl formerDeputy;  // Needed for keeping handcuffs + shifting
+            public static PlayerControl formerSheriff;  // When deputy gets promoted...
+
+            public static void replaceCurrentSheriff(PlayerControl deputy)
+            {
+                if (!formerSheriff) formerSheriff = sheriff;
+                sheriff = deputy;
+                currentTarget = null;
+                cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+            }
+
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
+                formerDeputy = null;
+                formerSheriff = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
+            }
+        }
+
+        public static class Deputy
+        {
+            public static PlayerControl deputy;
+            public static Color color = Sheriff.color;
+
+            public static PlayerControl currentTarget;
+            public static PlayerControl handcuffedPlayer;
+            public static int promotesToSheriff; // No: 0, Immediately: 1, After Meeting: 2
+            public static bool keepsHandcuffsOnPromotion;
+            public static float handcuffDuration;
+            public static float remainingHandcuffs;
+            public static float handcuffCooldown;
+            public static float handcuffTimeRemaining;
+            public static float handcuffedKnows;
+
+            // For now, these are no settings, but these params can be used. Sabotage and Use are currently untested but might work
+            public static bool disablesUse = false;  
+            public static bool disablesSabotage = false;  // For now disabled
+            public static bool disablesVents = true;
+            public static bool hideCuffedButtons = true;
+
+            private static Sprite buttonSprite;
+            private static Sprite handcuffedSprite;
+            
+            public static Dictionary<byte, int> handcuffedPlayerCounts;
+
+            public static Sprite getButtonSprite()
+            {
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffButton.png", 115f);
+                return buttonSprite;
+            }
+
+            public static Sprite getHandcuffedButtonSprite()
+            {
+                if (handcuffedSprite) return handcuffedSprite;
+                handcuffedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffed.png", 115f);
+                return handcuffedSprite;
+            }
+
+            // Can be used to enable / disable the handcuff effect on the target's buttons
+            public static void setHandcuffedKnows(bool active=true)
+            {
+                handcuffedKnows = active ? handcuffTimeRemaining : 0f;
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
+            }
+
+            public static void clearAndReload()
+            {
+                deputy = null;
+                currentTarget = null;
+                handcuffedPlayer = null;
+                handcuffTimeRemaining = 0f;
+                setHandcuffedKnows(false);
+                promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getSelection();
+                remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
+                handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
+                keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
+                handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
+                handcuffedPlayerCounts = new Dictionary<byte, int>();
             }
         }
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
     public class CustomButton
@@ -14,24 +15,27 @@ namespace TheOtherRoles.Objects {
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
         private Action OnClick;
+        private Action InitialOnClick;
         private Action OnMeetingEnds;
-        private Func<bool> HasButton;
-        private Func<bool> CouldUse;
+        public Func<bool> HasButton;
+        public Func<bool> CouldUse;
         private Action OnEffectEnds;
         public bool HasEffect;
         public bool isEffectActive = false;
         public bool showButtonText = false;
         public float EffectDuration;
         public Sprite Sprite;
-        private HudManager hudManager;
-        private bool mirror;
-        private KeyCode? hotkey;
+        public HudManager hudManager;
+        public bool mirror;
+        public KeyCode? hotkey;
         private string buttonText;
+        public bool isHandcuffed = false;
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
             this.hudManager = hudManager;
             this.OnClick = OnClick;
+            this.InitialOnClick = OnClick;
             this.HasButton = HasButton;
             this.CouldUse = CouldUse;
             this.PositionOffset = PositionOffset;
@@ -63,6 +67,9 @@ namespace TheOtherRoles.Objects {
             {
                 actionButton.graphic.color = new Color(1f, 1f, 1f, 0.3f);
                 this.OnClick();
+
+                // Deputy skip onClickEvent if handcuffed
+                if (Deputy.handcuffedKnows > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.Timer = this.EffectDuration;
@@ -130,13 +137,34 @@ namespace TheOtherRoles.Objects {
             }
         }
 
-        private void Update()
+        public void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
                 setActive(false);
                 return;
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
+
+            if (Timer >= 0)  // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
+            {
+                if (HasEffect && isEffectActive)
+                    Timer -= Time.deltaTime;
+                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
+                    Timer -= Time.deltaTime;
+            }
+
+            if (Timer <= 0 && HasEffect && isEffectActive)
+            {
+                isEffectActive = false;
+                actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                OnEffectEnds();
+            }
+
+            if (Deputy.hideCuffedButtons && isHandcuffed)
+            {
+                setActive(false);
+                return;
+            }
 
             actionButton.graphic.sprite = Sprite;
             if (showButtonText && buttonText != ""){
@@ -155,7 +183,7 @@ namespace TheOtherRoles.Objects {
                 actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.DisabledClear;
                 actionButton.graphic.material.SetFloat("_Desat", 1f);
             }
-
+        
             if (Timer >= 0) {
                 if (HasEffect && isEffectActive)
                     Timer -= Time.deltaTime;
@@ -173,6 +201,16 @@ namespace TheOtherRoles.Objects {
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
+
+            // Deputy disable the button and display Handcuffs instead...
+            if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
+                OnClick = () => {
+                    Deputy.setHandcuffedKnows();
+                };
+            } else // Reset.
+            {
+                OnClick = InitialOnClick;
+            }
         }
     }
 }

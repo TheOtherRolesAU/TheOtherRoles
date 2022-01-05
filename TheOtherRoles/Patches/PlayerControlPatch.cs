@@ -142,6 +142,26 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Sheriff.currentTarget, Sheriff.color);
         }
 
+        static void deputySetTarget()
+        {
+            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
+            Deputy.currentTarget = setTarget();
+            setPlayerOutline(Deputy.currentTarget, Deputy.color);
+        }
+
+        public static void deputyCheckPromotion(bool isMeeting=false)
+        {
+            // If LocalPlayer is Deputy, the Sheriff is disconnected and Deputy promotion is enabled, then trigger promotion
+            if (Deputy.deputy == null || Deputy.deputy != PlayerControl.LocalPlayer) return;
+            if (Deputy.promotesToSheriff == 0 || Deputy.deputy.Data.IsDead == true || Deputy.promotesToSheriff == 2 && !isMeeting) return;
+            if (Sheriff.sheriff == null || Sheriff.sheriff?.Data?.Disconnected == true || Sheriff.sheriff.Data.IsDead)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyPromotes, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.deputyPromotes();
+            }
+        }
+
         static void trackerSetTarget() {
             if (Tracker.tracker == null || Tracker.tracker != PlayerControl.LocalPlayer) return;
             Tracker.currentTarget = setTarget();
@@ -230,6 +250,23 @@ namespace TheOtherRoles.Patches {
             if (Spy.spy != null) untargetables.Add(Spy.spy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
+        }
+
+        static void deputyUpdate()
+        {
+            if (Deputy.handcuffedPlayer != null)
+            {
+                if (Deputy.handcuffTimeRemaining < 0)
+                {
+                    Deputy.handcuffedPlayer = null;
+                    // Resets the buttons
+                    Deputy.setHandcuffedKnows(false);
+                }
+                if (Deputy.handcuffedKnows > 0)
+                {
+                    Deputy.handcuffedKnows -= Time.fixedDeltaTime;
+                }
+            }
         }
 
         static void engineerUpdate() {
@@ -738,6 +775,9 @@ namespace TheOtherRoles.Patches {
                 shifterSetTarget();
                 // Sheriff
                 sheriffSetTarget();
+                // Deputy
+                deputySetTarget();
+                deputyUpdate();
                 // Detective
                 detectiveUpdateFootPrints();
                 // Tracker
@@ -759,6 +799,8 @@ namespace TheOtherRoles.Patches {
                 impostorSetTarget();
                 // Warlock
                 warlockSetTarget();
+                // Check for deputy promotion on Sheriff disconnect
+                deputyCheckPromotion();
                 // Check for sidekick promotion on Jackal disconnect
                 sidekickCheckPromotion();
                 // SecurityGuard
@@ -888,7 +930,7 @@ namespace TheOtherRoles.Patches {
                     otherLover.MurderPlayer(otherLover);
                 }
             }
-            
+
             // Sidekick promotion trigger on murder
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && target == Jackal.jackal && Jackal.jackal == PlayerControl.LocalPlayer) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);

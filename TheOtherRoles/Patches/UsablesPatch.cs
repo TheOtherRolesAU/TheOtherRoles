@@ -7,6 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
+using TheOtherRoles.Objects;
 
 
 namespace TheOtherRoles.Patches {
@@ -66,6 +67,13 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
+            // Deputy handcuff disables the vents
+            if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesVents)
+            {
+                Deputy.setHandcuffedKnows();
+                return false;
+            }
+
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
@@ -122,6 +130,12 @@ namespace TheOtherRoles.Patches {
     class KillButtonDoClickPatch {
         public static bool Prefix(KillButton __instance) {
             if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
+                // Deputy handcuff update.
+                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
+                    Deputy.setHandcuffedKnows();
+                    return false;
+                }
+                
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderAttemptResult res = Helpers.checkMuderAttemptAndKill(PlayerControl.LocalPlayer, __instance.currentTarget);
                 // Handle blank kill
@@ -142,6 +156,23 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
+    class SabotageButtonDoClickPatch
+    {
+        public static bool Prefix(SabotageButton __instance)
+        {
+            if (__instance.isActiveAndEnabled)
+            {
+                // Deputy handcuff update.
+                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesSabotage)
+                {
+                    Deputy.setHandcuffedKnows();
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
@@ -152,6 +183,24 @@ namespace TheOtherRoles.Patches {
             if (blockSabotageJanitor || blockSabotageMafioso) {
                 HudManager.Instance.SabotageButton.SetDisabled();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(UseButton), nameof(UseButton.DoClick))]
+    class UseButtonDoClickPatch
+    {
+        public static bool Prefix(UseButton __instance)
+        {
+            if (__instance.isActiveAndEnabled)
+            {
+                // Deputy handcuff update.
+                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesUse)
+                {
+                    Deputy.setHandcuffedKnows();
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
