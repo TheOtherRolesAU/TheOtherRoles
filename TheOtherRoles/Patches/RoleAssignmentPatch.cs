@@ -328,7 +328,7 @@ namespace TheOtherRoles.Patches {
                     data.crewmates.ToList().RemoveAll(x => x.PlayerId == sheriff);
                     data.maxCrewmateRoles--;
                     leftCrewRolesCount--;
-                    if (CustomOptionHolder.deputySpawnRate.getSelection() == 10) { // Force Deputy
+                    if (CustomOptionHolder.deputySpawnRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Force Deputy
                         byte deputy = setRoleToRandomPlayer((byte)RoleId.Deputy, data.crewmates);
                         data.crewmates.ToList().RemoveAll(x => x.PlayerId == deputy);
                         data.maxCrewmateRoles--;
