@@ -236,6 +236,11 @@ namespace TheOtherRoles.Patches {
 
         private static void assignDependentRoles(RoleAssignmentData data) {
 
+            int crew = data.crewmates.Count < data.maxCrewmateRoles ? data.crewmates.Count : data.maxCrewmateRoles;
+            int imp = data.impostors.Count < data.maxImpostorRoles ? data.impostors.Count : data.maxImpostorRoles;
+            int leftCrewRolesCount = crew - data.crewSettings.Where(x => x.Value != 0 && x.Value != 10).ToList().Count;
+            int leftImpRolesCount = imp - data.impSettings.Where(x => x.Value != 0 && x.Value != 10).ToList().Count;
+
             // Other Guesser
             if (CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0) {
                 bool isEvilGuesser = (rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10);
@@ -247,49 +252,61 @@ namespace TheOtherRoles.Patches {
                             byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
                             data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
                             data.maxCrewmateRoles--;
+                            leftCrewRolesCount--;
                         }
                         else if (Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Other Guesser = Evil Guesser
                             byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
                             data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
                             data.maxImpostorRoles--;
+                            leftImpRolesCount--;
                         }
                     }
                     else if (Guesser.niceGuesser == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) {  // Dont force, add other guesser (nice) to pool
                         data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
                         crewValues += CustomOptionHolder.guesserSpawnBothRate.getSelection();
+                        leftCrewRolesCount--;
                     }
                     else if (Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Dont force, add other guesser (evil) to pool
                         data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
                         impValues += CustomOptionHolder.guesserSpawnBothRate.getSelection();
+                        leftImpRolesCount--;
                     }
                 }
-                else if (CustomOptionHolder.guesserSpawnRate.getSelection() < 10 && rnd.Next(guesserSpawnValues + CustomOptionHolder.guesserSpawnRate.getSelection()) < CustomOptionHolder.guesserSpawnRate.getSelection()) { // Guesser is < 100%, but won the lottery .. yay
+                else if ((CustomOptionHolder.guesserSpawnRate.getSelection() < 10 && rnd.Next(guesserSpawnValues + CustomOptionHolder.guesserSpawnRate.getSelection()) < CustomOptionHolder.guesserSpawnRate.getSelection()) 
+                    || (isEvilGuesser && leftImpRolesCount > 0) || 
+                    (!isEvilGuesser && leftCrewRolesCount > 0)) { // Guesser is < 100%, but won the lottery or there are roles left to assign
                     if (isEvilGuesser && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Add Evil Guesser
                         byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
                         data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
                         data.maxImpostorRoles--;
+                        leftImpRolesCount--;
                         if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Force Other Guesser (nice)
                             byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
                             data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
                             data.maxCrewmateRoles--;
+                            leftCrewRolesCount--;
                         }
                         else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) { // Dont force, add other guesser (nice) to pool
                             data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
                             crewValues += CustomOptionHolder.guesserSpawnBothRate.getSelection();
+                            leftCrewRolesCount--;
                         }
                     }
                     else if (!isEvilGuesser && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Add Nice Guesser
                         byte niceGuesser = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
                         data.crewmates.ToList().RemoveAll(x => x.PlayerId == niceGuesser);
                         data.maxCrewmateRoles--;
+                        leftCrewRolesCount--;
                         if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Force Other Guesser (evil)
                             byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
                             data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
                             data.maxImpostorRoles--;
+                            leftImpRolesCount--;
                         }
                         else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) { // Dont force, add other guesser (evil) to pool
                             data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
                             impValues += CustomOptionHolder.guesserSpawnBothRate.getSelection();
+                            leftImpRolesCount--;
                         }
                     }
                 }
@@ -305,22 +322,24 @@ namespace TheOtherRoles.Patches {
                     } else if (CustomOptionHolder.deputySpawnRate.getSelection() < 10) { // Dont force, add Deputy to pool
                         data.crewSettings.Add((byte)RoleId.Deputy, CustomOptionHolder.deputySpawnRate.getSelection()); 
                     }
-                } else if (CustomOptionHolder.sheriffSpawnRate.getSelection() < 10 && rnd.Next(crewValues + CustomOptionHolder.sheriffSpawnRate.getSelection()) < CustomOptionHolder.sheriffSpawnRate.getSelection()) { // Sheriff is < 100%, but won the lottery .. yay
+                } else if ((CustomOptionHolder.sheriffSpawnRate.getSelection() < 10 && rnd.Next(crewValues + CustomOptionHolder.sheriffSpawnRate.getSelection()) < CustomOptionHolder.sheriffSpawnRate.getSelection())
+                    || leftCrewRolesCount > 0) { // Sheriff is < 100%, but won the lottery or there are roles left to assign
                     byte sheriff = setRoleToRandomPlayer((byte)RoleId.Sheriff, data.crewmates);
                     data.crewmates.ToList().RemoveAll(x => x.PlayerId == sheriff);
                     data.maxCrewmateRoles--;
+                    leftCrewRolesCount--;
                     if (CustomOptionHolder.deputySpawnRate.getSelection() == 10) { // Force Deputy
                         byte deputy = setRoleToRandomPlayer((byte)RoleId.Deputy, data.crewmates);
                         data.crewmates.ToList().RemoveAll(x => x.PlayerId == deputy);
                         data.maxCrewmateRoles--;
+                        leftCrewRolesCount--;
                     } else { // Dont force, add Deputy to pool
                         data.crewSettings.Add((byte)RoleId.Deputy, CustomOptionHolder.deputySpawnRate.getSelection());
                         crewValues += CustomOptionHolder.deputySpawnRate.getSelection();
+                        leftCrewRolesCount--;
                     }
                 }
             }
-
-           
         }
         private static void assignChanceRoles(RoleAssignmentData data) {
             // Get all roles where the chance to occur is set grater than 0% but not 100% and build a ticket pool based on their weight
