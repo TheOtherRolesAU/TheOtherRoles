@@ -14,6 +14,7 @@ namespace TheOtherRoles.Objects {
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
+        public float DeputyTimer = 0f;
         private Action OnClick;
         private Action InitialOnClick;
         private Action OnMeetingEnds;
@@ -118,6 +119,7 @@ namespace TheOtherRoles.Objects {
                 try
                 {
                     buttons[i].Timer = buttons[i].MaxTimer;
+                    buttons[i].DeputyTimer = buttons[i].MaxTimer;
                     buttons[i].Update();
                 }
                 catch (NullReferenceException)
@@ -145,15 +147,15 @@ namespace TheOtherRoles.Objects {
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
 
-            if (Timer >= 0)  // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
+            if (DeputyTimer >= 0)  // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
             {
                 if (HasEffect && isEffectActive)
-                    Timer -= Time.deltaTime;
+                    DeputyTimer -= Time.deltaTime;
                 else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
-                    Timer -= Time.deltaTime;
+                    DeputyTimer -= Time.deltaTime;
             }
 
-            if (Timer <= 0 && HasEffect && isEffectActive)
+            if (DeputyTimer <= 0 && HasEffect && isEffectActive)
             {
                 isEffectActive = false;
                 actionButton.cooldownTimerText.color = Palette.EnabledColor;

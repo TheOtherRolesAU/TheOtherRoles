@@ -89,7 +89,6 @@ namespace TheOtherRoles
             hackerButton.EffectDuration = Hacker.duration;
             hackerVitalsButton.EffectDuration = Hacker.duration;
             hackerAdminTableButton.EffectDuration = Hacker.duration;
-            deputyHandcuffButton.EffectDuration = Deputy.handcuffDuration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
@@ -305,6 +304,7 @@ namespace TheOtherRoles
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.deputyUsedHandcuffs(targetId);
                     Deputy.currentTarget = null;
+                    deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer;
                 },
                 () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
@@ -323,10 +323,7 @@ namespace TheOtherRoles
                 Deputy.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.F,
-                true,
-                Deputy.handcuffDuration,
-                () => { deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer; }
+                KeyCode.F
             );
             // Deputy Handcuff button handcuff counter
             deputyButtonHandcuffsText = GameObject.Instantiate(deputyHandcuffButton.actionButton.cooldownTimerText, deputyHandcuffButton.actionButton.cooldownTimerText.transform.parent);

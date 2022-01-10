@@ -176,7 +176,7 @@ namespace TheOtherRoles.Patches {
             if ((CustomOptionHolder.deputySpawnRate.getSelection() > 0 &&
                 CustomOptionHolder.sheriffSpawnRate.getSelection() == 10) ||
                 CustomOptionHolder.deputySpawnRate.getSelection() == 0) 
-                    data.crewSettings.Add((byte)RoleId.Sheriff, CustomOptionHolder.mayorSpawnRate.getSelection());
+                    data.crewSettings.Add((byte)RoleId.Sheriff, CustomOptionHolder.sheriffSpawnRate.getSelection());
 
 
             crewValues = data.crewSettings.Values.ToList().Sum();
