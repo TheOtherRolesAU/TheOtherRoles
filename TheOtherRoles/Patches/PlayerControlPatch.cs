@@ -254,19 +254,15 @@ namespace TheOtherRoles.Patches {
 
         static void deputyUpdate()
         {
-            if (Deputy.handcuffedPlayer != null)
+            if (PlayerControl.LocalPlayer == null || !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId)) return;
+            
+            if (Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] <= 0)
             {
-                if (Deputy.handcuffTimeRemaining < 0)
-                {
-                    Deputy.handcuffedPlayer = null;
-                    // Resets the buttons
-                    Deputy.setHandcuffedKnows(false);
-                }
-                if (Deputy.handcuffedKnows > 0)
-                {
-                    Deputy.handcuffedKnows -= Time.fixedDeltaTime;
-                }
+                Deputy.handcuffedKnows.Remove(PlayerControl.LocalPlayer.PlayerId);
+                // Resets the buttons
+                Deputy.setHandcuffedKnows(false);
             }
+            
         }
 
         static void engineerUpdate() {

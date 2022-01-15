@@ -538,16 +538,7 @@ namespace TheOtherRoles
         public static void deputyUsedHandcuffs(byte targetId)
         {
             Deputy.remainingHandcuffs--;
-            Deputy.handcuffedPlayer = Helpers.playerById(targetId);
-            Deputy.handcuffTimeRemaining = Deputy.handcuffDuration;
-            int timesTargetCuffed = Deputy.handcuffedPlayerCounts.ContainsKey(targetId) ? Deputy.handcuffedPlayerCounts[targetId] : 0;
-            Deputy.handcuffedPlayerCounts[targetId] = timesTargetCuffed + 1;
-
-            if (Deputy.handcuffedPlayer == PlayerControl.LocalPlayer && false)  // Closes Minigames. Is disabled for now, as it would enable too much hard proofing opportunity(?)
-            {
-                if (Minigame.Instance && Deputy.disablesUse)
-                    Minigame.Instance.ForceClose();
-            }
+            Deputy.handcuffedPlayers.Add(targetId);
         }
 
         public static void deputyPromotes()

@@ -70,7 +70,7 @@ namespace TheOtherRoles.Objects {
                 this.OnClick();
 
                 // Deputy skip onClickEvent if handcuffed
-                if (Deputy.handcuffedKnows > 0f) return;
+                if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.Timer = this.EffectDuration;
@@ -205,7 +205,7 @@ namespace TheOtherRoles.Objects {
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
 
             // Deputy disable the button and display Handcuffs instead...
-            if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
+            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
                 OnClick = () => {
                     Deputy.setHandcuffedKnows();
                 };

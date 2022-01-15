@@ -184,14 +184,13 @@ namespace TheOtherRoles
             public static Color color = Sheriff.color;
 
             public static PlayerControl currentTarget;
-            public static PlayerControl handcuffedPlayer;
+            public static List<byte> handcuffedPlayers = new List<byte>();
             public static int promotesToSheriff; // No: 0, Immediately: 1, After Meeting: 2
             public static bool keepsHandcuffsOnPromotion;
             public static float handcuffDuration;
             public static float remainingHandcuffs;
             public static float handcuffCooldown;
-            public static float handcuffTimeRemaining;
-            public static float handcuffedKnows;
+            public static Dictionary<byte, float> handcuffedKnows = new Dictionary<byte, float>();
 
             // For now, these are no settings, but these params can be used. Sabotage and Use are currently untested but might work
             public static bool disablesUse = false;  
@@ -202,7 +201,6 @@ namespace TheOtherRoles
             private static Sprite buttonSprite;
             private static Sprite handcuffedSprite;
             
-            public static Dictionary<byte, int> handcuffedPlayerCounts;
 
             public static Sprite getButtonSprite()
             {
@@ -219,9 +217,14 @@ namespace TheOtherRoles
             }
 
             // Can be used to enable / disable the handcuff effect on the target's buttons
-            public static void setHandcuffedKnows(bool active=true)
+            public static void setHandcuffedKnows(bool active = true)
             {
-                handcuffedKnows = active ? handcuffTimeRemaining : 0f;
+                if (active) {
+                    byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+                    handcuffedKnows.Add(localPlayerId, handcuffDuration);
+                    handcuffedPlayers.RemoveAll(x => x == localPlayerId);
+                }
+
                 HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
             }
 
@@ -229,15 +232,14 @@ namespace TheOtherRoles
             {
                 deputy = null;
                 currentTarget = null;
-                handcuffedPlayer = null;
-                handcuffTimeRemaining = 0f;
-                setHandcuffedKnows(false);
+                handcuffedPlayers = new List<byte>();
+                handcuffedKnows = new Dictionary<byte, float>();
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(false, true);
                 promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getSelection();
                 remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
                 keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
                 handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
-                handcuffedPlayerCounts = new Dictionary<byte, int>();
             }
         }
 

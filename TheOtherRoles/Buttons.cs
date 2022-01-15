@@ -44,7 +44,7 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
 
-        public static List<CustomButton> deputyHandcuffedButtons = null;
+        public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text deputyButtonHandcuffsText;
@@ -114,19 +114,25 @@ namespace TheOtherRoles
             positionOffsetValue.z = -0.1f;
             couldUse = couldUse ?? button.CouldUse;
             CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.hotkey,
-                                                                                        true, Deputy.handcuffTimeRemaining, () => { }, button.mirror);
+                true, Deputy.handcuffDuration, () => { }, button.mirror);
             replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
             replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
             replacementHandcuffedButton.isEffectActive = true;
-            deputyHandcuffedButtons.Add(replacementHandcuffedButton);
+            if (deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))
+                deputyHandcuffedButtons[PlayerControl.LocalPlayer.PlayerId].Add(replacementHandcuffedButton);
+            else
+                deputyHandcuffedButtons.Add(PlayerControl.LocalPlayer.PlayerId, new List<CustomButton> { replacementHandcuffedButton });
         }
         
         // Disables / Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
-        public static void setAllButtonsHandcuffedStatus(bool handcuffed)
+        public static void setAllButtonsHandcuffedStatus(bool handcuffed, bool reset = false)
         {
-            if (handcuffed && deputyHandcuffedButtons == null)
+            if (reset) {
+                deputyHandcuffedButtons = new Dictionary<byte, List<CustomButton>>();
+                return;
+            }
+            if (handcuffed && !deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))
             {
-                deputyHandcuffedButtons = new List<CustomButton>();
                 int maxI = CustomButton.buttons.Count;
                 for (int i = 0; i < maxI; i++)
                 {
@@ -155,15 +161,15 @@ namespace TheOtherRoles
                 // Use Button if enabled
                 if (Deputy.disablesUse && HudManager.Instance.UseButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, HudManager.Instance.UseButton.transform.localPosition);
             }
-            else if (!handcuffed && deputyHandcuffedButtons != null)  // Reset to original. Disables the replacements, enables the original buttons.
+            else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
             {
-                foreach (CustomButton replacementButton in deputyHandcuffedButtons)
+                foreach (CustomButton replacementButton in deputyHandcuffedButtons[PlayerControl.LocalPlayer.PlayerId])
                 {
                     replacementButton.HasButton = () => { return false; };
                     replacementButton.Update(); // To make it disappear properly.
                     CustomButton.buttons.Remove(replacementButton);
                 }
-                deputyHandcuffedButtons = null;
+                deputyHandcuffedButtons.Remove(PlayerControl.LocalPlayer.PlayerId);
 
                 foreach (CustomButton button in CustomButton.buttons)
                 {
@@ -309,15 +315,7 @@ namespace TheOtherRoles
                 () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     if (deputyButtonHandcuffsText != null) deputyButtonHandcuffsText.text = $"{Deputy.remainingHandcuffs}";
-                    if ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove)
-                    {
-                        // Could handcuff, but no more than <deputyNumberOfCuffsPerTarget> times the same player!
-                        byte targetId = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
-                        int timesTargetCuffed = Deputy.handcuffedPlayerCounts.ContainsKey(targetId) ? Deputy.handcuffedPlayerCounts[targetId] : 0;
-                        if (timesTargetCuffed >= CustomOptionHolder.deputyNumberOfCuffsPerTarget.getFloat()) return false;
-                        return true;
-                    }
-                    return false;
+                    return ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove);
                 },
                 () => { deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer; },
                 Deputy.getButtonSprite(),

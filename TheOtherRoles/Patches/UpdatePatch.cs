@@ -216,7 +216,8 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
             Tracker.corpsesTrackingTimer -= Time.deltaTime;
-            Deputy.handcuffTimeRemaining -= Time.deltaTime;
+            foreach (byte key in Deputy.handcuffedKnows.Keys.ToList())
+                Deputy.handcuffedKnows[key] -= Time.deltaTime;
         }
 
         public static void miniUpdate() {
@@ -252,22 +253,22 @@ namespace TheOtherRoles.Patches {
             if (enabled) __instance.KillButton.Show();
             else __instance.KillButton.Hide();
 
-            if (Deputy.handcuffedKnows > 0 && Deputy.hideCuffedButtons) __instance.KillButton.Hide();
+            if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 && Deputy.hideCuffedButtons) __instance.KillButton.Hide();
         }
 
         static void updateUseButton(HudManager __instance) {
-            if (Deputy.disablesUse && Deputy.handcuffedKnows > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.UseButton.Hide();
+            if (Deputy.disablesUse && Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.UseButton.Hide();
             else __instance.UseButton.Show();
         }
 
         static void updateSabotageButton(HudManager __instance) {
-            if (Deputy.disablesSabotage && Deputy.handcuffedKnows > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.SabotageButton.Hide();
+            if (Deputy.disablesSabotage && Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.SabotageButton.Hide();
             else if (PlayerControl.LocalPlayer.Data.Role.IsImpostor) __instance.SabotageButton.Show();
         }
 
         static void updateVentButton(HudManager __instance)
         {
-            if (Deputy.disablesVents && Deputy.handcuffedKnows > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.ImpostorVentButton.Hide();
+            if (Deputy.disablesVents && Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 && Deputy.hideCuffedButtons || MeetingHud.Instance) __instance.ImpostorVentButton.Hide();
             else if (PlayerControl.LocalPlayer.roleCanUseVents()) __instance.ImpostorVentButton.Show();
 
         }

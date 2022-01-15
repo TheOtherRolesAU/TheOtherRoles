@@ -68,7 +68,7 @@ namespace TheOtherRoles.Patches {
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             // Deputy handcuff disables the vents
-            if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesVents)
+            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesVents)
             {
                 Deputy.setHandcuffedKnows();
                 return false;
@@ -131,7 +131,7 @@ namespace TheOtherRoles.Patches {
         public static bool Prefix(KillButton __instance) {
             if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove) {
                 // Deputy handcuff update.
-                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer) {
+                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
                     Deputy.setHandcuffedKnows();
                     return false;
                 }
@@ -164,7 +164,7 @@ namespace TheOtherRoles.Patches {
             if (__instance.isActiveAndEnabled)
             {
                 // Deputy handcuff update.
-                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesSabotage)
+                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesSabotage)
                 {
                     Deputy.setHandcuffedKnows();
                     return false;
@@ -194,7 +194,7 @@ namespace TheOtherRoles.Patches {
             if (__instance.isActiveAndEnabled)
             {
                 // Deputy handcuff update.
-                if (PlayerControl.LocalPlayer == Deputy.handcuffedPlayer && Deputy.disablesUse)
+                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesUse)
                 {
                     Deputy.setHandcuffedKnows();
                     return false;
