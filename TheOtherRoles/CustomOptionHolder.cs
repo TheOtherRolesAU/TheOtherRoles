@@ -147,6 +147,7 @@ namespace TheOtherRoles {
         public static CustomOption hackerOnlyColorType;
         public static CustomOption hackerToolsNumber;
         public static CustomOption hackerRechargeTasksNumber;
+        public static CustomOption hackerNoMove;
 
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
@@ -186,6 +187,7 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardCamDuration;
         public static CustomOption securityGuardCamMaxCharges;
         public static CustomOption securityGuardCamRechargeTasksNumber;
+        public static CustomOption securityGuardNoMove;
 
         public static CustomOption baitSpawnRate;
         public static CustomOption baitHighlightAllVents;
@@ -396,6 +398,7 @@ namespace TheOtherRoles {
             hackerOnlyColorType = CustomOption.Create(173, "Hacker Only Sees Color Type", false, hackerSpawnRate);
             hackerToolsNumber = CustomOption.Create(174, "Max Mobile Gadget Charges", 5f, 1f, 30f, 1f, hackerSpawnRate);
             hackerRechargeTasksNumber = CustomOption.Create(175, "Number Of Tasks Needed For Recharging", 2f, 1f, 5f, 1f, hackerSpawnRate);
+            hackerNoMove = CustomOption.Create(176, "Cant Move During Mobile Gadget Duration", true, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
@@ -423,6 +426,7 @@ namespace TheOtherRoles {
             securityGuardCamDuration = CustomOption.Create(285, "Security Guard Duration", 10f, 2.5f, 60f, 2.5f, securityGuardSpawnRate);
             securityGuardCamMaxCharges = CustomOption.Create(286, "Gadged Max Charges", 5f, 1f, 30f, 1f, securityGuardSpawnRate);
             securityGuardCamRechargeTasksNumber = CustomOption.Create(287, "Number Of Tasks Needed For Recharging", 3f, 1f, 10f, 1f, securityGuardSpawnRate);
+            securityGuardNoMove = CustomOption.Create(288, "Cant Move During Cam Duration", true, securityGuardSpawnRate);
 
             baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);

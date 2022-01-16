@@ -491,6 +491,7 @@ namespace TheOtherRoles
         public static int rechargedTasks = 2;
         public static int chargesVitals = 1;
         public static int chargesAdminTable = 1;
+        public static bool cantMove = true;
 
         private static Sprite buttonSprite;
         private static Sprite vitalsSprite;
@@ -539,6 +540,7 @@ namespace TheOtherRoles
             rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.hackerRechargeTasksNumber.getFloat());
             chargesVitals = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
             chargesAdminTable = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
+            cantMove = CustomOptionHolder.hackerNoMove.getBool();
         }
     }
 
@@ -929,6 +931,7 @@ namespace TheOtherRoles
         public static int rechargeTasksNumber = 3;
         public static int rechargedTasks = 3;
         public static int charges = 1;
+        public static bool cantMove = true;
         public static Vent ventTarget = null;
         public static Minigame minigame = null;
 
@@ -988,6 +991,7 @@ namespace TheOtherRoles
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
             camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
             ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
+            cantMove = CustomOptionHolder.securityGuardNoMove.getBool();
         }
     }
 

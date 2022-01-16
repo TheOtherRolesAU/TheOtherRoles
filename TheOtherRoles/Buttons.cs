@@ -378,7 +378,7 @@ namespace TheOtherRoles
                    if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
                        DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
-                   PlayerControl.LocalPlayer.moveable = false;
+                   if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
 
                    Hacker.chargesAdminTable--;
@@ -437,7 +437,7 @@ namespace TheOtherRoles
                        Hacker.doorLog.Begin(null);
                    }
 
-                   PlayerControl.LocalPlayer.moveable = false;
+                   if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
 
                    Hacker.chargesVitals--;
@@ -897,7 +897,7 @@ namespace TheOtherRoles
                     }
                     SecurityGuard.charges--;
 
-                    PlayerControl.LocalPlayer.moveable = false;
+                    if (SecurityGuard.cantMove) PlayerControl.LocalPlayer.moveable = false;
                     PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },

@@ -81,8 +81,10 @@ namespace TheOtherRoles.Modules {
             running = true;
             checkForUpdate().GetAwaiter().GetResult();
             clearOldVersions();
-            if (hasUpdate || TheOtherRolesPlugin.ShowPopUp.Value) DestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
-            TheOtherRolesPlugin.ShowPopUp.Value = hasUpdate;
+            if (hasUpdate || TheOtherRolesPlugin.ShowPopUpVersion.Value != TheOtherRolesPlugin.VersionString) {
+                DestroyableSingleton<MainMenuManager>.Instance.Announcement.gameObject.SetActive(true);
+                TheOtherRolesPlugin.ShowPopUpVersion.Value = TheOtherRolesPlugin.VersionString;
+            }
         }
 
         public static void ExecuteUpdate() {
