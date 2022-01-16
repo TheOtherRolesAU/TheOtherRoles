@@ -25,7 +25,7 @@ Even more roles are coming soon :)
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
 | [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
 | [Morphling](#morphling) | [Seer](#seer) |  |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) |  |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) & [Deputy](#deputy)|  |  |
 | [Vampire](#vampire) | [Shifter](#shifter) |  |  |
 | [Warlock](#warlock) | [Snitch](#snitch) |  |  |
 | [Witch](#witch) | [Spy](#spy) |  |  |
@@ -104,6 +104,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added SecurityGuard mobile cams after placing all screws
 - Added The Other Roles changelog announcment popup
 - Changed that the Bounty Hunter exlude his lover 
+- Add new Role [Deputy](#deputy) thanks [gendelo3](https://github.com/gendelo3)
   
 
 **Version 3.3.3**
@@ -914,6 +915,32 @@ If they try to kill a Crewmate, they die instead.
 | Sheriff Spawn Chance | -
 | Sheriff Cooldown | -
 | Neutrals Can Die To Sheriff | -
+| Sheriff Has A Deputy | Deputy can not be in game without Sheriff
+-----------------------
+
+## Deputy
+### **Team: Crewmates**
+The Deputy has the ability to handcuff player.
+Handcuff will be hidden until the handcuffed player try to use a disabled button/hotkey.
+Handcuff disable: 
+- Kill
+- Abilities
+- Vent
+- Report
+
+**NOTE:**
+- Duration starts after the handcuffs become visible.
+- Deputy can not be in game without Sheriff.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Sheriff &&&
+| Deputy Number Of Handcuffs | -
+| Handcuff Cooldown| -
+| Handcuff Duration | -
+| Deputy Gets Promoted To Sheriff | "Off", "On (Immediately)" or "On (After Meeting)"
+| Deputy Keeps Handcuffs When Promoted |-
 -----------------------
 
 ## Jester
