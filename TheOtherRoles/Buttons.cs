@@ -154,12 +154,9 @@ namespace TheOtherRoles
                 // Kill Button if enabled for the Role
                 if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });
                 // Vent Button if enabled
-                if (Deputy.disablesVents && PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0),
-                                                                                                                        couldUse: () => { return HudManager.Instance.ImpostorVentButton.currentTarget != null; });
-                // Sabotage Button if enabled
-                if (Deputy.disablesSabotage && PlayerControl.LocalPlayer.Data.Role.IsImpostor) addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, 1f, 0), () => { return true; });
-                // Use Button if enabled
-                if (Deputy.disablesUse && HudManager.Instance.UseButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, HudManager.Instance.UseButton.transform.localPosition);
+                if (PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0), couldUse: () => { return HudManager.Instance.ImpostorVentButton.currentTarget != null; });
+                // Report Button
+                addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, -0.06f, 0), () => { return HudManager.Instance.ReportButton.enabled; });
             }
             else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
             {

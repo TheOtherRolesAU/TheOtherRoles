@@ -192,16 +192,9 @@ namespace TheOtherRoles
             public static float handcuffCooldown;
             public static Dictionary<byte, float> handcuffedKnows = new Dictionary<byte, float>();
 
-            // For now, these are no settings, but these params can be used. Sabotage and Use are currently untested but might work
-            public static bool disablesUse = false;  
-            public static bool disablesSabotage = false;  // For now disabled
-            public static bool disablesVents = true;
-            public static bool hideCuffedButtons = true;
-
             private static Sprite buttonSprite;
             private static Sprite handcuffedSprite;
             
-
             public static Sprite getButtonSprite()
             {
                 if (buttonSprite) return buttonSprite;

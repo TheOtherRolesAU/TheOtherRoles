@@ -147,23 +147,20 @@ namespace TheOtherRoles.Objects {
             }
             setActive(hudManager.UseButton.isActiveAndEnabled);
 
-            if (DeputyTimer >= 0)  // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
-            {
+            if (DeputyTimer >= 0) { // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
                 if (HasEffect && isEffectActive)
                     DeputyTimer -= Time.deltaTime;
                 else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
                     DeputyTimer -= Time.deltaTime;
             }
 
-            if (DeputyTimer <= 0 && HasEffect && isEffectActive)
-            {
+            if (DeputyTimer <= 0 && HasEffect && isEffectActive) {
                 isEffectActive = false;
                 actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 OnEffectEnds();
             }
 
-            if (Deputy.hideCuffedButtons && isHandcuffed)
-            {
+            if (isHandcuffed) {
                 setActive(false);
                 return;
             }

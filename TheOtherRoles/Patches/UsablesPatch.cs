@@ -15,8 +15,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
-        {
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
 
@@ -59,7 +58,7 @@ namespace TheOtherRoles.Patches {
     class VentButtonDoClickPatch {
         static  bool Prefix(VentButton __instance) {
             // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
-		    if (__instance.currentTarget != null) __instance.currentTarget.Use();
+		    if (__instance.currentTarget != null && !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId)) __instance.currentTarget.Use();
             return false;
         }
     }
@@ -68,8 +67,7 @@ namespace TheOtherRoles.Patches {
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             // Deputy handcuff disables the vents
-            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesVents)
-            {
+            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
                 Deputy.setHandcuffedKnows();
                 return false;
             }
@@ -156,24 +154,6 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
-    class SabotageButtonDoClickPatch
-    {
-        public static bool Prefix(SabotageButton __instance)
-        {
-            if (__instance.isActiveAndEnabled)
-            {
-                // Deputy handcuff update.
-                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesSabotage)
-                {
-                    Deputy.setHandcuffedKnows();
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
     class SabotageButtonRefreshPatch {
         static void Postfix() {
@@ -186,21 +166,11 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(UseButton), nameof(UseButton.DoClick))]
-    class UseButtonDoClickPatch
-    {
-        public static bool Prefix(UseButton __instance)
-        {
-            if (__instance.isActiveAndEnabled)
-            {
-                // Deputy handcuff update.
-                if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId) && Deputy.disablesUse)
-                {
-                    Deputy.setHandcuffedKnows();
-                    return false;
-                }
-            }
-            return true;
+    [HarmonyPatch(typeof(ReportButton), nameof(ReportButton.DoClick))]
+    class ReportButtonDoClickPatch {
+        public static bool Prefix(ReportButton __instance) {
+            if (__instance.isActiveAndEnabled && Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) Deputy.setHandcuffedKnows();
+            return !Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId);
         }
     }
 
