@@ -50,6 +50,7 @@ namespace TheOtherRoles {
         public static CustomOption loversImpLoverRate;
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
+        public static CustomOption loversEnableChat;
 
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
@@ -156,6 +157,7 @@ namespace TheOtherRoles {
         public static CustomOption hackerOnlyColorType;
         public static CustomOption hackerToolsNumber;
         public static CustomOption hackerRechargeTasksNumber;
+        public static CustomOption hackerNoMove;
 
         public static CustomOption trackerSpawnRate;
         public static CustomOption trackerUpdateIntervall;
@@ -192,6 +194,10 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardTotalScrews;
         public static CustomOption securityGuardCamPrice;
         public static CustomOption securityGuardVentPrice;
+        public static CustomOption securityGuardCamDuration;
+        public static CustomOption securityGuardCamMaxCharges;
+        public static CustomOption securityGuardCamRechargeTasksNumber;
+        public static CustomOption securityGuardNoMove;
 
         public static CustomOption baitSpawnRate;
         public static CustomOption baitHighlightAllVents;
@@ -305,6 +311,7 @@ namespace TheOtherRoles {
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
+            loversEnableChat = CustomOption.Create(54, "Enable lover chat", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -410,6 +417,7 @@ namespace TheOtherRoles {
             hackerOnlyColorType = CustomOption.Create(173, "Hacker Only Sees Color Type", false, hackerSpawnRate);
             hackerToolsNumber = CustomOption.Create(174, "Max Mobile Gadget Charges", 5f, 1f, 30f, 1f, hackerSpawnRate);
             hackerRechargeTasksNumber = CustomOption.Create(175, "Number Of Tasks Needed For Recharging", 2f, 1f, 5f, 1f, hackerSpawnRate);
+            hackerNoMove = CustomOption.Create(176, "Cant Move During Mobile Gadget Duration", true, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
             trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
@@ -434,6 +442,10 @@ namespace TheOtherRoles {
             securityGuardTotalScrews = CustomOption.Create(282, "Security Guard Number Of Screws", 7f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardCamPrice = CustomOption.Create(283, "Number Of Screws Per Cam", 2f, 1f, 15f, 1f, securityGuardSpawnRate);
             securityGuardVentPrice = CustomOption.Create(284, "Number Of Screws Per Vent", 1f, 1f, 15f, 1f, securityGuardSpawnRate);
+            securityGuardCamDuration = CustomOption.Create(285, "Security Guard Duration", 10f, 2.5f, 60f, 2.5f, securityGuardSpawnRate);
+            securityGuardCamMaxCharges = CustomOption.Create(286, "Gadged Max Charges", 5f, 1f, 30f, 1f, securityGuardSpawnRate);
+            securityGuardCamRechargeTasksNumber = CustomOption.Create(287, "Number Of Tasks Needed For Recharging", 3f, 1f, 10f, 1f, securityGuardSpawnRate);
+            securityGuardNoMove = CustomOption.Create(288, "Cant Move During Cam Duration", true, securityGuardSpawnRate);
 
             baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
             baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);

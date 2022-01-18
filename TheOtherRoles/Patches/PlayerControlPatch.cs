@@ -483,6 +483,15 @@ namespace TheOtherRoles.Patches {
             SecurityGuard.ventTarget = target;
         }
 
+        public static void securityGuardUpdate() {
+            if (SecurityGuard.securityGuard == null || PlayerControl.LocalPlayer != SecurityGuard.securityGuard || SecurityGuard.securityGuard.Data.IsDead) return;
+            var (playerCompleted, _) = TasksHandler.taskInfo(SecurityGuard.securityGuard.Data);
+            if (playerCompleted == SecurityGuard.rechargedTasks) {
+                SecurityGuard.rechargedTasks += SecurityGuard.rechargeTasksNumber;
+                if (SecurityGuard.maxCharges > SecurityGuard.charges) SecurityGuard.charges++;
+            }
+        }
+
         public static void arsonistSetTarget() {
             if (Arsonist.arsonist == null || Arsonist.arsonist != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables;
@@ -556,8 +565,9 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
+                if (Lovers.getPartner(BountyHunter.bountyHunter) != null) 
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp())) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
@@ -801,6 +811,7 @@ namespace TheOtherRoles.Patches {
                 sidekickCheckPromotion();
                 // SecurityGuard
                 securityGuardSetTarget();
+                securityGuardUpdate();
                 // Arsonist
                 arsonistSetTarget();
                 // Snitch

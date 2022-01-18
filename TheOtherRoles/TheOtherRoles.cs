@@ -409,6 +409,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(232, 57, 185, byte.MaxValue);
 
         public static bool bothDie = true;
+        public static bool enableChat = true;
         // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
         public static bool notAckedExiledIsLover = false;
 
@@ -437,6 +438,7 @@ namespace TheOtherRoles
             lover2 = null;
             notAckedExiledIsLover = false;
             bothDie = CustomOptionHolder.loversBothDie.getBool();
+            enableChat = CustomOptionHolder.loversEnableChat.getBool();
         }
 
         public static PlayerControl getPartner(this PlayerControl player) {
@@ -565,6 +567,7 @@ namespace TheOtherRoles
         public static int rechargedTasks = 2;
         public static int chargesVitals = 1;
         public static int chargesAdminTable = 1;
+        public static bool cantMove = true;
 
         private static Sprite buttonSprite;
         private static Sprite vitalsSprite;
@@ -613,6 +616,7 @@ namespace TheOtherRoles
             rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.hackerRechargeTasksNumber.getFloat());
             chargesVitals = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
             chargesAdminTable = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
+            cantMove = CustomOptionHolder.hackerNoMove.getBool();
         }
     }
 
@@ -998,7 +1002,14 @@ namespace TheOtherRoles
         public static int ventPrice = 1;
         public static int camPrice = 2;
         public static int placedCameras = 0;
+        public static float duration = 10f;
+        public static int maxCharges = 5;
+        public static int rechargeTasksNumber = 3;
+        public static int rechargedTasks = 3;
+        public static int charges = 1;
+        public static bool cantMove = true;
         public static Vent ventTarget = null;
+        public static Minigame minigame = null;
 
         private static Sprite closeVentButtonSprite;
         public static Sprite getCloseVentButtonSprite() {
@@ -1028,14 +1039,35 @@ namespace TheOtherRoles
             return staticVentSealedSprite;
         }
 
+        private static Sprite camSprite;
+        public static Sprite getCamSprite() {
+            if (camSprite) return camSprite;
+            camSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+            return camSprite;
+        }
+
+        private static Sprite logSprite;
+        public static Sprite getLogSprite() {
+            if (logSprite) return logSprite;
+            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            return logSprite;
+        }
+
         public static void clearAndReload() {
             securityGuard = null;
             ventTarget = null;
+            minigame = null;
+            duration = CustomOptionHolder.securityGuardCamDuration.getFloat();
+            maxCharges = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamMaxCharges.getFloat());
+            rechargeTasksNumber = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamRechargeTasksNumber.getFloat());
+            rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamRechargeTasksNumber.getFloat());
+            charges = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamMaxCharges.getFloat()) /2;
             placedCameras = 0;
             cooldown = CustomOptionHolder.securityGuardCooldown.getFloat();
             totalScrews = remainingScrews = Mathf.RoundToInt(CustomOptionHolder.securityGuardTotalScrews.getFloat());
             camPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardCamPrice.getFloat());
             ventPrice = Mathf.RoundToInt(CustomOptionHolder.securityGuardVentPrice.getFloat());
+            cantMove = CustomOptionHolder.securityGuardNoMove.getBool();
         }
     }
 
