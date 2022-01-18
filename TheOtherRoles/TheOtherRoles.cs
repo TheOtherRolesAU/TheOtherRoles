@@ -24,6 +24,7 @@ namespace TheOtherRoles
             Mayor.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+            Deputy.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
@@ -155,12 +156,85 @@ namespace TheOtherRoles
 
             public static PlayerControl currentTarget;
 
+            public static PlayerControl formerDeputy;  // Needed for keeping handcuffs + shifting
+            public static PlayerControl formerSheriff;  // When deputy gets promoted...
+
+            public static void replaceCurrentSheriff(PlayerControl deputy)
+            {
+                if (!formerSheriff) formerSheriff = sheriff;
+                sheriff = deputy;
+                currentTarget = null;
+                cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+            }
+
             public static void clearAndReload() {
                 sheriff = null;
                 currentTarget = null;
+                formerDeputy = null;
+                formerSheriff = null;
                 cooldown = CustomOptionHolder.sheriffCooldown.getFloat();
                 canKillNeutrals = CustomOptionHolder.sheriffCanKillNeutrals.getBool();
                 spyCanDieToSheriff = CustomOptionHolder.spyCanDieToSheriff.getBool();
+            }
+        }
+
+        public static class Deputy
+        {
+            public static PlayerControl deputy;
+            public static Color color = Sheriff.color;
+
+            public static PlayerControl currentTarget;
+            public static List<byte> handcuffedPlayers = new List<byte>();
+            public static int promotesToSheriff; // No: 0, Immediately: 1, After Meeting: 2
+            public static bool keepsHandcuffsOnPromotion;
+            public static float handcuffDuration;
+            public static float remainingHandcuffs;
+            public static float handcuffCooldown;
+            public static bool knowsSheriff;
+            public static Dictionary<byte, float> handcuffedKnows = new Dictionary<byte, float>();
+
+            private static Sprite buttonSprite;
+            private static Sprite handcuffedSprite;
+            
+            public static Sprite getButtonSprite()
+            {
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffButton.png", 115f);
+                return buttonSprite;
+            }
+
+            public static Sprite getHandcuffedButtonSprite()
+            {
+                if (handcuffedSprite) return handcuffedSprite;
+                handcuffedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.DeputyHandcuffed.png", 115f);
+                return handcuffedSprite;
+            }
+
+            // Can be used to enable / disable the handcuff effect on the target's buttons
+            public static void setHandcuffedKnows(bool active = true)
+            {
+                if (active) {
+                    byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+                    handcuffedKnows.Add(localPlayerId, handcuffDuration);
+                    handcuffedPlayers.RemoveAll(x => x == localPlayerId);
+                }
+
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
+            }
+
+            public static void clearAndReload()
+            {
+                deputy = null;
+                currentTarget = null;
+                handcuffedPlayers = new List<byte>();
+                handcuffedKnows = new Dictionary<byte, float>();
+                HudManagerStartPatch.setAllButtonsHandcuffedStatus(false, true);
+                promotesToSheriff = CustomOptionHolder.deputyGetsPromoted.getSelection();
+                remainingHandcuffs = CustomOptionHolder.deputyNumberOfHandcuffs.getFloat();
+                handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
+                keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
+                handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
+                knowsSheriff = CustomOptionHolder.deputyKnowsSheriff.getBool();
             }
         }
 
@@ -1053,7 +1127,7 @@ namespace TheOtherRoles
         public static bool showInfoInGhostChat = true;
         public static bool killsThroughShield = true;
         public static bool evilGuesserCanGuessSpy = true;
-
+        public static bool guesserCantGuessSnitch = false;
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
             targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
@@ -1084,7 +1158,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             niceGuesser = null;
             evilGuesser = null;
-
+            guesserCantGuessSnitch = CustomOptionHolder.guesserCantGuessSnitchIfTaksDone.getBool();
             remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             remainingShotsNiceGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
