@@ -335,6 +335,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(232, 57, 185, byte.MaxValue);
 
         public static bool bothDie = true;
+        public static bool enableChat = true;
         // Lovers save if next to be exiled is a lover, because RPC of ending game comes before RPC of exiled
         public static bool notAckedExiledIsLover = false;
 
@@ -363,6 +364,7 @@ namespace TheOtherRoles
             lover2 = null;
             notAckedExiledIsLover = false;
             bothDie = CustomOptionHolder.loversBothDie.getBool();
+            enableChat = CustomOptionHolder.loversEnableChat.getBool();
         }
 
         public static PlayerControl getPartner(this PlayerControl player) {

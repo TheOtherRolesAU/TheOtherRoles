@@ -386,7 +386,7 @@ namespace TheOtherRoles
                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead;},
                () => {
                    if (hackerAdminTableChargesText != null) hackerAdminTableChargesText.text = $"{Hacker.chargesAdminTable} / {Hacker.toolsNumber}";
-                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesAdminTable > 0; 
+                   return Hacker.chargesAdminTable > 0; 
                },
                () => {
                    hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
@@ -447,7 +447,7 @@ namespace TheOtherRoles
                    if (hackerVitalsChargesText != null) hackerVitalsChargesText.text = $"{Hacker.chargesVitals} / {Hacker.toolsNumber}";
                    hackerVitalsButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
                    hackerVitalsButton.actionButton.OverrideText(PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "VITALS");
-                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesVitals > 0;
+                   return Hacker.chargesVitals > 0;
                },
                () => {
                    hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
