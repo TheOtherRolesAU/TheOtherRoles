@@ -87,6 +87,11 @@ namespace TheOtherRoles {
             AudioClip audioClip = AudioClip.Create(clipName, samples.Length, channels, sampleRate, false);
             audioClip.SetData(samples, 0);
             return audioClip;
+
+            // Usage example:
+            /*AudioClip exampleClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.exampleClip.raw");
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);*/
+            
         }
 
         public static PlayerControl playerById(byte id)
