@@ -68,6 +68,27 @@ namespace TheOtherRoles {
             return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
         }
 
+        public static AudioClip loadAudioClipFromResources(string path, string clipName = "UNNAMED_TOR_AUDIO_CLIP")
+        {
+            // must be "raw (headerless) 2-channel signed 32 bit pcm (le) (use Audacity to export)"
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(path);
+            var byteAudio = new byte[stream.Length];
+            _ = stream.Read(byteAudio, 0, (int)stream.Length);
+            float[] samples = new float[byteAudio.Length / 4]; // 4 bytes per sample
+            int offset;
+            for (int i = 0; i < samples.Length; i++)
+            {
+                offset = i * 4;
+                samples[i] = (float)BitConverter.ToInt32(byteAudio, offset) / Int32.MaxValue;
+            }
+            int channels = 2;
+            int sampleRate = 48000;
+            AudioClip audioClip = AudioClip.Create(clipName, samples.Length, channels, sampleRate, false);
+            audioClip.SetData(samples, 0);
+            return audioClip;
+        }
+
         public static PlayerControl playerById(byte id)
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
