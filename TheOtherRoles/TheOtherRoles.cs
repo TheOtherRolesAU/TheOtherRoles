@@ -190,6 +190,7 @@ namespace TheOtherRoles
             public static float handcuffDuration;
             public static float remainingHandcuffs;
             public static float handcuffCooldown;
+            public static bool knowsSheriff;
             public static Dictionary<byte, float> handcuffedKnows = new Dictionary<byte, float>();
 
             private static Sprite buttonSprite;
@@ -233,6 +234,7 @@ namespace TheOtherRoles
                 handcuffCooldown = CustomOptionHolder.deputyHandcuffCooldown.getFloat();
                 keepsHandcuffsOnPromotion = CustomOptionHolder.deputyKeepsHandcuffs.getBool();
                 handcuffDuration = CustomOptionHolder.deputyHandcuffDuration.getFloat();
+                knowsSheriff = CustomOptionHolder.deputyKnowsSheriff.getBool();
             }
         }
 

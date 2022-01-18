@@ -71,12 +71,16 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
             else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
-                /*if (Deputy.deputy != null)  // For now, the Sheriff cannot see the Deputy
-                {
+                if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
-                }*/ 
+                }
             }
-            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) setPlayerNameColor(Deputy.deputy, Deputy.color);
+            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Deputy.deputy, Deputy.color);
+                if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
+                    setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
+                }
+            }
             else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
             else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
