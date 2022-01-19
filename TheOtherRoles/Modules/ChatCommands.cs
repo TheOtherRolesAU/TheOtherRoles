@@ -84,6 +84,14 @@ namespace TheOtherRoles.Modules {
             }
         }
 
+        [HarmonyPatch(typeof(ChatBubble), nameof(ChatBubble.SetName))]
+        public static class SetBubbleName { 
+            public static void Postfix(ChatBubble __instance, [HarmonyArgument(0)] string playerName) {
+                PlayerControl sourcePlayer = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
+                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && (sourcePlayer.Data.Role.IsImpostor || sourcePlayer.PlayerId == Spy.spy.PlayerId)) __instance.NameText.color = Palette.ImpostorRed;
+            }
+        }
+
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
         public static class AddChat {
             public static bool Prefix(ChatController __instance, [HarmonyArgument(0)] PlayerControl sourcePlayer) {
@@ -94,6 +102,5 @@ namespace TheOtherRoles.Modules {
 
             }
         }
-
     }
 }

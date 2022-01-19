@@ -311,7 +311,7 @@ namespace TheOtherRoles {
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
-            loversEnableChat = CustomOption.Create(54, "Enable lover chat", true, loversSpawnRate);
+            loversEnableChat = CustomOption.Create(54, "Enable Lover Chat", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
