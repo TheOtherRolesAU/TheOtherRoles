@@ -586,7 +586,11 @@ namespace TheOtherRoles
                     MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceGarlic, Hazel.SendOption.Reliable);
                     writer.WriteBytesAndSize(buff);
                     writer.EndMessage();
-                    RPCProcedure.placeGarlic(buff); 
+                    RPCProcedure.placeGarlic(buff);
+                    
+                    // Just an example! TODO REMOVE!!
+                    AudioClip exampleClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.exampleClip.raw");
+                    if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);
                 },
                 () => { return !Vampire.localPlacedGarlic && !PlayerControl.LocalPlayer.Data.IsDead && Vampire.garlicsActive; },
                 () => { return PlayerControl.LocalPlayer.CanMove && !Vampire.localPlacedGarlic; },
