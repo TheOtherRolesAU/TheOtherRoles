@@ -828,7 +828,7 @@ Depending on the options you can choose whether voting the Witch out will save a
 **NOTE:**
 - The spellbound players will die before the voted player dies (which might trigger e.g. trigger an Impostor win condition, even if the Witch is the one being voted)
 
-\
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
@@ -862,12 +862,13 @@ Depending on the options, the Guesser can't guess the shielded player and depend
 |----------|:-------------:|
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
-| Guesser Number Of Shots Per Game| -
-| Guesser Can Shoot Multiple Times Per Meeting| -
-| Guesses Visible In Ghost Chat| -
-| Guesses Ignore The Medic Shield| -
-| Evil Guesser Can Guess The Spy| -
-| Both Guesser Spawn Rate| -
+| Guesser Number Of Shots Per Game | -
+| Guesser Can Shoot Multiple Times Per Meeting |  -
+| Guesses Visible In Ghost Chat | -
+| Guesses Ignore The Medic Shield | -
+| Evil Guesser Can Guess The Spy | -
+| Both Guesser Spawn Rate | -
+| Guesser Can't Guess Snitch When Tasks Completed | -
 
 -----------------------
 
@@ -896,6 +897,7 @@ You can enable an exclusive chat only for Lovers\
 | Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
 | Lovers Can Have Another Role | If set to true, the Lovers can have a second role
+| Enable Lover Chat | -
 -----------------------
 
 
@@ -913,7 +915,7 @@ If they try to kill a Crewmate, they die instead.
 |----------|:-------------:|
 | Sheriff Spawn Chance | -
 | Sheriff Cooldown | -
-| Neutrals Can Die To Sheriff | -
+| Sheriff Can Kill Neutrals | -
 | Sheriff Has A Deputy | Deputy can not be in game without Sheriff
 -----------------------
 
@@ -934,10 +936,10 @@ Handcuff disable:
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Sheriff And Deputy Know Each Other | -
 | Deputy Number Of Handcuffs | -
 | Handcuff Cooldown| -
 | Handcuff Duration | -
+| Sheriff And Deputy Know Each Other | -
 | Deputy Gets Promoted To Sheriff | "Off", "On (Immediately)" or "On (After Meeting)"
 | Deputy Keeps Handcuffs When Promoted |-
 -----------------------
@@ -1117,11 +1119,12 @@ While accessing those mobile gadgets, the Hacker is not able to move.\
 | Name | Description |
 |----------|:-------------:|
 | Hacker Spawn Chance | -
-| Hacker Cooldown| -
+| Hacker Cooldown | -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
-| Max Mobile Gadget Charges| -
+| Max Mobile Gadget Charges | -
 | Number Of Tasks Needed For Recharging | Number of tasks to get a charge
+| Can't Move During Cam Duration | -
 -----------------------
 
 
@@ -1330,6 +1333,10 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
+| Security Guard Duration | -
+| Gadget Max Charges | -
+| Number Of Tasks Needed For Recharging | -
+| Can't Move During Cam Duration | -
 -----------------------
 
 ## Bait
