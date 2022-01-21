@@ -618,6 +618,9 @@ namespace TheOtherRoles
             resetTracked();
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            if (updateIntervall == 0f) {
+                updateIntervall = 0.01f;
+            }
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
