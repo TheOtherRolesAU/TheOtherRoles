@@ -69,11 +69,21 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
-            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) 
+            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
-            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer) 
+                if (Deputy.deputy != null && Deputy.knowsSheriff) {
+                    setPlayerNameColor(Deputy.deputy, Deputy.color);
+                }
+            }
+            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Deputy.deputy, Deputy.color);
+                if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
+                    setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
+                }
+            }
+            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
-            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer) 
+            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Detective.detective, Detective.color);
             else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer)
                 setPlayerNameColor(TimeMaster.timeMaster, TimeMaster.color);
@@ -84,12 +94,12 @@ namespace TheOtherRoles.Patches {
             else if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Swapper.swapper, Swapper.color);
             else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
-                setPlayerNameColor(Seer.seer, Seer.color);  
-            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer) 
+                setPlayerNameColor(Seer.seer, Seer.color);
+            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer) 
+            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
-            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer) 
+            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
             else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
                 // Jackal can see his sidekick
@@ -210,6 +220,8 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
             Tracker.corpsesTrackingTimer -= Time.deltaTime;
+            foreach (byte key in Deputy.handcuffedKnows.Keys.ToList())
+                Deputy.handcuffedKnows[key] -= Time.deltaTime;
         }
 
         public static void miniUpdate() {
@@ -244,6 +256,20 @@ namespace TheOtherRoles.Patches {
             
             if (enabled) __instance.KillButton.Show();
             else __instance.KillButton.Hide();
+
+            if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0) __instance.KillButton.Hide();
+        }
+
+        static void updateReportButton(HudManager __instance) {
+            if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 || MeetingHud.Instance) __instance.ReportButton.Hide();
+            else if (!__instance.ReportButton.isActiveAndEnabled) __instance.ReportButton.Show();
+        }
+         
+        static void updateVentButton(HudManager __instance)
+        {
+            if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0 || MeetingHud.Instance) __instance.ImpostorVentButton.Hide();
+            else if (PlayerControl.LocalPlayer.roleCanUseVents() && !__instance.ImpostorVentButton.isActiveAndEnabled) __instance.ImpostorVentButton.Show();
+
         }
 
         static void Postfix(HudManager __instance)
@@ -262,6 +288,11 @@ namespace TheOtherRoles.Patches {
             timerUpdate();
             // Mini
             miniUpdate();
+
+            // Deputy Sabotage, Use and Vent Button Disabling
+            updateReportButton(__instance);
+            updateVentButton(__instance);
+
         }
     }
 }
