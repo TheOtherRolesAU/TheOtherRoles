@@ -169,6 +169,12 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            // Deputy check Promotion, see if the sheriff still exists. The promotion will be after the meeting.
+            if (Deputy.deputy != null)
+            {
+                PlayerControlFixedUpdatePatch.deputyCheckPromotion(isMeeting: true);
+            }
+
             // Force Bounty Hunter Bounty Update
             if (BountyHunter.bountyHunter != null && BountyHunter.bountyHunter == PlayerControl.LocalPlayer)
                 BountyHunter.bountyUpdateTimer = 0f;

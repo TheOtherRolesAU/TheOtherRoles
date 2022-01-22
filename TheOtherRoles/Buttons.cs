@@ -5,6 +5,7 @@ using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TheOtherRoles
 {
@@ -14,6 +15,7 @@ namespace TheOtherRoles
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         private static CustomButton sheriffKillButton;
+        private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
@@ -36,13 +38,18 @@ namespace TheOtherRoles
         public static CustomButton cleanerCleanButton;
         public static CustomButton warlockCurseButton;
         public static CustomButton securityGuardButton;
+        public static CustomButton securityGuardCamButton;
         public static CustomButton arsonistButton;
         public static CustomButton vultureEatButton;
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
 
+        public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
+
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
+        public static TMPro.TMP_Text securityGuardChargesText;
+        public static TMPro.TMP_Text deputyButtonHandcuffsText;
         public static TMPro.TMP_Text pursuerButtonBlanksText;
         public static TMPro.TMP_Text hackerAdminTableChargesText;
         public static TMPro.TMP_Text hackerVitalsChargesText;
@@ -51,6 +58,7 @@ namespace TheOtherRoles
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
+            deputyHandcuffButton.MaxTimer = Deputy.handcuffCooldown;
             timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = 0f;
@@ -72,6 +80,7 @@ namespace TheOtherRoles
             cleanerCleanButton.MaxTimer = Cleaner.cooldown;
             warlockCurseButton.MaxTimer = Warlock.cooldown;
             securityGuardButton.MaxTimer = SecurityGuard.cooldown;
+            securityGuardCamButton.MaxTimer = SecurityGuard.cooldown;
             arsonistButton.MaxTimer = Arsonist.cooldown;
             vultureEatButton.MaxTimer = Vulture.cooldown;
             mediumButton.MaxTimer = Medium.cooldown;
@@ -92,6 +101,7 @@ namespace TheOtherRoles
             mediumButton.EffectDuration = Medium.duration;
             trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             witchSpellButton.EffectDuration = Witch.spellCastingDuration;
+            securityGuardCamButton.EffectDuration = SecurityGuard.duration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
@@ -100,6 +110,73 @@ namespace TheOtherRoles
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
             timeMasterShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
+        {
+            Vector3 positionOffsetValue = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
+            positionOffsetValue.z = -0.1f;
+            couldUse = couldUse ?? button.CouldUse;
+            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.hotkey,
+                true, Deputy.handcuffDuration, () => { }, button.mirror);
+            replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
+            replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
+            replacementHandcuffedButton.isEffectActive = true;
+            if (deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))
+                deputyHandcuffedButtons[PlayerControl.LocalPlayer.PlayerId].Add(replacementHandcuffedButton);
+            else
+                deputyHandcuffedButtons.Add(PlayerControl.LocalPlayer.PlayerId, new List<CustomButton> { replacementHandcuffedButton });
+        }
+        
+        // Disables / Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
+        public static void setAllButtonsHandcuffedStatus(bool handcuffed, bool reset = false)
+        {
+            if (reset) {
+                deputyHandcuffedButtons = new Dictionary<byte, List<CustomButton>>();
+                return;
+            }
+            if (handcuffed && !deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))
+            {
+                int maxI = CustomButton.buttons.Count;
+                for (int i = 0; i < maxI; i++)
+                {
+                    try
+                    {
+                        if (CustomButton.buttons[i].HasButton())  // For each custombutton the player has
+                        {
+                            addReplacementHandcuffedButton(CustomButton.buttons[i]);  // The new buttons are the only non-handcuffed buttons now!
+                        }
+                        CustomButton.buttons[i].isHandcuffed = true;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        System.Console.WriteLine("[WARNING] NullReferenceException from MeetingEndedUpdate().HasButton(), if theres only one warning its fine");  // Note: idk what this is good for, but i copied it from above /gendelo
+                    }
+                }
+
+                // Non Custom (Vanilla) Buttons. The Originals are disabled / hidden in UpdatePatch.cs already, just need to replace them. Can use any button, as we replace onclick etc anyways.
+                // Kill Button if enabled for the Role
+                if (HudManager.Instance.KillButton.isActiveAndEnabled) addReplacementHandcuffedButton(arsonistButton, new Vector3(0, 1f, 0), couldUse: () => { return HudManager.Instance.KillButton.currentTarget != null; });
+                // Vent Button if enabled
+                if (PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0), couldUse: () => { return HudManager.Instance.ImpostorVentButton.currentTarget != null; });
+                // Report Button
+                addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, -0.06f, 0), () => { return HudManager.Instance.ReportButton.enabled; });
+            }
+            else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
+            {
+                foreach (CustomButton replacementButton in deputyHandcuffedButtons[PlayerControl.LocalPlayer.PlayerId])
+                {
+                    replacementButton.HasButton = () => { return false; };
+                    replacementButton.Update(); // To make it disappear properly.
+                    CustomButton.buttons.Remove(replacementButton);
+                }
+                deputyHandcuffedButtons.Remove(PlayerControl.LocalPlayer.PlayerId);
+
+                foreach (CustomButton button in CustomButton.buttons)
+                {
+                    button.isHandcuffed = false;
+                }
+            }
         }
 
         public static void Postfix(HudManager __instance)
@@ -112,7 +189,7 @@ namespace TheOtherRoles
                     MessageWriter usedRepairWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.EngineerUsedRepair, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(usedRepairWriter);
                     RPCProcedure.engineerUsedRepair();
- 
+
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks) {
                         if (task.TaskType == TaskTypes.FixLights) {
                             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.EngineerFixLights, Hazel.SendOption.Reliable, -1);
@@ -163,7 +240,7 @@ namespace TheOtherRoles
                                 if (Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
                                     GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
-                                    
+
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
                                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -177,7 +254,7 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor  && PlayerControl.LocalPlayer.CanMove; },
+                () => { return __instance.ReportButton.graphic.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove; },
                 () => { janitorCleanButton.Timer = janitorCleanButton.MaxTimer; },
                 Janitor.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -222,6 +299,37 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.Q
             );
+
+            // Deputy Handcuff
+            deputyHandcuffButton = new CustomButton(
+                () => {
+                    byte targetId = 0;
+                    targetId = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyUsedHandcuffs, Hazel.SendOption.Reliable, -1);
+                    writer.Write(targetId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.deputyUsedHandcuffs(targetId);
+                    Deputy.currentTarget = null;
+                    deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer;
+                },
+                () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (deputyButtonHandcuffsText != null) deputyButtonHandcuffsText.text = $"{Deputy.remainingHandcuffs}";
+                    return ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove);
+                },
+                () => { deputyHandcuffButton.Timer = deputyHandcuffButton.MaxTimer; },
+                Deputy.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
+            // Deputy Handcuff button handcuff counter
+            deputyButtonHandcuffsText = GameObject.Instantiate(deputyHandcuffButton.actionButton.cooldownTimerText, deputyHandcuffButton.actionButton.cooldownTimerText.transform.parent);
+            deputyButtonHandcuffsText.text = "";
+            deputyButtonHandcuffsText.enableWordWrapping = false;
+            deputyButtonHandcuffsText.transform.localScale = Vector3.one * 0.5f;
+            deputyButtonHandcuffsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             // Time Master Rewind Time
             timeMasterShieldButton = new CustomButton(
@@ -374,12 +482,15 @@ namespace TheOtherRoles
                    if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
                        DestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
+                   if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
+                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+
                    Hacker.chargesAdminTable--;
                },
                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead;},
                () => {
                    if (hackerAdminTableChargesText != null) hackerAdminTableChargesText.text = $"{Hacker.chargesAdminTable} / {Hacker.toolsNumber}";
-                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesAdminTable > 0; 
+                   return Hacker.chargesAdminTable > 0; 
                },
                () => {
                    hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
@@ -394,6 +505,7 @@ namespace TheOtherRoles
                0f,
                () => { 
                    hackerAdminTableButton.Timer = hackerAdminTableButton.MaxTimer;
+                   if (!hackerVitalsButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
                    if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
                },
                PlayerControl.GameOptions.MapId == 3,
@@ -428,6 +540,10 @@ namespace TheOtherRoles
                        Hacker.doorLog.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
                        Hacker.doorLog.Begin(null);
                    }
+
+                   if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
+                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+
                    Hacker.chargesVitals--;
                },
                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.GameOptions.MapId != 0 && PlayerControl.GameOptions.MapId != 3; },
@@ -435,7 +551,7 @@ namespace TheOtherRoles
                    if (hackerVitalsChargesText != null) hackerVitalsChargesText.text = $"{Hacker.chargesVitals} / {Hacker.toolsNumber}";
                    hackerVitalsButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
                    hackerVitalsButton.actionButton.OverrideText(PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "VITALS");
-                   return PlayerControl.LocalPlayer.CanMove && Hacker.chargesVitals > 0;
+                   return Hacker.chargesVitals > 0;
                },
                () => {
                    hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
@@ -450,6 +566,7 @@ namespace TheOtherRoles
                0f,
                () => { 
                    hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
+                   if(!hackerAdminTableButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
                    if (Minigame.Instance) {
                        if (PlayerControl.GameOptions.MapId == 1) Hacker.doorLog.ForceClose();
                        else Hacker.vitals.ForceClose();
@@ -861,6 +978,68 @@ namespace TheOtherRoles
             securityGuardButtonScrewsText.transform.localScale = Vector3.one * 0.5f;
             securityGuardButtonScrewsText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
+            securityGuardCamButton = new CustomButton(
+                () => {
+                    if (PlayerControl.GameOptions.MapId != 1) {
+                        if (SecurityGuard.minigame == null) {
+                            var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("Surv_Panel"));
+                            if (e == null || Camera.main == null) return;
+                            SecurityGuard.minigame = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
+                        }
+                        SecurityGuard.minigame.transform.SetParent(Camera.main.transform, false);
+                        SecurityGuard.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+                        SecurityGuard.minigame.Begin(null);
+                    } else {
+                        if (SecurityGuard.minigame == null) {
+                            var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("SurvLogConsole"));
+                            if (e == null || Camera.main == null) return;
+                            SecurityGuard.minigame = UnityEngine.Object.Instantiate(e.MinigamePrefab, Camera.main.transform, false);
+                        }
+                        SecurityGuard.minigame.transform.SetParent(Camera.main.transform, false);
+                        SecurityGuard.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+                        SecurityGuard.minigame.Begin(null);
+                    }
+                    SecurityGuard.charges--;
+
+                    if (SecurityGuard.cantMove) PlayerControl.LocalPlayer.moveable = false;
+                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                },
+                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
+                () => {
+                    if (securityGuardChargesText != null) securityGuardChargesText.text = $"{SecurityGuard.charges} / {SecurityGuard.maxCharges}";
+                    securityGuardCamButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
+                    securityGuardCamButton.actionButton.OverrideText(PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "SECURITY");
+                    return PlayerControl.LocalPlayer.CanMove && SecurityGuard.charges > 0;
+                },
+                () => {
+                    securityGuardCamButton.Timer = securityGuardCamButton.MaxTimer;
+                    securityGuardCamButton.isEffectActive = false;
+                    securityGuardCamButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                SecurityGuard.getCamSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.Q,
+                true,
+                0f,
+                () => {
+                    securityGuardCamButton.Timer = securityGuardCamButton.MaxTimer;
+                    if (Minigame.Instance) {
+                        SecurityGuard.minigame.ForceClose();
+                    }
+                    PlayerControl.LocalPlayer.moveable = true;
+                },
+                false,
+                PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "SECURITY"
+            );
+
+            // Security Guard cam button charges
+            securityGuardChargesText = GameObject.Instantiate(securityGuardCamButton.actionButton.cooldownTimerText, securityGuardCamButton.actionButton.cooldownTimerText.transform.parent);
+            securityGuardChargesText.text = "";
+            securityGuardChargesText.enableWordWrapping = false;
+            securityGuardChargesText.transform.localScale = Vector3.one * 0.5f;
+            securityGuardChargesText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
             // Arsonist button
             arsonistButton = new CustomButton(
                 () => {
@@ -1121,6 +1300,7 @@ namespace TheOtherRoles
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();
+            deputyHandcuffedButtons = null;
         }
     }
 }
