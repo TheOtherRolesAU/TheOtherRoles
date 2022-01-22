@@ -73,6 +73,7 @@ namespace TheOtherRoles.Objects {
                 if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
+                    this.DeputyTimer = this.EffectDuration;
                     this.Timer = this.EffectDuration;
                     actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
                     this.isEffectActive = true;
