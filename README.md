@@ -25,7 +25,7 @@ Even more roles are coming soon :)
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
 | [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
 | [Morphling](#morphling) | [Seer](#seer) |  |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) & [Deputy](#deputy)|  |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) 
 | [Vampire](#vampire) | [Shifter](#shifter) |  |  |
 | [Warlock](#warlock) | [Snitch](#snitch) |  |  |
 | [Witch](#witch) | [Spy](#spy) |  |  |
@@ -34,6 +34,7 @@ Even more roles are coming soon :)
 |  |  [Tracker](#tracker) |  |  |
 |  |  [Bait](#bait) |  |
 |  |  [Medium](#medium) |  |
+|  |  [Deputy](#deputy) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
