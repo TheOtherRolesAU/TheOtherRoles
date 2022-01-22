@@ -67,11 +67,20 @@ namespace TheOtherRoles
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
-
+			
+			// Adding in options to give Jester extra vision.
+			public static bool hasImpostorVision = false;
+			public static float vision = 1f;
+			
+			
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
+				
+				// Set the options needed for jester vision from the CustomOptionHolder
+				vision = CustomOptionHolder.jesterVision.getFloat();
+				hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
         }
 
