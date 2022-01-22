@@ -18,6 +18,7 @@ namespace TheOtherRoles
         Mayor,
         Engineer,
         Sheriff,
+        Deputy,
         Lighter,
         Godfather,
         Mafioso,
@@ -88,6 +89,8 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
+        DeputyUsedHandcuffs,
+        DeputyPromotes,
         JackalCreatesSidekick,
         SidekickPromotes,
         ErasePlayerRoles,
@@ -161,6 +164,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sheriff:
                         Sheriff.sheriff = player;
+                        break;
+                    case RoleId.Deputy:
+                        Deputy.deputy = player;
                         break;
                     case RoleId.Lighter:
                         Lighter.lighter = player;
@@ -431,8 +437,12 @@ namespace TheOtherRoles
                 Mayor.mayor = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
-            if (Sheriff.sheriff != null && Sheriff.sheriff == player)
+            if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
+                if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = oldShifter;  // Shifter also shifts info on promoted deputy (to get handcuffs)
                 Sheriff.sheriff = oldShifter;
+            }
+            if (Deputy.deputy != null && Deputy.deputy == player)
+                Deputy.deputy = oldShifter;
             if (Lighter.lighter != null && Lighter.lighter == player)
                 Lighter.lighter = oldShifter;
             if (Detective.detective != null && Detective.detective == player)
@@ -525,6 +535,22 @@ namespace TheOtherRoles
                     Tracker.tracked = player;
         }
 
+        public static void deputyUsedHandcuffs(byte targetId)
+        {
+            Deputy.remainingHandcuffs--;
+            Deputy.handcuffedPlayers.Add(targetId);
+        }
+
+        public static void deputyPromotes()
+        {
+            if (Deputy.deputy != null) {  // Deputy should never be null here, but there appeared to be a race condition during testing, which was removed.
+                Sheriff.replaceCurrentSheriff(Deputy.deputy);
+                Sheriff.formerDeputy = Deputy.deputy;
+                Deputy.deputy = null;
+                // No clear and reload, as we need to keep the number of handcuffs left etc
+            }
+        }
+
         public static void jackalCreatesSidekick(byte targetId) {
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null) return;
@@ -555,6 +581,7 @@ namespace TheOtherRoles
             if (player == Mayor.mayor) Mayor.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
+            if (player == Deputy.deputy) Deputy.clearAndReload();
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
@@ -738,6 +765,14 @@ namespace TheOtherRoles
                         pva.SetDead(pva.DidReport, true);
                         pva.Overlay.gameObject.SetActive(true);
                     }
+
+                    //Give players back their vote if target is shot dead
+                    if (pva.VotedFor != dyingTargetId || pva.VotedFor != partnerId) continue;
+                    pva.UnsetVote();
+                    var voteAreaPlayer = Helpers.playerById(pva.TargetPlayerId);
+                    if (!voteAreaPlayer.AmOwner) continue;
+                    MeetingHud.Instance.ClearVote();
+
                 }
                 if (AmongUsClient.Instance.AmHost) 
                     MeetingHud.Instance.CheckForEndVoting();
@@ -879,6 +914,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
+                    break;               
+                case (byte)CustomRPC.DeputyUsedHandcuffs:
+                    RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DeputyPromotes:
+                    RPCProcedure.deputyPromotes();
                     break;
                 case (byte)CustomRPC.JackalCreatesSidekick:
                     RPCProcedure.jackalCreatesSidekick(reader.ReadByte());
