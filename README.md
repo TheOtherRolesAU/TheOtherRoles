@@ -925,8 +925,8 @@ If they try to kill a Crewmate, they die instead.
 ## Deputy
 ### **Team: Crewmates**
 The Deputy has the ability to handcuff player.
-Handcuff will be hidden until the handcuffed player try to use a disabled button/hotkey.
-Handcuff disable: 
+Handcuffs will be hidden until the handcuffed player try to use a disabled button/hotkey.
+Handcuffs disable: 
 - Kill
 - Abilities
 - Vent
