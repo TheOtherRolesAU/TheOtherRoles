@@ -1,4 +1,6 @@
 ![eisbison banner](./Images/TOR_logo.png)
+<p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
+
 <p align="center">
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
 
@@ -23,10 +25,11 @@ Even more roles are coming soon :)
 | [Mafioso (Mafia)](#mafia) | [Medic](#medic) |  |  |
 | [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) |  |  |
 | [Morphling](#morphling) | [Seer](#seer) |  |  |
-| [Trickster](#trickster) | [Sheriff](#sheriff) |  |  |
-| [Vampire](#vampire) | [Shifter](#shifter) |  |  |
-| [Warlock](#warlock) | [Snitch](#snitch) |  |  |
-| [Witch](#witch) | [Spy](#spy) |  |  |
+| [Trickster](#trickster) | [Sheriff](#sheriff) 
+| [Vampire](#vampire) | [Deputy](#deputy) |  |
+| [Warlock](#warlock) | [Shifter](#shifter) |  |  |
+| [Witch](#witch) | [Snitch](#snitch) |  |  |
+|  | [Spy](#spy) |  |  |
 |  | [Swapper](#swapper) |  |  |
 |  | [Time Master](#time-master) |  |  |
 |  |  [Tracker](#tracker) |  |  |
@@ -38,6 +41,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.15s| v3.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.0/TheOtherRoles.zip)
+| 2021.12.15s| v3.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.3/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)
 | 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
@@ -91,6 +96,20 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 3.4.0**
+- Added new Role [Deputy](#deputy) thanks [gendelo3](https://github.com/gendelo3)
+- Added Hacker option "Cant Move During Mobile Gadget Duration"
+- Added Security Guard mobile cams after placing all screws
+- Added Lover option "Enable Lover Chat"
+- Added return votes in meetings: You'll now get your votes back if your target got shot by the Guesser
+- Added New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by [MaximeGillot](https://github.com/MaximeGillot))
+- Added The Other Roles changelog announcement popup
+- Changed that the Bounty Hunter exclude their Lover
+- Changed the position of the Witch icon in meetings for better visibility
+- Fixed a bug where the spy had a white name for Impostors in chat
+- Fixed a bug where the Guesser and Swapper UI in meetings was behind the visor cosmetics
+
 
 **Version 3.3.3**
 - Fixed a bug where a guessed Guesser could guess
@@ -777,17 +796,14 @@ The Warlock can still perform normal kills, but the two buttons share the same c
 ## Bounty Hunter
 ### **Team: Impostors**
 \
-Created by  [Mallöris](https://github.com/Mallaris)\
-\
 The Bounty Hunter is an Impostor, that continuously get bounties (the targeted player doesn't get notified).\
 The target of the Bounty Hunter swaps after every meeting and after a configurable amount of time.\
 If the Bounty Hunter kills their target, their kill cooldown will be a lot less than usual.\
 Killing a player that's not their current target results in an increased kill cooldown.\
 Depending on the options, there'll be an arrow pointing towards the current target.\
-
 \
 **NOTE:**
-- The target won't be an Impostor or a Spy
+- The target won't be an Impostor, a Spy or the Bounty Hunter's Lover.
 - Killing the target resets the timer and a new target will be selected.
 
 ### Game Options
@@ -815,7 +831,7 @@ Depending on the options you can choose whether voting the Witch out will save a
 **NOTE:**
 - The spellbound players will die before the voted player dies (which might trigger e.g. trigger an Impostor win condition, even if the Witch is the one being voted)
 
-\
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
@@ -839,7 +855,7 @@ You can only shoot during the voting time.\
 Depending on the options, the Guesser can't guess the shielded player and depending on the Medic options the Medic/shielded player might be notified (no one will die, independently of what the Guesser guessed).\
 \
 **NOTE:**
-- The vote of a shot player, won't be counted
+- If a player gets shot, you'll get back your votes
 - You can't guess the role **Nice Mini** for obvious reasons
 - You can't guess the role **Lover**, you'll have to guess the primary role of one of the Lovers, to kill both of them
 - Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out
@@ -849,12 +865,13 @@ Depending on the options, the Guesser can't guess the shielded player and depend
 |----------|:-------------:|
 | Guesser Spawn Chance | -
 | Chance That The Guesser Is An Impostor | -
-| Guesser Number Of Shots Per Game| -
-| Guesser Can Shoot Multiple Times Per Meeting| -
-| Guesses Visible In Ghost Chat| -
-| Guesses Ignore The Medic Shield| -
-| Evil Guesser Can Guess The Spy| -
-| Both Guesser Spawn Rate| -
+| Guesser Number Of Shots Per Game | -
+| Guesser Can Shoot Multiple Times Per Meeting |  -
+| Guesses Visible In Ghost Chat | -
+| Guesses Ignore The Medic Shield | -
+| Evil Guesser Can Guess The Spy | -
+| Both Guesser Spawn Rate | -
+| Guesser Can't Guess Snitch When Tasks Completed | -
 
 -----------------------
 
@@ -870,6 +887,7 @@ The Lovers win, if they are both alive when the game ends. They can also win wit
 If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
 If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
 If there's a team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as they're alive. If the Lover dies, their tasks will also be counted.\
+You can enable an exclusive chat only for Lovers\
 \
 **NOTE:**
 - In a 2 Cremates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
@@ -882,6 +900,7 @@ If there's a team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lov
 | Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
 | Lovers Can Have Another Role | If set to true, the Lovers can have a second role
+| Enable Lover Chat | -
 -----------------------
 
 
@@ -899,7 +918,33 @@ If they try to kill a Crewmate, they die instead.
 |----------|:-------------:|
 | Sheriff Spawn Chance | -
 | Sheriff Cooldown | -
-| Neutrals Can Die To Sheriff | -
+| Sheriff Can Kill Neutrals | -
+| Sheriff Has A Deputy | Deputy can not be in game without Sheriff
+-----------------------
+
+## Deputy
+### **Team: Crewmates**
+The Deputy has the ability to handcuff player.
+Handcuffs will be hidden until the handcuffed player try to use a disabled button/hotkey.
+Handcuffs disable: 
+- Kill
+- Abilities
+- Vent
+- Report
+
+**NOTE:**
+- Duration starts after the handcuffs become visible.
+- Deputy can not be in game without Sheriff.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Deputy Number Of Handcuffs | -
+| Handcuff Cooldown| -
+| Handcuff Duration | -
+| Sheriff And Deputy Know Each Other | -
+| Deputy Gets Promoted To Sheriff | "Off", "On (Immediately)" or "On (After Meeting)"
+| Deputy Keeps Handcuffs When Promoted |-
 -----------------------
 
 ## Jester
@@ -1066,6 +1111,7 @@ Otherwise they see the same information as everyone else.
 **Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
 **Vitals**: The Hacker can see how long dead players have been dead for.\
 The Hacker can access his mobile gadgets (vitals & admin table), with a maximum of charges (uses) and a configurable amount of tasks needed to recharge.\
+While accessing those mobile gadgets, the Hacker is not able to move.\
 \
 **NOTE:**
 - If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
@@ -1076,11 +1122,12 @@ The Hacker can access his mobile gadgets (vitals & admin table), with a maximum 
 | Name | Description |
 |----------|:-------------:|
 | Hacker Spawn Chance | -
-| Hacker Cooldown| -
+| Hacker Cooldown | -
 | Hacker Duration | Sets how long the "Hacker mode" remains active
 | Hacker Only Sees Color Type | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors)
-| Max Mobile Gadget Charges| -
+| Max Mobile Gadget Charges | -
 | Number Of Tasks Needed For Recharging | Number of tasks to get a charge
+| Can't Move During Cam Duration | -
 -----------------------
 
 
@@ -1170,6 +1217,7 @@ Depending on the options, the Tracker has another ability: They can track all co
 When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).
 When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
 
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
@@ -1177,6 +1225,7 @@ When the Snitch has one task left (configurable) the Snitch will be revealed to 
 | Task Count Where The Snitch Will Be Revealed | -
 | Include Team Jackal | -
 | Use Different Arrow Color For Team Jackal | -
+| Snitch can't be guessed after finishing all their tasks | -
 -----------------------
 
 ## Jackal
@@ -1269,12 +1318,15 @@ The Security Guard is a Crewmate that has a certain number of screws that they c
 Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
 The new camera will be visible after the next meeting and accessible by everyone.\
 The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.\
+\
 **NOTE:**
-- Trickster boxes can't be sealed
-- The Security Guard can't place Cameras on MiraHQ
-- The remaining number of screws can be seen above their special button
-- On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys.
 
+- Trickster boxes can't be sealed
+- The Security Guard can't place cameras on MiraHQ
+- The remaining number of screws can be seen above their special button.
+- On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys
+- Security Guard can access mobile cameras after placing all screws
+- While accessing the mobile cameras, the Security Guard is not able to move
 
 ### Game Options
 | Name | Description
@@ -1284,13 +1336,15 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 | Security Guard Number Of Screws | The number of screws that a Security Guard can use in a game
 | Number Of Screws Per Cam | The number of screws it takes to place a camera
 | Number Of Screws Per Vent | The number of screws it takes to seal a vent
+| Security Guard Duration | -
+| Gadget Max Charges | -
+| Number Of Tasks Needed For Recharging | -
+| Can't Move During Cam Duration | -
 -----------------------
 
 ## Bait
 ### **Team: Crewmates**
-\
-Created by [Mallöris](https://github.com/Mallaris)\
-\
+
 The Bait is a Crewmate that if killed, forces the killer to self report the body (you can configure a delay in the options).
 Additionally, the Bait can see if someone is inside a vent (depending on the options the exact vent gets
 an outline or all vents do).
@@ -1306,9 +1360,7 @@ an outline or all vents do).
 
 ## Medium
 ### **Team: Crewmates**
-\
-Created by [Mallöris](https://github.com/Mallaris)\
-\
+
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
 During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
@@ -1329,9 +1381,7 @@ What is your killers role? (mini exluded)
 
 ## Vulture
 ### **Team: Neutral**
-\
-Created by [Mallöris](https://github.com/Mallaris)\
-\
+
 The Vulture does not have any tasks, they have to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
 Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.
