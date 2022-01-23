@@ -14,9 +14,6 @@ namespace TheOtherRoles
         
     {
         private static Dictionary<string, AudioClip> soundEffects;
-        private static bool loaded = false;
-
-        public static AudioClip exampleClip;
 
         static SoundEffectsHolder()
         {
@@ -27,9 +24,9 @@ namespace TheOtherRoles
             {
                 if (resourceName.Contains("TheOtherRoles.Resources.SoundEffects.") && resourceName.Contains(".raw"))
                 {
-                    AudioClip newClip = Helpers.loadAudioClipFromResources(resourceName);
-                    if (newClip != null) soundEffects.Add(resourceName, newClip);
-                    exampleClip = newClip;
+                    AudioClip tmpClip;
+                    tmpClip = Helpers.loadAudioClipFromResources(resourceName);
+                    soundEffects.Add(resourceName, tmpClip);
                 }
             }
         }

@@ -706,7 +706,7 @@ namespace TheOtherRoles
                     RPCProcedure.placeGarlic(buff);
                     
                     // Just an example! TODO REMOVE!!
-                    AudioClip exampleClip = SoundEffectsHolder.get("TheOtherRoles.Resources.exampleClip.raw");
+                    AudioClip exampleClip = SoundEffectsHolder.get("TheOtherRoles.Resources.SoundEffects.exampleClip.raw");
                     if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);
                 },
                 () => { return !Vampire.localPlacedGarlic && !PlayerControl.LocalPlayer.Data.IsDead && Vampire.garlicsActive; },

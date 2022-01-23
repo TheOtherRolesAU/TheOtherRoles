@@ -15,7 +15,7 @@
         <EmbeddedResource Include="Resources\CustomHats\*.png" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
-        <EmbeddedResource Include="Resources\*.raw" />
+        <EmbeddedResource Include="Resources\SoundEffects\*.raw" />
     </ItemGroup>
 
     <ItemGroup>
