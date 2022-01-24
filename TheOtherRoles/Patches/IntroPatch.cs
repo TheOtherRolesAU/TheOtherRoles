@@ -50,7 +50,10 @@ namespace TheOtherRoles.Patches {
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
                 }
-            } 
+            }
+
+            // Force Reload of SoundEffectHolder
+            SoundEffectsManager.Load();
 
             }
     }
