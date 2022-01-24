@@ -33,5 +33,6 @@
 |securityGuardCam | (already has a sound) |-|-|
 |arsonistDouse | | [Water Pouring Out of Bucket](https://freesound.org/people/Breviceps/sounds/508178/ )| CC0 1.0 |
 |vultureEat | combined | [Vulture](https://freesound.org/people/AntumDeluge/sounds/188041/ ) + [Eating Crisps](https://freesound.org/people/Sethroph/sounds/334209/ )| CC0 1.0 both| |
+|mediumAsk| |[ghost_sounds.wav](https://freesound.org/people/fishwithfeathers/sounds/177768/ )| CC0 1.0|
 |pursuerBlank | | [gun load.wav](https://freesound.org/people/Shelby_Wideman/sounds/178141/ )| CC0 1.0 |
 |witchSpell | | [witch's laugh](https://freesound.org/people/Yogoorth/sounds/589144/ ) | CC0 1.0 |

@@ -1179,6 +1179,7 @@ namespace TheOtherRoles
                     if (Medium.target != null) {
                         Medium.soulTarget = Medium.target;
                         mediumButton.HasEffect = true;
+                        SoundEffectsManager.play("mediumAsk");
                     }
                 },
                 () => { return Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
@@ -1251,6 +1252,7 @@ namespace TheOtherRoles
 
                         Medium.souls.Remove(target);
                     }
+                    SoundEffectsManager.stop("mediumAsk");
                 }
             );
 
