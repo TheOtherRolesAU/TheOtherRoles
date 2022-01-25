@@ -1,4 +1,3 @@
-  
 using HarmonyLib;
 using UnityEngine;
 using System.Reflection;
@@ -166,7 +165,18 @@ namespace TheOtherRoles.Patches {
                     // 2 = Polus
                     // 3 = Dleks - deactivated
                     // 4 = Airship
-                    List<byte> possibleMaps = new List<byte>(){0, 1, 2, 4};
+                    List<byte> possibleMaps = new List<byte>(); //{0, 1, 2, 4}; // Disable Adding anything right away
+                    if (CustomOptionHolder.enableSkeld.getBool())
+			    possibleMaps.Add(0);
+                    if (CustomOptionHolder.enableMira.getBool())
+			    possibleMaps.Add(1);
+                    if (CustomOptionHolder.enablePolus.getBool())
+			    possibleMaps.Add(2);
+                    if (CustomOptionHolder.enableRevSkeld.getBool())
+			    possibleMaps.Add(3);
+                    if (CustomOptionHolder.enableAirShip.getBool())
+			    possibleMaps.Add(4);
+
                     PlayerControl.GameOptions.MapId = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
                 }
 
