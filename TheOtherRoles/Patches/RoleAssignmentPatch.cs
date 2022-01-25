@@ -283,7 +283,7 @@ namespace TheOtherRoles.Patches {
             // --- Assign Dependent Roles if main role exists ---
             if (Sheriff.sheriff != null) { // Deputy
                 if (CustomOptionHolder.deputySpawnRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Force Deputy
-                    byte deputy = setRoleToRandomPlayer((byte)RoleId.NiceGuesser, data.crewmates);
+                    byte deputy = setRoleToRandomPlayer((byte)RoleId.Deputy, data.crewmates);
                     data.crewmates.ToList().RemoveAll(x => x.PlayerId == deputy);
                     data.maxCrewmateRoles--;
                 } else if (CustomOptionHolder.deputySpawnRate.getSelection() < 10) // Dont force, add Deputy to the ticket system
@@ -292,7 +292,7 @@ namespace TheOtherRoles.Patches {
             if (!isEvilGuesser && Guesser.niceGuesser != null) { // Other Guesser (evil)
                 if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Force other guesser (evil)
                     byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                    data.crewmates.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
+                    data.impostors.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
                     data.maxImpostorRoles--;
                 } else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) // Dont force, add Guesser (evil) to the ticket system
                     data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnBothRate.getSelection());
