@@ -160,8 +160,7 @@ namespace TheOtherRoles.Patches {
                         }
                     }
 
-                    if (CustomOptionHolder.dynamicMap.getBool())
-                    {
+                    if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
                         // 0 = Skeld
                         // 1 = Mira HQ
                         // 2 = Polus
@@ -169,9 +168,13 @@ namespace TheOtherRoles.Patches {
                         // 4 = Airship
                         List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
                         chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        writer.Write(chosenMapId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.dynamicMapOption(chosenMapId);
                     }
                 }
-                PlayerControl.GameOptions.MapId = chosenMapId;
                 return continueStart;
             }
         }
