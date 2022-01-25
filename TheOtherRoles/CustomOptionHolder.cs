@@ -64,8 +64,6 @@ namespace TheOtherRoles {
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
-        public static CustomOption jesterVision;
-        public static CustomOption jesterHasImpostorVision;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -187,10 +185,6 @@ namespace TheOtherRoles {
         public static CustomOption cleanerSpawnRate;
         public static CustomOption cleanerCooldown;
         
-        public static CustomOption undertakerSpawnRate;
-        public static CustomOption undertakerDragingDelaiAfterKill;
-
-        
         public static CustomOption warlockSpawnRate;
         public static CustomOption warlockCooldown;
         public static CustomOption warlockRootTime;
@@ -241,7 +235,6 @@ namespace TheOtherRoles {
         public static CustomOption enablePolus;
         public static CustomOption enableRevSkeld;
         public static CustomOption enableAirShip;
-
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
 
@@ -295,10 +288,7 @@ namespace TheOtherRoles {
 
             cleanerSpawnRate = CustomOption.Create(260, cs(Cleaner.color, "Cleaner"), rates, null, true);
             cleanerCooldown = CustomOption.Create(261, "Cleaner Cooldown", 30f, 10f, 60f, 2.5f, cleanerSpawnRate);
-      
-            undertakerSpawnRate = CustomOption.Create(603, cs(Undertaker.color, "Undertaker"), rates, null, true);
-            undertakerDragingDelaiAfterKill = CustomOption.Create(604, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
-            
+
             warlockSpawnRate = CustomOption.Create(270, cs(Cleaner.color, "Warlock"), rates, null, true);
             warlockCooldown = CustomOption.Create(271, "Warlock Cooldown", 30f, 10f, 60f, 2.5f, warlockSpawnRate);
             warlockRootTime = CustomOption.Create(272, "Warlock Root Time", 5f, 0f, 15f, 1f, warlockSpawnRate);
@@ -339,12 +329,6 @@ namespace TheOtherRoles {
 
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester can call emergency meeting", true, jesterSpawnRate);
-			
-			// Credit JustASysAdmin aka EvilScum
-			// Using 6XX ids to prevent issues with the master branch.
-			// Code to add vision is in the ShipStatus patch.
-            jesterVision = CustomOption.Create(601, "Jester Vision", 1f, 0.25f, 3f, 0.25f, jesterSpawnRate);
-            jesterHasImpostorVision = CustomOption.Create(602, "Jester Has Impostor Vision", false, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
@@ -440,7 +424,7 @@ namespace TheOtherRoles {
             hackerNoMove = CustomOption.Create(176, "Cant Move During Mobile Gadget Duration", true, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
-            trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 0f, 30f, 1f, trackerSpawnRate);
+            trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 2.5f, 30f, 2.5f, trackerSpawnRate);
             trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
             trackerCanTrackCorpses = CustomOption.Create(203, "Tracker Can Track Corpses", true, trackerSpawnRate);
             trackerCorpsesTrackingCooldown = CustomOption.Create(204, "Corpses Tracking Cooldown", 30f, 5f, 120f, 5f, trackerCanTrackCorpses);
