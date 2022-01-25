@@ -199,10 +199,23 @@ namespace TheOtherRoles.Patches {
             // Display lighter / darker color for all alive players
             if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead) {
                 if (MeetingHud.Instance != null) {
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                        var target = Helpers.playerById(player.TargetPlayerId);
-                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
+                    if (MapOptions.showLighterDarker)
+                    { 
+                        foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                            var target = Helpers.playerById(player.TargetPlayerId);
+                            if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
+                        }
                     }
+                    else
+                    {
+                        if (PlayerControl.LocalPlayer == Hacker.hacker || PlayerControl.LocalPlayer == Detective.detective || PlayerControl.LocalPlayer == Medium.medium)
+                        {
+                            foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                            {
+                                var target = Helpers.playerById(player.TargetPlayerId);
+                                if (target != null) player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
+                            }
+                        }
                 }
             }
         }

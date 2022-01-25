@@ -106,6 +106,37 @@ namespace TheOtherRoles
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
         }
 
+        public static byte returnCurrentMapId()
+        {
+            byte chosenMapId = 0;
+            var camsExisting = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("Surv_Panel"));
+            var vitalsExisting = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
+            var survconsoleExisting = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("SurvConsole"));
+
+            if (camsExisting != null)
+            {
+                // Polus
+                chosenMapId = 2;
+            }
+            else if (vitalsExisting != null)
+            {
+                // Airship ?
+                chosenMapId = 4;
+            }
+            else if (survconsoleExisting != null)
+            {
+                // Skeld
+                chosenMapId = 0;
+            }
+            else
+            {
+                // Mira HQ
+                chosenMapId = 1;
+            }
+            return chosenMapId;
+        }
+
+
         public static void resetTimeMasterButton() {
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;
@@ -484,7 +515,6 @@ namespace TheOtherRoles
 
                    if (Hacker.cantMove) PlayerControl.LocalPlayer.moveable = false;
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
-
                    Hacker.chargesAdminTable--;
                },
                () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead;},
@@ -508,7 +538,7 @@ namespace TheOtherRoles
                    if (!hackerVitalsButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
                    if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
                },
-               PlayerControl.GameOptions.MapId == 3,
+               returnCurrentMapId() == 3,
                "ADMIN"
            );
 
@@ -521,7 +551,7 @@ namespace TheOtherRoles
 
             hackerVitalsButton = new CustomButton(
                () => {
-                   if (PlayerControl.GameOptions.MapId != 1) {
+                   if (returnCurrentMapId() != 1) {
                        if (Hacker.vitals == null) {
                            var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("panel_vitals"));
                            if (e == null || Camera.main == null) return;
@@ -546,11 +576,11 @@ namespace TheOtherRoles
 
                    Hacker.chargesVitals--;
                },
-               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.GameOptions.MapId != 0 && PlayerControl.GameOptions.MapId != 3; },
+               () => { return Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && returnCurrentMapId() != 0 && returnCurrentMapId() != 3; },
                () => {
                    if (hackerVitalsChargesText != null) hackerVitalsChargesText.text = $"{Hacker.chargesVitals} / {Hacker.toolsNumber}";
-                   hackerVitalsButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
-                   hackerVitalsButton.actionButton.OverrideText(PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "VITALS");
+                   hackerVitalsButton.actionButton.graphic.sprite = returnCurrentMapId() == 1 ? Hacker.getLogSprite() : Hacker.getVitalsSprite();
+                   hackerVitalsButton.actionButton.OverrideText(returnCurrentMapId() == 1 ? "DOORLOG" : "VITALS");
                    return Hacker.chargesVitals > 0;
                },
                () => {
@@ -568,7 +598,7 @@ namespace TheOtherRoles
                    hackerVitalsButton.Timer = hackerVitalsButton.MaxTimer;
                    if(!hackerAdminTableButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
                    if (Minigame.Instance) {
-                       if (PlayerControl.GameOptions.MapId == 1) Hacker.doorLog.ForceClose();
+                       if (returnCurrentMapId() == 1) Hacker.doorLog.ForceClose();
                        else Hacker.vitals.ForceClose();
                    }
                },
@@ -942,7 +972,7 @@ namespace TheOtherRoles
                         RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
                         SecurityGuard.ventTarget = null;
                         
-                    } else if (PlayerControl.GameOptions.MapId != 1) { // Place camera if there's no vent and it's not MiraHQ
+                    } else if (returnCurrentMapId() != 1) { // Place camera if there's no vent and it's not MiraHQ
                         var pos = PlayerControl.LocalPlayer.transform.position;
                         byte[] buff = new byte[sizeof(float) * 2];
                         Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
@@ -957,12 +987,12 @@ namespace TheOtherRoles
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
-                    securityGuardButton.actionButton.graphic.sprite = (SecurityGuard.ventTarget == null && PlayerControl.GameOptions.MapId != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
+                    securityGuardButton.actionButton.graphic.sprite = (SecurityGuard.ventTarget == null && returnCurrentMapId() != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
                     if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
 
                     if (SecurityGuard.ventTarget != null)
                         return SecurityGuard.remainingScrews >= SecurityGuard.ventPrice && PlayerControl.LocalPlayer.CanMove;
-                    return PlayerControl.GameOptions.MapId != 1 && SecurityGuard.remainingScrews >= SecurityGuard.camPrice && PlayerControl.LocalPlayer.CanMove;
+                    return returnCurrentMapId() != 1 && SecurityGuard.remainingScrews >= SecurityGuard.camPrice && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
                 SecurityGuard.getPlaceCameraButtonSprite(),
@@ -1007,8 +1037,8 @@ namespace TheOtherRoles
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
                     if (securityGuardChargesText != null) securityGuardChargesText.text = $"{SecurityGuard.charges} / {SecurityGuard.maxCharges}";
-                    securityGuardCamButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
-                    securityGuardCamButton.actionButton.OverrideText(PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "SECURITY");
+                    securityGuardCamButton.actionButton.graphic.sprite = returnCurrentMapId() == 1 ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
+                    securityGuardCamButton.actionButton.OverrideText(returnCurrentMapId() == 1 ? "DOORLOG" : "SECURITY");
                     return PlayerControl.LocalPlayer.CanMove && SecurityGuard.charges > 0;
                 },
                 () => {
@@ -1030,7 +1060,7 @@ namespace TheOtherRoles
                     PlayerControl.LocalPlayer.moveable = true;
                 },
                 false,
-                PlayerControl.GameOptions.MapId == 1 ? "DOORLOG" : "SECURITY"
+                returnCurrentMapId() == 1 ? "DOORLOG" : "SECURITY"
             );
 
             // Security Guard cam button charges
