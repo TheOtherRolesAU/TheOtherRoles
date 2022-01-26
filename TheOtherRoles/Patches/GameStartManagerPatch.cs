@@ -139,7 +139,6 @@ namespace TheOtherRoles.Patches {
                 // Block game start if not everyone has the same mod version
                 bool continueStart = true;
 
-                byte chosenMapId = PlayerControl.GameOptions.MapId;
                 if (AmongUsClient.Instance.AmHost) {
                     foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
                         if (client.Character == null) continue;
@@ -166,8 +165,18 @@ namespace TheOtherRoles.Patches {
                         // 2 = Polus
                         // 3 = Dleks - deactivated
                         // 4 = Airship
-                        List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
-                        chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
+                        List<byte> possibleMaps = new List<byte>();
+                        if (CustomOptionHolder.dynamicMapEnableSkeld.getBool())
+                            possibleMaps.Add(0);
+                        if (CustomOptionHolder.dynamicMapEnableMira.getBool())
+                            possibleMaps.Add(1);
+                        if (CustomOptionHolder.dynamicMapEnablePolus.getBool())
+                            possibleMaps.Add(2);
+                        if (CustomOptionHolder.dynamicMapEnableDleks.getBool())
+                            possibleMaps.Add(3);
+                        if (CustomOptionHolder.dynamicMapEnableAirShip.getBool())
+                            possibleMaps.Add(4);
+                        byte chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(chosenMapId);
