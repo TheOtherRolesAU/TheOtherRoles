@@ -113,7 +113,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added Security Guard mobile cams after placing all screws
 - Added Lover option "Enable Lover Chat"
 - Added return votes in meetings: You'll now get your votes back if your target got shot by the Guesser
-- Added New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by [MaximeGillot](https://github.com/MaximeGillot)
+- Added New Option for Guesser: Guesser can't guess Snitch if they has done all tasks (created by [MaximeGillot](https://github.com/MaximeGillot))
 - Added The Other Roles changelog announcement popup
 - Changed that the Bounty Hunter exclude their Lover
 - Changed the position of the Witch icon in meetings for better visibility
