@@ -72,6 +72,7 @@ namespace TheOtherRoles
         UncheckedMurderPlayer,
         UncheckedCmdReportDeadBody,
         UncheckedExilePlayer,
+        DynamicMapOption,
 
         // Role functionality
 
@@ -323,6 +324,10 @@ namespace TheOtherRoles
         public static void uncheckedExilePlayer(byte targetId) {
             PlayerControl target = Helpers.playerById(targetId);
             if (target != null) target.Exiled();
+        }
+
+        public static void dynamicMapOption(byte mapId) {
+            PlayerControl.GameOptions.MapId = mapId;
         }
 
         // Role functionality
@@ -865,6 +870,10 @@ namespace TheOtherRoles
                     byte reportSource = reader.ReadByte();
                     byte reportTarget = reader.ReadByte();
                     RPCProcedure.uncheckedCmdReportDeadBody(reportSource, reportTarget);
+                    break;
+                case (byte)CustomRPC.DynamicMapOption:
+                    byte mapId = reader.ReadByte();
+                    RPCProcedure.dynamicMapOption(mapId);
                     break;
 
                 // Role functionality
