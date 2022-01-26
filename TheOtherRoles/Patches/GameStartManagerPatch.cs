@@ -158,18 +158,32 @@ namespace TheOtherRoles.Patches {
                             break;
                         }
                     }
-                }
 
-                if (CustomOptionHolder.dynamicMap.getBool()) {
-                    // 0 = Skeld
-                    // 1 = Mira HQ
-                    // 2 = Polus
-                    // 3 = Dleks - deactivated
-                    // 4 = Airship
-                    List<byte> possibleMaps = new List<byte>(){0, 1, 2, 4};
-                    PlayerControl.GameOptions.MapId = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
-                }
+                    if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
+                        // 0 = Skeld
+                        // 1 = Mira HQ
+                        // 2 = Polus
+                        // 3 = Dleks - deactivated
+                        // 4 = Airship
+                        List<byte> possibleMaps = new List<byte>();
+                        if (CustomOptionHolder.dynamicMapEnableSkeld.getBool())
+                            possibleMaps.Add(0);
+                        if (CustomOptionHolder.dynamicMapEnableMira.getBool())
+                            possibleMaps.Add(1);
+                        if (CustomOptionHolder.dynamicMapEnablePolus.getBool())
+                            possibleMaps.Add(2);
+                        if (CustomOptionHolder.dynamicMapEnableDleks.getBool())
+                            possibleMaps.Add(3);
+                        if (CustomOptionHolder.dynamicMapEnableAirShip.getBool())
+                            possibleMaps.Add(4);
+                        byte chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
 
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        writer.Write(chosenMapId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.dynamicMapOption(chosenMapId);
+                    }
+                }
                 return continueStart;
             }
         }
