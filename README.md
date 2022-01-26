@@ -41,8 +41,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.15s| v3.4.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.2/TheOtherRoles.zip)
+| 2021.12.15s| v3.4.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.1/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.0/TheOtherRoles.zip)
-| 2021.12.15s| v3.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.3/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.2/TheOtherRoles.zip)
 | 2021.12.14s| v3.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.1/TheOtherRoles.zip)
@@ -97,6 +98,19 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
   
+**Version 3.4.2**
+- Fixed a game breaking bug
+  
+**Version 3.4.1**
+- Added a new mod option "Show Lighter/Darker" for meetings
+- Added options for choosing which maps are enabled for random maps thanks [EvilScum](https://github.com/JustASysAdmin)
+- Added Jester option "Jester Has Impostor Vision" thanks [EvilScum](https://github.com/JustASysAdmin)
+- Fixed a bug where the Bounty Hunter had no bounty
+- Fixed a bug where the Guesser & Sheriff were not assigned properly (fingers crossed)
+- Fixed a bug where Hacker buttons didn't work as intended with "random map" option
+- Fixed a bug where the Security Guard could not access cams on Skeld, dlekS & Airship
+- Changed Tracker update intervall to a minimum of 1 thanks [LaicosVK](https://github.com/LaicosVK)
+
 **Version 3.4.0**
 - Added new Role [Deputy](#deputy) thanks [gendelo3](https://github.com/gendelo3)
 - Added Hacker option "Cant Move During Mobile Gadget Duration"
@@ -109,7 +123,6 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Changed the position of the Witch icon in meetings for better visibility
 - Fixed a bug where the spy had a white name for Impostors in chat
 - Fixed a bug where the Guesser and Swapper UI in meetings was behind the visor cosmetics
-
 
 **Version 3.3.3**
 - Fixed a bug where a guessed Guesser could guess
@@ -566,6 +579,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Dleks:** You are now able to select the Dleks map.
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
+- **Darker/Lighter:** Displays color type of each player in meetings
 
 ### Task Count Limits per map
 You can configure:
