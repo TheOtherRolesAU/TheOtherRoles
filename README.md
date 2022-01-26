@@ -103,6 +103,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the Guesser & Sheriff were not assigned properly (fingers crossed)
 - Fixed a bug where Hacker buttons didn't work as intended with "random map" option
 - Fixed a bug where the Security Guard could not access cams on Skeld, dlekS & Airship
+- Added options for choosing which maps are enabled for random maps thanks [EvilScum](https://github.com/JustASysAdmin)
+- Added Jester option "Jester Has Impostor Vision" thanks [EvilScum](https://github.com/JustASysAdmin)
+- Changed Tracker update intervall to a minimum of 1 thanks [LaicosVK](https://github.com/LaicosVK)
 
 **Version 3.4.0**
 - Added new Role [Deputy](#deputy) thanks [gendelo3](https://github.com/gendelo3)
