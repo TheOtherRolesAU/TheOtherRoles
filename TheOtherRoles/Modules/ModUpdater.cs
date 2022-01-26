@@ -158,7 +158,7 @@ update to v{ver} is available</size>
                         }
                     }
                 }  else {
-                    announcement = $@"<size=150%>Version {ver}:</size>
+                    announcement = $@"<size=150%><color=#FC0303>THE OTHER ROLES</color> Version {ver}:</size>
 
 {announcement}";
                 }

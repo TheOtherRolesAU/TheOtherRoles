@@ -68,11 +68,13 @@ namespace TheOtherRoles
 
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
+            public static bool hasImpostorVision = false;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
+                hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
         }
 
