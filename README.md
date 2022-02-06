@@ -105,7 +105,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where a sidekicked Security Guard was stuck
 - Fixed a bug where a disabled Report Button triggered handcuffs
 - Fixed a bug where the Evil Guesser spawn rate was not correct
-- Changed that Cleaner & Vulture exlude each other
+- Changed that Cleaner & Vulture exclude each other
 - Changed that the lighter/darker color indicator can be displayed as dead
 
 **Version 3.4.2**
