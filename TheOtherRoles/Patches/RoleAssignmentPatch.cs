@@ -237,11 +237,11 @@ namespace TheOtherRoles.Patches {
         private static void assignDependentRoles(RoleAssignmentData data) {
             // Roles that prob have a dependent role
             bool guesserFlag = CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0 
-                && CustomOptionHolder.guesserSpawnRate.getSelection() > 0
-                && ((isEvilGuesser && Guesser.evilGuesser == null) || (!isEvilGuesser && Guesser.niceGuesser == null));
+                && CustomOptionHolder.guesserSpawnRate.getSelection() > 0;
             bool sheriffFlag = CustomOptionHolder.deputySpawnRate.getSelection() > 0 
                 && CustomOptionHolder.sheriffSpawnRate.getSelection() > 0
                 && Sheriff.sheriff == null;
+
             if (!guesserFlag && !sheriffFlag) return; // assignDependentRoles is not needed
 
             int crew = data.crewmates.Count < data.maxCrewmateRoles ? data.crewmates.Count : data.maxCrewmateRoles; // Max number of crew loops
@@ -261,7 +261,7 @@ namespace TheOtherRoles.Patches {
                 crewValues -= crewSteps;
             }
             while (imp > 0 && (isEvilGuesser && !isGuesser)) { 
-                if (rnd.Next(crewValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
+                if (rnd.Next(impValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
                 imp--;
                 impValues -= impSteps;
             }
