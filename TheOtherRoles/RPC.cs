@@ -55,6 +55,7 @@ namespace TheOtherRoles
         Lawyer,
         Pursuer,
         Witch,
+        Ninja,
         Crewmate,
         Impostor
     }
@@ -277,6 +278,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Witch:
                         Witch.witch = player;
+                        break;
+                    case RoleId.Ninja:
+                        Ninja.ninja = player;
                         break;
                     }
                 }

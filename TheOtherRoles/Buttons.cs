@@ -44,6 +44,7 @@ namespace TheOtherRoles
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
+        public static CustomButton ninjaMarkButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -86,7 +87,8 @@ namespace TheOtherRoles
             mediumButton.MaxTimer = Medium.cooldown;
             pursuerButton.MaxTimer = Pursuer.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
-            witchSpellButton.MaxTimer = Witch.cooldown; 
+            witchSpellButton.MaxTimer = Witch.cooldown;
+            ninjaMarkButton.MaxTimer = Ninja.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -101,6 +103,7 @@ namespace TheOtherRoles
             mediumButton.EffectDuration = Medium.duration;
             trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             witchSpellButton.EffectDuration = Witch.spellCastingDuration;
+            ninjaMarkButton.EffectDuration = Ninja.markingDuration;
             securityGuardCamButton.EffectDuration = SecurityGuard.duration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -1298,6 +1301,73 @@ namespace TheOtherRoles
                     Witch.spellCastingTarget = null;
                 }
             );
+
+            // Witch Spell button
+            ninjaMarkButton = new CustomButton(
+                () => {
+                    if (Ninja.ninjaMarked != null)
+                    {
+                        // Murder attempt with teleport
+                        MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
+                        if (attempt == MurderAttemptResult.PerformKill)
+                        {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
+                            writer.Write(Witch.currentTarget.PlayerId);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
+                        }
+
+                        if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill)
+                        {
+                            witchSpellButton.MaxTimer += Witch.cooldownAddition;
+                            witchSpellButton.Timer = witchSpellButton.MaxTimer;
+                            if (Witch.triggerBothCooldowns)
+                                Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        }
+                        else
+                        {
+                            witchSpellButton.Timer = 0f;
+                        }
+                        Witch.spellCastingTarget = null;
+                        // create trace
+
+
+                        return;
+                    } 
+                    if (Ninja.currentTarget != null)
+                    {
+                        Ninja.markingTarget = Ninja.currentTarget;
+                    }
+                },
+                () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (ninjaMarkButton.isEffectActive && Ninja.markingTarget != Ninja.currentTarget)
+                    {
+                        Ninja.markingTarget = null;
+                        ninjaMarkButton.Timer = 0f;
+                        ninjaMarkButton.isEffectActive = false;
+                    }
+                    return PlayerControl.LocalPlayer.CanMove && Ninja.currentTarget != null;
+                },
+                () => {
+                    ninjaMarkButton.Timer = witchSpellButton.MaxTimer;
+                    ninjaMarkButton.isEffectActive = false;
+                    Ninja.markingTarget = null;
+                },
+                Ninja.getMarkButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                Ninja.markingDuration,
+                () =>
+                {
+                    Ninja.ninjaMarked = Ninja.markingTarget;
+                }
+                    
+            );
+
+
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons
             setCustomButtonCooldowns();

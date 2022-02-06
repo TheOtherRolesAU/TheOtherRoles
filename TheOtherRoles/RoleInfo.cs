@@ -68,6 +68,7 @@ namespace TheOtherRoles
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
         public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch);
+        public static RoleInfo ninja = new RoleInfo("Ninja", Ninja.color, "Do ninja stuff", "Do ninja stuff", RoleId.Ninja);
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
             impostor,
@@ -83,6 +84,7 @@ namespace TheOtherRoles
             warlock,
             bountyHunter,
             witch,
+            ninja,
             niceMini,
             evilMini,
             goodGuesser,
@@ -138,6 +140,7 @@ namespace TheOtherRoles
             if (p == Cleaner.cleaner) infos.Add(cleaner);
             if (p == Warlock.warlock) infos.Add(warlock);
             if (p == Witch.witch) infos.Add(witch);
+            if (p == Ninja.ninja) infos.Add(ninja);
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
             if (p == Medic.medic) infos.Add(medic);
