@@ -97,6 +97,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+    
+**Version 3.4.2**
+- Fixed a game breaking bug
   
 **Version 3.4.1**
 - Added a new mod option "Show Lighter/Darker" for meetings
