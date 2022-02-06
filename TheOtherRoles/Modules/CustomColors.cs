@@ -14,14 +14,13 @@ namespace TheOtherRoles.Modules {
         public static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11, 13, 14, 17 };
         public static uint pickableColors = (uint)Palette.ColorNames.Length;
 
-        private static readonly List<int> ORDER = new List<int>() { 7, 14, 5, 33, 4, 
-                                                                    30, 0, 19, 27, 3,
-                                                                    17, 25, 18, 13, 23,
-                                                                    8, 32, 1, 21, 31,
-                                                                    10, 34, 15, 28, 22,
-                                                                    29, 11, 2, 26, 16,
-                                                                    20, 24, 9, 12, 6,
-                                                                    35, 36, 37, 38, 39};
+        private static readonly List<int> ORDER = new List<int>() { 7, 36, 14, 5, 33, 4,
+                                                                    37, 30, 0, 19, 27, 3,
+                                                                    35, 17, 25, 18, 13, 23,
+                                                                    8, 32, 38, 1, 21, 31,
+                                                                    10, 34, 28, 22, 29, 11,
+                                                                    2, 26, 20, 24, 9, 12,
+                                                                    40, 16, 41, 15, 6, 39 };
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
             List<Color32> colorlist = Enumerable.ToList<Color32>(Palette.PlayerColors);
@@ -98,26 +97,38 @@ namespace TheOtherRoles.Modules {
                                         shadow = new Color32(0xDB, 0x44, 0x42, byte.MaxValue),
                                         isLighterColor = true });
 
-            colors.Add(new CustomColor {
-                                        longname = "Ice",
+            colors.Add(new CustomColor { longname = "Ice",
                                         color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
                                         shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
                                         isLighterColor = true });
             
-            colors.Add(new CustomColor {
-                                        longname = "Fuchsia",
+            colors.Add(new CustomColor { longname = "Fuchsia", //35
                                         color = new Color32(0x94, 0x04, 0x6E, byte.MaxValue),
                                         shadow = new Color32(0x68, 0x03, 0x4F, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor {
-                                        longname = "Panda",
+            colors.Add(new CustomColor { longname = "Panda", //36
                                         color = new Color32(0xE5, 0xE5, 0xE5, byte.MaxValue),
                                         shadow = new Color32(0x0C, 0x0C, 0x0C, byte.MaxValue),
-                                        isLighterColor = false });
-            colors.Add(new CustomColor {
-                                        longname = "Blood orange",
+                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "Blood orange", //37
                                         color = new Color32(0xB3, 0x2A, 0x2D, byte.MaxValue),
                                         shadow = new Color32(0xFD, 0xC8, 0x8B, byte.MaxValue),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "Navy", //38
+                                        color = new Color32(0x00, 0x1E, 0x66, byte.MaxValue),
+                                        shadow = new Color32(0x00, 0x07, 0x19, byte.MaxValue),
+                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "True dark", //39
+                                        color = new Color32(0x00, 0x00, 0x00, byte.MaxValue),
+                                        shadow = new Color32(0x33, 0x33, 0x33, byte.MaxValue),
+                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "Crimson", //40
+                                        color = new Color32(0x66, 0x5C, 0x51, byte.MaxValue),
+                                        shadow = new Color32(0x4C, 0x45, 0x3D, byte.MaxValue),
+                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "Sylver", //41
+                                        color = new Color32(0x82, 0x82, 0x82, byte.MaxValue),
+                                        shadow = new Color32(0xC4, 0xC4, 0xC4, byte.MaxValue),
                                         isLighterColor = true });
 
             pickableColors += (uint)colors.Count; // Colors to show in Tab
@@ -169,7 +180,7 @@ namespace TheOtherRoles.Modules {
                 public static void Postfix(PlayerTab __instance) { // Replace instead
                     Il2CppArrayBase<ColorChip> chips = __instance.ColorChips.ToArray();
 
-                    int cols = 8; // TODO: Design an algorithm to dynamically position chips to optimally fill space
+                    int cols = 6; // TODO: Design an algorithm to dynamically position chips to optimally fill space
                     for (int i = 0; i < ORDER.Count; i++) {
                         int pos = ORDER[i];
                         if (pos < 0 || pos > chips.Length)
