@@ -197,12 +197,10 @@ namespace TheOtherRoles.Patches {
             }
 
             // Display lighter / darker color for all alive players
-            if (PlayerControl.LocalPlayer != null && !PlayerControl.LocalPlayer.Data.IsDead) {
-                if (MeetingHud.Instance != null && MapOptions.showLighterDarker) {
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                        var target = Helpers.playerById(player.TargetPlayerId);
-                        if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
-                    }
+            if (PlayerControl.LocalPlayer != null && MeetingHud.Instance != null && MapOptions.showLighterDarker) {
+                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
+                    var target = Helpers.playerById(player.TargetPlayerId);
+                    if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
                 }
             }
         }
