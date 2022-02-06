@@ -20,7 +20,8 @@ namespace TheOtherRoles.Modules {
                                                                     8, 32, 1, 21, 31,
                                                                     10, 34, 15, 28, 22,
                                                                     29, 11, 2, 26, 16,
-                                                                    20, 24, 9, 12, 6 };
+                                                                    20, 24, 9, 12, 6,
+                                                                    35, 36, 37, 38, 39};
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
             List<Color32> colorlist = Enumerable.ToList<Color32>(Palette.PlayerColors);
@@ -97,10 +98,36 @@ namespace TheOtherRoles.Modules {
                                         shadow = new Color32(0xDB, 0x44, 0x42, byte.MaxValue),
                                         isLighterColor = true });
 
-            colors.Add(new CustomColor { longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue), 
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
                                         shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });     
+                                        isLighterColor = true });
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        isLighterColor = true });
+            colors.Add(new CustomColor {
+                                        longname = "Ice",
+                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
+                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        isLighterColor = true });
 
             pickableColors += (uint)colors.Count; // Colors to show in Tab
             /** Hidden Colors **/     

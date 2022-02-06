@@ -2,3 +2,15 @@
 .vscode/tasks.json
 TODO
 .DS_Store
+*.dll
+*.cache
+*.targets
+*.props
+*.json
+*.pdb
+*.txt
+*.CopyComplete
+*.xml
+*.config
+TheOtherRoles/obj/Debug/netstandard2.1/.NETStandard,Version=v2.1.AssemblyAttributes.cs
+TheOtherRoles/obj/Debug/netstandard2.1/TheOtherRoles.AssemblyInfo.cs
