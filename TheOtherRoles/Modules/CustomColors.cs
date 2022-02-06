@@ -103,30 +103,21 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
                                         shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
                                         isLighterColor = true });
+            
             colors.Add(new CustomColor {
-                                        longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });
+                                        longname = "Fuchsia",
+                                        color = new Color32(0x94, 0x04, 0x6E, byte.MaxValue),
+                                        shadow = new Color32(0x68, 0x03, 0x4F, byte.MaxValue),
+                                        isLighterColor = false });
             colors.Add(new CustomColor {
-                                        longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });
+                                        longname = "Panda",
+                                        color = new Color32(0xE5, 0xE5, 0xE5, byte.MaxValue),
+                                        shadow = new Color32(0x0C, 0x0C, 0x0C, byte.MaxValue),
+                                        isLighterColor = false });
             colors.Add(new CustomColor {
-                                        longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });
-            colors.Add(new CustomColor {
-                                        longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });
-            colors.Add(new CustomColor {
-                                        longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
+                                        longname = "Blood orange",
+                                        color = new Color32(0xB3, 0x2A, 0x2D, byte.MaxValue),
+                                        shadow = new Color32(0xFD, 0xC8, 0x8B, byte.MaxValue),
                                         isLighterColor = true });
 
             pickableColors += (uint)colors.Count; // Colors to show in Tab
@@ -178,7 +169,7 @@ namespace TheOtherRoles.Modules {
                 public static void Postfix(PlayerTab __instance) { // Replace instead
                     Il2CppArrayBase<ColorChip> chips = __instance.ColorChips.ToArray();
 
-                    int cols = 5; // TODO: Design an algorithm to dynamically position chips to optimally fill space
+                    int cols = 8; // TODO: Design an algorithm to dynamically position chips to optimally fill space
                     for (int i = 0; i < ORDER.Count; i++) {
                         int pos = ORDER[i];
                         if (pos < 0 || pos > chips.Length)
