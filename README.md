@@ -41,6 +41,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2021.12.15s| v3.4.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.2/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.1/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.0/TheOtherRoles.zip)
 | 2021.12.15s| v3.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.3.3/TheOtherRoles.zip)
@@ -108,7 +109,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 3.4.2**
 - Fixed a game breaking bug
-
+  
 **Version 3.4.1**
 - Added a new mod option "Show Lighter/Darker" for meetings
 - Added options for choosing which maps are enabled for random maps thanks [EvilScum](https://github.com/JustASysAdmin)
