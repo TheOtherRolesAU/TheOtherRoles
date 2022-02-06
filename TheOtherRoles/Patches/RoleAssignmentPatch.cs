@@ -36,6 +36,7 @@ namespace TheOtherRoles.Patches {
             assignDependentRoles(data); // Assign roles that may have a dependent role
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
             assignRoleTargets(data);
+            assignModifiers();
         }
 
         private static RoleAssignmentData getRoleAssignmentData() {
@@ -375,6 +376,39 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        private static void assignModifiers() {
+            var modifierMin = CustomOptionHolder.modifiersCountMin.getSelection();
+            var modifierMax = CustomOptionHolder.modifiersCountMax.getSelection();
+            if (modifierMin > modifierMax) modifierMin = modifierMax;
+            int modifierCountSettings = rnd.Next(modifierMin, modifierMax + 1);
+            List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList();
+            int modifierCount = Mathf.Min(players.Count, modifierCountSettings);
+            List<ModifierId> modifier = new List<ModifierId>();
+
+            modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierOne, CustomOptionHolder.modifierOne.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierTwo, CustomOptionHolder.modifierTwo.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierThree, CustomOptionHolder.modifierThree.getSelection()));
+
+            while (modifierCount < modifier.Count) {
+                var index = rnd.Next(0, modifier.Count);
+                modifier.RemoveAt(index);
+            }
+
+            foreach (byte modifierId in modifier) {
+                var i = rnd.Next(0, players.Count);
+                byte playerId = players[i].PlayerId;
+                players.RemoveAt(i);
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetModifier, Hazel.SendOption.Reliable, -1);
+                writer.Write(modifierId);
+                writer.Write(playerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setModifier(modifierId, playerId);
+
+                TheOtherRolesPlugin.Logger.LogError(playerId + " player - " + modifierId + " modifier");
+            }
+        }
+
         private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, byte flag = 0, bool removePlayer = true) {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
@@ -386,6 +420,19 @@ namespace TheOtherRoles.Patches {
             writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.setRole(roleId, playerId, flag);
+            return playerId;
+        }
+
+        private static byte setModifierToRandomPlayer(byte modifierId, List<PlayerControl> playerList) {
+            var index = rnd.Next(0, playerList.Count);
+            byte playerId = playerList[index].PlayerId;
+            playerList.RemoveAt(index);
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetModifier, Hazel.SendOption.Reliable, -1);
+            writer.Write(modifierId);
+            writer.Write(playerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.setModifier(modifierId, playerId);
             return playerId;
         }
 

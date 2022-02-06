@@ -58,6 +58,11 @@ namespace TheOtherRoles
         Crewmate,
         Impostor
     }
+    enum ModifierId {
+        ModifierOne,
+        ModifierTwo,
+        ModifierThree
+    }
 
     enum CustomRPC
     {
@@ -67,6 +72,7 @@ namespace TheOtherRoles
         ShareOptions,
         ForceEnd,
         SetRole,
+        SetModifier,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
@@ -280,6 +286,21 @@ namespace TheOtherRoles
                         break;
                     }
                 }
+        }
+
+        public static void setModifier(byte modifierId, byte playerId) {
+            PlayerControl player = Helpers.playerById(playerId); 
+            switch ((ModifierId)modifierId) {
+                case ModifierId.ModifierOne:
+                    ModifierOne.modifierOne.Add(player);
+                    break;
+                case ModifierId.ModifierTwo:
+                    ModifierTwo.modifierTwo.Add(player);
+                    break;
+                case ModifierId.ModifierThree:
+                    ModifierThree.modifierThree.Add(player);
+                    break;
+            }
         }
 
         public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
@@ -826,12 +847,17 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();
-                    break;
+                    break; 
                 case (byte)CustomRPC.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
                     byte flag = reader.ReadByte();
                     RPCProcedure.setRole(roleId, playerId, flag);
+                    break;
+                case (byte)CustomRPC.SetModifier:
+                    byte modifierId = reader.ReadByte();
+                    byte pId = reader.ReadByte();
+                    RPCProcedure.setModifier(modifierId, pId);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();

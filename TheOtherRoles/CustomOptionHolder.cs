@@ -12,6 +12,7 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] ratesModifier = new string[]{"0", "1", "2", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
@@ -22,6 +23,8 @@ namespace TheOtherRoles {
         public static CustomOption neutralRolesCountMax;
         public static CustomOption impostorRolesCountMin;
         public static CustomOption impostorRolesCountMax;
+        public static CustomOption modifiersCountMin;
+        public static CustomOption modifiersCountMax;
 
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -225,6 +228,10 @@ namespace TheOtherRoles {
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
 
+        public static CustomOption modifierOne;
+        public static CustomOption modifierTwo;
+        public static CustomOption modifierThree;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -263,6 +270,8 @@ namespace TheOtherRoles {
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
+            modifiersCountMin = CustomOption.Create(306, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 0f, 0f, 15f, 1f);
+            modifiersCountMax = CustomOption.Create(307, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 0f, 0f, 15f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -464,6 +473,10 @@ namespace TheOtherRoles {
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
+
+            modifierOne = CustomOption.Create(1000, cs(Color.yellow, "modifierOne"), ratesModifier, null, true);
+            modifierTwo = CustomOption.Create(1001, cs(Color.yellow, "modifierTwo"), ratesModifier, null, true);
+            modifierThree = CustomOption.Create(1002, cs(Color.yellow, "modifierThree"), ratesModifier, null, true);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

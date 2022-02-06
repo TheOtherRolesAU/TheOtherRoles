@@ -60,6 +60,9 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
+            ModifierOne.clearAndReload();
+            ModifierTwo.clearAndReload();
+            ModifierThree.clearAndReload();
         }
 
         public static class Jester {
@@ -1412,4 +1415,30 @@ namespace TheOtherRoles
             witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
+
+    // Modifier
+    public static class ModifierOne {
+        public static List<PlayerControl> modifierOne = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            modifierOne = new List<PlayerControl>();
+        }
+    }
+
+    public static class ModifierTwo {
+        public static List<PlayerControl> modifierTwo = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            modifierTwo = new List<PlayerControl>();
+        }
+    }
+
+    public static class ModifierThree {
+        public static List<PlayerControl> modifierThree = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            modifierThree = new List<PlayerControl>();
+        }
+    }
+
 }
