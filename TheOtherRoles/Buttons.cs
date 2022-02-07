@@ -1362,7 +1362,7 @@ namespace TheOtherRoles
                 () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {  // CouldUse
                     ninjaMarkButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
-                    return PlayerControl.LocalPlayer.CanMove && Ninja.currentTarget != null || Ninja.ninjaMarked != null;
+                    return PlayerControl.LocalPlayer.CanMove && (Ninja.currentTarget != null || Ninja.ninjaMarked != null);
                 },
                 () => {  // on meeting ends
                     ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
