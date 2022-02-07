@@ -103,7 +103,6 @@ namespace TheOtherRoles
             mediumButton.EffectDuration = Medium.duration;
             trackerTrackCorpsesButton.EffectDuration = Tracker.corpsesTrackingDuration;
             witchSpellButton.EffectDuration = Witch.spellCastingDuration;
-            ninjaMarkButton.EffectDuration = Ninja.markingDuration;
             securityGuardCamButton.EffectDuration = SecurityGuard.duration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
@@ -1321,7 +1320,7 @@ namespace TheOtherRoles
                             writer.WriteBytesAndSize(buff);
                             writer.EndMessage();
                             RPCProcedure.placeNinjaTrace(buff);
-                            
+
                             // Perform Kill
                             MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                             writer2.Write(PlayerControl.LocalPlayer.PlayerId);
@@ -1347,7 +1346,7 @@ namespace TheOtherRoles
                             ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
                             Ninja.ninja.killTimer = PlayerControl.GameOptions.KillCooldown;
                         }
-                        else
+                        else if (attempt == MurderAttemptResult.SuppressKill)
                         {
                             ninjaMarkButton.Timer = 0f;
                         }
@@ -1356,36 +1355,23 @@ namespace TheOtherRoles
                     } 
                     if (Ninja.currentTarget != null)
                     {
-                        Ninja.markingTarget = Ninja.currentTarget;
+                        Ninja.ninjaMarked = Ninja.currentTarget;
+                        ninjaMarkButton.Timer = 5f;
                     }
                 },
                 () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {  // CouldUse
-                    if (ninjaMarkButton.isEffectActive && Ninja.markingTarget != Ninja.currentTarget)
-                    {
-                        Ninja.markingTarget = null;
-                        ninjaMarkButton.Timer = 0f;
-                        ninjaMarkButton.isEffectActive = false;
-                    }
                     ninjaMarkButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
                     return PlayerControl.LocalPlayer.CanMove && Ninja.currentTarget != null || Ninja.ninjaMarked != null;
                 },
                 () => {  // on meeting ends
-                    ninjaMarkButton.Timer = witchSpellButton.MaxTimer;
-                    ninjaMarkButton.isEffectActive = false;
-                    Ninja.markingTarget = null;
+                    ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
+                    Ninja.ninjaMarked = null;
                 },
                 Ninja.getMarkButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.F,
-                true,
-                Ninja.markingDuration,
-                () =>
-                {   // On effect ends
-                    Ninja.ninjaMarked = Ninja.markingTarget;
-                    ninjaMarkButton.Timer = 5f; // Small cd to avoid accidental click
-                }                    
+                KeyCode.F                   
             );
 
 

@@ -1423,7 +1423,6 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl markingTarget;
         public static float cooldown = 30f;
-        public static float markingDuration = 1f;
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
         
