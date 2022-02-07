@@ -1423,13 +1423,14 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl markingTarget;
         public static float cooldown = 30f;
-        public static float markingDuration = 2f;
+        public static float markingDuration = 1f;
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
         
 
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
+        public static Arrow arrow = new Arrow(Color.black);
         public static Sprite getMarkButtonSprite()
         {
             if (markButtonSprite) return markButtonSprite;
@@ -1440,7 +1441,7 @@ namespace TheOtherRoles
         public static Sprite getKillButtonSprite()
         {
             if (killButtonSprite) return killButtonSprite;
-            killButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaKillButton.png", 225f);
+            killButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaKillButton.png", 115f);
             return killButtonSprite;
         }
 
@@ -1451,6 +1452,10 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.ninjaCooldown.getFloat();
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
+
+            if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
+            arrow = new Arrow(Color.black);
+            if (arrow.arrow != null) arrow.arrow.SetActive(false);
         }
     }
 }

@@ -1302,7 +1302,7 @@ namespace TheOtherRoles
                 }
             );
 
-            // Witch Spell button
+            // Ninja mark and assassinate button 
             ninjaMarkButton = new CustomButton(
                 () => {
                     if (Ninja.ninjaMarked != null)
@@ -1311,27 +1311,47 @@ namespace TheOtherRoles
                         MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
                         if (attempt == MurderAttemptResult.PerformKill)
                         {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureSpelled, Hazel.SendOption.Reliable, -1);
-                            writer.Write(Witch.currentTarget.PlayerId);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer);
-                            RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
+                            // Create first trace before killing
+                            var pos = PlayerControl.LocalPlayer.transform.position;
+                            byte[] buff = new byte[sizeof(float) * 2];
+                            Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                            Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                            MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceNinjaTrace, Hazel.SendOption.Reliable);
+                            writer.WriteBytesAndSize(buff);
+                            writer.EndMessage();
+                            RPCProcedure.placeNinjaTrace(buff);
+                            
+                            // Perform Kill
+                            MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                            writer2.Write(PlayerControl.LocalPlayer.PlayerId);
+                            writer2.Write(Ninja.ninjaMarked.PlayerId);
+                            writer2.Write(byte.MaxValue);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                            RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
+
+                            // Create Second trace after killing
+                            pos = Ninja.ninjaMarked.transform.position;
+                            buff = new byte[sizeof(float) * 2];
+                            Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                            Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                            MessageWriter writer3 = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlaceNinjaTrace, Hazel.SendOption.Reliable);
+                            writer3.WriteBytesAndSize(buff);
+                            writer3.EndMessage();
+                            RPCProcedure.placeNinjaTrace(buff);
                         }
 
                         if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill)
                         {
-                            witchSpellButton.MaxTimer += Witch.cooldownAddition;
-                            witchSpellButton.Timer = witchSpellButton.MaxTimer;
-                            if (Witch.triggerBothCooldowns)
-                                Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                            ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
+                            Ninja.ninja.killTimer = PlayerControl.GameOptions.KillCooldown;
                         }
                         else
                         {
-                            witchSpellButton.Timer = 0f;
+                            ninjaMarkButton.Timer = 0f;
                         }
-                        Witch.spellCastingTarget = null;
-                        // create trace
-
-
+                        Ninja.ninjaMarked = null;
                         return;
                     } 
                     if (Ninja.currentTarget != null)
@@ -1340,16 +1360,17 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => {
+                () => {  // CouldUse
                     if (ninjaMarkButton.isEffectActive && Ninja.markingTarget != Ninja.currentTarget)
                     {
                         Ninja.markingTarget = null;
                         ninjaMarkButton.Timer = 0f;
                         ninjaMarkButton.isEffectActive = false;
                     }
-                    return PlayerControl.LocalPlayer.CanMove && Ninja.currentTarget != null;
+                    ninjaMarkButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
+                    return PlayerControl.LocalPlayer.CanMove && Ninja.currentTarget != null || Ninja.ninjaMarked != null;
                 },
-                () => {
+                () => {  // on meeting ends
                     ninjaMarkButton.Timer = witchSpellButton.MaxTimer;
                     ninjaMarkButton.isEffectActive = false;
                     Ninja.markingTarget = null;
@@ -1361,10 +1382,10 @@ namespace TheOtherRoles
                 true,
                 Ninja.markingDuration,
                 () =>
-                {
+                {   // On effect ends
                     Ninja.ninjaMarked = Ninja.markingTarget;
-                }
-                    
+                    ninjaMarkButton.Timer = 5f; // Small cd to avoid accidental click
+                }                    
             );
 
 

@@ -324,6 +324,36 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void ninjaUpdate()
+        {
+            if (Ninja.arrow?.arrow != null)
+            {
+                if (Ninja.ninja == null || Ninja.ninja != PlayerControl.LocalPlayer || !Ninja.knowsTargetLocation) {
+                    Ninja.arrow.arrow.SetActive(false);
+                    return;
+                }
+                if (Ninja.ninjaMarked != null && !PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    bool trackedOnMap = !Ninja.ninjaMarked.Data.IsDead;
+                    Vector3 position = Ninja.ninjaMarked.transform.position;
+                    if (!trackedOnMap)
+                    { // Check for dead body
+                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Ninja.ninjaMarked.PlayerId);
+                        if (body != null)
+                        {
+                            trackedOnMap = true;
+                            position = body.transform.position;
+                        }
+                    }
+                    Ninja.arrow.Update(position);
+                    Ninja.arrow.arrow.SetActive(trackedOnMap);
+                } else
+                {
+                    Ninja.arrow.arrow.SetActive(false);
+                }
+            }
+        }
+
         static void trackerUpdate() {
             // Handle player tracking
             if (Tracker.arrow?.arrow != null) {
@@ -753,6 +783,16 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
+        static void ninjaSetTarget()
+        {
+            if (Ninja.ninja == null || Ninja.ninja != PlayerControl.LocalPlayer) return;
+            List<PlayerControl> untargetables = new List<PlayerControl>();
+            if (Spy.spy != null) untargetables.Add(Spy.spy);
+            if (Mini.mini != null) untargetables.Add(Mini.mini);
+            Ninja.currentTarget = setTarget(onlyCrewmates: true, untargetablePlayers: untargetables);
+            setPlayerOutline(Ninja.currentTarget, Ninja.color);
+        }
+
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -831,6 +871,11 @@ namespace TheOtherRoles.Patches {
                 pursuerSetTarget();
                 // Witch
                 witchSetTarget();
+                // Ninja
+                ninjaSetTarget();
+                NinjaTrace.UpdateAll();
+                ninjaUpdate();
+
                 hackerUpdate();
             } 
         }
@@ -960,6 +1005,10 @@ namespace TheOtherRoles.Patches {
             if (Witch.triggerBothCooldowns && Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null) 
                 HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
 
+            // Ninja Button Sync
+            if (Ninja.ninja != null && PlayerControl.LocalPlayer == Ninja.ninja && __instance == Ninja.ninja && HudManagerStartPatch.ninjaMarkButton != null)
+                HudManagerStartPatch.ninjaMarkButton.Timer = HudManagerStartPatch.ninjaMarkButton.MaxTimer;
+
             // Warlock Button Sync
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
                 if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
@@ -1044,7 +1093,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
     class KillAnimationCoPerformKillPatch {
-        public static bool hideNextAnimation = true;
+        public static bool hideNextAnimation = false;
         public static void Prefix(KillAnimation __instance, [HarmonyArgument(0)]ref PlayerControl source, [HarmonyArgument(1)]ref PlayerControl target) {
             if (hideNextAnimation)
                 source = target;
