@@ -160,7 +160,7 @@ namespace TheOtherRoles
                 // Vent Button if enabled
                 if (PlayerControl.LocalPlayer.roleCanUseVents()) addReplacementHandcuffedButton(arsonistButton, new Vector3(-1.8f, 1f, 0), couldUse: () => { return HudManager.Instance.ImpostorVentButton.currentTarget != null; });
                 // Report Button
-                addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, -0.06f, 0), () => { return HudManager.Instance.ReportButton.enabled; });
+                addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, -0.06f, 0), () => { return HudManager.Instance.ReportButton.graphic.color == Palette.EnabledColor; });
             }
             else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(PlayerControl.LocalPlayer.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
             {
