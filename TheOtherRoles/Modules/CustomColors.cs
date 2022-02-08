@@ -81,27 +81,22 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(0xF7, 0x44, 0x17, byte.MaxValue), 
                                         shadow = new Color32(0x9B, 0x2E, 0x0F, byte.MaxValue),
                                         isLighterColor = true });   
-
             colors.Add(new CustomColor { longname = "Teal",
                                         color = new Color32(0x25, 0xB8, 0xBF, byte.MaxValue), 
                                         shadow = new Color32(0x12, 0x89, 0x86, byte.MaxValue),
                                         isLighterColor = false });   
-
             colors.Add(new CustomColor { longname = "Blurple",
                                         color = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue), 
                                         shadow = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
                                         isLighterColor = false });   
-
             colors.Add(new CustomColor { longname = "Sunrise", 
                                         color = new Color32(0xFF, 0xCA, 0x19, byte.MaxValue), 
                                         shadow = new Color32(0xDB, 0x44, 0x42, byte.MaxValue),
                                         isLighterColor = true });
-
             colors.Add(new CustomColor { longname = "Ice",
                                         color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue),
                                         shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
                                         isLighterColor = true });
-            
             colors.Add(new CustomColor { longname = "Fuchsia", //35
                                         color = new Color32(0x94, 0x04, 0x6E, byte.MaxValue),
                                         shadow = new Color32(0x68, 0x03, 0x4F, byte.MaxValue),
@@ -126,7 +121,7 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(0x66, 0x5C, 0x51, byte.MaxValue),
                                         shadow = new Color32(0x4C, 0x45, 0x3D, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Sylver", //41
+            colors.Add(new CustomColor { longname = "Silver", //41
                                         color = new Color32(0x82, 0x82, 0x82, byte.MaxValue),
                                         shadow = new Color32(0xC4, 0xC4, 0xC4, byte.MaxValue),
                                         isLighterColor = true });
