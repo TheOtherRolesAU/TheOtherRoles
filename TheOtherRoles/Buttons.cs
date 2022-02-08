@@ -44,7 +44,7 @@ namespace TheOtherRoles
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
-        public static CustomButton ninjaMarkButton;
+        public static CustomButton ninjaButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -88,7 +88,7 @@ namespace TheOtherRoles
             pursuerButton.MaxTimer = Pursuer.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
-            ninjaMarkButton.MaxTimer = Ninja.cooldown;
+            ninjaButton.MaxTimer = Ninja.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1302,14 +1302,12 @@ namespace TheOtherRoles
             );
 
             // Ninja mark and assassinate button 
-            ninjaMarkButton = new CustomButton(
+            ninjaButton = new CustomButton(
                 () => {
-                    if (Ninja.ninjaMarked != null)
-                    {
+                    if (Ninja.ninjaMarked != null) {
                         // Murder attempt with teleport
                         MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
-                        if (attempt == MurderAttemptResult.PerformKill)
-                        {
+                        if (attempt == MurderAttemptResult.PerformKill) {
                             // Create first trace before killing
                             var pos = PlayerControl.LocalPlayer.transform.position;
                             byte[] buff = new byte[sizeof(float) * 2];
@@ -1341,31 +1339,27 @@ namespace TheOtherRoles
                             RPCProcedure.placeNinjaTrace(buff);
                         }
 
-                        if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill)
-                        {
-                            ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
+                        if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill) {
+                            ninjaButton.Timer = ninjaButton.MaxTimer;
                             Ninja.ninja.killTimer = PlayerControl.GameOptions.KillCooldown;
-                        }
-                        else if (attempt == MurderAttemptResult.SuppressKill)
-                        {
-                            ninjaMarkButton.Timer = 0f;
+                        } else if (attempt == MurderAttemptResult.SuppressKill) {
+                            ninjaButton.Timer = 0f;
                         }
                         Ninja.ninjaMarked = null;
                         return;
                     } 
-                    if (Ninja.currentTarget != null)
-                    {
+                    if (Ninja.currentTarget != null) {
                         Ninja.ninjaMarked = Ninja.currentTarget;
-                        ninjaMarkButton.Timer = 5f;
+                        ninjaButton.Timer = 5f;
                     }
                 },
                 () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {  // CouldUse
-                    ninjaMarkButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
-                    return PlayerControl.LocalPlayer.CanMove && (Ninja.currentTarget != null || Ninja.ninjaMarked != null);
+                    ninjaButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
+                    return (Ninja.currentTarget != null || Ninja.ninjaMarked != null) && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => {  // on meeting ends
-                    ninjaMarkButton.Timer = ninjaMarkButton.MaxTimer;
+                    ninjaButton.Timer = ninjaButton.MaxTimer;
                     Ninja.ninjaMarked = null;
                 },
                 Ninja.getMarkButtonSprite(),
@@ -1374,9 +1368,7 @@ namespace TheOtherRoles
                 KeyCode.F                   
             );
 
-
-
-            // Set the default (or settings from the previous game) timers/durations when spawning the buttons
+            // Set the default (or settings from the previous game) timers / durations when spawning the buttons
             setCustomButtonCooldowns();
             deputyHandcuffedButtons = null;
         }

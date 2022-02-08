@@ -148,7 +148,7 @@ namespace TheOtherRoles.Patches {
                     else if (PlayerControl.LocalPlayer == Witch.witch)
                         Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
                     else if (PlayerControl.LocalPlayer == Ninja.ninja)
-                        Ninja.ninja.killTimer = HudManagerStartPatch.ninjaMarkButton.Timer = HudManagerStartPatch.ninjaMarkButton.MaxTimer;
+                        Ninja.ninja.killTimer = HudManagerStartPatch.ninjaButton.Timer = HudManagerStartPatch.ninjaButton.MaxTimer;
                 }
                 __instance.SetTarget(null);
             }

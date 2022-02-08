@@ -7,7 +7,7 @@ namespace TheOtherRoles.Objects {
     class NinjaTrace {
         public static List<NinjaTrace> traces = new List<NinjaTrace>();
 
-        public GameObject trace;
+        private GameObject trace;
         private float timeRemaining;
         
         private static Sprite TraceSprite;

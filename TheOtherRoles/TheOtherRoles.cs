@@ -1421,33 +1421,28 @@ namespace TheOtherRoles
 
         public static PlayerControl ninjaMarked;
         public static PlayerControl currentTarget;
-        public static PlayerControl markingTarget;
         public static float cooldown = 30f;
         public static float traceTime = 1f;
-        public static bool knowsTargetLocation = false;
-        
+        public static bool knowsTargetLocation = false;        
 
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
         public static Arrow arrow = new Arrow(Color.black);
-        public static Sprite getMarkButtonSprite()
-        {
+        public static Sprite getMarkButtonSprite() {
             if (markButtonSprite) return markButtonSprite;
             markButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaMarkButton.png", 115f);
             return markButtonSprite;
         }
 
-        public static Sprite getKillButtonSprite()
-        {
+        public static Sprite getKillButtonSprite() {
             if (killButtonSprite) return killButtonSprite;
-            killButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaKillButton.png", 115f);
+            killButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaAssassinateButton.png", 115f);
             return killButtonSprite;
         }
 
-        public static void clearAndReload()
-        {
+        public static void clearAndReload() {
             ninja = null;
-            currentTarget = markingTarget= ninjaMarked = null;
+            currentTarget = ninjaMarked = null;
             cooldown = CustomOptionHolder.ninjaCooldown.getFloat();
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
