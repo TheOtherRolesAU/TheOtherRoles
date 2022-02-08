@@ -146,6 +146,9 @@ namespace TheOtherRoles.Patches {
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
+            if (Spy.sidekickedSpy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+                setPlayerNameColor(Spy.sidekickedSpy, Spy.color);
+            }
 
             // Crewmate roles with no changes: Mini
             // Impostor roles with no changes: Morphling, Camouflager, Vampire, Godfather, Eraser, Janitor, Cleaner, Warlock, BountyHunter,  Witch and Mafioso

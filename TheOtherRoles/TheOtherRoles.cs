@@ -879,12 +879,14 @@ namespace TheOtherRoles
         public static bool impostorsCanKillAnyone = true;
         public static bool canEnterVents = false;
         public static bool hasImpostorVision = false;
+        public static PlayerControl sidekickedSpy;
 
         public static void clearAndReload() {
             spy = null;
             impostorsCanKillAnyone = CustomOptionHolder.spyImpostorsCanKillAnyone.getBool();
             canEnterVents = CustomOptionHolder.spyCanEnterVents.getBool();
             hasImpostorVision = CustomOptionHolder.spyHasImpostorVision.getBool();
+            sidekickedSpy = null;
         }
     }
 

@@ -186,12 +186,12 @@ namespace TheOtherRoles.Patches {
             if (Vampire.vampire == null || Vampire.vampire != PlayerControl.LocalPlayer) return;
 
             PlayerControl target = null;
-            if (Spy.spy != null) {
+            if (Spy.spy != null || Spy.sidekickedSpy != null) {
                 if (Spy.impostorsCanKillAnyone) {
                     target = setTarget(false, true);
                 }
                 else {
-                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy, Spy.sidekickedSpy });
                 }
             }
             else {
@@ -248,6 +248,7 @@ namespace TheOtherRoles.Patches {
 
             List<PlayerControl> untargetables = new List<PlayerControl>();
             if (Spy.spy != null) untargetables.Add(Spy.spy);
+            if (Spy.sidekickedSpy != null) untargetables.Add(Spy.sidekickedSpy);
             Eraser.currentTarget = setTarget(onlyCrewmates: !Eraser.canEraseAnyone, untargetablePlayers: Eraser.canEraseAnyone ? new List<PlayerControl>() : untargetables);
             setPlayerOutline(Eraser.currentTarget, Eraser.color);
         }
@@ -293,12 +294,12 @@ namespace TheOtherRoles.Patches {
             }
 
             PlayerControl target = null;
-            if (Spy.spy != null) {
+            if (Spy.spy != null || Spy.sidekickedSpy != null) {
                 if (Spy.impostorsCanKillAnyone) {
                     target = setTarget(false, true);
                 }
                 else {
-                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy });
+                    target = setTarget(true, true, new List<PlayerControl>() { Spy.spy, Spy.sidekickedSpy});
                 }
             }
             else {
@@ -566,7 +567,7 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && p != Spy.sidekickedSpy && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
@@ -748,6 +749,7 @@ namespace TheOtherRoles.Patches {
             else {
                 untargetables = new List<PlayerControl>(); // Also target players that have already been spelled, to hide spells that were blanks/blocked by shields
                 if (Spy.spy != null && !Witch.canSpellAnyone) untargetables.Add(Spy.spy);
+                if (Spy.sidekickedSpy != null && !Witch.canSpellAnyone) untargetables.Add(Spy.sidekickedSpy);
             }
             Witch.currentTarget = setTarget(onlyCrewmates: !Witch.canSpellAnyone, untargetablePlayers: untargetables);
             setPlayerOutline(Witch.currentTarget, Witch.color);
