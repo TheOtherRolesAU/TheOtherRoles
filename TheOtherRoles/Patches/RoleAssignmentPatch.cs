@@ -19,6 +19,7 @@ namespace TheOtherRoles.Patches {
     class RoleManagerSelectRolesPatch {
         private static int crewValues;
         private static int impValues;
+        private static bool isEvilGuesser;
         public static void Postfix() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -162,13 +163,12 @@ namespace TheOtherRoles.Patches {
             }
 
             // Assign Guesser (chance to be impostor based on setting)
+            isEvilGuesser =  rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10;
             if ((CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0 && 
                 CustomOptionHolder.guesserSpawnRate.getSelection() == 10) || 
                 CustomOptionHolder.guesserSpawnBothRate.getSelection() == 0) {
-
-                if (rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10) 
-                    data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
-                else data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                    if (isEvilGuesser) data.impSettings.Add((byte)RoleId.EvilGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
+                    else data.crewSettings.Add((byte)RoleId.NiceGuesser, CustomOptionHolder.guesserSpawnRate.getSelection());
 
             }
 
@@ -236,8 +236,12 @@ namespace TheOtherRoles.Patches {
 
         private static void assignDependentRoles(RoleAssignmentData data) {
             // Roles that prob have a dependent role
-            bool guesserFlag = CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0 && CustomOptionHolder.guesserSpawnRate.getSelection() > 0;
-            bool sheriffFlag = CustomOptionHolder.deputySpawnRate.getSelection() > 0 && CustomOptionHolder.sheriffSpawnRate.getSelection() > 0;
+            bool guesserFlag = CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0 
+                && CustomOptionHolder.guesserSpawnRate.getSelection() > 0;
+            bool sheriffFlag = CustomOptionHolder.deputySpawnRate.getSelection() > 0 
+                && CustomOptionHolder.sheriffSpawnRate.getSelection() > 0
+                && Sheriff.sheriff == null;
+
             if (!guesserFlag && !sheriffFlag) return; // assignDependentRoles is not needed
 
             int crew = data.crewmates.Count < data.maxCrewmateRoles ? data.crewmates.Count : data.maxCrewmateRoles; // Max number of crew loops
@@ -249,8 +253,6 @@ namespace TheOtherRoles.Patches {
             bool isSheriff = !sheriffFlag; 
             bool isGuesser = !guesserFlag;
 
-            bool isEvilGuesser = (rnd.Next(1, 101) <= CustomOptionHolder.guesserIsImpGuesserRate.getSelection() * 10);
-
             // --- Simulate Crew & Imp ticket system ---
             while (crew > 0 && (!isSheriff || (!isEvilGuesser && !isGuesser))) {
                 if (!isSheriff && rnd.Next(crewValues) < CustomOptionHolder.sheriffSpawnRate.getSelection()) isSheriff = true;
@@ -259,7 +261,7 @@ namespace TheOtherRoles.Patches {
                 crewValues -= crewSteps;
             }
             while (imp > 0 && (isEvilGuesser && !isGuesser)) { 
-                if (rnd.Next(crewValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
+                if (rnd.Next(impValues) < CustomOptionHolder.guesserSpawnRate.getSelection()) isGuesser = true;
                 imp--;
                 impValues -= impSteps;
             }
