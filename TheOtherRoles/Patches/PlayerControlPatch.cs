@@ -65,6 +65,8 @@ namespace TheOtherRoles.Patches {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
                         || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
+                    // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
+                    hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || PlayerControl.LocalPlayer == Medic.medic);
                 }
 
                 if (hasVisibleShield) {

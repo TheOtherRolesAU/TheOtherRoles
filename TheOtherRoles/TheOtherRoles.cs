@@ -333,6 +333,8 @@ namespace TheOtherRoles
         public static bool showAttemptToShielded = false;
         public static bool showAttemptToMedic = false;
         public static bool setShieldAfterMeeting = false;
+        public static bool showShieldAfterMeeting = false;
+        public static bool meetingAfterShielding = false;
 
         public static Color shieldedColor = new Color32(0, 221, 255, byte.MaxValue);
         public static PlayerControl currentTarget;
@@ -354,6 +356,8 @@ namespace TheOtherRoles
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
             showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
+            showShieldAfterMeeting = CustomOptionHolder.medicShowShieldAfterMeeting.getBool();
+            meetingAfterShielding = false;
         }
     }
 

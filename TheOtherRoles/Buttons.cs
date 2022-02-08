@@ -365,6 +365,7 @@ namespace TheOtherRoles
                         RPCProcedure.setFutureShielded(Medic.currentTarget.PlayerId);
                     else
                         RPCProcedure.medicSetShielded(Medic.currentTarget.PlayerId);
+                    Medic.meetingAfterShielding = false;
                 },
                 () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove; },

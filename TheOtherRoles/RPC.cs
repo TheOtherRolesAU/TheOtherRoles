@@ -389,6 +389,7 @@ namespace TheOtherRoles
             if (Medic.shielded == null || Medic.medic == null) return;
             
             bool isShieldedAndShow = Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded;
+            isShieldedAndShow = isShieldedAndShow && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting);  // Dont show attempt, if shield is not shown yet
             bool isMedicAndShow = Medic.medic == PlayerControl.LocalPlayer && Medic.showAttemptToMedic;
 
             if ((isShieldedAndShow || isMedicAndShow) && HudManager.Instance?.FullScreen != null) {
