@@ -28,14 +28,14 @@ namespace TheOtherRoles.Objects {
 
             timeRemaining = duration;
 
-            // display the ninjas color in the trace for duration / 4 seconds, could be an extra setting.
-            HudManager.Instance.StartCoroutine(Effects.Lerp(duration / 4, new Action<float>((p) => {  // time could be fixed as a setting manually etc.
+            // display the ninjas color in the trace
+            HudManager.Instance.StartCoroutine(Effects.Lerp(CustomOptionHolder.ninjaTraceColorTime.getFloat(), new Action<float>((p) => {
                 Color c = Palette.PlayerColors[(int)Ninja.ninja.Data.DefaultOutfit.ColorId];
                 if (Camouflager.camouflageTimer > 0) {
                     c = Palette.PlayerColors[6];
                 }
 
-                Color g = Palette.PlayerColors[6];  // default grey
+                Color g = Palette.ImpostorRed;  // Usual display color. could also be Palette.PlayerColors[6] for default grey like camo
 
                 Color combinedColor = Mathf.Clamp01(p) * g + Mathf.Clamp01(1 - p) * c;
 
