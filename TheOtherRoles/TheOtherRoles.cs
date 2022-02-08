@@ -355,8 +355,8 @@ namespace TheOtherRoles
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
             showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
-            setShieldAfterMeeting = CustomOptionHolder.medicSetShieldAfterMeeting.getBool();
-            showShieldAfterMeeting = CustomOptionHolder.medicShowShieldAfterMeeting.getBool();
+            setShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 2;
+            showShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 1;
             meetingAfterShielding = false;
         }
     }
