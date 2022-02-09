@@ -24,10 +24,11 @@ namespace TheOtherRoles {
         public OptionBehaviour optionBehaviour;
         public CustomOption parent;
         public bool isHeader;
+        public Func<bool> extraCondition;
 
         // Option creation
 
-        public CustomOption(int id, string name,  System.Object[] selections, System.Object defaultValue, CustomOption parent, bool isHeader) {
+        public CustomOption(int id, string name,  System.Object[] selections, System.Object defaultValue, CustomOption parent, bool isHeader, Func<bool> extraCondition = null) {
             this.id = id;
             this.name = parent == null ? name : "- " + name;
             this.selections = selections;
@@ -35,6 +36,7 @@ namespace TheOtherRoles {
             this.defaultSelection = index >= 0 ? index : 0;
             this.parent = parent;
             this.isHeader = isHeader;
+            this.extraCondition = extraCondition;
             selection = 0;
             if (id != 0) {
                 entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", id.ToString(), defaultSelection);
@@ -43,19 +45,19 @@ namespace TheOtherRoles {
             options.Add(this);
         }
 
-        public static CustomOption Create(int id, string name, string[] selections, CustomOption parent = null, bool isHeader = false) {
-            return new CustomOption(id, name, selections, "", parent, isHeader);
+        public static CustomOption Create(int id, string name, string[] selections, CustomOption parent = null, bool isHeader = false, Func<bool> extraCondition = null) {
+            return new CustomOption(id, name, selections, "", parent, isHeader, extraCondition);
         }
 
-        public static CustomOption Create(int id, string name, float defaultValue, float min, float max, float step, CustomOption parent = null, bool isHeader = false) {
+        public static CustomOption Create(int id, string name, float defaultValue, float min, float max, float step, CustomOption parent = null, bool isHeader = false, Func<bool> extraCondition = null) {
             List<float> selections = new List<float>();
             for (float s = min; s <= max; s += step)
                 selections.Add(s);
-            return new CustomOption(id, name, selections.Cast<object>().ToArray(), defaultValue, parent, isHeader);
+            return new CustomOption(id, name, selections.Cast<object>().ToArray(), defaultValue, parent, isHeader, extraCondition);
         }
 
-        public static CustomOption Create(int id, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false) {
-            return new CustomOption(id, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader);
+        public static CustomOption Create(int id, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false, Func<bool> extraCondition = null) {
+            return new CustomOption(id, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader, extraCondition);
         }
 
         // Static behaviour
@@ -277,6 +279,7 @@ namespace TheOtherRoles {
                         enabled = parent.selection != 0;
                         parent = parent.parent;
                     }
+                    if (option.extraCondition != null) enabled = enabled && option.extraCondition();
                     option.optionBehaviour.gameObject.SetActive(enabled);
                     if (enabled) {
                         offset -= option.isHeader ? 0.75f : 0.5f;
