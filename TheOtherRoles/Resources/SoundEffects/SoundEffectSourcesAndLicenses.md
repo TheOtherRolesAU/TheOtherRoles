@@ -26,6 +26,7 @@
 |eraserErase | | [Pencil Eraser Erasing](https://freesound.org/people/deleted_user_7146007/sounds/383861/ ) | CC0 1.0 |
 |tricksterPlaceBox | |[Carton_impact_5.wav](https://freesound.org/people/andresix/sounds/245617/ ) | CC0 1.0 |
 |tricksterLight | same as lighterLight |-|-|
+|tricksterUseBoxVent | |[rubber duck -CsG-.wav](https://freesound.org/people/csaszi/sounds/350917/) | CC0 1.0 |
 |warlockCurse | | [Buffer Spell](https://freesound.org/people/deleted_user_3277771/sounds/176741/ ) | CC0 1.0 |
 |warlockKill | (already has a sound) |-|-|
 |securityGuardPlaceCam | combined | [drilling a screw into wood.wav](https://freesound.org/people/chewiesmissus/sounds/244242/ ) + [hammer v3.wav](https://freesound.org/people/blukotek/sounds/337814/ ) | CC0 1.0 both|
