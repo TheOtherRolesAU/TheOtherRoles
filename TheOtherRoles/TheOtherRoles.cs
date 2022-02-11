@@ -629,6 +629,7 @@ namespace TheOtherRoles
             public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
+        public static bool miniEvilGuessable = true;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
         public static bool triggerMiniLose = false;
 
@@ -636,6 +637,7 @@ namespace TheOtherRoles
             mini = null;
             triggerMiniLose = false;
             growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
+            miniEvilGuessable = CustomOptionHolder.miniEvilGuessable.getBool();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
