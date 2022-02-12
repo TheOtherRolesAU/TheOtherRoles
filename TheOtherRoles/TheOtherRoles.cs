@@ -60,8 +60,8 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
-            ModifierOne.clearAndReload();
-            ModifierTwo.clearAndReload();
+            Bloody.clearAndReload();
+            AntiTeleport.clearAndReload();
             ModifierThree.clearAndReload();
         }
 
@@ -1417,19 +1417,26 @@ namespace TheOtherRoles
     }
 
     // Modifier
-    public static class ModifierOne {
-        public static List<PlayerControl> modifierOne = new List<PlayerControl>();
+    public static class Bloody {
+        public static List<PlayerControl> bloody = new List<PlayerControl>();
+        public static Dictionary<byte, float> active = new Dictionary<byte, float>();
+
+        public static float duration = 5f;
 
         public static void clearAndReload() {
-            modifierOne = new List<PlayerControl>();
+            bloody = new List<PlayerControl>();
+            active = new Dictionary<byte, float>();
+            duration = CustomOptionHolder.modifierBloodyDuration.getFloat();
         }
     }
 
-    public static class ModifierTwo {
-        public static List<PlayerControl> modifierTwo = new List<PlayerControl>();
+    public static class AntiTeleport {
+        public static List<PlayerControl> antiTeleport = new List<PlayerControl>();
+        public static Vector3 position = new Vector3();
 
         public static void clearAndReload() {
-            modifierTwo = new List<PlayerControl>();
+            antiTeleport = new List<PlayerControl>();
+            position = new Vector3();
         }
     }
 

@@ -59,8 +59,8 @@ namespace TheOtherRoles
         Impostor
     }
     enum ModifierId {
-        ModifierOne,
-        ModifierTwo,
+        Bloody,
+        AntiTeleport,
         ModifierThree
     }
 
@@ -116,6 +116,7 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        Bloody
     }
 
     public static class RPCProcedure {
@@ -291,11 +292,11 @@ namespace TheOtherRoles
         public static void setModifier(byte modifierId, byte playerId) {
             PlayerControl player = Helpers.playerById(playerId); 
             switch ((ModifierId)modifierId) {
-                case ModifierId.ModifierOne:
-                    ModifierOne.modifierOne.Add(player);
+                case ModifierId.Bloody:
+                    Bloody.bloody.Add(player);
                     break;
-                case ModifierId.ModifierTwo:
-                    ModifierTwo.modifierTwo.Add(player);
+                case ModifierId.AntiTeleport:
+                    AntiTeleport.antiTeleport.Add(player);
                     break;
                 case ModifierId.ModifierThree:
                     ModifierThree.modifierThree.Add(player);
@@ -827,6 +828,11 @@ namespace TheOtherRoles
             Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
             if (value > 0) Pursuer.blankedList.Add(target);            
         }
+
+        public static void bloody(byte playerId) {
+            if (Bloody.active.ContainsKey(playerId)) return;
+            Bloody.active.Add(playerId, Bloody.duration);
+        }
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -1015,6 +1021,10 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.Bloody:
+                    byte bloodyKiller = reader.ReadByte();
+                    RPCProcedure.bloody(bloodyKiller);
                     break;
             }
         }

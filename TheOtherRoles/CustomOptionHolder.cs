@@ -228,8 +228,11 @@ namespace TheOtherRoles {
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
 
-        public static CustomOption modifierOne;
-        public static CustomOption modifierTwo;
+        public static CustomOption modifierBloody;
+        public static CustomOption modifierBloodyDuration;
+
+        public static CustomOption modifierAntiTeleport;
+
         public static CustomOption modifierThree;
 
         public static CustomOption maxNumberOfMeetings;
@@ -420,8 +423,8 @@ namespace TheOtherRoles {
             medicShowAttemptToMedic = CustomOption.Create(146, "Medic Sees Murder Attempt On Shielded Player", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
-            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
-            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper Can Call Emergency Meeting", false, swapperSpawnRate);
+            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper Can Only Swap Others", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
@@ -474,9 +477,12 @@ namespace TheOtherRoles {
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
 
-            modifierOne = CustomOption.Create(1000, cs(Color.yellow, "modifierOne"), ratesModifier, null, true);
-            modifierTwo = CustomOption.Create(1001, cs(Color.yellow, "modifierTwo"), ratesModifier, null, true);
-            modifierThree = CustomOption.Create(1002, cs(Color.yellow, "modifierThree"), ratesModifier, null, true);
+            modifierBloody = CustomOption.Create(1000, cs(Color.yellow, "Bloody"), ratesModifier, null, true);
+            modifierBloodyDuration = CustomOption.Create(1001, "Trail duration", 5f, 1f, 30f, 1f, modifierBloody);
+
+            modifierAntiTeleport = CustomOption.Create(1010, cs(Color.yellow, "Anti Teleport"), ratesModifier, null, true);
+
+            modifierThree = CustomOption.Create(1020, cs(Color.yellow, "modifierThree"), ratesModifier, null, true);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

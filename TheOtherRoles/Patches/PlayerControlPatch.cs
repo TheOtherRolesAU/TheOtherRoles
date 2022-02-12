@@ -753,6 +753,16 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
+        static void bloodyUpdate() {
+            if (!Bloody.active.Any()) return;
+            foreach (KeyValuePair<byte, float> entry in Bloody.active) {
+                PlayerControl player = Helpers.playerById(entry.Key);
+                new Footprint(4f, false, player);
+                Bloody.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
+                if (entry.Value <= 0) Bloody.active.Remove(entry.Key);
+            }
+        }
+
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -831,7 +841,12 @@ namespace TheOtherRoles.Patches {
                 pursuerSetTarget();
                 // Witch
                 witchSetTarget();
+                // Hacker
                 hackerUpdate();
+
+                // --MODIFIER--
+                // Bloody
+                bloodyUpdate();
             } 
         }
     }
@@ -1023,6 +1038,14 @@ namespace TheOtherRoles.Patches {
                     }
                     if (p == 1f && renderer != null) renderer.enabled = false;
                 })));
+            }
+
+            // Add Bloody Modifier
+            if (Bloody.bloody.FindAll(x => x.PlayerId == target.PlayerId).Count > 0) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.Bloody, Hazel.SendOption.Reliable, -1);
+                writer.Write(__instance.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.bloody(__instance.PlayerId);
             }
         }
     }

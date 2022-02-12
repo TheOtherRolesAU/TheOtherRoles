@@ -385,8 +385,8 @@ namespace TheOtherRoles.Patches {
             int modifierCount = Mathf.Min(players.Count, modifierCountSettings);
             List<ModifierId> modifier = new List<ModifierId>();
 
-            modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierOne, CustomOptionHolder.modifierOne.getSelection()));
-            modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierTwo, CustomOptionHolder.modifierTwo.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(ModifierId.Bloody, CustomOptionHolder.modifierBloody.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(ModifierId.AntiTeleport, CustomOptionHolder.modifierAntiTeleport.getSelection()));
             modifier.AddRange(Enumerable.Repeat(ModifierId.ModifierThree, CustomOptionHolder.modifierThree.getSelection()));
 
             while (modifierCount < modifier.Count) {
