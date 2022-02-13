@@ -101,6 +101,7 @@ namespace TheOtherRoles {
         public static CustomOption shifterShiftsModifiers;
 
         public static CustomOption mayorSpawnRate;
+        public static CustomOption mayorCanAlwaysSeeVoteColors;
 
         public static CustomOption engineerSpawnRate;
         public static CustomOption engineerNumberOfFixes;
@@ -369,6 +370,7 @@ namespace TheOtherRoles {
             shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
+            mayorCanAlwaysSeeVoteColors = CustomOption.Create(81, "Mayor Always Sees Vote Colors", false, mayorSpawnRate);
 
             engineerSpawnRate = CustomOption.Create(90, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);
