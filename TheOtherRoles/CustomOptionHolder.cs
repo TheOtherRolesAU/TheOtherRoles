@@ -146,6 +146,8 @@ namespace TheOtherRoles {
         public static CustomOption swapperSpawnRate;
         public static CustomOption swapperCanCallEmergency;
         public static CustomOption swapperCanOnlySwapOthers;
+        public static CustomOption swapperSwapsNumber;
+        public static CustomOption swapperRechargeTasksNumber;
 
         public static CustomOption seerSpawnRate;
         public static CustomOption seerMode;
@@ -413,6 +415,8 @@ namespace TheOtherRoles {
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
             swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
             swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
+            swapperSwapsNumber = CustomOption.Create(153, "Initial Swap Charges", 1f, 0f, 5f, 1f, swapperSpawnRate);
+            swapperRechargeTasksNumber = CustomOption.Create(154, "Number Of Tasks Needed For Recharging", 2f, 1f, 10f, 1f, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
