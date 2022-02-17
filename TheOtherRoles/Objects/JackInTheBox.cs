@@ -8,7 +8,7 @@ namespace TheOtherRoles.Objects {
 
     public class JackInTheBox {
         public static System.Collections.Generic.List<JackInTheBox> AllJackInTheBoxes = new System.Collections.Generic.List<JackInTheBox>();
-        public static int JackInTheBoxLimit = 3;
+        public static int JackInTheBoxLimit = (int)CustomOptionHolder.tricksterPlaceBoxCount.getFloat();
         public static bool boxesConvertedToVents = false;
         public static Sprite[] boxAnimationSprites = new Sprite[18];
 
@@ -97,6 +97,7 @@ namespace TheOtherRoles.Objects {
         }
 
         public static bool hasJackInTheBoxLimitReached() {
+            JackInTheBoxLimit = (int)CustomOptionHolder.tricksterPlaceBoxCount.getFloat();
             return (AllJackInTheBoxes.Count >= JackInTheBoxLimit);
         }
 
