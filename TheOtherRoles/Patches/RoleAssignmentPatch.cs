@@ -48,12 +48,18 @@ namespace TheOtherRoles.Patches {
 
             var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
             var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();
+            var crewmateRolesMax = CustomOptionHolder.crewmateRolesMax.getSelection();
             var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
             var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
             var impostorMin = CustomOptionHolder.impostorRolesCountMin.getSelection();
             var impostorMax = CustomOptionHolder.impostorRolesCountMax.getSelection();
-            
+
             // Make sure min is less or equal to max
+            if (crewmateRolesMax == 1) {
+                crewmateMax = crewmates.Count - neutralMin;
+                crewmateMin = crewmateMax;
+            }
+            
             if (crewmateMin > crewmateMax) crewmateMin = crewmateMax;
             if (neutralMin > neutralMax) neutralMin = neutralMax;
             if (impostorMin > impostorMax) impostorMin = impostorMax;
