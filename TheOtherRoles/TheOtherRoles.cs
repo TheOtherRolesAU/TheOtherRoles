@@ -629,6 +629,7 @@ namespace TheOtherRoles
             public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
+        public static bool miniEvilGuessable = true;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
         public static bool triggerMiniLose = false;
 
@@ -636,6 +637,7 @@ namespace TheOtherRoles
             mini = null;
             triggerMiniLose = false;
             growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
+            miniEvilGuessable = CustomOptionHolder.miniEvilGuessable.getBool();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
@@ -698,6 +700,8 @@ namespace TheOtherRoles
             resetTracked();
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            if (updateIntervall == 0f) {
+                updateIntervall = 0.01f; }
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
