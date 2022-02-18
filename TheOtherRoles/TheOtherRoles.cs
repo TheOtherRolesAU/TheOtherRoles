@@ -54,15 +54,17 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
-            Bait.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
+            // Modifier
+            Bait.clearAndReload();
             Bloody.clearAndReload();
             AntiTeleport.clearAndReload();
-            ModifierThree.clearAndReload();
+            Tiebreaker.clearAndReload();
+            Sunglasses.clearAndReload();
         }
 
         public static class Jester {
@@ -442,8 +444,8 @@ namespace TheOtherRoles
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
-            bothDie = CustomOptionHolder.loversBothDie.getBool();
-            enableChat = CustomOptionHolder.loversEnableChat.getBool();
+            bothDie = CustomOptionHolder.modifierLoverBothDie.getBool();
+            enableChat = CustomOptionHolder.modifierLoverEnableChat.getBool();
         }
 
         public static PlayerControl getPartner(this PlayerControl player) {
@@ -1212,25 +1214,6 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Bait {
-        public static PlayerControl bait;
-        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
-
-        public static bool highlightAllVents = false;
-        public static float reportDelay = 0f;
-        public static bool showKillFlash = true;
-
-        public static bool reported = false;
-
-        public static void clearAndReload() {
-            bait = null;
-            reported = false;
-            highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
-            reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
-            showKillFlash = CustomOptionHolder.baitShowKillFlash.getBool();
-        }
-    }
-
     public static class Vulture {
         public static PlayerControl vulture;
         public static Color color = new Color32(139, 69, 19, byte.MaxValue);
@@ -1417,9 +1400,28 @@ namespace TheOtherRoles
     }
 
     // Modifier
+    public static class Bait {
+        public static List<PlayerControl> bait;
+        public static Dictionary<DeadPlayer, float> active;
+        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+        public static float reportDelayMin = 0f;
+        public static float reportDelayMax = 0f;
+        public static bool showKillFlash = true;
+
+        public static void clearAndReload() {
+            bait = new List<PlayerControl>();
+            active = new Dictionary<DeadPlayer, float>();
+            reportDelayMin = CustomOptionHolder.modifierBaitReportDelayMin.getFloat();
+            reportDelayMax = CustomOptionHolder.modifierBaitReportDelayMax.getFloat();
+            if (reportDelayMin > reportDelayMax) reportDelayMin = reportDelayMax;
+            showKillFlash = CustomOptionHolder.modifierBaitShowKillFlash.getBool();
+        }
+    }
+
     public static class Bloody {
-        public static List<PlayerControl> bloody = new List<PlayerControl>();
-        public static Dictionary<byte, float> active = new Dictionary<byte, float>();
+        public static List<PlayerControl> bloody;
+        public static Dictionary<byte, float> active;
 
         public static float duration = 5f;
 
@@ -1431,8 +1433,8 @@ namespace TheOtherRoles
     }
 
     public static class AntiTeleport {
-        public static List<PlayerControl> antiTeleport = new List<PlayerControl>();
-        public static Vector3 position = new Vector3();
+        public static List<PlayerControl> antiTeleport;
+        public static Vector3 position;
 
         public static void clearAndReload() {
             antiTeleport = new List<PlayerControl>();
@@ -1440,11 +1442,24 @@ namespace TheOtherRoles
         }
     }
 
-    public static class ModifierThree {
-        public static List<PlayerControl> modifierThree = new List<PlayerControl>();
+    public static class Tiebreaker {
+        public static PlayerControl tiebreaker;
+
+        public static bool isTiebreaker = false;
 
         public static void clearAndReload() {
-            modifierThree = new List<PlayerControl>();
+            tiebreaker = null;
+            isTiebreaker = false;
+        }
+    }
+
+    public static class Sunglasses {
+        public static List<PlayerControl> sunglasses;
+        public static int vision = 1;
+
+        public static void clearAndReload() {
+            sunglasses = new List<PlayerControl>();
+            vision = CustomOptionHolder.modifierSunglassesVision.getSelection() + 1;
         }
     }
 

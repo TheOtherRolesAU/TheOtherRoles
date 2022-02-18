@@ -121,8 +121,6 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Guesser.niceGuesser, Guesser.color);
             } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Guesser.evilGuesser, Palette.ImpostorRed);
-            } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Bait.bait, Bait.color);
             } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {

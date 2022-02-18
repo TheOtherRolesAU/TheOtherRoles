@@ -28,7 +28,6 @@ namespace TheOtherRoles
         Medic,
         Shifter,
         Swapper,
-        Lover,
         Seer,
         Morphling,
         Camouflager,
@@ -49,19 +48,20 @@ namespace TheOtherRoles
         EvilGuesser,
         NiceGuesser,
         BountyHunter,
-        Bait,
         Vulture,
         Medium,
         Lawyer,
         Pursuer,
         Witch,
         Crewmate,
-        Impostor
-    }
-    enum ModifierId {
+        Impostor,
+        // Modifier ---
+        Lover,
+        Bait,
         Bloody,
         AntiTeleport,
-        ModifierThree
+        Tiebreaker,
+        Sunglasses
     }
 
     enum CustomRPC
@@ -157,7 +157,7 @@ namespace TheOtherRoles
             }
         }
 
-        public static void setRole(byte roleId, byte playerId, byte flag) {
+        public static void setRole(byte roleId, byte playerId) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
@@ -202,10 +202,6 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Swapper:
                         Swapper.swapper = player;
-                        break;
-                    case RoleId.Lover:
-                        if (flag == 0) Lovers.lover1 = player;
-                        else Lovers.lover2 = player;
                         break;
                     case RoleId.Seer:
                         Seer.seer = player;
@@ -267,9 +263,6 @@ namespace TheOtherRoles
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
-                    case RoleId.Bait:
-                        Bait.bait = player;
-                        break;
                     case RoleId.Vulture:
                         Vulture.vulture = player;
                         break;
@@ -289,17 +282,27 @@ namespace TheOtherRoles
                 }
         }
 
-        public static void setModifier(byte modifierId, byte playerId) {
+        public static void setModifier(byte modifierId, byte playerId, byte flag) {
             PlayerControl player = Helpers.playerById(playerId); 
-            switch ((ModifierId)modifierId) {
-                case ModifierId.Bloody:
+            switch ((RoleId)modifierId) {
+                case RoleId.Bait:
+                    Bait.bait.Add(player);
+                    break;
+                case RoleId.Lover:
+                    if (flag == 0) Lovers.lover1 = player;
+                    else Lovers.lover2 = player;
+                    break;
+                case RoleId.Bloody:
                     Bloody.bloody.Add(player);
                     break;
-                case ModifierId.AntiTeleport:
+                case RoleId.AntiTeleport:
                     AntiTeleport.antiTeleport.Add(player);
                     break;
-                case ModifierId.ModifierThree:
-                    ModifierThree.modifierThree.Add(player);
+                case RoleId.Tiebreaker:
+                    Tiebreaker.tiebreaker = player;
+                    break;
+                case RoleId.Sunglasses:
+                    Sunglasses.sunglasses.Add(player);
                     break;
             }
         }
@@ -496,10 +499,6 @@ namespace TheOtherRoles
                 SecurityGuard.securityGuard = oldShifter;
             if (Guesser.niceGuesser != null && Guesser.niceGuesser == player)
                 Guesser.niceGuesser = oldShifter;
-            if (Bait.bait != null && Bait.bait == player) {
-                Bait.bait = oldShifter;
-                if (Bait.bait.Data.IsDead) Bait.reported = true;
-            }
                 
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
@@ -623,7 +622,6 @@ namespace TheOtherRoles
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
-            if (player == Bait.bait) Bait.clearAndReload();
             if (player == Medium.medium) Medium.clearAndReload();
 
             // Impostor roles
@@ -658,6 +656,13 @@ namespace TheOtherRoles
             if (player == Vulture.vulture) Vulture.clearAndReload();
             if (player == Lawyer.lawyer) Lawyer.clearAndReload();
             if (player == Pursuer.pursuer) Pursuer.clearAndReload();
+
+            // Modifier
+            if (player == Bait.bait.Any(x => x.PlayerId == player.PlayerId)) Bait.bait.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (player == Bloody.bloody.Any(x => x.PlayerId == player.PlayerId)) Bloody.bloody.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (player == AntiTeleport.antiTeleport.Any(x => x.PlayerId == player.PlayerId)) AntiTeleport.antiTeleport.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (player == Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
@@ -858,13 +863,13 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
-                    byte flag = reader.ReadByte();
-                    RPCProcedure.setRole(roleId, playerId, flag);
+                    RPCProcedure.setRole(roleId, playerId);
                     break;
                 case (byte)CustomRPC.SetModifier:
                     byte modifierId = reader.ReadByte();
                     byte pId = reader.ReadByte();
-                    RPCProcedure.setModifier(modifierId, pId);
+                    byte flag = reader.ReadByte();
+                    RPCProcedure.setModifier(modifierId, pId, flag);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();

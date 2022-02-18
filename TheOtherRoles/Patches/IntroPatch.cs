@@ -96,26 +96,32 @@ namespace TheOtherRoles.Patches {
                 if (!CustomOptionHolder.activateRoles.getBool()) return; // Don't override the intro of the vanilla roles
 
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
-                RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
+                RoleInfo roleInfo = infos.Where(info => !info.isModifier).FirstOrDefault();
+                RoleInfo modifierInfo = infos.Where(info => info.isModifier).FirstOrDefault();
 
                 if (roleInfo != null) {
                     __instance.RoleText.text = roleInfo.name;
                     __instance.RoleText.color = roleInfo.color;
                     __instance.RoleBlurbText.text = roleInfo.introDescription;
                     __instance.RoleBlurbText.color = roleInfo.color;
+                    if (roleInfo.roleId)
                 }
 
-                if (infos.Any(info => info.roleId == RoleId.Lover)) {
-                    PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                    __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
-                }
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
-                    if (infos.Any(info => info.roleId == RoleId.Sheriff)) 
+                    if (infos.Any(info => info.roleId == RoleId.Sheriff))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Deputy is {Deputy.deputy?.Data?.PlayerName ?? ""}");
                     else if (infos.Any(info => info.roleId == RoleId.Deputy))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Sheriff is {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
                 }
 
+                if (modifierInfo != null) {
+                    if (modifierInfo.roleId != RoleId.Lover)
+                        __instance.RoleBlurbText.text += Helpers.cs(modifierInfo.color, $"\n{modifierInfo.introDescription}");
+                    else {
+                        PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                        __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                    }
+                }
             }
         }
 
