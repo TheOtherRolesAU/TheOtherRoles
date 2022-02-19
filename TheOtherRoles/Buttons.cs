@@ -44,6 +44,7 @@ namespace TheOtherRoles
         public static CustomButton mediumButton;
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
+        public static CustomButton phaserCurseButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -86,7 +87,8 @@ namespace TheOtherRoles
             mediumButton.MaxTimer = Medium.cooldown;
             pursuerButton.MaxTimer = Pursuer.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
-            witchSpellButton.MaxTimer = Witch.cooldown; 
+            witchSpellButton.MaxTimer = Witch.cooldown;
+            phaserCurseButton.MaxTimer = Phaser.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1297,6 +1299,44 @@ namespace TheOtherRoles
                     }
                     Witch.spellCastingTarget = null;
                 }
+            );
+
+            // Phaser curse
+            phaserCurseButton = new CustomButton(
+                () => {
+                    if (Phaser.curseVictim == null)
+                    {
+                        // Apply Curse
+                        Phaser.curseVictim = Phaser.currentTarget;
+                        phaserCurseButton.Sprite = Phaser.getCurseKillButtonSprite();
+                        phaserCurseButton.Timer = 1f;
+                    }
+                    else if (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)
+                    {
+                        PlayerControl.LocalPlayer.transform.position = Phaser.currentTarget.transform.position;
+                        MurderAttemptResult murder = Helpers.checkMuderAttemptAndKill(Phaser.phaser, Phaser.currentTarget, showAnimation: true);
+                        if (murder == MurderAttemptResult.SuppressKill) return;
+
+
+                        Phaser.curseVictim = null;
+                        Phaser.curseVictimTarget = null;
+                        phaserCurseButton.Sprite = Phaser.getCurseButtonSprite();
+                        Phaser.phaser.killTimer = phaserCurseButton.Timer = phaserCurseButton.MaxTimer;
+
+                    }
+                },
+                () => { return Phaser.phaser != null && Phaser.phaser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return ((Phaser.curseVictim == null && Phaser.currentTarget != null) || (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)) && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    phaserCurseButton.Timer = phaserCurseButton.MaxTimer;
+                    phaserCurseButton.Sprite = Phaser.getCurseButtonSprite();
+                    Phaser.curseVictim = null;
+                    Phaser.curseVictimTarget = null;
+                },
+                Phaser.getCurseButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

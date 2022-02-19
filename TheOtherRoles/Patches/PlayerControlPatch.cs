@@ -307,7 +307,7 @@ namespace TheOtherRoles.Patches {
 
             HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
-
+        
         static void warlockSetTarget() {
             if (Warlock.warlock == null || Warlock.warlock != PlayerControl.LocalPlayer) return;
             if (Warlock.curseVictim != null && (Warlock.curseVictim.Data.Disconnected || Warlock.curseVictim.Data.IsDead)) {
@@ -321,6 +321,26 @@ namespace TheOtherRoles.Patches {
             else {
                 Warlock.curseVictimTarget = setTarget(targetingPlayer: Warlock.curseVictim);
                 setPlayerOutline(Warlock.curseVictimTarget, Warlock.color);
+            }
+        }
+
+        static void phaserSetTarget()
+        {
+            if (Phaser.phaser == null || Phaser.phaser != PlayerControl.LocalPlayer) return;
+            if (Phaser.curseVictim != null && (Phaser.curseVictim.Data.Disconnected || Phaser.curseVictim.Data.IsDead))
+            {
+                // If the cursed victim is disconnected or dead reset the curse so a new curse can be applied
+                Phaser.resetCurse();
+            }
+            if (Phaser.curseVictim == null)
+            {
+                Phaser.currentTarget = setTarget();
+                setPlayerOutline(Phaser.currentTarget, Phaser.color);
+            }
+            else
+            {
+                Phaser.curseVictimTarget = setTarget(targetingPlayer: Phaser.curseVictim);
+                setPlayerOutline(Phaser.curseVictimTarget, Phaser.color);
             }
         }
 
@@ -832,6 +852,8 @@ namespace TheOtherRoles.Patches {
                 // Witch
                 witchSetTarget();
                 hackerUpdate();
+                // Phaser
+                phaserSetTarget();
             } 
         }
     }
@@ -964,6 +986,15 @@ namespace TheOtherRoles.Patches {
             if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
                 if(Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
                     HudManagerStartPatch.warlockCurseButton.Timer = Warlock.warlock.killTimer;
+                }
+            }
+
+            // Phaser Button Sync
+            if (Phaser.phaser != null && PlayerControl.LocalPlayer == Phaser.phaser && __instance == Phaser.phaser && HudManagerStartPatch.phaserCurseButton != null)
+            {
+                if (Phaser.phaser.killTimer > HudManagerStartPatch.phaserCurseButton.Timer)
+                {
+                    HudManagerStartPatch.phaserCurseButton.Timer = Phaser.phaser.killTimer;
                 }
             }
 
