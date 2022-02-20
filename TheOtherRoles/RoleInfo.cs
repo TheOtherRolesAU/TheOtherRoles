@@ -67,7 +67,9 @@ namespace TheOtherRoles
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
-        public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch);
+        public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch); 
+        public static RoleInfo phaser = new RoleInfo("Phaser", Phaser.color, "Curse other players and kill everyone", "Curse and kill everyone", RoleId.Phaser);
+
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
             impostor,
@@ -83,6 +85,7 @@ namespace TheOtherRoles
             warlock,
             bountyHunter,
             witch,
+            phaser,
             niceMini,
             evilMini,
             goodGuesser,
@@ -138,6 +141,7 @@ namespace TheOtherRoles
             if (p == Cleaner.cleaner) infos.Add(cleaner);
             if (p == Warlock.warlock) infos.Add(warlock);
             if (p == Witch.witch) infos.Add(witch);
+            if (p == Phaser.phaser) infos.Add(phaser);
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
             if (p == Medic.medic) infos.Add(medic);

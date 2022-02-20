@@ -55,6 +55,7 @@ namespace TheOtherRoles
         Lawyer,
         Pursuer,
         Witch,
+        Phaser,
         Crewmate,
         Impostor
     }
@@ -277,6 +278,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Witch:
                         Witch.witch = player;
+                        break;
+                    case RoleId.Phaser:
+                        Phaser.phaser = player;
                         break;
                     }
                 }
@@ -616,6 +620,7 @@ namespace TheOtherRoles
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
+            if (player == Phaser.phaser) Phaser.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();

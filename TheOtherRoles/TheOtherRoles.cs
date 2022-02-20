@@ -60,6 +60,7 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
+            Phaser.clearAndReload();
         }
 
         public static class Jester {
@@ -1416,4 +1417,54 @@ namespace TheOtherRoles
             witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
+
+    public static class Phaser
+    {
+        public static PlayerControl phaser;
+        public static Color color = Palette.ImpostorRed;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl curseVictim;
+        public static PlayerControl curseVictimTarget;
+
+        public static float cooldown = 30f;
+        public static float rootTime = 5f;
+
+        private static Sprite curseButtonSprite;
+        private static Sprite curseKillButtonSprite;
+
+        public static Sprite getCurseButtonSprite()
+        {
+            if (curseButtonSprite) return curseButtonSprite;
+            curseButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PhaseButton.png", 115f);
+            return curseButtonSprite;
+        }
+
+        public static Sprite getCurseKillButtonSprite()
+        {
+            if (curseKillButtonSprite) return curseKillButtonSprite;
+            curseKillButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PhaseKillButton.png", 115f);
+            return curseKillButtonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            phaser = null;
+            currentTarget = null;
+            curseVictim = null;
+            curseVictimTarget = null;
+            cooldown = CustomOptionHolder.phaserCooldown.getFloat();
+        }
+
+        public static void resetCurse()
+        {
+            HudManagerStartPatch.phaserCurseButton.Timer = HudManagerStartPatch.phaserCurseButton.MaxTimer;
+            HudManagerStartPatch.phaserCurseButton.Sprite = Phaser.getCurseButtonSprite();
+            HudManagerStartPatch.phaserCurseButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+            currentTarget = null;
+            curseVictim = null;
+            curseVictimTarget = null;
+        }
+    }
+
 }
