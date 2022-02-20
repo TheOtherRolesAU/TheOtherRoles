@@ -53,6 +53,7 @@ namespace TheOtherRoles {
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
         public static CustomOption loversEnableChat;
+        public static CustomOption loversAliveCount;
 
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
@@ -331,6 +332,7 @@ namespace TheOtherRoles {
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
             loversEnableChat = CustomOption.Create(54, "Enable Lover Chat", true, loversSpawnRate);
+            loversAliveCount = CustomOption.Create(312, "Total Alive To Win", 3f, 2f, 3f, 1f, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);

@@ -449,7 +449,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
+            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= Lovers.count) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false);
                 return true;
@@ -458,7 +458,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2) && statistics.SheriffAlive == 0) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                 return true;
@@ -467,7 +467,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2) && statistics.SheriffAlive == 0) {
                 __instance.enabled = false;
                 GameOverReason endReason;
                 switch (TempData.LastDeathReason) {
@@ -507,6 +507,7 @@ namespace TheOtherRoles.Patches {
     internal class PlayerStatistics {
         public int TeamImpostorsAlive {get;set;}
         public int TeamJackalAlive {get;set;}
+        public int SheriffAlive {get;set;}
         public int TeamLoversAlive {get;set;}
         public int TotalAlive {get;set;}
         public bool TeamImpostorHasAliveLover {get;set;}
@@ -523,6 +524,7 @@ namespace TheOtherRoles.Patches {
         private void GetPlayerCounts() {
             int numJackalAlive = 0;
             int numImpostorsAlive = 0;
+            int numSheriffAlive = 0;
             int numLoversAlive = 0;
             int numTotalAlive = 0;
             bool impLover = false;
@@ -552,12 +554,16 @@ namespace TheOtherRoles.Patches {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
+                        if (Sheriff.sheriff != null && Sheriff.sheriff.PlayerId == playerInfo.PlayerId) {
+                            numSheriffAlive++;
+                        }
                     }
                 }
             }
 
             TeamJackalAlive = numJackalAlive;
             TeamImpostorsAlive = numImpostorsAlive;
+            SheriffAlive = numSheriffAlive;
             TeamLoversAlive = numLoversAlive;
             TotalAlive = numTotalAlive;
             TeamImpostorHasAliveLover = impLover;

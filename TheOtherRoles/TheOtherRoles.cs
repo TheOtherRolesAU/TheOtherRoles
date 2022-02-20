@@ -407,6 +407,7 @@ namespace TheOtherRoles
     }
 
     public static class Lovers {
+        public static float count = 3f;
         public static PlayerControl lover1;
         public static PlayerControl lover2;
         public static Color color = new Color32(232, 57, 185, byte.MaxValue);
@@ -437,6 +438,7 @@ namespace TheOtherRoles
         }
 
         public static void clearAndReload() {
+            count = CustomOptionHolder.loversAliveCount.getFloat();
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
