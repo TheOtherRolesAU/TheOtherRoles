@@ -365,6 +365,8 @@ namespace TheOtherRoles
         public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
         public static bool shiftModifiers = false;
+        public static bool shiftSelf = false;
+        public static bool diesBeforeMeeting = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -378,6 +380,8 @@ namespace TheOtherRoles
             currentTarget = null;
             futureShift = null;
             shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
+            shiftSelf = CustomOptionHolder.shifterShiftsModifiers.getBool();
+            diesBeforeMeeting = CustomOptionHolder.shifterShiftsModifiers.getBool();
         }
     }
 

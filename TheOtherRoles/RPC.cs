@@ -480,15 +480,18 @@ namespace TheOtherRoles
                 Guesser.niceGuesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player) {
                 Bait.bait = oldShifter;
-                if (Bait.bait.Data.IsDead) Bait.reported = true;
-            }
-                
+                if (Bait.bait.Data.IsDead) Bait.reported = true; }
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
+            if (Phaser.phaser != null && Phaser.phaser == player)
+                Phaser.phaser = oldShifter;
 
             // Set cooldowns to max for both players
-            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
+            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player) {
                 CustomButton.ResetAllCooldowns();
+                if (CustomOptionHolder.shifterShiftsSelf.getBool())
+                    Shifter.shifter = player;
+            }
         }
 
         public static void swapperSwap(byte playerId1, byte playerId2) {

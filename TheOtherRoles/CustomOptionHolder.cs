@@ -102,6 +102,8 @@ namespace TheOtherRoles {
 
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
+        public static CustomOption shifterShiftsSelf;
+        public static CustomOption shifterDiesBeforeMeeting;
 
         public static CustomOption mayorSpawnRate;
 
@@ -381,6 +383,8 @@ namespace TheOtherRoles {
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
+            shifterShiftsSelf = CustomOption.Create(9995, "Shifter Shifts Self", false, shifterSpawnRate);
+            shifterDiesBeforeMeeting = CustomOption.Create(9994, "Shifter Dies Before Meeting", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
 
