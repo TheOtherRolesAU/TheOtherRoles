@@ -22,9 +22,10 @@ namespace TheOtherRoles
     {
         public const string Id = "me.eisbison.theotherroles";
 
-        public const string VersionString = "3.4.3";
+        public const string VersionString = "3.4.3.1";
 
         public static System.Version Version = System.Version.Parse(VersionString);
+
         internal static BepInEx.Logging.ManualLogSource Logger;
 
         public Harmony Harmony { get; } = new Harmony(Id);
