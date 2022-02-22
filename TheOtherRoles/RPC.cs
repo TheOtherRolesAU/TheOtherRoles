@@ -85,6 +85,7 @@ namespace TheOtherRoles
         TimeMasterShield,
         TimeMasterRewindTime,
         ShifterShift,
+        ShifterKilledDueBadShift,
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
@@ -416,15 +417,15 @@ namespace TheOtherRoles
             PlayerControl oldShifter = Shifter.shifter;
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null || oldShifter == null) return;
-
             Shifter.futureShift = null;
-            Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer) {
+            if (Shifter.checkTargetIsBad(player)) {
                 oldShifter.Exiled();
                 return;
             }
+
+            Shifter.clearAndReload();
 
             if (Shifter.shiftModifiers) {
                 // Switch shield
@@ -489,8 +490,14 @@ namespace TheOtherRoles
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player) {
                 CustomButton.ResetAllCooldowns();
-                if (CustomOptionHolder.shifterShiftsSelf.getBool())
-                    Shifter.shifter = player;
+            }
+            if (CustomOptionHolder.shifterShiftsSelf.getBool())
+                Shifter.shifter = player;
+        }
+        public static void shifterKilledDueBadShift()
+        {
+            if (Shifter.shifter != null) {
+                Shifter.shiftedBadRole = true;
             }
         }
 
@@ -911,6 +918,14 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.ShifterKilledDueBadShift:
+                    RPCProcedure.shifterKilledDueBadShift();
+                    break;
+                case (byte)CustomRPC.VampireSetBitten:
+                    byte bittenId = reader.ReadByte();
+                    byte reset = reader.ReadByte();
+                    RPCProcedure.vampireSetBitten(bittenId, reset);
+                    break;
                 case (byte)CustomRPC.SwapperSwap:
                     byte playerId1 = reader.ReadByte();
                     byte playerId2 = reader.ReadByte();
@@ -921,11 +936,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
-                    break;
-                case (byte)CustomRPC.VampireSetBitten:
-                    byte bittenId = reader.ReadByte();
-                    byte reset = reader.ReadByte();
-                    RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.PlaceGarlic:
                     RPCProcedure.placeGarlic(reader.ReadBytesAndSize());

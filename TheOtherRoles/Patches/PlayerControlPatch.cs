@@ -874,6 +874,7 @@ namespace TheOtherRoles.Patches {
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             Helpers.handleVampireBiteOnBodyReport();
+            Helpers.handleShiftOnBodyReport();
         }
     }
 

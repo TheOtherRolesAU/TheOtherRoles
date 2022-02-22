@@ -367,6 +367,7 @@ namespace TheOtherRoles
         public static bool shiftModifiers = false;
         public static bool shiftSelf = false;
         public static bool diesBeforeMeeting = false;
+        public static bool shiftedBadRole = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -375,14 +376,28 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        private static Sprite badShiftOverlaySprite;
+        public static Sprite getBadShiftOverlaySprite()
+        {
+            if (badShiftOverlaySprite) return badShiftOverlaySprite;
+            badShiftOverlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BadShiftMeeting.png", 225f);
+            return badShiftOverlaySprite;
+        }
+
         public static void clearAndReload() {
             shifter = null;
             currentTarget = null;
             futureShift = null;
             shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
-            shiftSelf = CustomOptionHolder.shifterShiftsModifiers.getBool();
-            diesBeforeMeeting = CustomOptionHolder.shifterShiftsModifiers.getBool();
+            shiftSelf = CustomOptionHolder.shifterShiftsSelf.getBool();
+            diesBeforeMeeting = CustomOptionHolder.shifterDiesBeforeMeeting.getBool();
+            shiftedBadRole = false;
         }
+        public static bool checkTargetIsBad(PlayerControl target)
+        {
+            return target.Data.Role.IsImpostor || target == Jackal.jackal || target == Sidekick.sidekick || Jackal.formerJackals.Contains(target) || target == TheOtherRoles.Jester.jester || target == Arsonist.arsonist || target == Vulture.vulture || target == Lawyer.lawyer;
+        }
+
     }
 
     public static class Swapper {

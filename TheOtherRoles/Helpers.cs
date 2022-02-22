@@ -93,6 +93,16 @@ namespace TheOtherRoles {
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
         }
+        public static void handleShiftOnBodyReport()
+        {
+            // Check if Shifter has shifted bad role and option is on. If yes, kill him.
+            if (Shifter.shifter != null && Shifter.diesBeforeMeeting && Shifter.futureShift != null && Shifter.checkTargetIsBad(Shifter.futureShift)) {
+                Helpers.checkMuderAttemptAndKill(Shifter.shifter, Shifter.shifter, true, false);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterKilledDueBadShift, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.shifterKilledDueBadShift();
+            }
+        }
 
         public static void refreshRoleDescription(PlayerControl player) {
             if (player == null) return;
@@ -277,6 +287,11 @@ namespace TheOtherRoles {
             if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
             if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
             if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
+
+            // If Shifter tries to kill himself, just do it. Only happens if shifter has targeted a bad / neutral role or is lover.
+            if (Shifter.shifter != null && Shifter.shifter == killer && Shifter.shifter == target) {
+                return MurderAttemptResult.PerformKill;
+            }
 
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
