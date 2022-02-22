@@ -37,6 +37,7 @@ namespace TheOtherRoles.Patches {
         {
             private static GameObject modStamp;
             static void Prefix(PingTracker __instance) {
+                
                 if (modStamp == null) {
                     modStamp = new GameObject("ModStamp");
                     var rend = modStamp.AddComponent<SpriteRenderer>();
@@ -73,7 +74,7 @@ namespace TheOtherRoles.Patches {
                 if (amongUsLogo != null) {
                     amongUsLogo.transform.localScale *= 0.6f;
                     amongUsLogo.transform.position += Vector3.up * 0.25f;
-                }
+                }       
 
                 var torLogo = new GameObject("bannerLogo_TOR");
                 torLogo.transform.position = Vector3.up;
