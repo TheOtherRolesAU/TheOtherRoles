@@ -406,6 +406,22 @@ namespace TheOtherRoles.Patches {
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
+
+            // Add Shifter overlay for bad shift
+            if (Shifter.shifter != null && Shifter.shiftedBadRole)
+            {
+                foreach (PlayerVoteArea pva in __instance.playerStates)
+                {
+                    if (Shifter.shifter.PlayerId == pva.TargetPlayerId)
+                    {
+                        SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                        rend.transform.SetParent(pva.transform);
+                        rend.gameObject.layer = pva.Megaphone.gameObject.layer;
+                        rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
+                        rend.sprite = Shifter.getBadShiftOverlaySprite();
+                    }
+                }
+            }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
