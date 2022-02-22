@@ -43,7 +43,7 @@ namespace TheOtherRoles.Patches {
                     rend.sprite = TheOtherRolesPlugin.GetModStamp();
                     rend.color = new Color(1, 1, 1, 0.5f);
                     modStamp.transform.parent = __instance.transform.parent;
-                    modStamp.transform.localScale *= 1.0f;
+                    modStamp.transform.localScale *= 0.6f;
                 }
                 float offset = (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) ? 0.75f : 0f;
                 modStamp.transform.position = HudManager.Instance.MapButton.transform.position + Vector3.down * offset;
