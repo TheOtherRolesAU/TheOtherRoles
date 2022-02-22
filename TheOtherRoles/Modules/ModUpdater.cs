@@ -44,7 +44,7 @@ namespace TheOtherRoles.Modules {
             
             var text = button.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
             __instance.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => {
-                text.SetText("Update\nThe Other Roles");
+                text.SetText("Update\nThe Epic Roles");
             })));
 
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
@@ -88,7 +88,7 @@ namespace TheOtherRoles.Modules {
         }
 
         public static void ExecuteUpdate() {
-            string info = "Updating The Other Roles\nPlease wait...";
+            string info = "Updating The Epic Roles\nPlease wait...";
             ModUpdater.InfoPopup.Show(info); // Show originally
             if (updateTask == null) {
                 if (updateURI != null) {
@@ -117,7 +117,7 @@ namespace TheOtherRoles.Modules {
             try {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-                var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/Eisbison/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
+                var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/LaicosVK/TheEpicRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
                 // var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/EoF-1141/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK || response.Content == null) {
                     System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
@@ -138,10 +138,7 @@ namespace TheOtherRoles.Modules {
                 int diff = TheOtherRolesPlugin.Version.CompareTo(ver);
                 if (diff < 0) { // Update required
                     hasUpdate = true;
-                    announcement = $@"<size=150%>A new <color=#FC0303>THE OTHER ROLES</color>
-update to v{ver} is available</size>
-
-{announcement}";
+                    announcement = $@"<size=150%>A new <color=#FC0303>THE EPIC ROLES</color> update to v{ver} is available</size> {announcement}";
 
                     JToken assets = data["assets"];
                     if (!assets.HasValues)
@@ -191,7 +188,7 @@ update to v{ver} is available</size>
                         responseStream.CopyTo(fileStream); 
                     }
                 }
-                showPopup("The Other Roles\nupdated successfully\nPlease restart the game.");
+                showPopup("The Epic Roles\nupdated successfully\nPlease restart the game.");
                 return true;
             } catch (System.Exception ex) {
                 TheOtherRolesPlugin.Instance.Log.LogError(ex.ToString());

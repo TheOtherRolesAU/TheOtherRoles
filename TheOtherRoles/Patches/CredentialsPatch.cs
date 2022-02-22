@@ -9,17 +9,11 @@ using UnityEngine;
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
-        public static string fullCredentials = 
-$@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}
-<size=60%>Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>EndOfFile</color>
-<color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>Mallöris</color>
-Button design by <color=#FCCE03FF>Bavari</color></size>";
+        public static string fullCredentials = $@"<size=130%><color=#ff351f>TheEpicRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()} <size=60%>Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color></size>";
 
-    public static string mainMenuCredentials = 
-$@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>EndOfFile</color> & <color=#FCCE03FF>Mallöris</color>
-Design by <color=#FCCE03FF>Bavari</color>";
+        public static string mainMenuCredentials = $@"Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color>";
 
-        public static string contributorsCredentials = "<size=60%>GitHub Contributors: Alex2911, amsyarasyiq, gendelo3, MaximeGillot</size>";
+        public static string torCredentials = $@"<size=60%><color=#FCCE03FF>Original Mod by github.com/Eisbison/TheOtherRoles</color></size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
@@ -30,7 +24,7 @@ Design by <color=#FCCE03FF>Bavari</color>";
 
                 var credentials = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
                 credentials.transform.position = new Vector3(0, 0, 0);
-                credentials.SetText($"v{TheOtherRolesPlugin.Version.ToString()}\n<size=30f%>\n</size>{mainMenuCredentials}\n<size=30%>\n</size>{contributorsCredentials}");
+                credentials.SetText($"v{TheOtherRolesPlugin.Version.ToString()}\n<size=30f%>\n</size>{mainMenuCredentials}\n<size=30%>\n</size>{torCredentials}");
                 credentials.alignment = TMPro.TextAlignmentOptions.Center;
                 credentials.fontSize *= 0.75f;
 
@@ -89,3 +83,5 @@ Design by <color=#FCCE03FF>Bavari</color>";
         }
     }
 }
+
+

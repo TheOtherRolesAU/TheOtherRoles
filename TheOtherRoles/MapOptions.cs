@@ -17,6 +17,7 @@ namespace TheOtherRoles{
         public static bool showRoleSummary = true;
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
+        public static bool toggleCursor = true;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -40,6 +41,7 @@ public static void clearAndReloadMapOptions() {
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
+            toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value;
         }
     }
 }
