@@ -761,13 +761,17 @@ namespace TheOtherRoles
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
             PlayerControl client = Lawyer.target;
+
+            // Don't promote to pursuer if target is jester and jester was exiled
+            if (client != null && client == Jester.jester && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Jester.jester.PlayerId) return;
+
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
 
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
-                    Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
-                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                    if (playerInfo != null) playerInfo.text = "";
+                Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
+                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerInfo != null) playerInfo.text = "";
             }
         }
 
