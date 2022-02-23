@@ -625,6 +625,7 @@ namespace TheOtherRoles.Patches {
                 if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
 
                     Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                    Helpers.handleShiftOnBodyReport(); // Same for Shifter
                     RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);

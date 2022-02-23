@@ -417,7 +417,7 @@ namespace TheOtherRoles.Patches {
                         SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
-                        rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
+                        rend.transform.localPosition = new Vector3(-0.55f, -0.03f, -1f);
                         rend.sprite = Shifter.getBadShiftOverlaySprite();
                     }
                 }
