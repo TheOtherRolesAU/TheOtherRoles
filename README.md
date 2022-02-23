@@ -6,13 +6,13 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 [![Discord](./Images/TOR_server.png)](https://discord.gg/WjegsxEuAD)
 
-# The Epic Roles
+# Information
 **The Epic Roles** is a remodded version of the mod [The Other Roles](https://github.com/Eisbison/TheOtherRoles) for [Among Us](https://store.steampowered.com/app/945360/Among_Us).
 
 Our goal is to make this mod more epic and to add a bunch of new features and roles to it.
 
 # Releases
-| Among Us - Version| Mod Version | Link |
+| Among Us Version| Mod Version | Link |
 |----------|-------------|-----------------|
 | 2021.12.15s| v3.4.3.1| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v3.4.3.1/TheEpicRoles.zip)
 
