@@ -68,6 +68,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
+        public static CustomOption jesterCanBeLawyerClient;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -349,6 +350,7 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, "Jester Has Impostor Vision", false, jesterSpawnRate);
+            jesterCanBeLawyerClient = CustomOption.Create(8999, "Jester Can Be Client Of Lawyer", false, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);

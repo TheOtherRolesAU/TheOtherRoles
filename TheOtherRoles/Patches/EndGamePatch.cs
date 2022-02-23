@@ -189,22 +189,25 @@ namespace TheOtherRoles.Patches {
             }
 
             // Possible Additional winner: Lawyer
-            if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
-                WinningPlayerData winningClient = null;
-                foreach (WinningPlayerData winner in TempData.winners) {
-                    if (winner.PlayerName == Lawyer.target.Data.PlayerName)
-                        winningClient = winner;
-                }
-                if (winningClient != null) { // The Lawyer wins if the client is winning (and alive, but if he wasn't the Lawyer shouldn't exist anymore)
-                    if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
-                        TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
-                    if (!Lawyer.lawyer.Data.IsDead) { // The Lawyer steals the clients win
-                        TempData.winners.Remove(winningClient);
-                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
-                    } else { // The Lawyer wins together with the client
-                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+            if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null) {
+                if (!Lawyer.target.Data.IsDead || (Jester.jester != null && Lawyer.target == Jester.jester)) {
+                    WinningPlayerData winningClient = null;
+                    foreach (WinningPlayerData winner in TempData.winners) {
+                        if (winner.PlayerName == Lawyer.target.Data.PlayerName)
+                            winningClient = winner;
                     }
-                } 
+                    if (winningClient != null) { // The Lawyer wins if the client is winning (and alive, but if he wasn't the Lawyer shouldn't exist anymore)
+                        if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
+                            TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
+                        if (!Lawyer.lawyer.Data.IsDead) { // The Lawyer steals the clients win
+                            TempData.winners.Remove(winningClient);
+                            AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
+                        }
+                        else { // The Lawyer wins together with the client
+                            AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+                        }
+                    }
+                }
             }
 
             // Possible Additional winner: Pursuer
