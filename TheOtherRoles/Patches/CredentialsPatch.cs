@@ -9,7 +9,8 @@ using UnityEngine;
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
-        public static string fullCredentials = $@"<size=130%><color=#ff351f>TheEpicRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()} <size=60%>Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color></size>";
+        public static string fullCredentials =  $@"<size=130%><color=#00ffd9>TheEpicRoles</color></size> <size=50%>v{TheOtherRolesPlugin.Version.ToString()}
+                                                Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color></size>";
 
         public static string mainMenuCredentials = $@"Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color>";
 
@@ -53,7 +54,7 @@ namespace TheOtherRoles.Patches {
             static void Postfix(PingTracker __instance){
                 __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
-                    __instance.text.text = $"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}\n" + __instance.text.text;
+                    __instance.text.text = $"<size=130%><color=#ff351f>TheEpicRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}\n" + __instance.text.text;
                     if (PlayerControl.LocalPlayer.Data.IsDead || (!(PlayerControl.LocalPlayer == null) && (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2))) {
                         __instance.transform.localPosition = new Vector3(3.45f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                     } else {
