@@ -9,7 +9,7 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 # Information
 **The Epic Roles** is a remodded version of the mod [The Other Roles](https://github.com/Eisbison/TheOtherRoles) for [Among Us](https://store.steampowered.com/app/945360/Among_Us).
 
-Our goal is to make this mod more epic and to add a bunch of new features and roles to it.
+Our goal is to make this mod more epic and to add a bunch of new features, roles and quality of life features to it.
 
 # Releases
 | Among Us Version| Mod Version | Link |
@@ -22,6 +22,14 @@ Our goal is to make this mod more epic and to add a bunch of new features and ro
   
 **Version 3.4.3.1**
 - First Release
+- Phaser Role
+- Sheriff stops impostor win
+- Trickster box count option
+- Lover win count option
+- Crewmate roles option: Auto
+- Replaced some texts and graphics
+- Evil mini guessable option
+- Shifter passes on his role option
 </details>
 
 # Installation
