@@ -111,7 +111,7 @@ namespace TheOtherRoles {
         public static void handleShiftOnBodyReport()
         {
             // Check if Shifter has shifted bad role and option is on. If yes, kill him.
-            if (Shifter.shifter != null && Shifter.diesBeforeMeeting && Shifter.futureShift != null && Shifter.checkTargetIsBad(Shifter.futureShift)) {
+            if (Shifter.shifter != null && Shifter.diesBeforeMeeting && ! Shifter.shifter.Data.IsDead && Shifter.futureShift != null && Shifter.checkTargetIsBad(Shifter.futureShift)) {
                 Helpers.checkMuderAttemptAndKill(Shifter.shifter, Shifter.shifter, true, false);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterKilledDueBadShift, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
