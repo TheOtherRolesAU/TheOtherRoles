@@ -93,7 +93,7 @@ namespace TheOtherRoles
 
             if (ToggleCursor.Value) {
                 Helpers.enableCursor(true);
-            }                    
+            }
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;
