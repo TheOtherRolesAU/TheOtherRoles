@@ -19,6 +19,7 @@ Our goal is to make this mod more epic and to add a bunch of new features and ro
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
 **Version 3.4.3.1**
 - First Release
 </details>
@@ -32,6 +33,7 @@ Our goal is to make this mod more epic and to add a bunch of new features and ro
 ## Windows Manual Installation
 <details>
   <summary>Click to show Windows Manual Installation</summary>  
+  
 1. Download and unzip the newest [release](https://github.com/LaicosVK/TheEpicRoles/releases/latest)
 2. Find the folder of your game, for Steam players you can right click in Steam, on the game, a menu will appear proposing you to go to the folders.
 3. Make a copy of your game, it's not obligatory but advised, put it where you want.
@@ -42,6 +44,7 @@ Our goal is to make this mod more epic and to add a bunch of new features and ro
 ## Linux Manual Installation
 <details>
   <summary>Click to show Linux Manual Installation</summary>  
+  
 1. Install Among Us via Steam
 2. Download newest [release](https://github.com/LaicosVK/TheEpicRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable `winhttp.dll` via the proton winecfg (https://docs.bepinex.dev/articles/advanced/steam_interop.html#open-winecfg-for-the-target-game)
