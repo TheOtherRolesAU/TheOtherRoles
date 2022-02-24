@@ -21,6 +21,7 @@ namespace TheOtherRoles.Patches
             new SelectionBehaviour("Show Role Summary", () => MapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value, TheOtherRolesPlugin.ShowRoleSummary.Value),
             new SelectionBehaviour("Show Lighter / Darker", () => MapOptions.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
             new SelectionBehaviour("Better Cursor", () => MapOptions.toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value = !TheOtherRolesPlugin.ToggleCursor.Value, TheOtherRolesPlugin.ToggleCursor.Value),
+            new SelectionBehaviour("Remove Shake", () => MapOptions.toggleShake = TheOtherRolesPlugin.ToggleShake.Value = !TheOtherRolesPlugin.ToggleShake.Value, TheOtherRolesPlugin.ToggleShake.Value),
         };
         
         private static GameObject popUp;
