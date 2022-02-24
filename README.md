@@ -30,18 +30,31 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+<details>
+  <summary>3.4.3.3</summary>
+  - 
+</details>
   
-**Version 3.4.3.1**
-- First Release
-- Phaser Role
-- Sheriff stops impostor win
-- Trickster box count option
-- Lover win count option
-- Crewmate roles option: Auto
-- Replaced some texts and graphics
-- Evil mini guessable option
-- Shifter passes on his role option
-- New colors
+<details>
+  <summary>3.4.3.2</summary>
+  - Phaser Role<br/>
+  - Sheriff stops impostor win<br/>
+  - Trickster box count option<br/>
+  - Lover win count option<br/>
+  - Crewmate roles option: Auto<br/>
+  - Replaced some texts and graphics<br/>
+  - Evil mini guessable option<br/>
+  - Shifter passes on his role option<br/>
+  - New colors<br/>
+  - Jester can be client<br/>
+</details>
+  
+<details>
+  <summary>3.4.3.1</summary>
+  - First Release
+</details>
+  
 </details>
 
 # Installation
