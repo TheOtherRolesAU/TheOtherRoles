@@ -1,5 +1,14 @@
 ![eisbison banner](./Images/TOR_logo.png)
-<p align="center"><a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/release/laicosvk/theepicroles"></a></p>
+<p align="center">
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/release/laicosvk/theepicroles"></a> <!--Releases-->
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/assets-dl/laicosvk/theepicroles"></a> <!--Downloads-->
+</p>
+  
+<p align="center">
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net//github/releases/laicosvk/theepicroles"></a> <!--Releases-->
+  <a href="https://github.com/LaicosVK/TheEpicRoles/stargazers"><img src="https://badgen.net/github/stars/laicosvk/theepicroles"></a> <!--Stars-->
+</p>
+
 
 <p align="center">
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
