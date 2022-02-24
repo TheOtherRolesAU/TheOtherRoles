@@ -13,12 +13,12 @@ namespace TheOtherRoles.Patches {
             private static float gameShakeAmount;
             static void Prefix(FollowerCamera __instance) {
                 // Set values depending on mod option
-                if (TheOtherRolesPlugin.ToggleShake.Value) {
-                    lobbyShakeAmount = gameShakeAmount = 0;       
-                }
-                else {
+                if (TheOtherRolesPlugin.ToggleScreenShake.Value) {
                     lobbyShakeAmount = 0.03f;
                     gameShakeAmount = 0.02f;
+                }
+                else {
+                    lobbyShakeAmount = gameShakeAmount = 0;
                 }
                 // Sets __instance.shakeAmount value depending on Gamemode / Gamestate
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started || AmongUsClient.Instance.GameMode == GameModes.FreePlay)

@@ -18,7 +18,7 @@ namespace TheOtherRoles{
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
         public static bool toggleCursor = true;
-        public static bool toggleShake = true;
+        public static bool toggleScreenShake = false;
 
         // Updating values
         public static int meetingsCount = 0;
@@ -43,7 +43,7 @@ public static void clearAndReloadMapOptions() {
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
             toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value;
-            toggleShake = TheOtherRolesPlugin.ToggleShake.Value;
+            toggleScreenShake = TheOtherRolesPlugin.ToggleScreenShake.Value;
         }
     }
 }
