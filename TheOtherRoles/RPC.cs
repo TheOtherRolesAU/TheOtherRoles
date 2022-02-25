@@ -622,6 +622,7 @@ namespace TheOtherRoles
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
+            if (player == Ninja.ninja) Ninja.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
