@@ -174,7 +174,7 @@ namespace TheOtherRoles.Patches
                 passiveButton.OnClick.AddListener((Action) (() =>
                 {
                     if(info.Title == "Better Cursor") {
-                        Helpers.enableCursor(false);                  
+                        Helpers.enableCursor("toggle");                  
                     }
                     button.onState = info.OnClick();
                     button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;

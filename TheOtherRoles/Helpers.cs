@@ -20,8 +20,8 @@ namespace TheOtherRoles {
     }
     public static class Helpers {
 
-        public static void enableCursor(bool initalSetCursor) {
-            if (initalSetCursor) {
+        public static void enableCursor(string mode) {
+            if (mode == "init") {
                 Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
                 return;

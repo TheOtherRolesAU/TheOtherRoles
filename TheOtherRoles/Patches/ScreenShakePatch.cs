@@ -1,11 +1,14 @@
 ﻿using HarmonyLib;
 
+/*
+ * This patch removes the screen shake effect from the lobby
+ * and from the game. 
+ */
+
 namespace TheOtherRoles.Patches {
     [Harmony]
-    public class ScreenShakePatch {
-        
-        // Patches FollowerCamera.Update()
-        // Sets original or zero values for 
+    public class ScreenShakePatch {   
+
         [HarmonyPatch(typeof(FollowerCamera), nameof(FollowerCamera.Update))]
         private static class ShakePatch {
 
@@ -14,13 +17,14 @@ namespace TheOtherRoles.Patches {
             static void Prefix(FollowerCamera __instance) {
                 // Set values depending on mod option
                 if (TheOtherRolesPlugin.ToggleScreenShake.Value) {
+                    // Default Among Us shake values
                     lobbyShakeAmount = 0.03f;
                     gameShakeAmount = 0.02f;
                 }
                 else {
                     lobbyShakeAmount = gameShakeAmount = 0;
                 }
-                // Sets __instance.shakeAmount value depending on Gamemode / Gamestate
+                // Sets shakeAmount value depending on Gamemode / Gamestate
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started || AmongUsClient.Instance.GameMode == GameModes.FreePlay)
                     __instance.shakeAmount = gameShakeAmount;
                 else
