@@ -787,7 +787,7 @@ namespace TheOtherRoles.Patches {
         {
             if (Ninja.ninja == null || Ninja.ninja != PlayerControl.LocalPlayer) return;
             List<PlayerControl> untargetables = new List<PlayerControl>();
-            if (Spy.spy != null) untargetables.Add(Spy.spy);
+            if (Spy.spy != null && !Spy.impostorsCanKillAnyone) untargetables.Add(Spy.spy);
             if (Mini.mini != null) untargetables.Add(Mini.mini);
             Ninja.currentTarget = setTarget(onlyCrewmates: true, untargetablePlayers: untargetables);
             setPlayerOutline(Ninja.currentTarget, Ninja.color);
