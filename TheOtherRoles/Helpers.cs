@@ -21,16 +21,6 @@ namespace TheOtherRoles {
     }
     public static class Helpers {
 
-        public static void showTargetNameOnButton(PlayerControl target, CustomButton button) {
-            if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
-                var text = "";
-                if (target == null) text = "KILL"; // Set text to "KILL" if no target
-                else text = target.name; // Set text to "KILL" if no target
-                button.actionButton.OverrideText(text);
-                button.showButtonText = true;
-            }
-        }
-
     public static void enableCursor(bool initalSetCursor) {
             if (initalSetCursor) {
                 Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
