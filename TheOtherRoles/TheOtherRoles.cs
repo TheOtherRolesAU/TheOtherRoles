@@ -81,11 +81,13 @@ namespace TheOtherRoles
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
-            public static bool canAlwaysSeeVoteColors = false;
+            public static bool canSeeVoteColors = false;
+            public static int tasksNeededToSeeVoteColors;
 
             public static void clearAndReload() {
                 mayor = null;
-                canAlwaysSeeVoteColors = CustomOptionHolder.mayorCanAlwaysSeeVoteColors.getBool();
+                canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
+                tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
             }
         }
 
