@@ -240,6 +240,7 @@ namespace TheOtherRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+        public static CustomOption showButtonTarget;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -498,6 +499,9 @@ namespace TheOtherRoles {
             dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", true, dynamicMap, false);
             dynamicMapEnableAirShip = CustomOption.Create(504, "Enable Airship Rotation", true, dynamicMap, false);
             dynamicMapEnableDleks = CustomOption.Create(505, "Enable dlekS Rotation", false, dynamicMap, false);
+
+            //LVK. Setting if the target of a button should be shown
+            showButtonTarget = CustomOption.Create(9994, "Show Button Target", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

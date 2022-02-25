@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
 
@@ -20,7 +21,17 @@ namespace TheOtherRoles {
     }
     public static class Helpers {
 
-        public static void enableCursor(bool initalSetCursor) {
+        public static void showTargetNameOnButton(PlayerControl target, CustomButton button) {
+            if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
+                var text = "";
+                if (target == null) text = "KILL"; // Set text to "KILL" if no target
+                else text = target.name; // Set text to "KILL" if no target
+                button.actionButton.OverrideText(text);
+                button.showButtonText = true;
+            }
+        }
+
+    public static void enableCursor(bool initalSetCursor) {
             if (initalSetCursor) {
                 Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);

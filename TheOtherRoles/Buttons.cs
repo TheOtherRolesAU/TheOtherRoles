@@ -276,8 +276,7 @@ namespace TheOtherRoles
                             (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget || Lawyer.lawyer == Sheriff.currentTarget || Pursuer.pursuer == Sheriff.currentTarget)) ||
                             (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget)) {
                             targetId = Sheriff.currentTarget.PlayerId;
-                        }
-                        else {
+                        } else {
                             targetId = PlayerControl.LocalPlayer.PlayerId;
                         }
 
@@ -293,7 +292,9 @@ namespace TheOtherRoles
                     Sheriff.currentTarget = null;
                 },
                 () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    Helpers.showTargetNameOnButton(Sheriff.currentTarget, sheriffKillButton); //show the target on the button
+                    return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0f, 1f, 0),
