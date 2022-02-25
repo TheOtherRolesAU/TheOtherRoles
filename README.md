@@ -33,7 +33,7 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 
 <details>
   <summary>3.4.3.3</summary>
-  - 
+  - Targetable buttons can now show your current target (if setting is turned on)
 </details>
   
 <details>
