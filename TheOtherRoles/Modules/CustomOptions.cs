@@ -375,33 +375,49 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 40;
-            int detailedSettingsP1 = roleSettingsLines + 40;
-            int detailedSettingsP2 = detailedSettingsP1 + 42;
-            int detailedSettingsP3 = detailedSettingsP2 + 42;
+            int roleSettingsLines = defaultSettingsLines + 41; //How many roles?
+            int detailedSettingsP1 = roleSettingsLines + 47; //third  page (impostor settings)
+            int detailedSettingsP2 = detailedSettingsP1 + 18; //forth page (multy team settings)
+            int detailedSettingsP3 = detailedSettingsP2 + 33; //fifth page (neutral roles)
+            int detailedSettingsP4 = detailedSettingsP3 + 44; //sixth page (crew roles 1)
+            int detailedSettingsP5 = detailedSettingsP4 + 46; //seventh page (crew roles 2)
+            int detailedSettingsP6 = detailedSettingsP5 + 43; //eighth page (other settings)
+
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end6 = hudString.TakeWhile(c => (detailedSettingsP4 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end7 = hudString.TakeWhile(c => (detailedSettingsP5 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
             } else if (counter == 1) {
                 hudString = hudString.Substring(end1 + 1, end2 - end1);
                 // Temporary fix, should add a new CustomOption for spaces
-                int gap = 2;
-                int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                int default_gap = 2; //Preset and enable mod roles
+                int role_gap = 1+default_gap + 3; //Roles count
+                int imp_gap = 1+role_gap + 11; //impostor roles
+                int multy_gap = 1+imp_gap + 3; //roles that can be imp, neutral or crew
+                int neutral_gap = 1+multy_gap + 5; //Neutral roles
+
+                int index = hudString.TakeWhile(c => (default_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 6;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (role_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 20;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (imp_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 26;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (multy_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
+
+                index = hudString.TakeWhile(c => (neutral_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+                hudString = hudString.Insert(index + 1, "\n");
+
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1, end3 - end2);
             } else if (counter == 3) {
@@ -409,10 +425,14 @@ namespace TheOtherRoles {
             } else if (counter == 4) {
                 hudString = hudString.Substring(end4 + 1, end5 - end4);
             } else if (counter == 5) {
-                hudString = hudString.Substring(end5 + 1);
+                hudString = hudString.Substring(end5 + 1, end6 - end5);
+            } else if (counter == 6) {
+                hudString = hudString.Substring(end6 + 1, end7 - end6);
+            } else if (counter == 7) {
+                hudString = hudString.Substring(end7 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/6)";
+            hudString += $"\n Press TAB for more... ({counter+1}/8)";
             __result = hudString;
         }
     }
@@ -423,7 +443,7 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance)
         {
             if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 6;
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
             }
         }
     }
