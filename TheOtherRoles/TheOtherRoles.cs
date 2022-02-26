@@ -85,8 +85,11 @@ namespace TheOtherRoles
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
 
+            public static bool mayorShowVotes = false;
+
             public static void clearAndReload() {
                 mayor = null;
+                mayorShowVotes = CustomOptionHolder.mayorShowVotes.getBool();
             }
         }
 
