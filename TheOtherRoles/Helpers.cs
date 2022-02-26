@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
 
@@ -20,7 +21,7 @@ namespace TheOtherRoles {
     }
     public static class Helpers {
 
-        public static void enableCursor(bool initalSetCursor) {
+    public static void enableCursor(bool initalSetCursor) {
             if (initalSetCursor) {
                 Sprite sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Cursor.png", 115f);
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
