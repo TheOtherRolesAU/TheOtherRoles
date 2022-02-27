@@ -137,7 +137,7 @@ namespace TheOtherRoles.Modules {
             colors.Add(new CustomColor {
                 longname = "True dark", //39
                 color = new Color32(0x00, 0x00, 0x00, byte.MaxValue),
-                shadow = new Color32(0x33, 0x33, 0x33, byte.MaxValue),
+                shadow = new Color32(0x13, 0x13, 0x13, byte.MaxValue),
                 isLighterColor = false });
             colors.Add(new CustomColor {
                 longname = "Crimson", //40

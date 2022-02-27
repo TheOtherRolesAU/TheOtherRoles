@@ -107,6 +107,7 @@ namespace TheOtherRoles {
         public static CustomOption shifterDiesBeforeMeeting;
 
         public static CustomOption mayorSpawnRate;
+        public static CustomOption mayorShowVotes;
 
         public static CustomOption engineerSpawnRate;
         public static CustomOption engineerNumberOfFixes;
@@ -271,7 +272,7 @@ namespace TheOtherRoles {
             // Using new id's for the options to not break compatibilty with older versions
             crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
             crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), 0f, 0f, 15f, 1f);
-            crewmateRolesMax = CustomOption.Create(507, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Auto Crewmate Roles"), false);
+            crewmateRolesMax = CustomOption.Create(9020, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Auto Crewmate Roles"), false);
             neutralRolesCountMin = CustomOption.Create(302, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), 0f, 0f, 15f, 1f);
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
@@ -325,9 +326,9 @@ namespace TheOtherRoles {
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
 
-            phaserSpawnRate = CustomOption.Create(508, cs(Cleaner.color, "Phaser"), rates, null, true);
-            phaserMarkCooldown = CustomOption.Create(509, "Mark Cooldown", 20f, 10f, 60f, 2.5f, phaserSpawnRate);
-            phaserPhaseCooldown = CustomOption.Create(509, "Phase Cooldown", 10f, 10f, 60f, 2.5f, phaserSpawnRate);
+            phaserSpawnRate = CustomOption.Create(9000, cs(Cleaner.color, "Phaser"), rates, null, true);
+            phaserMarkCooldown = CustomOption.Create(9001, "Mark Cooldown", 20f, 10f, 60f, 2.5f, phaserSpawnRate);
+            phaserPhaseCooldown = CustomOption.Create(9002, "Phase Cooldown", 10f, 10f, 60f, 2.5f, phaserSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
@@ -353,7 +354,7 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, "Jester Has Impostor Vision", false, jesterSpawnRate);
-            jesterCanBeLawyerClient = CustomOption.Create(8999, "Jester Can Be Client Of Lawyer", false, jesterSpawnRate);
+            jesterCanBeLawyerClient = CustomOption.Create(8000, "Jester Can Be Client Of Lawyer", false, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
@@ -388,10 +389,11 @@ namespace TheOtherRoles {
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
-            shifterShiftsSelf = CustomOption.Create(9995, "Shifter Shifts Self", false, shifterSpawnRate);
-            shifterDiesBeforeMeeting = CustomOption.Create(9994, "Shifter Dies Before Meeting", false, shifterSpawnRate);
+            shifterShiftsSelf = CustomOption.Create(9030, "Shifter Shifts Self", false, shifterSpawnRate);
+            shifterDiesBeforeMeeting = CustomOption.Create(9031, "Shifter Dies Before Meeting", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
+            mayorShowVotes = CustomOption.Create(9010, "Show Mayor Votes", false, mayorSpawnRate);
 
             engineerSpawnRate = CustomOption.Create(90, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);

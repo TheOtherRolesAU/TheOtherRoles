@@ -33,7 +33,10 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 
 <details>
   <summary>3.4.3.3</summary>
-  - 
+  - Targetable buttons can now show your current target (if setting is turned on)<br/>
+  - Setting if the second Mayor vote should be shown<br/>
+  - Setting to turn off camera shake<br/>
+  - Lobbysidebar looks now better<br/>
 </details>
   
 <details>
