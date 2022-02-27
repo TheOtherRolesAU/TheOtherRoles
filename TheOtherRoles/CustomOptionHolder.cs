@@ -233,7 +233,8 @@ namespace TheOtherRoles {
         public static CustomOption pursuerBlanksNumber;
 
         public static CustomOption phaserSpawnRate;
-        public static CustomOption phaserCooldown;
+        public static CustomOption phaserMarkCooldown;
+        public static CustomOption phaserPhaseCooldown;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -325,7 +326,8 @@ namespace TheOtherRoles {
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
 
             phaserSpawnRate = CustomOption.Create(508, cs(Cleaner.color, "Phaser"), rates, null, true);
-            phaserCooldown = CustomOption.Create(509, "Phaser Cooldown", 30f, 10f, 60f, 2.5f, phaserSpawnRate);
+            phaserMarkCooldown = CustomOption.Create(509, "Mark Cooldown", 20f, 10f, 60f, 2.5f, phaserSpawnRate);
+            phaserPhaseCooldown = CustomOption.Create(509, "Phase Cooldown", 10f, 10f, 60f, 2.5f, phaserSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);

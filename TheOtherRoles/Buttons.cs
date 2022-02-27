@@ -88,7 +88,7 @@ namespace TheOtherRoles
             pursuerButton.MaxTimer = Pursuer.cooldown;
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
-            phaserCurseButton.MaxTimer = Phaser.cooldown;
+            phaserCurseButton.MaxTimer = Phaser.markCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1350,7 +1350,7 @@ namespace TheOtherRoles
                         // Apply Curse
                         Phaser.curseVictim = Phaser.currentTarget;
                         phaserCurseButton.Sprite = Phaser.getCurseKillButtonSprite();
-                        phaserCurseButton.Timer = 1f;
+                        phaserCurseButton.Timer = Phaser.phaseCooldown;
                     }
                     else if (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)
                     {
@@ -1368,7 +1368,7 @@ namespace TheOtherRoles
                 },
                 () => { return Phaser.phaser != null && Phaser.phaser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, "Phase"); //Show target name under button if setting is true
+                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, "Mark"); //Show target name under button if setting is true
                     return ((Phaser.curseVictim == null && Phaser.currentTarget != null) || (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)) && PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     phaserCurseButton.Timer = phaserCurseButton.MaxTimer;
