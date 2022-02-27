@@ -101,7 +101,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.4.4**
-- Fixed a bug where games were not finished properly (special thanks to miniduikboot & 6pak)
+- Fixed a bug where games were not finished properly on offical servers (special thanks to miniduikboot & 6pak)
   
 **Version 3.4.3**
 - Fixed a bug where "Guesser Is Impostor Chance" crashed the role system
