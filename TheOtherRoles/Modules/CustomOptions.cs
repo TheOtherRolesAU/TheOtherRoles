@@ -445,39 +445,41 @@ namespace TheOtherRoles {
     public static class GameOptionsNextPagePatch
     {
         public static void Postfix(KeyboardJoystick __instance) {
-            if (Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftShift)) {
-                TheOtherRolesPlugin.optionsPage--;
-                if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 7;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                TheOtherRolesPlugin.optionsPage = 0;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                TheOtherRolesPlugin.optionsPage = 1;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                TheOtherRolesPlugin.optionsPage = 2;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha4)) {
-                TheOtherRolesPlugin.optionsPage = 3;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha5)) {
-                TheOtherRolesPlugin.optionsPage = 4;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha6)) {
-                TheOtherRolesPlugin.optionsPage = 5;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha7)) {
-                TheOtherRolesPlugin.optionsPage = 6;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha8)) {
-                TheOtherRolesPlugin.optionsPage = 7;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha9)) {
-                TheOtherRolesPlugin.optionsPage = 8;
+            if (!HudManager.Instance.Chat.IsOpen) {
+                if (Input.GetKeyDown(KeyCode.Tab)) {
+                    TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
+                }
+                if (Input.GetKeyDown(KeyCode.LeftShift)) {
+                    TheOtherRolesPlugin.optionsPage--;
+                    if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 7;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                    TheOtherRolesPlugin.optionsPage = 0;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                    TheOtherRolesPlugin.optionsPage = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                    TheOtherRolesPlugin.optionsPage = 2;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                    TheOtherRolesPlugin.optionsPage = 3;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                    TheOtherRolesPlugin.optionsPage = 4;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha6)) {
+                    TheOtherRolesPlugin.optionsPage = 5;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha7)) {
+                    TheOtherRolesPlugin.optionsPage = 6;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                    TheOtherRolesPlugin.optionsPage = 7;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                    TheOtherRolesPlugin.optionsPage = 8;
+                }
             }
         }
     }
