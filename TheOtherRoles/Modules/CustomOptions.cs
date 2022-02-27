@@ -376,12 +376,13 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 23;
             int roleSettingsLines = defaultSettingsLines + 41; //How many roles?
-            int detailedSettingsP1 = roleSettingsLines + 47; //third  page (impostor settings)
+            int detailedSettingsP1 = roleSettingsLines + 48; //third  page (impostor settings)
             int detailedSettingsP2 = detailedSettingsP1 + 18; //forth page (multy team settings)
             int detailedSettingsP3 = detailedSettingsP2 + 33; //fifth page (neutral roles)
-            int detailedSettingsP4 = detailedSettingsP3 + 44; //sixth page (crew roles 1)
+            int detailedSettingsP4 = detailedSettingsP3 + 45; //sixth page (crew roles 1)
             int detailedSettingsP5 = detailedSettingsP4 + 46; //seventh page (crew roles 2)
-            int detailedSettingsP6 = detailedSettingsP5 + 43; //eighth page (other settings)
+            int detailedSettingsP6 = detailedSettingsP5 + 7; //eighth page (other settings)
+            int detailedSettingsP7 = detailedSettingsP6 + 99; //empty
 
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
@@ -390,6 +391,7 @@ namespace TheOtherRoles {
             int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end6 = hudString.TakeWhile(c => (detailedSettingsP4 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end7 = hudString.TakeWhile(c => (detailedSettingsP5 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end8 = hudString.TakeWhile(c => (detailedSettingsP6 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
@@ -429,7 +431,9 @@ namespace TheOtherRoles {
             } else if (counter == 6) {
                 hudString = hudString.Substring(end6 + 1, end7 - end6);
             } else if (counter == 7) {
-                hudString = hudString.Substring(end7 + 1);
+                hudString = hudString.Substring(end7 + 1, end8 - end7);
+            } else if (counter == 8) {
+                hudString = hudString.Substring(end8 + 1);
             }
 
             hudString += $"\n Press TAB for more... ({counter+1}/8)";
@@ -440,10 +444,40 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class GameOptionsNextPagePatch
     {
-        public static void Postfix(KeyboardJoystick __instance)
-        {
-            if(Input.GetKeyDown(KeyCode.Tab)) {
+        public static void Postfix(KeyboardJoystick __instance) {
+            if (Input.GetKeyDown(KeyCode.Tab)) {
                 TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift)) {
+                TheOtherRolesPlugin.optionsPage--;
+                if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 7;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                TheOtherRolesPlugin.optionsPage = 0;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                TheOtherRolesPlugin.optionsPage = 1;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                TheOtherRolesPlugin.optionsPage = 2;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                TheOtherRolesPlugin.optionsPage = 3;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                TheOtherRolesPlugin.optionsPage = 4;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6)) {
+                TheOtherRolesPlugin.optionsPage = 5;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha7)) {
+                TheOtherRolesPlugin.optionsPage = 6;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                TheOtherRolesPlugin.optionsPage = 7;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha9)) {
+                TheOtherRolesPlugin.optionsPage = 8;
             }
         }
     }
