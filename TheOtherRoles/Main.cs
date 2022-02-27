@@ -73,8 +73,8 @@ namespace TheOtherRoles
             ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
             ToggleScreenShake = Config.Bind("Custom", "Screen Shake", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
-            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
-            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
+            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Epic Roles");
+            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#00FFDDFF");
             
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
