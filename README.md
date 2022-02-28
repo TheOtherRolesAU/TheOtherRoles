@@ -23,7 +23,7 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 # Releases
 | Among Us Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.12.15s| v1.0.3| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.3/TheEpicRoles.zip)
+| 2022.2.24s| v1.0.3| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.3/TheEpicRoles.zip)
 | 2021.12.15s| v1.0.2| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.2/TheEpicRoles.zip)
 | 2021.12.15s| v1.0.1| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.1/TheEpicRoles.zip)
 
@@ -32,16 +32,16 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
   <summary>Click to show the Changelog</summary>
 
 <details>
-  <summary>3.4.4.3</summary>
+  <summary>1.0.3</summary>
   - Targetable buttons can now show your current target (if setting is turned on)<br/>
   - Setting if the second Mayor vote should be shown<br/>
   - Setting to turn off camera shake<br/>
   - Lobbysidebar looks now better<br/>
-  - Fixed a bug where games were not finished properly on official servers (special thanks to miniduikboot & 6pak)
+  - Fixed a bug where games were not finished properly on official servers
 </details>
   
 <details>
-  <summary>3.4.3.2</summary>
+  <summary>1.0.2</summary>
   - Phaser Role<br/>
   - Sheriff stops impostor win<br/>
   - Trickster box count option<br/>
@@ -55,7 +55,7 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 </details>
   
 <details>
-  <summary>3.4.3.1</summary>
+  <summary>1.0.1</summary>
   - First Release
 </details>
   
