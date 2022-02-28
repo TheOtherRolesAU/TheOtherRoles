@@ -85,8 +85,11 @@ namespace TheOtherRoles
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
 
+            public static bool mayorShowVotes = false;
+
             public static void clearAndReload() {
                 mayor = null;
+                mayorShowVotes = CustomOptionHolder.mayorShowVotes.getBool();
             }
         }
 
@@ -1450,8 +1453,8 @@ namespace TheOtherRoles
         public static PlayerControl curseVictim;
         public static PlayerControl curseVictimTarget;
 
-        public static float cooldown = 30f;
-        public static float rootTime = 5f;
+        public static float markCooldown = 20f;
+        public static float phaseCooldown = 10f;
 
         private static Sprite curseButtonSprite;
         private static Sprite curseKillButtonSprite;
@@ -1476,7 +1479,8 @@ namespace TheOtherRoles
             currentTarget = null;
             curseVictim = null;
             curseVictimTarget = null;
-            cooldown = CustomOptionHolder.phaserCooldown.getFloat();
+            markCooldown = CustomOptionHolder.phaserMarkCooldown.getFloat();
+            phaseCooldown = CustomOptionHolder.phaserPhaseCooldown.getFloat();
         }
 
         public static void resetCurse()
