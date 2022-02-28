@@ -624,8 +624,7 @@ namespace TheOtherRoles.Patches {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
                 if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
 
-                    Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
-                    Helpers.handleShiftOnBodyReport(); // Same for Shifter
+                    Helpers.handleKillOnBodyReport(); // Manually call Vampire and Shifter handling since the CmdReportDeadBody Prefix won't be called
                     RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
@@ -874,8 +873,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
-            Helpers.handleVampireBiteOnBodyReport();
-            Helpers.handleShiftOnBodyReport();
+            Helpers.handleKillOnBodyReport();
         }
     }
 
