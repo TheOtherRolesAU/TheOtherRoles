@@ -55,6 +55,7 @@ namespace TheOtherRoles
         Lawyer,
         Pursuer,
         Witch,
+        Phaser,
         Crewmate,
         Impostor
     }
@@ -84,6 +85,7 @@ namespace TheOtherRoles
         TimeMasterShield,
         TimeMasterRewindTime,
         ShifterShift,
+        ShifterKilledDueBadShift,
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
@@ -278,6 +280,9 @@ namespace TheOtherRoles
                     case RoleId.Witch:
                         Witch.witch = player;
                         break;
+                    case RoleId.Phaser:
+                        Phaser.phaser = player;
+                        break;
                     }
                 }
         }
@@ -412,15 +417,15 @@ namespace TheOtherRoles
             PlayerControl oldShifter = Shifter.shifter;
             PlayerControl player = Helpers.playerById(targetId);
             if (player == null || oldShifter == null) return;
-
             Shifter.futureShift = null;
-            Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer) {
+            if (Shifter.checkTargetIsBad(player)) {
                 oldShifter.Exiled();
                 return;
             }
+
+            Shifter.clearAndReload();
 
             if (Shifter.shiftModifiers) {
                 // Switch shield
@@ -476,15 +481,24 @@ namespace TheOtherRoles
                 Guesser.niceGuesser = oldShifter;
             if (Bait.bait != null && Bait.bait == player) {
                 Bait.bait = oldShifter;
-                if (Bait.bait.Data.IsDead) Bait.reported = true;
-            }
-                
+                if (Bait.bait.Data.IsDead) Bait.reported = true; }
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
+            if (Phaser.phaser != null && Phaser.phaser == player)
+                Phaser.phaser = oldShifter;
 
             // Set cooldowns to max for both players
-            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
+            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player) {
                 CustomButton.ResetAllCooldowns();
+            }
+            if (CustomOptionHolder.shifterShiftsSelf.getBool())
+                Shifter.shifter = player;
+        }
+        public static void shifterKilledDueBadShift()
+        {
+            if (Shifter.shifter != null) {
+                Shifter.shiftedBadRole = true;
+            }
         }
 
         public static void swapperSwap(byte playerId1, byte playerId2) {
@@ -616,6 +630,7 @@ namespace TheOtherRoles
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
+            if (player == Phaser.phaser) Phaser.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -746,13 +761,17 @@ namespace TheOtherRoles
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
             PlayerControl client = Lawyer.target;
+
+            // Don't promote to pursuer if target is jester and jester was exiled
+            if (client != null && client == Jester.jester && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Jester.jester.PlayerId) return;
+
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;
 
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
-                    Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
-                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                    if (playerInfo != null) playerInfo.text = "";
+                Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
+                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                if (playerInfo != null) playerInfo.text = "";
             }
         }
 
@@ -903,6 +922,14 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.ShifterKilledDueBadShift:
+                    RPCProcedure.shifterKilledDueBadShift();
+                    break;
+                case (byte)CustomRPC.VampireSetBitten:
+                    byte bittenId = reader.ReadByte();
+                    byte reset = reader.ReadByte();
+                    RPCProcedure.vampireSetBitten(bittenId, reset);
+                    break;
                 case (byte)CustomRPC.SwapperSwap:
                     byte playerId1 = reader.ReadByte();
                     byte playerId2 = reader.ReadByte();
@@ -913,11 +940,6 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
                     RPCProcedure.camouflagerCamouflage();
-                    break;
-                case (byte)CustomRPC.VampireSetBitten:
-                    byte bittenId = reader.ReadByte();
-                    byte reset = reader.ReadByte();
-                    RPCProcedure.vampireSetBitten(bittenId, reset);
                     break;
                 case (byte)CustomRPC.PlaceGarlic:
                     RPCProcedure.placeGarlic(reader.ReadBytesAndSize());

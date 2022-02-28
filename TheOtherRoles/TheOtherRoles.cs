@@ -60,6 +60,7 @@ namespace TheOtherRoles
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
+            Phaser.clearAndReload();
         }
 
         public static class Jester {
@@ -69,12 +70,14 @@ namespace TheOtherRoles
             public static bool triggerJesterWin = false;
             public static bool canCallEmergency = true;
             public static bool hasImpostorVision = false;
+            public static bool canBeLawyerClient = false;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
+                canBeLawyerClient = CustomOptionHolder.jesterCanBeLawyerClient.getBool();
             }
         }
 
@@ -82,8 +85,11 @@ namespace TheOtherRoles
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
 
+            public static bool mayorShowVotes = false;
+
             public static void clearAndReload() {
                 mayor = null;
+                mayorShowVotes = CustomOptionHolder.mayorShowVotes.getBool();
             }
         }
 
@@ -364,6 +370,9 @@ namespace TheOtherRoles
         public static PlayerControl futureShift;
         public static PlayerControl currentTarget;
         public static bool shiftModifiers = false;
+        public static bool shiftSelf = false;
+        public static bool diesBeforeMeeting = false;
+        public static bool shiftedBadRole = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -372,12 +381,28 @@ namespace TheOtherRoles
             return buttonSprite;
         }
 
+        private static Sprite badShiftOverlaySprite;
+        public static Sprite getBadShiftOverlaySprite()
+        {
+            if (badShiftOverlaySprite) return badShiftOverlaySprite;
+            badShiftOverlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BadShiftMeeting.png", 225f);
+            return badShiftOverlaySprite;
+        }
+
         public static void clearAndReload() {
             shifter = null;
             currentTarget = null;
             futureShift = null;
             shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
+            shiftSelf = CustomOptionHolder.shifterShiftsSelf.getBool();
+            diesBeforeMeeting = CustomOptionHolder.shifterDiesBeforeMeeting.getBool();
+            shiftedBadRole = false;
         }
+        public static bool checkTargetIsBad(PlayerControl target)
+        {
+            return target.Data.Role.IsImpostor || target == Jackal.jackal || target == Sidekick.sidekick || Jackal.formerJackals.Contains(target) || target == TheOtherRoles.Jester.jester || target == Arsonist.arsonist || target == Vulture.vulture || target == Lawyer.lawyer;
+        }
+
     }
 
     public static class Swapper {
@@ -406,6 +431,7 @@ namespace TheOtherRoles
     }
 
     public static class Lovers {
+        public static float count = 3f;
         public static PlayerControl lover1;
         public static PlayerControl lover2;
         public static Color color = new Color32(232, 57, 185, byte.MaxValue);
@@ -436,6 +462,7 @@ namespace TheOtherRoles
         }
 
         public static void clearAndReload() {
+            count = CustomOptionHolder.loversAliveCount.getFloat();
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
@@ -629,6 +656,7 @@ namespace TheOtherRoles
             public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
+        public static bool miniEvilGuessable = true;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
         public static bool triggerMiniLose = false;
 
@@ -636,6 +664,7 @@ namespace TheOtherRoles
             mini = null;
             triggerMiniLose = false;
             growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
+            miniEvilGuessable = CustomOptionHolder.miniEvilGuessable.getBool();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
@@ -698,6 +727,8 @@ namespace TheOtherRoles
             resetTracked();
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
+            if (updateIntervall == 0f) {
+                updateIntervall = 0.01f; }
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
@@ -1412,4 +1443,55 @@ namespace TheOtherRoles
             witchVoteSavesTargets = CustomOptionHolder.witchVoteSavesTargets.getBool();
         }
     }
+
+    public static class Phaser
+    {
+        public static PlayerControl phaser;
+        public static Color color = Palette.ImpostorRed;
+
+        public static PlayerControl currentTarget;
+        public static PlayerControl curseVictim;
+        public static PlayerControl curseVictimTarget;
+
+        public static float markCooldown = 20f;
+        public static float phaseCooldown = 10f;
+
+        private static Sprite curseButtonSprite;
+        private static Sprite curseKillButtonSprite;
+
+        public static Sprite getCurseButtonSprite()
+        {
+            if (curseButtonSprite) return curseButtonSprite;
+            curseButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PhaseButton.png", 115f);
+            return curseButtonSprite;
+        }
+
+        public static Sprite getCurseKillButtonSprite()
+        {
+            if (curseKillButtonSprite) return curseKillButtonSprite;
+            curseKillButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PhaseKillButton.png", 115f);
+            return curseKillButtonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            phaser = null;
+            currentTarget = null;
+            curseVictim = null;
+            curseVictimTarget = null;
+            markCooldown = CustomOptionHolder.phaserMarkCooldown.getFloat();
+            phaseCooldown = CustomOptionHolder.phaserPhaseCooldown.getFloat();
+        }
+
+        public static void resetCurse()
+        {
+            HudManagerStartPatch.phaserCurseButton.Timer = HudManagerStartPatch.phaserCurseButton.MaxTimer;
+            HudManagerStartPatch.phaserCurseButton.Sprite = Phaser.getCurseButtonSprite();
+            HudManagerStartPatch.phaserCurseButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+            currentTarget = null;
+            curseVictim = null;
+            curseVictimTarget = null;
+        }
+    }
+
 }

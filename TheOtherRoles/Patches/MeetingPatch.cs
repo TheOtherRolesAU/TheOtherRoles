@@ -136,7 +136,7 @@ namespace TheOtherRoles.Patches {
 
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
-                    bool mayorFirstVoteDisplayed = false;
+                    bool mayorFirstVoteDisplayed = !Mayor.mayorShowVotes;
                     for (int j = 0; j < states.Length; j++) {
                         MeetingHud.VoterState voterState = states[j];
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
@@ -259,8 +259,8 @@ namespace TheOtherRoles.Patches {
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 RoleId guesserRole = (Guesser.niceGuesser != null && PlayerControl.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser :  RoleId.EvilGuesser;
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == guesserRole || roleInfo == RoleInfo.niceMini || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles
-                
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == guesserRole || roleInfo == RoleInfo.niceMini || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy) || (!Mini.miniEvilGuessable && roleInfo == RoleInfo.evilMini)) continue; // Not guessable roles
+
                 if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
                     int numberOfLeftTasks = playerTotal - playerCompleted;
@@ -404,6 +404,22 @@ namespace TheOtherRoles.Patches {
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
+                }
+            }
+
+            // Add Shifter overlay for bad shift
+            if (Shifter.shifter != null && Shifter.shiftedBadRole)
+            {
+                foreach (PlayerVoteArea pva in __instance.playerStates)
+                {
+                    if (Shifter.shifter.PlayerId == pva.TargetPlayerId)
+                    {
+                        SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
+                        rend.transform.SetParent(pva.transform);
+                        rend.gameObject.layer = pva.Megaphone.gameObject.layer;
+                        rend.transform.localPosition = new Vector3(-0.55f, -0.03f, -1f);
+                        rend.sprite = Shifter.getBadShiftOverlaySprite();
+                    }
                 }
             }
         }

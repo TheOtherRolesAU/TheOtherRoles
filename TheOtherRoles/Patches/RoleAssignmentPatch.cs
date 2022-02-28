@@ -48,12 +48,18 @@ namespace TheOtherRoles.Patches {
 
             var crewmateMin = CustomOptionHolder.crewmateRolesCountMin.getSelection();
             var crewmateMax = CustomOptionHolder.crewmateRolesCountMax.getSelection();
+            var crewmateRolesMax = CustomOptionHolder.crewmateRolesMax.getSelection();
             var neutralMin = CustomOptionHolder.neutralRolesCountMin.getSelection();
             var neutralMax = CustomOptionHolder.neutralRolesCountMax.getSelection();
             var impostorMin = CustomOptionHolder.impostorRolesCountMin.getSelection();
             var impostorMax = CustomOptionHolder.impostorRolesCountMax.getSelection();
-            
+
             // Make sure min is less or equal to max
+            if (crewmateRolesMax == 1) {
+                crewmateMax = crewmates.Count - neutralMin;
+                crewmateMin = crewmateMax;
+            }
+            
             if (crewmateMin > crewmateMax) crewmateMin = crewmateMax;
             if (neutralMin > neutralMax) neutralMin = neutralMax;
             if (impostorMin > impostorMax) impostorMin = impostorMax;
@@ -82,6 +88,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Warlock, CustomOptionHolder.warlockSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.BountyHunter, CustomOptionHolder.bountyHunterSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Witch, CustomOptionHolder.witchSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Phaser, CustomOptionHolder.phaserSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
@@ -360,8 +367,9 @@ namespace TheOtherRoles.Patches {
             if (Lawyer.lawyer != null) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal))
-                        possibleTargets.Add(p);
+                    // Only allow Jester as client if setting is true
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || (p == Jester.jester && Jester.canBeLawyerClient)))
+                    possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {
                     MessageWriter w = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);

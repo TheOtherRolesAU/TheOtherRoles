@@ -189,22 +189,25 @@ namespace TheOtherRoles.Patches {
             }
 
             // Possible Additional winner: Lawyer
-            if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
-                WinningPlayerData winningClient = null;
-                foreach (WinningPlayerData winner in TempData.winners) {
-                    if (winner.PlayerName == Lawyer.target.Data.PlayerName)
-                        winningClient = winner;
-                }
-                if (winningClient != null) { // The Lawyer wins if the client is winning (and alive, but if he wasn't the Lawyer shouldn't exist anymore)
-                    if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
-                        TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
-                    if (!Lawyer.lawyer.Data.IsDead) { // The Lawyer steals the clients win
-                        TempData.winners.Remove(winningClient);
-                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
-                    } else { // The Lawyer wins together with the client
-                        AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+            if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null) {
+                if (!Lawyer.target.Data.IsDead || (Jester.jester != null && Lawyer.target == Jester.jester)) {
+                    WinningPlayerData winningClient = null;
+                    foreach (WinningPlayerData winner in TempData.winners) {
+                        if (winner.PlayerName == Lawyer.target.Data.PlayerName)
+                            winningClient = winner;
                     }
-                } 
+                    if (winningClient != null) { // The Lawyer wins if the client is winning (and alive, but if he wasn't the Lawyer shouldn't exist anymore)
+                        if (!TempData.winners.ToArray().Any(x => x.PlayerName == Lawyer.lawyer.Data.PlayerName))
+                            TempData.winners.Add(new WinningPlayerData(Lawyer.lawyer.Data));
+                        if (!Lawyer.lawyer.Data.IsDead) { // The Lawyer steals the clients win
+                            TempData.winners.Remove(winningClient);
+                            AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerStolenWin);
+                        }
+                        else { // The Lawyer wins together with the client
+                            AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalLawyerBonusWin);
+                        }
+                    }
+                }
             }
 
             // Possible Additional winner: Pursuer
@@ -449,7 +452,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
+            if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= Lovers.count) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.LoversWin, false);
                 return true;
@@ -458,7 +461,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2) && statistics.SheriffAlive == 0) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                 return true;
@@ -467,7 +470,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2) && statistics.SheriffAlive == 0) {
                 __instance.enabled = false;
                 GameOverReason endReason;
                 switch (TempData.LastDeathReason) {
@@ -507,6 +510,7 @@ namespace TheOtherRoles.Patches {
     internal class PlayerStatistics {
         public int TeamImpostorsAlive {get;set;}
         public int TeamJackalAlive {get;set;}
+        public int SheriffAlive {get;set;}
         public int TeamLoversAlive {get;set;}
         public int TotalAlive {get;set;}
         public bool TeamImpostorHasAliveLover {get;set;}
@@ -523,6 +527,7 @@ namespace TheOtherRoles.Patches {
         private void GetPlayerCounts() {
             int numJackalAlive = 0;
             int numImpostorsAlive = 0;
+            int numSheriffAlive = 0;
             int numLoversAlive = 0;
             int numTotalAlive = 0;
             bool impLover = false;
@@ -552,12 +557,16 @@ namespace TheOtherRoles.Patches {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
+                        if (Sheriff.sheriff != null && Sheriff.sheriff.PlayerId == playerInfo.PlayerId) {
+                            numSheriffAlive++;
+                        }
                     }
                 }
             }
 
             TeamJackalAlive = numJackalAlive;
             TeamImpostorsAlive = numImpostorsAlive;
+            SheriffAlive = numSheriffAlive;
             TeamLoversAlive = numLoversAlive;
             TotalAlive = numTotalAlive;
             TeamImpostorHasAliveLover = impLover;

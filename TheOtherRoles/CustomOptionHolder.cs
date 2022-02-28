@@ -18,6 +18,7 @@ namespace TheOtherRoles {
         public static CustomOption activateRoles;
         public static CustomOption crewmateRolesCountMin;
         public static CustomOption crewmateRolesCountMax;
+        public static CustomOption crewmateRolesMax;
         public static CustomOption neutralRolesCountMin;
         public static CustomOption neutralRolesCountMax;
         public static CustomOption impostorRolesCountMin;
@@ -45,12 +46,14 @@ namespace TheOtherRoles {
 
         public static CustomOption miniSpawnRate;
         public static CustomOption miniGrowingUpDuration;
+        public static CustomOption miniEvilGuessable;
 
         public static CustomOption loversSpawnRate;
         public static CustomOption loversImpLoverRate;
         public static CustomOption loversBothDie;
         public static CustomOption loversCanHaveAnotherRole;
         public static CustomOption loversEnableChat;
+        public static CustomOption loversAliveCount;
 
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
@@ -65,6 +68,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
+        public static CustomOption jesterCanBeLawyerClient;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -99,8 +103,11 @@ namespace TheOtherRoles {
 
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
+        public static CustomOption shifterShiftsSelf;
+        public static CustomOption shifterDiesBeforeMeeting;
 
         public static CustomOption mayorSpawnRate;
+        public static CustomOption mayorShowVotes;
 
         public static CustomOption engineerSpawnRate;
         public static CustomOption engineerNumberOfFixes;
@@ -180,6 +187,7 @@ namespace TheOtherRoles {
 
         public static CustomOption tricksterSpawnRate;
         public static CustomOption tricksterPlaceBoxCooldown;
+        public static CustomOption tricksterPlaceBoxCount;
         public static CustomOption tricksterLightsOutCooldown;
         public static CustomOption tricksterLightsOutDuration;
 
@@ -225,11 +233,16 @@ namespace TheOtherRoles {
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
 
+        public static CustomOption phaserSpawnRate;
+        public static CustomOption phaserMarkCooldown;
+        public static CustomOption phaserPhaseCooldown;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+        public static CustomOption showButtonTarget;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -259,6 +272,7 @@ namespace TheOtherRoles {
             // Using new id's for the options to not break compatibilty with older versions
             crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
             crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), 0f, 0f, 15f, 1f);
+            crewmateRolesMax = CustomOption.Create(9020, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Auto Crewmate Roles"), false);
             neutralRolesCountMin = CustomOption.Create(302, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), 0f, 0f, 15f, 1f);
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
@@ -286,6 +300,7 @@ namespace TheOtherRoles {
 
             tricksterSpawnRate = CustomOption.Create(250, cs(Trickster.color, "Trickster"), rates, null, true);
             tricksterPlaceBoxCooldown = CustomOption.Create(251, "Trickster Box Cooldown", 10f, 2.5f, 30f, 2.5f, tricksterSpawnRate);
+            tricksterPlaceBoxCount = CustomOption.Create(506, "Trickster Box Count", 3f, 2f, 7f, 1f, tricksterSpawnRate);
             tricksterLightsOutCooldown = CustomOption.Create(252, "Trickster Lights Out Cooldown", 30f, 10f, 60f, 5f, tricksterSpawnRate);
             tricksterLightsOutDuration = CustomOption.Create(253, "Trickster Lights Out Duration", 15f, 5f, 60f, 2.5f, tricksterSpawnRate);
 
@@ -311,14 +326,20 @@ namespace TheOtherRoles {
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
 
+            phaserSpawnRate = CustomOption.Create(9000, cs(Cleaner.color, "Phaser"), rates, null, true);
+            phaserMarkCooldown = CustomOption.Create(9001, "Mark Cooldown", 20f, 10f, 60f, 2.5f, phaserSpawnRate);
+            phaserPhaseCooldown = CustomOption.Create(9002, "Phase Cooldown", 10f, 10f, 60f, 2.5f, phaserSpawnRate);
+
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
+            miniEvilGuessable = CustomOption.Create(319, "Evil Mini Is Guessable", true, miniSpawnRate);
 
             loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
             loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
             loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
             loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
             loversEnableChat = CustomOption.Create(54, "Enable Lover Chat", true, loversSpawnRate);
+            loversAliveCount = CustomOption.Create(312, "Total Alive To Win", 3f, 2f, 3f, 1f, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -333,6 +354,7 @@ namespace TheOtherRoles {
             jesterSpawnRate = CustomOption.Create(60, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, "Jester Has Impostor Vision", false, jesterSpawnRate);
+            jesterCanBeLawyerClient = CustomOption.Create(8000, "Jester Can Be Client Of Lawyer", false, jesterSpawnRate);
 
             arsonistSpawnRate = CustomOption.Create(290, cs(Arsonist.color, "Arsonist"), rates, null, true);
             arsonistCooldown = CustomOption.Create(291, "Arsonist Cooldown", 12.5f, 2.5f, 60f, 2.5f, arsonistSpawnRate);
@@ -367,8 +389,11 @@ namespace TheOtherRoles {
 
             shifterSpawnRate = CustomOption.Create(70, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, "Shifter Shifts Modifiers", false, shifterSpawnRate);
+            shifterShiftsSelf = CustomOption.Create(9030, "Shifter Shifts Self", false, shifterSpawnRate);
+            shifterDiesBeforeMeeting = CustomOption.Create(9031, "Shifter Dies Before Meeting", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, cs(Mayor.color, "Mayor"), rates, null, true);
+            mayorShowVotes = CustomOption.Create(9010, "Show Mayor Votes", false, mayorSpawnRate);
 
             engineerSpawnRate = CustomOption.Create(90, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);
@@ -428,7 +453,7 @@ namespace TheOtherRoles {
             hackerNoMove = CustomOption.Create(176, "Cant Move During Mobile Gadget Duration", true, hackerSpawnRate);
 
             trackerSpawnRate = CustomOption.Create(200, cs(Tracker.color, "Tracker"), rates, null, true);
-            trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 1f, 30f, 1f, trackerSpawnRate);
+            trackerUpdateIntervall = CustomOption.Create(201, "Tracker Update Intervall", 5f, 0f, 30f, 1f, trackerSpawnRate);
             trackerResetTargetAfterMeeting = CustomOption.Create(202, "Tracker Reset Target After Meeting", false, trackerSpawnRate);
             trackerCanTrackCorpses = CustomOption.Create(203, "Tracker Can Track Corpses", true, trackerSpawnRate);
             trackerCorpsesTrackingCooldown = CustomOption.Create(204, "Corpses Tracking Cooldown", 30f, 5f, 120f, 5f, trackerCanTrackCorpses);
@@ -478,6 +503,9 @@ namespace TheOtherRoles {
             dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", true, dynamicMap, false);
             dynamicMapEnableAirShip = CustomOption.Create(504, "Enable Airship Rotation", true, dynamicMap, false);
             dynamicMapEnableDleks = CustomOption.Create(505, "Enable dlekS Rotation", false, dynamicMap, false);
+
+            //LVK. Setting if the target of a button should be shown
+            showButtonTarget = CustomOption.Create(9994, "Show Button Target", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

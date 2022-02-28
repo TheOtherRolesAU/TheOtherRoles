@@ -334,8 +334,11 @@ namespace TheOtherRoles {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
                         var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
-                        if (min > max) min = max;
-                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        var auto = CustomOptionHolder.crewmateRolesMax.getSelection();
+                        var optionValue = "";
+                        if (min > max)  min = max;
+                        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        if (auto == 1) optionValue = "Auto";
                         sb.AppendLine($"{optionName}: {optionValue}");
                     } else if (option == CustomOptionHolder.neutralRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
@@ -351,7 +354,7 @@ namespace TheOtherRoles {
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
-                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax)) {
+                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax) || (option == CustomOptionHolder.crewmateRolesMax)) {
                         continue;
                     } else {
                         sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
@@ -372,33 +375,51 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 40;
-            int detailedSettingsP1 = roleSettingsLines + 40;
-            int detailedSettingsP2 = detailedSettingsP1 + 42;
-            int detailedSettingsP3 = detailedSettingsP2 + 42;
+            int roleSettingsLines = defaultSettingsLines + 41; //How many roles?
+            int detailedSettingsP1 = roleSettingsLines + 48; //third  page (impostor settings)
+            int detailedSettingsP2 = detailedSettingsP1 + 18; //forth page (multy team settings)
+            int detailedSettingsP3 = detailedSettingsP2 + 33; //fifth page (neutral roles)
+            int detailedSettingsP4 = detailedSettingsP3 + 45; //sixth page (crew roles 1)
+            int detailedSettingsP5 = detailedSettingsP4 + 46; //seventh page (crew roles 2)
+            int detailedSettingsP6 = detailedSettingsP5 + 7; //eighth page (other settings)
+            int detailedSettingsP7 = detailedSettingsP6 + 99; //empty
+
             int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end6 = hudString.TakeWhile(c => (detailedSettingsP4 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end7 = hudString.TakeWhile(c => (detailedSettingsP5 -= (c == '\n' ? 1 : 0)) > 0).Count();
+            int end8 = hudString.TakeWhile(c => (detailedSettingsP6 -= (c == '\n' ? 1 : 0)) > 0).Count();
             int counter = TheOtherRolesPlugin.optionsPage;
             if (counter == 0) {
                 hudString = hudString.Substring(0, end1) + "\n";   
             } else if (counter == 1) {
                 hudString = hudString.Substring(end1 + 1, end2 - end1);
                 // Temporary fix, should add a new CustomOption for spaces
-                int gap = 2;
-                int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                int default_gap = 2; //Preset and enable mod roles
+                int role_gap = 1+default_gap + 3; //Roles count
+                int imp_gap = 1+role_gap + 11; //impostor roles
+                int multy_gap = 1+imp_gap + 3; //roles that can be imp, neutral or crew
+                int neutral_gap = 1+multy_gap + 5; //Neutral roles
+
+                int index = hudString.TakeWhile(c => (default_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 6;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (role_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 20;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (imp_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 26;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+
+                index = hudString.TakeWhile(c => (multy_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
+
+                index = hudString.TakeWhile(c => (neutral_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+                hudString = hudString.Insert(index + 1, "\n");
+
             } else if (counter == 2) {
                 hudString = hudString.Substring(end2 + 1, end3 - end2);
             } else if (counter == 3) {
@@ -406,10 +427,16 @@ namespace TheOtherRoles {
             } else if (counter == 4) {
                 hudString = hudString.Substring(end4 + 1, end5 - end4);
             } else if (counter == 5) {
-                hudString = hudString.Substring(end5 + 1);
+                hudString = hudString.Substring(end5 + 1, end6 - end5);
+            } else if (counter == 6) {
+                hudString = hudString.Substring(end6 + 1, end7 - end6);
+            } else if (counter == 7) {
+                hudString = hudString.Substring(end7 + 1, end8 - end7);
+            } else if (counter == 8) {
+                hudString = hudString.Substring(end8 + 1);
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/6)";
+            hudString += $"\n Press TAB for more... ({counter+1}/8)";
             __result = hudString;
         }
     }
@@ -417,10 +444,42 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class GameOptionsNextPagePatch
     {
-        public static void Postfix(KeyboardJoystick __instance)
-        {
-            if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 6;
+        public static void Postfix(KeyboardJoystick __instance) {
+            if (!HudManager.Instance.Chat.IsOpen) {
+                if (Input.GetKeyDown(KeyCode.Tab)) {
+                    TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
+                }
+                if (Input.GetKeyDown(KeyCode.LeftShift)) {
+                    TheOtherRolesPlugin.optionsPage--;
+                    if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 7;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha1)) {
+                    TheOtherRolesPlugin.optionsPage = 0;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2)) {
+                    TheOtherRolesPlugin.optionsPage = 1;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3)) {
+                    TheOtherRolesPlugin.optionsPage = 2;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha4)) {
+                    TheOtherRolesPlugin.optionsPage = 3;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha5)) {
+                    TheOtherRolesPlugin.optionsPage = 4;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha6)) {
+                    TheOtherRolesPlugin.optionsPage = 5;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha7)) {
+                    TheOtherRolesPlugin.optionsPage = 6;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                    TheOtherRolesPlugin.optionsPage = 7;
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                    TheOtherRolesPlugin.optionsPage = 8;
+                }
             }
         }
     }
