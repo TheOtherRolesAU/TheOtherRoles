@@ -22,12 +22,12 @@ namespace TheOtherRoles.Patches {
             var btnExit = GameObject.Find("ExitGameButton");
 
             // Get Button Sprite + Text
-            SpriteRenderer btnExitSprite = btnExit.GetComponent<SpriteRenderer>();
+           SpriteRenderer btnExitSprite = btnExit.GetComponent<SpriteRenderer>();
             var textExit = btnExit.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
            
             // Change Init Color        
             btnExitSprite.color = textExit.color = buttonExitColor;
-           
+
             // Get PassivButton and add listeners
             PassiveButton btnExitPassive = btnExit.GetComponent<PassiveButton>();
             btnExitPassive.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)delegate {

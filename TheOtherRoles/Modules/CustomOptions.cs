@@ -24,10 +24,11 @@ namespace TheOtherRoles {
         public OptionBehaviour optionBehaviour;
         public CustomOption parent;
         public bool isHeader;
+        public string type;
 
         // Option creation
 
-        public CustomOption(int id, string name,  System.Object[] selections, System.Object defaultValue, CustomOption parent, bool isHeader) {
+        public CustomOption(int id, string name,  System.Object[] selections, System.Object defaultValue, CustomOption parent, bool isHeader, String type) {
             this.id = id;
             this.name = parent == null ? name : "- " + name;
             this.selections = selections;
@@ -35,6 +36,7 @@ namespace TheOtherRoles {
             this.defaultSelection = index >= 0 ? index : 0;
             this.parent = parent;
             this.isHeader = isHeader;
+            this.type = type;
             selection = 0;
             if (id != 0) {
                 entry = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", id.ToString(), defaultSelection);
@@ -43,19 +45,19 @@ namespace TheOtherRoles {
             options.Add(this);
         }
 
-        public static CustomOption Create(int id, string name, string[] selections, CustomOption parent = null, bool isHeader = false) {
-            return new CustomOption(id, name, selections, "", parent, isHeader);
+        public static CustomOption Create(int id, string name, String type, string[] selections, CustomOption parent = null, bool isHeader = false) {
+            return new CustomOption(id, name, selections, "", parent, isHeader, type);
         }
 
-        public static CustomOption Create(int id, string name, float defaultValue, float min, float max, float step, CustomOption parent = null, bool isHeader = false) {
+        public static CustomOption Create(int id, string name, String type, float defaultValue, float min, float max, float step, CustomOption parent = null, bool isHeader = false) {
             List<float> selections = new List<float>();
             for (float s = min; s <= max; s += step)
                 selections.Add(s);
-            return new CustomOption(id, name, selections.Cast<object>().ToArray(), defaultValue, parent, isHeader);
+            return new CustomOption(id, name, selections.Cast<object>().ToArray(), defaultValue, parent, isHeader, type);
         }
 
-        public static CustomOption Create(int id, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false) {
-            return new CustomOption(id, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader);
+        public static CustomOption Create(int id, string name, String type, bool defaultValue, CustomOption parent = null, bool isHeader = false) {
+            return new CustomOption(id, name, new string[]{"Off", "On"}, defaultValue ? "On" : "Off", parent, isHeader, type);
         }
 
         // Static behaviour
@@ -292,7 +294,7 @@ namespace TheOtherRoles {
         public static void Prefix(GameSettingMenu __instance) {
             __instance.HideForOnline = new Transform[]{};
         }
-
+        
         public static void Postfix(GameSettingMenu __instance) {
             // Setup mapNameTransform
             var mapNameTransform = __instance.AllItems.FirstOrDefault(x => x.gameObject.activeSelf && x.name.Equals("MapName", StringComparison.OrdinalIgnoreCase));
@@ -327,117 +329,165 @@ namespace TheOtherRoles {
 
         private static void Postfix(ref string __result)
         {
-            StringBuilder sb = new StringBuilder(__result);
-            foreach (CustomOption option in CustomOption.options) {
-                if (option.parent == null) {
+            // Set max Font size to 1
+            TMPro.TextMeshPro btnExitSprite = GameObject.Find("GameSettings_TMP").GetComponent<TMPro.TextMeshPro>();
+            btnExitSprite.fontSizeMax = 1;
+
+            StringBuilder result = new StringBuilder();
+
+            if (TheOtherRolesPlugin.optionsPage == 0) {
+                result.AppendLine($"1. Settings");
+                result.AppendLine($"_______________________________");
+                result.AppendLine();
+                result.Append(__result);
+                result.AppendLine();
+                result.AppendLine($"2. The Epic Roles Settings");
+                result.AppendLine($"_______________________________");
+                result.AppendLine();
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "option")) {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
                         var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
                         var auto = CustomOptionHolder.crewmateRolesMax.getSelection();
                         var optionValue = "";
-                        if (min > max)  min = max;
+                        if (min > max) min = max;
                         optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         if (auto == 1) optionValue = "Auto";
-                        sb.AppendLine($"{optionName}: {optionValue}");
-                    } else if (option == CustomOptionHolder.neutralRolesCountMin) {
+                        result.AppendLine($"{optionName}: {optionValue}");
+                    }
+                    else if (option == CustomOptionHolder.neutralRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
                         var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
                         var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-                        sb.AppendLine($"{optionName}: {optionValue}");
-                    } else if (option == CustomOptionHolder.impostorRolesCountMin) {
+                        result.AppendLine($"{optionName}: {optionValue}");
+                    }
+                    else if (option == CustomOptionHolder.impostorRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
                         var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
                         var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-                        sb.AppendLine($"{optionName}: {optionValue}");
-                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax) || (option == CustomOptionHolder.crewmateRolesMax)) {
+                        result.AppendLine($"{optionName}: {optionValue}");
+                    }
+                    else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax) || (option == CustomOptionHolder.crewmateRolesMax)) {
                         continue;
-                    } else {
-                        sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
-                    
-                }
-            }
-            CustomOption parent = null;
-            foreach (CustomOption option in CustomOption.options)
-                if (option.parent != null) {
-                    if (option.parent != parent) {
-                        sb.AppendLine();
-                        parent = option.parent;
+                    else {
+                        if (option.type == "option")
+                            result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
-                    sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
-                }
-
-            var hudString = sb.ToString();
-
-            int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 41; //How many roles?
-            int detailedSettingsP1 = roleSettingsLines + 48; //third  page (impostor settings)
-            int detailedSettingsP2 = detailedSettingsP1 + 18; //forth page (multy team settings)
-            int detailedSettingsP3 = detailedSettingsP2 + 33; //fifth page (neutral roles)
-            int detailedSettingsP4 = detailedSettingsP3 + 45; //sixth page (crew roles 1)
-            int detailedSettingsP5 = detailedSettingsP4 + 46; //seventh page (crew roles 2)
-            int detailedSettingsP6 = detailedSettingsP5 + 7; //eighth page (other settings)
-            int detailedSettingsP7 = detailedSettingsP6 + 99; //empty
-
-            int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end6 = hudString.TakeWhile(c => (detailedSettingsP4 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end7 = hudString.TakeWhile(c => (detailedSettingsP5 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end8 = hudString.TakeWhile(c => (detailedSettingsP6 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int counter = TheOtherRolesPlugin.optionsPage;
-            if (counter == 0) {
-                hudString = hudString.Substring(0, end1) + "\n";   
-            } else if (counter == 1) {
-                hudString = hudString.Substring(end1 + 1, end2 - end1);
-                // Temporary fix, should add a new CustomOption for spaces
-
-                int default_gap = 2; //Preset and enable mod roles
-                int role_gap = 1+default_gap + 3; //Roles count
-                int imp_gap = 1+role_gap + 11; //impostor roles
-                int multy_gap = 1+imp_gap + 3; //roles that can be imp, neutral or crew
-                int neutral_gap = 1+multy_gap + 5; //Neutral roles
-
-                int index = hudString.TakeWhile(c => (default_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-
-                index = hudString.TakeWhile(c => (role_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-
-                index = hudString.TakeWhile(c => (imp_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-
-                index = hudString.TakeWhile(c => (multy_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-
-                index = hudString.TakeWhile(c => (neutral_gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-
-            } else if (counter == 2) {
-                hudString = hudString.Substring(end2 + 1, end3 - end2);
-            } else if (counter == 3) {
-                hudString = hudString.Substring(end3 + 1, end4 - end3);
-            } else if (counter == 4) {
-                hudString = hudString.Substring(end4 + 1, end5 - end4);
-            } else if (counter == 5) {
-                hudString = hudString.Substring(end5 + 1, end6 - end5);
-            } else if (counter == 6) {
-                hudString = hudString.Substring(end6 + 1, end7 - end6);
-            } else if (counter == 7) {
-                hudString = hudString.Substring(end7 + 1, end8 - end7);
-            } else if (counter == 8) {
-                hudString = hudString.Substring(end8 + 1);
+                } 
             }
 
-            hudString += $"\n Press TAB for more... ({counter+1}/8)";
-            __result = hudString;
+            if(TheOtherRolesPlugin.optionsPage == 1) {
+                result.AppendLine($"3. Role Allocation");
+                result.AppendLine($"_______________________________");
+                result.AppendLine();
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor" && n.parent == null)) {
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }
+                result.AppendLine();
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "neutral" && n.parent == null)) {
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }
+                result.AppendLine();
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "other" && n.parent == null)) {
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }
+                result.AppendLine();
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate" && n.parent == null)) {
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }       
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 2) {
+                result.AppendLine($"4. Impostor Roles");
+                result.AppendLine($"_______________________________");
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor")) {
+                    if (option.name.Contains("Witch")) // Linebreak before Witch
+                        break;
+                    if(option.parent == null)
+                        result.AppendLine();
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");                    
+                }     
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 3) {
+                bool start = false;
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor")) {
+                    if (option.name.Contains("Witch")) // Start with Witch
+                        start = true;
+                    if (start) {
+                        if (option.parent == null)
+                            result.AppendLine();
+                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    }
+                }      
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 4) {
+                result.AppendLine($"5. Neutral Roles");
+                result.AppendLine($"_______________________________");
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "neutral")) {
+                    if (option.parent == null)
+                        result.AppendLine();
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }            
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 5) {
+                result.AppendLine($"6. Other Roles");
+                result.AppendLine($"_______________________________");
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "other")) {
+                    if (option.parent == null)
+                        result.AppendLine();
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }      
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 6) {                
+                result.AppendLine($"6. Crewmate Roles");
+                result.AppendLine($"_______________________________");
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
+                    if (option.name.Contains("Medic")) // Linebreak before Medic
+                        break;
+                    if (option.parent == null)
+                        result.AppendLine();
+                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }     
+            }
+
+            if (TheOtherRolesPlugin.optionsPage == 7) {
+                bool start = false;
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
+                    if (option.name.Contains("Security Guard")) // Linebreak before Security Guard
+                        break;
+                    if (option.name.Contains("Medic")) // Start with Medic
+                        start = true;
+                    if (start) {
+                        if (option.parent == null)
+                            result.AppendLine();
+                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    }
+                }   
+            }
+            
+            if (TheOtherRolesPlugin.optionsPage == 8) {
+                bool start = false;
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
+                    if (option.name.Contains("Security Guard")) // Start with Security Guard
+                        start = true;
+                    if (start) {
+                        if (option.parent == null)
+                            result.AppendLine();
+                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    }
+                }   
+            }
+            __result = result.ToString();
         }
     }
 
@@ -447,43 +497,36 @@ namespace TheOtherRoles {
         public static void Postfix(KeyboardJoystick __instance) {
             if (!HudManager.Instance.Chat.IsOpen) {
                 if (Input.GetKeyDown(KeyCode.Tab)) {
-                    TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 8;
+                    TheOtherRolesPlugin.optionsPage++;
+                    if (TheOtherRolesPlugin.optionsPage == 10) TheOtherRolesPlugin.optionsPage = 0;
                 }
                 if (Input.GetKeyDown(KeyCode.LeftShift)) {
                     TheOtherRolesPlugin.optionsPage--;
-                    if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 7;
+                    if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 9;
                 }
-                if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                    TheOtherRolesPlugin.optionsPage = 0;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha2)) {
-                    TheOtherRolesPlugin.optionsPage = 1;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                    TheOtherRolesPlugin.optionsPage = 2;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha4)) {
-                    TheOtherRolesPlugin.optionsPage = 3;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha5)) {
-                    TheOtherRolesPlugin.optionsPage = 4;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha6)) {
-                    TheOtherRolesPlugin.optionsPage = 5;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha7)) {
-                    TheOtherRolesPlugin.optionsPage = 6;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha8)) {
-                    TheOtherRolesPlugin.optionsPage = 7;
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                    TheOtherRolesPlugin.optionsPage = 0;         
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                    TheOtherRolesPlugin.optionsPage = 1;      
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                    TheOtherRolesPlugin.optionsPage = 2;       
+                if (Input.GetKeyDown(KeyCode.Alpha4))
+                    TheOtherRolesPlugin.optionsPage = 3;  
+                if (Input.GetKeyDown(KeyCode.Alpha5))
+                    TheOtherRolesPlugin.optionsPage = 4;       
+                if (Input.GetKeyDown(KeyCode.Alpha6))
+                    TheOtherRolesPlugin.optionsPage = 5;                
+                if (Input.GetKeyDown(KeyCode.Alpha7))
+                    TheOtherRolesPlugin.optionsPage = 6;                
+                if (Input.GetKeyDown(KeyCode.Alpha8))
+                    TheOtherRolesPlugin.optionsPage = 7;                
+                if (Input.GetKeyDown(KeyCode.Alpha9))
                     TheOtherRolesPlugin.optionsPage = 8;
-                }
+                if (Input.GetKeyDown(KeyCode.Alpha0)) // Empty page
+                    TheOtherRolesPlugin.optionsPage = 9;
             }
         }
     }
-
     
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class GameSettingsFontPatch {
