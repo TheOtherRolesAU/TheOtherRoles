@@ -376,7 +376,7 @@ namespace TheOtherRoles {
 
             int defaultSettingsLines = 23;
             int roleSettingsLines = defaultSettingsLines + 41; //How many roles?
-            int detailedSettingsP1 = roleSettingsLines + 48; //third  page (impostor settings)
+            int detailedSettingsP1 = roleSettingsLines + 49; //third  page (impostor settings)
             int detailedSettingsP2 = detailedSettingsP1 + 18; //forth page (multy team settings)
             int detailedSettingsP3 = detailedSettingsP2 + 33; //fifth page (neutral roles)
             int detailedSettingsP4 = detailedSettingsP3 + 45; //sixth page (crew roles 1)
@@ -477,7 +477,7 @@ namespace TheOtherRoles {
                 if (Input.GetKeyDown(KeyCode.Alpha8)) {
                     TheOtherRolesPlugin.optionsPage = 7;
                 }
-                if (Input.GetKeyDown(KeyCode.Alpha8)) {
+                if (Input.GetKeyDown(KeyCode.Alpha9)) {
                     TheOtherRolesPlugin.optionsPage = 8;
                 }
             }

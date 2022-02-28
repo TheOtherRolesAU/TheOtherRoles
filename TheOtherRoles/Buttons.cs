@@ -112,7 +112,7 @@ namespace TheOtherRoles
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
                 if (target == null) text = defaultText; // Set text to defaultText if no target
-                else text = target.name; // Set text to playername
+                else text = target.Data.PlayerName; // Set text to playername
                 button.actionButton.OverrideText(text);
                 button.showButtonText = true;
             }
