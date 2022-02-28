@@ -762,8 +762,12 @@ namespace TheOtherRoles
             PlayerControl player = Lawyer.lawyer;
             PlayerControl client = Lawyer.target;
 
-            // Don't promote to pursuer if target is jester and jester was exiled
-            if (client != null && client == Jester.jester && ExileController.Instance.exiled != null && ExileController.Instance.exiled.PlayerId == Jester.jester.PlayerId) return;
+            // Don't promote to pursuer if target is jester and the jester was exiled in the meeting
+            if (client != null && client == Jester.jester && Jester.meetingExile == true) {
+                Jester.meetingExile = false;
+                return;
+            }
+            
 
             Lawyer.clearAndReload();
             Pursuer.pursuer = player;

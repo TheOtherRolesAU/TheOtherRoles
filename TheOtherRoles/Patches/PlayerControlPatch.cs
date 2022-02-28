@@ -969,7 +969,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Pursuer promotion trigger on murder (the host sends the call such that everyone recieves the update before a possible game End)
-            if (target == Lawyer.target && AmongUsClient.Instance.AmHost) {
+            if (target == Lawyer.target && AmongUsClient.Instance.AmHost && !(target == Jester.jester && Jester.meetingExile == true)) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
@@ -1130,7 +1130,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
-            if (__instance == Lawyer.target && AmongUsClient.Instance.AmHost) {
+            if (__instance == Lawyer.target && AmongUsClient.Instance.AmHost && !(Lawyer.target == Jester.jester && Jester.meetingExile == true)) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();

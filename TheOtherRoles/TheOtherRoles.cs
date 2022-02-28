@@ -71,6 +71,7 @@ namespace TheOtherRoles
             public static bool canCallEmergency = true;
             public static bool hasImpostorVision = false;
             public static bool canBeLawyerClient = false;
+            public static bool meetingExile = false;
 
             public static void clearAndReload() {
                 jester = null;
@@ -78,6 +79,7 @@ namespace TheOtherRoles
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
                 canBeLawyerClient = CustomOptionHolder.jesterCanBeLawyerClient.getBool();
+                meetingExile = false;
             }
         }
 

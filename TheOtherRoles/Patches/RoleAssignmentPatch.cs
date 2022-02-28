@@ -368,7 +368,7 @@ namespace TheOtherRoles.Patches {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     // Only allow Jester as client if setting is true
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || (p == Jester.jester && Jester.canBeLawyerClient)))
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && ( (p == Jester.jester && Jester.canBeLawyerClient)))
                     possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {
