@@ -504,6 +504,7 @@ namespace TheOtherRoles {
                     TheOtherRolesPlugin.optionsPage--;
                     if (TheOtherRolesPlugin.optionsPage == -1) TheOtherRolesPlugin.optionsPage = 9;
                 }
+
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                     TheOtherRolesPlugin.optionsPage = 0;         
                 if (Input.GetKeyDown(KeyCode.Alpha2))

@@ -83,7 +83,7 @@ namespace TheOtherRoles.Patches {
                         };
                     }
 
-                    if (exiled != null && exiled.PlayerId == Jester.jester.PlayerId) {
+                    if (exiled != null && Jester.jester != null && exiled.PlayerId == Jester.jester.PlayerId) {
                         Jester.meetingExile = true;
                     }
                     // RPCVotingComplete

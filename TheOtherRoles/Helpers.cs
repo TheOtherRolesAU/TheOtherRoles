@@ -100,24 +100,32 @@ namespace TheOtherRoles {
             return res;
         }
 
-        public static void handleVampireBiteOnBodyReport() {
-            // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
-            Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+        // Handle vampire bite and vampire shifting bad player on body report or meeting button
+        public static void handleKillOnBodyReport() {
+            MessageWriter writer;
+
+            // Vampire: Try to murder the bitten player
+            MurderAttemptResult vampireBite = checkMuderAttempt(Vampire.vampire, Vampire.bitten, true);
+            if (vampireBite == MurderAttemptResult.PerformKill) {
+                Helpers.uncheckedMurderPlayer(Vampire.vampire, Vampire.bitten, false);
+            }
+            // Shifter: Kill if shifted player is a bad role and shifter wasn't already killed by vampire bite.
+            if (Shifter.shifter != null && Shifter.diesBeforeMeeting && !Shifter.shifter.Data.IsDead && Shifter.futureShift != null && Shifter.checkTargetIsBad(Shifter.futureShift) &&
+                (Vampire.bitten == null || vampireBite != MurderAttemptResult.PerformKill || Vampire.bitten != Shifter.shifter))
+            {
+                Helpers.uncheckedMurderPlayer(Shifter.shifter, Shifter.shifter, false);
+
+                writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterKilledDueBadShift, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.shifterKilledDueBadShift();
+            }
+
+            // Vampire: Reset bitten (regardless whether the kill was successful or not)
+            writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
             writer.Write(byte.MaxValue);
             writer.Write(byte.MaxValue);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
-        }
-        public static void handleShiftOnBodyReport()
-        {
-            // Check if Shifter has shifted bad role and option is on. If yes, kill him.
-            if (Shifter.shifter != null && Shifter.diesBeforeMeeting && ! Shifter.shifter.Data.IsDead && Shifter.futureShift != null && Shifter.checkTargetIsBad(Shifter.futureShift)) {
-                Helpers.checkMuderAttemptAndKill(Shifter.shifter, Shifter.shifter, true, false);
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShifterKilledDueBadShift, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shifterKilledDueBadShift();
-            }
         }
 
         public static void refreshRoleDescription(PlayerControl player) {
@@ -304,11 +312,6 @@ namespace TheOtherRoles {
             if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
             if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
 
-            // If Shifter tries to kill himself, just do it. Only happens if shifter has targeted a bad / neutral role or is lover.
-            if (Shifter.shifter != null && Shifter.shifter == killer && Shifter.shifter == target) {
-                return MurderAttemptResult.PerformKill;
-            }
-
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
@@ -351,14 +354,17 @@ namespace TheOtherRoles {
 
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
             if (murder == MurderAttemptResult.PerformKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(killer.PlayerId);
-                writer.Write(target.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+                uncheckedMurderPlayer(killer, target, showAnimation);
             }
             return murder;            
+        }
+        public static void uncheckedMurderPlayer(PlayerControl killer, PlayerControl target, bool showAnimation = true) {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+            writer.Write(killer.PlayerId);
+            writer.Write(target.PlayerId);
+            writer.Write(showAnimation ? Byte.MaxValue : 0);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
         }
     
         public static void shareGameVersion() {
