@@ -23,7 +23,7 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 # Releases
 | Among Us Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.12.15s| v1.0.3| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.2/TheEpicRoles.zip)
+| 2021.12.15s| v1.0.3| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.3/TheEpicRoles.zip)
 | 2021.12.15s| v1.0.2| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.2/TheEpicRoles.zip)
 | 2021.12.15s| v1.0.1| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.1/TheEpicRoles.zip)
 
