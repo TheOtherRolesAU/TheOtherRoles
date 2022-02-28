@@ -1,5 +1,14 @@
 ![eisbison banner](./Images/TOR_logo.png)
-<p align="center"><a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/release/laicosvk/theepicroles"></a></p>
+<p align="center">
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/release/laicosvk/theepicroles"></a> <!--Releases-->
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net/github/assets-dl/laicosvk/theepicroles"></a> <!--Downloads-->
+</p>
+  
+<p align="center">
+  <a href="https://github.com/LaicosVK/TheEpicRoles/releases/"><img src="https://badgen.net//github/releases/laicosvk/theepicroles"></a> <!--Releases-->
+  <a href="https://github.com/LaicosVK/TheEpicRoles/stargazers"><img src="https://badgen.net/github/stars/laicosvk/theepicroles"></a> <!--Stars-->
+</p>
+
 
 <p align="center">
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
@@ -14,24 +23,42 @@ Our goal is to make this mod more epic and to add a bunch of new features, roles
 # Releases
 | Among Us Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2021.12.15s| v3.4.3.2| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v3.4.3.2/TheEpicRoles.zip)
-| 2021.12.15s| v3.4.3.1| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v3.4.3.1/TheEpicRoles.zip)
+| 2021.12.15s| v1.0.3| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.2/TheEpicRoles.zip)
+| 2021.12.15s| v1.0.2| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.2/TheEpicRoles.zip)
+| 2021.12.15s| v1.0.1| [Download](https://github.com/LaicosVK/TheEpicRoles/releases/download/v1.0.1/TheEpicRoles.zip)
 
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+<details>
+  <summary>3.4.4.3</summary>
+  - Targetable buttons can now show your current target (if setting is turned on)<br/>
+  - Setting if the second Mayor vote should be shown<br/>
+  - Setting to turn off camera shake<br/>
+  - Lobbysidebar looks now better<br/>
+  - Fixed a bug where games were not finished properly on official servers (special thanks to miniduikboot & 6pak)
+</details>
   
-**Version 3.4.3.1**
-- First Release
-- Phaser Role
-- Sheriff stops impostor win
-- Trickster box count option
-- Lover win count option
-- Crewmate roles option: Auto
-- Replaced some texts and graphics
-- Evil mini guessable option
-- Shifter passes on his role option
-- New colors
+<details>
+  <summary>3.4.3.2</summary>
+  - Phaser Role<br/>
+  - Sheriff stops impostor win<br/>
+  - Trickster box count option<br/>
+  - Lover win count option<br/>
+  - Crewmate roles option: Auto<br/>
+  - Replaced some texts and graphics<br/>
+  - Evil mini guessable option<br/>
+  - Shifter passes on his role option<br/>
+  - New colors<br/>
+  - Jester can be client<br/>
+</details>
+  
+<details>
+  <summary>3.4.3.1</summary>
+  - First Release
+</details>
+  
 </details>
 
 # Installation
