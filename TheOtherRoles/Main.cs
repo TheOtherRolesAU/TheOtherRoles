@@ -93,7 +93,7 @@ namespace TheOtherRoles
             Harmony.PatchAll();
 
             if (ToggleCursor.Value) {
-                Helpers.enableCursor(true);
+                Helpers.enableCursor("init");
             }
         }
         public static Sprite GetModStamp() {
