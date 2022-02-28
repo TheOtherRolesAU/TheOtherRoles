@@ -1352,8 +1352,8 @@ namespace TheOtherRoles
                         phaserCurseButton.Sprite = Phaser.getCurseKillButtonSprite();
                         phaserCurseButton.Timer = Phaser.phaseCooldown;
                     }
-                    else if (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)
-                    {
+                    else if (Phaser.curseVictim != null && Phaser.curseVictimTarget == null) {
+                        PlayerControl.LocalPlayer.transform.position = new Vector3(-100f, 100f, 0f);
                         PlayerControl.LocalPlayer.transform.position = Phaser.currentTarget.transform.position;
                         MurderAttemptResult murder = Helpers.checkMuderAttemptAndKill(Phaser.phaser, Phaser.currentTarget, showAnimation: true);
                         if (murder == MurderAttemptResult.SuppressKill) return;
@@ -1368,7 +1368,7 @@ namespace TheOtherRoles
                 },
                 () => { return Phaser.phaser != null && Phaser.phaser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, "Mark"); //Show target name under button if setting is true
+                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, "MARK"); //Show target name under button if setting is true
                     return ((Phaser.curseVictim == null && Phaser.currentTarget != null) || (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)) && PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     phaserCurseButton.Timer = phaserCurseButton.MaxTimer;
