@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheEpicRoles", "TheOtherRoles\TheEpicRoles.csproj", "{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheEpicRoles", "TheEpicRoles\TheEpicRoles.csproj", "{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
