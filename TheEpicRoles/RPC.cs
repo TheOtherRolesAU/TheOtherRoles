@@ -55,6 +55,7 @@ namespace TheEpicRoles {
         Pursuer,
         Witch,
         Phaser,
+        Jumper,
         Crewmate,
         Impostor
     }
@@ -282,6 +283,9 @@ namespace TheEpicRoles {
                     case RoleId.Phaser:
                         Phaser.phaser = player;
                         break;
+                    case RoleId.Jumper:
+                        Jumper.jumper = player;
+                        break;
                     }
                 }
         }
@@ -483,15 +487,16 @@ namespace TheEpicRoles {
                 if (Bait.bait.Data.IsDead) Bait.reported = true; }
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
-            if (Phaser.phaser != null && Phaser.phaser == player)
-                Phaser.phaser = oldShifter;
+            if (Jumper.jumper != null && Jumper.jumper == player)
+                Jumper.jumper = oldShifter;
+
+            if (CustomOptionHolder.shifterShiftsSelf.getBool())
+                Shifter.shifter = player;
 
             // Set cooldowns to max for both players
             if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player) {
                 CustomButton.ResetAllCooldowns();
             }
-            if (CustomOptionHolder.shifterShiftsSelf.getBool())
-                Shifter.shifter = player;
         }
         public static void shifterKilledDueBadShift()
         {
@@ -616,6 +621,7 @@ namespace TheEpicRoles {
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
             if (player == Bait.bait) Bait.clearAndReload();
             if (player == Medium.medium) Medium.clearAndReload();
+            if (player == Jumper.jumper) Jumper.clearAndReload();
 
             // Impostor roles
             if (player == Morphling.morphling) Morphling.clearAndReload();
@@ -638,7 +644,7 @@ namespace TheEpicRoles {
             if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
                 Lovers.clearAndReload(); 
             }
-            if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
+            if (player == Jackal.jackal) { // Promote Sidekick and hence override the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
                     RPCProcedure.sidekickPromotes();
                 } else {

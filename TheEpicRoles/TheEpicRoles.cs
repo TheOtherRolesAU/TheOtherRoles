@@ -61,6 +61,7 @@ namespace TheEpicRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Phaser.clearAndReload();
+            Jumper.clearAndReload();
         }
 
         public static class Jester {
@@ -1496,4 +1497,12 @@ namespace TheEpicRoles
         }
     }
 
+    public static class Jumper {
+        public static PlayerControl jumper;
+        public static Color color = new Color32(247, 170, 98, byte.MaxValue); // light orange
+
+        public static void clearAndReload() {
+            jumper = null;
+        }
+    }
 }

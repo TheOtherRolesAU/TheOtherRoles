@@ -68,6 +68,7 @@ namespace TheEpicRoles {
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover);
         public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch); 
         public static RoleInfo phaser = new RoleInfo("Phaser", Phaser.color, "Curse other players and kill everyone", "Curse and kill everyone", RoleId.Phaser);
+        public static RoleInfo jumper = new RoleInfo("Jumper", Jumper.color, "Surprise the <color=#FF1919FF>Impostors</color>", "Surprise the Impostors", RoleId.Jumper);
 
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
@@ -115,7 +116,8 @@ namespace TheEpicRoles {
             spy,
             securityGuard,
             bait,
-            medium
+            medium,
+            jumper
         };
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p) {
@@ -164,6 +166,7 @@ namespace TheEpicRoles {
             if (p == Medium.medium) infos.Add(medium);
             if (p == Lawyer.lawyer) infos.Add(lawyer);
             if (p == Pursuer.pursuer) infos.Add(pursuer);
+            if (p == Jumper.jumper) infos.Add(jumper);
 
             // Default roles
             if (infos.Count == 0 && p.Data.Role.IsImpostor) infos.Add(impostor); // Just Impostor
