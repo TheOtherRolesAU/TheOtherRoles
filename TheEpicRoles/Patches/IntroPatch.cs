@@ -96,7 +96,29 @@ namespace TheEpicRoles.Patches {
                 new Vector3(-6.5f, -4.5f, 0.0f) //medbay bottom
                 };
 
-                List<Vector3> miraSpawn = new List<Vector3>() { };
+                List<Vector3> miraSpawn = new List<Vector3>() {
+                new Vector3(-4.5f, 3.5f, 0.0f), //launchpad top
+                new Vector3(-4.5f, -1.4f, 0.0f), //launchpad bottom
+                new Vector3(8.5f, -1f, 0.0f), //launchpad- med hall
+                new Vector3(14f, -1.5f, 0.0f), //medbay
+                new Vector3(16.5f, 3f, 0.0f), // comms
+                new Vector3(10f, 5f, 0.0f), //lockers
+                new Vector3(6f, 1.5f, 0.0f), //locker room
+                new Vector3(2.5f, 13.6f, 0.0f), //reactor
+                new Vector3(6f, 12f, 0.0f), //reactor middle
+                new Vector3(9.5f, 13f, 0.0f), //lab
+                new Vector3(15f, 9f, 0.0f), //bottom left cross
+                new Vector3(17.9f, 11.5f, 0.0f), //middle cross
+                new Vector3(14f, 17.3f, 0.0f), //office
+                new Vector3(19.5f, 21f, 0.0f), //admin
+                new Vector3(14f, 24f, 0.0f), //greenhouse left
+                new Vector3(22f, 24f, 0.0f), //greenhouse right
+                new Vector3(21f, 8.5f, 0.0f), //bottom right cross
+                new Vector3(28f, 3f, 0.0f), //caf right
+                new Vector3(22f, 3f, 0.0f), //caf left
+                new Vector3(19f, 4f, 0.0f), //storage
+                new Vector3(22f, -2f, 0.0f), //balcony
+                };
 
                 List<Vector3> polusSpawn = new List<Vector3>() {
                 new Vector3(16.6f, -1f, 0.0f), //dropship top
@@ -147,9 +169,48 @@ namespace TheEpicRoles.Patches {
                 new Vector3(17.5f, -25.7f, 0.0f), //snowman under office
                 };
 
-                List<Vector3> dleksSpawn = new List<Vector3>() { };
+                List<Vector3> dleksSpawn = new List<Vector3>() {
+                new Vector3(2.2f, 2.2f, 0.0f), //cafeteria. botton. top left.
+                new Vector3(-0.7f, 2.2f, 0.0f), //caffeteria. button. top right.
+                new Vector3(2.2f, -0.2f, 0.0f), //caffeteria. button. bottom left.
+                new Vector3(-0.7f, -0.2f, 0.0f), //caffeteria. button. bottom right.
+                new Vector3(-10.0f, 3.0f, 0.0f), //weapons top
+                new Vector3(-9.0f, 1.0f, 0.0f), //weapons bottom
+                new Vector3(-6.5f, -3.5f, 0.0f), //O2
+                new Vector3(-11.5f, -3.5f, 0.0f), //O2-nav hall
+                new Vector3(-17.0f, -3.5f, 0.0f), //navigation top
+                new Vector3(-18.2f, -5.7f, 0.0f), //navigation bottom
+                new Vector3(-11.5f, -6.5f, 0.0f), //nav-shields top
+                new Vector3(-9.5f, -8.5f, 0.0f), //nav-shields bottom
+                new Vector3(-9.2f, -12.2f, 0.0f), //shields top
+                new Vector3(-8.0f, -14.3f, 0.0f), //shields bottom
+                new Vector3(-2.5f, -16f, 0.0f), //coms left
+                new Vector3(-4.2f, -16.4f, 0.0f), //coms middle
+                new Vector3(-5.5f, -16f, 0.0f), //coms right
+                new Vector3(1.5f, -10.0f, 0.0f), //storage top
+                new Vector3(1.5f, -15.5f, 0.0f), //storage bottom
+                new Vector3(4.5f, -12.5f, 0.0f), //storrage left
+                new Vector3(-0.3f, -12.5f, 0.0f), //storrage right
+                new Vector3(-4.5f, -7.5f, 0.0f), //admin top
+                new Vector3(-4.5f, -9.5f, 0.0f), //admin bottom
+                new Vector3(9.0f, -8.0f, 0.0f), //elec top left
+                new Vector3(6.0f, -8.0f, 0.0f), //elec top right
+                new Vector3(8.0f, -11.0f, 0.0f), //elec bottom
+                new Vector3(12.0f, -13.0f, 0.0f), //elec-lower hall
+                new Vector3(17f, -10f, 0.0f), //lower engine top
+                new Vector3(17.0f, -13.0f, 0.0f), //lower engine bottom
+                new Vector3(21.5f, -3.0f, 0.0f), //reactor top
+                new Vector3(21.5f, -8.0f, 0.0f), //reactor bottom
+                new Vector3(13.0f, -3.0f, 0.0f), //security top
+                new Vector3(12.6f, -5.6f, 0.0f), // security bottom
+                new Vector3(17.0f, 2.5f, 0.0f), //upper engibe top
+                new Vector3(17.0f, -1.0f, 0.0f), //upper engine bottom
+                new Vector3(10.5f, 1.0f, 0.0f), //upper-mad hall
+                new Vector3(10.5f, -2.0f, 0.0f), //medbay top
+                new Vector3(6.5f, -4.5f, 0.0f) //medbay bottom
+                };
 
-                List<Vector3> airshipSpawn = new List<Vector3>() { };
+                List<Vector3> airshipSpawn = new List<Vector3>() { }; //no spawns since it already has random spawns
 
                 if (PlayerControl.GameOptions.MapId == 0) PlayerControl.LocalPlayer.transform.position = skeldSpawn[rnd.Next(skeldSpawn.Count)];
                 if (PlayerControl.GameOptions.MapId == 1) PlayerControl.LocalPlayer.transform.position = miraSpawn[rnd.Next(miraSpawn.Count)];

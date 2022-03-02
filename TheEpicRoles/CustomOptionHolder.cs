@@ -511,7 +511,7 @@ namespace TheEpicRoles {
             //LVK. Random Spawn on round start
             randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
             //LVK. Cooldown on round start setting
-            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Cooldown On Roundstart", "option", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
