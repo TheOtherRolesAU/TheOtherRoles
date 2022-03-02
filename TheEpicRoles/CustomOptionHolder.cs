@@ -243,6 +243,8 @@ namespace TheEpicRoles {
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption showButtonTarget;
+        public static CustomOption randomGameStartPosition;
+        public static CustomOption resetRoundStartCooldown;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -505,15 +507,24 @@ namespace TheEpicRoles {
             dynamicMapEnableDleks = CustomOption.Create(505, "Enable dlekS Rotation", "map", false, dynamicMap, false);
 
             //LVK. Setting if the target of a button should be shown
-            showButtonTarget = CustomOption.Create(9994, "Show Button Target", "option", true);
+            showButtonTarget = CustomOption.Create(9040, "Show Button Target", "option", true);
+            //LVK. Random Spawn on round start
+            randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
+            //LVK. Cooldown on round start setting
+            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
+
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
             blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
+
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
-            blockedRolePairings.Add((byte)RoleId.Cleaner, new [] { (byte)RoleId.Vulture});
-            
+            blockedRolePairings.Add((byte)RoleId.Cleaner, new[] { (byte)RoleId.Vulture });
+
+            blockedRolePairings.Add((byte)RoleId.Phaser, new[] { (byte)RoleId.Camouflager });
+            blockedRolePairings.Add((byte)RoleId.Camouflager, new[] { (byte)RoleId.Phaser });
+
         }
     }
 }

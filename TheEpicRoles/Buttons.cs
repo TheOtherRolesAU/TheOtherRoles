@@ -1367,7 +1367,7 @@ namespace TheEpicRoles {
                 },
                 () => { return Phaser.phaser != null && Phaser.phaser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, "MARK"); //Show target name under button if setting is true
+                    showTargetNameOnButton(Phaser.currentTarget, phaserCurseButton, Phaser.phaser.transform.position.ToString()); //Show target name under button if setting is true
                     return ((Phaser.curseVictim == null && Phaser.currentTarget != null) || (Phaser.curseVictim != null && Phaser.curseVictimTarget == null)) && PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     phaserCurseButton.Timer = phaserCurseButton.MaxTimer;
