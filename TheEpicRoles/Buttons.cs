@@ -1405,14 +1405,12 @@ namespace TheEpicRoles {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 },
                 () => { return AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started; },
-                () => {
-                    return true;
-                },
+                () => { return true; },
                 () => { },
                 Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.R,
+                KeyCode.LeftControl,
                 false,
                 "Not Ready",
                 true
