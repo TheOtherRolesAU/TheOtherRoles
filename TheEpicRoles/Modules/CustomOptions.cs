@@ -379,7 +379,7 @@ namespace TheEpicRoles {
                         if (option.type == "option")
                             result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
-                } 
+                }                
             }
 
             if(TheEpicRolesPlugin.optionsPage == 1) {
@@ -449,7 +449,7 @@ namespace TheEpicRoles {
             }
 
             if (TheEpicRolesPlugin.optionsPage == 6) {                
-                result.AppendLine($"6. Crewmate Roles");
+                result.AppendLine($"7. Crewmate Roles");
                 result.AppendLine($"_______________________________");
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
                     if (option.name.Contains("Medic")) // Linebreak before Medic
@@ -486,6 +486,11 @@ namespace TheEpicRoles {
                         result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
                 }   
+            }
+            // When no empty page
+            if (TheEpicRolesPlugin.optionsPage != 9) {
+                result.AppendLine($"_______________________________");
+                result.AppendLine($"Page {TheEpicRolesPlugin.optionsPage + 1} of 9");
             }
             __result = result.ToString();
         }

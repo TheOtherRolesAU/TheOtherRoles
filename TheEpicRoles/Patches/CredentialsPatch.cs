@@ -9,12 +9,11 @@ using UnityEngine;
 namespace TheEpicRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
-        public static string fullCredentials = $@"<size=130%><color=#00ffd9>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}
-                                               Remodded by <color=#D5342AFF>LaicosVK</color>, <color=#D5342AFF>Nova</color> & <color=#D5342AFF>DasMonschta</color></size>";
-
-        public static string mainMenuCredentials = $@"Remodded by <color=#00FFDDFF>LaicosVK</color>, <color=#00FFDDFF>Nova</color> & <color=#00FFDDFF>DasMonschta</color>";
-        public static string extraCredentials = $@"<size=100%>Graphics by <color=#00FFDDFF>moep424</color></size>";
-        public static string torCredentials = $@"<size=40%><color=#FCCE03FF>Original Mod by github.com/Eisbison/TheOtherRoles</color></size>";
+        public static string terColor               = "#00ffd9";
+        public static string torColor               = "#fcce03";
+        public static string fullCredentials        = $"<size=130%><color={terColor}>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}\nRemodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color></size>";
+        public static string mainMenuCredentials    = $"Remodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color>\nGraphics by <color={terColor}>moep424";
+        public static string torCredentials         = $"<size=40%><color={torColor}>Original Mod by github.com/Eisbison/TheOtherRoles</color></size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
@@ -25,7 +24,7 @@ namespace TheEpicRoles.Patches {
 
                 var credentials = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
                 credentials.transform.position = new Vector3(0, 0, 0);
-                credentials.SetText($"v{TheEpicRolesPlugin.Version.ToString()}\n<size=1f%>\n</size>{mainMenuCredentials}\n<size=1%>\n</size>{extraCredentials}\n{ torCredentials}\n");
+                credentials.SetText($"v{TheEpicRolesPlugin.Version.ToString()}\n<size=1f%>\n</size>{mainMenuCredentials}\n<size=1%>\n</size>\n{torCredentials}\n");
                 credentials.alignment = TMPro.TextAlignmentOptions.Center;
                 credentials.fontSize *= 0.75f;
                 credentials.SetOutlineThickness(0);
@@ -55,7 +54,7 @@ namespace TheEpicRoles.Patches {
                 __instance.text.alignment = TMPro.TextAlignmentOptions.TopRight;
                 __instance.text.SetOutlineThickness(0);
                 if (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) {
-                    __instance.text.text = $"<size=130%><color=#00ffd9>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}</size>\n" + __instance.text.text;
+                    __instance.text.text = $"<size=130%><color={terColor}>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}</size>\n" + __instance.text.text;
                     if (PlayerControl.LocalPlayer.Data.IsDead || (!(PlayerControl.LocalPlayer == null) && (PlayerControl.LocalPlayer == Lovers.lover1 || PlayerControl.LocalPlayer == Lovers.lover2))) {
                         __instance.transform.localPosition = new Vector3(3.45f, __instance.transform.localPosition.y, __instance.transform.localPosition.z);
                     } else {
