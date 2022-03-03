@@ -44,6 +44,7 @@ namespace TheEpicRoles {
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton phaserCurseButton;
+        public static CustomButton readyButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -88,6 +89,7 @@ namespace TheEpicRoles {
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             phaserCurseButton.MaxTimer = Phaser.markCooldown;
+            readyButton.MaxTimer = 3f;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1379,6 +1381,41 @@ namespace TheEpicRoles {
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
+            );
+
+            readyButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetReadyStatus, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    if (readyButton.buttonText == "Not Ready") {       
+                        readyButton.Sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.ReadyButton.png", 115f);
+                        readyButton.buttonText = "Ready";
+                        writer.Write(byte.MaxValue);
+                        if (AmongUsClient.Instance.AmHost)
+                            RPCProcedure.setReadyStatus(PlayerControl.LocalPlayer.PlayerId, byte.MaxValue);
+                    }
+                    else {
+                        readyButton.Sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f);
+                        readyButton.buttonText = "Not Ready";
+                        writer.Write(byte.MinValue);
+                        if (AmongUsClient.Instance.AmHost)
+                            RPCProcedure.setReadyStatus(PlayerControl.LocalPlayer.PlayerId, byte.MinValue);
+                    }            
+                    readyButton.Timer = 3f;
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                },
+                () => { return AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started; },
+                () => {
+                    return true;
+                },
+                () => { },
+                Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.R,
+                false,
+                "Not Ready",
+                true
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

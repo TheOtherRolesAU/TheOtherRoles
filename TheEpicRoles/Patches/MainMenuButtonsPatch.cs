@@ -22,7 +22,7 @@ namespace TheEpicRoles.Patches {
             var btnExit = GameObject.Find("ExitGameButton");
 
             // Get Button Sprite + Text
-           SpriteRenderer btnExitSprite = btnExit.GetComponent<SpriteRenderer>();
+            SpriteRenderer btnExitSprite = btnExit.GetComponent<SpriteRenderer>();
             var textExit = btnExit.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
            
             // Change Init Color        

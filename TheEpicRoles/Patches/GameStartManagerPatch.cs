@@ -21,6 +21,36 @@ namespace TheEpicRoles.Patches {
                 if (PlayerControl.LocalPlayer != null) {
                     Helpers.shareGameVersion();
                 }
+
+                // Send current players status list to new player
+                if (AmongUsClient.Instance.AmHost) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetReadyNames, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(RPCProcedure.readyStatus.ToArray());
+                    writer.EndMessage();
+                }
+            }
+        }
+
+
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+        public class AmongUsClientOnPlayerLeftPatch {
+            public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref InnerNet.ClientData data) {      
+                // Remove player from ready list and send updated ready status list to all player
+                if (AmongUsClient.Instance.AmHost) {
+                    RPCProcedure.readyStatus.Remove(data.Character.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetReadyNames, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(RPCProcedure.readyStatus.ToArray());
+                    writer.EndMessage();
+                    RPCProcedure.setReadyNames(RPCProcedure.readyStatus.ToArray());
+                }          
+            }
+        }
+
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
+        public class testPatch {
+            public static void Prefix() {
+                // Clear ready status list on game join
+                RPCProcedure.readyStatus.Clear();
             }
         }
 
@@ -84,7 +114,8 @@ namespace TheEpicRoles.Patches {
                             }
                         }
                     }
-                    if (blockStart) {
+                    // block start if blockstart is true AND if not all players are ready
+                    if (blockStart || RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count) {
                         __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
@@ -129,7 +160,6 @@ namespace TheEpicRoles.Patches {
 
                 __instance.PlayerCounter.text = currentText + suffix;
                 __instance.PlayerCounter.autoSizeTextContainer = true;
-
             }
         }
 
@@ -183,6 +213,10 @@ namespace TheEpicRoles.Patches {
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.dynamicMapOption(chosenMapId);
                     }
+
+                    // Block start if not all players are ready
+                    if (RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count)
+                        continueStart = false;
                 }
                 return continueStart;
             }
