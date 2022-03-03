@@ -115,7 +115,7 @@ namespace TheEpicRoles.Patches {
                         }
                     }
                     // block start if blockstart is true AND if not all players are ready
-                    if (blockStart || RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count) {
+                    if (blockStart || (!CustomOptionHolder.toggleLobbyMode.getBool() && RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count)) {
                         __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
@@ -215,7 +215,7 @@ namespace TheEpicRoles.Patches {
                     }
 
                     // Block start if not all players are ready
-                    if (RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count)
+                    if (!CustomOptionHolder.toggleLobbyMode.getBool() && RPCProcedure.readyStatus.Count != PlayerControl.AllPlayerControls.Count)
                         continueStart = false;
                 }
                 return continueStart;

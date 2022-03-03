@@ -245,6 +245,7 @@ namespace TheEpicRoles {
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
+        public static CustomOption toggleLobbyMode;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -512,12 +513,14 @@ namespace TheEpicRoles {
             randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
             //LVK. Cooldown on round start setting
             resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
+            //Monschtalein. toggle lobby mode
+            toggleLobbyMode = CustomOption.Create(9043, "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
 
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
-            blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
+            blockedRolePairings.Add((byte)RoleId.Mini, new[] { (byte)RoleId.Spy });
 
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
             blockedRolePairings.Add((byte)RoleId.Cleaner, new[] { (byte)RoleId.Vulture });
