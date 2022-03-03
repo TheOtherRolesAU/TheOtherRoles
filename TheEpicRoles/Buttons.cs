@@ -1390,13 +1390,15 @@ namespace TheEpicRoles {
                     if (readyButton.buttonText == "Not Ready") {       
                         readyButton.Sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.ReadyButton.png", 115f);
                         readyButton.buttonText = "Ready";
+                        readyButton.actionButton.buttonLabelText.outlineColor = Color.green;
                         writer.Write(byte.MaxValue);
                         if (AmongUsClient.Instance.AmHost)
                             RPCProcedure.setReadyStatus(PlayerControl.LocalPlayer.PlayerId, byte.MaxValue);
                     }
                     else {
                         readyButton.Sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f);
-                        readyButton.buttonText = "Not Ready";
+                        readyButton.buttonText = "Not Ready"; 
+                        readyButton.actionButton.buttonLabelText.outlineColor = Color.red;
                         writer.Write(byte.MinValue);
                         if (AmongUsClient.Instance.AmHost)
                             RPCProcedure.setReadyStatus(PlayerControl.LocalPlayer.PlayerId, byte.MinValue);
@@ -1408,7 +1410,7 @@ namespace TheEpicRoles {
                 () => { return true; },
                 () => { },
                 Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f),
-                new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(-1f, 0, 0),
                 __instance,
                 KeyCode.LeftControl,
                 false,
