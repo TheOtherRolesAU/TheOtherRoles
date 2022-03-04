@@ -131,6 +131,8 @@ namespace TheEpicRoles.Patches {
                 setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
             } else if (Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
+            } else if (Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer) {
+                setPlayerNameColor(Jumper.jumper, Jumper.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors

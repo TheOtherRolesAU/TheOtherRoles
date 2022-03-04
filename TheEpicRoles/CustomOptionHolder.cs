@@ -237,6 +237,10 @@ namespace TheEpicRoles {
         public static CustomOption phaserMarkCooldown;
         public static CustomOption phaserPhaseCooldown;
 
+        public static CustomOption jumperSpawnRate;
+        public static CustomOption jumperBeforeMeeting;
+        public static CustomOption jumperJumpTime;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -495,6 +499,10 @@ namespace TheEpicRoles {
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", "crewmate", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", "crewmate", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", "crewmate", false, mediumSpawnRate);
+
+            jumperSpawnRate = CustomOption.Create(9050, cs(Jumper.color, "Jumper"), "crewmate", rates, null, true);
+            jumperBeforeMeeting = CustomOption.Create(363, "Can Jump Before Meeting", "crewmate", true, jumperSpawnRate);
+            jumperJumpTime = CustomOption.Create(9051, "Jump Cooldown", "crewmate", 3f, 0f, 10f, 1f, jumperSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, cs(new Color(0, 1, 217f / 255f, 1f), "Number Of Meetings (excluding Mayor meeting)"), "option", 10, 0, 15, 1, null, true);
