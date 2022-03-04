@@ -242,9 +242,13 @@ namespace TheEpicRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+      
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
+        public static CustomOption firstKillShield;
+        public static CustomOption firstKillShieldNotification;
+        public static CustomOption toggleLobbyMode;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -505,6 +509,11 @@ namespace TheEpicRoles {
             randomGameStartPosition = CustomOption.Create(9041, cs(new Color(0, 1, 217f / 255f, 1f), "Random Spawn Location"), "option", true);
             //LVK. Cooldown on round start setting
             resetRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Reset Spawn Cooldown"), "option", true);
+            //LVK. Shield the player that died first last round
+            firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood", "option", true);
+            firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting", "option", true, firstKillShield);
+            //Monschtalein. toggle lobby mode
+            toggleLobbyMode = CustomOption.Create(7000, cs(new Color(0, 1, 217f / 255f, 1f), "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
 
             dynamicMap = CustomOption.Create(8, cs(new Color(0, 1, 217f / 255f, 1f), "Play On A Random Map"), "map", false, null, false);
             dynamicMapEnableSkeld = CustomOption.Create(501, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Skeld Rotation"), "map", true, dynamicMap, false);
@@ -517,7 +526,7 @@ namespace TheEpicRoles {
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
 
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
-            blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
+            blockedRolePairings.Add((byte)RoleId.Mini, new[] { (byte)RoleId.Spy });
 
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
             blockedRolePairings.Add((byte)RoleId.Cleaner, new[] { (byte)RoleId.Vulture });

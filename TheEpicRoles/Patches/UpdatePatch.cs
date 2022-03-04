@@ -272,8 +272,12 @@ namespace TheEpicRoles.Patches {
 
         static void Postfix(HudManager __instance)
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
-
+            // Update Lobby Buttons in Lobby and return
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
+                CustomButton.LobbyHudUpdate();
+                return;
+            }            
+            CustomButton.LobbyHudUpdate(); // Remove Lobby Buttons in Game
             CustomButton.HudUpdate();
             resetNameTagsAndColors();
             setNameColors();

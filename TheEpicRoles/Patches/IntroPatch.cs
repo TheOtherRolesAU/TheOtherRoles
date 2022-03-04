@@ -1,4 +1,5 @@
 using HarmonyLib;
+using Hazel;
 using System;
 using static TheEpicRoles.TheEpicRoles;
 using TheEpicRoles.Objects;
@@ -50,6 +51,19 @@ namespace TheEpicRoles.Patches {
                     BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
+                }
+            }
+
+            //First Kill Shield
+            if (AmongUsClient.Instance.AmHost) {
+                if (CustomOptionHolder.firstKillShield.getBool() == true) {
+                    if (TheEpicRolesPlugin.firstKill != 0) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuardianAngelSetShielded, Hazel.SendOption.Reliable, -1);
+                        writer.Write(TheEpicRolesPlugin.firstKill);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.guardianAngelSetShielded(TheEpicRolesPlugin.firstKill);
+                        TheEpicRolesPlugin.firstKill = 0;
+                    }
                 }
             }
 
