@@ -185,6 +185,7 @@ namespace TheEpicRoles {
             crewmateTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.TabIconCrewmate.png", 100f);
             crewmateTab.name = "CrewmateTab";
 
+            // Position of Tab Icons
             gameTab.transform.position += Vector3.left * 2f;
             roleTab.transform.position += Vector3.left * 2f;
             torTab.transform.position += Vector3.left * 1f;
@@ -249,6 +250,7 @@ namespace TheEpicRoles {
                 UnityEngine.Object.Destroy(option.gameObject);
             List<OptionBehaviour> crewmateOptions = new List<OptionBehaviour>();
 
+            // Add specific options to specific lists
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
@@ -288,9 +290,7 @@ namespace TheEpicRoles {
             crewmateMenu.Children = crewmateOptions.ToArray();
             crewmateSettings.gameObject.SetActive(false);
 
-
             // Adapt task count for main options
-
             var commonTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
             if(commonTasksOption != null) commonTasksOption.ValidRange = new FloatRange(0f, 4f);
 
@@ -356,9 +356,9 @@ namespace TheEpicRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
+            // Return Menu Update if in normal among us settings 
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-
-            if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) return; // TODO: Introduce a cleaner way to seperate the TOR settings from the game settings
+            if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) return;
 
             __instance.GetComponentInParent<Scroller>().ContentYBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
