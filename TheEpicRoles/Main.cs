@@ -20,7 +20,7 @@ namespace TheEpicRoles {
     public class TheEpicRolesPlugin : BasePlugin
     {
         public const string Id = "me.laicosvk.theepicroles";
-        public const string VersionString = "1.0.3";
+        public const string VersionString = "1.0.4";
         public static byte firstKill = 0;
 
         public static System.Version Version = System.Version.Parse(VersionString);

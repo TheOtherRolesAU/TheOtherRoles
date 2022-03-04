@@ -11,8 +11,8 @@ namespace TheEpicRoles.Patches {
     public static class CredentialsPatch {
         public static string terColor               = "#00ffd9";
         public static string torColor               = "#fcce03";
-        public static string fullCredentials        = $"<size=130%><color={terColor}>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}\nRemodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color></size>";
-        public static string mainMenuCredentials    = $"Remodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color>\nGraphics by <color={terColor}>moep424";
+        public static string fullCredentials        = $"<size=130%><color={terColor}>TheEpicRoles</color></size> <size=50%>v{TheEpicRolesPlugin.Version.ToString()}\nRemodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color>\nGraphics by <color={terColor}>moep424</color></size>";
+        public static string mainMenuCredentials    = $"Remodded by <color={terColor}>LaicosVK</color>, <color={terColor}>Nova</color> & <color={terColor}>DasMonschta</color>\nGraphics by <color={terColor}>moep424</color>";
         public static string torCredentials         = $"<size=40%><color={torColor}>Original Mod by github.com/Eisbison/TheOtherRoles</color></size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]

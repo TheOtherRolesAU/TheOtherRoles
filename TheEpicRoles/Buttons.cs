@@ -1412,7 +1412,7 @@ namespace TheEpicRoles {
                 },
                 () => { return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperBeforeMeeting == true) && PlayerControl.LocalPlayer.CanMove; },
-                () => { 
+                () => {
                     if (Jumper.jumpLocation != Vector3.zero) Jumper.jumperBeforeMeeting = true;
                     jumperButton.Timer = jumperButton.MaxTimer;
                 },
@@ -1420,6 +1420,7 @@ namespace TheEpicRoles {
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.E
+            );
 
             readyButton = new CustomButton(
                 () => {
