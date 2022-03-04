@@ -47,7 +47,7 @@ namespace TheEpicRoles.Patches {
         }
 
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameJoined))]
-        public class testPatch {
+        public class AmongUsClientOnGameJoinedtPatch {
             public static void Prefix() {
                 // Clear ready status list on game join
                 RPCProcedure.readyStatus.Clear();
