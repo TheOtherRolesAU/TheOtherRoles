@@ -245,6 +245,8 @@ namespace TheEpicRoles {
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
+        public static CustomOption firstKillShield;
+        public static CustomOption firstKillShieldNotification;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -512,6 +514,9 @@ namespace TheEpicRoles {
             randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
             //LVK. Cooldown on round start setting
             resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
+            //LVK. Shield the player that died first last round
+            firstKillShield = CustomOption.Create(9043, "Protect Previous Firstblood", "option", true);
+            firstKillShieldNotification = CustomOption.Create(9044, "Show Kill Attempt In Meeting", "option", true, firstKillShield);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

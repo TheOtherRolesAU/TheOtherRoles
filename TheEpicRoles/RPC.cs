@@ -111,6 +111,8 @@ namespace TheEpicRoles {
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+
+        GuardianAngelSetShielded,
     }
 
     public static class RPCProcedure {
@@ -311,6 +313,9 @@ namespace TheEpicRoles {
         }
 
         public static void uncheckedMurderPlayer(byte sourceId, byte targetId, byte showAnimation) {
+            // Tell everybody who the first kill is for the first kill shield
+            if (CustomOptionHolder.firstKillShield.getBool() == true && TheEpicRolesPlugin.firstKill == 0) TheEpicRolesPlugin.firstKill = targetId;
+            if (sourceId == targetId) Helpers.playerById(sourceId).protectedByGuardian = false;
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
             if (source != null && target != null) {
@@ -387,6 +392,11 @@ namespace TheEpicRoles {
             Medic.usedShield = true;
             Medic.shielded = Helpers.playerById(shieldedId);
             Medic.futureShielded = null;
+        }
+
+        public static void guardianAngelSetShielded(byte shielded) {
+            Helpers.playerById(shielded).protectedByGuardian = true;
+            if (CustomOptionHolder.firstKillShield.getBool() == true) Helpers.playerById(shielded).protectedByGuardianThisRound = true;
         }
 
         public static void shieldedMurderAttempt() {
@@ -1015,6 +1025,9 @@ namespace TheEpicRoles {
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.GuardianAngelSetShielded:
+                    RPCProcedure.guardianAngelSetShielded(reader.ReadByte());
                     break;
             }
         }
