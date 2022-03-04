@@ -510,12 +510,12 @@ namespace TheEpicRoles {
             //LVK. Cooldown on round start setting
             resetRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Reset Spawn Cooldown"), "option", true);
             //LVK. Shield the player that died first last round
-            firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood", "option", true);
-            firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting", "option", true, firstKillShield);
+            firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood"), "option", true);
+            firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting"), "option", true, firstKillShield);
             //Monschtalein. toggle lobby mode
-            toggleLobbyMode = CustomOption.Create(7000, cs(new Color(0, 1, 217f / 255f, 1f), "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
+            toggleLobbyMode = CustomOption.Create(7000, cs(new Color(0, 1, 217f / 255f, 1f), "Ignore undready players"), "option", new string[] { "No", "Yes" }, null, false);
 
-            dynamicMap = CustomOption.Create(8, cs(new Color(0, 1, 217f / 255f, 1f), "Play On A Random Map"), "map", false, null, false);
+            dynamicMap = CustomOption.Create(8, cs(new Color(0, 1, 217f / 255f, 1f), "Play On A Random Map"), "map", false, null, true);
             dynamicMapEnableSkeld = CustomOption.Create(501, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Skeld Rotation"), "map", true, dynamicMap, false);
             dynamicMapEnableMira = CustomOption.Create(502, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Mira Rotation"), "map", true, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Polus Rotation"), "map", true, dynamicMap, false);
