@@ -29,7 +29,7 @@ namespace TheEpicRoles {
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheEpicRolesPlugin Instance;
 
-        public static int optionsPage = 1;
+        public static int optionsPage = 2;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<bool> StreamerMode { get; set; }

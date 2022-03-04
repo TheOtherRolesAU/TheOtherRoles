@@ -338,7 +338,7 @@ namespace TheEpicRoles {
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
-            switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+            switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;     
         }
 
         public static void engineerUsedRepair() {
