@@ -1462,15 +1462,13 @@ namespace TheEpicRoles
         private static Sprite curseButtonSprite;
         private static Sprite curseKillButtonSprite;
 
-        public static Sprite getCurseButtonSprite()
-        {
+        public static Sprite getCurseButtonSprite() {
             if (curseButtonSprite) return curseButtonSprite;
             curseButtonSprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.PhaseButton.png", 115f);
             return curseButtonSprite;
         }
 
-        public static Sprite getCurseKillButtonSprite()
-        {
+        public static Sprite getCurseKillButtonSprite() {
             if (curseKillButtonSprite) return curseKillButtonSprite;
             curseKillButtonSprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.PhaseKillButton.png", 115f);
             return curseKillButtonSprite;
@@ -1499,10 +1497,31 @@ namespace TheEpicRoles
 
     public static class Jumper {
         public static PlayerControl jumper;
-        public static Color color = new Color32(247, 170, 98, byte.MaxValue); // light orange
+        public static Color color = new Color32(204, 155, 20, byte.MaxValue); // mint
 
+        public static Vector3 jumpLocation;
+        public static bool jumperBeforeMeeting = false;
+        public static float jumperJumpTime = 10f;
+
+        private static Sprite jumpMarkButtonSprite;
+        private static Sprite jumpButtonSprite;
+
+        public static Sprite getJumpMarkButtonSprite() {
+            if (jumpMarkButtonSprite) return jumpMarkButtonSprite;
+            jumpMarkButtonSprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.JumperButton.png", 115f);
+            return jumpMarkButtonSprite;
+        }
+
+        public static Sprite getJumpButtonSprite() {
+            if (jumpButtonSprite) return jumpButtonSprite;
+            jumpButtonSprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.JumperJumpButton.png", 115f);
+            return jumpButtonSprite;
+        }
         public static void clearAndReload() {
+            jumpLocation = Vector3.zero;
             jumper = null;
+            jumperBeforeMeeting = CustomOptionHolder.jumperBeforeMeeting.getBool();
+            jumperJumpTime = CustomOptionHolder.jumperJumpTime.getFloat();
         }
     }
 }

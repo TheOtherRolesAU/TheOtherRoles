@@ -44,6 +44,7 @@ namespace TheEpicRoles {
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton phaserCurseButton;
+        public static CustomButton jumperButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -88,6 +89,7 @@ namespace TheEpicRoles {
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             phaserCurseButton.MaxTimer = Phaser.markCooldown;
+            jumperButton.MaxTimer = Jumper.jumperJumpTime;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1352,8 +1354,11 @@ namespace TheEpicRoles {
                         phaserCurseButton.Timer = Phaser.phaseCooldown;
                     }
                     else if (Phaser.curseVictim != null && Phaser.curseVictimTarget == null) {
-                        PlayerControl.LocalPlayer.transform.position = new Vector3(-100f, 100f, 0f);
-                        PlayerControl.LocalPlayer.transform.position = Phaser.currentTarget.transform.position;
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetPosition, Hazel.SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        writer.Write(Phaser.currentTarget.transform.position.x);
+                        writer.Write(Phaser.currentTarget.transform.position.y);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
                         MurderAttemptResult murder = Helpers.checkMuderAttemptAndKill(Phaser.phaser, Phaser.currentTarget, showAnimation: true);
                         if (murder == MurderAttemptResult.SuppressKill) return;
 
@@ -1379,6 +1384,36 @@ namespace TheEpicRoles {
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
+            );
+
+
+            // Jumper curse
+            jumperButton = new CustomButton(
+                () => {
+                    if (Jumper.jumpLocation == Vector3.zero) {
+                        Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
+                        jumperButton.Sprite = Jumper.getJumpButtonSprite();
+                    } else {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetPosition, Hazel.SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        writer.Write(Jumper.jumpLocation.x);
+                        writer.Write(Jumper.jumpLocation.y);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+                        PlayerControl.LocalPlayer.transform.position = Jumper.jumpLocation;
+                    }
+                    jumperButton.Timer = jumperButton.MaxTimer;
+                },
+                () => { return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperBeforeMeeting == true) && PlayerControl.LocalPlayer.CanMove; },
+                () => { 
+                    if (Jumper.jumpLocation != Vector3.zero) Jumper.jumperBeforeMeeting = true;
+                    jumperButton.Timer = jumperButton.MaxTimer;
+                },
+                Jumper.getJumpMarkButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.E
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

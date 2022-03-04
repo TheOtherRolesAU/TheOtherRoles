@@ -112,6 +112,7 @@ namespace TheEpicRoles {
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        SetPosition,
     }
 
     public static class RPCProcedure {
@@ -833,7 +834,13 @@ namespace TheEpicRoles {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
-            if (value > 0) Pursuer.blankedList.Add(target);            
+            if (value > 0) Pursuer.blankedList.Add(target);
+        }
+
+        public static void setPosition(byte playerId, float x, float y) {
+            PlayerControl target = Helpers.playerById(playerId);
+            target.transform.position = new Vector3(x, y, 0);
+
         }
     }   
 
@@ -1021,6 +1028,9 @@ namespace TheEpicRoles {
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetPosition:
+                    RPCProcedure.setPosition(reader.ReadByte(), reader.ReadSingle(), reader.ReadSingle());
                     break;
             }
         }
