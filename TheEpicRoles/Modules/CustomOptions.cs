@@ -123,19 +123,44 @@ namespace TheEpicRoles {
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     class GameOptionsMenuStartPatch {
         public static void Postfix(GameOptionsMenu __instance) {
-            if (GameObject.Find("TORSettings") != null) { // Settings setup has already been performed, fixing the title of the tab and returning
-                GameObject.Find("TORSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("The Other Roles Settings");
+            if (GameObject.Find("TERSettings") != null) { // Settings setup has already been performed, fixing the title of the tab and returning
+                GameObject.Find("TERSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("The Epic Roles Settings");
+                return;
+            }
+            if (GameObject.Find("ImpostorSettings") != null) { 
+                GameObject.Find("ImpostorSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("Impostor Roles Settings");
+                return;
+            }
+            if (GameObject.Find("NeutralSettings") != null) {
+                GameObject.Find("NeutralSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("Neutral Roles Settings");
+                return;
+            }
+            if (GameObject.Find("CrewmateSettings") != null) {
+                GameObject.Find("CrewmateSettings").transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText("Crewmate Roles Settings");
                 return;
             }
 
-            // Setup TOR tab
+            // Setup Custom Tabs
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
             var gameSettings = GameObject.Find("Game Settings");
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            var torSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
-            var torMenu = torSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
-            torSettings.name = "TORSettings";
+            
+            var terSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
+            var torMenu = terSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            terSettings.name = "TERSettings";
+
+            var impostorSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
+            var impostorMenu = impostorSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            impostorSettings.name = "ImpostorSettings";
+
+            var neutralSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
+            var neutralMenu = neutralSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            neutralSettings.name = "NeutralSettings";
+
+            var crewmateSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
+            var crewmateMenu = crewmateSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            crewmateSettings.name = "CrewmateSettings";
 
             var roleTab = GameObject.Find("RoleTab");
             var gameTab = GameObject.Find("GameTab");
@@ -143,12 +168,32 @@ namespace TheEpicRoles {
             var torTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
             var torTabHighlight = torTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             torTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.TabIcon.png", 100f);
-    
-            gameTab.transform.position += Vector3.left * 0.5f;
-            torTab.transform.position += Vector3.right * 0.5f;
-            roleTab.transform.position += Vector3.left * 0.5f;  
+            torTab.name = "TorTab";
 
-            var tabs = new GameObject[]{gameTab, roleTab, torTab};
+            var impostorTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
+            var impostorTabHighlight = impostorTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
+            impostorTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.TabIconImpostor.png", 100f);
+            impostorTab.name = "ImpostorTab";
+
+            var neutralTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
+            var neutralTabHighlight = neutralTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
+            neutralTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.TabIconNeutral.png", 100f);
+            neutralTab.name = "NeutralTab";
+
+            var crewmateTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
+            var crewmateTabHighlight = crewmateTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
+            crewmateTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helpers.loadSpriteFromResources("TheEpicRoles.Resources.TabIconCrewmate.png", 100f);
+            crewmateTab.name = "CrewmateTab";
+
+            // Position of Tab Icons
+            gameTab.transform.position += Vector3.left * 2f;
+            roleTab.transform.position += Vector3.left * 2f;
+            torTab.transform.position += Vector3.left * 1f;
+            impostorTab.transform.position += Vector3.zero;
+            neutralTab.transform.position += Vector3.right * 1f;
+            crewmateTab.transform.position += Vector3.right * 2f;
+
+            var tabs = new GameObject[]{gameTab, roleTab, torTab, impostorTab, neutralTab, crewmateTab};
             for (int i = 0; i < tabs.Length; i++) {
                 var button = tabs[i].GetComponentInChildren<PassiveButton>();
                 if (button == null) continue;
@@ -157,10 +202,16 @@ namespace TheEpicRoles {
                 button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
                     gameSettingMenu.RegularGameSettings.SetActive(false);
                     gameSettingMenu.RolesSettings.gameObject.SetActive(false);
-                    torSettings.gameObject.SetActive(false);
+                    terSettings.gameObject.SetActive(false);
+                    impostorSettings.gameObject.SetActive(false);
+                    neutralSettings.gameObject.SetActive(false);
+                    crewmateSettings.gameObject.SetActive(false);
                     gameSettingMenu.GameSettingsHightlight.enabled = false;
                     gameSettingMenu.RolesSettingsHightlight.enabled = false;
                     torTabHighlight.enabled = false;
+                    impostorTabHighlight.enabled = false;
+                    neutralTabHighlight.enabled = false;
+                    crewmateTabHighlight.enabled = false;
                     if (copiedIndex == 0) {
                         gameSettingMenu.RegularGameSettings.SetActive(true);
                         gameSettingMenu.GameSettingsHightlight.enabled = true;  
@@ -168,21 +219,55 @@ namespace TheEpicRoles {
                         gameSettingMenu.RolesSettings.gameObject.SetActive(true);
                         gameSettingMenu.RolesSettingsHightlight.enabled = true;
                     } else if (copiedIndex == 2) {
-                        torSettings.gameObject.SetActive(true);
+                        terSettings.gameObject.SetActive(true);
                         torTabHighlight.enabled = true;
+                    } else if (copiedIndex == 3) {
+                        impostorSettings.gameObject.SetActive(true);
+                        impostorTabHighlight.enabled = true;
+                    } else if (copiedIndex == 4) {
+                        neutralSettings.gameObject.SetActive(true);
+                        neutralTabHighlight.enabled = true;
+                    } else if (copiedIndex == 5) {
+                        crewmateSettings.gameObject.SetActive(true);
+                        crewmateTabHighlight.enabled = true;
                     }
-               }));
+                }));
             }
 
             foreach (OptionBehaviour option in torMenu.GetComponentsInChildren<OptionBehaviour>())
                 UnityEngine.Object.Destroy(option.gameObject);
             List<OptionBehaviour> torOptions = new List<OptionBehaviour>();
 
+            foreach (OptionBehaviour option in impostorMenu.GetComponentsInChildren<OptionBehaviour>())
+                UnityEngine.Object.Destroy(option.gameObject);
+            List<OptionBehaviour> impostorOptions = new List<OptionBehaviour>();
+
+            foreach (OptionBehaviour option in neutralMenu.GetComponentsInChildren<OptionBehaviour>())
+                UnityEngine.Object.Destroy(option.gameObject);
+            List<OptionBehaviour> neutralOptions = new List<OptionBehaviour>();
+
+            foreach (OptionBehaviour option in crewmateMenu.GetComponentsInChildren<OptionBehaviour>())
+                UnityEngine.Object.Destroy(option.gameObject);
+            List<OptionBehaviour> crewmateOptions = new List<OptionBehaviour>();
+
+            // Add specific options to specific lists
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
-                    StringOption stringOption = UnityEngine.Object.Instantiate(template, torMenu.transform);
-                    torOptions.Add(stringOption);
+                    StringOption stringOption;                  
+                    if (option.type == "impostor") {
+                        stringOption = UnityEngine.Object.Instantiate(template, impostorMenu.transform);
+                        impostorOptions.Add(stringOption);
+                    }else if (option.type == "neutral" || option.type == "other") {
+                        stringOption = UnityEngine.Object.Instantiate(template, neutralMenu.transform);
+                        neutralOptions.Add(stringOption);
+                    }else if (option.type == "crewmate") {
+                        stringOption = UnityEngine.Object.Instantiate(template, crewmateMenu.transform);
+                        crewmateOptions.Add(stringOption);
+                    }else {
+                        stringOption = UnityEngine.Object.Instantiate(template, torMenu.transform);
+                        torOptions.Add(stringOption);
+                    }
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => {});
                     stringOption.TitleText.text = option.name;
                     stringOption.Value = stringOption.oldValue = option.selection;
@@ -193,11 +278,19 @@ namespace TheEpicRoles {
                 option.optionBehaviour.gameObject.SetActive(true);
             }
 
-            torMenu.Children = torOptions.ToArray();
-            torSettings.gameObject.SetActive(false);
+            torMenu.Children = torOptions.ToArray(); 
+            terSettings.gameObject.SetActive(false);
+
+            impostorMenu.Children = impostorOptions.ToArray();
+            impostorSettings.gameObject.SetActive(false);
+
+            neutralMenu.Children = neutralOptions.ToArray();
+            neutralSettings.gameObject.SetActive(false);
+
+            crewmateMenu.Children = crewmateOptions.ToArray();
+            crewmateSettings.gameObject.SetActive(false);
 
             // Adapt task count for main options
-
             var commonTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
             if(commonTasksOption != null) commonTasksOption.ValidRange = new FloatRange(0f, 4f);
 
@@ -263,15 +356,25 @@ namespace TheEpicRoles {
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance) {
-            if (__instance.Children.Length < 100) return; // TODO: Introduce a cleaner way to seperate the TOR settings from the game settings
+            // Return Menu Update if in normal among us settings 
+            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+            if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) return;
 
             __instance.GetComponentInParent<Scroller>().ContentYBounds.max = -0.5F + __instance.Children.Length * 0.55F; 
             timer += Time.deltaTime;
             if (timer < 0.1f) return;
             timer = 0f;
 
-            float offset = 2.75f;
+            float offset = 2.75f;   
             foreach (CustomOption option in CustomOption.options) {
+                if (GameObject.Find("TERSettings") && !(option.type == "option" || option.type == "map"))
+                    continue;
+                if (GameObject.Find("ImpostorSettings") && option.type != "impostor")
+                    continue;
+                if (GameObject.Find("NeutralSettings") && !(option.type == "neutral" || option.type == "other"))
+                    continue;
+                if (GameObject.Find("CrewmateSettings") && option.type != "crewmate")
+                    continue;
                 if (option?.optionBehaviour != null && option.optionBehaviour.gameObject != null) {
                     bool enabled = true;
                     var parent = option.parent;
@@ -336,17 +439,19 @@ namespace TheEpicRoles {
             StringBuilder result = new StringBuilder();
 
             if (TheEpicRolesPlugin.optionsPage == 0) {
-                result.AppendLine($"1. Settings");
+                result.AppendLine($"1. Among Us Settings");
                 result.AppendLine($"_______________________________");
                 result.AppendLine();
-                result.Append(__result);
-                result.AppendLine();
+                result.Append(__result);        
+            }
+
+            if (TheEpicRolesPlugin.optionsPage == 1) {
                 result.AppendLine($"2. The Epic Roles Settings");
                 result.AppendLine($"_______________________________");
                 result.AppendLine();
-                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "option")) {
+                foreach (CustomOption option in CustomOption.options.Where(n => n.type == "option" || n.type == "map")) {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
-                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
+                        var optionName = CustomOptionHolder.cs(new Color(0, 1, 217f / 255f, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
                         var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
                         var auto = CustomOptionHolder.crewmateRolesMax.getSelection();
@@ -357,7 +462,7 @@ namespace TheEpicRoles {
                         result.AppendLine($"{optionName}: {optionValue}");
                     }
                     else if (option == CustomOptionHolder.neutralRolesCountMin) {
-                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
+                        var optionName = CustomOptionHolder.cs(new Color(0, 1, 217f / 255f, 1f), "Neutral Roles");
                         var min = CustomOptionHolder.neutralRolesCountMin.getSelection();
                         var max = CustomOptionHolder.neutralRolesCountMax.getSelection();
                         if (min > max) min = max;
@@ -365,7 +470,7 @@ namespace TheEpicRoles {
                         result.AppendLine($"{optionName}: {optionValue}");
                     }
                     else if (option == CustomOptionHolder.impostorRolesCountMin) {
-                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
+                        var optionName = CustomOptionHolder.cs(new Color(0, 1, 217f / 255f, 1f), "Impostor Roles");
                         var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
                         var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
                         if (min > max) min = max;
@@ -376,13 +481,12 @@ namespace TheEpicRoles {
                         continue;
                     }
                     else {
-                        if (option.type == "option")
-                            result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
-                } 
+                }
             }
 
-            if(TheEpicRolesPlugin.optionsPage == 1) {
+            if (TheEpicRolesPlugin.optionsPage == 2) {
                 result.AppendLine($"3. Role Allocation");
                 result.AppendLine($"_______________________________");
                 result.AppendLine();
@@ -403,7 +507,7 @@ namespace TheEpicRoles {
                 }       
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 2) {
+            if (TheEpicRolesPlugin.optionsPage == 3) {
                 result.AppendLine($"4. Impostor Roles");
                 result.AppendLine($"_______________________________");
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor")) {
@@ -415,7 +519,7 @@ namespace TheEpicRoles {
                 }     
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 3) {
+            if (TheEpicRolesPlugin.optionsPage == 4) {
                 bool start = false;
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor")) {
                     if (option.name.Contains("Witch")) // Start with Witch
@@ -428,7 +532,7 @@ namespace TheEpicRoles {
                 }      
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 4) {
+            if (TheEpicRolesPlugin.optionsPage == 5) {
                 result.AppendLine($"5. Neutral Roles");
                 result.AppendLine($"_______________________________");
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "neutral")) {
@@ -438,7 +542,7 @@ namespace TheEpicRoles {
                 }            
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 5) {
+            if (TheEpicRolesPlugin.optionsPage == 6) {
                 result.AppendLine($"6. Other Roles");
                 result.AppendLine($"_______________________________");
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "other")) {
@@ -448,8 +552,8 @@ namespace TheEpicRoles {
                 }      
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 6) {                
-                result.AppendLine($"6. Crewmate Roles");
+            if (TheEpicRolesPlugin.optionsPage == 7) {                
+                result.AppendLine($"7. Crewmate Roles");
                 result.AppendLine($"_______________________________");
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
                     if (option.name.Contains("Medic")) // Linebreak before Medic
@@ -460,7 +564,7 @@ namespace TheEpicRoles {
                 }     
             }
 
-            if (TheEpicRolesPlugin.optionsPage == 7) {
+            if (TheEpicRolesPlugin.optionsPage == 8) {
                 bool start = false;
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
                     if (option.name.Contains("Security Guard")) // Linebreak before Security Guard
@@ -475,7 +579,7 @@ namespace TheEpicRoles {
                 }   
             }
             
-            if (TheEpicRolesPlugin.optionsPage == 8) {
+            if (TheEpicRolesPlugin.optionsPage == 9) {
                 bool start = false;
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate")) {
                     if (option.name.Contains("Security Guard")) // Start with Security Guard
@@ -486,6 +590,11 @@ namespace TheEpicRoles {
                         result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
                 }   
+            }
+            // When no empty page
+            if (TheEpicRolesPlugin.optionsPage != 10) {
+                result.AppendLine($"_______________________________");
+                result.AppendLine($"Page {TheEpicRolesPlugin.optionsPage + 1} of 10");
             }
             __result = result.ToString();
         }
@@ -498,11 +607,11 @@ namespace TheEpicRoles {
             if (!HudManager.Instance.Chat.IsOpen) {
                 if (Input.GetKeyDown(KeyCode.Tab)) {
                     TheEpicRolesPlugin.optionsPage++;
-                    if (TheEpicRolesPlugin.optionsPage == 10) TheEpicRolesPlugin.optionsPage = 0;
+                    if (TheEpicRolesPlugin.optionsPage == 11) TheEpicRolesPlugin.optionsPage = 0;
                 }
                 if (Input.GetKeyDown(KeyCode.LeftShift)) {
                     TheEpicRolesPlugin.optionsPage--;
-                    if (TheEpicRolesPlugin.optionsPage == -1) TheEpicRolesPlugin.optionsPage = 9;
+                    if (TheEpicRolesPlugin.optionsPage == -1) TheEpicRolesPlugin.optionsPage = 10;
                 }
 
                 if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -523,8 +632,10 @@ namespace TheEpicRoles {
                     TheEpicRolesPlugin.optionsPage = 7;                
                 if (Input.GetKeyDown(KeyCode.Alpha9))
                     TheEpicRolesPlugin.optionsPage = 8;
-                if (Input.GetKeyDown(KeyCode.Alpha0)) // Empty page
+                if (Input.GetKeyDown(KeyCode.Alpha0)) 
                     TheEpicRolesPlugin.optionsPage = 9;
+                if (Input.GetKeyDown(KeyCode.Backspace)) // Empty page
+                    TheEpicRolesPlugin.optionsPage = 10;
             }
         }
     }

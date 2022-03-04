@@ -21,6 +21,7 @@ namespace TheEpicRoles {
     {
         public const string Id = "me.laicosvk.theepicroles";
         public const string VersionString = "1.0.3";
+        public static byte firstKill = 0;
 
         public static System.Version Version = System.Version.Parse(VersionString);
 
@@ -29,7 +30,7 @@ namespace TheEpicRoles {
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheEpicRolesPlugin Instance;
 
-        public static int optionsPage = 1;
+        public static int optionsPage = 2;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
         public static ConfigEntry<bool> StreamerMode { get; set; }
