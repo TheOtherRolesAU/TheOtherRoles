@@ -242,9 +242,12 @@ namespace TheEpicRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+      
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
+        public static CustomOption firstKillShield;
+        public static CustomOption firstKillShieldNotification;
         public static CustomOption toggleLobbyMode;
 
         public static CustomOption dynamicMap;
@@ -513,8 +516,11 @@ namespace TheEpicRoles {
             randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
             //LVK. Cooldown on round start setting
             resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
+            //LVK. Shield the player that died first last round
+            firstKillShield = CustomOption.Create(9043, "Protect Previous Firstblood", "option", true);
+            firstKillShieldNotification = CustomOption.Create(9044, "Show Kill Attempt In Meeting", "option", true, firstKillShield);
             //Monschtalein. toggle lobby mode
-            toggleLobbyMode = CustomOption.Create(9043, "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
+            toggleLobbyMode = CustomOption.Create(7000, "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
