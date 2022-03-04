@@ -111,11 +111,17 @@ namespace TheEpicRoles {
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
-
         GuardianAngelSetShielded,
+        
+        // Ready Status
+        SetReadyStatus,
+        SetReadyNames,
     }
 
     public static class RPCProcedure {
+
+        // Store ready status of all players
+        public static List<byte> readyStatus = new List<byte>();
 
         // Main Controls
 
@@ -126,6 +132,7 @@ namespace TheEpicRoles {
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
+            readyStatus.Clear();
         }
 
         public static void ShareOptions(int numberOfOptions, MessageReader reader) {            
@@ -839,6 +846,34 @@ namespace TheEpicRoles {
             Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
             if (value > 0) Pursuer.blankedList.Add(target);            
         }
+
+        // Sets the ready status in readystatus list if reciever is lobby host
+        // and sends the ready status to all current players in lobby
+        public static void setReadyStatus(byte playerId, byte status) {
+            if (AmongUsClient.Instance.AmHost) {
+                if (status == byte.MaxValue && !readyStatus.Contains(playerId)) {
+                    readyStatus.Add(playerId);
+                }
+                else if (status == byte.MinValue && readyStatus.Contains(playerId)) {
+                    readyStatus.Remove(playerId);
+                }
+                MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetReadyNames, Hazel.SendOption.Reliable);
+                writer.WriteBytesAndSize(readyStatus.ToArray());
+                writer.EndMessage();
+                RPCProcedure.setReadyNames(readyStatus.ToArray());
+            }
+        }
+
+        // Set the player name color for all players recieved by the host
+        public static void setReadyNames(byte[] playerIds) {
+            readyStatus = playerIds.ToList();
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                player.nameText.color = Color.white;
+                if (readyStatus.Contains(player.PlayerId)) {
+                    player.nameText.color = Color.green;
+                }
+            }
+        }
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -1028,6 +1063,12 @@ namespace TheEpicRoles {
                     break;
                 case (byte)CustomRPC.GuardianAngelSetShielded:
                     RPCProcedure.guardianAngelSetShielded(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetReadyStatus:
+                    RPCProcedure.setReadyStatus(reader.ReadByte(), reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetReadyNames:
+                    RPCProcedure.setReadyNames(reader.ReadBytesAndSize());
                     break;
             }
         }

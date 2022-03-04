@@ -242,11 +242,13 @@ namespace TheEpicRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+      
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
         public static CustomOption firstKillShield;
         public static CustomOption firstKillShieldNotification;
+        public static CustomOption toggleLobbyMode;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -517,12 +519,14 @@ namespace TheEpicRoles {
             //LVK. Shield the player that died first last round
             firstKillShield = CustomOption.Create(9043, "Protect Previous Firstblood", "option", true);
             firstKillShieldNotification = CustomOption.Create(9044, "Show Kill Attempt In Meeting", "option", true, firstKillShield);
+            //Monschtalein. toggle lobby mode
+            toggleLobbyMode = CustomOption.Create(7000, "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
 
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
-            blockedRolePairings.Add((byte)RoleId.Mini, new [] { (byte)RoleId.Spy});
+            blockedRolePairings.Add((byte)RoleId.Mini, new[] { (byte)RoleId.Spy });
 
             blockedRolePairings.Add((byte)RoleId.Vulture, new [] { (byte)RoleId.Cleaner});
             blockedRolePairings.Add((byte)RoleId.Cleaner, new[] { (byte)RoleId.Vulture });
