@@ -272,17 +272,17 @@ namespace TheEpicRoles {
         public static void Load() {
             
             // Role Options
-            presetSelection = CustomOption.Create(0, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), "option", presets, null, true);
-            activateRoles = CustomOption.Create(1, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), "option", true, null, true);
+            presetSelection = CustomOption.Create(0, cs(new Color(0, 1, 217f / 255f, 1f), "Preset"), "option", presets, null, true);
+            activateRoles = CustomOption.Create(1, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Mod And Block Vanilla Roles"), "option", true, null, true);
 
             // Using new id's for the options to not break compatibilty with older versions
-            crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), "option", 0f, 0f, 15f, 1f, null, true);
-            crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), "option", 0f, 0f, 15f, 1f);
-            crewmateRolesMax = CustomOption.Create(9020, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Auto Crewmate Roles"), "option", false);
-            neutralRolesCountMin = CustomOption.Create(302, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), "option", 0f, 0f, 15f, 1f);
-            neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), "option", 0f, 0f, 15f, 1f);
-            impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), "option", 0f, 0f, 3f, 1f);
-            impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), "option", 0f, 0f, 3f, 1f);
+            crewmateRolesCountMin = CustomOption.Create(300, cs(new Color(0, 1, 217f / 255f, 1f), "Minimum Crewmate Roles"), "option", 0f, 0f, 15f, 1f, null, true);
+            crewmateRolesCountMax = CustomOption.Create(301, cs(new Color(0, 1, 217f / 255f, 1f), "Maximum Crewmate Roles"), "option", 0f, 0f, 15f, 1f);
+            crewmateRolesMax = CustomOption.Create(9020, cs(new Color(0, 1, 217f / 255f, 1f), "Auto Crewmate Roles"), "option", false);
+            neutralRolesCountMin = CustomOption.Create(302, cs(new Color(0, 1, 217f / 255f, 1f), "Minimum Neutral Roles"), "option", 0f, 0f, 15f, 1f);
+            neutralRolesCountMax = CustomOption.Create(303, cs(new Color(0, 1, 217f / 255f, 1f), "Maximum Neutral Roles"), "option", 0f, 0f, 15f, 1f);
+            impostorRolesCountMin = CustomOption.Create(304, cs(new Color(0, 1, 217f / 255f, 1f), "Minimum Impostor Roles"), "option", 0f, 0f, 3f, 1f);
+            impostorRolesCountMax = CustomOption.Create(305, cs(new Color(0, 1, 217f / 255f, 1f), "Maximum Impostor Roles"), "option", 0f, 0f, 3f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), "impostor", rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", "impostor", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -497,30 +497,30 @@ namespace TheEpicRoles {
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", "crewmate", false, mediumSpawnRate);
 
             // Other options
-            maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", "option", 10, 0, 15, 1, null, true);
-            blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", "option", false);
-            noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", "option", false, blockSkippingInEmergencyMeetings);
-            hidePlayerNames = CustomOption.Create(6, "Hide Player Names", "option", false);
-            allowParallelMedBayScans = CustomOption.Create(7, "Allow Parallel MedBay Scans", "option", false);
-
-            dynamicMap = CustomOption.Create(8, "Play On A Random Map", "map", false, null, false);
-            dynamicMapEnableSkeld = CustomOption.Create(501, "Enable Skeld Rotation", "map", true, dynamicMap, false);
-            dynamicMapEnableMira = CustomOption.Create(502, "Enable Mira Rotation", "map", true, dynamicMap, false);
-            dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", "map", true, dynamicMap, false);
-            dynamicMapEnableAirShip = CustomOption.Create(504, "Enable Airship Rotation", "map", true, dynamicMap, false);
-            dynamicMapEnableDleks = CustomOption.Create(505, "Enable dlekS Rotation", "map", false, dynamicMap, false);
+            maxNumberOfMeetings = CustomOption.Create(3, cs(new Color(0, 1, 217f / 255f, 1f), "Number Of Meetings (excluding Mayor meeting)"), "option", 10, 0, 15, 1, null, true);
+            blockSkippingInEmergencyMeetings = CustomOption.Create(4, cs(new Color(0, 1, 217f / 255f, 1f), "Block Skipping In Emergency Meetings"), "option", false);
+            noVoteIsSelfVote = CustomOption.Create(5, cs(new Color(0, 1, 217f / 255f, 1f), "No Vote Is Self Vote"), "option", false, blockSkippingInEmergencyMeetings);
+            hidePlayerNames = CustomOption.Create(6, cs(new Color(0, 1, 217f / 255f, 1f), "Hide Player Names"), "option", false);
+            allowParallelMedBayScans = CustomOption.Create(7, cs(new Color(0, 1, 217f / 255f, 1f), "Allow Parallel MedBay Scans"), "option", false);
 
             //LVK. Setting if the target of a button should be shown
-            showButtonTarget = CustomOption.Create(9040, "Show Button Target", "option", true);
+            showButtonTarget = CustomOption.Create(9040, cs(new Color(0, 1, 217f / 255f, 1f), "Show Button Target"), "option", true);
             //LVK. Random Spawn on round start
-            randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
+            randomGameStartPosition = CustomOption.Create(9041, cs(new Color(0, 1, 217f / 255f, 1f), "Random Spawn Location"), "option", true);
             //LVK. Cooldown on round start setting
-            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Reset Spawn Cooldown"), "option", true);
             //LVK. Shield the player that died first last round
-            firstKillShield = CustomOption.Create(9043, "Protect Previous Firstblood", "option", true);
-            firstKillShieldNotification = CustomOption.Create(9044, "Show Kill Attempt In Meeting", "option", true, firstKillShield);
+            firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood", "option", true);
+            firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting", "option", true, firstKillShield);
             //Monschtalein. toggle lobby mode
-            toggleLobbyMode = CustomOption.Create(7000, "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
+            toggleLobbyMode = CustomOption.Create(7000, cs(new Color(0, 1, 217f / 255f, 1f), "Ignore undready players", "option", new string[] { "No", "Yes" }, null, true);
+
+            dynamicMap = CustomOption.Create(8, cs(new Color(0, 1, 217f / 255f, 1f), "Play On A Random Map"), "map", false, null, false);
+            dynamicMapEnableSkeld = CustomOption.Create(501, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Skeld Rotation"), "map", true, dynamicMap, false);
+            dynamicMapEnableMira = CustomOption.Create(502, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Mira Rotation"), "map", true, dynamicMap, false);
+            dynamicMapEnablePolus = CustomOption.Create(503, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Polus Rotation"), "map", true, dynamicMap, false);
+            dynamicMapEnableAirShip = CustomOption.Create(504, cs(new Color(0, 1, 217f / 255f, 1f), "Enable Airship Rotation"), "map", true, dynamicMap, false);
+            dynamicMapEnableDleks = CustomOption.Create(505, cs(new Color(0, 1, 217f / 255f, 1f), "Enable dlekS Rotation"), "map", false, dynamicMap, false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
