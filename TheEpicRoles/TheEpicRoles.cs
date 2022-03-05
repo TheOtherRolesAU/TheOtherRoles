@@ -1499,9 +1499,13 @@ namespace TheEpicRoles
         public static PlayerControl jumper;
         public static Color color = new Color32(204, 155, 20, byte.MaxValue); // mint
 
+        public static float jumperJumpTime = 30f;
+        public static float jumperChargesOnPlace = 1f;
+        public static float jumperChargesGainOnMeeting = 2f;
+        public static float jumperMaxCharges = 3f;
+        public static float jumperCharges = 0f;
+
         public static Vector3 jumpLocation;
-        public static bool jumperBeforeMeeting = false;
-        public static float jumperJumpTime = 10f;
 
         private static Sprite jumpMarkButtonSprite;
         private static Sprite jumpButtonSprite;
@@ -1520,8 +1524,11 @@ namespace TheEpicRoles
         public static void clearAndReload() {
             jumpLocation = Vector3.zero;
             jumper = null;
-            jumperBeforeMeeting = CustomOptionHolder.jumperBeforeMeeting.getBool();
+            jumperCharges = 0f;
             jumperJumpTime = CustomOptionHolder.jumperJumpTime.getFloat();
+            jumperChargesOnPlace = CustomOptionHolder.jumperChargesOnPlace.getFloat();
+            jumperChargesGainOnMeeting = CustomOptionHolder.jumperChargesGainOnMeeting.getFloat();
+            jumperMaxCharges = CustomOptionHolder.jumperMaxCharges.getFloat();
         }
     }
 }

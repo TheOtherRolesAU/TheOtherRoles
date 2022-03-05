@@ -1393,12 +1393,13 @@ namespace TheEpicRoles {
                 KeyCode.F
             );
 
-            // Jumper curse
+            // Jumper Jump
             jumperButton = new CustomButton(
                 () => {
                     if (Jumper.jumpLocation == Vector3.zero) {
                         Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
                         jumperButton.Sprite = Jumper.getJumpButtonSprite();
+                        Jumper.jumperCharges = Jumper.jumperChargesOnPlace;
                     } else {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetPosition, Hazel.SendOption.Reliable, -1);
                         writer.Write(PlayerControl.LocalPlayer.PlayerId);
@@ -1407,19 +1408,21 @@ namespace TheEpicRoles {
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
 
                         PlayerControl.LocalPlayer.transform.position = Jumper.jumpLocation;
+
+                        Jumper.jumperCharges -= 1f;
                     }
                     jumperButton.Timer = jumperButton.MaxTimer;
                 },
                 () => { return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperBeforeMeeting == true) && PlayerControl.LocalPlayer.CanMove; },
+                () => { return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperCharges >= 1f) && PlayerControl.LocalPlayer.CanMove; },
                 () => {
-                    if (Jumper.jumpLocation != Vector3.zero) Jumper.jumperBeforeMeeting = true;
+                    if (Jumper.jumpLocation != Vector3.zero) Jumper.jumperCharges += Jumper.jumperChargesGainOnMeeting;
                     jumperButton.Timer = jumperButton.MaxTimer;
                 },
                 Jumper.getJumpMarkButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.E
+                KeyCode.F
             );
 
             readyButton = new CustomButton(
