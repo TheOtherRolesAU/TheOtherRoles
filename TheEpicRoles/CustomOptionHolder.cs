@@ -238,8 +238,10 @@ namespace TheEpicRoles {
         public static CustomOption phaserPhaseCooldown;
 
         public static CustomOption jumperSpawnRate;
-        public static CustomOption jumperBeforeMeeting;
         public static CustomOption jumperJumpTime;
+        public static CustomOption jumperChargesOnPlace;
+        public static CustomOption jumperChargesGainOnMeeting;
+        public static CustomOption jumperMaxCharges;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -501,8 +503,10 @@ namespace TheEpicRoles {
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", "crewmate", false, mediumSpawnRate);
 
             jumperSpawnRate = CustomOption.Create(9050, cs(Jumper.color, "Jumper"), "crewmate", rates, null, true);
-            jumperBeforeMeeting = CustomOption.Create(363, "Can Jump Before Meeting", "crewmate", true, jumperSpawnRate);
-            jumperJumpTime = CustomOption.Create(9051, "Jump Cooldown", "crewmate", 3f, 0f, 10f, 1f, jumperSpawnRate);
+            jumperJumpTime = CustomOption.Create(9051, "Jump Cooldown", "crewmate", 30f, 0f, 60f, 5f, jumperSpawnRate);
+            jumperChargesOnPlace = CustomOption.Create(9051, "Charges On Place", "crewmate", 1f, 0f, 10f, 1f, jumperSpawnRate);
+            jumperChargesGainOnMeeting = CustomOption.Create(9051, "Charges Gained After Meeting", "crewmate", 2f, 0f, 10f, 1f, jumperSpawnRate);
+            jumperMaxCharges = CustomOption.Create(9051, "Maximum Charges", "crewmate", 3f, 0f, 10f, 1f, jumperSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, cs(new Color(0, 1, 217f / 255f, 1f), "Number Of Meetings (excluding Mayor meeting)"), "option", 10, 0, 15, 1, null, true);
