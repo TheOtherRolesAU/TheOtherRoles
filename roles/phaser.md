@@ -4,7 +4,6 @@
 # Phaser (Impostor)
 Mark - Teleport - Kill
 
-## Description
 The Phaser has the ability to mark a person after a certain amount of time. After a specified time the Phaser can phase through reality, teleport to his marked person and kill it.
 
 ## Notes
