@@ -22,5 +22,5 @@ The Phaser has the ability to mark a person after a certain amount of time. Afte
 |phaserPhaseCooldown|10|Phase cooldown after marking
 
 ## Credits
-- Idea and implementation by [LaicosVK](https://github.com/LaicosVK "visit github profile of LaicosVK")\
+- Idea and implementation by [LaicosVK](https://github.com/LaicosVK "visit github profile of LaicosVK")
 - Buttons by [Moep424](# "visit profile of moep424")
