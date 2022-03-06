@@ -251,7 +251,7 @@ namespace TheEpicRoles {
       
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
-        public static CustomOption resetRoundStartCooldown;
+        public static CustomOption setRoundStartCooldown;
         public static CustomOption firstKillShield;
         public static CustomOption firstKillShieldNotification;
         public static CustomOption toggleLobbyMode;
@@ -503,10 +503,10 @@ namespace TheEpicRoles {
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", "crewmate", false, mediumSpawnRate);
 
             jumperSpawnRate = CustomOption.Create(9050, cs(Jumper.color, "Jumper"), "crewmate", rates, null, true);
-            jumperJumpTime = CustomOption.Create(9051, "Jump Cooldown", "crewmate", 30f, 0f, 60f, 5f, jumperSpawnRate);
-            jumperChargesOnPlace = CustomOption.Create(9051, "Charges On Place", "crewmate", 1f, 0f, 10f, 1f, jumperSpawnRate);
-            jumperChargesGainOnMeeting = CustomOption.Create(9051, "Charges Gained After Meeting", "crewmate", 2f, 0f, 10f, 1f, jumperSpawnRate);
-            jumperMaxCharges = CustomOption.Create(9051, "Maximum Charges", "crewmate", 3f, 0f, 10f, 1f, jumperSpawnRate);
+            jumperJumpTime = CustomOption.Create(9051, "Jump Cooldown", "crewmate", 30, 0, 60, 5, jumperSpawnRate);
+            jumperChargesOnPlace = CustomOption.Create(9052, "Charges On Place", "crewmate", 1, 0, 10, 1, jumperSpawnRate);
+            jumperChargesGainOnMeeting = CustomOption.Create(9053, "Charges Gained After Meeting", "crewmate", 2, 0, 10, 1, jumperSpawnRate);
+            jumperMaxCharges = CustomOption.Create(9054, "Maximum Charges", "crewmate", 3, 0, 10, 1, jumperSpawnRate);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, cs(new Color(0, 1, 217f / 255f, 1f), "Number Of Meetings (excluding Mayor meeting)"), "option", 10, 0, 15, 1, null, true);
@@ -520,7 +520,7 @@ namespace TheEpicRoles {
             //LVK. Random Spawn on round start
             randomGameStartPosition = CustomOption.Create(9041, cs(new Color(0, 1, 217f / 255f, 1f), "Random Spawn Location"), "option", true);
             //LVK. Cooldown on round start setting
-            resetRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Reset Spawn Cooldown"), "option", true);
+            setRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Set Spawn Cooldown"), "option", 30f, 10f, 60f, 2.5f, null, true);
             //LVK. Shield the player that died first last round
             firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood"), "option", true);
             firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting"), "option", true, firstKillShield);

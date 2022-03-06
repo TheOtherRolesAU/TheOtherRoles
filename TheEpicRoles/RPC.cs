@@ -327,11 +327,13 @@ namespace TheEpicRoles {
         }
 
         public static void uncheckedMurderPlayer(byte sourceId, byte targetId, byte showAnimation) {
-            // Tell everybody who the first kill is for the first kill shield
-            if (CustomOptionHolder.firstKillShield.getBool() == true && TheEpicRolesPlugin.firstKill == 0) TheEpicRolesPlugin.firstKill = targetId;
-            if (sourceId == targetId) Helpers.playerById(sourceId).protectedByGuardian = false;
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
+
+            // set the first kill shield
+            if (CustomOptionHolder.firstKillShield.getBool() == true && TheEpicRolesPlugin.firstKill == 0) TheEpicRolesPlugin.firstKill = target.NetId;
+            if (sourceId == targetId) Helpers.playerById(sourceId).protectedByGuardian = false;
+
             if (source != null && target != null) {
                 if (showAnimation == 0) KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                 source.MurderPlayer(target);
@@ -858,6 +860,7 @@ namespace TheEpicRoles {
 
         public static void setPosition(byte playerId, float x, float y) {
             PlayerControl target = Helpers.playerById(playerId);
+            target.transform.localPosition = new Vector3(x, y, 0);
             target.transform.position = new Vector3(x, y, 0);
 
         }

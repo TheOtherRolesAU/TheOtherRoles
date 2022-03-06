@@ -61,8 +61,13 @@ namespace TheEpicRoles.Patches {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuardianAngelSetShielded, Hazel.SendOption.Reliable, -1);
                         writer.Write(TheEpicRolesPlugin.firstKill);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.guardianAngelSetShielded(TheEpicRolesPlugin.firstKill);
-                        TheEpicRolesPlugin.firstKill = 0;
+                        foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                            if (player.NetId == TheEpicRolesPlugin.firstKill) RPCProcedure.guardianAngelSetShielded(player.PlayerId);
+                            TheEpicRolesPlugin.firstKill = 0;
+
+                            Helpers.playerById(player.PlayerId).protectedByGuardian = true;
+                            if (CustomOptionHolder.firstKillShield.getBool() == true) Helpers.playerById(player.PlayerId).protectedByGuardianThisRound = true;
+                        }
                     }
                 }
             }
@@ -233,10 +238,10 @@ namespace TheEpicRoles.Patches {
                 if (PlayerControl.GameOptions.MapId == 4) PlayerControl.LocalPlayer.transform.position = airshipSpawn[rnd.Next(airshipSpawn.Count)];
 
             }
-            if (CustomOptionHolder.resetRoundStartCooldown.getBool()) { //reset cooldown on round start
-                PlayerControl.LocalPlayer.killTimer = 60; //set imp cooldown to the max
-                CustomButton.ResetAllCooldowns(); //reset button cooldowns
-            }
+            //reset cooldown on round start
+            CustomButton.ResetAllCooldowns(); //reset button cooldowns
+            PlayerControl.LocalPlayer.killTimer = CustomOptionHolder.setRoundStartCooldown.getFloat(); //reset kill cooldowns
+
         }
     }
 

@@ -56,6 +56,7 @@ namespace TheEpicRoles {
         public static TMPro.TMP_Text pursuerButtonBlanksText;
         public static TMPro.TMP_Text hackerAdminTableChargesText;
         public static TMPro.TMP_Text hackerVitalsChargesText;
+        public static TMPro.TMP_Text jumperChargesText;
 
         public static void setCustomButtonCooldowns() {
             engineerRepairButton.MaxTimer = 0f;
@@ -1396,11 +1397,11 @@ namespace TheEpicRoles {
             // Jumper Jump
             jumperButton = new CustomButton(
                 () => {
-                    if (Jumper.jumpLocation == Vector3.zero) {
+                    if (Jumper.jumpLocation == Vector3.zero) { //set location
                         Jumper.jumpLocation = PlayerControl.LocalPlayer.transform.localPosition;
                         jumperButton.Sprite = Jumper.getJumpButtonSprite();
                         Jumper.jumperCharges = Jumper.jumperChargesOnPlace;
-                    } else {
+                    } else if (Jumper.jumperCharges >= 1f) { //teleport to location if you have one
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetPosition, Hazel.SendOption.Reliable, -1);
                         writer.Write(PlayerControl.LocalPlayer.PlayerId);
                         writer.Write(Jumper.jumpLocation.x);
@@ -1411,19 +1412,29 @@ namespace TheEpicRoles {
 
                         Jumper.jumperCharges -= 1f;
                     }
-                    jumperButton.Timer = jumperButton.MaxTimer;
+                    if (Jumper.jumperCharges > 0) jumperButton.Timer = jumperButton.MaxTimer;
                 },
                 () => { return Jumper.jumper != null && Jumper.jumper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperCharges >= 1f) && PlayerControl.LocalPlayer.CanMove; },
                 () => {
-                    if (Jumper.jumpLocation != Vector3.zero) Jumper.jumperCharges += Jumper.jumperChargesGainOnMeeting;
-                    jumperButton.Timer = jumperButton.MaxTimer;
+                    if (jumperChargesText != null) jumperChargesText.text = $"{Jumper.jumperCharges}";
+                    return (Jumper.jumpLocation == Vector3.zero || Jumper.jumperCharges >= 1f) && PlayerControl.LocalPlayer.CanMove;
+                },
+                () => {
+                    Jumper.jumperCharges += Jumper.jumperChargesGainOnMeeting;
+                    if (Jumper.jumperCharges > Jumper.jumperMaxCharges) Jumper.jumperCharges = Jumper.jumperMaxCharges;
+                    if (Jumper.jumperCharges > 0) jumperButton.Timer = jumperButton.MaxTimer;
                 },
                 Jumper.getJumpMarkButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
+            // Jumper Charges counter
+            jumperChargesText = GameObject.Instantiate(jumperButton.actionButton.cooldownTimerText, jumperButton.actionButton.cooldownTimerText.transform.parent);
+            jumperChargesText.text = "";
+            jumperChargesText.enableWordWrapping = false;
+            jumperChargesText.transform.localScale = Vector3.one * 0.5f;
+            jumperChargesText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
 
             readyButton = new CustomButton(
                 () => {

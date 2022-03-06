@@ -51,6 +51,7 @@ namespace TheEpicRoles.Patches {
             public static void Prefix() {
                 // Clear ready status list on game join
                 RPCProcedure.readyStatus.Clear();
+                TheEpicRolesPlugin.firstKill = 0;
             }
         }
 
