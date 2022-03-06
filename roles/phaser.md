@@ -1,17 +1,25 @@
-[Back to all roles](https://github.com/laicosvk/theepicroles "Back to all roles")
+[:arrow_backward: back to overview](https://github.com/laicosvk/theepicroles "Back to all roles")
+<img align="right" width="100" height="100" src="../TheEpicRoles/Resources/PhaseButton.png"/>
 
-# Phaser
-Mark someone and teleport to your victim to kill it.
+# Phaser (Impostor)
+Mark - Teleport - Kill
 
-## Team: Impostor 
-The Phaser has the ability to mark a person. After some time, the Phaser can phase through reality, teleporting to the marked person and killing it. 
+## Description
+The Phaser has the ability to mark a person after a certain amount of time. After a specified time the Phaser can phase through reality, teleport to his marked person and kill it.
 
-## Notes:
-- If someone is standing next to the target, the Phase button is grayed out.
+## Notes
+- The Phase button is disabled if the marked player is near to another player.
 - Phaser and Camouflager exclude each others.
 
-## Options:
+## Buttons
+|Mark Button|Phase Button|
+| :------------: | :------------: |
+|<img width="100" height="100" src="../TheEpicRoles/Resources/PhaseButton.png"/>|<img width="100" height="100" src="../TheEpicRoles/Resources/PhaseKillButton.png"/>|
+
+
+
+## Options
 |Name|Default|Description|
 | :------------: | :------------: | :------------: |
-|phaserMarkCooldown|20|How muche time till you can mark someone
-|phaserPhaseCooldown|10|How muche time till you can Phase kill after marking
+|phaserMarkCooldown|20|Mark Cooldown
+|phaserPhaseCooldown|10|Phase Cooldown after marking
