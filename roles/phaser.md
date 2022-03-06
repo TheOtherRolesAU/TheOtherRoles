@@ -1,5 +1,5 @@
 [:arrow_backward: back to overview](https://github.com/laicosvk/theepicroles "back to overview")
-<img align="right" width="100" height="100" src="../TheEpicRoles/Resources/PhaseButton.png"/>
+<img align="right" height="250" src="https://anexia.com/blog/wp-content/uploads/2016/06/Phaser-Titelbild.jpg"/>
 
 # Phaser (Impostor)
 Mark - Teleport - Kill
