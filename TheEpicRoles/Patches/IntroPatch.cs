@@ -54,24 +54,6 @@ namespace TheEpicRoles.Patches {
                 }
             }
 
-            //First Kill Shield
-            if (AmongUsClient.Instance.AmHost) {
-                if (CustomOptionHolder.firstKillShield.getBool() == true) {
-                    if (TheEpicRolesPlugin.firstKill != 0) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GuardianAngelSetShielded, Hazel.SendOption.Reliable, -1);
-                        writer.Write(TheEpicRolesPlugin.firstKill);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                            if (player.NetId == TheEpicRolesPlugin.firstKill) RPCProcedure.guardianAngelSetShielded(player.PlayerId);
-                            TheEpicRolesPlugin.firstKill = 0;
-
-                            Helpers.playerById(player.PlayerId).protectedByGuardian = true;
-                            if (CustomOptionHolder.firstKillShield.getBool() == true) Helpers.playerById(player.PlayerId).protectedByGuardianThisRound = true;
-                        }
-                    }
-                }
-            }
-
             if (CustomOptionHolder.randomGameStartPosition.getBool()) { //Random spawn on game start
 
                 List<Vector3> skeldSpawn = new List<Vector3>() {

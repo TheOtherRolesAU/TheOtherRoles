@@ -1368,6 +1368,7 @@ namespace TheEpicRoles {
                         writer.Write(Phaser.currentTarget.transform.position.y);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         MurderAttemptResult murder = Helpers.checkMuderAttemptAndKill(Phaser.phaser, Phaser.currentTarget, showAnimation: true);
+                        Phaser.phaser.transform.position = Phaser.currentTarget.transform.position;
                         if (murder == MurderAttemptResult.SuppressKill) return;
 
 

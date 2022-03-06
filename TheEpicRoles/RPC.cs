@@ -114,8 +114,7 @@ namespace TheEpicRoles {
         SetBlanked,
         
         SetPosition,
-        GuardianAngelSetShielded,
-        
+
         // Ready Status
         SetReadyStatus,
         SetReadyNames,
@@ -329,11 +328,6 @@ namespace TheEpicRoles {
         public static void uncheckedMurderPlayer(byte sourceId, byte targetId, byte showAnimation) {
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
-
-            // set the first kill shield
-            if (CustomOptionHolder.firstKillShield.getBool() == true && TheEpicRolesPlugin.firstKill == 0) TheEpicRolesPlugin.firstKill = target.NetId;
-            if (sourceId == targetId) Helpers.playerById(sourceId).protectedByGuardian = false;
-
             if (source != null && target != null) {
                 if (showAnimation == 0) KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                 source.MurderPlayer(target);
@@ -408,11 +402,6 @@ namespace TheEpicRoles {
             Medic.usedShield = true;
             Medic.shielded = Helpers.playerById(shieldedId);
             Medic.futureShielded = null;
-        }
-
-        public static void guardianAngelSetShielded(byte shielded) {
-            Helpers.playerById(shielded).protectedByGuardian = true;
-            if (CustomOptionHolder.firstKillShield.getBool() == true) Helpers.playerById(shielded).protectedByGuardianThisRound = true;
         }
 
         public static void shieldedMurderAttempt() {
@@ -1081,9 +1070,6 @@ namespace TheEpicRoles {
                     break;
                 case (byte)CustomRPC.SetPosition:
                     RPCProcedure.setPosition(reader.ReadByte(), reader.ReadSingle(), reader.ReadSingle());
-                    break;
-                case (byte)CustomRPC.GuardianAngelSetShielded:
-                    RPCProcedure.guardianAngelSetShielded(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetReadyStatus:
                     RPCProcedure.setReadyStatus(reader.ReadByte(), reader.ReadByte());

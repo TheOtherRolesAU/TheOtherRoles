@@ -252,8 +252,6 @@ namespace TheEpicRoles {
         public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption setRoundStartCooldown;
-        public static CustomOption firstKillShield;
-        public static CustomOption firstKillShieldNotification;
         public static CustomOption toggleLobbyMode;
 
         public static CustomOption dynamicMap;
@@ -521,9 +519,6 @@ namespace TheEpicRoles {
             randomGameStartPosition = CustomOption.Create(9041, cs(new Color(0, 1, 217f / 255f, 1f), "Random Spawn Location"), "option", true);
             //LVK. Cooldown on round start setting
             setRoundStartCooldown = CustomOption.Create(9042, cs(new Color(0, 1, 217f / 255f, 1f), "Set Spawn Cooldown"), "option", 30f, 10f, 60f, 2.5f, null, true);
-            //LVK. Shield the player that died first last round
-            firstKillShield = CustomOption.Create(9043, cs(new Color(0, 1, 217f / 255f, 1f), "Protect Previous Firstblood"), "option", true);
-            firstKillShieldNotification = CustomOption.Create(9044, cs(new Color(0, 1, 217f / 255f, 1f), "Show Kill Attempt In Meeting"), "option", true, firstKillShield);
             //Monschtalein. toggle lobby mode
             toggleLobbyMode = CustomOption.Create(7000, cs(new Color(0, 1, 217f / 255f, 1f), "Ignore undready players"), "option", new string[] { "No", "Yes" }, null, false);
 

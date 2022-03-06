@@ -333,12 +333,6 @@ namespace TheEpicRoles {
                 return MurderAttemptResult.SuppressKill;
             }
 
-            //dont kill if guiardian angel shield
-            if (target.protectedByGuardian == true || target.protectedByGuardianThisRound == true) {
-                new CustomMessage("This person has the first kill shield", 3);
-                return MurderAttemptResult.SuppressKill;
-            }
-
             // Block impostor not fully grown mini kill
             else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
             return MurderAttemptResult.SuppressKill;
@@ -354,8 +348,6 @@ namespace TheEpicRoles {
                 return MurderAttemptResult.SuppressKill;
             }
 
-            if (CustomOptionHolder.firstKillShield.getBool() == true && TheEpicRolesPlugin.firstKill == 0) TheEpicRolesPlugin.firstKill = target.Data.PlayerId;
-            if (killer.protectedByGuardian == true) killer.protectedByGuardian = false;
             return MurderAttemptResult.PerformKill;
         }
 
