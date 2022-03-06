@@ -11,15 +11,15 @@ The Phaser has the ability to mark a person after a certain amount of time. Afte
 - Phaser and Camouflager exclude each others.
 
 ## Buttons
-|Mark Button|Phase Button|
+| Mark Button | Phase Button |
 | :------------: | :------------: |
 |<img width="100" height="100" src="../TheEpicRoles/Resources/PhaseButton.png"/>|<img width="100" height="100" src="../TheEpicRoles/Resources/PhaseKillButton.png"/>|
 
 ## Options
-|Name|Default|Description|
-| :------------: | :------------: | :------------: |
-|phaserMarkCooldown|20|Initial mark cooldown
-|phaserPhaseCooldown|10|Phase cooldown after marking
+| Name | Default | Description |
+| --- | :---: | --- |
+|Mark Cooldown|20|Initial mark cooldown
+|Phase Cooldown|10|Phase cooldown after marking
 
 ## Credits
 - Idea and implementation by [LaicosVK](https://github.com/LaicosVK "visit github profile of LaicosVK")
