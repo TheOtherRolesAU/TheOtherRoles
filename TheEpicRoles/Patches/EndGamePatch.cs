@@ -331,9 +331,19 @@ namespace TheEpicRoles.Patches {
                 var roleSummaryText = new StringBuilder();
                 roleSummaryText.AppendLine("Players and roles at the end of the game:");
                 foreach(var data in AdditionalTempData.playerRoles) {
+                    var playerName = data.PlayerName;
+                    while (playerName.Length < 12) playerName = $"{playerName} ";
+
                     var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
-                    var taskInfo = data.TasksTotal > 0 ? $" - <color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
-                    roleSummaryText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}");
+                    var rolesSingle = string.Join(" ", data.Roles.Select(x => x.name));
+                    while (rolesSingle.Length < 20) {
+                        rolesSingle = $"{rolesSingle} ";
+                        roles = $"{roles} ";
+                    }
+
+                    var taskInfo = data.TasksTotal > 0 ? $"<color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
+
+                    roleSummaryText.AppendLine($"{playerName} {roles} {taskInfo}");
                 }
                 TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
                 roleSummaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
