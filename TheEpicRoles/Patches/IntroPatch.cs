@@ -3,6 +3,7 @@ using Hazel;
 using System;
 using static TheEpicRoles.TheEpicRoles;
 using TheEpicRoles.Objects;
+using TheEpicRoles.Patches;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,17 @@ namespace TheEpicRoles.Patches {
                     BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
+                }
+            }
+
+            if (PlayerControl.LocalPlayer.AmOwner == true && CustomOptionHolder.firstKillShield.getBool() == true) {
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                    if (GameStartManagerPatch.guardianShield == player.Data.PlayerName) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetGuardianShield, Hazel.SendOption.Reliable, -1);
+                        writer.Write(player.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.setGuardianShield(player.PlayerId);
+                    }
                 }
             }
 

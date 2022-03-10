@@ -112,8 +112,10 @@ namespace TheEpicRoles {
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
-        
+
         SetPosition,
+        SetFirstKill,
+        SetGuardianShield,
 
         // Ready Status
         SetReadyStatus,
@@ -328,6 +330,7 @@ namespace TheEpicRoles {
         public static void uncheckedMurderPlayer(byte sourceId, byte targetId, byte showAnimation) {
             PlayerControl source = Helpers.playerById(sourceId);
             PlayerControl target = Helpers.playerById(targetId);
+            if (source == target) source.protectedByGuardian = false;
             if (source != null && target != null) {
                 if (showAnimation == 0) KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                 source.MurderPlayer(target);
@@ -851,7 +854,15 @@ namespace TheEpicRoles {
             PlayerControl target = Helpers.playerById(playerId);
             target.transform.localPosition = new Vector3(x, y, 0);
             target.transform.position = new Vector3(x, y, 0);
+        }
 
+        public static void setFirstKill(byte playerId) {
+            GameStartManagerPatch.guardianShield = Helpers.playerById(playerId).Data.PlayerName;
+        }
+
+        public static void setGuardianShield(byte playerId) {
+            Helpers.playerById(playerId).protectedByGuardian = true;
+            GameStartManagerPatch.guardianShield = "";
         }
 
         // Sets the ready status in readystatus list if reciever is lobby host
@@ -1070,6 +1081,12 @@ namespace TheEpicRoles {
                     break;
                 case (byte)CustomRPC.SetPosition:
                     RPCProcedure.setPosition(reader.ReadByte(), reader.ReadSingle(), reader.ReadSingle());
+                    break;
+                case (byte)CustomRPC.SetFirstKill:
+                    RPCProcedure.setFirstKill(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SetGuardianShield:
+                    RPCProcedure.setGuardianShield(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetReadyStatus:
                     RPCProcedure.setReadyStatus(reader.ReadByte(), reader.ReadByte());

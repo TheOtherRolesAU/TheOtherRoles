@@ -47,6 +47,7 @@ namespace TheEpicRoles {
         public static CustomButton phaserCurseButton;
         public static CustomButton jumperButton;
         public static CustomButton readyButton;
+        public static CustomButton guardianShield;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -94,6 +95,7 @@ namespace TheEpicRoles {
             phaserCurseButton.MaxTimer = Phaser.markCooldown;
             jumperButton.MaxTimer = Jumper.jumperJumpTime;
             readyButton.MaxTimer = 3f;
+            guardianShield.MaxTimer = 0f;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -1470,7 +1472,19 @@ namespace TheEpicRoles {
                 false,
                 "Not Ready",
                 true
+            );
 
+            // GuardianShield
+            guardianShield = new CustomButton(
+                () => { },
+                () => { return PlayerControl.LocalPlayer.protectedByGuardian || PlayerControl.LocalPlayer.protectedByGuardianThisRound; },
+                () => { return true; },
+                () => { },
+                Helpers.loadSpriteFromResources("TheEpicRoles.Resources.GuardianShield.png", 115f),
+                //new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(0f, 2.06f, 0),
+                __instance,
+                null
             );
 
             // Set the default (or settings from the previous game) timers/durations when spawning the buttons

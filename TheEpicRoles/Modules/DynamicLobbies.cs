@@ -20,12 +20,13 @@ namespace TheEpicRoles.Modules {
                                 if (!Int32.TryParse(text.Substring(6), out LobbyLimit)) {
                                     __instance.AddChat(PlayerControl.LocalPlayer, "Invalid Size\nUsage: /size {amount}");
                                 } else {
-                                    LobbyLimit = Math.Clamp(LobbyLimit, 4, 15);
+                                    LobbyLimit = Math.Clamp(LobbyLimit, 4, 18);
                                     if (LobbyLimit != PlayerControl.GameOptions.MaxPlayers) {
                                         PlayerControl.GameOptions.MaxPlayers = LobbyLimit;
                                         DestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
                                         PlayerControl.LocalPlayer.RpcSyncSettings(PlayerControl.GameOptions);
                                         __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size changed to {LobbyLimit} players");
+                                        if (LobbyLimit > 15) __instance.AddChat(PlayerControl.LocalPlayer, $"CAREFUL! This many players are not normally supported! expect things to break!");
                                     } else {
                                         __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size is already {LobbyLimit}");
                                     }

@@ -730,8 +730,7 @@ namespace TheEpicRoles
             resetTracked();
             timeUntilUpdate = 0f;
             updateIntervall = CustomOptionHolder.trackerUpdateIntervall.getFloat();
-            if (updateIntervall == 0f) {
-                updateIntervall = 0.01f; }
+            if (updateIntervall == 0f) updateIntervall = 0.01f;
             resetTargetAfterMeeting = CustomOptionHolder.trackerResetTargetAfterMeeting.getBool();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
@@ -1213,7 +1212,7 @@ namespace TheEpicRoles
         public static bool showArrow = true;
         public static float bountyKillCooldown = 0f;
         public static float punishmentTime = 15f;
-        public static float arrowUpdateIntervall = 10f;
+        public static float arrowUpdateIntervall = 5f;
 
         public static float arrowUpdateTimer = 0f;
         public static float bountyUpdateTimer = 0f;
@@ -1240,6 +1239,7 @@ namespace TheEpicRoles
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
+            if (arrowUpdateIntervall == 0f) arrowUpdateIntervall = 0.01f;
         }
     }
 
