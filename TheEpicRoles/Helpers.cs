@@ -10,6 +10,7 @@ using System.Linq;
 using static TheEpicRoles.TheEpicRoles;
 using TheEpicRoles.Modules;
 using TheEpicRoles.Objects;
+using TheEpicRoles.Patches;
 using HarmonyLib;
 using Hazel;
 
@@ -346,6 +347,14 @@ namespace TheEpicRoles {
                     RPCProcedure.timeMasterRewindTime();
                 }
                 return MurderAttemptResult.SuppressKill;
+            }
+
+            if (GameStartManagerPatch.guardianShield == "") {
+                GameStartManagerPatch.guardianShield = target.Data.PlayerName;
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.SetFirstKill, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setFirstKill(target.PlayerId);
             }
 
             return MurderAttemptResult.PerformKill;

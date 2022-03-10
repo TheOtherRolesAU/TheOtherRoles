@@ -15,6 +15,8 @@ namespace TheEpicRoles.Patches {
         private static bool versionSent = false;
         private static string lobbyCodeText = "";
 
+        public static string guardianShield = "";
+
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
         public class AmongUsClientOnPlayerJoinedPatch {
             public static void Postfix() {
