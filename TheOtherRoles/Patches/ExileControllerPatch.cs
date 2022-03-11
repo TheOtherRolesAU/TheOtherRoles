@@ -51,6 +51,9 @@ namespace TheOtherRoles.Patches {
                 JackInTheBox.convertToVents();
             }
 
+            // Activate portals.
+            Portal.meetingEndsUpdate();
+
             // Witch execute casted spells
             if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
                 bool exiledIsWitch = exiled != null && exiled.PlayerId == Witch.witch.PlayerId;

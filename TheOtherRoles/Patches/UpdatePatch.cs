@@ -74,13 +74,13 @@ namespace TheOtherRoles.Patches {
                 if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
-            }
-            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
+            } else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Deputy.deputy, Deputy.color);
                 if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 }
-            }
+            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer)
+                setPlayerNameColor(Portalmaker.portalmaker, Portalmaker.color);
             else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
             else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)

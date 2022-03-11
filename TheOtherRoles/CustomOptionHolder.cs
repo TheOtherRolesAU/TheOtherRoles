@@ -102,6 +102,11 @@ namespace TheOtherRoles {
 
         public static CustomOption mayorSpawnRate;
 
+        public static CustomOption portalmakerSpawnRate;
+        public static CustomOption portalmakerCooldown;
+        public static CustomOption portalmakerUsePortalCooldown;
+        public static CustomOption portalmakerLogOnlyColorType;
+
         public static CustomOption engineerSpawnRate;
         public static CustomOption engineerNumberOfFixes;
         public static CustomOption engineerHighlightForImpostors;
@@ -444,6 +449,11 @@ namespace TheOtherRoles {
             spyImpostorsCanKillAnyone = CustomOption.Create(242, "Impostors Can Kill Anyone If There Is A Spy", true, spySpawnRate);
             spyCanEnterVents = CustomOption.Create(243, "Spy Can Enter Vents", false, spySpawnRate);
             spyHasImpostorVision = CustomOption.Create(244, "Spy Has Impostor Vision", false, spySpawnRate);
+
+            portalmakerSpawnRate = CustomOption.Create(380, cs(Portalmaker.color, "Portalmaker"), rates, null, true);
+            portalmakerCooldown = CustomOption.Create(381, "Portalmaker Cooldown", 30f, 10f, 60f, 2.5f, portalmakerSpawnRate);
+            portalmakerUsePortalCooldown = CustomOption.Create(382, "Use Portal Cooldown", 30f, 10f, 60f, 2.5f, portalmakerSpawnRate);
+            portalmakerLogOnlyColorType = CustomOption.Create(383, "Portalmaker Log Only Shows Color Type", true, portalmakerSpawnRate);
 
             securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "Security Guard"), rates, null, true);
             securityGuardCooldown = CustomOption.Create(281, "Security Guard Cooldown", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);

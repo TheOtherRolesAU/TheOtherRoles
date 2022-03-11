@@ -21,6 +21,9 @@ namespace TheOtherRoles
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
+        private static CustomButton portalmakerPlacePortalButton;
+        private static CustomButton usePortalButton;
+        private static CustomButton portalmakerLogButton;
         private static CustomButton hackerButton;
         private static CustomButton hackerVitalsButton;
         private static CustomButton hackerAdminTableButton;
@@ -45,6 +48,7 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
 
+
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
@@ -64,6 +68,9 @@ namespace TheOtherRoles
             shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
             camouflagerButton.MaxTimer = Camouflager.cooldown;
+            portalmakerPlacePortalButton.MaxTimer = Portalmaker.cooldown;
+            usePortalButton.MaxTimer = Portalmaker.usePortalCooldown;
+            portalmakerLogButton.MaxTimer = 40f; // TODO add option / check mechanic
             hackerButton.MaxTimer = Hacker.cooldown;
             hackerVitalsButton.MaxTimer = Hacker.cooldown;
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
@@ -713,7 +720,86 @@ namespace TheOtherRoles
                 true
             );
 
-            
+            portalmakerPlacePortalButton = new CustomButton(
+                () => {
+                    portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer;
+
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.PlacePortal, Hazel.SendOption.Reliable);
+                    writer.WriteBytesAndSize(buff);
+                    writer.EndMessage();
+                    RPCProcedure.placePortal(buff);
+                    Portal.meetingEndsUpdate(); // TODO REMOVE!!
+                },
+                () => { return Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Portal.secondPortal == null; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Portal.secondPortal == null; },
+                () => { portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer; },
+                Portalmaker.getPlacePortalButtonSprite(),
+                new Vector3(-2.7f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
+
+            usePortalButton = new CustomButton(
+                () => {
+                    bool didTeleport = false;
+                    Vector2 target = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
+                    writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.usePortal(PlayerControl.LocalPlayer.PlayerId);
+                    usePortalButton.Timer = usePortalButton.MaxTimer;
+                    HudManager.Instance.StartCoroutine(Effects.Lerp(1.5f, new Action<float>((p) => { // Delayed action
+                        PlayerControl.LocalPlayer.moveable = false;
+                        PlayerControl.LocalPlayer.NetTransform.Halt();
+                        if (p >= 0.45f && p <= 0.5f && !didTeleport) {
+                            PlayerControl.LocalPlayer.transform.position = target;
+                            didTeleport = true;
+                        }
+                        if (p == 1f) {
+                            PlayerControl.LocalPlayer.moveable = true;
+                        }
+                    })));
+                    },
+                () => { return CustomOptionHolder.portalmakerSpawnRate.getSelection() > 0; },
+                () => { return PlayerControl.LocalPlayer.CanMove && Portal.locationNearEntry(PlayerControl.LocalPlayer.transform.position) && !Portal.isTeleporting; },
+                () => { usePortalButton.Timer = usePortalButton.MaxTimer; },
+                Portalmaker.getUsePortalButtonSprite(),
+                new Vector3(0.9f, -0.06f, 0),
+                __instance,
+                KeyCode.H,
+                mirror: true
+            );
+
+            portalmakerLogButton = new CustomButton(
+               () => {
+                   //((DoorConsole)Portalmaker.log).UseIcon; TODO                   
+               },
+               () => { return Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+               () => { return Portal.bothPlacedAndEnabled && PlayerControl.LocalPlayer.CanMove; },
+               () => {
+                   portalmakerLogButton.Timer = portalmakerLogButton.MaxTimer;
+               },
+               Portalmaker.getLogSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.Q,
+               true,
+               30f,
+               () => {
+                   portalmakerLogButton.Timer = portalmakerLogButton.MaxTimer;
+                   if (!portalmakerLogButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
+                   //if (Minigame.Instance) Portalmaker.log.ForceClose();
+               },
+               false,
+               "PORTAL LOG"
+           );
+
+
             // Jackal Sidekick Button
             jackalSidekickButton = new CustomButton(
                 () => {

@@ -16,6 +16,7 @@ namespace TheOtherRoles
     enum RoleId {
         Jester,
         Mayor,
+        Portalmaker,
         Engineer,
         Sheriff,
         Deputy,
@@ -99,6 +100,8 @@ namespace TheOtherRoles
         SetFutureShifted,
         SetFutureShielded,
         SetFutureSpelled,
+        PlacePortal,
+        UsePortal,
         PlaceJackInTheBox,
         LightsOut,
         PlaceCamera,
@@ -119,6 +122,7 @@ namespace TheOtherRoles
         public static void resetVariables() {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
+            Portal.clearPortals();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -160,7 +164,10 @@ namespace TheOtherRoles
                     case RoleId.Mayor:
                         Mayor.mayor = player;
                         break;
-                    case RoleId.Engineer:
+                    case RoleId.Portalmaker:
+                        Portalmaker.portalmaker = player;
+                        break;
+                        case RoleId.Engineer:
                         Engineer.engineer = player;
                         break;
                     case RoleId.Sheriff:
@@ -440,6 +447,8 @@ namespace TheOtherRoles
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
                 Mayor.mayor = oldShifter;
+            if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == player)
+                Portalmaker.portalmaker = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
             if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
@@ -585,6 +594,7 @@ namespace TheOtherRoles
 
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();
+            if (player == Portalmaker.portalmaker) Portalmaker.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
             if (player == Deputy.deputy) Deputy.clearAndReload();
@@ -665,6 +675,16 @@ namespace TheOtherRoles
             }
         }
 
+        public static void placePortal(byte[] buff) {
+            Vector3 position = Vector2.zero;
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
+            new Portal(position);
+        }
+
+        public static void usePortal(byte playerId) {
+            Portal.startTeleport(playerId);
+        }
 
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
@@ -948,6 +968,12 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.PlacePortal:
+                    RPCProcedure.placePortal(reader.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.UsePortal:
+                    RPCProcedure.usePortal(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());
