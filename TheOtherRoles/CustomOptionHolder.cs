@@ -106,6 +106,7 @@ namespace TheOtherRoles {
         public static CustomOption portalmakerCooldown;
         public static CustomOption portalmakerUsePortalCooldown;
         public static CustomOption portalmakerLogOnlyColorType;
+        public static CustomOption portalmakerLogHasTime;
 
         public static CustomOption engineerSpawnRate;
         public static CustomOption engineerNumberOfFixes;
@@ -454,6 +455,7 @@ namespace TheOtherRoles {
             portalmakerCooldown = CustomOption.Create(381, "Portalmaker Cooldown", 30f, 10f, 60f, 2.5f, portalmakerSpawnRate);
             portalmakerUsePortalCooldown = CustomOption.Create(382, "Use Portal Cooldown", 30f, 10f, 60f, 2.5f, portalmakerSpawnRate);
             portalmakerLogOnlyColorType = CustomOption.Create(383, "Portalmaker Log Only Shows Color Type", true, portalmakerSpawnRate);
+            portalmakerLogHasTime = CustomOption.Create(384, "Log Shows Time", true, portalmakerSpawnRate);
 
             securityGuardSpawnRate = CustomOption.Create(280, cs(SecurityGuard.color, "Security Guard"), rates, null, true);
             securityGuardCooldown = CustomOption.Create(281, "Security Guard Cooldown", 30f, 10f, 60f, 2.5f, securityGuardSpawnRate);

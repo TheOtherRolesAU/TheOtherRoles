@@ -444,7 +444,8 @@ namespace TheOtherRoles.Patches {
                 if (Portalmaker.portalmaker != null && PlayerControl.LocalPlayer == Portalmaker.portalmaker && !PlayerControl.LocalPlayer.Data.IsDead) {
                     foreach (var entry in Portal.teleportedPlayers) {
                         float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
-                        string msg = $"{(int)timeBeforeMeeting}s ago: {entry.name} used the teleporter";
+                        string msg = Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting}s ago: " : "";
+                        msg = msg + $"{entry.name} used the teleporter";
                         DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
                     }
                 }                

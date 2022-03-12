@@ -86,6 +86,7 @@ namespace TheOtherRoles
             public static float cooldown;
             public static float usePortalCooldown;
             public static bool logOnlyHasColors;
+            public static bool logShowsTime;
 
             private static Sprite placePortalButtonSprite;
             private static Sprite usePortalButtonSprite;
@@ -114,6 +115,7 @@ namespace TheOtherRoles
                 cooldown = CustomOptionHolder.portalmakerCooldown.getFloat();
                 usePortalCooldown = CustomOptionHolder.portalmakerUsePortalCooldown.getFloat();
                 logOnlyHasColors = CustomOptionHolder.portalmakerLogOnlyColorType.getBool();
+                logShowsTime = CustomOptionHolder.portalmakerLogHasTime.getBool();
             }
 
 
