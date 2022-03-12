@@ -733,7 +733,6 @@ namespace TheOtherRoles
                     writer.WriteBytesAndSize(buff);
                     writer.EndMessage();
                     RPCProcedure.placePortal(buff);
-                    Portal.meetingEndsUpdate(); // TODO REMOVE!!
                 },
                 () => { return Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Portal.secondPortal == null; },
                 () => { return PlayerControl.LocalPlayer.CanMove && Portal.secondPortal == null; },
@@ -747,17 +746,22 @@ namespace TheOtherRoles
             usePortalButton = new CustomButton(
                 () => {
                     bool didTeleport = false;
-                    Vector2 target = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
-                    writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    Vector2 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
+                    Vector2 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
+                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);  // TODO: check for bans on servers
+                    //PlayerControl.LocalPlayer.DoMove
+                    if (!PlayerControl.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
+                        writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    }
                     RPCProcedure.usePortal(PlayerControl.LocalPlayer.PlayerId);
                     usePortalButton.Timer = usePortalButton.MaxTimer;
                     HudManager.Instance.StartCoroutine(Effects.Lerp(1.5f, new Action<float>((p) => { // Delayed action
                         PlayerControl.LocalPlayer.moveable = false;
                         PlayerControl.LocalPlayer.NetTransform.Halt();
                         if (p >= 0.45f && p <= 0.5f && !didTeleport) {
-                            PlayerControl.LocalPlayer.transform.position = target;
+                            PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
                         if (p == 1f) {

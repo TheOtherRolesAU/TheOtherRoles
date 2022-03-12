@@ -8,66 +8,94 @@ namespace TheOtherRoles.Objects {
         public static Portal firstPortal = null;
         public static Portal secondPortal = null;
         public static bool bothPlacedAndEnabled = false;
-        public static Sprite[] portalAnimationSprites = new Sprite[81];
+        public static Sprite[] portalBgAnimationSprites = new Sprite[12];
+        public static Sprite[] portalFgAnimationSprites = new Sprite[12];
         public static Sprite portalSprite;
         public static bool isTeleporting = false;
 
-        public static List<byte> teleportedPlayers;
+        public struct tpLogEntry {
+            public byte playerId;
+            public string name;
+            public float time;
+            public tpLogEntry(byte playerId, string name, float time) {
+                this.playerId = playerId;
+                this.time = time;
+                this.name = name;
+            }
+        }
 
-        public static Sprite getBoxAnimationSprite(int index) {
-            if (portalAnimationSprites == null || portalAnimationSprites.Length == 0) return null;
-            index = Mathf.Clamp(index, 0, portalAnimationSprites.Length - 1);
-            if (portalAnimationSprites[index] == null)
-                portalAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_animation_00{(index+1):00}.png", 225f));
-            return portalAnimationSprites[index];
+        public static List<tpLogEntry> teleportedPlayers;
+
+        public static Sprite getBgAnimationSprite(int index) {
+            if (portalBgAnimationSprites == null || portalBgAnimationSprites.Length == 0) return null;
+            index = Mathf.Clamp(index, 0, portalBgAnimationSprites.Length - 1);
+            if (portalBgAnimationSprites[index] == null)
+                portalBgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_00{(index+1):00}.png", 115f));
+            return portalBgAnimationSprites[index];
+        }
+
+        public static Sprite getFgAnimationSprite(int index) {
+            if (portalFgAnimationSprites == null || portalFgAnimationSprites.Length == 0) return null;
+            index = Mathf.Clamp(index, 0, portalFgAnimationSprites.Length - 1);
+            if (portalFgAnimationSprites[index] == null)
+                portalFgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_animation_front_00{(index + 1):00}.png", 115f));
+            return portalFgAnimationSprites[index];
         }
 
         public static void startTeleport(byte playerId) {
             if (firstPortal == null || secondPortal == null) return;
             isTeleporting = true;
-            teleportedPlayers.Add(playerId);
+            teleportedPlayers.Add(new tpLogEntry(playerId, Helpers.playerById(playerId).nameText.text ,0f));
             HudManager.Instance.StartCoroutine(Effects.Lerp(2.5f, new Action<float>((p) => {
-                if (firstPortal != null && firstPortal.animationRenderer != null) {
-                    firstPortal.animationRenderer.sprite = getBoxAnimationSprite((int)(p * portalAnimationSprites.Length));
-                    if (p == 1f) firstPortal.animationRenderer.sprite = null;
-                }
-            })));
-            HudManager.Instance.StartCoroutine(Effects.Lerp(2.5f, new Action<float>((p) => {
-                if (secondPortal != null && secondPortal.animationRenderer != null) {
-                    secondPortal.animationRenderer.sprite = getBoxAnimationSprite((int)(p * portalAnimationSprites.Length));
+                if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
+                    firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    firstPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    secondPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     if (p == 1f) {
-                        secondPortal.animationRenderer.sprite = null;
+                        firstPortal.animationFgRenderer.sprite = null;
+                        secondPortal.animationFgRenderer.sprite = null;
+                        firstPortal.animationBgRenderer.sprite = null;
+                        secondPortal.animationBgRenderer.sprite = null;
                         isTeleporting = false;
                     }
                 }
             })));
         }
 
-        public GameObject portalAnimationGameObject;
+        public GameObject portalFgAnimationGameObject;
+        public GameObject portalBgAnimationGameObject;
         public GameObject portalGameObject;
-        private SpriteRenderer animationRenderer;
+        private SpriteRenderer animationFgRenderer;
+        private SpriteRenderer animationBgRenderer;
         private SpriteRenderer portalRenderer;
 
         public Portal(Vector2 p) {
             portalGameObject = new GameObject("Portal");
             Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
 
+
             // Create the portal            
             portalGameObject.transform.position = position;
             portalRenderer = portalGameObject.AddComponent<SpriteRenderer>();
+            animationBgRenderer = portalGameObject.AddComponent<SpriteRenderer>();
             portalRenderer.sprite = portalSprite;
 
-            portalAnimationGameObject = new GameObject("PortalAnimation");
-            position.z -= 1.1f; // infront of the player;
-            portalAnimationGameObject.transform.position = position;
-            animationRenderer = portalAnimationGameObject.AddComponent<SpriteRenderer>();
-            animationRenderer.sprite = null;
+            portalBgAnimationGameObject = new GameObject("PortalAnimationBG");
+            portalBgAnimationGameObject.transform.position = position;
+            animationBgRenderer = portalBgAnimationGameObject.AddComponent<SpriteRenderer>();
+
+            Vector3 fgPosition = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z - 0.1f);
+            portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
+            portalFgAnimationGameObject.transform.position = fgPosition;
+            animationFgRenderer = portalFgAnimationGameObject.AddComponent<SpriteRenderer>();
 
 
             // Only render the inactive portals for the Portalmaker
             bool playerIsPortalmaker = PlayerControl.LocalPlayer == TheOtherRoles.Portalmaker.portalmaker;
             portalGameObject.SetActive(playerIsPortalmaker);
-            portalAnimationGameObject.SetActive(true);
+            portalFgAnimationGameObject.SetActive(true);
+            portalBgAnimationGameObject.SetActive(true);
 
             if (firstPortal == null) firstPortal = this;
             else if (secondPortal == null) {
@@ -86,13 +114,15 @@ namespace TheOtherRoles.Objects {
         }
 
         public static Vector2 findExit(Vector2 p) {
-            TheOtherRolesPlugin.Logger.LogWarning(p);
-            TheOtherRolesPlugin.Logger.LogWarning(firstPortal.portalGameObject.transform.position);
-            TheOtherRolesPlugin.Logger.LogWarning(p.x - firstPortal.portalGameObject.transform.position.x);
-            TheOtherRolesPlugin.Logger.LogWarning(p.y - firstPortal.portalGameObject.transform.position.y);
             var dist1 = Vector2.Distance(p, firstPortal.portalGameObject.transform.position);
             var dist2 = Vector2.Distance(p, secondPortal.portalGameObject.transform.position);
             return dist1 < dist2 ? secondPortal.portalGameObject.transform.position : firstPortal.portalGameObject.transform.position;
+        }
+
+        public static Vector2 findEntry(Vector2 p) {
+            var dist1 = Vector2.Distance(p, firstPortal.portalGameObject.transform.position);
+            var dist2 = Vector2.Distance(p, secondPortal.portalGameObject.transform.position);
+            return dist1 > dist2 ? secondPortal.portalGameObject.transform.position : firstPortal.portalGameObject.transform.position;
         }
 
         public static void meetingEndsUpdate() {
@@ -104,11 +134,14 @@ namespace TheOtherRoles.Objects {
             }
 
             // reset teleported players
-            teleportedPlayers = new List<byte>();
+            teleportedPlayers = new List<tpLogEntry>();
         }
 
         private static void preloadSprites() {
-            for (int i = 0; i < portalAnimationSprites.Length; i++) getBoxAnimationSprite(i);
+            for (int i = 0; i < portalFgAnimationSprites.Length; i++) {
+                getBgAnimationSprite(i);
+                getFgAnimationSprite(i);
+            }
             portalSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PortalAnimation.portal_0001.png", 115f);
         }
 
@@ -118,7 +151,7 @@ namespace TheOtherRoles.Objects {
             firstPortal = null;
             secondPortal = null;
             isTeleporting = false;
-            teleportedPlayers = new List<byte>();
+            teleportedPlayers = new List<tpLogEntry>();
         }
 
     }
