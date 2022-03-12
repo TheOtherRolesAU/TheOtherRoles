@@ -117,12 +117,14 @@ namespace TheEpicRoles {
 
         public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
-                var text = "";
-                if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
-                else if (ShipStatusPatch.lightsOut <= PlayerControl.GameOptions.CrewLightMod) text = defaultText; // set to default if lights are out
-                else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
-                else if (target == null) text = defaultText; // Set text to defaultText if no target
-                else text = target.Data.PlayerName; // Set text to playername
+                var text = defaultText;
+                if (PlayerControl.LocalPlayer.CanMove){
+                    if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
+                    else if (ShipStatusPatch.lightsOut <= PlayerControl.GameOptions.CrewLightMod) text = defaultText; // set to default if lights are out
+                    else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
+                    else if (target == null) text = defaultText; // Set text to defaultText if no target
+                    else text = target.Data.PlayerName; // Set text to playername
+                }
                 button.actionButton.OverrideText(text);
                 button.showButtonText = true;
             }
@@ -1477,12 +1479,10 @@ namespace TheEpicRoles {
             // GuardianShield
             guardianShield = new CustomButton(
                 () => { },
-                //() => { return (PlayerControl.LocalPlayer.protectedByGuardian || PlayerControl.LocalPlayer.protectedByGuardianThisRound) && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return true; },
+                () => { return (PlayerControl.LocalPlayer.protectedByGuardian || PlayerControl.LocalPlayer.protectedByGuardianThisRound) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return true; },
                 () => { },
                 Helpers.loadSpriteFromResources("TheEpicRoles.Resources.GuardianShield.png", 115f),
-                //new Vector3(-1.8f, -0.06f, 0),
                 new Vector3(0.4f, 2.9f, 0),
                 __instance,
                 null
