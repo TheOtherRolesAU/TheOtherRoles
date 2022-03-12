@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
 
@@ -12,12 +13,13 @@ namespace TheOtherRoles.Objects {
         public static Sprite[] portalFgAnimationSprites = new Sprite[12];
         public static Sprite portalSprite;
         public static bool isTeleporting = false;
+        public static float teleportDuration = 2.5f; 
 
         public struct tpLogEntry {
             public byte playerId;
             public string name;
-            public float time;
-            public tpLogEntry(byte playerId, string name, float time) {
+            public DateTime time;
+            public tpLogEntry(byte playerId, string name, DateTime time) {
                 this.playerId = playerId;
                 this.time = time;
                 this.name = name;
@@ -45,8 +47,15 @@ namespace TheOtherRoles.Objects {
         public static void startTeleport(byte playerId) {
             if (firstPortal == null || secondPortal == null) return;
             isTeleporting = true;
-            teleportedPlayers.Add(new tpLogEntry(playerId, Helpers.playerById(playerId).nameText.text ,0f));
-            HudManager.Instance.StartCoroutine(Effects.Lerp(2.5f, new Action<float>((p) => {
+            
+            // Generate log info
+            PlayerControl playerControl = Helpers.playerById(playerId);
+            if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
+            string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : Helpers.playerById(playerId).nameText.text;
+            if (Camouflager.camouflageTimer > 0) playerNameDisplay = "A camouflaged player";
+            teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
+            
+            HudManager.Instance.StartCoroutine(Effects.Lerp(teleportDuration, new Action<float>((p) => {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
                     firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));

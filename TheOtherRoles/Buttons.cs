@@ -23,7 +23,6 @@ namespace TheOtherRoles
         private static CustomButton camouflagerButton;
         private static CustomButton portalmakerPlacePortalButton;
         private static CustomButton usePortalButton;
-        private static CustomButton portalmakerLogButton;
         private static CustomButton hackerButton;
         private static CustomButton hackerVitalsButton;
         private static CustomButton hackerAdminTableButton;
@@ -70,7 +69,6 @@ namespace TheOtherRoles
             camouflagerButton.MaxTimer = Camouflager.cooldown;
             portalmakerPlacePortalButton.MaxTimer = Portalmaker.cooldown;
             usePortalButton.MaxTimer = Portalmaker.usePortalCooldown;
-            portalmakerLogButton.MaxTimer = 40f; // TODO add option / check mechanic
             hackerButton.MaxTimer = Hacker.cooldown;
             hackerVitalsButton.MaxTimer = Hacker.cooldown;
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
@@ -738,7 +736,7 @@ namespace TheOtherRoles
                 () => { return PlayerControl.LocalPlayer.CanMove && Portal.secondPortal == null; },
                 () => { portalmakerPlacePortalButton.Timer = portalmakerPlacePortalButton.MaxTimer; },
                 Portalmaker.getPlacePortalButtonSprite(),
-                new Vector3(-2.7f, -0.06f, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -749,7 +747,7 @@ namespace TheOtherRoles
                     Vector2 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
                     Vector2 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
                     PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);  // TODO: check for bans on servers
-                    //PlayerControl.LocalPlayer.DoMove
+
                     if (!PlayerControl.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
                         writer.Write((byte)PlayerControl.LocalPlayer.PlayerId);
@@ -757,10 +755,10 @@ namespace TheOtherRoles
                     }
                     RPCProcedure.usePortal(PlayerControl.LocalPlayer.PlayerId);
                     usePortalButton.Timer = usePortalButton.MaxTimer;
-                    HudManager.Instance.StartCoroutine(Effects.Lerp(1.5f, new Action<float>((p) => { // Delayed action
+                    HudManager.Instance.StartCoroutine(Effects.Lerp(Portal.teleportDuration, new Action<float>((p) => { // Delayed action
                         PlayerControl.LocalPlayer.moveable = false;
                         PlayerControl.LocalPlayer.NetTransform.Halt();
-                        if (p >= 0.45f && p <= 0.5f && !didTeleport) {
+                        if (p >= 0.5f && p <= 0.53f && !didTeleport) {
                             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
@@ -769,7 +767,7 @@ namespace TheOtherRoles
                         }
                     })));
                     },
-                () => { return CustomOptionHolder.portalmakerSpawnRate.getSelection() > 0; },
+                () => { return Portal.bothPlacedAndEnabled; },
                 () => { return PlayerControl.LocalPlayer.CanMove && Portal.locationNearEntry(PlayerControl.LocalPlayer.transform.position) && !Portal.isTeleporting; },
                 () => { usePortalButton.Timer = usePortalButton.MaxTimer; },
                 Portalmaker.getUsePortalButtonSprite(),
@@ -778,31 +776,6 @@ namespace TheOtherRoles
                 KeyCode.H,
                 mirror: true
             );
-
-            portalmakerLogButton = new CustomButton(
-               () => {
-                   //((DoorConsole)Portalmaker.log).UseIcon; TODO                   
-               },
-               () => { return Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-               () => { return Portal.bothPlacedAndEnabled && PlayerControl.LocalPlayer.CanMove; },
-               () => {
-                   portalmakerLogButton.Timer = portalmakerLogButton.MaxTimer;
-               },
-               Portalmaker.getLogSprite(),
-               new Vector3(-1.8f, -0.06f, 0),
-               __instance,
-               KeyCode.Q,
-               true,
-               30f,
-               () => {
-                   portalmakerLogButton.Timer = portalmakerLogButton.MaxTimer;
-                   if (!portalmakerLogButton.isEffectActive) PlayerControl.LocalPlayer.moveable = true;
-                   //if (Minigame.Instance) Portalmaker.log.ForceClose();
-               },
-               false,
-               "PORTAL LOG"
-           );
-
 
             // Jackal Sidekick Button
             jackalSidekickButton = new CustomButton(

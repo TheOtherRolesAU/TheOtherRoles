@@ -5,6 +5,7 @@ using System.Linq;
 using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
+using TheOtherRoles.Objects;
 using System.Collections;
 using System;
 using System.Text;
@@ -438,6 +439,15 @@ namespace TheOtherRoles.Patches {
                 if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
                 target = meetingTarget;
+
+                // Add Portal info into Portalmaker Chat:
+                if (Portalmaker.portalmaker != null && PlayerControl.LocalPlayer == Portalmaker.portalmaker && !PlayerControl.LocalPlayer.Data.IsDead) {
+                    foreach (var entry in Portal.teleportedPlayers) {
+                        float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
+                        string msg = $"{(int)timeBeforeMeeting}s ago: {entry.name} used the teleporter";
+                        DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
+                    }
+                }                
             }
         }
 
