@@ -567,7 +567,7 @@ namespace TheEpicRoles.Patches {
                             numJackalAlive++;
                             if (lover) jackalLover = true;
                         }
-                        if (Sheriff.sheriff != null && Sheriff.sheriff.PlayerId == playerInfo.PlayerId) {
+                        if ((Sheriff.sheriff != null && Sheriff.sheriff.PlayerId == playerInfo.PlayerId) || (Deputy.deputy != null && Deputy.deputy.PlayerId == playerInfo.PlayerId)) {
                             numSheriffAlive++;
                         }
                     }
