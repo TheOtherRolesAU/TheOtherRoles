@@ -1392,7 +1392,7 @@ namespace TheEpicRoles {
                     Phaser.curseVictimTarget = null;
                 },
                 Phaser.getCurseButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                new Vector3(-0.0646f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
@@ -1477,12 +1477,13 @@ namespace TheEpicRoles {
             // GuardianShield
             guardianShield = new CustomButton(
                 () => { },
-                () => { return PlayerControl.LocalPlayer.protectedByGuardian || PlayerControl.LocalPlayer.protectedByGuardianThisRound; },
+                //() => { return (PlayerControl.LocalPlayer.protectedByGuardian || PlayerControl.LocalPlayer.protectedByGuardianThisRound) && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return true; },
                 () => { return true; },
                 () => { },
                 Helpers.loadSpriteFromResources("TheEpicRoles.Resources.GuardianShield.png", 115f),
                 //new Vector3(-1.8f, -0.06f, 0),
-                new Vector3(0f, 2.06f, 0),
+                new Vector3(0.4f, 2.9f, 0),
                 __instance,
                 null
             );
