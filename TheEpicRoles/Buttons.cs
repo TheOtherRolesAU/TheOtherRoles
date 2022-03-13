@@ -1464,7 +1464,7 @@ namespace TheEpicRoles {
                     readyButton.Timer = 3f;
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 },
-                () => { return AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started; },
+                () => { return AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started && AmongUsClient.Instance.GameMode != GameModes.FreePlay; },
                 () => { return true; },
                 () => { },
                 Helpers.loadSpriteFromResources("TheEpicRoles.Resources.NotReadyButton.png", 115f),

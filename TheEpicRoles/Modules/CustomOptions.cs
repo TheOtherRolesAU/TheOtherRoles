@@ -481,7 +481,7 @@ namespace TheEpicRoles {
                         continue;
                     }
                     else {
-                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                        result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                     }
                 }
             }
@@ -491,19 +491,19 @@ namespace TheEpicRoles {
                 result.AppendLine($"_______________________________");
                 result.AppendLine();
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "impostor" && n.parent == null)) {
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }
                 result.AppendLine();
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "neutral" && n.parent == null)) {
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }
                 result.AppendLine();
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "other" && n.parent == null)) {
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }
                 result.AppendLine();
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "crewmate" && n.parent == null)) {
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }       
             }
 
@@ -514,8 +514,8 @@ namespace TheEpicRoles {
                     if (option.name.Contains("Witch")) // Linebreak before Witch
                         break;
                     if(option.parent == null)
-                        result.AppendLine();
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");                    
+                        result.AppendLine();                    
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");                    
                 }     
             }
 
@@ -527,7 +527,7 @@ namespace TheEpicRoles {
                     if (start) {
                         if (option.parent == null)
                             result.AppendLine();
-                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                        result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                     }
                 }      
             }
@@ -538,7 +538,7 @@ namespace TheEpicRoles {
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "neutral")) {
                     if (option.parent == null)
                         result.AppendLine();
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }            
             }
 
@@ -548,7 +548,7 @@ namespace TheEpicRoles {
                 foreach (CustomOption option in CustomOption.options.Where(n => n.type == "other")) {
                     if (option.parent == null)
                         result.AppendLine();
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }      
             }
 
@@ -560,7 +560,7 @@ namespace TheEpicRoles {
                         break;
                     if (option.parent == null)
                         result.AppendLine();
-                    result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                 }     
             }
 
@@ -574,7 +574,7 @@ namespace TheEpicRoles {
                     if (start) {
                         if (option.parent == null)
                             result.AppendLine();
-                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                        result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                     }
                 }   
             }
@@ -587,7 +587,7 @@ namespace TheEpicRoles {
                     if (start) {
                         if (option.parent == null)
                             result.AppendLine();
-                        result.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                        result.AppendLine($"{option.name.Replace("\n", " ")}: {option.selections[option.selection].ToString()}");
                     }
                 }   
             }
@@ -604,7 +604,7 @@ namespace TheEpicRoles {
     public static class GameOptionsNextPagePatch
     {
         public static void Postfix(KeyboardJoystick __instance) {
-            if (!HudManager.Instance.Chat.IsOpen) {
+            if (!HudManager.Instance.Chat.IsOpen && AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                 if (Input.GetKeyDown(KeyCode.Tab)) {
                     TheEpicRolesPlugin.optionsPage++;
                     if (TheEpicRolesPlugin.optionsPage == 11) TheEpicRolesPlugin.optionsPage = 0;
