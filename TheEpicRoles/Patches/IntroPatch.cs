@@ -56,7 +56,7 @@ namespace TheEpicRoles.Patches {
             }
 
             //guardian angel shield
-            if (PlayerControl.LocalPlayer.AmOwner == true && CustomOptionHolder.firstKillShield.getBool() == true) {
+            if (AmongUsClient.Instance.AmHost == true && CustomOptionHolder.firstKillShield.getBool() == true) {
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                     if (GameStartManagerPatch.guardianShield == player.Data.PlayerName) {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetGuardianShield, Hazel.SendOption.Reliable, -1);
