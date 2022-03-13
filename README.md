@@ -41,6 +41,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.2.23s| v3.4.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.4/TheOtherRoles.zip)
+| 2021.12.15s| v3.4.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.3/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.2/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.1/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.0/TheOtherRoles.zip)
@@ -97,6 +99,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 3.4.4**
+- Fixed a bug where games were not finished properly on official servers (special thanks to miniduikboot & 6pak)
+  
+**Version 3.4.3**
+- Fixed a bug where "Guesser Is Impostor Chance" crashed the role system
+- Fixed a bug where a sidekicked Hacker was stuck
+- Fixed a bug where a sidekicked Security Guard was stuck
+- Fixed a bug where a disabled Report Button triggered handcuffs
+- Fixed a bug where the Evil Guesser spawn rate was not correct
+- Changed that Cleaner & Vulture exclude each other
+- Changed that the lighter/darker color indicator can be displayed as dead
+
+**Version 3.4.2**
+- Fixed a game breaking bug
   
 **Version 3.4.2**
 - Fixed a game breaking bug
@@ -776,6 +793,7 @@ The Cleaner is an Impostor who has the ability to clean up dead bodies.\
 \
 **NOTE:**
 - The Kill and Clean cooldown are shared, preventing them from immediately cleaning their own kills.
+- If there is a Cleaner in the game, there can't be a Vulture.
 
 ### Game Options
 | Name | Description |
@@ -1399,6 +1417,7 @@ What is your killers role? (mini exluded)
 The Vulture does not have any tasks, they have to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
 Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.
+If there is a Vulture in the game, there can't be a Cleaner.
 
 ### Game Options
 | Name | Description |
