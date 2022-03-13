@@ -862,7 +862,6 @@ namespace TheEpicRoles {
 
         public static void setGuardianShield(byte playerId) {
             Helpers.playerById(playerId).protectedByGuardian = true;
-            GameStartManagerPatch.guardianShield = "";
         }
 
         // Sets the ready status in readystatus list if reciever is lobby host

@@ -927,6 +927,7 @@ namespace TheEpicRoles.Patches {
     {
         public static bool resetToCrewmate = false;
         public static bool resetToDead = false;
+        public static int guardianLoverCounter = 0;
 
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target)
         {
@@ -954,9 +955,13 @@ namespace TheEpicRoles.Patches {
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) {
-                    otherLover.MurderPlayer(otherLover);
-                }
+                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie && !target.protectedByGuardianThisRound)
+                    if (target.protectedByGuardianThisRound && guardianLoverCounter == 0)
+                        guardianLoverCounter++;
+                    else {
+                        otherLover.protectedByGuardian = false;
+                        otherLover.MurderPlayer(otherLover);
+                    }
             }
 
             // Sidekick promotion trigger on murder

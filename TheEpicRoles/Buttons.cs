@@ -1394,7 +1394,7 @@ namespace TheEpicRoles {
                     Phaser.curseVictimTarget = null;
                 },
                 Phaser.getCurseButtonSprite(),
-                new Vector3(-0.0646f, -0.06f, 0),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F
             );
