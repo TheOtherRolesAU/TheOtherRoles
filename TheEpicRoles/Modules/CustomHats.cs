@@ -351,8 +351,11 @@ namespace TheEpicRoles.Modules {
                     if (x == "TER Developer Hats") return 1;
                     if (x == "TER Community Hats") return 2;
 
-                    if (x == innerslothPackageName) return 4;
-                    return 3;
+                    if (x == "TOR Developer Hats") return 3;
+                    if (x == "TOR Community Hats") return 4;
+
+                    if (x == innerslothPackageName) return 6;
+                    return 5;
                 });
                 foreach (string key in orderedKeys) {
                     List<System.Tuple<HatBehaviour, HatExtension>> value = packages[key];
@@ -444,7 +447,7 @@ namespace TheEpicRoles.Modules {
                         info.reshashbf = current["reshashbf"]?.ToString();
 
                         info.author = current["author"]?.ToString();
-                        info.package = current["package"]?.ToString();
+                        info.package = $"TOR {current["package"]?.ToString()}";
                         info.condition = current["condition"]?.ToString();
                         info.bounce = current["bounce"] != null;
                         info.adaptive = current["adaptive"] != null;
@@ -492,7 +495,7 @@ namespace TheEpicRoles.Modules {
         public static async Task<HttpStatusCode> FetchHats_TER() {
             HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
-            var response = await http.GetAsync(new System.Uri($"{REPO_TOR}/CustomHats.json"), HttpCompletionOption.ResponseContentRead);
+            var response = await http.GetAsync(new System.Uri($"{REPO_TER}/CustomHats.json"), HttpCompletionOption.ResponseContentRead);
             try {
                 if (response.StatusCode != HttpStatusCode.OK) return response.StatusCode;
                 if (response.Content == null) {
@@ -535,7 +538,7 @@ namespace TheEpicRoles.Modules {
 
                 List<string> markedfordownload = new List<string>();
 
-                string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\";
+                string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheEpicHats\";
                 MD5 md5 = MD5.Create();
                 foreach (CustomHatOnline data in hatdatas) {
                     if (doesResourceRequireDownload(filePath + data.resource, data.reshasha, md5))
@@ -552,7 +555,7 @@ namespace TheEpicRoles.Modules {
 
                 foreach (var file in markedfordownload) {
 
-                    var hatFileResponse = await http.GetAsync($"{REPO_TOR}/hats/{file}", HttpCompletionOption.ResponseContentRead);
+                    var hatFileResponse = await http.GetAsync($"{REPO_TER}/hats/{file}", HttpCompletionOption.ResponseContentRead);
                     if (hatFileResponse.StatusCode != HttpStatusCode.OK) continue;
                     using (var responseStream = await hatFileResponse.Content.ReadAsStreamAsync()) {
                         using (var fileStream = File.Create($"{filePath}\\{file}")) {
@@ -561,7 +564,7 @@ namespace TheEpicRoles.Modules {
                     }
                 }
 
-                hatdetails = hatdatas;
+                hatdetails.AddRange(hatdatas);
             }
             catch (System.Exception ex) {
                 TheEpicRolesPlugin.Instance.Log.LogError(ex.ToString());

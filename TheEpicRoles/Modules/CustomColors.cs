@@ -15,8 +15,8 @@ namespace TheEpicRoles.Modules {
         public static uint pickableColors = (uint)Palette.ColorNames.Length;
 
         private static readonly List<int> ORDER = new List<int>() { 7, 36, 14, 5, 33, 4,
-                                                                    37, 30, 0, 19, 27, 3,
-                                                                    35, 17, 25, 18, 13, 23,
+                                                                    37, 30, 18, 0, 19, 27,
+                                                                    3, 35, 17, 25, 13, 23,
                                                                     8, 32, 38, 1, 21, 31,
                                                                     10, 34, 28, 22, 29, 11,
                                                                     2, 26, 20, 24, 9, 12,
@@ -30,9 +30,9 @@ namespace TheEpicRoles.Modules {
 
             /* Custom Colors */
             colors.Add(new CustomColor {
-                longname = "Salmon", //18
-                color = new Color32(239, 191, 192, byte.MaxValue),
-                shadow = new Color32(182, 119, 114, byte.MaxValue),
+                longname = "Candy cane", //18
+                color = new Color32(0xCC, 0x00, 0x00, byte.MaxValue),
+                shadow = new Color32(0xFF, 0xFF, 0xFF, byte.MaxValue),
                 isLighterColor = true });
             colors.Add(new CustomColor {
                 longname = "Bordeaux", //19
@@ -101,8 +101,8 @@ namespace TheEpicRoles.Modules {
                 isLighterColor = false });
             colors.Add(new CustomColor {
                 longname = "Blurple", //32
-                color = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue),
-                shadow = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
+                color = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
+                shadow = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue),
                 isLighterColor = false });
             colors.Add(new CustomColor {
                 longname = "Sunrise",  //33
