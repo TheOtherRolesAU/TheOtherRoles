@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches {
         private static GameData.PlayerInfo target = null;
         private const float scale = 0.65f;
         private static TMPro.TextMeshPro swapperChargesText;
-        private static List<PassiveButton> swapperButtonList;
+        private static PassiveButton[] swapperButtonList;
         private static TMPro.TextMeshPro swapperConfirmButtonLabel;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
@@ -230,10 +230,10 @@ namespace TheOtherRoles.Patches {
                         secondPlayer = __instance.playerStates[A];
                     }
                     renderers[A].color = Color.green;
-                } else {
+                } else if (renderers[A] != null) {
                     renderers[A].color = Color.gray;
-                }
-                swapperButtonList[A].OnClick.RemoveAllListeners();  // Swap buttons can't be clicked / changed anymore
+                    }
+                if (swapperButtonList[A] != null) swapperButtonList[A].OnClick.RemoveAllListeners();  // Swap buttons can't be clicked / changed anymore
             }
             if (firstPlayer != null && secondPlayer != null) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
@@ -365,7 +365,7 @@ namespace TheOtherRoles.Patches {
             if (Swapper.swapper != null && PlayerControl.LocalPlayer == Swapper.swapper && !Swapper.swapper.Data.IsDead) {
                 selections = new bool[__instance.playerStates.Length];
                 renderers = new SpriteRenderer[__instance.playerStates.Length];
-                swapperButtonList = new List<PassiveButton>();
+                swapperButtonList = new PassiveButton[__instance.playerStates.Length];
 
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -383,7 +383,7 @@ namespace TheOtherRoles.Patches {
                     if (Swapper.charges <= 0) renderer.color = Color.gray;
 
                     PassiveButton button = checkbox.GetComponent<PassiveButton>();
-                    swapperButtonList.Add(button);
+                    swapperButtonList[i] = button;
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperOnClick(copiedIndex, __instance)));
