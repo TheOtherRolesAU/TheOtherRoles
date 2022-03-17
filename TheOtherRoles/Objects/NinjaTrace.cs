@@ -13,7 +13,7 @@ namespace TheOtherRoles.Objects {
         private static Sprite TraceSprite;
         public static Sprite getTraceSprite() {
             if (TraceSprite) return TraceSprite;
-            TraceSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaTraceW.png", 300f);
+            TraceSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.NinjaTraceW.png", 225f);
             return TraceSprite;
         }
 
@@ -35,7 +35,8 @@ namespace TheOtherRoles.Objects {
                     c = Palette.PlayerColors[6];
                 }
 
-                Color g = Palette.ImpostorRed;  // Usual display color. could also be Palette.PlayerColors[6] for default grey like camo
+                Color g = new Color(0,0,0);  // Usual display color. could also be Palette.PlayerColors[6] for default grey like camo
+                // if this stays black (0,0,0), it can ofc be removed.
 
                 Color combinedColor = Mathf.Clamp01(p) * g + Mathf.Clamp01(1 - p) * c;
 
