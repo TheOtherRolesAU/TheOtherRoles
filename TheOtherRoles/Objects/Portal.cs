@@ -51,7 +51,7 @@ namespace TheOtherRoles.Objects {
             // Generate log info
             PlayerControl playerControl = Helpers.playerById(playerId);
             if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
-            string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : Helpers.playerById(playerId).nameText.text;
+            string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : Helpers.playerById(playerId).Data.PlayerName;
             if (Camouflager.camouflageTimer > 0) playerNameDisplay = "A camouflaged player";
             teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
             
