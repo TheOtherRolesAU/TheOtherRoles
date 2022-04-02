@@ -40,6 +40,7 @@ public static void clearAndReloadMapOptions() {
             ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
+            showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }
     }
