@@ -47,17 +47,17 @@ namespace TheOtherRoles.Patches {
         }
 
         static void setPlayerOutline(PlayerControl target, Color color) {
-            if (target == null || target.myRend == null) return;
+            if (target == null || target.MyRend == null) return;
 
-            target.myRend.material.SetFloat("_Outline", 1f);
-            target.myRend.material.SetColor("_OutlineColor", color);
+            target.MyRend.material.SetFloat("_Outline", 1f);
+            target.MyRend.material.SetColor("_OutlineColor", color);
         }
 
         // Update functions
 
         static void setBasePlayerOutlines() {
             foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
-                if (target == null || target.myRend == null) continue;
+                if (target == null || target.MyRend == null) continue;
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
@@ -68,11 +68,11 @@ namespace TheOtherRoles.Patches {
                 }
 
                 if (hasVisibleShield) {
-                    target.myRend.material.SetFloat("_Outline", 1f);
-                    target.myRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                    target.MyRend.material.SetFloat("_Outline", 1f);
+                    target.MyRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
                 }
                 else {
-                    target.myRend.material.SetFloat("_Outline", 0f);
+                    target.MyRend.material.SetFloat("_Outline", 0f);
                 }
             }
         }
@@ -1056,7 +1056,7 @@ namespace TheOtherRoles.Patches {
     class KillAnimationSetMovementPatch {
         private static int? colorId = null;
         public static void Prefix(PlayerControl source, bool canMove) {
-            Color color = source.myRend.material.GetColor("_BodyColor");
+            Color color = source.MyRend.material.GetColor("_BodyColor");
             if (color != null && Morphling.morphling != null && source.Data.PlayerId == Morphling.morphling.PlayerId) {
                 var index = Palette.PlayerColors.IndexOf(color);
                 if (index != -1) colorId = index;

@@ -17,8 +17,8 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
-                    PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, player.Body);
-                    DestroyableSingleton<HatManager>.Instance.SetSkin(player.Skin.layer, data.DefaultOutfit.SkinId);
+                    // PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, player.Body);
+                    player.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
                     player.HatSlot.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
                     PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, player.PetSlot);
                     player.NameText.text = data.PlayerName;
@@ -90,7 +90,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
             public static void Postfix(IntroCutscene __instance) {
                 if (!CustomOptionHolder.activateRoles.getBool()) return; // Don't override the intro of the vanilla roles
@@ -139,6 +139,15 @@ namespace TheOtherRoles.Patches {
             public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
                 setupIntroTeam(__instance, ref yourTeam);
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
+    public static class ShouldAlwaysHorseAround {
+        public static bool Prefix(ref bool __result) {
+            __result = MapOptions.enableHorseMode;
+
+            return false;
         }
     }
 }
