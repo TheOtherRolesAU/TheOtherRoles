@@ -121,12 +121,12 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
         class BeginCrewmatePatch {
-            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeamIcons(__instance, ref yourTeam);
+            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay) {
+                setupIntroTeamIcons(__instance, ref teamToDisplay);
             }
 
-            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay) {
+                setupIntroTeam(__instance, ref teamToDisplay);
             }
         }
 

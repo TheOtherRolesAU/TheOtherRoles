@@ -130,15 +130,17 @@ namespace TheOtherRoles.Modules {
             if (hatShader == null && DestroyableSingleton<HatManager>.InstanceExists) {
                 foreach (HatData x in DestroyableSingleton<HatManager>.Instance.allHats) {
                     HatViewData h = x.hatViewData.viewData;
-
+                    break;  // TODO: this allows hats to load, but the shader wont work...
                     if (h.AltShader != null) {
                         hatShader = h.AltShader;
                         break;
+                        
                     }
                 }
             }
 
             HatData hat = ScriptableObject.CreateInstance<HatData>();
+            //hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
             hat.hatViewData.viewData.MainImage = CreateHatSprite(ch.resource, fromDisk);
             if (ch.backresource != null) {
                 hat.hatViewData.viewData.BackImage = CreateHatSprite(ch.backresource, fromDisk);
