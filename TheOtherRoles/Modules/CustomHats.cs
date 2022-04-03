@@ -140,7 +140,7 @@ namespace TheOtherRoles.Modules {
             }
 
             HatData hat = ScriptableObject.CreateInstance<HatData>();
-            //hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
+            hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
             hat.hatViewData.viewData.MainImage = CreateHatSprite(ch.resource, fromDisk);
             if (ch.backresource != null) {
                 hat.hatViewData.viewData.BackImage = CreateHatSprite(ch.backresource, fromDisk);
