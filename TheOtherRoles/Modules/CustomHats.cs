@@ -127,16 +127,10 @@ namespace TheOtherRoles.Modules {
         }
 
         private static HatData CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
-            if (hatShader == null && DestroyableSingleton<HatManager>.InstanceExists) {
-                foreach (HatData x in DestroyableSingleton<HatManager>.Instance.allHats) {
-                    HatViewData h = x.hatViewData.viewData;
-                    break;  // TODO: this allows hats to load, but the shader wont work...
-                    if (h.AltShader != null) {
-                        hatShader = h.AltShader;
-                        break;
-                        
-                    }
-                }
+            if (hatShader == null) {
+                Material tmpShader = new Material("PlayerMaterial");
+                tmpShader.shader = Shader.Find("Unlit/PlayerShader");
+                hatShader = tmpShader;
             }
 
             HatData hat = ScriptableObject.CreateInstance<HatData>();
