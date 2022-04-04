@@ -90,10 +90,27 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        public static IEnumerator<WaitForSeconds> EndShowRole(IntroCutscene __instance) {
+            yield return new WaitForSeconds(5f);
+
+            __instance.YouAreText.gameObject.SetActive(false);
+            __instance.RoleText.gameObject.SetActive(false);
+            __instance.RoleBlurbText.gameObject.SetActive(false);
+            __instance.ourCrewmate.gameObject.SetActive(false);
+           
+        }
+
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
-            public static void Postfix(IntroCutscene __instance) {
-                if (!CustomOptionHolder.activateRoles.getBool()) return; // Don't override the intro of the vanilla roles
+            public static bool Prefix(IntroCutscene __instance) {
+                if (!CustomOptionHolder.activateRoles.getBool()) return true; // Don't override the intro of the vanilla roles
+
+                RoleBehaviour role = PlayerControl.LocalPlayer.Data.Role;
+                __instance.RoleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(role.StringName, Array.Empty<Il2CppSystem.Object>());
+                __instance.RoleBlurbText.text = role.Blurb;
+                __instance.RoleText.color = role.TeamColor;
+                __instance.YouAreText.color = role.TeamColor;
+                __instance.RoleBlurbText.color = role.TeamColor;
 
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
                 RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
@@ -115,18 +132,31 @@ namespace TheOtherRoles.Patches {
                     else if (infos.Any(info => info.roleId == RoleId.Deputy))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Sheriff is {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
                 }
+                SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.Data.Role.IntroSound, false);
+                __instance.YouAreText.gameObject.SetActive(true);
+                __instance.RoleText.gameObject.SetActive(true);
+                __instance.RoleBlurbText.gameObject.SetActive(true);
+                if ((UnityEngine.Object)__instance.ourCrewmate == (UnityEngine.Object)null) {
+                    __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
+                    __instance.ourCrewmate.gameObject.SetActive(false);
+                }
+                __instance.ourCrewmate.gameObject.SetActive(true);
+                __instance.ourCrewmate.transform.localPosition = new Vector3(0.0f, -1.05f, -18f);
+                __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
+                __instance.StartCoroutine((Il2CppSystem.Collections.IEnumerator)EndShowRole(__instance));
 
+                return false;
             }
         }
 
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+            [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
         class BeginCrewmatePatch {
-            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeamIcons(__instance, ref yourTeam);
+            public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay) {
+                setupIntroTeamIcons(__instance, ref teamToDisplay);
             }
 
-            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
-                setupIntroTeam(__instance, ref yourTeam);
+            public static void Postfix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay) {
+                setupIntroTeam(__instance, ref teamToDisplay);
             }
         }
 
