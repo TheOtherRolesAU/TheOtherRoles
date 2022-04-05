@@ -102,54 +102,37 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
-            public static bool Prefix(IntroCutscene __instance) {
-                if (!CustomOptionHolder.activateRoles.getBool()) return true; // Don't override the intro of the vanilla roles
-
-                RoleBehaviour role = PlayerControl.LocalPlayer.Data.Role;
-                __instance.RoleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(role.StringName, Array.Empty<Il2CppSystem.Object>());
-                __instance.RoleBlurbText.text = role.Blurb;
-                __instance.RoleText.color = role.TeamColor;
-                __instance.YouAreText.color = role.TeamColor;
-                __instance.RoleBlurbText.color = role.TeamColor;
-
+            static public void SetRoleTexts(IntroCutscene __instance) {
+                // Don't override the intro of the vanilla roles
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
                 RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
-
                 if (roleInfo != null) {
                     __instance.RoleText.text = roleInfo.name;
                     __instance.RoleText.color = roleInfo.color;
                     __instance.RoleBlurbText.text = roleInfo.introDescription;
                     __instance.RoleBlurbText.color = roleInfo.color;
                 }
-
                 if (infos.Any(info => info.roleId == RoleId.Lover)) {
                     PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
                     __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
                 }
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
-                    if (infos.Any(info => info.roleId == RoleId.Sheriff)) 
+                    if (infos.Any(info => info.roleId == RoleId.Sheriff))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Deputy is {Deputy.deputy?.Data?.PlayerName ?? ""}");
                     else if (infos.Any(info => info.roleId == RoleId.Deputy))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Sheriff is {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
                 }
-                SoundManager.Instance.PlaySound(PlayerControl.LocalPlayer.Data.Role.IntroSound, false);
-                __instance.YouAreText.gameObject.SetActive(true);
-                __instance.RoleText.gameObject.SetActive(true);
-                __instance.RoleBlurbText.gameObject.SetActive(true);
-                if ((UnityEngine.Object)__instance.ourCrewmate == (UnityEngine.Object)null) {
-                    __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
-                    __instance.ourCrewmate.gameObject.SetActive(false);
-                }
-                __instance.ourCrewmate.gameObject.SetActive(true);
-                __instance.ourCrewmate.transform.localPosition = new Vector3(0.0f, -1.05f, -18f);
-                __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
-                __instance.StartCoroutine((Il2CppSystem.Collections.IEnumerator)EndShowRole(__instance));
-
-                return false;
+            }
+            public static bool Prefix(IntroCutscene __instance) {
+                if (!CustomOptionHolder.activateRoles.getBool()) return true;
+                HudManager.Instance.StartCoroutine(Effects.Lerp(10f, new Action<float>((p) => {
+                    SetRoleTexts(__instance);
+                })));
+                return true;
             }
         }
 
-            [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
         class BeginCrewmatePatch {
             public static void Prefix(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay) {
                 setupIntroTeamIcons(__instance, ref teamToDisplay);
