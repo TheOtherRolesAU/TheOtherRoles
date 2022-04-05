@@ -230,7 +230,6 @@ namespace TheOtherRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
-        public static CustomOption enableHorseMode;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -472,7 +471,6 @@ namespace TheOtherRoles {
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
             allowParallelMedBayScans = CustomOption.Create(7, "Allow Parallel MedBay Scans", false);
-            enableHorseMode = CustomOption.Create(9, "Enable Horse Mode", false);
 
             dynamicMap = CustomOption.Create(8, "Play On A Random Map", false, null, false);
             dynamicMapEnableSkeld = CustomOption.Create(501, "Enable Skeld Rotation", true, dynamicMap, false);
