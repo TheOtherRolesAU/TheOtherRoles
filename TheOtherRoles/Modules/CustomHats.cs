@@ -212,7 +212,7 @@ namespace TheOtherRoles.Modules {
         private static class PlayerPhysicsHandleAnimationPatch {
             private static void Postfix(PlayerPhysics __instance) {
                 AnimationClip currentAnimation = __instance.Animator.GetCurrentAnimation();
-                if (currentAnimation == null || __instance.Skin == null || __instance.Skin.skin == null || currentAnimation == __instance.Skin.skin.ClimbAnim || currentAnimation == __instance.Skin.skin.ClimbDownAnim) return;
+                if (currentAnimation == __instance.CurrentAnimationGroup.ClimbAnim || currentAnimation == __instance.CurrentAnimationGroup.ClimbDownAnim) return;
                 HatParent hp = __instance.myPlayer.HatRenderer;
                 if (hp.Hat == null) return;
                 HatExtension extend = hp.Hat.getHatExtension();
