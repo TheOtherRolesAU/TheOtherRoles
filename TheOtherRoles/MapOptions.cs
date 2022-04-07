@@ -36,7 +36,6 @@ namespace TheOtherRoles{
             noVoteIsSelfVote = CustomOptionHolder.noVoteIsSelfVote.getBool();
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
-            reloadPluginOptions();
         }
 
         public static void reloadPluginOptions() {
@@ -46,6 +45,7 @@ namespace TheOtherRoles{
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
+            Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }
     }
 }
