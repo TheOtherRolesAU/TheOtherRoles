@@ -102,9 +102,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 3.4.5**
-- Update to among us version 2022.3.29s
+- Update to Among Us version 2022.3.29s
 - Added horse-mode button in the main menu (bottom right)  
-- Added TheOtherRoles-discord button in the main menu (bottom left, report your bugs and feature suggestions here :)
+- Added TheOtherRoles-discord button in the main menu (bottom left, report your bugs and feature suggestions here)
 - Fixed a bug where the deputy was not assigned properly
 - Fixed a bug where a promoted deputy had wrong cooldown 
 - Fixed a bug where the killer doesn't teleport to the body
