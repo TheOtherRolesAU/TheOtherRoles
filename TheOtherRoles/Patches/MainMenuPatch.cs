@@ -44,7 +44,7 @@ namespace TheOtherRoles.Modules {
             var horseModeSelectionBehavior = new ClientOptionsPatch.SelectionBehaviour("Enable Horse Mode", () => MapOptions.enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value = !TheOtherRolesPlugin.EnableHorseMode.Value, TheOtherRolesPlugin.EnableHorseMode.Value);
 
             var bottomTemplate = GameObject.Find("InventoryButton");
-            if (template == null) return;
+            if (bottomTemplate == null) return;
             var horseButton = Object.Instantiate(bottomTemplate, bottomTemplate.transform.parent);
             var passiveHorseButton = horseButton.GetComponent<PassiveButton>();
             var spriteHorseButton = horseButton.GetComponent<SpriteRenderer>();
@@ -75,7 +75,5 @@ namespace TheOtherRoles.Modules {
                 }
             });
         }
-
-
     }
 }
