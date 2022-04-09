@@ -38,6 +38,13 @@ namespace TheOtherRoles.Patches {
 
         public static void Postfix(RegionMenu __instance) {
             var template = DestroyableSingleton<JoinGameButton>.Instance;
+            var joinGameButtons = GameObject.FindObjectsOfType<JoinGameButton>();
+            foreach (var t in joinGameButtons) {  // The correct button has a background, the other 2 dont
+                if (t.GameIdText != null && t.GameIdText.Background != null) {
+                    template = t;
+                    break;
+                }
+            }
             if (template == null || template.GameIdText == null) return;
 
             if (ipField == null || ipField.gameObject == null) {
@@ -47,7 +54,7 @@ namespace TheOtherRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) return;
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(0, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(0.225f, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
@@ -80,7 +87,7 @@ namespace TheOtherRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) return;
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(0.225f, -1.75f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(TheOtherRolesPlugin.Port.Value.ToString());
                 __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
