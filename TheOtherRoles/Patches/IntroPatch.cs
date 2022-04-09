@@ -125,7 +125,7 @@ namespace TheOtherRoles.Patches {
             }
             public static bool Prefix(IntroCutscene __instance) {
                 if (!CustomOptionHolder.activateRoles.getBool()) return true;
-                HudManager.Instance.StartCoroutine(Effects.Lerp(10f, new Action<float>((p) => {
+                HudManager.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     SetRoleTexts(__instance);
                 })));
                 return true;
