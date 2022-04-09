@@ -369,8 +369,8 @@ namespace TheOtherRoles.Patches {
                                     if (!component || component.Data == null || component.Data.Disconnected || component.Data.IsDead)
                                     {
                                         num2--;
-                                    } else if (component?.myRend?.material != null) {
-                                        Color color = component.myRend.material.GetColor("_BodyColor");
+                                    } else if (component?.MyRend?.material != null) {
+                                        Color color = component.MyRend.material.GetColor("_BodyColor");
                                         if (Hacker.onlyColorType) {
                                             var id = Mathf.Max(0, Palette.PlayerColors.IndexOf(color));
                                             color = Helpers.isLighterColor((byte)id) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
