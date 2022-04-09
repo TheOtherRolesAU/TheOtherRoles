@@ -67,6 +67,12 @@ namespace TheOtherRoles.Modules {
                     spriteHorseButton.sprite = horseModeOffSprite;
                 }
                 CredentialsPatch.LogoPatch.updateSprite();
+                // Avoid wrong Player Particles floating around in the background
+                var particles = GameObject.FindObjectOfType<PlayerParticles>(); 
+                if (particles != null) {
+                    particles.pool.ReclaimAll();
+                    particles.Start();
+                }
             });
         }
 
