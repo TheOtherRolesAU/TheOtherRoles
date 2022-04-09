@@ -172,8 +172,6 @@ namespace TheOtherRoles.Patches {
                             possibleMaps.Add(1);
                         if (CustomOptionHolder.dynamicMapEnablePolus.getBool())
                             possibleMaps.Add(2);
-                        if (CustomOptionHolder.dynamicMapEnableDleks.getBool())
-                            possibleMaps.Add(3);
                         if (CustomOptionHolder.dynamicMapEnableAirShip.getBool())
                             possibleMaps.Add(4);
                         byte chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
