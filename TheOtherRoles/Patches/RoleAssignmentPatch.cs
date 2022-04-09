@@ -239,14 +239,13 @@ namespace TheOtherRoles.Patches {
             bool guesserFlag = CustomOptionHolder.guesserSpawnBothRate.getSelection() > 0 
                 && CustomOptionHolder.guesserSpawnRate.getSelection() > 0;
             bool sheriffFlag = CustomOptionHolder.deputySpawnRate.getSelection() > 0 
-                && CustomOptionHolder.sheriffSpawnRate.getSelection() > 0
-                && Sheriff.sheriff == null;
+                && CustomOptionHolder.sheriffSpawnRate.getSelection() > 0;
 
             if (!guesserFlag && !sheriffFlag) return; // assignDependentRoles is not needed
 
             int crew = data.crewmates.Count < data.maxCrewmateRoles ? data.crewmates.Count : data.maxCrewmateRoles; // Max number of crew loops
             int imp = data.impostors.Count < data.maxImpostorRoles ? data.impostors.Count : data.maxImpostorRoles; // Max number of imp loops
-            int crewSteps = crew / data.crewSettings.Keys.Count(); // Avarage crewvalues deducted after each loop
+            int crewSteps = crew / data.crewSettings.Keys.Count(); // Avarage crewvalues deducted after each loop 
             int impSteps = imp / data.impSettings.Keys.Count(); // Avarage impvalues deducted after each loop
 
             // set to false if needed, otherwise we can skip the loop
