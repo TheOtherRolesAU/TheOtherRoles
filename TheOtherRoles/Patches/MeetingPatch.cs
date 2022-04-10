@@ -411,7 +411,7 @@ namespace TheOtherRoles.Patches {
 
                 Transform confirmSwapButtonMask = UnityEngine.Object.Instantiate(maskTemplate, confirmSwapButtonParent);
                 swapperConfirmButtonLabel = UnityEngine.Object.Instantiate(textTemplate, confirmSwapButton);
-                confirmSwapButton.GetComponent<SpriteRenderer>().sprite = DestroyableSingleton<HatManager>.Instance.AllNamePlates[0].Image;
+                confirmSwapButton.GetComponent<SpriteRenderer>().sprite = DestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
                 confirmSwapButtonParent.localPosition = new Vector3(0, -2.225f, -5);
                 confirmSwapButtonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 swapperConfirmButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
