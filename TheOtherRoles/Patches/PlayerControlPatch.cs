@@ -741,7 +741,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        // Mini set adapted button cooldown for Vampire, Sheriff, Jackal, Sidekick
+        // Mini set adapted button cooldown for Vampire, Sheriff, Jackal, Sidekick, Warlock, Cleaner
         static void miniUpdate() {
             if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) {
                 var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
@@ -749,6 +749,8 @@ namespace TheOtherRoles.Patches {
                 HudManagerStartPatch.vampireKillButton.MaxTimer = Vampire.cooldown * multiplier;
                 HudManagerStartPatch.jackalKillButton.MaxTimer = Jackal.cooldown * multiplier;
                 HudManagerStartPatch.sidekickKillButton.MaxTimer = Sidekick.cooldown * multiplier;
+                HudManagerStartPatch.warlockCurseButton.MaxTimer = Warlock.cooldown * multiplier;
+                HudManagerStartPatch.cleanerCleanButton.MaxTimer = Cleaner.cooldown * multiplier;
             }
         }
     
