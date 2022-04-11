@@ -432,7 +432,7 @@ namespace TheOtherRoles.Patches {
                     }
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
-                    string roleNames = RoleInfo.GetRolesString(p, true);
+                    string roleNames = RoleInfo.GetRolesString(p, true, false);
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                     string playerInfoText = "";
@@ -595,49 +595,6 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        static void baitUpdate() {
-            if (Bait.bait == null || Bait.bait != PlayerControl.LocalPlayer) return;
-
-            // Bait report
-            if (Bait.bait.Data.IsDead && !Bait.reported) {
-                Bait.reportDelay -= Time.fixedDeltaTime;
-                DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == Bait.bait.PlayerId)?.FirstOrDefault();
-                if (deadPlayer.killerIfExisting != null && Bait.reportDelay <= 0f) {
-
-                    Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
-                    RPCProcedure.uncheckedCmdReportDeadBody(deadPlayer.killerIfExisting.PlayerId, Bait.bait.PlayerId);
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
-                    writer.Write(deadPlayer.killerIfExisting.PlayerId);
-                    writer.Write(Bait.bait.PlayerId);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    Bait.reported = true;
-                }
-            }
-
-            // Bait Vents
-            if (ShipStatus.Instance?.AllVents != null) {
-                var ventsWithPlayers = new List<int>();
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                    if (player.inVent) {
-                        Vent target = ShipStatus.Instance.AllVents.OrderBy(x => Vector2.Distance(x.transform.position, player.GetTruePosition())).FirstOrDefault();
-                        if (target != null) ventsWithPlayers.Add(target.Id);
-                    }
-                }
-
-                foreach (Vent vent in ShipStatus.Instance.AllVents) {
-                    if (vent.myRend == null || vent.myRend.material == null) continue;
-                    if (ventsWithPlayers.Contains(vent.Id) || (ventsWithPlayers.Count > 0 && Bait.highlightAllVents)) {
-                        vent.myRend.material.SetFloat("_Outline", 1f);
-                        vent.myRend.material.SetColor("_OutlineColor", Color.yellow);
-                    }
-                    else {
-                        vent.myRend.material.SetFloat("_Outline", 0);
-                    }
-                }
-            }
-        }
-
         static void vultureUpdate() {
             if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
             if (Vulture.vulture.Data.IsDead) {
@@ -753,6 +710,37 @@ namespace TheOtherRoles.Patches {
             setPlayerOutline(Witch.currentTarget, Witch.color);
         }
 
+        static void baitUpdate() {
+            if (!Bait.active.Any()) return;
+
+            // Bait report
+            foreach (KeyValuePair<DeadPlayer, float> entry in Bait.active) {
+                Bait.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
+                if (entry.Value <= 0) {
+                    Bait.active.Remove(entry.Key);
+                    if (entry.Key.killerIfExisting != null) {
+                        Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                        RPCProcedure.uncheckedCmdReportDeadBody(entry.Key.killerIfExisting.PlayerId, entry.Key.player.PlayerId);
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
+                        writer.Write(entry.Key.killerIfExisting.PlayerId);
+                        writer.Write(entry.Key.player.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    }
+                }
+            }
+        }
+
+        static void bloodyUpdate() {
+            if (!Bloody.active.Any()) return;
+            foreach (KeyValuePair<byte, float> entry in Bloody.active) {
+                PlayerControl player = Helpers.playerById(entry.Key);
+                new Footprint(4f, false, player);
+                Bloody.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
+                if (entry.Value <= 0) Bloody.active.Remove(entry.Key);
+            }
+        }
+
 
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -831,7 +819,12 @@ namespace TheOtherRoles.Patches {
                 pursuerSetTarget();
                 // Witch
                 witchSetTarget();
+                // Hacker
                 hackerUpdate();
+
+                // --MODIFIER--
+                // Bloody
+                bloodyUpdate();
             } 
         }
     }
@@ -997,9 +990,20 @@ namespace TheOtherRoles.Patches {
                     BountyHunter.bountyHunter.SetKillTimer(PlayerControl.GameOptions.KillCooldown + BountyHunter.punishmentTime); 
             }
 
-            // Show flash on bait kill to the killer if enabled
-            if (Bait.bait != null && target == Bait.bait && Bait.showKillFlash && __instance == PlayerControl.LocalPlayer) {
-                Helpers.showFlash(new Color(204f / 255f, 102f / 255f, 0f / 255f));
+            // Bait
+            if (Bait.bait.FindAll(x => x.PlayerId == target.PlayerId).Count > 0) {
+                float reportDelay = (float) rnd.Next((int)Bait.reportDelayMin, (int)Bait.reportDelayMax + 1);
+                Bait.active.Add(deadPlayer, reportDelay);
+
+                if (Bait.showKillFlash && __instance == PlayerControl.LocalPlayer) Helpers.showFlash(new Color(204f / 255f, 102f / 255f, 0f / 255f));
+            }
+
+            // Add Bloody Modifier
+            if (Bloody.bloody.FindAll(x => x.PlayerId == target.PlayerId).Count > 0) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.Bloody, Hazel.SendOption.Reliable, -1);
+                writer.Write(__instance.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.bloody(__instance.PlayerId);
             }
         }
     }

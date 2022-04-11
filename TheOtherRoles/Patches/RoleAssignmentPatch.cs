@@ -37,6 +37,7 @@ namespace TheOtherRoles.Patches {
             assignDependentRoles(data); // Assign roles that may have a dependent role
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
             assignRoleTargets(data);
+            assignModifiers();
         }
 
         private static RoleAssignmentData getRoleAssignmentData() {
@@ -101,7 +102,6 @@ namespace TheOtherRoles.Patches {
             crewSettings.Add((byte)RoleId.Hacker, CustomOptionHolder.hackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Tracker, CustomOptionHolder.trackerSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Snitch, CustomOptionHolder.snitchSpawnRate.getSelection());
-            crewSettings.Add((byte)RoleId.Bait, CustomOptionHolder.baitSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Medium, CustomOptionHolder.mediumSpawnRate.getSelection());
             if (impostors.Count > 1) {
                 // Only add Spy if more than 1 impostor as the spy role is otherwise useless
@@ -122,29 +122,6 @@ namespace TheOtherRoles.Patches {
         }
 
         private static void assignSpecialRoles(RoleAssignmentData data) {
-            // Assign Lovers
-            if (rnd.Next(1, 101) <= CustomOptionHolder.loversSpawnRate.getSelection() * 10) {
-                bool isOnlyRole = !CustomOptionHolder.loversCanHaveAnotherRole.getBool();
-                if (data.impostors.Count > 0 && data.crewmates.Count > 0 && (!isOnlyRole || (data.maxCrewmateRoles > 0 && data.maxImpostorRoles > 0)) && rnd.Next(1, 101) <= CustomOptionHolder.loversImpLoverRate.getSelection() * 10) {
-                    setRoleToRandomPlayer((byte)RoleId.Lover, data.impostors, 0, isOnlyRole); 
-                    setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1, isOnlyRole);
-                    if (isOnlyRole) {
-                        data.maxCrewmateRoles--;
-                        data.maxImpostorRoles--;
-                    }
-                } else if (data.crewmates.Count >= 2 && (isOnlyRole || data.maxCrewmateRoles >= 2)) {
-                    byte firstLoverId = setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 0, isOnlyRole); 
-                    if (isOnlyRole) {
-                        setRoleToRandomPlayer((byte)RoleId.Lover, data.crewmates, 1);
-                        data.maxCrewmateRoles -= 2;
-                    } else {
-                        var crewmatesWithoutFirstLover = data.crewmates.ToList();
-                        crewmatesWithoutFirstLover.RemoveAll(p => p.PlayerId == firstLoverId);
-                        setRoleToRandomPlayer((byte)RoleId.Lover, crewmatesWithoutFirstLover, 1, false);
-                    }
-                }
-            }
-
             // Assign Mafia
             if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, data.impostors);
@@ -376,7 +353,56 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, byte flag = 0, bool removePlayer = true) {
+        private static void assignModifiers() {
+            var modifierMin = CustomOptionHolder.modifiersCountMin.getSelection();
+            var modifierMax = CustomOptionHolder.modifiersCountMax.getSelection();
+            if (modifierMin > modifierMax) modifierMin = modifierMax;
+            int modifierCountSettings = rnd.Next(modifierMin, modifierMax + 1);
+            List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList();
+            int modifierCount = Mathf.Min(players.Count, modifierCountSettings);
+            List<RoleId> modifier = new List<RoleId>();
+            List<PlayerControl> evilPlayers = new List<PlayerControl>(players);
+            List<PlayerControl> nicePlayers = new List<PlayerControl>(players);
+            evilPlayers.RemoveAll(x => !x.Data.Role.IsImpostor && x != Jackal.jackal);
+            nicePlayers.RemoveAll(x => x.Data.Role.IsImpostor || x == Jackal.jackal);
+
+            modifier.AddRange(Enumerable.Repeat(RoleId.Lover, CustomOptionHolder.modifierLover.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.Bait, CustomOptionHolder.modifierBait.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.Bloody, CustomOptionHolder.modifierBloody.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.AntiTeleport, CustomOptionHolder.modifierAntiTeleport.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.Tiebreaker, CustomOptionHolder.modifierTieBreaker.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.Sunglasses, CustomOptionHolder.modifierSunglasses.getSelection()));
+
+            while (modifierCount < modifier.Count) {
+                var index = rnd.Next(0, modifier.Count);
+                modifier.RemoveAt(index);
+            }
+            modifier = modifier.OrderBy(x => rnd.Next()).ToList(); // randomize list
+
+            if (modifier.Contains(RoleId.Lover)) {
+                bool isEvilLover = rnd.Next(1, 101) <= CustomOptionHolder.modifierLoverImpLoverRate.getSelection() * 10;
+                byte firstLoverId;
+
+                if (isEvilLover) firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, evilPlayers);
+                    else firstLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, nicePlayers);
+                byte secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, nicePlayers, 1);
+
+                modifier.RemoveAll(x => x == RoleId.Lover);
+                players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
+            }
+
+            foreach (byte modifierId in modifier) {
+                if (players.Count == 0) break;
+                byte playerId;
+                if (modifierId == (byte)RoleId.Sunglasses) {
+                    playerId = setModifierToRandomPlayer(modifierId, nicePlayers);
+                    players.RemoveAll(x => x.PlayerId == playerId);
+                }
+                playerId = setModifierToRandomPlayer(modifierId, players);
+            }
+        }
+
+        private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, bool removePlayer = true) {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
             if (removePlayer) playerList.RemoveAt(index);
@@ -384,12 +410,24 @@ namespace TheOtherRoles.Patches {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
-            writer.Write(flag);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.setRole(roleId, playerId, flag);
+            RPCProcedure.setRole(roleId, playerId);
             return playerId;
         }
 
+        private static byte setModifierToRandomPlayer(byte modifierId, List<PlayerControl> playerList, byte flag = 0) {
+            var index = rnd.Next(0, playerList.Count);
+            byte playerId = playerList[index].PlayerId;
+            playerList.RemoveAt(index);
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetModifier, Hazel.SendOption.Reliable, -1);
+            writer.Write(modifierId);
+            writer.Write(playerId);
+            writer.Write(flag);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.setModifier(modifierId, playerId, flag);
+            return playerId;
+        }
 
 
         private class RoleAssignmentData {

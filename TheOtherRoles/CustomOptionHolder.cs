@@ -12,6 +12,7 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] ratesModifier = new string[]{"0", "1", "2", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
@@ -22,6 +23,8 @@ namespace TheOtherRoles {
         public static CustomOption neutralRolesCountMax;
         public static CustomOption impostorRolesCountMin;
         public static CustomOption impostorRolesCountMax;
+        public static CustomOption modifiersCountMin;
+        public static CustomOption modifiersCountMax;
 
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -45,12 +48,6 @@ namespace TheOtherRoles {
 
         public static CustomOption miniSpawnRate;
         public static CustomOption miniGrowingUpDuration;
-
-        public static CustomOption loversSpawnRate;
-        public static CustomOption loversImpLoverRate;
-        public static CustomOption loversBothDie;
-        public static CustomOption loversCanHaveAnotherRole;
-        public static CustomOption loversEnableChat;
 
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
@@ -200,11 +197,6 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardCamRechargeTasksNumber;
         public static CustomOption securityGuardNoMove;
 
-        public static CustomOption baitSpawnRate;
-        public static CustomOption baitHighlightAllVents;
-        public static CustomOption baitReportDelay;
-        public static CustomOption baitShowKillFlash;
-
         public static CustomOption vultureSpawnRate;
         public static CustomOption vultureCooldown;
         public static CustomOption vultureNumberToWin;
@@ -224,6 +216,26 @@ namespace TheOtherRoles {
         public static CustomOption lawyerKnowsRole;
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
+
+        public static CustomOption modifierBait;
+        public static CustomOption modifierBaitReportDelayMin;
+        public static CustomOption modifierBaitReportDelayMax;
+        public static CustomOption modifierBaitShowKillFlash;
+
+        public static CustomOption modifierLover;
+        public static CustomOption modifierLoverImpLoverRate;
+        public static CustomOption modifierLoverBothDie;
+        public static CustomOption modifierLoverEnableChat;
+
+        public static CustomOption modifierBloody;
+        public static CustomOption modifierBloodyDuration;
+
+        public static CustomOption modifierAntiTeleport;
+
+        public static CustomOption modifierTieBreaker;
+
+        public static CustomOption modifierSunglasses;
+        public static CustomOption modifierSunglassesVision;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -262,6 +274,8 @@ namespace TheOtherRoles {
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
+            modifiersCountMin = CustomOption.Create(306, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 0f, 0f, 15f, 1f);
+            modifiersCountMax = CustomOption.Create(307, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 0f, 0f, 15f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -312,12 +326,6 @@ namespace TheOtherRoles {
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
-
-            loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
-            loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
-            loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
-            loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
-            loversEnableChat = CustomOption.Create(54, "Enable Lover Chat", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -410,8 +418,8 @@ namespace TheOtherRoles {
             medicShowAttemptToMedic = CustomOption.Create(146, "Medic Sees Murder Attempt On Shielded Player", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
-            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
-            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper Can Call Emergency Meeting", false, swapperSpawnRate);
+            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper Can Only Swap Others", false, swapperSpawnRate);
 
             seerSpawnRate = CustomOption.Create(160, cs(Seer.color, "Seer"), rates, null, true);
             seerMode = CustomOption.Create(161, "Seer Mode", new string[]{ "Show Death Flash + Souls", "Show Death Flash", "Show Souls"}, seerSpawnRate);
@@ -454,15 +462,30 @@ namespace TheOtherRoles {
             securityGuardCamRechargeTasksNumber = CustomOption.Create(287, "Number Of Tasks Needed For Recharging", 3f, 1f, 10f, 1f, securityGuardSpawnRate);
             securityGuardNoMove = CustomOption.Create(288, "Cant Move During Cam Duration", true, securityGuardSpawnRate);
 
-            baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
-            baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
-            baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
-            baitShowKillFlash = CustomOption.Create(333, "Warn The Killer With A Flash", true, baitSpawnRate);
-
             mediumSpawnRate = CustomOption.Create(360, cs(Medium.color, "Medium"), rates, null, true);
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
+
+            modifierBloody = CustomOption.Create(1000, cs(Color.yellow, "Bloody"), ratesModifier, null, true);
+            modifierBloodyDuration = CustomOption.Create(1001, "Trail duration", 5f, 1f, 30f, 1f, modifierBloody);
+
+            modifierAntiTeleport = CustomOption.Create(1010, cs(Color.yellow, "Anti Teleport"), ratesModifier, null, true);
+
+            modifierTieBreaker = CustomOption.Create(1020, cs(Color.yellow, "Tie Breaker"), false, null, true);
+
+            modifierBait = CustomOption.Create(1030, cs(Color.yellow, "Bait"), ratesModifier, null, true);
+            modifierBaitReportDelayMin = CustomOption.Create(1031, "Bait Report Delay Min", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitReportDelayMax = CustomOption.Create(1032, "Bait Report Delay Max", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitShowKillFlash = CustomOption.Create(1033, "Warn The Killer With A Flash", true, modifierBait);
+
+            modifierLover = CustomOption.Create(1040, cs(Color.yellow, "Lovers"), false, null, true);
+            modifierLoverImpLoverRate = CustomOption.Create(1041, "Chance That One Lover Is Impostor", rates, modifierLover);
+            modifierLoverBothDie = CustomOption.Create(1042, "Both Lovers Die", true, modifierLover);
+            modifierLoverEnableChat = CustomOption.Create(1043, "Enable Lover Chat", true, modifierLover);
+
+            modifierSunglasses = CustomOption.Create(1050, cs(Color.yellow, "Sunglasses"), ratesModifier, null, true);
+            modifierSunglassesVision = CustomOption.Create(1051, "Vision with sunglasses", new string[] { "-10%", "-20%", "-30%", "-40%", "-50%" }, modifierSunglasses);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

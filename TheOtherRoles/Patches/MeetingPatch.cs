@@ -55,6 +55,8 @@ namespace TheOtherRoles.Patches {
                     }
                 }
 
+
+
                 return dictionary;
             }
 
@@ -73,6 +75,14 @@ namespace TheOtherRoles.Patches {
 			        KeyValuePair<byte, int> max = self.MaxPair(out tie);
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
+                    // TieBreaker 
+                    Tiebreaker.isTiebreaker = false;
+                    int maxVoteValue = self.Values.Max();
+                    List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+                    foreach (KeyValuePair<byte, int> pair in self) 
+                        if (pair.Value == maxVoteValue) 
+                            potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
                     {
@@ -81,6 +91,12 @@ namespace TheOtherRoles.Patches {
                             VoterId = playerVoteArea.TargetPlayerId,
                             VotedForId = playerVoteArea.VotedFor
                         };
+
+                        if (tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
+                            exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == playerVoteArea.VotedFor);
+                            tie = false;
+                            Tiebreaker.isTiebreaker = true;
+                        }
                     }
 
                     // RPCVotingComplete
@@ -302,7 +318,7 @@ namespace TheOtherRoles.Patches {
                             return;
                         }
 
-                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget).FirstOrDefault();
+                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, false).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
                         PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
@@ -430,6 +446,10 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
+                // Resett Bait list
+                Bait.active = new Dictionary<DeadPlayer, float>();
+                // Safe AntiTeleport positions
+                AntiTeleport.position = PlayerControl.LocalPlayer.transform.position;
                 // Medium meeting start time
                 Medium.meetingStartTime = DateTime.UtcNow;
                 // Reset vampire bitten
