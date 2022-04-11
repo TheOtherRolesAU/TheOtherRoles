@@ -32,7 +32,6 @@ namespace TheOtherRoles
         Morphling,
         Camouflager,
         Hacker,
-        Mini,
         Tracker,
         Vampire,
         Snitch,
@@ -61,7 +60,8 @@ namespace TheOtherRoles
         Bloody,
         AntiTeleport,
         Tiebreaker,
-        Sunglasses
+        Sunglasses,
+        Mini
     }
 
     enum CustomRPC
@@ -215,9 +215,6 @@ namespace TheOtherRoles
                     case RoleId.Hacker:
                         Hacker.hacker = player;
                         break;
-                    case RoleId.Mini:
-                        Mini.mini = player;
-                        break;
                     case RoleId.Tracker:
                         Tracker.tracker = player;
                         break;
@@ -303,6 +300,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Sunglasses:
                     Sunglasses.sunglasses.Add(player);
+                    break;
+                case RoleId.Mini:
+                    Mini.mini = player;
                     break;
             }
         }
@@ -447,6 +447,11 @@ namespace TheOtherRoles
 
                 if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
                 else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
+
+                // TODO other Modifiers?
+                // TODO MINI shiftable??
+                if (Mini.mini != null && Mini.mini == player)
+                    Mini.mini = oldShifter;
             }
 
             // Shift role
@@ -474,8 +479,6 @@ namespace TheOtherRoles
                 Seer.seer = oldShifter;
             if (Hacker.hacker != null && Hacker.hacker == player)
                 Hacker.hacker = oldShifter;
-            if (Mini.mini != null && Mini.mini == player)
-                Mini.mini = oldShifter;
             if (Tracker.tracker != null && Tracker.tracker == player)
                 Tracker.tracker = oldShifter;
             if (Snitch.snitch != null && Snitch.snitch == player)
@@ -603,7 +606,6 @@ namespace TheOtherRoles
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
             if (player == Hacker.hacker) Hacker.clearAndReload();
-            if (player == Mini.mini) Mini.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
@@ -650,6 +652,7 @@ namespace TheOtherRoles
             if (player == AntiTeleport.antiTeleport.Any(x => x.PlayerId == player.PlayerId)) AntiTeleport.antiTeleport.RemoveAll(x => x.PlayerId == player.PlayerId);
             if (player == Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
+            if (player == Mini.mini) Mini.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {

@@ -14,7 +14,7 @@ namespace TheOtherRoles
     {
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
-        private static CustomButton sheriffKillButton;
+        public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
@@ -26,10 +26,10 @@ namespace TheOtherRoles
         private static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
-        private static CustomButton vampireKillButton;
+        public static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
-        private static CustomButton jackalKillButton;
-        private static CustomButton sidekickKillButton;
+        public static CustomButton jackalKillButton;
+        public static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
         private static CustomButton lighterButton;
         private static CustomButton eraserButton;

@@ -741,8 +741,19 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        // Mini set adapted button cooldown for Vampire, Sheriff, Jackal, Sidekick
+        static void miniUpdate() {
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) {
+                var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+                HudManagerStartPatch.sheriffKillButton.MaxTimer = Sheriff.cooldown * multiplier;
+                HudManagerStartPatch.vampireKillButton.MaxTimer = Vampire.cooldown * multiplier;
+                HudManagerStartPatch.jackalKillButton.MaxTimer = Jackal.cooldown * multiplier;
+                HudManagerStartPatch.sidekickKillButton.MaxTimer = Sidekick.cooldown * multiplier;
+            }
+        }
+    
 
-        public static void Postfix(PlayerControl __instance) {
+    public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
             // Mini and Morphling shrink
@@ -825,6 +836,8 @@ namespace TheOtherRoles.Patches {
                 // --MODIFIER--
                 // Bloody
                 bloodyUpdate();
+                // mini (for the cooldowns)
+                miniUpdate();
             } 
         }
     }
@@ -944,22 +957,6 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.lawyerPromotesToPursuer();
             }
 
-            // Cleaner Button Sync
-            if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null) 
-                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
-
-
-            // Witch Button Sync
-            if (Witch.triggerBothCooldowns && Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null) 
-                HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
-
-            // Warlock Button Sync
-            if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
-                if (Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
-                    HudManagerStartPatch.warlockCurseButton.Timer = Warlock.warlock.killTimer;
-                }
-            }
-
             // Seer show flash and add dead player position
             if (Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
                 Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));
@@ -974,12 +971,6 @@ namespace TheOtherRoles.Patches {
                 Medium.featureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
             }
 
-            // Mini set adapted kill cooldown
-            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.Role.IsImpostor && Mini.mini == __instance) {
-                var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
-                Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * multiplier);
-            }
-
             // Set bountyHunter cooldown
             if (BountyHunter.bountyHunter != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter && __instance == BountyHunter.bountyHunter) {
                 if (target == BountyHunter.bounty) {
@@ -988,6 +979,21 @@ namespace TheOtherRoles.Patches {
                 }
                 else
                     BountyHunter.bountyHunter.SetKillTimer(PlayerControl.GameOptions.KillCooldown + BountyHunter.punishmentTime); 
+            }
+
+            // Cleaner Button Sync
+            if (Cleaner.cleaner != null && PlayerControl.LocalPlayer == Cleaner.cleaner && __instance == Cleaner.cleaner && HudManagerStartPatch.cleanerCleanButton != null)
+                HudManagerStartPatch.cleanerCleanButton.Timer = Cleaner.cleaner.killTimer;
+
+            // Witch Button Sync
+            if (Witch.triggerBothCooldowns && Witch.witch != null && PlayerControl.LocalPlayer == Witch.witch && __instance == Witch.witch && HudManagerStartPatch.witchSpellButton != null)
+                HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+
+            // Warlock Button Sync
+            if (Warlock.warlock != null && PlayerControl.LocalPlayer == Warlock.warlock && __instance == Warlock.warlock && HudManagerStartPatch.warlockCurseButton != null) {
+                if (Warlock.warlock.killTimer > HudManagerStartPatch.warlockCurseButton.Timer) {
+                    HudManagerStartPatch.warlockCurseButton.Timer = Warlock.warlock.killTimer;
+                }
             }
 
             // Bait
@@ -1014,7 +1020,7 @@ namespace TheOtherRoles.Patches {
             if (PlayerControl.GameOptions.KillCooldown <= 0f) return false;
             float multiplier = 1f;
             float addition = 0f;
-            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini && Mini.mini.Data.Role.IsImpostor) multiplier = Mini.isGrownUp() ? 0.66f : 2f;
+            if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) multiplier = Mini.isGrownUp() ? 0.66f : 2f;
             if (BountyHunter.bountyHunter != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) addition = BountyHunter.punishmentTime;
 
             __instance.killTimer = Mathf.Clamp(time, 0f, PlayerControl.GameOptions.KillCooldown * multiplier + addition);

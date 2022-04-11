@@ -46,9 +46,6 @@ namespace TheOtherRoles {
         public static CustomOption eraserCooldown;
         public static CustomOption eraserCanEraseAnyone;
 
-        public static CustomOption miniSpawnRate;
-        public static CustomOption miniGrowingUpDuration;
-
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
         public static CustomOption guesserNumberOfShots;
@@ -236,6 +233,9 @@ namespace TheOtherRoles {
 
         public static CustomOption modifierSunglasses;
         public static CustomOption modifierSunglassesVision;
+        
+        public static CustomOption modifierMini;
+        public static CustomOption modifierMiniGrowingUpDuration;
 
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
@@ -323,9 +323,6 @@ namespace TheOtherRoles {
             witchSpellCastingDuration = CustomOption.Create(374, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
-
-            miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
-            miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -486,6 +483,9 @@ namespace TheOtherRoles {
 
             modifierSunglasses = CustomOption.Create(1050, cs(Color.yellow, "Sunglasses"), ratesModifier, null, true);
             modifierSunglassesVision = CustomOption.Create(1051, "Vision with sunglasses", new string[] { "-10%", "-20%", "-30%", "-40%", "-50%" }, modifierSunglasses);
+
+            modifierMini = CustomOption.Create(1061, cs(Color.yellow, "Mini"), false, null, true);
+            modifierMiniGrowingUpDuration = CustomOption.Create(1062, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

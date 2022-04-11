@@ -39,7 +39,6 @@ namespace TheOtherRoles
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
-            Mini.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
@@ -65,6 +64,7 @@ namespace TheOtherRoles
             AntiTeleport.clearAndReload();
             Tiebreaker.clearAndReload();
             Sunglasses.clearAndReload();
+            Mini.clearAndReload();
         }
 
         public static class Jester {
@@ -640,7 +640,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             mini = null;
             triggerMiniLose = false;
-            growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
+            growingUpDuration = CustomOptionHolder.modifierMiniGrowingUpDuration.getFloat();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
