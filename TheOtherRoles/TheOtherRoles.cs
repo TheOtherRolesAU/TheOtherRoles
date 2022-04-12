@@ -1392,7 +1392,7 @@ namespace TheOtherRoles
 
     public static class Bloody {
         public static List<PlayerControl> bloody = new List<PlayerControl>();
-        public static Dictionary<byte, float> active;
+        public static Dictionary<byte, float> active = new Dictionary<byte, float>();
 
         public static float duration = 5f;
 
