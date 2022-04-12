@@ -237,6 +237,10 @@ namespace TheOtherRoles {
         public static CustomOption modifierMini;
         public static CustomOption modifierMiniGrowingUpDuration;
 
+        public static CustomOption modifierVip;
+        public static CustomOption modifierVipShowColor;
+        public static CustomOption modifierVipIsBlue;
+
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -486,6 +490,10 @@ namespace TheOtherRoles {
 
             modifierMini = CustomOption.Create(1061, cs(Color.yellow, "Mini"), false, null, true);
             modifierMiniGrowingUpDuration = CustomOption.Create(1062, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
+
+            modifierVip = CustomOption.Create(1071, cs(Color.yellow, "VIP"), false, null, true);
+            modifierVipShowColor = CustomOption.Create(1072, "Show Team Color", true, modifierVip);
+            modifierVipIsBlue = CustomOption.Create(1073, "Show Blue", false, modifierVip);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

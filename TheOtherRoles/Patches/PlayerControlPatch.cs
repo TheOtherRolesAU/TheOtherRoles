@@ -1022,6 +1022,20 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.bloody(__instance.PlayerId);
             }
+
+            // VIP Modifier
+            if (Vip.vip == target) {
+                Color color = Color.yellow;
+                if (Vip.showColor) {
+                    color = Color.white;
+                    if (__instance.Data.Role.IsImpostor) color = Color.red;
+                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) {
+                        if (Vip.modifierVipIsBlue) color = Color.blue;
+                        else color = Color.black;
+                    }
+                }
+                Helpers.showFlash(color, 3);
+            }
         }
     }
 

@@ -1460,7 +1460,18 @@ namespace TheOtherRoles
         public static bool isGrownUp() {
             return growingProgress() == 1f;
         }
+
     }
+    public static class Vip {
+        public static PlayerControl vip;
+        public static bool showColor = true;
+        public static bool modifierVipIsBlue = false;
 
-
+        public static void clearAndReload() {
+            vip = null;
+            showColor = CustomOptionHolder.modifierVipShowColor.getBool();
+            modifierVipIsBlue = CustomOptionHolder.modifierVipIsBlue.getBool();
+        }
+    } 
+    
 }
