@@ -74,6 +74,7 @@ namespace TheOtherRoles
         public static RoleInfo sunglasses = new RoleInfo("Sunglasses", Color.yellow, "You got the sunglasses", "Your vision is reduced", RoleId.Sunglasses, false, true);
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover, false, true);
         public static RoleInfo mini = new RoleInfo("Mini", Color.yellow, "No one will harm you until you grow up", "No one will harm you", RoleId.Mini, false, true);
+        public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "VIP", RoleId.Vip, false, true);
 
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
@@ -123,7 +124,8 @@ namespace TheOtherRoles
             antiTeleport,
             tiebreaker,
             sunglasses,
-            mini
+            mini,
+            vip
         };
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p, bool showModifier = true) {
@@ -139,6 +141,7 @@ namespace TheOtherRoles
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
+                if (p == Vip.vip) infos.Add(vip);
             }
 
             // Special roles

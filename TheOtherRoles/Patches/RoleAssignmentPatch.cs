@@ -366,6 +366,7 @@ namespace TheOtherRoles.Patches {
             modifier.AddRange(Enumerable.Repeat(RoleId.Tiebreaker, CustomOptionHolder.modifierTieBreaker.getSelection()));
             modifier.AddRange(Enumerable.Repeat(RoleId.Sunglasses, CustomOptionHolder.modifierSunglasses.getSelection()));
             modifier.AddRange(Enumerable.Repeat(RoleId.Mini, CustomOptionHolder.modifierMini.getSelection()));
+            modifier.AddRange(Enumerable.Repeat(RoleId.Vip, CustomOptionHolder.modifierVip.getSelection()));
 
             while (modifierCount < modifier.Count) {
                 var index = rnd.Next(0, modifier.Count);

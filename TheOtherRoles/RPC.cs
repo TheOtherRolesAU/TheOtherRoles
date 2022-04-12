@@ -61,7 +61,8 @@ namespace TheOtherRoles
         AntiTeleport,
         Tiebreaker,
         Sunglasses,
-        Mini
+        Mini,
+        Vip
     }
 
     enum CustomRPC
@@ -303,6 +304,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Mini:
                     Mini.mini = player;
+                    break;
+                case RoleId.Vip:
+                    Vip.vip = player;
                     break;
             }
         }
@@ -653,6 +657,7 @@ namespace TheOtherRoles
             if (player == Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
             if (player == Mini.mini) Mini.clearAndReload();
+            if (player == Vip.vip) Vip.clearAndReload();
         }
 
         public static void setFutureErased(byte playerId) {
