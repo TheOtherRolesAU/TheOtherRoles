@@ -819,8 +819,6 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
-                // Bait
-                baitUpdate();
                 // Vulture
                 vultureUpdate();
                 // Medium
@@ -837,6 +835,8 @@ namespace TheOtherRoles.Patches {
                 hackerUpdate();
 
                 // --MODIFIER--
+                // Bait
+                baitUpdate();
                 // Bloody
                 bloodyUpdate();
                 // mini (for the cooldowns)

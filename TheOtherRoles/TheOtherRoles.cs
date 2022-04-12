@@ -1373,7 +1373,7 @@ namespace TheOtherRoles
     // Modifier
     public static class Bait {
         public static List<PlayerControl> bait = new List<PlayerControl>();
-        public static Dictionary<DeadPlayer, float> active;
+        public static Dictionary<DeadPlayer, float> active = new Dictionary<DeadPlayer, float>();
         public static Color color = new Color32(0, 247, 255, byte.MaxValue);
 
         public static float reportDelayMin = 0f;
