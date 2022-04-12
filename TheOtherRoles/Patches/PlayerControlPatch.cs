@@ -714,7 +714,7 @@ namespace TheOtherRoles.Patches {
             if (!Bait.active.Any()) return;
 
             // Bait report
-            foreach (KeyValuePair<DeadPlayer, float> entry in Bait.active) {
+            foreach (KeyValuePair<DeadPlayer, float> entry in new Dictionary<DeadPlayer, float>(Bait.active)) {
                 Bait.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
                 if (entry.Value <= 0) {
                     Bait.active.Remove(entry.Key);
@@ -733,7 +733,7 @@ namespace TheOtherRoles.Patches {
 
         static void bloodyUpdate() {
             if (!Bloody.active.Any()) return;
-            foreach (KeyValuePair<byte, float> entry in Bloody.active) {
+            foreach (KeyValuePair<byte, float> entry in new Dictionary<byte, float>(Bloody.active)) {
                 PlayerControl player = Helpers.playerById(entry.Key);
                 new Footprint(4f, false, player);
                 Bloody.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
@@ -742,7 +742,7 @@ namespace TheOtherRoles.Patches {
         }
 
         // Mini set adapted button cooldown for Vampire, Sheriff, Jackal, Sidekick, Warlock, Cleaner
-        public static void miniUpdate() {
+        public static void miniCooldownUpdate() {
             if (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) {
                 var multiplier = Mini.isGrownUp() ? 0.66f : 2f;
                 HudManagerStartPatch.sheriffKillButton.MaxTimer = Sheriff.cooldown * multiplier;
@@ -840,7 +840,7 @@ namespace TheOtherRoles.Patches {
                 // Bloody
                 bloodyUpdate();
                 // mini (for the cooldowns)
-                miniUpdate();
+                miniCooldownUpdate();
             } 
         }
     }

@@ -1290,7 +1290,7 @@ namespace TheOtherRoles
                     if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill) {
                         Witch.currentCooldownAddition += Witch.cooldownAddition;
                         witchSpellButton.MaxTimer = Witch.cooldown + Witch.currentCooldownAddition;
-                        Patches.PlayerControlFixedUpdatePatch.miniUpdate();  // Modifies the MaxTimer if the witch is the mini
+                        Patches.PlayerControlFixedUpdatePatch.miniCooldownUpdate();  // Modifies the MaxTimer if the witch is the mini
                         witchSpellButton.Timer = witchSpellButton.MaxTimer;
                         if (Witch.triggerBothCooldowns) {
                             float multiplier = (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) ? (Mini.isGrownUp() ? 0.66f : 2f) : 1f;
