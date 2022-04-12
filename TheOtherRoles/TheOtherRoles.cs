@@ -627,35 +627,6 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Mini {
-        public static PlayerControl mini;
-        public static Color color = Color.white;
-        public const float defaultColliderRadius = 0.2233912f;
-            public const float defaultColliderOffset = 0.3636057f;
-
-        public static float growingUpDuration = 400f;
-        public static DateTime timeOfGrowthStart = DateTime.UtcNow;
-        public static bool triggerMiniLose = false;
-
-        public static void clearAndReload() {
-            mini = null;
-            triggerMiniLose = false;
-            growingUpDuration = CustomOptionHolder.modifierMiniGrowingUpDuration.getFloat();
-            timeOfGrowthStart = DateTime.UtcNow;
-        }
-
-        public static float growingProgress() {
-            if (timeOfGrowthStart == null) return 0f;
-
-            float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
-            return Mathf.Clamp(timeSinceStart/(growingUpDuration*1000), 0f, 1f);
-        }
-
-        public static bool isGrownUp() {
-            return growingProgress() == 1f;
-        }
-    }
-
     public static class Tracker {
         public static PlayerControl tracker;
         public static Color color = new Color32(100, 58, 220, byte.MaxValue);
@@ -1401,7 +1372,7 @@ namespace TheOtherRoles
 
     // Modifier
     public static class Bait {
-        public static List<PlayerControl> bait;
+        public static List<PlayerControl> bait = new List<PlayerControl>();
         public static Dictionary<DeadPlayer, float> active;
         public static Color color = new Color32(0, 247, 255, byte.MaxValue);
 
@@ -1420,7 +1391,7 @@ namespace TheOtherRoles
     }
 
     public static class Bloody {
-        public static List<PlayerControl> bloody;
+        public static List<PlayerControl> bloody = new List<PlayerControl>();
         public static Dictionary<byte, float> active;
 
         public static float duration = 5f;
@@ -1433,7 +1404,7 @@ namespace TheOtherRoles
     }
 
     public static class AntiTeleport {
-        public static List<PlayerControl> antiTeleport;
+        public static List<PlayerControl> antiTeleport = new List<PlayerControl>();
         public static Vector3 position;
 
         public static void clearAndReload() {
@@ -1454,7 +1425,7 @@ namespace TheOtherRoles
     }
 
     public static class Sunglasses {
-        public static List<PlayerControl> sunglasses;
+        public static List<PlayerControl> sunglasses = new List<PlayerControl>();
         public static int vision = 1;
 
         public static void clearAndReload() {
@@ -1462,5 +1433,34 @@ namespace TheOtherRoles
             vision = CustomOptionHolder.modifierSunglassesVision.getSelection() + 1;
         }
     }
+    public static class Mini {
+        public static PlayerControl mini;
+        public static Color color = Color.yellow;
+        public const float defaultColliderRadius = 0.2233912f;
+        public const float defaultColliderOffset = 0.3636057f;
+
+        public static float growingUpDuration = 400f;
+        public static DateTime timeOfGrowthStart = DateTime.UtcNow;
+        public static bool triggerMiniLose = false;
+
+        public static void clearAndReload() {
+            mini = null;
+            triggerMiniLose = false;
+            growingUpDuration = CustomOptionHolder.modifierMiniGrowingUpDuration.getFloat();
+            timeOfGrowthStart = DateTime.UtcNow;
+        }
+
+        public static float growingProgress() {
+            if (timeOfGrowthStart == null) return 0f;
+
+            float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
+            return Mathf.Clamp(timeSinceStart / (growingUpDuration * 1000), 0f, 1f);
+        }
+
+        public static bool isGrownUp() {
+            return growingProgress() == 1f;
+        }
+    }
+
 
 }
