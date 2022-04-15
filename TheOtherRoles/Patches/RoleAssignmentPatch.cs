@@ -354,6 +354,8 @@ namespace TheOtherRoles.Patches {
             List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList();
             int modifierCount = Mathf.Min(players.Count, modifierCountSettings);
 
+            if (modifierCount == 0) return;
+
             List<RoleId> allModifiers = new List<RoleId>();
             List<RoleId> ensuredModifiers = new List<RoleId>();
             List<RoleId> chanceModifiers = new List<RoleId>();
@@ -380,6 +382,7 @@ namespace TheOtherRoles.Patches {
                 byte secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer, 1);
 
                 players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
+                modifierCount--;
             }
 
             foreach (RoleId m in allModifiers) {
