@@ -390,6 +390,7 @@ namespace TheOtherRoles.Patches {
             assignModifiersToPlayers(ensuredModifiers, players, modifierCount); // Assign ensured modifier
 
             modifierCount -= ensuredModifiers.Count;
+            if (modifierCount <= 0) return;
             int chanceModifierCount = modifierCount;
             List<RoleId> chanceModifierToAssign = new List<RoleId>();
             while (chanceModifierCount > 0 ) {
