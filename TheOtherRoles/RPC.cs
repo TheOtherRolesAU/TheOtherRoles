@@ -306,7 +306,7 @@ namespace TheOtherRoles
                     Mini.mini = player;
                     break;
                 case RoleId.Vip:
-                    Vip.vip = player;
+                    Vip.vip.Add(player);
                     break;
             }
         }
@@ -651,13 +651,13 @@ namespace TheOtherRoles
             if (player == Pursuer.pursuer) Pursuer.clearAndReload();
 
             // Modifier
-            if (player == Bait.bait.Any(x => x.PlayerId == player.PlayerId)) Bait.bait.RemoveAll(x => x.PlayerId == player.PlayerId);
-            if (player == Bloody.bloody.Any(x => x.PlayerId == player.PlayerId)) Bloody.bloody.RemoveAll(x => x.PlayerId == player.PlayerId);
-            if (player == AntiTeleport.antiTeleport.Any(x => x.PlayerId == player.PlayerId)) AntiTeleport.antiTeleport.RemoveAll(x => x.PlayerId == player.PlayerId);
-            if (player == Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (Bait.bait.Any(x => x.PlayerId == player.PlayerId)) Bait.bait.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (Bloody.bloody.Any(x => x.PlayerId == player.PlayerId)) Bloody.bloody.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == player.PlayerId)) AntiTeleport.antiTeleport.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
             if (player == Mini.mini) Mini.clearAndReload();
-            if (player == Vip.vip) Vip.clearAndReload();
+            if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
         }
 
         public static void setFutureErased(byte playerId) {

@@ -1024,7 +1024,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // VIP Modifier
-            if (Vip.vip == target) {
+            if (Vip.vip.FindAll(x => x.PlayerId == target.PlayerId).Count > 0) {
                 Color color = Color.yellow;
                 if (Vip.showColor) {
                     color = Color.white;

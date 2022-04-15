@@ -100,6 +100,10 @@ namespace TheOtherRoles {
             return (float)selections[selection];
         }
 
+        public int getQuantity() {
+            return selection + 1;
+        }
+
         // Option changes
 
         public void updateSelection(int newSelection) {

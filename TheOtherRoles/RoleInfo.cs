@@ -141,7 +141,7 @@ namespace TheOtherRoles
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
-                if (p == Vip.vip) infos.Add(vip);
+                if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
             }
 
             // Special roles

@@ -12,7 +12,7 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
-        public static string[] ratesModifier = new string[]{"0", "1", "2", "3"};
+        public static string[] ratesModifier = new string[]{"1", "2", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
@@ -215,6 +215,7 @@ namespace TheOtherRoles {
         public static CustomOption pursuerBlanksNumber;
 
         public static CustomOption modifierBait;
+        public static CustomOption modifierBaitQuantity;
         public static CustomOption modifierBaitReportDelayMin;
         public static CustomOption modifierBaitReportDelayMax;
         public static CustomOption modifierBaitShowKillFlash;
@@ -225,19 +226,23 @@ namespace TheOtherRoles {
         public static CustomOption modifierLoverEnableChat;
 
         public static CustomOption modifierBloody;
+        public static CustomOption modifierBloodyQuantity;
         public static CustomOption modifierBloodyDuration;
 
         public static CustomOption modifierAntiTeleport;
+        public static CustomOption modifierAntiTeleportQuantity;
 
         public static CustomOption modifierTieBreaker;
 
         public static CustomOption modifierSunglasses;
+        public static CustomOption modifierSunglassesQuantity;
         public static CustomOption modifierSunglassesVision;
         
         public static CustomOption modifierMini;
         public static CustomOption modifierMiniGrowingUpDuration;
 
         public static CustomOption modifierVip;
+        public static CustomOption modifierVipQuantity;
         public static CustomOption modifierVipShowColor;
         public static CustomOption modifierVipIsBlue;
 
@@ -468,35 +473,41 @@ namespace TheOtherRoles {
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
 
-            modifierBloody = CustomOption.Create(1000, cs(Color.yellow, "Bloody"), ratesModifier, null, true);
-            modifierBloodyDuration = CustomOption.Create(1001, "Trail duration", 5f, 1f, 30f, 1f, modifierBloody);
+            modifierBloody = CustomOption.Create(1000, cs(Color.yellow, "Bloody"), rates, null, true);
+            modifierBloodyQuantity = CustomOption.Create(1001, cs(Color.yellow, "Bloody Quantity"), ratesModifier, modifierBloody);
+            modifierBloodyDuration = CustomOption.Create(1002, "Trail duration", 5f, 1f, 30f, 1f, modifierBloody);
 
-            modifierAntiTeleport = CustomOption.Create(1010, cs(Color.yellow, "Anti Teleport"), ratesModifier, null, true);
+            modifierAntiTeleport = CustomOption.Create(1010, cs(Color.yellow, "Anti Teleport"), rates, null, true);
+            modifierAntiTeleportQuantity = CustomOption.Create(1011, cs(Color.yellow, "Anti Teleport Quantity"), ratesModifier, modifierAntiTeleport);
 
-            modifierTieBreaker = CustomOption.Create(1020, cs(Color.yellow, "Tie Breaker"), false, null, true);
+            modifierTieBreaker = CustomOption.Create(1020, cs(Color.yellow, "Tie Breaker"), rates, null, true);
 
-            modifierBait = CustomOption.Create(1030, cs(Color.yellow, "Bait"), ratesModifier, null, true);
-            modifierBaitReportDelayMin = CustomOption.Create(1031, "Bait Report Delay Min", 0f, 0f, 10f, 1f, modifierBait);
-            modifierBaitReportDelayMax = CustomOption.Create(1032, "Bait Report Delay Max", 0f, 0f, 10f, 1f, modifierBait);
-            modifierBaitShowKillFlash = CustomOption.Create(1033, "Warn The Killer With A Flash", true, modifierBait);
+            modifierBait = CustomOption.Create(1030, cs(Color.yellow, "Bait"), rates, null, true);
+            modifierBaitQuantity = CustomOption.Create(1031, cs(Color.yellow, "Bait Quantity"), ratesModifier, modifierBait);
+            modifierBaitReportDelayMin = CustomOption.Create(1032, "Bait Report Delay Min", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitReportDelayMax = CustomOption.Create(1033, "Bait Report Delay Max", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitShowKillFlash = CustomOption.Create(1034, "Warn The Killer With A Flash", true, modifierBait);
 
-            modifierLover = CustomOption.Create(1040, cs(Color.yellow, "Lovers"), false, null, true);
+            modifierLover = CustomOption.Create(1040, cs(Color.yellow, "Lovers"), rates, null, true);
             modifierLoverImpLoverRate = CustomOption.Create(1041, "Chance That One Lover Is Impostor", rates, modifierLover);
             modifierLoverBothDie = CustomOption.Create(1042, "Both Lovers Die", true, modifierLover);
             modifierLoverEnableChat = CustomOption.Create(1043, "Enable Lover Chat", true, modifierLover);
 
-            modifierSunglasses = CustomOption.Create(1050, cs(Color.yellow, "Sunglasses"), ratesModifier, null, true);
-            modifierSunglassesVision = CustomOption.Create(1051, "Vision with sunglasses", new string[] { "-10%", "-20%", "-30%", "-40%", "-50%" }, modifierSunglasses);
+            modifierSunglasses = CustomOption.Create(1050, cs(Color.yellow, "Sunglasses"), rates, null, true);
+            modifierSunglassesQuantity = CustomOption.Create(1051, cs(Color.yellow, "Sunglasses Quantity"), ratesModifier, modifierSunglasses);
+            modifierSunglassesVision = CustomOption.Create(1052, "Vision with sunglasses", new string[] { "-10%", "-20%", "-30%", "-40%", "-50%" }, modifierSunglasses);
 
-            modifierMini = CustomOption.Create(1061, cs(Color.yellow, "Mini"), false, null, true);
+            modifierMini = CustomOption.Create(1061, cs(Color.yellow, "Mini"), rates, null, true);
             modifierMiniGrowingUpDuration = CustomOption.Create(1062, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
 
-            modifierVip = CustomOption.Create(1071, cs(Color.yellow, "VIP"), false, null, true);
+            modifierVip = CustomOption.Create(1070, cs(Color.yellow, "VIP"), rates, null, true);
+            modifierVipQuantity = CustomOption.Create(1071, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
             modifierVipShowColor = CustomOption.Create(1072, "Show Team Color", true, modifierVip);
             modifierVipIsBlue = CustomOption.Create(1073, "Show Blue", false, modifierVip);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
+            blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", false);
             blockSkippingInEmergencyMeetings = CustomOption.Create(4, "Block Skipping In Emergency Meetings", false);
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
