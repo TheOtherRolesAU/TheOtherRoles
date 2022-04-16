@@ -244,8 +244,10 @@ namespace TheOtherRoles {
         public static CustomOption modifierVip;
         public static CustomOption modifierVipQuantity;
         public static CustomOption modifierVipShowColor;
-        public static CustomOption modifierVipIsBlue;
 
+        public static CustomOption modifierInvert;
+        public static CustomOption modifierInvertQuantity;
+        
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
@@ -504,7 +506,9 @@ namespace TheOtherRoles {
             modifierVip = CustomOption.Create(1070, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
             modifierVipShowColor = CustomOption.Create(1072, "Show Team Color", true, modifierVip);
-            modifierVipIsBlue = CustomOption.Create(1073, "Show Blue", false, modifierVip);
+
+            modifierInvert = CustomOption.Create(1080, cs(Color.yellow, "Invert"), rates, null, true);
+            modifierInvertQuantity = CustomOption.Create(1081, cs(Color.yellow, "Modifier Quantity"), ratesModifier, modifierInvert);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);

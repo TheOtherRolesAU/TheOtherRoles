@@ -366,7 +366,8 @@ namespace TheOtherRoles.Patches {
                 RoleId.Bloody,
                 RoleId.AntiTeleport,
                 RoleId.Sunglasses,
-                RoleId.Vip
+                RoleId.Vip,
+                RoleId.Invert
             });
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
@@ -396,7 +397,7 @@ namespace TheOtherRoles.Patches {
             if (modifierCount <= 0) return;
             int chanceModifierCount = Mathf.Min(modifierCount, chanceModifiers.Count);
             List<RoleId> chanceModifierToAssign = new List<RoleId>();
-            while (chanceModifierCount > 0 ) {
+            while (chanceModifierCount > 0 && chanceModifiers.Count > 0) {
                 var index = rnd.Next(0, chanceModifiers.Count);
                 RoleId modifierId = chanceModifiers[index];
                 chanceModifierToAssign.Add(modifierId);
@@ -496,6 +497,10 @@ namespace TheOtherRoles.Patches {
                 case RoleId.Vip:
                     selection = CustomOptionHolder.modifierVip.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierVipQuantity.getQuantity();
+                    break;
+                case RoleId.Invert:
+                    selection = CustomOptionHolder.modifierInvert.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierInvertQuantity.getQuantity();
                     break;
             }
                  

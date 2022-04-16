@@ -1035,10 +1035,7 @@ namespace TheOtherRoles.Patches {
                 if (Vip.showColor) {
                     color = Color.white;
                     if (__instance.Data.Role.IsImpostor) color = Color.red;
-                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) {
-                        if (Vip.modifierVipIsBlue) color = Color.blue;
-                        else color = Color.black;
-                    }
+                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) color = Color.blue;
                 }
                 Helpers.showFlash(color, 3);
             }
@@ -1123,6 +1120,13 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+    public static class PlayerPhysicsFixedUpdate {
+        public static void Postfix(PlayerPhysics __instance) {
+            if (__instance.AmOwner && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
         }
     }
 }

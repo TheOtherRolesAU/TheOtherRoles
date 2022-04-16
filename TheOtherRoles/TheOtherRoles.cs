@@ -66,6 +66,7 @@ namespace TheOtherRoles
             Sunglasses.clearAndReload();
             Mini.clearAndReload();
             Vip.clearAndReload();
+            Invert.clearAndReload();
         }
 
         public static class Jester {
@@ -1466,13 +1467,18 @@ namespace TheOtherRoles
     public static class Vip {
         public static List<PlayerControl> vip = new List<PlayerControl>();
         public static bool showColor = true;
-        public static bool modifierVipIsBlue = false;
 
         public static void clearAndReload() {
             vip = new List<PlayerControl>();
             showColor = CustomOptionHolder.modifierVipShowColor.getBool();
-            modifierVipIsBlue = CustomOptionHolder.modifierVipIsBlue.getBool();
         }
-    } 
-    
+    }
+
+    public static class Invert {
+        public static List<PlayerControl> invert = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            invert = new List<PlayerControl>();
+        }
+    }
 }

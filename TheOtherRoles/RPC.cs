@@ -62,7 +62,8 @@ namespace TheOtherRoles
         Tiebreaker,
         Sunglasses,
         Mini,
-        Vip
+        Vip,
+        Invert
     }
 
     enum CustomRPC
@@ -118,7 +119,8 @@ namespace TheOtherRoles
         LawyerPromotesToPursuer,
         SetBlanked,
         Bloody,
-        SetFirstKill
+        SetFirstKill,
+        Invert
     }
 
     public static class RPCProcedure {
@@ -308,6 +310,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Vip:
                     Vip.vip.Add(player);
+                    break;
+                case RoleId.Invert:
+                    Invert.invert.Add(player);
                     break;
             }
         }
@@ -659,6 +664,7 @@ namespace TheOtherRoles
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
             if (player == Mini.mini) Mini.clearAndReload();
             if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
         }
 
         public static void setFutureErased(byte playerId) {
