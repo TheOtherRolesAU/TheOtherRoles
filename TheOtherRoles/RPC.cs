@@ -117,7 +117,8 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
-        Bloody
+        Bloody,
+        SetFirstKill
     }
 
     public static class RPCProcedure {
@@ -834,6 +835,12 @@ namespace TheOtherRoles
             if (Bloody.active.ContainsKey(playerId)) return;
             Bloody.active.Add(playerId, Bloody.duration);
         }
+
+        public static void setFirstKill(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            MapOptions.firstKillPlayer = target;
+        }
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -1026,6 +1033,10 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.Bloody:
                     byte bloodyKiller = reader.ReadByte();
                     RPCProcedure.bloody(bloodyKiller);
+                    break;
+                case (byte)CustomRPC.SetFirstKill:
+                    byte firstKill = reader.ReadByte();
+                    RPCProcedure.setFirstKill(firstKill);
                     break;
             }
         }

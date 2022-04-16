@@ -458,6 +458,8 @@ namespace TheOtherRoles.Patches {
                 if (meetingTarget == null) meetingsCount++;
                 // Save the meeting target
                 target = meetingTarget;
+                // Remove first kill shield
+                MapOptions.firstKillPlayer = null;
             }
         }
 

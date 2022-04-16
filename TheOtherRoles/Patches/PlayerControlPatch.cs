@@ -61,15 +61,21 @@ namespace TheOtherRoles.Patches {
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
+                Color color = Medic.shieldedColor;
                 if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
                         || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
                 }
 
+                if (Camouflager.camouflageTimer <= 0f && MapOptions.firstKillPlayer != null && MapOptions.shieldFirstKill && ((target == MapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == MapOptions.firstKillPlayer))) {
+                    hasVisibleShield = true;
+                    color = Color.blue;
+                }
+
                 if (hasVisibleShield) {
-                    target.MyRend.material.SetFloat("_Outline", 1f);
-                    target.MyRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                target.MyRend.material.SetFloat("_Outline", 1f);
+                target.MyRend.material.SetColor("_OutlineColor", color);
                 }
                 else {
                     target.MyRend.material.SetFloat("_Outline", 0f);
@@ -1036,6 +1042,9 @@ namespace TheOtherRoles.Patches {
                 }
                 Helpers.showFlash(color, 3);
             }
+
+            // First kill
+            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
         }
     }
 
