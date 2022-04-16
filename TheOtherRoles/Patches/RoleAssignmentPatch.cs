@@ -394,7 +394,7 @@ namespace TheOtherRoles.Patches {
 
             modifierCount -= ensuredModifiers.Count;
             if (modifierCount <= 0) return;
-            int chanceModifierCount = modifierCount;
+            int chanceModifierCount = Mathf.Min(modifierCount, chanceModifiers.Count);
             List<RoleId> chanceModifierToAssign = new List<RoleId>();
             while (chanceModifierCount > 0 ) {
                 var index = rnd.Next(0, chanceModifiers.Count);
@@ -452,7 +452,7 @@ namespace TheOtherRoles.Patches {
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
                 crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
                 int sunglassesCount = 0;
-                while (sunglassesCount < modifiers.FindAll(x => x == RoleId.Sunglasses).Count) {
+                while (sunglassesCount < (modifiers.FindAll(x => x == RoleId.Sunglasses).Count / getSelectionForRoleId(RoleId.Sunglasses, false))) {
                     playerId = setModifierToRandomPlayer((byte)RoleId.Sunglasses, crewPlayer);
                     crewPlayer.RemoveAll(x => x.PlayerId == playerId);
                     playerList.RemoveAll(x => x.PlayerId == playerId);
