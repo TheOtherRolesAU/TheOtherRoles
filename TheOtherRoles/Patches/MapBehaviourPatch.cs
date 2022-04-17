@@ -22,6 +22,7 @@ namespace TheOtherRoles.Patches {
 			vector.x *= Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
 			vector.z = -1f;
 			__instance.HerePoint.transform.localPosition = vector;
+			PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
 
 			return false;
 		}
