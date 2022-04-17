@@ -354,6 +354,8 @@ namespace TheOtherRoles.Patches {
             List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList();
             int modifierCount = Mathf.Min(players.Count, modifierCountSettings);
 
+            if (modifierCount == 0) return;
+
             List<RoleId> allModifiers = new List<RoleId>();
             List<RoleId> ensuredModifiers = new List<RoleId>();
             List<RoleId> chanceModifiers = new List<RoleId>();
@@ -364,7 +366,8 @@ namespace TheOtherRoles.Patches {
                 RoleId.Bloody,
                 RoleId.AntiTeleport,
                 RoleId.Sunglasses,
-                RoleId.Vip
+                RoleId.Vip,
+                RoleId.Invert
             });
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
@@ -380,6 +383,7 @@ namespace TheOtherRoles.Patches {
                 byte secondLoverId = setModifierToRandomPlayer((byte)RoleId.Lover, crewPlayer, 1);
 
                 players.RemoveAll(x => x.PlayerId == firstLoverId || x.PlayerId == secondLoverId);
+                modifierCount--;
             }
 
             foreach (RoleId m in allModifiers) {
@@ -391,9 +395,9 @@ namespace TheOtherRoles.Patches {
 
             modifierCount -= ensuredModifiers.Count;
             if (modifierCount <= 0) return;
-            int chanceModifierCount = modifierCount;
+            int chanceModifierCount = Mathf.Min(modifierCount, chanceModifiers.Count);
             List<RoleId> chanceModifierToAssign = new List<RoleId>();
-            while (chanceModifierCount > 0 ) {
+            while (chanceModifierCount > 0 && chanceModifiers.Count > 0) {
                 var index = rnd.Next(0, chanceModifiers.Count);
                 RoleId modifierId = chanceModifiers[index];
                 chanceModifierToAssign.Add(modifierId);
@@ -449,7 +453,7 @@ namespace TheOtherRoles.Patches {
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
                 crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
                 int sunglassesCount = 0;
-                while (sunglassesCount < modifiers.FindAll(x => x == RoleId.Sunglasses).Count) {
+                while (sunglassesCount < (modifiers.FindAll(x => x == RoleId.Sunglasses).Count / getSelectionForRoleId(RoleId.Sunglasses, false))) {
                     playerId = setModifierToRandomPlayer((byte)RoleId.Sunglasses, crewPlayer);
                     crewPlayer.RemoveAll(x => x.PlayerId == playerId);
                     playerList.RemoveAll(x => x.PlayerId == playerId);
@@ -493,6 +497,10 @@ namespace TheOtherRoles.Patches {
                 case RoleId.Vip:
                     selection = CustomOptionHolder.modifierVip.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierVipQuantity.getQuantity();
+                    break;
+                case RoleId.Invert:
+                    selection = CustomOptionHolder.modifierInvert.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierInvertQuantity.getQuantity();
                     break;
             }
                  

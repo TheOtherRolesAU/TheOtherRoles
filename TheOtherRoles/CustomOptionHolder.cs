@@ -244,13 +244,16 @@ namespace TheOtherRoles {
         public static CustomOption modifierVip;
         public static CustomOption modifierVipQuantity;
         public static CustomOption modifierVipShowColor;
-        public static CustomOption modifierVipIsBlue;
 
+        public static CustomOption modifierInvert;
+        public static CustomOption modifierInvertQuantity;
+        
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+        public static CustomOption shieldFirstKill;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -503,7 +506,9 @@ namespace TheOtherRoles {
             modifierVip = CustomOption.Create(1070, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
             modifierVipShowColor = CustomOption.Create(1072, "Show Team Color", true, modifierVip);
-            modifierVipIsBlue = CustomOption.Create(1073, "Show Blue", false, modifierVip);
+
+            modifierInvert = CustomOption.Create(1080, cs(Color.yellow, "Invert"), rates, null, true);
+            modifierInvertQuantity = CustomOption.Create(1081, cs(Color.yellow, "Modifier Quantity"), ratesModifier, modifierInvert);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
@@ -512,8 +517,9 @@ namespace TheOtherRoles {
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
             allowParallelMedBayScans = CustomOption.Create(7, "Allow Parallel MedBay Scans", false);
+            shieldFirstKill = CustomOption.Create(8, "Shield Last Game First Kill", false);
 
-            dynamicMap = CustomOption.Create(8, "Play On A Random Map", false, null, false);
+            dynamicMap = CustomOption.Create(500, "Play On A Random Map", false, null, false);
             dynamicMapEnableSkeld = CustomOption.Create(501, "Enable Skeld Rotation", true, dynamicMap, false);
             dynamicMapEnableMira = CustomOption.Create(502, "Enable Mira Rotation", true, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", true, dynamicMap, false);

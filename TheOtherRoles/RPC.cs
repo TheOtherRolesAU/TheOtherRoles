@@ -62,7 +62,8 @@ namespace TheOtherRoles
         Tiebreaker,
         Sunglasses,
         Mini,
-        Vip
+        Vip,
+        Invert
     }
 
     enum CustomRPC
@@ -117,7 +118,9 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
-        Bloody
+        Bloody,
+        SetFirstKill,
+        Invert
     }
 
     public static class RPCProcedure {
@@ -307,6 +310,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Vip:
                     Vip.vip.Add(player);
+                    break;
+                case RoleId.Invert:
+                    Invert.invert.Add(player);
                     break;
             }
         }
@@ -658,6 +664,7 @@ namespace TheOtherRoles
             if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
             if (player == Mini.mini) Mini.clearAndReload();
             if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
+            if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
         }
 
         public static void setFutureErased(byte playerId) {
@@ -833,6 +840,12 @@ namespace TheOtherRoles
         public static void bloody(byte playerId) {
             if (Bloody.active.ContainsKey(playerId)) return;
             Bloody.active.Add(playerId, Bloody.duration);
+        }
+
+        public static void setFirstKill(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            MapOptions.firstKillPlayer = target;
         }
     }   
 
@@ -1026,6 +1039,10 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.Bloody:
                     byte bloodyKiller = reader.ReadByte();
                     RPCProcedure.bloody(bloodyKiller);
+                    break;
+                case (byte)CustomRPC.SetFirstKill:
+                    byte firstKill = reader.ReadByte();
+                    RPCProcedure.setFirstKill(firstKill);
                     break;
             }
         }

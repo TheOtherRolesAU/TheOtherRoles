@@ -61,15 +61,21 @@ namespace TheOtherRoles.Patches {
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
+                Color color = Medic.shieldedColor;
                 if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                     hasVisibleShield = Medic.showShielded == 0 // Everyone
                         || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
                 }
 
+                if (Camouflager.camouflageTimer <= 0f && MapOptions.firstKillPlayer != null && MapOptions.shieldFirstKill && ((target == MapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == MapOptions.firstKillPlayer))) {
+                    hasVisibleShield = true;
+                    color = Color.blue;
+                }
+
                 if (hasVisibleShield) {
-                    target.MyRend.material.SetFloat("_Outline", 1f);
-                    target.MyRend.material.SetColor("_OutlineColor", Medic.shieldedColor);
+                target.MyRend.material.SetFloat("_Outline", 1f);
+                target.MyRend.material.SetColor("_OutlineColor", color);
                 }
                 else {
                     target.MyRend.material.SetFloat("_Outline", 0f);
@@ -1029,13 +1035,13 @@ namespace TheOtherRoles.Patches {
                 if (Vip.showColor) {
                     color = Color.white;
                     if (__instance.Data.Role.IsImpostor) color = Color.red;
-                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) {
-                        if (Vip.modifierVipIsBlue) color = Color.blue;
-                        else color = Color.black;
-                    }
+                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) color = Color.blue;
                 }
                 Helpers.showFlash(color, 3);
             }
+
+            // First kill
+            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
         }
     }
 
@@ -1114,6 +1120,13 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
+    public static class PlayerPhysicsFixedUpdate {
+        public static void Postfix(PlayerPhysics __instance) {
+            if (__instance.AmOwner && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
         }
     }
 }
