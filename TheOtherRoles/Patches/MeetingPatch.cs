@@ -429,7 +429,8 @@ namespace TheOtherRoles.Patches {
             if (passiveMapButton != null) passiveMapButton.OnClick.Invoke();  // This Creates the "ShipMap(Clone)" object, without opening it
 
             var hud = GameObject.Find("Hud");
-            var map = hud.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => x.name == "ShipMap(Clone)");  // find the inactive map object
+            List<string> mapNames = new List<string> { "ShipMap(Clone)", "PbMap(Clone)", "HqMap(Clone)", "AirshipMap(Clone)" };
+            var map = hud.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => mapNames.Any(y => x.name == y));  // find the inactive map object
             var closeButton = map.transform.FindChild("CloseButton");
             var passiveCloseButton = closeButton.GetComponent<ButtonBehavior>();
 
