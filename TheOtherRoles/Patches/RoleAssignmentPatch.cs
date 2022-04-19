@@ -453,7 +453,7 @@ namespace TheOtherRoles.Patches {
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
                 crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
                 int sunglassesCount = 0;
-                while (sunglassesCount < (modifiers.FindAll(x => x == RoleId.Sunglasses).Count / getSelectionForRoleId(RoleId.Sunglasses, false))) {
+                while (sunglassesCount < modifiers.FindAll(x => x == RoleId.Sunglasses).Count) {
                     playerId = setModifierToRandomPlayer((byte)RoleId.Sunglasses, crewPlayer);
                     crewPlayer.RemoveAll(x => x.PlayerId == playerId);
                     playerList.RemoveAll(x => x.PlayerId == playerId);

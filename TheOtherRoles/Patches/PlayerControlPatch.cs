@@ -1034,8 +1034,8 @@ namespace TheOtherRoles.Patches {
                 Color color = Color.yellow;
                 if (Vip.showColor) {
                     color = Color.white;
-                    if (__instance.Data.Role.IsImpostor) color = Color.red;
-                    else if (RoleInfo.getRoleInfoForPlayer(__instance, false).FirstOrDefault().isNeutral) color = Color.blue;
+                    if (target.Data.Role.IsImpostor) color = Color.red;
+                    else if (RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault().isNeutral) color = Color.blue;
                 }
                 Helpers.showFlash(color, 3);
             }
