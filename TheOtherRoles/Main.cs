@@ -86,7 +86,7 @@ namespace TheOtherRoles
             Instance = this;
             CustomOptionHolder.Load();
             CustomColors.Load();
-
+            Patches.FreeNamePatch.Initialize();
             Harmony.PatchAll();
         }
         public static Sprite GetModStamp() {

@@ -422,6 +422,37 @@ namespace TheOtherRoles.Patches {
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
+
+            // Make map-button clickable and let it open the map in the meeting
+            var mapButton = GameObject.Find("MapButton");
+            var passiveMapButton = mapButton.GetComponent<ButtonBehavior>();
+            if (passiveMapButton != null) passiveMapButton.OnClick.Invoke();  // This Creates the "ShipMap(Clone)" object, without opening it
+
+            var hud = GameObject.Find("Hud");
+            List<string> mapNames = new List<string> { "ShipMap(Clone)", "PbMap(Clone)", "HqMap(Clone)", "AirshipMap(Clone)" };
+            var map = hud.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => mapNames.Any(y => x.name == y));  // find the inactive map object
+            var closeButton = map.transform.FindChild("CloseButton");
+            var passiveCloseButton = closeButton.GetComponent<ButtonBehavior>();
+
+            bool mapOpen = false;
+            passiveCloseButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                mapOpen = false;
+            }));
+
+            // Set map background color to correct value
+            var backgroundAlphaPulse = hud.GetComponentInChildren<AlphaPulse>(true);
+            if (backgroundAlphaPulse != null) backgroundAlphaPulse.SetColor(PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : new Color(0.05f, 0.2f, 1f, 1f));
+
+            if (mapButton != null && passiveMapButton != null) {
+                passiveMapButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    if (map != null && !mapOpen) {
+                        map.gameObject.SetActive(true);
+                        mapOpen = true;
+                    } else {
+                        mapOpen = false;
+                    }
+                }));
+            }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
