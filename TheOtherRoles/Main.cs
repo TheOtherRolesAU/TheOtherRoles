@@ -17,6 +17,7 @@ using TheOtherRoles.Modules;
 namespace TheOtherRoles
 {
     [BepInPlugin(Id, "The Other Roles", VersionString)]
+    [BepInDependency(Submerged.SUBMERGED_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
@@ -88,6 +89,7 @@ namespace TheOtherRoles
             CustomColors.Load();
 
             Harmony.PatchAll();
+            Submerged.Initialize();
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;
