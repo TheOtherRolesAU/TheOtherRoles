@@ -7,23 +7,16 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\CustomHats\*.png" />
-        <EmbeddedResource Include="Resources\*.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
+        <EmbeddedResource Include="Resources\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/core/*.dll" />
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.3.29" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.553" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" />
     </ItemGroup>
-
-    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-        <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
-    </Target>
 </Project>
