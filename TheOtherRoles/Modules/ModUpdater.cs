@@ -49,9 +49,7 @@ namespace TheOtherRoles.Modules {
             })));
 
             buttonSprite.color = text.color = Color.red;
-            passiveButton.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)delegate {
-                buttonSprite.color = text.color = Color.red;
-            });
+            passiveButton.OnMouseOut.AddListener((System.Action)(() => buttonSprite.color = text.color = Color.red));
 
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
             ModUpdater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);

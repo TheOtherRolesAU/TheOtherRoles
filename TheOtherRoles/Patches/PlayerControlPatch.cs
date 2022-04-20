@@ -23,9 +23,8 @@ namespace TheOtherRoles.Patches {
             if (targetingPlayer.Data.IsDead) return result;
 
             Vector2 truePosition = targetingPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++) {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.Role.IsImpostor)) {
                     PlayerControl @object = playerInfo.Object;
                     if (untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {

@@ -528,9 +528,8 @@ namespace TheOtherRoles.Patches {
             bool impLover = false;
             bool jackalLover = false;
 
-            for (int i = 0; i < GameData.Instance.PlayerCount; i++)
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
             {
-                GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                 if (!playerInfo.Disconnected)
                 {
                     if (!playerInfo.IsDead)

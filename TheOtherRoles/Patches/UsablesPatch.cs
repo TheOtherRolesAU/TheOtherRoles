@@ -291,7 +291,7 @@ namespace TheOtherRoles.Patches {
                 if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0) {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
-                        GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
+                        GameData.PlayerInfo player = vitalsPanel.PlayerInfo;
 
                         // Hacker update
                         if (vitalsPanel.IsDead) {
@@ -314,7 +314,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch]
     class AdminPanelPatch {
-        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, List<Color>>();
+        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, System.Collections.Generic.List<Color>>();
 
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
@@ -415,9 +415,10 @@ namespace TheOtherRoles.Patches {
                 bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
-
-                    for (int i = 0; i < __instance.myIcons.Count; i++) {
-                        PoolableBehavior icon = __instance.myIcons[i];
+                    int i = -1;
+                    foreach (var icon in __instance.myIcons)
+                    {
+                        i += 1;
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {

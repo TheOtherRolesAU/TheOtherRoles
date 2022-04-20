@@ -282,11 +282,11 @@ namespace TheOtherRoles.Modules {
                     float ypos = offset - (i / __instance.NumPerRow) * (isDefaultPackage ? 1f : 1.5f) * __instance.YOffset;
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
                     if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard) {
-                        colorChip.Button.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
-                        colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
-                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+                        colorChip.Button.OnMouseOver.AddListener((System.Action)(() => __instance.SelectHat(hat)));
+                        colorChip.Button.OnMouseOut.AddListener((System.Action)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                        colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.ClickEquip()));
                     } else {
-                        colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                        colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.SelectHat(hat)));
                     }
                     colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                     Transform background = colorChip.transform.FindChild("Background");
