@@ -443,6 +443,7 @@ namespace TheOtherRoles.Modules {
                 List<string> markedfordownload = new List<string>();
 
                 string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\";
+                if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
                 MD5 md5 = MD5.Create();
                 foreach (CustomHatOnline data in hatdatas) {
     	            if (doesResourceRequireDownload(filePath + data.resource, data.reshasha, md5))
