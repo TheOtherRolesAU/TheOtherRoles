@@ -30,13 +30,14 @@ namespace TheOtherRoles {
             return null;
         }
 
-        public static Texture2D loadTextureFromResources(string path) {
+        public static unsafe Texture2D loadTextureFromResources(string path) {
             try {
                 Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 Stream stream = assembly.GetManifestResourceStream(path);
-                var byteTexture = new byte[stream.Length];
-                var read = stream.Read(byteTexture, 0, (int) stream.Length);
+                var length = stream.Length;
+                var byteTexture = new Il2CppStructArray<byte>(length);
+                stream.Read(new Span<byte>(IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int) length));
                 ImageConversion.LoadImage(texture, byteTexture, false);
                 return texture;
             } catch {
@@ -49,7 +50,7 @@ namespace TheOtherRoles {
             try {          
                 if (File.Exists(path))     {
                     Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                    byte[] byteTexture = File.ReadAllBytes(path);
+                    var byteTexture = Il2CppSystem.IO.File.ReadAllBytes(path);
                     ImageConversion.LoadImage(texture, byteTexture, false);
                     return texture;
                 }
