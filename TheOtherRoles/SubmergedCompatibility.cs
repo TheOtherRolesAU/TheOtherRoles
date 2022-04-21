@@ -70,8 +70,6 @@ namespace TheOtherRoles
             Plugin = plugin!.Instance as BasePlugin;
             Version = plugin.Metadata.Version;
 
-            var pluginType = Plugin!.GetType()!;
-
             Assembly = Plugin!.GetType().Assembly;
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             
@@ -96,7 +94,7 @@ namespace TheOtherRoles
 
     public class MissingSubmergedBehaviour : MonoBehaviour
     {
-        static MissingSubmergedBehaviour() => ClassInjector.IsTypeRegisteredInIl2Cpp<MissingSubmergedBehaviour>();
+        static MissingSubmergedBehaviour() => ClassInjector.RegisterTypeInIl2Cpp<MissingSubmergedBehaviour>();
         public MissingSubmergedBehaviour(IntPtr ptr) : base(ptr) { }
     }
 }
