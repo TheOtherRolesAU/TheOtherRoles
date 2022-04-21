@@ -19,6 +19,8 @@ namespace TheOtherRoles.Modules
 {
     public class ModUpdateBehaviour : MonoBehaviour
     {
+        public static readonly bool CheckForSubmergedUpdates = false;
+    
         public static ModUpdateBehaviour Instance { get; private set; }
         public ModUpdateBehaviour(IntPtr ptr) : base(ptr) { }
 
@@ -96,7 +98,6 @@ namespace TheOtherRoles.Modules
             var mgr = FindObjectOfType<MainMenuManager>(true);
             mgr.StartCoroutine(CoShowAnnouncement(announcement));
         }
-
         
         [HideFromIl2Cpp]
         public IEnumerator CoUpdate()
@@ -138,12 +139,15 @@ namespace TheOtherRoles.Modules
             {
                 Instance.TORUpdate = torUpdateCheck.Result;
             }
-            
-            var submergedUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("SubmergedAmongUs", "Submerged"));
-            while (!submergedUpdateCheck.IsCompleted) yield return null;
-            if (submergedUpdateCheck.Result != null && !Submerged.Debug && (!Submerged.Loaded || submergedUpdateCheck.Result.IsNewer(Submerged.Version)))
+
+            if (CheckForSubmergedUpdates)
             {
-                Instance.SubmergedUpdate = submergedUpdateCheck.Result;
+                var submergedUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("SubmergedAmongUs", "Submerged"));
+                while (!submergedUpdateCheck.IsCompleted) yield return null;
+                if (submergedUpdateCheck.Result != null && (!SubmergedCompatibility.Loaded || submergedUpdateCheck.Result.IsNewer(SubmergedCompatibility.Version)))
+                {
+                    Instance.SubmergedUpdate = submergedUpdateCheck.Result;
+                }
             }
         }
 
@@ -187,7 +191,7 @@ namespace TheOtherRoles.Modules
             if (downloadURI.Length == 0) return false;
 
             var res = await client.GetAsync(downloadURI, HttpCompletionOption.ResponseContentRead);
-            string codeBase = (isSubmerged ? Submerged.Assembly : Assembly.GetExecutingAssembly()).CodeBase;
+            string codeBase = (isSubmerged ? SubmergedCompatibility.Assembly : Assembly.GetExecutingAssembly()).CodeBase;
             UriBuilder uri = new UriBuilder(codeBase);
             string fullname = Uri.UnescapeDataString(uri.Path);
             if (File.Exists(fullname + ".old")) File.Delete(fullname + ".old");
