@@ -15,6 +15,7 @@ namespace TheOtherRoles
 
         public static SemanticVersioning.Version Version { get; private set; }
         public static bool Loaded { get; private set; }
+        public static bool Debug { get; private set; }
         public static BasePlugin Plugin { get; private set; }
         public static Assembly Assembly { get; private set; }
         public static Type[] Types { get; private set; }
@@ -27,6 +28,10 @@ namespace TheOtherRoles
             
             Plugin = plugin!.Instance as BasePlugin;
             Version = plugin.Metadata.Version;
+
+            var pluginType = Plugin!.GetType()!;
+            Debug = (bool) pluginType.GetProperty("IsDebugBuild", AccessTools.all)?.GetMethod.Invoke(null, Array.Empty<object>())!;
+            
             Assembly = Plugin!.GetType().Assembly;
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             

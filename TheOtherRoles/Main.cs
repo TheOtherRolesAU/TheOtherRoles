@@ -24,7 +24,7 @@ namespace TheOtherRoles
         public const string Id = "me.eisbison.theotherroles";
         public const string VersionString = "3.4.5";
 
-        public static System.Version Version = System.Version.Parse(VersionString);
+        public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
 
         public Harmony Harmony { get; } = new Harmony(Id);
@@ -90,6 +90,7 @@ namespace TheOtherRoles
 
             Harmony.PatchAll();
             Submerged.Initialize();
+            AddComponent<ModUpdateBehaviour>();
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;
