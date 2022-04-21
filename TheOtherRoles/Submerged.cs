@@ -11,8 +11,13 @@ namespace TheOtherRoles
 {
     public static class Submerged
     {
+        public static class Classes
+        {
+            public const string ElevatorMover = "ElevatorMover";
+        }
+        
         public const string SUBMERGED_GUID = "Submerged";
-
+        
         public static SemanticVersioning.Version Version { get; private set; }
         public static bool Loaded { get; private set; }
         public static bool Debug { get; private set; }
