@@ -45,6 +45,7 @@ namespace TheOtherRoles.Modules
         public UpdateData TORUpdate;
         public UpdateData SubmergedUpdate;
 
+        [HideFromIl2Cpp]
         public UpdateData RequiredUpdateData => TORUpdate ?? SubmergedUpdate;
         
         public void Awake()
@@ -129,20 +130,20 @@ namespace TheOtherRoles.Modules
         }
 
         [HideFromIl2Cpp]
-        public IEnumerator CoCheckUpdates()
+        public static IEnumerator CoCheckUpdates()
         {
-            var torUpdateCheck = Task.Run(() => GetGithubUpdate("Eisbison", "TheOtherRoles"));
+            var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("Eisbison", "TheOtherRoles"));
             while (!torUpdateCheck.IsCompleted) yield return null;
             if (torUpdateCheck.Result != null && torUpdateCheck.Result.IsNewer(Version.Parse(TheOtherRolesPlugin.VersionString)))
             {
-                TORUpdate = torUpdateCheck.Result;
+                Instance.TORUpdate = torUpdateCheck.Result;
             }
             
-            var submergedUpdateCheck = Task.Run(() => GetGithubUpdate("SubmergedAmongUs", "Submerged"));
+            var submergedUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("SubmergedAmongUs", "Submerged"));
             while (!submergedUpdateCheck.IsCompleted) yield return null;
             if (submergedUpdateCheck.Result != null && !Submerged.Debug && (!Submerged.Loaded || submergedUpdateCheck.Result.IsNewer(Submerged.Version)))
             {
-                SubmergedUpdate = submergedUpdateCheck.Result;
+                Instance.SubmergedUpdate = submergedUpdateCheck.Result;
             }
         }
 
