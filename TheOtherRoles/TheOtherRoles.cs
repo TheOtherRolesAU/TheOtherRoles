@@ -22,6 +22,7 @@ namespace TheOtherRoles
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
             Mayor.clearAndReload();
+            Portalmaker.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
             Deputy.clearAndReload();
@@ -77,6 +78,48 @@ namespace TheOtherRoles
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
+        }
+        
+        public static class Portalmaker {
+            public static PlayerControl portalmaker;
+            public static Color color = new Color32(69, 69, 169, byte.MaxValue);
+
+            public static float cooldown;
+            public static float usePortalCooldown;
+            public static bool logOnlyHasColors;
+            public static bool logShowsTime;
+
+            private static Sprite placePortalButtonSprite;
+            private static Sprite usePortalButtonSprite;
+            private static Sprite logSprite;
+
+            public static Sprite getPlacePortalButtonSprite() {
+                if (placePortalButtonSprite) return placePortalButtonSprite;
+                placePortalButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlacePortalButton.png", 115f);
+                return placePortalButtonSprite;
+            }
+
+            public static Sprite getUsePortalButtonSprite() {
+                if (usePortalButtonSprite) return usePortalButtonSprite;
+                usePortalButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.UsePortalButton.png", 115f);
+                return usePortalButtonSprite;
+            }
+
+            public static Sprite getLogSprite() {
+                if (logSprite) return logSprite;
+                logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                return logSprite;
+            }
+
+            public static void clearAndReload() {
+                portalmaker = null;
+                cooldown = CustomOptionHolder.portalmakerCooldown.getFloat();
+                usePortalCooldown = CustomOptionHolder.portalmakerUsePortalCooldown.getFloat();
+                logOnlyHasColors = CustomOptionHolder.portalmakerLogOnlyColorType.getBool();
+                logShowsTime = CustomOptionHolder.portalmakerLogHasTime.getBool();
+            }
+
+
         }
 
         public static class Mayor {
