@@ -12,6 +12,7 @@ using static TheOtherRoles.TheOtherRoles;
 namespace TheOtherRoles {
     public class CustomOptionHolder {
         public static string[] rates = new string[]{"0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"};
+        public static string[] ratesModifier = new string[]{"1", "2", "3"};
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Preset 3", "Preset 4", "Preset 5"};
 
         public static CustomOption presetSelection;
@@ -22,6 +23,8 @@ namespace TheOtherRoles {
         public static CustomOption neutralRolesCountMax;
         public static CustomOption impostorRolesCountMin;
         public static CustomOption impostorRolesCountMax;
+        public static CustomOption modifiersCountMin;
+        public static CustomOption modifiersCountMax;
 
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -42,16 +45,6 @@ namespace TheOtherRoles {
         public static CustomOption eraserSpawnRate;
         public static CustomOption eraserCooldown;
         public static CustomOption eraserCanEraseAnyone;
-
-        public static CustomOption miniSpawnRate;
-        public static CustomOption miniGrowingUpDuration;
-
-        public static CustomOption loversSpawnRate;
-        public static CustomOption loversImpLoverRate;
-        public static CustomOption loversBothDie;
-        public static CustomOption loversCanHaveAnotherRole;
-        public static CustomOption loversEnableChat;
-
         public static CustomOption guesserSpawnRate;
         public static CustomOption guesserIsImpGuesserRate;
         public static CustomOption guesserNumberOfShots;
@@ -216,11 +209,6 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardCamRechargeTasksNumber;
         public static CustomOption securityGuardNoMove;
 
-        public static CustomOption baitSpawnRate;
-        public static CustomOption baitHighlightAllVents;
-        public static CustomOption baitReportDelay;
-        public static CustomOption baitShowKillFlash;
-
         public static CustomOption vultureSpawnRate;
         public static CustomOption vultureCooldown;
         public static CustomOption vultureNumberToWin;
@@ -241,11 +229,46 @@ namespace TheOtherRoles {
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
 
+        public static CustomOption modifierBait;
+        public static CustomOption modifierBaitQuantity;
+        public static CustomOption modifierBaitReportDelayMin;
+        public static CustomOption modifierBaitReportDelayMax;
+        public static CustomOption modifierBaitShowKillFlash;
+
+        public static CustomOption modifierLover;
+        public static CustomOption modifierLoverImpLoverRate;
+        public static CustomOption modifierLoverBothDie;
+        public static CustomOption modifierLoverEnableChat;
+
+        public static CustomOption modifierBloody;
+        public static CustomOption modifierBloodyQuantity;
+        public static CustomOption modifierBloodyDuration;
+
+        public static CustomOption modifierAntiTeleport;
+        public static CustomOption modifierAntiTeleportQuantity;
+
+        public static CustomOption modifierTieBreaker;
+
+        public static CustomOption modifierSunglasses;
+        public static CustomOption modifierSunglassesQuantity;
+        public static CustomOption modifierSunglassesVision;
+        
+        public static CustomOption modifierMini;
+        public static CustomOption modifierMiniGrowingUpDuration;
+
+        public static CustomOption modifierVip;
+        public static CustomOption modifierVipQuantity;
+        public static CustomOption modifierVipShowColor;
+
+        public static CustomOption modifierInvert;
+        public static CustomOption modifierInvertQuantity;
+        
         public static CustomOption maxNumberOfMeetings;
         public static CustomOption blockSkippingInEmergencyMeetings;
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption allowParallelMedBayScans;
+        public static CustomOption shieldFirstKill;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -278,6 +301,8 @@ namespace TheOtherRoles {
             neutralRolesCountMax = CustomOption.Create(303, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
             impostorRolesCountMin = CustomOption.Create(304, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
             impostorRolesCountMax = CustomOption.Create(305, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
+            modifiersCountMin = CustomOption.Create(306, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 0f, 0f, 15f, 1f);
+            modifiersCountMax = CustomOption.Create(307, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 0f, 0f, 15f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -325,21 +350,11 @@ namespace TheOtherRoles {
             witchSpellCastingDuration = CustomOption.Create(374, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
-
             ninjaSpawnRate = CustomOption.Create(380, cs(Ninja.color, "Ninja"), rates, null, true);
             ninjaCooldown = CustomOption.Create(381, "Ninja Mark Cooldown", 30f, 10f, 120f, 5f, ninjaSpawnRate);
             ninjaKnowsTargetLocation = CustomOption.Create(382, "Ninja Knows Location Of Target", true, ninjaSpawnRate);
             ninjaTraceTime = CustomOption.Create(383, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
             ninjaTraceColorTime = CustomOption.Create(384, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
-
-            miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
-            miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
-
-            loversSpawnRate = CustomOption.Create(50, cs(Lovers.color, "Lovers"), rates, null, true);
-            loversImpLoverRate = CustomOption.Create(51, "Chance That One Lover Is Impostor", rates, loversSpawnRate);
-            loversBothDie = CustomOption.Create(52, "Both Lovers Die", true, loversSpawnRate);
-            loversCanHaveAnotherRole = CustomOption.Create(53, "Lovers Can Have Another Role", true, loversSpawnRate);
-            loversEnableChat = CustomOption.Create(54, "Enable Lover Chat", true, loversSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
@@ -434,8 +449,8 @@ namespace TheOtherRoles {
             medicShowAttemptToMedic = CustomOption.Create(146, "Medic Sees Murder Attempt On Shielded Player", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, cs(Swapper.color, "Swapper"), rates, null, true);
-            swapperCanCallEmergency = CustomOption.Create(151, "Swapper can call emergency meeting", false, swapperSpawnRate);
-            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper can only swap others", false, swapperSpawnRate);
+            swapperCanCallEmergency = CustomOption.Create(151, "Swapper Can Call Emergency Meeting", false, swapperSpawnRate);
+            swapperCanOnlySwapOthers = CustomOption.Create(152, "Swapper Can Only Swap Others", false, swapperSpawnRate);
             swapperSwapsNumber = CustomOption.Create(153, "Initial Swap Charges", 1f, 0f, 5f, 1f, swapperSpawnRate);
             swapperRechargeTasksNumber = CustomOption.Create(154, "Number Of Tasks Needed For Recharging", 2f, 1f, 10f, 1f, swapperSpawnRate);
 
@@ -486,15 +501,44 @@ namespace TheOtherRoles {
             securityGuardCamRechargeTasksNumber = CustomOption.Create(287, "Number Of Tasks Needed For Recharging", 3f, 1f, 10f, 1f, securityGuardSpawnRate);
             securityGuardNoMove = CustomOption.Create(288, "Cant Move During Cam Duration", true, securityGuardSpawnRate);
 
-            baitSpawnRate = CustomOption.Create(330, cs(Bait.color, "Bait"), rates, null, true);
-            baitHighlightAllVents = CustomOption.Create(331, "Highlight All Vents If A Vent Is Occupied", false, baitSpawnRate);
-            baitReportDelay = CustomOption.Create(332, "Bait Report Delay", 0f, 0f, 10f, 1f, baitSpawnRate);
-            baitShowKillFlash = CustomOption.Create(333, "Warn The Killer With A Flash", true, baitSpawnRate);
-
             mediumSpawnRate = CustomOption.Create(360, cs(Medium.color, "Medium"), rates, null, true);
             mediumCooldown = CustomOption.Create(361, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
+
+            modifierBloody = CustomOption.Create(1000, cs(Color.yellow, "Bloody"), rates, null, true);
+            modifierBloodyQuantity = CustomOption.Create(1001, cs(Color.yellow, "Bloody Quantity"), ratesModifier, modifierBloody);
+            modifierBloodyDuration = CustomOption.Create(1002, "Trail duration", 5f, 1f, 30f, 1f, modifierBloody);
+
+            modifierAntiTeleport = CustomOption.Create(1010, cs(Color.yellow, "Anti Teleport"), rates, null, true);
+            modifierAntiTeleportQuantity = CustomOption.Create(1011, cs(Color.yellow, "Anti Teleport Quantity"), ratesModifier, modifierAntiTeleport);
+
+            modifierTieBreaker = CustomOption.Create(1020, cs(Color.yellow, "Tie Breaker"), rates, null, true);
+
+            modifierBait = CustomOption.Create(1030, cs(Color.yellow, "Bait"), rates, null, true);
+            modifierBaitQuantity = CustomOption.Create(1031, cs(Color.yellow, "Bait Quantity"), ratesModifier, modifierBait);
+            modifierBaitReportDelayMin = CustomOption.Create(1032, "Bait Report Delay Min", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitReportDelayMax = CustomOption.Create(1033, "Bait Report Delay Max", 0f, 0f, 10f, 1f, modifierBait);
+            modifierBaitShowKillFlash = CustomOption.Create(1034, "Warn The Killer With A Flash", true, modifierBait);
+
+            modifierLover = CustomOption.Create(1040, cs(Color.yellow, "Lovers"), rates, null, true);
+            modifierLoverImpLoverRate = CustomOption.Create(1041, "Chance That One Lover Is Impostor", rates, modifierLover);
+            modifierLoverBothDie = CustomOption.Create(1042, "Both Lovers Die", true, modifierLover);
+            modifierLoverEnableChat = CustomOption.Create(1043, "Enable Lover Chat", true, modifierLover);
+
+            modifierSunglasses = CustomOption.Create(1050, cs(Color.yellow, "Sunglasses"), rates, null, true);
+            modifierSunglassesQuantity = CustomOption.Create(1051, cs(Color.yellow, "Sunglasses Quantity"), ratesModifier, modifierSunglasses);
+            modifierSunglassesVision = CustomOption.Create(1052, "Vision with sunglasses", new string[] { "-10%", "-20%", "-30%", "-40%", "-50%" }, modifierSunglasses);
+
+            modifierMini = CustomOption.Create(1061, cs(Color.yellow, "Mini"), rates, null, true);
+            modifierMiniGrowingUpDuration = CustomOption.Create(1062, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
+
+            modifierVip = CustomOption.Create(1070, cs(Color.yellow, "VIP"), rates, null, true);
+            modifierVipQuantity = CustomOption.Create(1071, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
+            modifierVipShowColor = CustomOption.Create(1072, "Show Team Color", true, modifierVip);
+
+            modifierInvert = CustomOption.Create(1080, cs(Color.yellow, "Invert"), rates, null, true);
+            modifierInvertQuantity = CustomOption.Create(1081, cs(Color.yellow, "Modifier Quantity"), ratesModifier, modifierInvert);
 
             // Other options
             maxNumberOfMeetings = CustomOption.Create(3, "Number Of Meetings (excluding Mayor meeting)", 10, 0, 15, 1, null, true);
@@ -502,8 +546,9 @@ namespace TheOtherRoles {
             noVoteIsSelfVote = CustomOption.Create(5, "No Vote Is Self Vote", false, blockSkippingInEmergencyMeetings);
             hidePlayerNames = CustomOption.Create(6, "Hide Player Names", false);
             allowParallelMedBayScans = CustomOption.Create(7, "Allow Parallel MedBay Scans", false);
+            shieldFirstKill = CustomOption.Create(8, "Shield Last Game First Kill", false);
 
-            dynamicMap = CustomOption.Create(8, "Play On A Random Map", false, null, false);
+            dynamicMap = CustomOption.Create(500, "Play On A Random Map", false, null, false);
             dynamicMapEnableSkeld = CustomOption.Create(501, "Enable Skeld Rotation", true, dynamicMap, false);
             dynamicMapEnableMira = CustomOption.Create(502, "Enable Mira Rotation", true, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, "Enable Polus Rotation", true, dynamicMap, false);

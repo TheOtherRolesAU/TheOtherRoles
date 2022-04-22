@@ -18,12 +18,15 @@ namespace TheOtherRoles{
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
         public static bool enableHorseMode = false;
+        public static bool shieldFirstKill = false;
 
         // Updating values
         public static int meetingsCount = 0;
         public static List<SurvCamera> camerasToAdd = new List<SurvCamera>();
         public static List<Vent> ventsToSeal = new List<Vent>();
         public static Dictionary<byte, PoolablePlayer> playerIcons = new Dictionary<byte, PoolablePlayer>();
+        public static string firstKillName;
+        public static PlayerControl firstKillPlayer;
 
         public static void clearAndReloadMapOptions() {
             meetingsCount = 0;
@@ -36,6 +39,8 @@ namespace TheOtherRoles{
             noVoteIsSelfVote = CustomOptionHolder.noVoteIsSelfVote.getBool();
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
+            shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
+            firstKillPlayer = null;
         }
 
         public static void reloadPluginOptions() {

@@ -40,7 +40,6 @@ namespace TheOtherRoles
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
             Hacker.clearAndReload();
-            Mini.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
             Snitch.clearAndReload();
@@ -55,13 +54,22 @@ namespace TheOtherRoles
             Arsonist.clearAndReload();
             Guesser.clearAndReload();
             BountyHunter.clearAndReload();
-            Bait.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
             Lawyer.clearAndReload();
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
+
+            // Modifier
+            Bait.clearAndReload();
+            Bloody.clearAndReload();
+            AntiTeleport.clearAndReload();
+            Tiebreaker.clearAndReload();
+            Sunglasses.clearAndReload();
+            Mini.clearAndReload();
+            Vip.clearAndReload();
+            Invert.clearAndReload();
         }
 
         public static class Jester {
@@ -497,8 +505,8 @@ namespace TheOtherRoles
             lover1 = null;
             lover2 = null;
             notAckedExiledIsLover = false;
-            bothDie = CustomOptionHolder.loversBothDie.getBool();
-            enableChat = CustomOptionHolder.loversEnableChat.getBool();
+            bothDie = CustomOptionHolder.modifierLoverBothDie.getBool();
+            enableChat = CustomOptionHolder.modifierLoverEnableChat.getBool();
         }
 
         public static PlayerControl getPartner(this PlayerControl player) {
@@ -677,35 +685,6 @@ namespace TheOtherRoles
             chargesVitals = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
             chargesAdminTable = Mathf.RoundToInt(CustomOptionHolder.hackerToolsNumber.getFloat()) / 2;
             cantMove = CustomOptionHolder.hackerNoMove.getBool();
-        }
-    }
-
-    public static class Mini {
-        public static PlayerControl mini;
-        public static Color color = Color.white;
-        public const float defaultColliderRadius = 0.2233912f;
-            public const float defaultColliderOffset = 0.3636057f;
-
-        public static float growingUpDuration = 400f;
-        public static DateTime timeOfGrowthStart = DateTime.UtcNow;
-        public static bool triggerMiniLose = false;
-
-        public static void clearAndReload() {
-            mini = null;
-            triggerMiniLose = false;
-            growingUpDuration = CustomOptionHolder.miniGrowingUpDuration.getFloat();
-            timeOfGrowthStart = DateTime.UtcNow;
-        }
-
-        public static float growingProgress() {
-            if (timeOfGrowthStart == null) return 0f;
-
-            float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
-            return Mathf.Clamp(timeSinceStart/(growingUpDuration*1000), 0f, 1f);
-        }
-
-        public static bool isGrownUp() {
-            return growingProgress() == 1f;
         }
     }
 
@@ -1097,7 +1076,7 @@ namespace TheOtherRoles
         private static Sprite animatedVentSealedSprite;
         public static Sprite getAnimatedVentSealedSprite() {
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 160f);
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 185f);
             return animatedVentSealedSprite;
         }
 
@@ -1273,25 +1252,6 @@ namespace TheOtherRoles
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
             arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
-        }
-    }
-
-    public static class Bait {
-        public static PlayerControl bait;
-        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
-
-        public static bool highlightAllVents = false;
-        public static float reportDelay = 0f;
-        public static bool showKillFlash = true;
-
-        public static bool reported = false;
-
-        public static void clearAndReload() {
-            bait = null;
-            reported = false;
-            highlightAllVents = CustomOptionHolder.baitHighlightAllVents.getBool();
-            reportDelay = CustomOptionHolder.baitReportDelay.getFloat();
-            showKillFlash = CustomOptionHolder.baitShowKillFlash.getBool();
         }
     }
 
@@ -1472,7 +1432,7 @@ namespace TheOtherRoles
             currentTarget = spellCastingTarget = null;
             cooldown = CustomOptionHolder.witchCooldown.getFloat();
             cooldownAddition = CustomOptionHolder.witchAdditionalCooldown.getFloat();
-            currentCooldownAddition = CustomOptionHolder.witchCooldown.getFloat();
+            currentCooldownAddition = 0f;
             canSpellAnyone = CustomOptionHolder.witchCanSpellAnyone.getBool();
             spellCastingDuration = CustomOptionHolder.witchSpellCastingDuration.getFloat();
             triggerBothCooldowns = CustomOptionHolder.witchTriggerBothCooldowns.getBool();
@@ -1480,8 +1440,7 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Ninja
-    {
+    public static class Ninja {
         public static PlayerControl ninja;
         public static Color color = Palette.ImpostorRed;
 
@@ -1489,7 +1448,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
         public static float traceTime = 1f;
-        public static bool knowsTargetLocation = false;        
+        public static bool knowsTargetLocation = false;
 
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
@@ -1516,6 +1475,116 @@ namespace TheOtherRoles
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+    }
+
+    // Modifier
+    public static class Bait {
+        public static List<PlayerControl> bait = new List<PlayerControl>();
+        public static Dictionary<DeadPlayer, float> active = new Dictionary<DeadPlayer, float>();
+        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+        public static float reportDelayMin = 0f;
+        public static float reportDelayMax = 0f;
+        public static bool showKillFlash = true;
+
+        public static void clearAndReload() {
+            bait = new List<PlayerControl>();
+            active = new Dictionary<DeadPlayer, float>();
+            reportDelayMin = CustomOptionHolder.modifierBaitReportDelayMin.getFloat();
+            reportDelayMax = CustomOptionHolder.modifierBaitReportDelayMax.getFloat();
+            if (reportDelayMin > reportDelayMax) reportDelayMin = reportDelayMax;
+            showKillFlash = CustomOptionHolder.modifierBaitShowKillFlash.getBool();
+        }
+    }
+
+    public static class Bloody {
+        public static List<PlayerControl> bloody = new List<PlayerControl>();
+        public static Dictionary<byte, float> active = new Dictionary<byte, float>();
+
+        public static float duration = 5f;
+
+        public static void clearAndReload() {
+            bloody = new List<PlayerControl>();
+            active = new Dictionary<byte, float>();
+            duration = CustomOptionHolder.modifierBloodyDuration.getFloat();
+        }
+    }
+
+    public static class AntiTeleport {
+        public static List<PlayerControl> antiTeleport = new List<PlayerControl>();
+        public static Vector3 position;
+
+        public static void clearAndReload() {
+            antiTeleport = new List<PlayerControl>();
+            position = new Vector3();
+        }
+    }
+
+    public static class Tiebreaker {
+        public static PlayerControl tiebreaker;
+
+        public static bool isTiebreaker = false;
+
+        public static void clearAndReload() {
+            tiebreaker = null;
+            isTiebreaker = false;
+        }
+    }
+
+    public static class Sunglasses {
+        public static List<PlayerControl> sunglasses = new List<PlayerControl>();
+        public static int vision = 1;
+
+        public static void clearAndReload() {
+            sunglasses = new List<PlayerControl>();
+            vision = CustomOptionHolder.modifierSunglassesVision.getSelection() + 1;
+        }
+    }
+    public static class Mini {
+        public static PlayerControl mini;
+        public static Color color = Color.yellow;
+        public const float defaultColliderRadius = 0.2233912f;
+        public const float defaultColliderOffset = 0.3636057f;
+
+        public static float growingUpDuration = 400f;
+        public static DateTime timeOfGrowthStart = DateTime.UtcNow;
+        public static bool triggerMiniLose = false;
+
+        public static void clearAndReload() {
+            mini = null;
+            triggerMiniLose = false;
+            growingUpDuration = CustomOptionHolder.modifierMiniGrowingUpDuration.getFloat();
+            timeOfGrowthStart = DateTime.UtcNow;
+        }
+
+        public static float growingProgress() {
+            if (timeOfGrowthStart == null) return 0f;
+
+            float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
+            return Mathf.Clamp(timeSinceStart / (growingUpDuration * 1000), 0f, 1f);
+        }
+
+        public static bool isGrownUp() {
+            return growingProgress() == 1f;
+        }
+
+    }
+    public static class Vip {
+        public static List<PlayerControl> vip = new List<PlayerControl>();
+        public static bool showColor = true;
+
+        public static void clearAndReload() {
+            vip = new List<PlayerControl>();
+            showColor = CustomOptionHolder.modifierVipShowColor.getBool();
+        }
+    }
+
+    public static class Invert {
+        public static List<PlayerControl> invert = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            invert = new List<PlayerControl>();
         }
     }
 }

@@ -121,8 +121,6 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Guesser.niceGuesser, Guesser.color);
             } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Guesser.evilGuesser, Palette.ImpostorRed);
-            } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Bait.bait, Bait.color);
             } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
@@ -229,7 +227,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void miniUpdate() {
-            if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f) return;
                 
             float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;

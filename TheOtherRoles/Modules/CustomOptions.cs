@@ -100,6 +100,10 @@ namespace TheOtherRoles {
             return (float)selections[selection];
         }
 
+        public int getQuantity() {
+            return selection + 1;
+        }
+
         // Option changes
 
         public void updateSelection(int newSelection) {
@@ -351,7 +355,14 @@ namespace TheOtherRoles {
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
-                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax)) {
+                    } else if (option == CustomOptionHolder.modifiersCountMin) {
+                        var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Modifiers");
+                        var min = CustomOptionHolder.modifiersCountMin.getSelection();
+                        var max = CustomOptionHolder.modifiersCountMax.getSelection();
+                        if (min > max) min = max;
+                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        sb.AppendLine($"{optionName}: {optionValue}");
+                    } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax) || option == CustomOptionHolder.modifiersCountMax) {
                         continue;
                     } else {
                         sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
@@ -390,13 +401,13 @@ namespace TheOtherRoles {
                 int gap = 2;
                 int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 6;
+                gap = 7;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 20;
+                gap = 21;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 26;
+                gap = 27;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {

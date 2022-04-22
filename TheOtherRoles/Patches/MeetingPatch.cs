@@ -59,6 +59,8 @@ namespace TheOtherRoles.Patches {
                     }
                 }
 
+
+
                 return dictionary;
             }
 
@@ -68,7 +70,7 @@ namespace TheOtherRoles.Patches {
                     // If skipping is disabled, replace skipps/no-votes with self vote
                     if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
                         foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
-                            if (playerVoteArea.VotedFor < 0) playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
+                            if (playerVoteArea.VotedFor == byte.MaxValue - 1) playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
                         }
                     }
 
@@ -76,6 +78,14 @@ namespace TheOtherRoles.Patches {
                     bool tie;
 			        KeyValuePair<byte, int> max = self.MaxPair(out tie);
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
+
+                    // TieBreaker 
+                    Tiebreaker.isTiebreaker = false;
+                    int maxVoteValue = self.Values.Max();
+                    List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+                    foreach (KeyValuePair<byte, int> pair in self) 
+                        if (pair.Value == maxVoteValue) 
+                            potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -85,6 +95,12 @@ namespace TheOtherRoles.Patches {
                             VoterId = playerVoteArea.TargetPlayerId,
                             VotedForId = playerVoteArea.VotedFor
                         };
+
+                        if (tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
+                            exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == playerVoteArea.VotedFor);
+                            tie = false;
+                            Tiebreaker.isTiebreaker = true;
+                        }
                     }
 
                     // RPCVotingComplete
@@ -282,7 +298,7 @@ namespace TheOtherRoles.Patches {
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 RoleId guesserRole = (Guesser.niceGuesser != null && PlayerControl.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser :  RoleId.EvilGuesser;
-                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == guesserRole || roleInfo == RoleInfo.niceMini || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles
+                if (roleInfo.roleId == RoleId.Lover || roleInfo.roleId == guesserRole || roleInfo == RoleInfo.mini || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles
                 
                 if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
@@ -325,7 +341,7 @@ namespace TheOtherRoles.Patches {
                             return;
                         }
 
-                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget).FirstOrDefault();
+                        var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, false).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
                         PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
@@ -469,6 +485,37 @@ namespace TheOtherRoles.Patches {
                     button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
+
+            // Make map-button clickable and let it open the map in the meeting
+            var mapButton = GameObject.Find("MapButton");
+            var passiveMapButton = mapButton.GetComponent<ButtonBehavior>();
+            if (passiveMapButton != null) passiveMapButton.OnClick.Invoke();  // This Creates the "ShipMap(Clone)" object, without opening it
+
+            var hud = GameObject.Find("Hud");
+            List<string> mapNames = new List<string> { "ShipMap(Clone)", "PbMap(Clone)", "HqMap(Clone)", "AirshipMap(Clone)" };
+            var map = hud.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => mapNames.Any(y => x.name == y));  // find the inactive map object
+            var closeButton = map.transform.FindChild("CloseButton");
+            var passiveCloseButton = closeButton.GetComponent<ButtonBehavior>();
+
+            bool mapOpen = false;
+            passiveCloseButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                mapOpen = false;
+            }));
+
+            // Set map background color to correct value
+            var backgroundAlphaPulse = hud.GetComponentInChildren<AlphaPulse>(true);
+            if (backgroundAlphaPulse != null) backgroundAlphaPulse.SetColor(PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : new Color(0.05f, 0.2f, 1f, 1f));
+
+            if (mapButton != null && passiveMapButton != null) {
+                passiveMapButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                    if (map != null && !mapOpen) {
+                        map.gameObject.SetActive(true);
+                        mapOpen = true;
+                    } else {
+                        mapOpen = false;
+                    }
+                }));
+            }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
@@ -493,6 +540,10 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
+                // Resett Bait list
+                Bait.active = new Dictionary<DeadPlayer, float>();
+                // Safe AntiTeleport positions
+                AntiTeleport.position = PlayerControl.LocalPlayer.transform.position;
                 // Medium meeting start time
                 Medium.meetingStartTime = DateTime.UtcNow;
                 // Reset vampire bitten
@@ -502,6 +553,7 @@ namespace TheOtherRoles.Patches {
                 // Save the meeting target
                 target = meetingTarget;
 
+
                 // Add Portal info into Portalmaker Chat:
                 if (Portalmaker.portalmaker != null && PlayerControl.LocalPlayer == Portalmaker.portalmaker && !PlayerControl.LocalPlayer.Data.IsDead) {
                     foreach (var entry in Portal.teleportedPlayers) {
@@ -510,7 +562,10 @@ namespace TheOtherRoles.Patches {
                         msg = msg + $"{entry.name} used the teleporter";
                         DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
                     }
-                }                
+                }
+
+                // Remove first kill shield
+                MapOptions.firstKillPlayer = null;
             }
         }
 

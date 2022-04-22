@@ -14,7 +14,7 @@ namespace TheOtherRoles
     {
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
-        private static CustomButton sheriffKillButton;
+        public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
         private static CustomButton medicShieldButton;
@@ -28,10 +28,10 @@ namespace TheOtherRoles
         private static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
-        private static CustomButton vampireKillButton;
+        public static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
-        private static CustomButton jackalKillButton;
-        private static CustomButton sidekickKillButton;
+        public static CustomButton jackalKillButton;
+        public static CustomButton sidekickKillButton;
         private static CustomButton jackalSidekickButton;
         private static CustomButton lighterButton;
         private static CustomButton eraserButton;
@@ -47,7 +47,6 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
-
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -1354,10 +1353,14 @@ namespace TheOtherRoles
                         RPCProcedure.setFutureSpelled(Witch.currentTarget.PlayerId);
                     }
                     if (attempt == MurderAttemptResult.BlankKill || attempt == MurderAttemptResult.PerformKill) {
-                        witchSpellButton.MaxTimer += Witch.cooldownAddition;
+                        Witch.currentCooldownAddition += Witch.cooldownAddition;
+                        witchSpellButton.MaxTimer = Witch.cooldown + Witch.currentCooldownAddition;
+                        Patches.PlayerControlFixedUpdatePatch.miniCooldownUpdate();  // Modifies the MaxTimer if the witch is the mini
                         witchSpellButton.Timer = witchSpellButton.MaxTimer;
-                        if (Witch.triggerBothCooldowns)
-                            Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        if (Witch.triggerBothCooldowns) {
+                            float multiplier = (Mini.mini != null && PlayerControl.LocalPlayer == Mini.mini) ? (Mini.isGrownUp() ? 0.66f : 2f) : 1f;
+                            Witch.witch.killTimer = PlayerControl.GameOptions.KillCooldown * multiplier;
+                        }
                     } else {
                         witchSpellButton.Timer = 0f;
                     }
