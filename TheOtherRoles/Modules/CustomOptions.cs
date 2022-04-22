@@ -515,7 +515,7 @@ namespace TheOtherRoles {
             var hudString = sb.ToString();
 
             int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 40;
+            int roleSettingsLines = defaultSettingsLines + 47;
             int detailedSettingsP1 = roleSettingsLines + 40;
             int detailedSettingsP2 = detailedSettingsP1 + 42;
             int detailedSettingsP3 = detailedSettingsP2 + 42;
@@ -536,10 +536,13 @@ namespace TheOtherRoles {
                 gap = 7;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index, "\n");
-                gap = 21;
+                gap = 18;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
-                gap = 27;
+                gap = 25;
+                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
+                hudString = hudString.Insert(index + 1, "\n");
+                gap = 42;
                 index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
                 hudString = hudString.Insert(index + 1, "\n");
             } else if (counter == 2) {
@@ -551,9 +554,8 @@ namespace TheOtherRoles {
             } else if (counter == 5) {
                 hudString = hudString.Substring(end5 + 1);
             }
-
             hudString += $"\n Press tab for more... ({counter+1}/6)";
-            __result = hudString;
+            __result = Helpers.cs(DateTime.Now.Millisecond > 500 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n") + hudString;
         }
     }
 
