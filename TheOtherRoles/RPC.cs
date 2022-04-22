@@ -556,10 +556,15 @@ namespace TheOtherRoles
             if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
                 Jackal.fakeSidekick = player;
             } else {
+                bool wasSpy = Spy.spy != null && player == Spy.spy;
+                bool wasImpostor = player.Data.Role.IsImpostor;  // This can only be reached if impostors can be sidekicked.
                 DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true; 
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
+                if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
+                Sidekick.wasSpy = wasSpy;
+                Sidekick.wasImpostor = wasImpostor;
             }
             Jackal.canCreateSidekick = false;
         }
@@ -568,6 +573,9 @@ namespace TheOtherRoles
             Jackal.removeCurrentJackal();
             Jackal.jackal = Sidekick.sidekick;
             Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
+            Jackal.wasTeamRed = Sidekick.wasTeamRed;
+            Jackal.wasSpy = Sidekick.wasSpy;
+            Jackal.wasImpostor = Sidekick.wasImpostor;
             Sidekick.clearAndReload();
             return;
         }

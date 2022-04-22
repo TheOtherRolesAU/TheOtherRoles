@@ -803,6 +803,9 @@ namespace TheOtherRoles
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
         public static bool hasImpostorVision = false;
+        public static bool wasTeamRed;
+        public static bool wasImpostor;
+        public static bool wasSpy;
 
         public static Sprite getSidekickButtonSprite() {
             if (buttonSprite) return buttonSprite;
@@ -831,6 +834,7 @@ namespace TheOtherRoles
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
+            wasTeamRed = wasImpostor = wasSpy = false;
         }
         
     }
@@ -840,6 +844,10 @@ namespace TheOtherRoles
         public static Color color = new Color32(0, 180, 235, byte.MaxValue);
 
         public static PlayerControl currentTarget;
+
+        public static bool wasTeamRed;
+        public static bool wasImpostor;
+        public static bool wasSpy;
 
         public static float cooldown = 30f;
         public static bool canUseVents = true;
@@ -855,6 +863,7 @@ namespace TheOtherRoles
             canKill = CustomOptionHolder.sidekickCanKill.getBool();
             promotesToJackal = CustomOptionHolder.sidekickPromotesToJackal.getBool();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
+            wasTeamRed = wasImpostor = wasSpy = false;
         }
     }
 
