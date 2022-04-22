@@ -469,6 +469,7 @@ namespace TheOtherRoles.Patches {
                     string meetingInfoText = "";
                     if (p == PlayerControl.LocalPlayer) {
                         playerInfoText = $"{roleNames}";
+                        if (p == Swapper.swapper) playerInfoText = $"{roleNames}" + Helpers.cs(Swapper.color, $" ({Swapper.charges})");
                         if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
                             TMPro.TextMeshPro tabText = DestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
                             tabText.SetText($"Tasks {taskInfo}");
@@ -764,6 +765,16 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        // For swapper swap charges        
+        public static void swapperUpdate() {
+            if (Swapper.swapper == null || PlayerControl.LocalPlayer != Swapper.swapper || PlayerControl.LocalPlayer.Data.IsDead) return;
+            var (playerCompleted, _) = TasksHandler.taskInfo(PlayerControl.LocalPlayer.Data);
+            if (playerCompleted == Swapper.rechargedTasks) {
+                Swapper.rechargedTasks += Swapper.rechargeTasksNumber;
+                Swapper.charges++;
+            }
+        }
+
         static void pursuerSetTarget() {
             if (Pursuer.pursuer == null || Pursuer.pursuer != PlayerControl.LocalPlayer) return;
             Pursuer.target = setTarget();
@@ -877,6 +888,7 @@ namespace TheOtherRoles.Patches {
                 ninjaUpdate();
 
                 hackerUpdate();
+                swapperUpdate();
             } 
         }
     }
