@@ -97,6 +97,12 @@ namespace TheOtherRoles {
         public static CustomOption witchTriggerBothCooldowns;
         public static CustomOption witchVoteSavesTargets;
 
+        public static CustomOption ninjaSpawnRate;
+        public static CustomOption ninjaCooldown;
+        public static CustomOption ninjaKnowsTargetLocation;
+        public static CustomOption ninjaTraceTime;
+        public static CustomOption ninjaTraceColorTime;
+
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
 
@@ -311,6 +317,12 @@ namespace TheOtherRoles {
             witchSpellCastingDuration = CustomOption.Create(374, "Spell Casting Duration", 1f, 0f, 10f, 1f, witchSpawnRate);
             witchTriggerBothCooldowns = CustomOption.Create(375, "Trigger Both Cooldowns", true, witchSpawnRate);
             witchVoteSavesTargets = CustomOption.Create(376, "Voting The Witch Saves All The Targets", true, witchSpawnRate);
+
+            ninjaSpawnRate = CustomOption.Create(380, cs(Ninja.color, "Ninja"), rates, null, true);
+            ninjaCooldown = CustomOption.Create(381, "Ninja Mark Cooldown", 30f, 10f, 120f, 5f, ninjaSpawnRate);
+            ninjaKnowsTargetLocation = CustomOption.Create(382, "Ninja Knows Location Of Target", true, ninjaSpawnRate);
+            ninjaTraceTime = CustomOption.Create(383, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
+            ninjaTraceColorTime = CustomOption.Create(384, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
 
             miniSpawnRate = CustomOption.Create(180, cs(Mini.color, "Mini"), rates, null, true);
             miniGrowingUpDuration = CustomOption.Create(181, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, miniSpawnRate);
