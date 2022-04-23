@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using UnhollowerRuntimeLib;
@@ -13,7 +14,6 @@ namespace TheOtherRoles
     {
         public static class Classes
         {
-            public const string SubmarineStatus = "SubmarineStatus";
             public const string ElevatorMover = "ElevatorMover";
         }
         
@@ -59,12 +59,24 @@ namespace TheOtherRoles
             }
         }
 
+        public static bool DisableO2MaskCheckForEmergency
+        {
+            set
+            {
+                if (!Loaded) return;
+                DisableO2MaskCheckField.SetValue(null, value);
+            }
+        }
+
         private static Type SubmarineStatusType;
         private static MethodInfo CalculateLightRadiusMethod;
         
+        private static Type TaskIsEmergencyPatchType;
+        private static FieldInfo DisableO2MaskCheckField;
+        
         public static void Initialize()
         {
-            Loaded = IL2CPPChainloader.Instance.Plugins.TryGetValue(SUBMERGED_GUID, out var plugin);
+            Loaded = IL2CPPChainloader.Instance.Plugins.TryGetValue(SUBMERGED_GUID, out PluginInfo plugin);
             if (!Loaded) return;
             
             Plugin = plugin!.Instance as BasePlugin;
@@ -76,18 +88,23 @@ namespace TheOtherRoles
             InjectedTypes = (Dictionary<string, Type>) AccessTools.PropertyGetter(Types.FirstOrDefault(t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes")
                 .Invoke(null, Array.Empty<object>());
             
-            SubmarineStatusType = Types.First(t => t.Name == Classes.SubmarineStatus);
+            SubmarineStatusType = Types.First(t => t.Name == "SubmarineStatus");
             CalculateLightRadiusMethod = AccessTools.Method(SubmarineStatusType, "CalculateLightRadius");
+            
+            TaskIsEmergencyPatchType = Types.First(t => t.Namespace == "PlayerTask_TaskIsEmergency_Patch");
+            DisableO2MaskCheckField = AccessTools.Field(TaskIsEmergencyPatchType, "DisableO2MaskCheck");
         }
 
         public static MonoBehaviour AddSubmergedComponent(this GameObject obj, string typeName)
         {
-            var validType = InjectedTypes.TryGetValue(typeName, out var type);
+            if (!Loaded) return obj.AddComponent<MissingSubmergedBehaviour>();
+            bool validType = InjectedTypes.TryGetValue(typeName, out Type type);
             return validType ? obj.AddComponent(Il2CppType.From(type)).TryCast<MonoBehaviour>() : obj.AddComponent<MissingSubmergedBehaviour>();
         }
 
         public static float GetSubmergedNeutralLightRadius()
         {
+            if (!Loaded) return 0;
             return (float) CalculateLightRadiusMethod.Invoke(SubmarineStatus, new object[] {null, true});
         }
     }
