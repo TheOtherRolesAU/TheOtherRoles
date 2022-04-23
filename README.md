@@ -10,8 +10,8 @@ This mod is not affiliated with Among Us or Innersloth LLC, and the content cont
 
 # The Other Roles
 
-The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings), new [Custom Hats](#custom-hats) and support for [10+ Player Lobbies](#Custom-Servers-and-10+-Players) to the game.
-Even more roles are coming soon :)
+The **The Other Roles**, is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings) and new [Custom Hats](#custom-hats) to the game.
+Even more roles are coming soon. :)
 
 | Impostors | Crewmates | Neutral | Modifier |
 |----------|-------------|-----------------|----------------|
@@ -99,6 +99,17 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 4.0.0**
+- Added option: shield last round first kill (till the first meeting)
+- Added possibility to enter a name
+- Added map in meeting with last position
+- Added bait, mini, lover, bloody, sunglasses, anti teleport, tiebreaker & invert modifier
+- Changed lobby/settings ui 
+- Reworked the lawyer
+- Removed bait, mini & lover role
+- Fixed a bug where the Jack In The Box size was not properly on Airship
+- Fixed a bug where "no vote is self vote" did not work
+
 **Version 3.4.5**
 - Update to Among Us version 2022.3.29s
 - Added horse-mode button in the main menu (bottom right)  
@@ -108,7 +119,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the killer doesn't teleport to the body
 - Changed the light source to prevent vanilla bugs
 - Removed dlekS (for now) :c 
-  
+
 **Version 3.4.4**
 - Fixed a bug where games were not finished properly on offical servers (special thanks to miniduikboot & 6pak)
   
