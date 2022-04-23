@@ -70,7 +70,7 @@ namespace TheOtherRoles {
 
         // Static behaviour
 
-        public static void switchPreset(int newPreset) {
+            public static void switchPreset(int newPreset) {
             CustomOption.preset = newPreset;
             foreach (CustomOption option in CustomOption.options) {
                 if (option.id == 0) continue;
@@ -291,7 +291,7 @@ namespace TheOtherRoles {
             for (int i = 0; i < CustomOption.options.Count; i++) {
                 CustomOption option = CustomOption.options[i];
                 if (option.optionBehaviour == null) {
-                    StringOption stringOption = UnityEngine.Object.Instantiate(template, menus[(int)option.type]);//torMenu.transform);
+                    StringOption stringOption = UnityEngine.Object.Instantiate(template, menus[(int)option.type]);
                     optionBehaviours[(int)option.type].Add(stringOption);
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
                     stringOption.TitleText.text = option.name;
@@ -396,7 +396,7 @@ namespace TheOtherRoles {
 
             float offset = 2.75f;
             foreach (CustomOption option in CustomOption.options) {
-                if (GameObject.Find("TERSettings") && option.type != CustomOption.CustomOptionType.General)
+                if (GameObject.Find("TORSettings") && option.type != CustomOption.CustomOptionType.General)
                     continue;
                 if (GameObject.Find("ImpostorSettings") && option.type != CustomOption.CustomOptionType.Impostor)
                     continue;
@@ -461,10 +461,18 @@ namespace TheOtherRoles {
             return typeof(GameOptionsData).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
         }
 
-        private static void Postfix(ref string __result)
-        {
-            StringBuilder sb = new StringBuilder(__result);
-            foreach (CustomOption option in CustomOption.options) {
+        private static string buildRoleOptions() {
+            var impRoles = buildOptionsOfType(CustomOption.CustomOptionType.Impostor, true) + "\n";
+            var neutralRoles = buildOptionsOfType(CustomOption.CustomOptionType.Neutral, true) + "\n";
+            var crewRoles = buildOptionsOfType(CustomOption.CustomOptionType.Crewmate, true) + "\n";
+            var modifiers = buildOptionsOfType(CustomOption.CustomOptionType.Modifier, true);
+            return impRoles + neutralRoles + crewRoles + modifiers;
+        }
+
+        private static string buildOptionsOfType(CustomOption.CustomOptionType type, bool headerOnly) {
+            StringBuilder sb = new StringBuilder("\n");
+            var options = CustomOption.options.Where(o => o.type == type);
+            foreach (var option in options) {
                 if (option.parent == null) {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
@@ -499,63 +507,56 @@ namespace TheOtherRoles {
                     } else {
                         sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
                     }
-                    
                 }
             }
-            CustomOption parent = null;
-            foreach (CustomOption option in CustomOption.options)
+            if (headerOnly) return sb.ToString();
+            else sb = new StringBuilder();
+
+            foreach (CustomOption option in options) {
                 if (option.parent != null) {
-                    if (option.parent != parent) {
-                        sb.AppendLine();
-                        parent = option.parent;
-                    }
-                    sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                    Color c = option.parent.getSelection() != 0 && (option.parent.parent == null || option.parent.parent.getSelection() != 0) ? Color.white : Color.grey;
+                    sb.AppendLine(Helpers.cs(c, $"{option.name}: {option.selections[option.selection].ToString()}"));
+                } else {
+                    sb.AppendLine($"\n{option.name}: {option.selections[option.selection].ToString()}");
                 }
-
-            var hudString = sb.ToString();
-
-            int defaultSettingsLines = 23;
-            int roleSettingsLines = defaultSettingsLines + 47;
-            int detailedSettingsP1 = roleSettingsLines + 40;
-            int detailedSettingsP2 = detailedSettingsP1 + 42;
-            int detailedSettingsP3 = detailedSettingsP2 + 42;
-            int end1 = hudString.TakeWhile(c => (defaultSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end2 = hudString.TakeWhile(c => (roleSettingsLines -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end3 = hudString.TakeWhile(c => (detailedSettingsP1 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end4 = hudString.TakeWhile(c => (detailedSettingsP2 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int end5 = hudString.TakeWhile(c => (detailedSettingsP3 -= (c == '\n' ? 1 : 0)) > 0).Count();
-            int counter = TheOtherRolesPlugin.optionsPage;
-            if (counter == 0) {
-                hudString = hudString.Substring(0, end1) + "\n";   
-            } else if (counter == 1) {
-                hudString = hudString.Substring(end1 + 1, end2 - end1);
-                // Temporary fix, should add a new CustomOption for spaces
-                int gap = 2;
-                int index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-                gap = 7;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index, "\n");
-                gap = 18;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-                gap = 25;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-                gap = 42;
-                index = hudString.TakeWhile(c => (gap -= (c == '\n' ? 1 : 0)) > 0).Count();
-                hudString = hudString.Insert(index + 1, "\n");
-            } else if (counter == 2) {
-                hudString = hudString.Substring(end2 + 1, end3 - end2);
-            } else if (counter == 3) {
-                hudString = hudString.Substring(end3 + 1, end4 - end3);
-            } else if (counter == 4) {
-                hudString = hudString.Substring(end4 + 1, end5 - end4);
-            } else if (counter == 5) {
-                hudString = hudString.Substring(end5 + 1);
             }
-            hudString += $"\n Press tab for more... ({counter+1}/6)";
-            __result = Helpers.cs(DateTime.Now.Millisecond > 500 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n") + hudString;
+            return sb.ToString();
+        }
+
+        private static void Postfix(ref string __result)
+        {
+
+            
+
+            int counter = TheOtherRolesPlugin.optionsPage;
+            string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Millisecond > 500 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
+
+            switch (counter) {
+                case 0:
+                    hudString += "Page 1: Vanilla Settings \n\n" + __result;
+                    break;
+                case 1:
+                    hudString += "Page 2: The Other Roles Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.General, false);
+                    break;
+                case 2:
+                    hudString += "Page 3: Role and Modifier Rates \n" + buildRoleOptions();
+                    break;
+                case 3:
+                    hudString += "Page 4: Impostor Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Impostor, false);
+                    break;
+                case 4:
+                    hudString += "Page 5: Neutral Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Neutral, false);
+                    break;
+                case 5:
+                    hudString += "Page 6: Crewmate Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Crewmate, false);
+                    break;
+                case 6:
+                    hudString += "Page 7: Modifier Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Modifier, false);
+                    break;
+            }
+
+            hudString += $"\n Press tab for more... ({counter+1}/7)";
+            __result = hudString;
         }
     }
 
@@ -564,8 +565,37 @@ namespace TheOtherRoles {
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
-            if(Input.GetKeyDown(KeyCode.Tab)) {
-                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 6;
+            int page = TheOtherRolesPlugin.optionsPage;
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                TheOtherRolesPlugin.optionsPage = (TheOtherRolesPlugin.optionsPage + 1) % 7;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) {
+                TheOtherRolesPlugin.optionsPage = 0;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2)) {
+                TheOtherRolesPlugin.optionsPage = 1;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3)) {
+                TheOtherRolesPlugin.optionsPage = 2;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4)) {
+                TheOtherRolesPlugin.optionsPage = 3;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5)) {
+                TheOtherRolesPlugin.optionsPage = 4;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Keypad6)) {
+                TheOtherRolesPlugin.optionsPage = 5;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) {
+                TheOtherRolesPlugin.optionsPage = 6;
+            }
+            if (page != TheOtherRolesPlugin.optionsPage) {
+                TheOtherRolesPlugin.Logger.LogMessage("switched page");
+                Vector3 position = (Vector3)HudManager.Instance?.GameSettings?.transform.localPosition;
+                if (position != null) {
+                    HudManager.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
+                }
             }
         }
     }
@@ -582,12 +612,12 @@ namespace TheOtherRoles {
     // This class is taken from Town of Us Reactivated, https://github.com/eDonnes124/Town-Of-Us-R/blob/master/source/Patches/CustomOption/Patches.cs, Licensed under GPLv3
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdate {
-        private const float
+        public const float
             MinX = -5.233334F /*-5.3F*/,
             OriginalY = 2.9F,
             MinY = 2.9F;
 
-        private static Scroller Scroller;
+        public static Scroller Scroller;
         private static Vector3 LastPosition = new Vector3(MinX, MinY);
 
         public static void Prefix(HudManager __instance) {
