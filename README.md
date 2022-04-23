@@ -15,24 +15,24 @@ Even more roles are coming soon :)
 
 | Impostors | Crewmates | Neutral | Modifier |
 |----------|-------------|-----------------|----------------|
-| [Evil Guesser](#guesser) | [Nice Guesser](#guesser) | [Jester](#jester) | [Bloody](#bloody) |
-| [Bounty Hunter](#bounty-hunter) | [Detective](#detective) | [Jackal](#jackal) | [Anti Teleport](#anti-teleport) |
-| [Camouflager](#camouflager) | [Engineer](#engineer) | [Sidekick](#sidekick) | [Tie Breaker](#tie-breaker) |
-| [Cleaner](#cleaner) | [Hacker](#hacker) | [Vulture](#vulture) | [Bait](#bait) |
-| [Eraser](#eraser) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Lovers](#lovers) |
-| [Godfather (Mafia)](#mafia) | [Mayor](#mayor) | | [Sunglasses](#sunglasses) |
-| [Mafioso (Mafia)](#mafia) | [Medic](#medic) | | [Mini](#mini) |
-| [Janitor (Mafia)](#mafia)  | [Security Guard](#security-guard) | | [VIP](#vip) |
-| [Morphling](#morphling) | [Seer](#seer) |  | [Invert](#invert) |
-| [Trickster](#trickster) | [Sheriff](#sheriff) 
-| [Vampire](#vampire) | [Deputy](#deputy) |  |
-| [Warlock](#warlock) | [Shifter](#shifter) |  |  |
-| [Witch](#witch) | [Snitch](#snitch) |  |  |
+| [Godfather (Mafia)](#mafia) | [Shifter](#shifter) | [Jester](#jester) | [Bloody](#bloody) |
+| [Mafioso (Mafia)](#mafia) | [Mayor](#mayor) | [Arsonist](#arsonist) | [Anti Teleport](#anti-teleport) |
+| [Janitor (Mafia)](#mafia) | [Engineer](#engineer) | [Jackal](#jackal) | [Tie Breaker](#tie-breaker) |
+| [Morphling](#morphling) | [Sheriff](#sheriff) | [Sidekick](#sidekick) | [Bait](#bait) |
+| [Camouflager](#camouflager) | [Deputy](#deputy) | [Vulture](#vulture) | [Lovers](#lovers) |
+| [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
+| [Eraser](#eraser) | [Detective](#detective) | | [Mini](#mini) |
+| [Trickster](#trickster) | [Time Master](#time-master) | | [VIP](#vip) |
+| [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
+| [Warlock](#warlock) | [Swapper](#swapper) |
+| [Bounty Hunter](#bounty-hunter) | [Seer](#seer) |  |
+| [Witch](#witch) | [Hacker](#hacker) |  |  |
+| [Evil Guesser](#guesser) | [Tracker](#tracker) |  |  |
+|  | [Snitch](#snitch) |  |  |
 |  | [Spy](#spy) |  |  |
-|  | [Swapper](#swapper) |  |  |
-|  | [Time Master](#time-master) |  |  |
-|  | [Tracker](#tracker) |  |  |
-|  | [Medium](#medium) |  |
+|  | [Security Guard](#security-guard) |  |  |
+|  | [Medium](#medium) |  |  |
+|  | [Nice Guesser](#guesser) |  |
 
 The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
 
