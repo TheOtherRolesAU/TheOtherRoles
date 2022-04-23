@@ -4,6 +4,7 @@
         <Version>3.4.5</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
+		<LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
