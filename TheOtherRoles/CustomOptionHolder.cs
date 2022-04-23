@@ -206,7 +206,7 @@ namespace TheOtherRoles {
         public static CustomOption mediumOneTimeUse;
 
         public static CustomOption lawyerSpawnRate;
-        public static CustomOption lawyerTargetKnows;
+        public static CustomOption lawyerTargetCanBeJester;
         public static CustomOption lawyerWinsAfterMeetings;
         public static CustomOption lawyerNeededMeetings;
         public static CustomOption lawyerVision;
@@ -373,7 +373,7 @@ namespace TheOtherRoles {
             vultureShowArrows = CustomOption.Create(344, "Show Arrows Pointing Towards The Corpses", true, vultureSpawnRate);
 
             lawyerSpawnRate = CustomOption.Create(350, cs(Lawyer.color, "Lawyer"), rates, null, true);
-            lawyerTargetKnows = CustomOption.Create(351, "Lawyer Target Knows", true, lawyerSpawnRate);
+            lawyerTargetCanBeJester = CustomOption.Create(351, "Lawyer Target Can Be The Jester", false, lawyerSpawnRate);
             lawyerWinsAfterMeetings = CustomOption.Create(352, "Lawyer Wins After Meetings", false, lawyerSpawnRate);
             lawyerNeededMeetings = CustomOption.Create(353, "Lawyer Needed Meetings To Win", 5f, 1f, 15f, 1f, lawyerWinsAfterMeetings);
             lawyerVision = CustomOption.Create(354, "Lawyer Vision", 1f, 0.25f, 3f, 0.25f, lawyerSpawnRate);
