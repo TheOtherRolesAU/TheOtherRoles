@@ -1434,26 +1434,48 @@ The player will start the round where the previous one ended (Emergency Meeting 
 | Anti Teleport Quantity | -
 -----------------------
 
+## Tie Breaker
 
+If the Voting ends in a tie, the Tie Breaker takes place and the player with the Tie Breaker Modifier gets an extra vote thats not visible to anyone.
+Everyone will know if the Tie Breaker was involved in the Meeting or not.
 
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Tie Breaker Spawn Chance | -
+-----------------------
+
+## Bait
+
+The Bait forces the killer to self report the body (you can configure a delay in the options).
+There can be more than one Bait.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Bait Spawn Chance | -
+| Bait Quantity | -
+| Bait Report Delay Min | -
+| Bait Report Delay Max | -
+| Warn The Killer With A Flash | -
+-----------------------
 
 ## Lovers
 
-There are always two Lovers which are linked together.\
-Their primary goal is it to stay alive together until the end of the game.\
-If one Lover dies (and the option is activated), the other Lover suicides.\
-You can select if Lovers are able to have a second role (could be a Neutral, Crewmate or Impostor Role)\
-You can specify the chance of one Lover being an Impostor.\
-The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win)\
-If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
-If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
-If there's a team Impostor/Jackal Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as they're alive. If the Lover dies, their tasks will also be counted.\
-You can enable an exclusive chat only for Lovers\
-\
+There are always two Lovers which are linked together.
+Their primary goal is it to stay alive together until the end of the game.
+If one Lover dies (and the option is activated), the other Lover suicides.
+You can specify the chance of one Lover being an Impostor.
+The Lovers never know the role of their partner, they only see who their partner is.
+The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win).
+If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.
+If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.
+If there's an Impostor/Jackal + Crewmate Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as they're alive.
+If the Lover dies, their tasks will also be counted.
+You can enable an exclusive chat only for Lovers.
+
 **NOTE:**
-- In a 2 Cremates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
-- The Lovers can change if the Shifter takes the role of a Lovers
+In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
 
 ### Game Options
 | Name | Description |
@@ -1461,8 +1483,21 @@ You can enable an exclusive chat only for Lovers\
 | Lovers Spawn Chance | -
 | Chance That One Lover Is Impostor | -
 | Both Lovers Die | Whether the second Lover suicides, if the first one dies
-| Lovers Can Have Another Role | If set to true, the Lovers can have a second role
 | Enable Lover Chat | -
+-----------------------
+
+## Sunglasses
+
+Sunglasses is only a Modifier for Crewmates.
+The Sunglasses will lower the Crewmate's vision by small percentage. The percentage is configurable in the options.
+The vision will also be affected when lights out.
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Sunglasses Spawn Chance | -
+| Sunglasses Quantity | -
+| Vision with sunglasses | -
 -----------------------
 
 ## Mini
@@ -1471,12 +1506,12 @@ The Mini's character is smaller and hence visible to everyone in the game.
 The Mini cannot be killed until it turns 18 years old, however it can be voted out.
 
 **Impostor/Jackal Mini:**
-  - While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
-  - If it gets thrown out of the ship, everything is fine.
+- While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
+- If it gets thrown out of the ship, everything is fine.
 
 **Crewmate Mini:**
-  - The Crewmate Mini aims to play out the strength its invincibility in the early game.
-  - If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
+- The Crewmate Mini aims to play out the strength its invincibility in the early game.
+- If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
 
 **Neutral Mini:**
 - The cooldown is not effected, except for the Team Jackal/Sidekick.
@@ -1494,18 +1529,36 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
 | Mini  | Mini Growing Up Duration
 -----------------------
 
-## Bait
+## VIP
 
-The Bait forces the killer to self report the body (you can configure a delay in the options).
+An Impostor, Jackal or Crewmate can be affected by the VIP (Very Important Player) Modifier.
+The VIP will show everyone when he dies with a flash similar to the Seer Flash.
+If the option Show Team Color is On, then everyone will get a flash in the color of the team the player was part of.
+
+Teams:
+- Impostor = Red
+- Neutral = Blue
+- Crewmate = White
 
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Bait Spawn Chance | -
-| Bait Quantity | -
-| Bait Report Delay Min | -
-| Bait Report Delay Max | -
-| Warn The Killer With A Flash | -
+| VIP Spawn Chance | -
+| VIP Quantity | -
+| Show Team Color | -
+-----------------------
+
+## Invert
+
+The Invert Modifier inverts your controls (no matter if keyboard or mouse).
+The Invert can affect all teams (Impostor, Neutral, Crewmate).
+
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Invert Spawn Chance | -
+| Invert Quantity | -
 -----------------------
 
 # Source code
