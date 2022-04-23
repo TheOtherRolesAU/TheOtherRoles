@@ -474,6 +474,20 @@ namespace TheOtherRoles {
             var options = CustomOption.options.Where(o => o.type == type);
             foreach (var option in options) {
                 if (option.parent == null) {
+                    sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
+                }
+            }
+            if (headerOnly) return sb.ToString();
+            else sb = new StringBuilder();
+
+            foreach (CustomOption option in options) {
+                if (option.parent != null) {
+                    bool isIrrelevant = option.parent.getSelection() == 0 || (option.parent.parent != null && option.parent.parent.getSelection() == 0);
+                    
+                    Color c = isIrrelevant ? Color.grey : Color.white;  // No use for now
+                    if (isIrrelevant) continue;
+                    sb.AppendLine(Helpers.cs(c, $"{option.name}: {option.selections[option.selection].ToString()}"));
+                } else {
                     if (option == CustomOptionHolder.crewmateRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
@@ -505,19 +519,8 @@ namespace TheOtherRoles {
                     } else if ((option == CustomOptionHolder.crewmateRolesCountMax) || (option == CustomOptionHolder.neutralRolesCountMax) || (option == CustomOptionHolder.impostorRolesCountMax) || option == CustomOptionHolder.modifiersCountMax) {
                         continue;
                     } else {
-                        sb.AppendLine($"{option.name}: {option.selections[option.selection].ToString()}");
-                    }
-                }
-            }
-            if (headerOnly) return sb.ToString();
-            else sb = new StringBuilder();
-
-            foreach (CustomOption option in options) {
-                if (option.parent != null) {
-                    Color c = option.parent.getSelection() != 0 && (option.parent.parent == null || option.parent.parent.getSelection() != 0) ? Color.white : Color.grey;
-                    sb.AppendLine(Helpers.cs(c, $"{option.name}: {option.selections[option.selection].ToString()}"));
-                } else {
-                    sb.AppendLine($"\n{option.name}: {option.selections[option.selection].ToString()}");
+                        sb.AppendLine($"\n{option.name}: {option.selections[option.selection].ToString()}");
+                    }                    
                 }
             }
             return sb.ToString();
@@ -525,11 +528,8 @@ namespace TheOtherRoles {
 
         private static void Postfix(ref string __result)
         {
-
-            
-
             int counter = TheOtherRolesPlugin.optionsPage;
-            string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Millisecond > 500 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
+            string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
 
             switch (counter) {
                 case 0:
@@ -555,7 +555,7 @@ namespace TheOtherRoles {
                     break;
             }
 
-            hudString += $"\n Press tab for more... ({counter+1}/7)";
+            hudString += $"\n Press TAB or Page Number for more... ({counter+1}/7)";
             __result = hudString;
         }
     }
