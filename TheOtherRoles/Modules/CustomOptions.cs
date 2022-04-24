@@ -591,7 +591,6 @@ namespace TheOtherRoles {
                 TheOtherRolesPlugin.optionsPage = 6;
             }
             if (page != TheOtherRolesPlugin.optionsPage) {
-                TheOtherRolesPlugin.Logger.LogMessage("switched page");
                 Vector3 position = (Vector3)HudManager.Instance?.GameSettings?.transform.localPosition;
                 if (position != null) {
                     HudManager.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);

@@ -31,7 +31,7 @@ namespace TheOtherRoles.Patches {
 			__instance.gameObject.SetActive(false);
 			__instance.countOverlay.gameObject.SetActive(false);
 			__instance.infectedOverlay.gameObject.SetActive(false);
-			__instance.taskOverlay.Hide();
+			__instance.taskOverlay.Show();
 			__instance.HerePoint.enabled = true;
 			return false;
 		}
