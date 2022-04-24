@@ -237,8 +237,8 @@ namespace TheOtherRoles {
             else clip = nextSkin.IdleAnim;
             float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             playerPhysics.Skin.skin = nextSkin;
-            playerPhysics.Skin.layer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-            PlayerControl.SetPlayerMaterialColors(colorId, playerPhysics.Skin.layer);
+            if (playerPhysics.Skin.layer.material == DestroyableSingleton<HatManager>.Instance.PlayerMaterial)
+                PlayerControl.SetPlayerMaterialColors(colorId, playerPhysics.Skin.layer);
             spriteAnim.Play(clip, 1f);
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);

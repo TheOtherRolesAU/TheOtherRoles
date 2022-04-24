@@ -1340,11 +1340,11 @@ namespace TheOtherRoles
         public static bool triggerLawyerWin = false;
         public static int meetings = 0;
 
-        public static bool targetKnows = false;
         public static float vision = 1f;
         public static bool winsAfterMeetings = false;
         public static int neededMeetings = 4;
         public static bool lawyerKnowsRole = false;
+        public static bool targetCanBeJester = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1358,11 +1358,11 @@ namespace TheOtherRoles
             triggerLawyerWin = false;
             meetings = 0;
 
-            targetKnows = CustomOptionHolder.lawyerTargetKnows.getBool();
             winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
             neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
             lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
+            targetCanBeJester = CustomOptionHolder.lawyerTargetCanBeJester.getBool();
         }
     }
 

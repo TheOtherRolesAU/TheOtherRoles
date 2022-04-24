@@ -473,6 +473,7 @@ namespace TheOtherRoles.Patches {
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                     string roleNames = RoleInfo.GetRolesString(p, true, false);
+                    string roleText = RoleInfo.GetRolesString(p, true, MapOptions.ghostsSeeModifier);
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                     string playerInfoText = "";
@@ -487,7 +488,7 @@ namespace TheOtherRoles.Patches {
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                     }
                     else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
-                        playerInfoText = $"{roleNames} {taskInfo}".Trim();
+                        playerInfoText = $"{roleText} {taskInfo}".Trim();
                         meetingInfoText = playerInfoText;
                     }
                     else if (MapOptions.ghostsSeeTasks) {
@@ -495,7 +496,7 @@ namespace TheOtherRoles.Patches {
                         meetingInfoText = playerInfoText;
                     }
                     else if (MapOptions.ghostsSeeRoles || (Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target)) {
-                        playerInfoText = $"{roleNames}";
+                        playerInfoText = $"{roleText}";
                         meetingInfoText = playerInfoText;
                     }
 
@@ -1185,7 +1186,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
-            if (__instance == Lawyer.target && AmongUsClient.Instance.AmHost) {
+            if (__instance == Lawyer.target && Lawyer.target != Jester.jester && AmongUsClient.Instance.AmHost) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
@@ -1196,7 +1197,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
     public static class PlayerPhysicsFixedUpdate {
         public static void Postfix(PlayerPhysics __instance) {
-            if (__instance.AmOwner && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
+            if (__instance.AmOwner && !PlayerControl.LocalPlayer.Data.IsDead && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
         }
     }
 }
