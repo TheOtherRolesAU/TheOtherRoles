@@ -9,8 +9,8 @@ namespace TheOtherRoles.Objects {
         public static Portal firstPortal = null;
         public static Portal secondPortal = null;
         public static bool bothPlacedAndEnabled = false;
-        public static Sprite[] portalBgAnimationSprites = new Sprite[12];
-        public static Sprite[] portalFgAnimationSprites = new Sprite[12];
+        // public static Sprite[] portalBgAnimationSprites = new Sprite[109];
+        public static Sprite[] portalFgAnimationSprites = new Sprite[109];
         public static Sprite portalSprite;
         public static bool isTeleporting = false;
         public static float teleportDuration = 2.5f; 
@@ -28,19 +28,19 @@ namespace TheOtherRoles.Objects {
 
         public static List<tpLogEntry> teleportedPlayers;
 
-        public static Sprite getBgAnimationSprite(int index) {
+         /*public static Sprite getBgAnimationSprite(int index) {
             if (portalBgAnimationSprites == null || portalBgAnimationSprites.Length == 0) return null;
             index = Mathf.Clamp(index, 0, portalBgAnimationSprites.Length - 1);
             if (portalBgAnimationSprites[index] == null)
-                portalBgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_00{(index+1):00}.png", 115f));
+                portalBgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.plattform.png", 115f));
             return portalBgAnimationSprites[index];
-        }
+        }*/
 
         public static Sprite getFgAnimationSprite(int index) {
             if (portalFgAnimationSprites == null || portalFgAnimationSprites.Length == 0) return null;
             index = Mathf.Clamp(index, 0, portalFgAnimationSprites.Length - 1);
             if (portalFgAnimationSprites[index] == null)
-                portalFgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_animation_front_00{(index + 1):00}.png", 115f));
+                portalFgAnimationSprites[index] = (Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.PortalAnimation.portal_{(index):000}.png", 115f));
             return portalFgAnimationSprites[index];
         }
 
@@ -52,15 +52,23 @@ namespace TheOtherRoles.Objects {
             PlayerControl playerControl = Helpers.playerById(playerId);
             if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
             string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : Helpers.playerById(playerId).Data.PlayerName;
-            if (Camouflager.camouflageTimer > 0) playerNameDisplay = "A camouflaged player";
+
+            int colorId = playerControl.Data.DefaultOutfit.ColorId;
+
+            if (Camouflager.camouflageTimer > 0) {
+                playerNameDisplay = "A camouflaged player";
+                colorId = 6;
+            }
             teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
             
             HudManager.Instance.StartCoroutine(Effects.Lerp(teleportDuration, new Action<float>((p) => {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
                     firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
-                    firstPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
-                    secondPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    //PlayerControl.SetPlayerMaterialColors(colorId, firstPortal.animationFgRenderer);
+                    //PlayerControl.SetPlayerMaterialColors(colorId, secondPortal.animationFgRenderer);
+                    /*firstPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    secondPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));*/
                     if (p == 1f) {
                         firstPortal.animationFgRenderer.sprite = null;
                         secondPortal.animationFgRenderer.sprite = null;
@@ -98,7 +106,7 @@ namespace TheOtherRoles.Objects {
             portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
             portalFgAnimationGameObject.transform.position = fgPosition;
             animationFgRenderer = portalFgAnimationGameObject.AddComponent<SpriteRenderer>();
-
+            //animationFgRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
 
             // Only render the inactive portals for the Portalmaker
             bool playerIsPortalmaker = PlayerControl.LocalPlayer == TheOtherRoles.Portalmaker.portalmaker;
@@ -148,10 +156,10 @@ namespace TheOtherRoles.Objects {
 
         private static void preloadSprites() {
             for (int i = 0; i < portalFgAnimationSprites.Length; i++) {
-                getBgAnimationSprite(i);
+                /*getBgAnimationSprite(i);*/
                 getFgAnimationSprite(i);
             }
-            portalSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PortalAnimation.portal_0001.png", 115f);
+            portalSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PortalAnimation.plattform.png", 115f);
         }
 
         public static void clearPortals() {
