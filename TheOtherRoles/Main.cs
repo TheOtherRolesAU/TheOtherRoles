@@ -35,6 +35,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> StreamerMode { get; set; }
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
+        public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
         public static ConfigEntry<bool> GhostsSeeVotes{ get; set; }
         public static ConfigEntry<bool> ShowRoleSummary { get; set; }
         public static ConfigEntry<bool> ShowLighterDarker { get; set; }
@@ -64,6 +65,7 @@ namespace TheOtherRoles
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
+            GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
             ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
             ShowLighterDarker = Config.Bind("Custom", "Show Lighter / Darker", true);
