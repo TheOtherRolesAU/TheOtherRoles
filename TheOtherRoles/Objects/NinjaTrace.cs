@@ -53,8 +53,6 @@ namespace TheOtherRoles.Objects {
                 if (p < (duration - fadeOutDuration) / duration)
                     interP = 0f;
                 else interP = (p * duration + fadeOutDuration - duration) / fadeOutDuration;
-
-                TheOtherRolesPlugin.Logger.LogMessage(interP);
                 if (traceRenderer) traceRenderer.color = new Color(traceRenderer.color.r, traceRenderer.color.g, traceRenderer.color.b, Mathf.Clamp01(1 - interP));
             })));
 
