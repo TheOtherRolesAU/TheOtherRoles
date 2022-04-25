@@ -507,7 +507,7 @@ namespace TheOtherRoles.Patches {
 
             if (mapButton != null && passiveMapButton != null) {
                 passiveMapButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    if (map != null && !mapOpen) {
+                    if (map != null && !mapOpen && MeetingHud.Instance) {
                         map.gameObject.SetActive(true);
                         mapOpen = true;
                     } else {
