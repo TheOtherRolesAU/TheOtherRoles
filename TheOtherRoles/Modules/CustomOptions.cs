@@ -611,16 +611,31 @@ namespace TheOtherRoles {
     // This class is taken from Town of Us Reactivated, https://github.com/eDonnes124/Town-Of-Us-R/blob/master/source/Patches/CustomOption/Patches.cs, Licensed under GPLv3
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdate {
-        public const float
-            MinX = -5.233334F /*-5.3F*/,
+        public static float
+            MinX,/*-5.3F*/
             OriginalY = 2.9F,
             MinY = 2.9F;
 
+
         public static Scroller Scroller;
-        private static Vector3 LastPosition = new Vector3(MinX, MinY);
+        private static Vector3 LastPosition;
+        private static float lastAspect;
+        private static bool setLastPosition = false;
 
         public static void Prefix(HudManager __instance) {
             if (__instance.GameSettings?.transform == null) return;
+
+            // Sets the MinX position to the left edge of the screen + 0.1 units
+            Rect safeArea = Screen.safeArea;
+            float aspect = Mathf.Min((Camera.main).aspect, safeArea.width / safeArea.height);
+            float safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
+            MinX = 0.1f - safeOrthographicSize * aspect;
+
+            if (!setLastPosition || aspect != lastAspect) {
+                LastPosition = new Vector3(MinX, MinY);
+                lastAspect = aspect;
+                setLastPosition = true;
+            }
 
             CreateScroller(__instance);
 
