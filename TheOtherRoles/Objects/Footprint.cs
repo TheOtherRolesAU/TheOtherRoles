@@ -28,7 +28,8 @@ namespace TheOtherRoles.Objects {
             else
                 this.color = Palette.PlayerColors[(int) player.Data.DefaultOutfit.ColorId];
 
-            footprint = new GameObject("Footprint");
+            footprint = new GameObject("Footprint") { layer = 11 };
+            footprint.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
             footprint.transform.position = position;
             footprint.transform.localPosition = position;

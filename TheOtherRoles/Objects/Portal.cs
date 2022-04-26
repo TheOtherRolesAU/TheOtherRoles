@@ -91,22 +91,25 @@ namespace TheOtherRoles.Objects {
         private SpriteRenderer portalRenderer;
 
         public Portal(Vector2 p) {
-            portalGameObject = new GameObject("Portal");
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
-
+            portalGameObject = new GameObject("Portal"){ layer = 11 };
+            //Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
+            Vector3 position = new Vector3(p.x, p.y, p.y / 1000f + 0.01f);
 
             // Create the portal            
             portalGameObject.transform.position = position;
+            portalGameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             portalRenderer = portalGameObject.AddComponent<SpriteRenderer>();
             animationBgRenderer = portalGameObject.AddComponent<SpriteRenderer>();
             portalRenderer.sprite = portalSprite;
 
-            portalBgAnimationGameObject = new GameObject("PortalAnimationBG");
+            portalBgAnimationGameObject = new GameObject("PortalAnimationBG") { layer = 11 }; ;
+            portalBgAnimationGameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             portalBgAnimationGameObject.transform.position = position;
             animationBgRenderer = portalBgAnimationGameObject.AddComponent<SpriteRenderer>();
 
-            Vector3 fgPosition = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z - 0.1f);
-            portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
+            Vector3 fgPosition = new Vector3(p.x, p.y, position.z - 1f);
+            portalFgAnimationGameObject = new GameObject("PortalAnimationFG") { layer = 11 }; ;
+            portalFgAnimationGameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             portalFgAnimationGameObject.transform.position = fgPosition;
             animationFgRenderer = portalFgAnimationGameObject.AddComponent<SpriteRenderer>();
             animationFgRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
@@ -123,25 +126,25 @@ namespace TheOtherRoles.Objects {
             }
         }
 
-        public static bool locationNearEntry(Vector2 p) {
+        public static bool locationNearEntry(Vector3 p) {
             if (!bothPlacedAndEnabled) return false;
             float maxDist = 0.25f;
 
-            var dist1 = Vector2.Distance(p, firstPortal.portalGameObject.transform.position);
-            var dist2 = Vector2.Distance(p, secondPortal.portalGameObject.transform.position);
+            var dist1 = Vector3.Distance(p, firstPortal.portalGameObject.transform.position);
+            var dist2 = Vector3.Distance(p, secondPortal.portalGameObject.transform.position);
             if (dist1 > maxDist && dist2 > maxDist) return false;
             return true;
         }
 
-        public static Vector2 findExit(Vector2 p) {
-            var dist1 = Vector2.Distance(p, firstPortal.portalGameObject.transform.position);
-            var dist2 = Vector2.Distance(p, secondPortal.portalGameObject.transform.position);
+        public static Vector3 findExit(Vector2 p) {
+            var dist1 = Vector3.Distance(p, firstPortal.portalGameObject.transform.position);
+            var dist2 = Vector3.Distance(p, secondPortal.portalGameObject.transform.position);
             return dist1 < dist2 ? secondPortal.portalGameObject.transform.position : firstPortal.portalGameObject.transform.position;
         }
 
-        public static Vector2 findEntry(Vector2 p) {
-            var dist1 = Vector2.Distance(p, firstPortal.portalGameObject.transform.position);
-            var dist2 = Vector2.Distance(p, secondPortal.portalGameObject.transform.position);
+        public static Vector3 findEntry(Vector2 p) {
+            var dist1 = Vector3.Distance(p, firstPortal.portalGameObject.transform.position);
+            var dist2 = Vector3.Distance(p, secondPortal.portalGameObject.transform.position);
             return dist1 > dist2 ? secondPortal.portalGameObject.transform.position : firstPortal.portalGameObject.transform.position;
         }
 
