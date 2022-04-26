@@ -17,10 +17,10 @@ namespace TheOtherRoles {
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks()
                 ) {
-
                 foreach (var playerInfoTask in playerInfo.Tasks)
                 {
                     if (playerInfoTask.Complete) CompletedTasks++;
+                    TotalTasks++;
                 }
             }
             return Tuple.Create(CompletedTasks, TotalTasks);
@@ -42,6 +42,7 @@ namespace TheOtherRoles {
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
                     __instance.TotalTasks += playerTotal;
                     __instance.CompletedTasks += playerCompleted;
+                    TheOtherRolesPlugin.Logger.LogMessage($"player {playerInfo.PlayerName}, {playerCompleted} / {playerTotal}");
                 }
                 return false;
             }
