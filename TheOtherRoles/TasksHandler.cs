@@ -42,7 +42,6 @@ namespace TheOtherRoles {
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
                     __instance.TotalTasks += playerTotal;
                     __instance.CompletedTasks += playerCompleted;
-                    TheOtherRolesPlugin.Logger.LogMessage($"player {playerInfo.PlayerName}, {playerCompleted} / {playerTotal}");
                 }
                 return false;
             }
