@@ -434,7 +434,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForTaskWin(ShipStatus __instance) {
-            if (GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks) {
+            if (GameData.Instance.TotalTasks > 0 && GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame(GameOverReason.HumansByTask, false);
                 return true;
@@ -522,9 +522,8 @@ namespace TheOtherRoles.Patches {
             bool impLover = false;
             bool jackalLover = false;
 
-            for (int i = 0; i < GameData.Instance.PlayerCount; i++)
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
             {
-                GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                 if (!playerInfo.Disconnected)
                 {
                     if (!playerInfo.IsDead)

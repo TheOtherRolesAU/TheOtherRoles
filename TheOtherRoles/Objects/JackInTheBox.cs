@@ -37,8 +37,9 @@ namespace TheOtherRoles.Objects {
         private SpriteRenderer boxRenderer;
 
         public JackInTheBox(Vector2 p) {
-            gameObject = new GameObject("JackInTheBox");
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
+            gameObject = new GameObject("JackInTheBox"){layer = 11};
+            gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
+            Vector3 position = new Vector3(p.x, p.y,  p.y/1000f + 0.01f);
             position += (Vector3)PlayerControl.LocalPlayer.Collider.offset; // Add collider offset that DoMove moves the player up at a valid position
             // Create the marker
             gameObject.transform.position = position;
@@ -48,6 +49,7 @@ namespace TheOtherRoles.Objects {
             // Create the vent
             var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>();
             vent = UnityEngine.Object.Instantiate<Vent>(referenceVent);
+            vent.gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             vent.transform.position = gameObject.transform.position;
             vent.Left = null;
             vent.Right = null;

@@ -25,13 +25,13 @@ namespace TheOtherRoles.Objects {
         }
 
         public Garlic(Vector2 p) {
-            garlic = new GameObject("Garlic");
-            background = new GameObject("Background");
+            garlic = new GameObject("Garlic"){layer = 11};
+            garlic.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
+            background = new GameObject("Background"){layer = 11};
             background.transform.SetParent(garlic.transform);
-            Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
+            Vector3 position = new Vector3(p.x, p.y, p.y / 1000 + 0.001f); // just behind player
             garlic.transform.position = position;
-            garlic.transform.localPosition = position;
-            background.transform.localPosition = new Vector3(0 , 0, -0.01f); // before player
+            background.transform.localPosition = new Vector3(0 , 0, -1f); // before player
 
             var garlicRenderer = garlic.AddComponent<SpriteRenderer>();
             garlicRenderer.sprite = getGarlicSprite();

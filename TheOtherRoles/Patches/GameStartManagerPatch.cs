@@ -174,6 +174,8 @@ namespace TheOtherRoles.Patches {
                             possibleMaps.Add(2);
                         if (CustomOptionHolder.dynamicMapEnableAirShip.getBool())
                             possibleMaps.Add(4);
+                        if (CustomOptionHolder.dynamicMapEnableSubmerged.getBool())
+                            possibleMaps.Add(5);
                         byte chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
