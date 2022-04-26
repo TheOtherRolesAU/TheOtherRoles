@@ -476,8 +476,9 @@ namespace TheOtherRoles.Patches {
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                     string playerInfoText = "";
-                    string meetingInfoText = "";
+                    string meetingInfoText = "";                    
                     if (p == PlayerControl.LocalPlayer) {
+                        if (p.Data.IsDead) roleNames = roleText;
                         playerInfoText = $"{roleNames}";
                         if (p == Swapper.swapper) playerInfoText = $"{roleNames}" + Helpers.cs(Swapper.color, $" ({Swapper.charges})");
                         if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
@@ -1095,8 +1096,9 @@ namespace TheOtherRoles.Patches {
             if (Bloody.bloody.FindAll(x => x.PlayerId == target.PlayerId).Count > 0) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.Bloody, Hazel.SendOption.Reliable, -1);
                 writer.Write(__instance.PlayerId);
+                writer.Write(target.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.bloody(__instance.PlayerId);
+                RPCProcedure.bloody(__instance.PlayerId, target.PlayerId);
             }
 
             // VIP Modifier
@@ -1107,7 +1109,7 @@ namespace TheOtherRoles.Patches {
                     if (target.Data.Role.IsImpostor) color = Color.red;
                     else if (RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault().isNeutral) color = Color.blue;
                 }
-                Helpers.showFlash(color, 3);
+                Helpers.showFlash(color, 1.5f);
             }
 
             // First kill
@@ -1196,7 +1198,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
     public static class PlayerPhysicsFixedUpdate {
         public static void Postfix(PlayerPhysics __instance) {
-            if (__instance.AmOwner && !PlayerControl.LocalPlayer.Data.IsDead && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
+            if (__instance.AmOwner && !PlayerControl.LocalPlayer.Data.IsDead && Invert.invert.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0 && Invert.meetings > 0 && GameData.Instance && __instance.myPlayer.CanMove)  __instance.body.velocity *= -1;
         }
     }
 }

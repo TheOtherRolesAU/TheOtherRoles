@@ -117,6 +117,8 @@ namespace TheOtherRoles {
                 if (roleInfo.name == "Jackal") {
                     var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
                     task.Text = cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");  
+                } else if (roleInfo.name == "Invert") {
+                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription} ({Invert.meetings})");
                 } else {
                     task.Text = cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");  
                 }
