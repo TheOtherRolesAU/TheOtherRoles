@@ -91,7 +91,7 @@ namespace TheOtherRoles
             SubmarineStatusType = Types.First(t => t.Name == "SubmarineStatus");
             CalculateLightRadiusMethod = AccessTools.Method(SubmarineStatusType, "CalculateLightRadius");
             
-            TaskIsEmergencyPatchType = Types.First(t => t.Namespace == "PlayerTask_TaskIsEmergency_Patch");
+            TaskIsEmergencyPatchType = Types.First(t => t.Name == "PlayerTask_TaskIsEmergency_Patch");
             DisableO2MaskCheckField = AccessTools.Field(TaskIsEmergencyPatchType, "DisableO2MaskCheck");
         }
 
