@@ -10,10 +10,10 @@ namespace TheOtherRoles.Objects {
         public static Portal secondPortal = null;
         public static bool bothPlacedAndEnabled = false;
         // public static Sprite[] portalBgAnimationSprites = new Sprite[109];
-        public static Sprite[] portalFgAnimationSprites = new Sprite[109];
+        public static Sprite[] portalFgAnimationSprites = new Sprite[205];
         public static Sprite portalSprite;
         public static bool isTeleporting = false;
-        public static float teleportDuration = 2.5f; 
+        public static float teleportDuration = 3.4166666667f; 
 
         public struct tpLogEntry {
             public byte playerId;
@@ -50,6 +50,9 @@ namespace TheOtherRoles.Objects {
             
             // Generate log info
             PlayerControl playerControl = Helpers.playerById(playerId);
+            bool flip = playerControl.MyRend.flipX; // use the original player control here, not the morhpTarget.
+            firstPortal.animationFgRenderer.flipX = flip;
+            secondPortal.animationFgRenderer.flipX = flip;
             if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
             string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : playerControl.Data.PlayerName;
 
@@ -65,8 +68,8 @@ namespace TheOtherRoles.Objects {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
                     firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
-                    //PlayerControl.SetPlayerMaterialColors(colorId, firstPortal.animationFgRenderer);
-                    //PlayerControl.SetPlayerMaterialColors(colorId, secondPortal.animationFgRenderer);
+                    PlayerControl.SetPlayerMaterialColors(colorId, firstPortal.animationFgRenderer);
+                    PlayerControl.SetPlayerMaterialColors(colorId, secondPortal.animationFgRenderer);
                     /*firstPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationBgRenderer.sprite = getBgAnimationSprite((int)(p * portalFgAnimationSprites.Length));*/
                     if (p == 1f) {
@@ -106,7 +109,7 @@ namespace TheOtherRoles.Objects {
             portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
             portalFgAnimationGameObject.transform.position = fgPosition;
             animationFgRenderer = portalFgAnimationGameObject.AddComponent<SpriteRenderer>();
-            //animationFgRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+            animationFgRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
 
             // Only render the inactive portals for the Portalmaker
             bool playerIsPortalmaker = PlayerControl.LocalPlayer == TheOtherRoles.Portalmaker.portalmaker;
