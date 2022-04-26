@@ -746,9 +746,9 @@ namespace TheOtherRoles
             usePortalButton = new CustomButton(
                 () => {
                     bool didTeleport = false;
-                    Vector2 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
-                    Vector2 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
-                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);  // TODO: check for bans on servers
+                    Vector3 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
+                    Vector3 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
+                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);
 
                     if (!PlayerControl.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
@@ -761,6 +761,9 @@ namespace TheOtherRoles
                         PlayerControl.LocalPlayer.moveable = false;
                         PlayerControl.LocalPlayer.NetTransform.Halt();
                         if (p >= 0.5f && p <= 0.53f && !didTeleport) {
+                            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                                SubmergedCompatibility.ChangeFloor(exit.y > -7);
+                            }
                             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
@@ -1392,6 +1395,9 @@ namespace TheOtherRoles
                             writer2.Write(Ninja.ninjaMarked.PlayerId);
                             writer2.Write(byte.MaxValue);
                             AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                                    SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
+                            }
                             RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
 
                             // Create Second trace after killing

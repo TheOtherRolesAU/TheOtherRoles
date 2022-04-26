@@ -73,6 +73,10 @@ namespace TheOtherRoles
         
         private static Type TaskIsEmergencyPatchType;
         private static FieldInfo DisableO2MaskCheckField;
+
+        private static MethodInfo RpcRequestChangeFloorMethod;
+        private static Type FloorHandlerType;
+        private static MethodInfo GetFloorHandlerMethod;
         
         public static void Initialize()
         {
@@ -93,6 +97,11 @@ namespace TheOtherRoles
             
             TaskIsEmergencyPatchType = Types.First(t => t.Name == "PlayerTask_TaskIsEmergency_Patch");
             DisableO2MaskCheckField = AccessTools.Field(TaskIsEmergencyPatchType, "DisableO2MaskCheck");
+
+            FloorHandlerType = Types.First(t => t.Name == "FloorHandler");
+            GetFloorHandlerMethod = AccessTools.Method(FloorHandlerType, "GetFloorHandler", new Type[] {typeof(PlayerControl)});
+            RpcRequestChangeFloorMethod = AccessTools.Method(FloorHandlerType, "RpcRequestChangeFloor");           
+
         }
 
         public static MonoBehaviour AddSubmergedComponent(this GameObject obj, string typeName)
@@ -106,6 +115,12 @@ namespace TheOtherRoles
         {
             if (!Loaded) return 0;
             return (float) CalculateLightRadiusMethod.Invoke(SubmarineStatus, new object[] {null, true});
+        }
+
+        public static void ChangeFloor(bool toUpper) {
+            if (!Loaded) return;
+            MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { PlayerControl.LocalPlayer })).TryCast(FloorHandlerType) as MonoBehaviour;
+            RpcRequestChangeFloorMethod.Invoke(_floorHandler, new object[] { toUpper });
         }
     }
 
