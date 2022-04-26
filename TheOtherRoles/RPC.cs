@@ -881,9 +881,10 @@ namespace TheOtherRoles
             if (value > 0) Pursuer.blankedList.Add(target);            
         }
 
-        public static void bloody(byte playerId) {
-            if (Bloody.active.ContainsKey(playerId)) return;
-            Bloody.active.Add(playerId, Bloody.duration);
+        public static void bloody(byte killerPlayerId, byte bloodyPlayerId) {
+            if (Bloody.active.ContainsKey(killerPlayerId)) return;
+            Bloody.active.Add(killerPlayerId, Bloody.duration);
+            Bloody.bloodyKillerMap.Add(bloodyPlayerId, killerPlayerId);
         }
 
         public static void setFirstKill(byte playerId) {
@@ -1091,7 +1092,8 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.Bloody:
                     byte bloodyKiller = reader.ReadByte();
-                    RPCProcedure.bloody(bloodyKiller);
+                    byte bloodyDead = reader.ReadByte();
+                    RPCProcedure.bloody(bloodyKiller, bloodyDead);
                     break;
                 case (byte)CustomRPC.SetFirstKill:
                     byte firstKill = reader.ReadByte();

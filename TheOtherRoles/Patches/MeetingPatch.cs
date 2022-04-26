@@ -83,8 +83,15 @@ namespace TheOtherRoles.Patches {
                     Tiebreaker.isTiebreaker = false;
                     int maxVoteValue = self.Values.Max();
                     List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+
+                    
+                    PlayerVoteArea tb = null;
+                    if (Tiebreaker.tiebreaker != null)
+                        tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
+                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 0;
+
                     foreach (KeyValuePair<byte, int> pair in self) 
-                        if (pair.Value == maxVoteValue) 
+                        if (pair.Value == maxVoteValue && !isTiebreakerSkip) 
                             potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];

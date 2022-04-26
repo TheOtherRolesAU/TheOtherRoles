@@ -211,6 +211,9 @@ namespace TheOtherRoles.Patches {
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
             }
+
+            // Invert add meeting
+            if (Invert.meetings > 0) Invert.meetings--;
         }
     }
 
@@ -229,7 +232,7 @@ namespace TheOtherRoles.Patches {
                     if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
                         if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                     }
-                    if (Tiebreaker.isTiebreaker) __result += Helpers.cs(Color.yellow, " (Tiebreaker)");
+                    if (Tiebreaker.isTiebreaker) __result += " (Tiebreaker)";
                 }
             } catch {
                 // pass - Hopefully prevent leaving while exiling to softlock game
