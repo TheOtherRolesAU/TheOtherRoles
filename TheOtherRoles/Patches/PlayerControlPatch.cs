@@ -802,7 +802,8 @@ namespace TheOtherRoles.Patches {
             if (!Bloody.active.Any()) return;
             foreach (KeyValuePair<byte, float> entry in new Dictionary<byte, float>(Bloody.active)) {
                 PlayerControl player = Helpers.playerById(entry.Key);
-                new Footprint(4f, false, player);
+                PlayerControl bloodyPlayer = Helpers.playerById(Bloody.bloodyKillerMap[player.PlayerId]);                
+                new Bloodytrail(player, bloodyPlayer);
                 Bloody.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
                 if (entry.Value <= 0) Bloody.active.Remove(entry.Key);
             }

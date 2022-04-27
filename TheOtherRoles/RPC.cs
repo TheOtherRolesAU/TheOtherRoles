@@ -137,6 +137,7 @@ namespace TheOtherRoles
             JackInTheBox.clearJackInTheBoxes();
             NinjaTrace.clearTraces();
             Portal.clearPortals();
+            Bloodytrail.resetSprites();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -884,7 +885,7 @@ namespace TheOtherRoles
         public static void bloody(byte killerPlayerId, byte bloodyPlayerId) {
             if (Bloody.active.ContainsKey(killerPlayerId)) return;
             Bloody.active.Add(killerPlayerId, Bloody.duration);
-            Bloody.bloodyKillerMap.Add(bloodyPlayerId, killerPlayerId);
+            Bloody.bloodyKillerMap.Add(killerPlayerId, bloodyPlayerId);
         }
 
         public static void setFirstKill(byte playerId) {

@@ -24,6 +24,12 @@
         <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Resources\Blood1.png" />
+      <None Remove="Resources\Blood2.png" />
+      <None Remove="Resources\Blood3.png" />
+    </ItemGroup>
+
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
         <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
