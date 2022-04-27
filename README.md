@@ -107,7 +107,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added option Shield last round first kill (till the first meeting)
 - Added option Medic shield will be set instantly, but shows up after meeting
 - Added additions to Swapper (charges mechanic, confirm swap button, UI & color changes in meeting)
-- Added option Mayor can always see the color (after finishing x-amount of tasks)
+- Added option Mayor can always see the vote color (after finishing x-amount of tasks)
 - Added possibility to enter a name
 - Added map in meeting with last position
 - Added Bait, Mini, Lover, Bloody, Sunglasses, Anti Teleport, Tiebreaker & Invert modifier
@@ -116,6 +116,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Changed the position of the Guesser to The Neutral Roles (Guesser still remains Imp/Crew when setting up roles)
 - Reworked the Lawyer
 - Removed Bait, Mini & Lover role
+- Fixed a bug with the color of the scream robe
 - Fixed a bug where the Jack In The Box size was not properly on Airship
 - Fixed a bug where "No vote is self vote" did not work
 
