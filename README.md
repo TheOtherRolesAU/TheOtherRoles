@@ -101,15 +101,23 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 4.0.0**
-- Added option: shield last round first kill (till the first meeting)
+- Added compatibility to new map Submerged
+- Added the role Ninja
+- Added the role Portalmaker
+- Added option Shield last round first kill (till the first meeting)
+- Added option Medic shield will be set instantly, but shows up after meeting
+- Added additions to Swapper (charges mechanic, confirm swap button, UI & color changes in meeting)
+- Added option Mayor can always see the color (after finishing x-amount of tasks)
 - Added possibility to enter a name
 - Added map in meeting with last position
-- Added bait, mini, lover, bloody, sunglasses, anti teleport, tiebreaker & invert modifier
-- Changed lobby/settings ui 
-- Reworked the lawyer
-- Removed bait, mini & lover role
+- Added Bait, Mini, Lover, Bloody, Sunglasses, Anti Teleport, Tiebreaker & Invert modifier
+- Changed lobby/settings ui
+- Changed that a sidekicked Spy/Impostor is still shown red to Impostor
+- Changed the position of the Guesser to The Neutral Roles (Guesser still remains Imp/Crew when setting up roles)
+- Reworked the Lawyer
+- Removed Bait, Mini & Lover role
 - Fixed a bug where the Jack In The Box size was not properly on Airship
-- Fixed a bug where "no vote is self vote" did not work
+- Fixed a bug where "No vote is self vote" did not work
 
 **Version 3.4.5**
 - Update to Among Us version 2022.3.29s
