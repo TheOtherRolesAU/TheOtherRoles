@@ -232,7 +232,8 @@ namespace TheOtherRoles.Patches {
                     if (id == StringNames.ImpostorsRemainP || id == StringNames.ImpostorsRemainS) {
                         if (Jester.jester != null && player.PlayerId == Jester.jester.PlayerId) __result = "";
                     }
-                    if (Tiebreaker.isTiebreaker) __result += " (Tiebreaker)";
+                    if (Tiebreaker.isTiebreak) __result += " (Tiebreaker)";
+                    Tiebreaker.isTiebreak = false;
                 }
             } catch {
                 // pass - Hopefully prevent leaving while exiling to softlock game

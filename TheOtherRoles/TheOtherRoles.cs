@@ -1526,11 +1526,11 @@ namespace TheOtherRoles
     public static class Tiebreaker {
         public static PlayerControl tiebreaker;
 
-        public static bool isTiebreaker = false;
+        public static bool isTiebreak = false;
 
         public static void clearAndReload() {
             tiebreaker = null;
-            isTiebreaker = false;
+            isTiebreak = false;
         }
     }
 

@@ -125,7 +125,8 @@ namespace TheOtherRoles
         SetBlanked,
         Bloody,
         SetFirstKill,
-        Invert
+        Invert,
+        SetTiebreak
     }
 
     public static class RPCProcedure {
@@ -893,6 +894,11 @@ namespace TheOtherRoles
             if (target == null) return;
             MapOptions.firstKillPlayer = target;
         }
+
+        public static void setTiebreak()
+        {
+            Tiebreaker.isTiebreak = true;
+        }
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -1099,6 +1105,9 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetFirstKill:
                     byte firstKill = reader.ReadByte();
                     RPCProcedure.setFirstKill(firstKill);
+                    break;
+                case (byte)CustomRPC.SetTiebreak:
+                    RPCProcedure.setTiebreak();
                     break;
             }
         }
