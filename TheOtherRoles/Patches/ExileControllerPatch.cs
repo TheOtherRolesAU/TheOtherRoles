@@ -14,8 +14,12 @@ using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
+    [HarmonyPriority(Priority.First)]
     class ExileControllerBeginPatch {
+        public static GameData.PlayerInfo lastExiled;
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
+            lastExiled = exiled;
+
             // Medic shield
             if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null && !Medic.medic.Data.IsDead) { // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
@@ -110,6 +114,15 @@ namespace TheOtherRoles.Patches {
             public static void Postfix(AirshipExileController __instance) {
                 WrapUpPostfix(__instance.exiled);
             }
+        }
+
+        // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
+        [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
+        public static void Prefix(GameObject obj) {
+            if (!ShipStatus.Instance || !(ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE)) return;
+            if (obj.name.Contains("ExileCutscene")) { 
+                WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
+            }            
         }
 
         static void WrapUpPostfix(GameData.PlayerInfo exiled) {
