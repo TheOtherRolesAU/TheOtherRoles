@@ -89,6 +89,7 @@ namespace TheOtherRoles.Patches {
                     if (Tiebreaker.tiebreaker != null)
                         tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
                     bool isTiebreakerSkip = tb == null || tb.VotedFor == 0;
+                    if (tb.AmDead) isTiebreakerSkip = true;
 
                     foreach (KeyValuePair<byte, int> pair in self) 
                         if (pair.Value == maxVoteValue && !isTiebreakerSkip) 
