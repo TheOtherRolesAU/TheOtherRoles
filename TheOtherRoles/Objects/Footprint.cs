@@ -30,7 +30,7 @@ namespace TheOtherRoles.Objects {
 
             footprint = new GameObject("Footprint") { layer = 11 };
             footprint.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
+            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.y / 1000 + 0.001f);
             footprint.transform.position = position;
             footprint.transform.localPosition = position;
             footprint.transform.SetParent(player.transform.parent);
