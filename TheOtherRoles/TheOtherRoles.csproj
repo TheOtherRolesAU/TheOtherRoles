@@ -20,6 +20,13 @@
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.553" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" />
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Blood1.png" />
+      <None Remove="Resources\Blood2.png" />
+      <None Remove="Resources\Blood3.png" />
+    </ItemGroup>
+
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
         <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />

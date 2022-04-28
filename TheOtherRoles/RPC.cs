@@ -125,7 +125,8 @@ namespace TheOtherRoles
         SetBlanked,
         Bloody,
         SetFirstKill,
-        Invert
+        Invert,
+        SetTiebreak
     }
 
     public static class RPCProcedure {
@@ -137,6 +138,7 @@ namespace TheOtherRoles
             JackInTheBox.clearJackInTheBoxes();
             NinjaTrace.clearTraces();
             Portal.clearPortals();
+            Bloodytrail.resetSprites();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -884,13 +886,18 @@ namespace TheOtherRoles
         public static void bloody(byte killerPlayerId, byte bloodyPlayerId) {
             if (Bloody.active.ContainsKey(killerPlayerId)) return;
             Bloody.active.Add(killerPlayerId, Bloody.duration);
-            Bloody.bloodyKillerMap.Add(bloodyPlayerId, killerPlayerId);
+            Bloody.bloodyKillerMap.Add(killerPlayerId, bloodyPlayerId);
         }
 
         public static void setFirstKill(byte playerId) {
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             MapOptions.firstKillPlayer = target;
+        }
+
+        public static void setTiebreak()
+        {
+            Tiebreaker.isTiebreak = true;
         }
     }   
 
@@ -1098,6 +1105,9 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetFirstKill:
                     byte firstKill = reader.ReadByte();
                     RPCProcedure.setFirstKill(firstKill);
+                    break;
+                case (byte)CustomRPC.SetTiebreak:
+                    RPCProcedure.setTiebreak();
                     break;
             }
         }

@@ -80,7 +80,7 @@ namespace TheOtherRoles.Patches {
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
                     // TieBreaker 
-                    Tiebreaker.isTiebreaker = false;
+                    Tiebreaker.isTiebreak = false;
                     int maxVoteValue = self.Values.Max();
                     List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
 
@@ -89,6 +89,7 @@ namespace TheOtherRoles.Patches {
                     if (Tiebreaker.tiebreaker != null)
                         tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
                     bool isTiebreakerSkip = tb == null || tb.VotedFor == 0;
+                    if (tb.AmDead) isTiebreakerSkip = true;
 
                     foreach (KeyValuePair<byte, int> pair in self) 
                         if (pair.Value == maxVoteValue && !isTiebreakerSkip) 
@@ -106,7 +107,10 @@ namespace TheOtherRoles.Patches {
                         if (Tiebreaker.tiebreaker != null && tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
                             exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == playerVoteArea.VotedFor);
                             tie = false;
-                            Tiebreaker.isTiebreaker = true;
+
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetTiebreak, Hazel.SendOption.Reliable, -1);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.setTiebreak();
                         }
                     }
 
