@@ -87,6 +87,7 @@ namespace TheOtherRoles
         // Role functionality
 
         EngineerFixLights = 91,
+        EngineerFixSubmergedOxygen,
         EngineerUsedRepair,
         CleanBody,
         MedicSetShielded,
@@ -385,6 +386,10 @@ namespace TheOtherRoles
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+        }
+
+        public static void engineerFixSubmergedOxygen() {
+            SubmergedCompatibility.RepairOxygen();
         }
 
         public static void engineerUsedRepair() {
@@ -978,6 +983,9 @@ namespace TheOtherRoles
 
                 case (byte)CustomRPC.EngineerFixLights:
                     RPCProcedure.engineerFixLights();
+                    break;
+                case (byte)CustomRPC.EngineerFixSubmergedOxygen:
+                    RPCProcedure.engineerFixSubmergedOxygen();
                     break;
                 case (byte)CustomRPC.EngineerUsedRepair:
                     RPCProcedure.engineerUsedRepair();

@@ -77,7 +77,18 @@ namespace TheOtherRoles
         private static MethodInfo RpcRequestChangeFloorMethod;
         private static Type FloorHandlerType;
         private static MethodInfo GetFloorHandlerMethod;
-        
+
+        private static Type Vent_MoveToVent_PatchType;
+        private static FieldInfo InTransitionField;
+
+        private static Type CustomTaskTypesType;
+        private static FieldInfo RetrieveOxigenMaskField;
+        public static TaskTypes RetrieveOxygenMask;
+        private static Type SubmarineOxygenSystemType;
+        private static FieldInfo SubmarineOxygenSystemInstanceField;
+        private static MethodInfo RepairDamageMethod;
+
+
         public static void Initialize()
         {
             Loaded = IL2CPPChainloader.Instance.Plugins.TryGetValue(SUBMERGED_GUID, out PluginInfo plugin);
@@ -100,8 +111,18 @@ namespace TheOtherRoles
 
             FloorHandlerType = Types.First(t => t.Name == "FloorHandler");
             GetFloorHandlerMethod = AccessTools.Method(FloorHandlerType, "GetFloorHandler", new Type[] {typeof(PlayerControl)});
-            RpcRequestChangeFloorMethod = AccessTools.Method(FloorHandlerType, "RpcRequestChangeFloor");           
+            RpcRequestChangeFloorMethod = AccessTools.Method(FloorHandlerType, "RpcRequestChangeFloor");
 
+            Vent_MoveToVent_PatchType = Types.First(t => t.Name == "Vent_MoveToVent_Patch");
+            InTransitionField = AccessTools.Field(Vent_MoveToVent_PatchType, "InTransition");
+
+            CustomTaskTypesType = Types.First(t => t.Name == "CustomTaskTypes");
+            RetrieveOxigenMaskField = AccessTools.Field(CustomTaskTypesType, "RetrieveOxygenMask");
+            RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskField.GetValue(null);
+
+            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem");
+            SubmarineOxygenSystemInstanceField = AccessTools.Field(SubmarineOxygenSystemType, "Instance");
+            RepairDamageMethod = AccessTools.Method(SubmarineOxygenSystemType, "RepairDamage");
         }
 
         public static MonoBehaviour AddSubmergedComponent(this GameObject obj, string typeName)
@@ -121,6 +142,23 @@ namespace TheOtherRoles
             if (!Loaded) return;
             MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { PlayerControl.LocalPlayer })).TryCast(FloorHandlerType) as MonoBehaviour;
             RpcRequestChangeFloorMethod.Invoke(_floorHandler, new object[] { toUpper });
+        }
+
+        public static bool getInTransition() {
+            if (!Loaded) return false;
+            return (bool)InTransitionField.GetValue(null);
+        }
+
+        public static void RepairOxygen() {
+            if (!Loaded) return;
+            try {
+                ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.GetValue(null), new object[] { PlayerControl.LocalPlayer, 64 });
+            }
+            catch (System.NullReferenceException e) {
+                TheOtherRoles.Logger.LogMessage("null reference in engineer oxygen fix");
+            }
+
         }
     }
 
