@@ -1074,9 +1074,16 @@ namespace TheOtherRoles
         }
 
         private static Sprite animatedVentSealedSprite;
+        private static float lastPPU;
         public static Sprite getAnimatedVentSealedSprite() {
+            float ppu = 185f;
+            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) ppu = 120f;
+            if (lastPPU != ppu) {
+                animatedVentSealedSprite = null;
+                lastPPU = ppu;
+            }
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 185f);
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
             return animatedVentSealedSprite;
         }
 
