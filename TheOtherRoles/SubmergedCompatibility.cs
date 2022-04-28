@@ -156,7 +156,7 @@ namespace TheOtherRoles
                 RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.GetValue(null), new object[] { PlayerControl.LocalPlayer, 64 });
             }
             catch (System.NullReferenceException e) {
-                TheOtherRoles.Logger.LogMessage("null reference in engineer oxygen fix");
+                TheOtherRolesPlugin.Logger.LogMessage("null reference in engineer oxygen fix");
             }
 
         }
