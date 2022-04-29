@@ -74,13 +74,13 @@ namespace TheOtherRoles.Patches {
                 if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
-            }
-            else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
+            } else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Deputy.deputy, Deputy.color);
                 if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 }
-            }
+            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer)
+                setPlayerNameColor(Portalmaker.portalmaker, Portalmaker.color);
             else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
             else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
@@ -121,8 +121,6 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Guesser.niceGuesser, Guesser.color);
             } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Guesser.evilGuesser, Palette.ImpostorRed);
-            } else if (Bait.bait != null && Bait.bait == PlayerControl.LocalPlayer) {
-                setPlayerNameColor(Bait.bait, Bait.color);
             } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
@@ -145,6 +143,12 @@ namespace TheOtherRoles.Patches {
             // No else if here, as the Impostors need the Spy name to be colored
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
+            }
+            if (Sidekick.sidekick != null && Sidekick.wasTeamRed && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+                setPlayerNameColor(Sidekick.sidekick, Spy.color);
+            }
+            if (Jackal.jackal != null && Jackal.wasTeamRed && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+                setPlayerNameColor(Jackal.jackal, Spy.color);
             }
 
             // Crewmate roles with no changes: Mini
@@ -184,9 +188,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Lawyer
-            bool localIsLawyer = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer;
-            bool localIsKnowingTarget = Lawyer.lawyer != null && Lawyer.target != null && Lawyer.targetKnows && Lawyer.target == PlayerControl.LocalPlayer;
-            if (localIsLawyer || (localIsKnowingTarget && !Lawyer.lawyer.Data.IsDead)) {
+            if (Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == PlayerControl.LocalPlayer) {
                 string suffix = Helpers.cs(Lawyer.color, " §");
                 Lawyer.target.nameText.text += suffix;
 
@@ -223,7 +225,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void miniUpdate() {
-            if (Mini.mini == null || Camouflager.camouflageTimer > 0f) return;
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f) return;
                 
             float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;

@@ -4,6 +4,7 @@ using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Hazel;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
@@ -52,7 +53,18 @@ namespace TheOtherRoles.Patches {
                 }
             } 
 
+            // First kill
+            if (AmongUsClient.Instance.AmHost && MapOptions.shieldFirstKill && MapOptions.firstKillName != "") {
+                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(MapOptions.firstKillName));
+                if (target != null) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFirstKill, Hazel.SendOption.Reliable, -1);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.setFirstKill(target.PlayerId);
+                }
             }
+            MapOptions.firstKillName = "";
+        }
     }
 
     [HarmonyPatch]
@@ -80,7 +92,7 @@ namespace TheOtherRoles.Patches {
 
         public static void setupIntroTeam(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
-            RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
+            RoleInfo roleInfo = infos.Where(info => !info.isModifier).FirstOrDefault();
             if (roleInfo == null) return;
             if (roleInfo.isNeutral) {
                 var neutralColor = new Color32(76, 84, 78, 255);
@@ -92,7 +104,6 @@ namespace TheOtherRoles.Patches {
 
         public static IEnumerator<WaitForSeconds> EndShowRole(IntroCutscene __instance) {
             yield return new WaitForSeconds(5f);
-
             __instance.YouAreText.gameObject.SetActive(false);
             __instance.RoleText.gameObject.SetActive(false);
             __instance.RoleBlurbText.gameObject.SetActive(false);
@@ -105,16 +116,22 @@ namespace TheOtherRoles.Patches {
             static public void SetRoleTexts(IntroCutscene __instance) {
                 // Don't override the intro of the vanilla roles
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(PlayerControl.LocalPlayer);
-                RoleInfo roleInfo = infos.Where(info => info.roleId != RoleId.Lover).FirstOrDefault();
+                RoleInfo roleInfo = infos.Where(info => !info.isModifier).FirstOrDefault();
+                RoleInfo modifierInfo = infos.Where(info => info.isModifier).FirstOrDefault();
+                __instance.RoleBlurbText.text = "";
                 if (roleInfo != null) {
                     __instance.RoleText.text = roleInfo.name;
                     __instance.RoleText.color = roleInfo.color;
                     __instance.RoleBlurbText.text = roleInfo.introDescription;
                     __instance.RoleBlurbText.color = roleInfo.color;
                 }
-                if (infos.Any(info => info.roleId == RoleId.Lover)) {
-                    PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                    __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                if (modifierInfo != null) {
+                    if (modifierInfo.roleId != RoleId.Lover)
+                        __instance.RoleBlurbText.text += Helpers.cs(modifierInfo.color, $"\n{modifierInfo.introDescription}");
+                    else {
+                        PlayerControl otherLover = PlayerControl.LocalPlayer == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
+                        __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
+                    }
                 }
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
                     if (infos.Any(info => info.roleId == RoleId.Sheriff))

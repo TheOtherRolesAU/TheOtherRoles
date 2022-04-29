@@ -128,8 +128,7 @@ namespace TheOtherRoles.Modules {
 
         private static HatData CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
             if (hatShader == null) {
-                Material tmpShader = new Material("PlayerMaterial");
-                tmpShader.shader = Shader.Find("Unlit/PlayerShader");
+                Material tmpShader = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
                 hatShader = tmpShader;
             }
 
