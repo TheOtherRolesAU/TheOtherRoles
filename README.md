@@ -104,7 +104,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 **Version 4.0.0**
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
-- Added option Shield Last Round First Kill (till the first meeting)
+- Added option Shield Last Round First Kill (until the first meeting)
 - Added option that medic shield will be set instantly, but shows up after meeting
 - Added additions to Swapper (charges mechanic, confirm swap button, UI & color changes in meeting)
 - Added option Mayor can always see the vote color (after finishing x-amount of tasks)
