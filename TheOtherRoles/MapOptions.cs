@@ -12,18 +12,22 @@ namespace TheOtherRoles{
         public static bool noVoteIsSelfVote = false;
         public static bool hidePlayerNames = false;
         public static bool ghostsSeeRoles = true;
+        public static bool ghostsSeeModifier = true;
         public static bool ghostsSeeTasks = true;
         public static bool ghostsSeeVotes = true;
         public static bool showRoleSummary = true;
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
         public static bool enableHorseMode = false;
+        public static bool shieldFirstKill = false;
 
         // Updating values
         public static int meetingsCount = 0;
         public static List<SurvCamera> camerasToAdd = new List<SurvCamera>();
         public static List<Vent> ventsToSeal = new List<Vent>();
         public static Dictionary<byte, PoolablePlayer> playerIcons = new Dictionary<byte, PoolablePlayer>();
+        public static string firstKillName;
+        public static PlayerControl firstKillPlayer;
 
         public static void clearAndReloadMapOptions() {
             meetingsCount = 0;
@@ -36,10 +40,13 @@ namespace TheOtherRoles{
             noVoteIsSelfVote = CustomOptionHolder.noVoteIsSelfVote.getBool();
             hidePlayerNames = CustomOptionHolder.hidePlayerNames.getBool();
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
+            shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
+            firstKillPlayer = null;
         }
 
         public static void reloadPluginOptions() {
             ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value;
+            ghostsSeeModifier = TheOtherRolesPlugin.GhostsSeeModifier.Value;
             ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;

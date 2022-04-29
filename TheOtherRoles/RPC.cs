@@ -16,6 +16,7 @@ namespace TheOtherRoles
     enum RoleId {
         Jester,
         Mayor,
+        Portalmaker,
         Engineer,
         Sheriff,
         Deputy,
@@ -28,12 +29,10 @@ namespace TheOtherRoles
         Medic,
         Shifter,
         Swapper,
-        Lover,
         Seer,
         Morphling,
         Camouflager,
         Hacker,
-        Mini,
         Tracker,
         Vampire,
         Snitch,
@@ -49,14 +48,24 @@ namespace TheOtherRoles
         EvilGuesser,
         NiceGuesser,
         BountyHunter,
-        Bait,
         Vulture,
         Medium,
         Lawyer,
         Pursuer,
         Witch,
+        Ninja,
         Crewmate,
-        Impostor
+        Impostor,
+        // Modifier ---
+        Lover,
+        Bait,
+        Bloody,
+        AntiTeleport,
+        Tiebreaker,
+        Sunglasses,
+        Mini,
+        Vip,
+        Invert
     }
 
     enum CustomRPC
@@ -67,6 +76,7 @@ namespace TheOtherRoles
         ShareOptions,
         ForceEnd,
         SetRole,
+        SetModifier,
         VersionHandshake,
         UseUncheckedVent,
         UncheckedMurderPlayer,
@@ -99,6 +109,9 @@ namespace TheOtherRoles
         SetFutureShifted,
         SetFutureShielded,
         SetFutureSpelled,
+        PlaceNinjaTrace,
+        PlacePortal,
+        UsePortal,
         PlaceJackInTheBox,
         LightsOut,
         PlaceCamera,
@@ -110,6 +123,10 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        Bloody,
+        SetFirstKill,
+        Invert,
+        SetTiebreak
     }
 
     public static class RPCProcedure {
@@ -119,6 +136,9 @@ namespace TheOtherRoles
         public static void resetVariables() {
             Garlic.clearGarlics();
             JackInTheBox.clearJackInTheBoxes();
+            NinjaTrace.clearTraces();
+            Portal.clearPortals();
+            Bloodytrail.resetSprites();
             clearAndReloadMapOptions();
             clearAndReloadRoles();
             clearGameHistory();
@@ -150,7 +170,7 @@ namespace TheOtherRoles
             }
         }
 
-        public static void setRole(byte roleId, byte playerId, byte flag) {
+        public static void setRole(byte roleId, byte playerId) {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
@@ -160,7 +180,10 @@ namespace TheOtherRoles
                     case RoleId.Mayor:
                         Mayor.mayor = player;
                         break;
-                    case RoleId.Engineer:
+                    case RoleId.Portalmaker:
+                        Portalmaker.portalmaker = player;
+                        break;
+                        case RoleId.Engineer:
                         Engineer.engineer = player;
                         break;
                     case RoleId.Sheriff:
@@ -196,10 +219,6 @@ namespace TheOtherRoles
                     case RoleId.Swapper:
                         Swapper.swapper = player;
                         break;
-                    case RoleId.Lover:
-                        if (flag == 0) Lovers.lover1 = player;
-                        else Lovers.lover2 = player;
-                        break;
                     case RoleId.Seer:
                         Seer.seer = player;
                         break;
@@ -211,9 +230,6 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Hacker:
                         Hacker.hacker = player;
-                        break;
-                    case RoleId.Mini:
-                        Mini.mini = player;
                         break;
                     case RoleId.Tracker:
                         Tracker.tracker = player;
@@ -260,9 +276,6 @@ namespace TheOtherRoles
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
-                    case RoleId.Bait:
-                        Bait.bait = player;
-                        break;
                     case RoleId.Vulture:
                         Vulture.vulture = player;
                         break;
@@ -278,8 +291,45 @@ namespace TheOtherRoles
                     case RoleId.Witch:
                         Witch.witch = player;
                         break;
+                    case RoleId.Ninja:
+                        Ninja.ninja = player;
+                        break;
                     }
                 }
+        }
+
+        public static void setModifier(byte modifierId, byte playerId, byte flag) {
+            PlayerControl player = Helpers.playerById(playerId); 
+            switch ((RoleId)modifierId) {
+                case RoleId.Bait:
+                    Bait.bait.Add(player);
+                    break;
+                case RoleId.Lover:
+                    if (flag == 0) Lovers.lover1 = player;
+                    else Lovers.lover2 = player;
+                    break;
+                case RoleId.Bloody:
+                    Bloody.bloody.Add(player);
+                    break;
+                case RoleId.AntiTeleport:
+                    AntiTeleport.antiTeleport.Add(player);
+                    break;
+                case RoleId.Tiebreaker:
+                    Tiebreaker.tiebreaker = player;
+                    break;
+                case RoleId.Sunglasses:
+                    Sunglasses.sunglasses.Add(player);
+                    break;
+                case RoleId.Mini:
+                    Mini.mini = player;
+                    break;
+                case RoleId.Vip:
+                    Vip.vip.Add(player);
+                    break;
+                case RoleId.Invert:
+                    Invert.invert.Add(player);
+                    break;
+            }
         }
 
         public static void versionHandshake(int major, int minor, int build, int revision, Guid guid, int clientId) {
@@ -390,6 +440,7 @@ namespace TheOtherRoles
             if (Medic.shielded == null || Medic.medic == null) return;
             
             bool isShieldedAndShow = Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded;
+            isShieldedAndShow = isShieldedAndShow && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting);  // Dont show attempt, if shield is not shown yet
             bool isMedicAndShow = Medic.medic == PlayerControl.LocalPlayer && Medic.showAttemptToMedic;
 
             if (isShieldedAndShow || isMedicAndShow) Helpers.showFlash(Palette.ImpostorRed, duration: 0.5f);
@@ -422,11 +473,15 @@ namespace TheOtherRoles
 
                 if (Lovers.lover2 != null && oldShifter == Lovers.lover2) Lovers.lover2 = player;
                 else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
+
+                // TODO other Modifiers?
             }
 
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
                 Mayor.mayor = oldShifter;
+            if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == player)
+                Portalmaker.portalmaker = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
             if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
@@ -449,8 +504,6 @@ namespace TheOtherRoles
                 Seer.seer = oldShifter;
             if (Hacker.hacker != null && Hacker.hacker == player)
                 Hacker.hacker = oldShifter;
-            if (Mini.mini != null && Mini.mini == player)
-                Mini.mini = oldShifter;
             if (Tracker.tracker != null && Tracker.tracker == player)
                 Tracker.tracker = oldShifter;
             if (Snitch.snitch != null && Snitch.snitch == player)
@@ -461,10 +514,6 @@ namespace TheOtherRoles
                 SecurityGuard.securityGuard = oldShifter;
             if (Guesser.niceGuesser != null && Guesser.niceGuesser == player)
                 Guesser.niceGuesser = oldShifter;
-            if (Bait.bait != null && Bait.bait == player) {
-                Bait.bait = oldShifter;
-                if (Bait.bait.Data.IsDead) Bait.reported = true;
-            }
                 
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
@@ -550,10 +599,15 @@ namespace TheOtherRoles
             if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
                 Jackal.fakeSidekick = player;
             } else {
+                bool wasSpy = Spy.spy != null && player == Spy.spy;
+                bool wasImpostor = player.Data.Role.IsImpostor;  // This can only be reached if impostors can be sidekicked.
                 DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true; 
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
+                if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
+                Sidekick.wasSpy = wasSpy;
+                Sidekick.wasImpostor = wasImpostor;
             }
             Jackal.canCreateSidekick = false;
         }
@@ -562,16 +616,20 @@ namespace TheOtherRoles
             Jackal.removeCurrentJackal();
             Jackal.jackal = Sidekick.sidekick;
             Jackal.canCreateSidekick = Jackal.jackalPromotedFromSidekickCanCreateSidekick;
+            Jackal.wasTeamRed = Sidekick.wasTeamRed;
+            Jackal.wasSpy = Sidekick.wasSpy;
+            Jackal.wasImpostor = Sidekick.wasImpostor;
             Sidekick.clearAndReload();
             return;
         }
         
-        public static void erasePlayerRoles(byte playerId, bool ignoreLovers = false) {
+        public static void erasePlayerRoles(byte playerId, bool ignoreModifier = false) {
             PlayerControl player = Helpers.playerById(playerId);
             if (player == null) return;
 
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();
+            if (player == Portalmaker.portalmaker) Portalmaker.clearAndReload();
             if (player == Engineer.engineer) Engineer.clearAndReload();
             if (player == Sheriff.sheriff) Sheriff.clearAndReload();
             if (player == Deputy.deputy) Deputy.clearAndReload();
@@ -582,13 +640,11 @@ namespace TheOtherRoles
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
             if (player == Hacker.hacker) Hacker.clearAndReload();
-            if (player == Mini.mini) Mini.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
             if (player == Spy.spy) Spy.clearAndReload();
             if (player == SecurityGuard.securityGuard) SecurityGuard.clearAndReload();
-            if (player == Bait.bait) Bait.clearAndReload();
             if (player == Medium.medium) Medium.clearAndReload();
 
             // Impostor roles
@@ -603,14 +659,12 @@ namespace TheOtherRoles
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
+            if (player == Ninja.ninja) Ninja.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
-            if (!ignoreLovers && (player == Lovers.lover1 || player == Lovers.lover2)) { // The whole Lover couple is being erased
-                Lovers.clearAndReload(); 
-            }
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
                 if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead) {
                     RPCProcedure.sidekickPromotes();
@@ -623,6 +677,20 @@ namespace TheOtherRoles
             if (player == Vulture.vulture) Vulture.clearAndReload();
             if (player == Lawyer.lawyer) Lawyer.clearAndReload();
             if (player == Pursuer.pursuer) Pursuer.clearAndReload();
+
+            // Modifier
+            if (!ignoreModifier)
+            {
+                if (player == Lovers.lover1 || player == Lovers.lover2) Lovers.clearAndReload(); // The whole Lover couple is being erased
+                if (Bait.bait.Any(x => x.PlayerId == player.PlayerId)) Bait.bait.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (Bloody.bloody.Any(x => x.PlayerId == player.PlayerId)) Bloody.bloody.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == player.PlayerId)) AntiTeleport.antiTeleport.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
+                if (player == Mini.mini) Mini.clearAndReload();
+                if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
+            }
         }
 
         public static void setFutureErased(byte playerId) {
@@ -652,6 +720,23 @@ namespace TheOtherRoles
             }
         }
 
+        public static void placeNinjaTrace(byte[] buff) {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
+            new NinjaTrace(position, Ninja.traceTime);
+        }
+
+        public static void placePortal(byte[] buff) {
+            Vector3 position = Vector2.zero;
+            position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
+            new Portal(position);
+        }
+
+        public static void usePortal(byte playerId) {
+            Portal.startTeleport(playerId);
+        }
 
         public static void placeJackInTheBox(byte[] buff) {
             Vector3 position = Vector3.zero;
@@ -794,6 +879,23 @@ namespace TheOtherRoles
             Pursuer.blankedList.RemoveAll(x => x.PlayerId == playerId);
             if (value > 0) Pursuer.blankedList.Add(target);            
         }
+
+        public static void bloody(byte killerPlayerId, byte bloodyPlayerId) {
+            if (Bloody.active.ContainsKey(killerPlayerId)) return;
+            Bloody.active.Add(killerPlayerId, Bloody.duration);
+            Bloody.bloodyKillerMap.Add(killerPlayerId, bloodyPlayerId);
+        }
+
+        public static void setFirstKill(byte playerId) {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            MapOptions.firstKillPlayer = target;
+        }
+
+        public static void setTiebreak()
+        {
+            Tiebreaker.isTiebreak = true;
+        }
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -814,12 +916,17 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();
-                    break;
+                    break; 
                 case (byte)CustomRPC.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
+                    RPCProcedure.setRole(roleId, playerId);
+                    break;
+                case (byte)CustomRPC.SetModifier:
+                    byte modifierId = reader.ReadByte();
+                    byte pId = reader.ReadByte();
                     byte flag = reader.ReadByte();
-                    RPCProcedure.setRole(roleId, playerId, flag);
+                    RPCProcedure.setModifier(modifierId, pId, flag);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
                     byte major = reader.ReadByte();
@@ -936,6 +1043,15 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetFutureShielded:
                     RPCProcedure.setFutureShielded(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.PlaceNinjaTrace:
+                    RPCProcedure.placeNinjaTrace(reader.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.PlacePortal:
+                    RPCProcedure.placePortal(reader.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.UsePortal:
+                    RPCProcedure.usePortal(reader.ReadByte());
+                    break;
                 case (byte)CustomRPC.PlaceJackInTheBox:
                     RPCProcedure.placeJackInTheBox(reader.ReadBytesAndSize());
                     break;
@@ -977,6 +1093,18 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.Bloody:
+                    byte bloodyKiller = reader.ReadByte();
+                    byte bloodyDead = reader.ReadByte();
+                    RPCProcedure.bloody(bloodyKiller, bloodyDead);
+                    break;
+                case (byte)CustomRPC.SetFirstKill:
+                    byte firstKill = reader.ReadByte();
+                    RPCProcedure.setFirstKill(firstKill);
+                    break;
+                case (byte)CustomRPC.SetTiebreak:
+                    RPCProcedure.setTiebreak();
                     break;
             }
         }

@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>3.4.5</Version>
+        <Version>4.0.0</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
+		<LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -15,11 +16,18 @@
         <EmbeddedResource Include="Resources\CustomHats\*.png" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
+		<EmbeddedResource Include="Resources\PortalAnimation\*.png" />
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="$(AmongUs)/BepInEx/core/*.dll" />
         <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Blood1.png" />
+      <None Remove="Resources\Blood2.png" />
+      <None Remove="Resources\Blood3.png" />
     </ItemGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
