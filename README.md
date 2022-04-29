@@ -40,6 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.3.29| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
 | 2022.3.29s| v3.4.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.5/TheOtherRoles.zip)
 | 2022.2.23s| v3.4.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.3/TheOtherRoles.zip)
@@ -101,15 +102,14 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 4.0.0**
-- Added compatibility to new map Submerged
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
-- Added option Shield Last Round First Kill (till the first meeting)
+- Added option Shield Last Round First Kill (until the first meeting)
 - Added option that medic shield will be set instantly, but shows up after meeting
 - Added additions to Swapper (charges mechanic, confirm swap button, UI & color changes in meeting)
 - Added option Mayor can always see the vote color (after finishing x-amount of tasks)
 - Added possibility to enter a name
-- Added map in meeting with last position
+- Added map in meeting with last position and list of tasks
 - Added Bait, Mini, Lover, Bloody, Sunglasses, Anti Teleport, Tiebreaker & Invert modifier
 - Changed lobby/settings ui
 - Changed that a sidekicked Spy/Impostor is still shown red to Impostor
@@ -1079,7 +1079,7 @@ If their client dies, the Lawyer changes their role and becomes the [Pursuer](#p
 How the Lawyer wins:
 - Lawyer dead/alive, client alive and client wins: The Lawyer wins together with the team of the client.
 - If their client is Jester and the Jester gets voted out, the Lawyer wins together with the Jester.
-\
+
 **NOTE:**
 - If the client disconnects, the Lawyer will also turn into the Pursuer
 - The Lawyer needs to figure out the role of their client depending on the options
@@ -1228,7 +1228,6 @@ The Detective's other feature shows when they report a corpse: they receive clue
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
-- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -1465,7 +1464,6 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 ### **Team: Crewmates**
 
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.\
-During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 Questions:
 What is your Role?
@@ -1565,9 +1563,12 @@ In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are
 
 ## Sunglasses
 
-Sunglasses is only a Modifier for Crewmates.\
 The Sunglasses will lower the Crewmate's vision by small percentage. The percentage is configurable in the options.\
 The vision will also be affected when lights out.
+
+**NOTE:**
+- Sunglasses only affects Crewmates.
+- If you have the Sunglasses modifier and get sidekicked, you lose the modifier.
 
 ### Game Options
 | Name | Description
