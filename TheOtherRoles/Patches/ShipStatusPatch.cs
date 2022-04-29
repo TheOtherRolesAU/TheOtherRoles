@@ -23,7 +23,8 @@ namespace TheOtherRoles.Patches {
                 || (Spy.spy != null && Spy.spy.PlayerId == player.PlayerId && Spy.hasImpostorVision)
                 || (Jester.jester != null && Jester.jester.PlayerId == player.PlayerId && Jester.hasImpostorVision))
             {
-                __result = __instance.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
+                //__result = __instance.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
+                __result = GetNeutralLightRadius(__instance, true);
                 return false;
             }
             
