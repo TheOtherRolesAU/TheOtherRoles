@@ -227,6 +227,9 @@ namespace TheOtherRoles.Patches {
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
+                if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                    SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
+                }
             }
 
             // Invert add meeting

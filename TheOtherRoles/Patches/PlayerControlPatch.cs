@@ -108,6 +108,9 @@ namespace TheOtherRoles.Patches {
                     else if (localPlayerPositions.Any(x => x.Item2 == true)) {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     }
+                    if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                        SubmergedCompatibility.ChangeFloor(next.Item1.y > -7);
+                    }
 
                     localPlayerPositions.RemoveAt(0);
 

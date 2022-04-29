@@ -27,7 +27,8 @@ namespace TheOtherRoles.Objects {
 
 
             blood = new GameObject("Blood" + index);
-            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z + 1f);
+            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.y / 1000 + +0.001f);
+            blood.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             blood.transform.position = position;
             blood.transform.localPosition = position;
             blood.transform.SetParent(player.transform.parent);
