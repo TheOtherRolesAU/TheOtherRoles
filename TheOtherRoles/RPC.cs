@@ -475,9 +475,6 @@ namespace TheOtherRoles
                 else if (Lovers.lover2 != null && player == Lovers.lover2) Lovers.lover2 = oldShifter;
 
                 // TODO other Modifiers?
-                // TODO MINI shiftable??
-                if (Mini.mini != null && Mini.mini == player)
-                    Mini.mini = oldShifter;
             }
 
             // Shift role
