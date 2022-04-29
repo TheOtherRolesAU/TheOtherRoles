@@ -148,9 +148,11 @@ namespace TheOtherRoles.Patches {
             if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
                 foreach (Vector3 pos in Seer.deadBodyPositions) {
                     GameObject soul = new GameObject();
-                    soul.transform.position = pos;
+                    //soul.transform.position = pos;
+                    soul.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000 - 1f);
                     soul.layer = 5;
                     var rend = soul.AddComponent<SpriteRenderer>();
+                    soul.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
                     rend.sprite = Seer.getSoulSprite();
                     
                     if(Seer.limitSoulDuration) {
@@ -206,9 +208,11 @@ namespace TheOtherRoles.Patches {
                 if (Medium.featureDeadBodies != null) {
                     foreach ((DeadPlayer db, Vector3 ps) in Medium.featureDeadBodies) {
                         GameObject s = new GameObject();
-                        s.transform.position = ps;
+                        //s.transform.position = ps;
+                        s.transform.position = new Vector3(ps.x, ps.y, ps.y / 1000 - 1f);
                         s.layer = 5;
                         var rend = s.AddComponent<SpriteRenderer>();
+                        s.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
                         rend.sprite = Medium.getSoulSprite();
                         Medium.souls.Add(rend);
                     }
