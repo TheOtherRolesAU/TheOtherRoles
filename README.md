@@ -1489,8 +1489,7 @@ A modifier is an addition to your Impostor/Neutral/Crewmate role.
 ### Bloody
 
 If killed, the Bloody Modifier will leave a trail for x-seconds on their killer. The trail will have the color of the killed person. Impostor,
-Neutral or Crewmate roles can have this Modifier.\
-If the killer is a Morphling, then the bloodtrail will change the color after the kill, if the Morphling morphs into a different person than the killed person.
+Neutral or Crewmate roles can have this Modifier.
 
 ### Game Options
 | Name | Description |

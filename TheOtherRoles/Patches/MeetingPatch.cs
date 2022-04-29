@@ -88,11 +88,11 @@ namespace TheOtherRoles.Patches {
                     PlayerVoteArea tb = null;
                     if (Tiebreaker.tiebreaker != null)
                         tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
-                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 0;
+                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
                     if (tb != null && tb.AmDead) isTiebreakerSkip = true;
 
-                    foreach (KeyValuePair<byte, int> pair in self) 
-                        if (pair.Value == maxVoteValue && !isTiebreakerSkip) 
+                    foreach (KeyValuePair<byte, int> pair in self)
+                        if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
                             potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
@@ -104,7 +104,7 @@ namespace TheOtherRoles.Patches {
                             VotedForId = playerVoteArea.VotedFor
                         };
 
-                        if (Tiebreaker.tiebreaker != null && tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
+                        if (Tiebreaker.tiebreaker != null && tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x != null && x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
                             exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == playerVoteArea.VotedFor);
                             tie = false;
 
@@ -494,37 +494,6 @@ namespace TheOtherRoles.Patches {
                     int copiedIndex = i;
                     button.OnClick.AddListener((System.Action)(() => guesserOnClick(copiedIndex, __instance)));
                 }
-            }
-
-            // Make map-button clickable and let it open the map in the meeting
-            var mapButton = GameObject.Find("MapButton");
-            var passiveMapButton = mapButton.GetComponent<ButtonBehavior>();
-            if (passiveMapButton != null) passiveMapButton.OnClick.Invoke();  // This Creates the "ShipMap(Clone)" object, without opening it
-
-            var hud = GameObject.Find("Hud");
-            List<string> mapNames = new List<string> { "ShipMap(Clone)", "PbMap(Clone)", "HqMap(Clone)", "AirshipMap(Clone)" };
-            var map = hud.GetComponentsInChildren<Transform>(true).FirstOrDefault(x => mapNames.Any(y => x.name == y));  // find the inactive map object
-            var closeButton = map.transform.FindChild("CloseButton");
-            var passiveCloseButton = closeButton.GetComponent<ButtonBehavior>();
-
-            bool mapOpen = false;
-            passiveCloseButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                mapOpen = false;
-            }));
-
-            // Set map background color to correct value
-            var backgroundAlphaPulse = hud.GetComponentInChildren<AlphaPulse>(true);
-            if (backgroundAlphaPulse != null) backgroundAlphaPulse.SetColor(PlayerControl.LocalPlayer.Data.Role.IsImpostor ? Palette.ImpostorRed : new Color(0.05f, 0.2f, 1f, 1f));
-
-            if (mapButton != null && passiveMapButton != null) {
-                passiveMapButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    if (map != null && !mapOpen && MeetingHud.Instance) {
-                        map.gameObject.SetActive(true);
-                        mapOpen = true;
-                    } else {
-                        mapOpen = false;
-                    }
-                }));
             }
         }
 
