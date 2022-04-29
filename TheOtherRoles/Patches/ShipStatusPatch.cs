@@ -30,7 +30,7 @@ namespace TheOtherRoles.Patches {
             // If player is Lighter with ability active
             if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId && Lighter.lighterTimer > 0f)
             {
-                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance));
+                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, unlerped);
                 return false;
             }
@@ -55,13 +55,13 @@ namespace TheOtherRoles.Patches {
             // If player is Lawyer, apply Lawyer vision modifier
             if (Lawyer.lawyer != null && Lawyer.lawyer.PlayerId == player.PlayerId)
             {
-                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance));
+                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MinLightRadius, __instance.MaxLightRadius * Lawyer.vision, unlerped);
                 return false;
             }
 
             // Default light radius
-            __result = GetNeutralLightRadius(__instance);
+            __result = GetNeutralLightRadius(__instance, false);
             if (Sunglasses.sunglasses.FindAll(x => x.PlayerId == player.PlayerId).Count > 0) // Sunglasses
                 __result *= 1f - Sunglasses.vision * 0.1f; // TODO! SUNGLASSES MAYBE NOT ALWAYS APPLIED
 
@@ -69,16 +69,16 @@ namespace TheOtherRoles.Patches {
             return false;
         }
 
-        public static float GetNeutralLightRadius(ShipStatus shipStatus)
-        {
-            if (SubmergedCompatibility.Loaded && shipStatus.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE)
-            {
-                return SubmergedCompatibility.GetSubmergedNeutralLightRadius();
+        public static float GetNeutralLightRadius(ShipStatus shipStatus, bool isImpostor) {
+            if (SubmergedCompatibility.Loaded && shipStatus.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                return SubmergedCompatibility.GetSubmergedNeutralLightRadius(isImpostor);
             }
-            
+
+            if (isImpostor) return shipStatus.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
+
             SwitchSystem switchSystem = shipStatus.Systems[SystemTypes.Electrical].TryCast<SwitchSystem>();
             float lerpValue = switchSystem.Value / 255f;
-            
+
             return Mathf.Lerp(shipStatus.MinLightRadius, shipStatus.MaxLightRadius, lerpValue) * PlayerControl.GameOptions.CrewLightMod;
         }
 

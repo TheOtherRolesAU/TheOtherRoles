@@ -132,10 +132,9 @@ namespace TheOtherRoles
             return validType ? obj.AddComponent(Il2CppType.From(type)).TryCast<MonoBehaviour>() : obj.AddComponent<MissingSubmergedBehaviour>();
         }
 
-        public static float GetSubmergedNeutralLightRadius()
-        {
+        public static float GetSubmergedNeutralLightRadius(bool isImpostor) {
             if (!Loaded) return 0;
-            return (float) CalculateLightRadiusMethod.Invoke(SubmarineStatus, new object[] {null, true});
+            return (float)CalculateLightRadiusMethod.Invoke(SubmarineStatus, new object[] { null, true, isImpostor });
         }
 
         public static void ChangeFloor(bool toUpper) {
