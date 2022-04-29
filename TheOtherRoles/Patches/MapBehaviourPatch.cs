@@ -27,10 +27,6 @@ namespace TheOtherRoles.Patches {
 		static bool Prefix3(MapBehaviour __instance) {
 			if (!MeetingHud.Instance || __instance.IsOpen) return true;  // Only run in meetings and when the map is closed
 
-			if (PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
-				__instance.ShowSabotageMap();
-				return false;
-			}
 			PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
 			__instance.GenericShow();
 			__instance.taskOverlay.Show();
@@ -38,24 +34,5 @@ namespace TheOtherRoles.Patches {
 			DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
 			return false;
 		}
-
-		[HarmonyPrefix]
-		[HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowSabotageMap))]
-		static bool Prefix4(MapBehaviour __instance) {
-			if (!MeetingHud.Instance || __instance.IsOpen) return true;  // Only run in meetings and when the map is closed
-
-			if (__instance.specialInputHandler != null) {
-				__instance.specialInputHandler.disableVirtualCursor = true;
-			}
-			PlayerControl.LocalPlayer.SetPlayerMaterialColors(__instance.HerePoint);
-			__instance.GenericShow();
-			__instance.infectedOverlay.gameObject.SetActive(true);
-			__instance.ColorControl.SetColor(Palette.ImpostorRed);
-			__instance.taskOverlay.Show();
-			DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
-			ConsoleJoystick.SetMode_Sabotage();
-			return false;
-		}
-
 	}
 }
