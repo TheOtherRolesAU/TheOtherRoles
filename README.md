@@ -1227,7 +1227,6 @@ The Detective's other feature shows when they report a corpse: they receive clue
 - When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
 - The Detective does not see footprints of players that sit in vents
 - More information about the [colors](#colors)
-- During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 ### Game Options
 | Name | Description |
@@ -1464,7 +1463,6 @@ The vents will be sealed after the next meeting, players can't enter or exit sea
 ### **Team: Crewmates**
 
 The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, it sees the places where the players have died (after the next meeting) and can question them. It then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.\
-During the meetings you can see, whether a player wears a darker or a lighter color, represented by (D) or (L) in the names.
 
 Questions:
 What is your Role?
@@ -1564,9 +1562,12 @@ In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are
 
 ## Sunglasses
 
-Sunglasses is only a Modifier for Crewmates.\
 The Sunglasses will lower the Crewmate's vision by small percentage. The percentage is configurable in the options.\
 The vision will also be affected when lights out.
+
+**NOTE:**
+- Sunglasses only affects Crewmates.
+- If you have the Sunglasses modifier and get sidekicked, you lose the modifier.
 
 ### Game Options
 | Name | Description
