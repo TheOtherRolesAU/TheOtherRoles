@@ -21,13 +21,19 @@ namespace TheOtherRoles.Patches {
 
             bool roleCouldUse = @object.roleCanUseVents();
 
+            if (__instance.name.StartsWith("SealedVent_")) {
+                canUse = couldUse = false;
+                __result = num;
+                return false;
+            }
+
             // Submerged Compatability if needed:
             if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
                 // as submerged does, only change stuff for vents 9 and 14 of submerged. Code partially provided by AlexejheroYTB
                 if (SubmergedCompatibility.getInTransition()) {
                     __result = float.MaxValue;
                     return canUse = couldUse = false;
-                }
+                }                
                 switch (__instance.Id) {
                     case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
                         if (PlayerControl.LocalPlayer.inVent) break;
@@ -59,10 +65,6 @@ namespace TheOtherRoles.Patches {
                     // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
                     usableDistance = 0.4f; 
                 }
-            } else if (__instance.name.StartsWith("SealedVent_")) {
-                canUse = couldUse = false;
-                __result = num;
-                return false;
             }
 
             couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
