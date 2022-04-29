@@ -101,7 +101,6 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 4.0.0**
-- Added compatibility to new map Submerged
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
 - Added option Shield Last Round First Kill (till the first meeting)
@@ -109,7 +108,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Added additions to Swapper (charges mechanic, confirm swap button, UI & color changes in meeting)
 - Added option Mayor can always see the vote color (after finishing x-amount of tasks)
 - Added possibility to enter a name
-- Added map in meeting with last position
+- Added map in meeting with last position and list of tasks
 - Added Bait, Mini, Lover, Bloody, Sunglasses, Anti Teleport, Tiebreaker & Invert modifier
 - Changed lobby/settings ui
 - Changed that a sidekicked Spy/Impostor is still shown red to Impostor
