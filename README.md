@@ -1079,7 +1079,7 @@ If their client dies, the Lawyer changes their role and becomes the [Pursuer](#p
 How the Lawyer wins:
 - Lawyer dead/alive, client alive and client wins: The Lawyer wins together with the team of the client.
 - If their client is Jester and the Jester gets voted out, the Lawyer wins together with the Jester.
-\
+
 **NOTE:**
 - If the client disconnects, the Lawyer will also turn into the Pursuer
 - The Lawyer needs to figure out the role of their client depending on the options
