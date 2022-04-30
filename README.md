@@ -40,7 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2022.3.29| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
+| 2022.3.29s| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
 | 2022.3.29s| v3.4.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.5/TheOtherRoles.zip)
 | 2022.2.23s| v3.4.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.3/TheOtherRoles.zip)
@@ -101,6 +101,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 4.1.0**
+- Added support for the Submerged map (https://github.com/SubmergedAmongUs/Submerged), which can be downloaded ingame with the Update button. If there is also a mod update, it will be prioritized
+- Added an option to give the Mayor a portable Meeting Button
+- Fixed a bug where the Lawyer didn't die with their client when voted out
+- Removed Lawyer option "Wins after Meetings"
+- Changed Medium question if the killer of a body is the Mini, the medium can now randomly ask the role question
+  
 **Version 4.0.0**
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
@@ -1133,6 +1140,7 @@ can only use them, if the previous player did not use them before)
 ### **Team: Crewmates**
 The Mayor leads the Crewmates by having a vote that counts twice.\
 The Mayor can always use their meeting, even if the maximum number of meetings was reached.\
+The Mayor has a portable Meeting Button, depending on the options.\
 The Mayor can see the vote colors after completing a configurable amount of tasks, depending on the options.
 
 ### Game Options
@@ -1140,7 +1148,8 @@ The Mayor can see the vote colors after completing a configurable amount of task
 |----------|:-------------:|
 | Mayor Spawn Chance | -
 | Mayor Can See Vote Colors | -
-| Mayor Completed Tasks Needed To See Vote Colors | -
+| Completed Tasks Needed To See Vote Colors | -
+| Mobile Emergency Button | -
 -----------------------
 
 ## Engineer
@@ -1418,7 +1427,7 @@ Additionally to that, the Portalmaker gets information about who used the portal
 - While one player uses a portal, it is blocked for any other player until the player got teleported.
 - All ghosts can still use the portals, but won't block any living player from using it and the Portalmaker won't get any information about it in chat.
 - If a morphed person uses a portal it will show the morphed name/color depending on the options.
-- If a comouflaged person uses a portal it will show "A comouflaged person used the portal."
+- If a camouflaged person uses a portal it will show "A comouflaged person used the portal."
 
 ### Game Options
 | Name | Description
@@ -1469,7 +1478,7 @@ Questions:
 What is your Role?
 What is your killer's color type?
 When did you die?
-What is your killers role? (mini exluded)
+What is your killers role?
 
 ### Game Options
 | Name | Description
@@ -1482,6 +1491,7 @@ What is your killers role? (mini exluded)
 
 # Modifier
 A modifier is an addition to your Impostor/Neutral/Crewmate role.
+Some modifiers can be ingame more than once (Quantity option).
 
 ## Bloody
 ### Bloody
@@ -1524,6 +1534,9 @@ Everyone will know if the Tie Breaker was involved in the Meeting or not.
 
 The Bait forces the killer to self report the body (you can configure a delay in the options).\
 There can be more than one Bait.
+
+**NOTE:**
+- If the Sheriff has the Bait modifier and dies while trying to kill a Crewmate, the Sheriff will *NOT* report themself.
 
 ### Game Options
 | Name | Description
