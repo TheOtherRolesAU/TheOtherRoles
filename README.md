@@ -1418,7 +1418,7 @@ Additionally to that, the Portalmaker gets information about who used the portal
 - While one player uses a portal, it is blocked for any other player until the player got teleported.
 - All ghosts can still use the portals, but won't block any living player from using it and the Portalmaker won't get any information about it in chat.
 - If a morphed person uses a portal it will show the morphed name/color depending on the options.
-- If a comouflaged person uses a portal it will show "A comouflaged person used the portal."
+- If a camouflaged person uses a portal it will show "A comouflaged person used the portal."
 
 ### Game Options
 | Name | Description
@@ -1469,7 +1469,7 @@ Questions:
 What is your Role?
 What is your killer's color type?
 When did you die?
-What is your killers role? (mini exluded)
+What is your killers role?
 
 ### Game Options
 | Name | Description
@@ -1482,6 +1482,7 @@ What is your killers role? (mini exluded)
 
 # Modifier
 A modifier is an addition to your Impostor/Neutral/Crewmate role.
+Some modifiers can be ingame more than once (Quantity option).
 
 ## Bloody
 ### Bloody
@@ -1524,6 +1525,9 @@ Everyone will know if the Tie Breaker was involved in the Meeting or not.
 
 The Bait forces the killer to self report the body (you can configure a delay in the options).\
 There can be more than one Bait.
+
+**NOTE:**
+- If the Sheriff has the Bait modifier and dies while trying to kill a Crewmate, the Sheriff will *NOT* report themself.
 
 ### Game Options
 | Name | Description
