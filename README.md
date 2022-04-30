@@ -1140,6 +1140,7 @@ can only use them, if the previous player did not use them before)
 ### **Team: Crewmates**
 The Mayor leads the Crewmates by having a vote that counts twice.\
 The Mayor can always use their meeting, even if the maximum number of meetings was reached.\
+The Mayor has a portable Meeting Button, depending on the options.\
 The Mayor can see the vote colors after completing a configurable amount of tasks, depending on the options.
 
 ### Game Options
@@ -1147,7 +1148,8 @@ The Mayor can see the vote colors after completing a configurable amount of task
 |----------|:-------------:|
 | Mayor Spawn Chance | -
 | Mayor Can See Vote Colors | -
-| Mayor Completed Tasks Needed To See Vote Colors | -
+| Completed Tasks Needed To See Vote Colors | -
+| Mobile Emergency Button | -
 -----------------------
 
 ## Engineer
