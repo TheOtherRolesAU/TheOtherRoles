@@ -1464,7 +1464,12 @@ namespace TheOtherRoles
                () => { return Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
                () => {
                    mayorMeetingButton.actionButton.OverrideText("Emergency");
-                   return PlayerControl.LocalPlayer.CanMove;
+                   bool sabotageActive = false;
+                   foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                       if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles
+                           || SubmergedCompatibility.isSubmerged() && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask)
+                           sabotageActive = true;
+                   return !sabotageActive && PlayerControl.LocalPlayer.CanMove;
                },
                () => { mayorMeetingButton.Timer = mayorMeetingButton.MaxTimer; },
                Mayor.getMeetingSprite(),

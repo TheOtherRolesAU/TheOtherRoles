@@ -835,7 +835,7 @@ namespace TheOtherRoles
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
             PlayerControl client = Lawyer.target;
-            Lawyer.clearAndReload();
+            Lawyer.clearAndReload(false);
             Pursuer.pursuer = player;
 
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {

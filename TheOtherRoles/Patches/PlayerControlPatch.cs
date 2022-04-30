@@ -1182,12 +1182,18 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.sidekickPromotes();
             }
 
-            // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
+            // Pursuer promotion trigger on exile & suicide (the host sends the call such that everyone recieves the update before a possible game End)
             if (__instance == Lawyer.target && Lawyer.target != Jester.jester && AmongUsClient.Instance.AmHost) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
+            if (__instance == Lawyer.target)
+            {
+                if (Lawyer.lawyer != null) Lawyer.lawyer.Exiled();
+                if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();
+            }
+
         }
     }
 

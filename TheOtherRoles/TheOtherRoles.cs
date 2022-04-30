@@ -1385,9 +1385,9 @@ namespace TheOtherRoles
             return targetSprite;
         }
 
-        public static void clearAndReload() {
+        public static void clearAndReload(bool clearTarget = true) {
             lawyer = null;
-            target = null;
+            if (clearTarget) target = null;
             triggerLawyerWin = false;
 
             vision = CustomOptionHolder.lawyerVision.getFloat();
