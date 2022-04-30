@@ -159,6 +159,10 @@ namespace TheOtherRoles
             }
 
         }
+
+        public static bool isSubmerged() {
+            return Loaded && ShipStatus.Instance && ShipStatus.Instance.Type == SUBMERGED_MAP_TYPE;
+        }
     }
 
     public class MissingSubmergedBehaviour : MonoBehaviour

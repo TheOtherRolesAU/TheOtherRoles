@@ -119,7 +119,7 @@ namespace TheOtherRoles.Patches {
         // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
         [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
         public static void Prefix(GameObject obj) {
-            if (!ShipStatus.Instance || !(ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE)) return;
+            if (!SubmergedCompatibility.isSubmerged()) return;
             if (obj.name.Contains("ExileCutscene")) { 
                 WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
             }            
@@ -227,7 +227,7 @@ namespace TheOtherRoles.Patches {
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
-                if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                if (SubmergedCompatibility.isSubmerged()) {
                     SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
                 }
             }

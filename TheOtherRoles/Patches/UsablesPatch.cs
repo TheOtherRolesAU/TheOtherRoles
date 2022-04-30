@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Submerged Compatability if needed:
-            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+            if (SubmergedCompatibility.isSubmerged()) {
                 // as submerged does, only change stuff for vents 9 and 14 of submerged. Code partially provided by AlexejheroYTB
                 if (SubmergedCompatibility.getInTransition()) {
                     __result = float.MaxValue;

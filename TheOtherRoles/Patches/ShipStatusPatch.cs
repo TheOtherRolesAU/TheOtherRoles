@@ -62,7 +62,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static float GetNeutralLightRadius(ShipStatus shipStatus, bool isImpostor) {
-            if (SubmergedCompatibility.Loaded && shipStatus.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+            if (SubmergedCompatibility.isSubmerged()) {
                 return SubmergedCompatibility.GetSubmergedNeutralLightRadius(isImpostor);
             }
 

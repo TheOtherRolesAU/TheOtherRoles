@@ -108,7 +108,7 @@ namespace TheOtherRoles.Patches {
                     else if (localPlayerPositions.Any(x => x.Item2 == true)) {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     }
-                    if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
+                    if (SubmergedCompatibility.isSubmerged()) {
                         SubmergedCompatibility.ChangeFloor(next.Item1.y > -7);
                     }
 
@@ -519,7 +519,7 @@ namespace TheOtherRoles.Patches {
             for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
                 Vent vent = ShipStatus.Instance.AllVents[i];
                 if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_") || vent.gameObject.name.StartsWith("FutureSealedVent_")) continue;
-                if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;

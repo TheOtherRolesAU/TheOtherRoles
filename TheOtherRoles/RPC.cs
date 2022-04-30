@@ -775,8 +775,8 @@ namespace TheOtherRoles
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
 
-            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) {
-                // remove 2d box collider of console, so that no barrier can be created.
+            if (SubmergedCompatibility.isSubmerged()) {
+                // remove 2d box collider of console, so that no barrier can be created. (irrelevant for now, but who knows... maybe we need it later)
                 var fixConsole = camera.transform.FindChild("FixConsole");
                 if (fixConsole != null) {
                     var boxCollider = fixConsole.GetComponent<BoxCollider2D>();

@@ -1077,7 +1077,7 @@ namespace TheOtherRoles
         private static float lastPPU;
         public static Sprite getAnimatedVentSealedSprite() {
             float ppu = 185f;
-            if (ShipStatus.Instance && ShipStatus.Instance.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE) ppu = 120f;
+            if (SubmergedCompatibility.isSubmerged()) ppu = 120f;
             if (lastPPU != ppu) {
                 animatedVentSealedSprite = null;
                 lastPPU = ppu;
