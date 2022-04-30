@@ -1109,6 +1109,20 @@ namespace TheOtherRoles
             return staticVentSealedSprite;
         }
 
+        private static Sprite submergedCentralUpperVentSealedSprite;
+        public static Sprite getSubmergedCentralUpperSealedSprite() {
+            if (submergedCentralUpperVentSealedSprite) return submergedCentralUpperVentSealedSprite;
+            submergedCentralUpperVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralUpperBlocked.png", 145f);
+            return submergedCentralUpperVentSealedSprite;
+        }
+
+        private static Sprite submergedCentralLowerVentSealedSprite;
+        public static Sprite getSubmergedCentralLowerSealedSprite() {
+            if (submergedCentralLowerVentSealedSprite) return submergedCentralLowerVentSealedSprite;
+            submergedCentralLowerVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralLowerBlocked.png", 145f);
+            return submergedCentralLowerVentSealedSprite;
+        }
+
         private static Sprite camSprite;
         public static Sprite getCamSprite() {
             if (camSprite) return camSprite;
