@@ -220,11 +220,6 @@ namespace TheOtherRoles.Patches {
                 roleCanCallEmergency = false;
                 statusText = "The Jester can't start an emergency meeting";
             }
-            // Potentially deactivate emergency button for Lawyer
-            if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer && Lawyer.winsAfterMeetings) {
-                roleCanCallEmergency = false;
-                statusText = "The Lawyer can't start an emergency meeting (" + Lawyer.meetings + "/" + Lawyer.neededMeetings + " meetings)";
-            }
 
             if (!roleCanCallEmergency) {
                 __instance.StatusText.text = statusText;

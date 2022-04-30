@@ -368,8 +368,8 @@ namespace TheOtherRoles
 
         public static void uncheckedCmdReportDeadBody(byte sourceId, byte targetId) {
             PlayerControl source = Helpers.playerById(sourceId);
-            PlayerControl target = Helpers.playerById(targetId);
-            if (source != null && target != null) source.ReportDeadBody(target.Data);
+            var t = targetId == Byte.MaxValue ? null : Helpers.playerById(targetId).Data;
+            if (source != null) source.ReportDeadBody(t);
         }
 
         public static void uncheckedExilePlayer(byte targetId) {

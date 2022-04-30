@@ -133,13 +133,28 @@ namespace TheOtherRoles
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
+            public static Minigame emergency = null;
+            public static Sprite emergencySprite = null;
+
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
+            public static bool meetingButton = true;
+
+            public static Sprite getMeetingSprite()
+            {
+                if (emergencySprite) return emergencySprite;
+                emergencySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.EmergencyButton.png", 550f);
+                return emergencySprite;
+            }
 
             public static void clearAndReload() {
                 mayor = null;
+                emergency = null;
+                emergencySprite = null;
+
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
+                meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
             }
         }
 
@@ -1345,11 +1360,8 @@ namespace TheOtherRoles
         public static Color color = new Color32(134, 153, 25, byte.MaxValue);
         public static Sprite targetSprite;
         public static bool triggerLawyerWin = false;
-        public static int meetings = 0;
 
         public static float vision = 1f;
-        public static bool winsAfterMeetings = false;
-        public static int neededMeetings = 4;
         public static bool lawyerKnowsRole = false;
         public static bool targetCanBeJester = false;
 
@@ -1363,10 +1375,7 @@ namespace TheOtherRoles
             lawyer = null;
             target = null;
             triggerLawyerWin = false;
-            meetings = 0;
 
-            winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
-            neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
             lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
             targetCanBeJester = CustomOptionHolder.lawyerTargetCanBeJester.getBool();

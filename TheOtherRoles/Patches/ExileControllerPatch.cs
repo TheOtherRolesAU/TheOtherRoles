@@ -220,9 +220,6 @@ namespace TheOtherRoles.Patches {
                     Medium.featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
                 }
             }
-            // Lawyer add meeting
-            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
-                Lawyer.meetings++;
 
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
