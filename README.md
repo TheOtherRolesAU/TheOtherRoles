@@ -40,7 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2022.3.29| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
+| 2022.3.29s| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
 | 2022.3.29s| v3.4.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.5/TheOtherRoles.zip)
 | 2022.2.23s| v3.4.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.3/TheOtherRoles.zip)
@@ -101,6 +101,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 4.1.0**
+- Added support for the Submerged map (https://github.com/SubmergedAmongUs/Submerged), which can be downloaded ingame with the Update button. If there is also a mod update, it will be prioritized
+- Added an option to give the Mayor a portable Meeting Button
+- Fixed a bug where the Lawyer didn't die with their client when voted out
+- Removed Lawyer option "Wins after Meetings"
+- Changed Medium question if the killer of a body is the Mini, the medium can now randomly ask the role question
+  
 **Version 4.0.0**
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
