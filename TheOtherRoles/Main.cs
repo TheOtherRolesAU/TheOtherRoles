@@ -16,14 +16,13 @@ using TheOtherRoles.Modules;
 
 namespace TheOtherRoles
 {
-    [BepInPlugin(Id, "The Other Roles", VersionString)]
+    [BepInPlugin(Id, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.0.0";
-
-        public static System.Version Version = System.Version.Parse(VersionString);
+        public static string VersionString = PluginInfo.PLUGIN_VERSION;
+        public static System.Version Version = System.Version.Parse(PluginInfo.PLUGIN_VERSION);
         internal static BepInEx.Logging.ManualLogSource Logger;
 
         public Harmony Harmony { get; } = new Harmony(Id);
