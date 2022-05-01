@@ -29,13 +29,11 @@ namespace TheOtherRoles.Modules {
             SpriteRenderer buttonSpriteDiscord = buttonDiscord.GetComponent<SpriteRenderer>();
 
             passiveButtonDiscord.OnClick = new Button.ButtonClickedEvent();
-            passiveButtonDiscord.OnClick.AddListener((UnityEngine.Events.UnityAction)delegate {
-                Application.OpenURL("https://discord.gg/77RkMJHWsM");
-            });
+            passiveButtonDiscord.OnClick.AddListener((System.Action)(() => Application.OpenURL("https://discord.gg/77RkMJHWsM")));
 
             Color discordColor = new Color32(88, 101, 242, byte.MaxValue);
             buttonSpriteDiscord.color = textDiscord.color = discordColor;
-            passiveButtonDiscord.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)delegate {
+            passiveButtonDiscord.OnMouseOut.AddListener((System.Action)delegate {
                 buttonSpriteDiscord.color = textDiscord.color = discordColor;
             });
 
@@ -56,7 +54,7 @@ namespace TheOtherRoles.Modules {
 
             passiveHorseButton.OnClick = new ButtonClickedEvent();
 
-            passiveHorseButton.OnClick.AddListener((UnityEngine.Events.UnityAction)delegate {
+            passiveHorseButton.OnClick.AddListener((System.Action)delegate {
                 horseButtonState = horseModeSelectionBehavior.OnClick();
                 if (horseButtonState) {
                     if (horseModeOnSprite == null) horseModeOnSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HorseModeButtonOn.png", 75f);
