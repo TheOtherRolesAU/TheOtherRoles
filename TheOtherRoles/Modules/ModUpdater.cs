@@ -19,7 +19,8 @@ namespace TheOtherRoles.Modules
 {
     public class ModUpdateBehaviour : MonoBehaviour
     {
-        public static readonly bool CheckForSubmergedUpdates = false;
+        public static readonly bool CheckForSubmergedUpdates = true;
+        public static bool showPopUp = true;
     
         public static ModUpdateBehaviour Instance { get; private set; }
         public ModUpdateBehaviour(IntPtr ptr) : base(ptr) { }
@@ -88,15 +89,19 @@ namespace TheOtherRoles.Modules
             }));
 
             var text = button.transform.GetChild(0).GetComponent<TMP_Text>();
-            StartCoroutine(Effects.Lerp(0.1f, (Action<float>)(p => text.SetText("Update"))));
+            string t = "Update";
+            if (TORUpdate is null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
+
+            StartCoroutine(Effects.Lerp(0.1f, (Action<float>)(p => text.SetText(t))));
 
             buttonSprite.color = text.color = Color.red;
             passiveButton.OnMouseOut.AddListener((Action)(() => buttonSprite.color = text.color = Color.red));
 
             var isSubmerged = TORUpdate == null;
-            var announcement = $"<size=150%>A new <color=#FC0303>{(isSubmerged ? "Submerged" : "THE OTHER ROLES")}</color>\nupdate to {(isSubmerged ? SubmergedUpdate.Tag : TORUpdate.Tag)} is available</size>\n{(isSubmerged ? SubmergedUpdate.Content : TORUpdate.Content)}";
+            var announcement = $"<size=150%>A new <color=#FC0303>{(isSubmerged ? "Submerged" : "THE OTHER ROLES")}</color> update to {(isSubmerged ? SubmergedUpdate.Tag : TORUpdate.Tag)} is available</size>\n{(isSubmerged ? SubmergedUpdate.Content : TORUpdate.Content)}";
             var mgr = FindObjectOfType<MainMenuManager>(true);
-            mgr.StartCoroutine(CoShowAnnouncement(announcement));
+            if (showPopUp) mgr.StartCoroutine(CoShowAnnouncement(announcement));
+            showPopUp = false;
         }
         
         [HideFromIl2Cpp]
