@@ -925,6 +925,7 @@ If the Ninja uses its ability, it will leave a trace (leaves) for a configurable
 - The mark on the marked player will reset after a meeting or after using the ability to kill the marked player. Performing a normal kill will **NOT** reset the mark
 - If the Ninja tries to kill a shielded player (e.g. Medic shield, Shield last game first kill ), the kill will not be performed
 - If the Ninja tries to kill the Time Master while the shield is active, the Ninja won't teleport to the players position, but the Time Master shield will still be activated
+- If the marked target is on a different floor on Submerged, the arrow will always point to the elevator
 
 ### Game Options
 | Name | Description |
@@ -1063,6 +1064,9 @@ The Vulture does not have any tasks, they have to win the game as a solo.\
 The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
 Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.\
 If there is a Vulture in the game, there can't be a Cleaner.
+
+**NOTE**
+- If the corpse is on a different floor on Submerged, the arrow will always point to the elevator
 
 ### Game Options
 | Name | Description |
@@ -1368,6 +1372,9 @@ An arrow points to the last tracked position of the player.\
 The arrow updates its position every few seconds (configurable).\
 Depending on the options, the Tracker has another ability: They can track all corpses on the map for a set amount of time. They will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
+**NOTE**
+- If the tracked player is on a different floor on Submerged, the arrow will always point to the elevator
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
@@ -1383,6 +1390,9 @@ Depending on the options, the Tracker has another ability: They can track all co
 ### **Team: Crewmates**
 When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).\
 When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
+
+**NOTE**
+- If the Impostor(s)/Jackal(s) is/are on a different floor on Submerged when the Snitch finished their tasks, the arrow will always point to the elevator
 
 ### Game Options
 | Name | Description
