@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>TheOtherRoles</AssemblyName>
         <Version>4.0.0</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
@@ -25,6 +26,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Resources\Blood1.png" />
       <None Remove="Resources\Blood2.png" />
       <None Remove="Resources\Blood3.png" />
@@ -32,6 +37,6 @@
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\$(AssemblyName).dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
     </Target>
 </Project>
