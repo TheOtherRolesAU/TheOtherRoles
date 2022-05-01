@@ -929,21 +929,21 @@ namespace TheOtherRoles
                     RPCProcedure.setModifier(modifierId, pId, flag);
                     break;
                 case (byte)CustomRPC.VersionHandshake:
-                    byte major = reader.ReadByte();
-                    byte minor = reader.ReadByte();
-                    byte patch = reader.ReadByte();
+                    int major = reader.ReadPackedInt32();
+                    int minor = reader.ReadPackedInt32();
+                    int patch = reader.ReadPackedInt32();
                     int versionOwnerId = reader.ReadPackedInt32();
-                    byte revision = 0xFF;
+                    int revision = -1;
                     Guid guid;
                     if (reader.Length - reader.Position >= 17) { // enough bytes left to read
-                        revision = reader.ReadByte();
+                        revision = reader.ReadPackedInt32();
                         // GUID
                         byte[] gbytes = reader.ReadBytes(16);
                         guid = new Guid(gbytes);
                     } else {
                         guid = new Guid(new byte[16]);
                     }
-                    RPCProcedure.versionHandshake(major, minor, patch, revision == 0xFF ? -1 : revision, guid, versionOwnerId);
+                    RPCProcedure.versionHandshake(major, minor, patch, revision, guid, versionOwnerId);
                     break;
                 case (byte)CustomRPC.UseUncheckedVent:
                     int ventId = reader.ReadPackedInt32();

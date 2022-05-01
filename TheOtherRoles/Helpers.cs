@@ -357,11 +357,11 @@ namespace TheOtherRoles {
     
         public static void shareGameVersion() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
-            writer.Write((byte)TheOtherRolesPlugin.Version.Major);
-            writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
-            writer.Write((byte)TheOtherRolesPlugin.Version.Build);
+            writer.WritePacked(TheOtherRolesPlugin.Version.Major);
+            writer.WritePacked(TheOtherRolesPlugin.Version.Minor);
+            writer.WritePacked(TheOtherRolesPlugin.Version.Build);
             writer.WritePacked(AmongUsClient.Instance.ClientId);
-            writer.Write((byte)(TheOtherRolesPlugin.Version.Revision < 0 ? 0xFF : TheOtherRolesPlugin.Version.Revision));
+            writer.WritePacked(TheOtherRolesPlugin.Version.Revision);
             writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.versionHandshake(TheOtherRolesPlugin.Version.Major, TheOtherRolesPlugin.Version.Minor, TheOtherRolesPlugin.Version.Build, TheOtherRolesPlugin.Version.Revision, Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId, AmongUsClient.Instance.ClientId);

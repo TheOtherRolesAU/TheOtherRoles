@@ -42,6 +42,10 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
         public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
+        public static ConfigEntry<bool> LobbyTimer { get; set; }
+        public static ConfigEntry<string> UpdateServer { get; set; }
+        public static ConfigEntry<string> HatServerList { get; set; }
+        public static ConfigEntry<string> CustomServerList { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
@@ -52,6 +56,16 @@ namespace TheOtherRoles
         public static void UpdateRegions() {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
             IRegionInfo[] regions = defaultRegions;
+
+            string[] servers = CustomServerList.Value.Trim().Split(',');
+            foreach(string server in servers) {
+                string[] temp = server.Trim().Split(':');
+                if(temp.Length != 3) continue;
+                var region = new DnsRegionInfo(temp[1], temp[0], StringNames.NoTranslation, temp[1], Convert.ToUInt16(temp[2]), false);
+                regions = regions.Concat(new IRegionInfo[] { region.Cast<IRegionInfo>()}).ToArray();
+            }
+            ServerManager.DefaultRegions = regions;
+            serverManager.AvailableRegions = regions;
 
             var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
             regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
@@ -73,7 +87,11 @@ namespace TheOtherRoles
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
             StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
-            
+
+            LobbyTimer = Config.Bind("Custom", "Enable Lobby Timer", true);
+            UpdateServer = Config.Bind("Custom", "Custom Update Server", "");
+            HatServerList = Config.Bind("Custom", "Custom Hat Servers", "");
+            CustomServerList = Config.Bind("Custom", "Custom Servers", "");            
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);

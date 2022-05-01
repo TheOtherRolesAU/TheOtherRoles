@@ -124,8 +124,9 @@ namespace TheOtherRoles.Modules {
             try {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-                var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/Eisbison/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
-                // var response = await http.GetAsync(new System.Uri("https://api.github.com/repos/EoF-1141/TheOtherRoles/releases/latest"), HttpCompletionOption.ResponseContentRead);
+                string updateServer = "https://api.github.com/repos/Eisbison/TheOtherRoles/releases/latest";
+                if(TheOtherRolesPlugin.UpdateServer.Value.Trim() != "") updateServer = TheOtherRolesPlugin.UpdateServer.Value.Trim();
+                var response = await http.GetAsync(new System.Uri(updateServer), HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK || response.Content == null) {
                     System.Console.WriteLine("Server returned no data: " + response.StatusCode.ToString());
                     return false;
