@@ -87,6 +87,7 @@ namespace TheOtherRoles
         // Role functionality
 
         EngineerFixLights = 91,
+        EngineerFixSubmergedOxygen,
         EngineerUsedRepair,
         CleanBody,
         MedicSetShielded,
@@ -367,8 +368,8 @@ namespace TheOtherRoles
 
         public static void uncheckedCmdReportDeadBody(byte sourceId, byte targetId) {
             PlayerControl source = Helpers.playerById(sourceId);
-            PlayerControl target = Helpers.playerById(targetId);
-            if (source != null && target != null) source.ReportDeadBody(target.Data);
+            var t = targetId == Byte.MaxValue ? null : Helpers.playerById(targetId).Data;
+            if (source != null) source.ReportDeadBody(t);
         }
 
         public static void uncheckedExilePlayer(byte targetId) {
@@ -385,6 +386,10 @@ namespace TheOtherRoles
         public static void engineerFixLights() {
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+        }
+
+        public static void engineerFixSubmergedOxygen() {
+            SubmergedCompatibility.RepairOxygen();
         }
 
         public static void engineerUsedRepair() {
@@ -770,6 +775,16 @@ namespace TheOtherRoles
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
             if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4) camera.transform.localRotation = new Quaternion(0, 0, 1, 1); // Polus and Airship 
 
+            if (SubmergedCompatibility.isSubmerged()) {
+                // remove 2d box collider of console, so that no barrier can be created. (irrelevant for now, but who knows... maybe we need it later)
+                var fixConsole = camera.transform.FindChild("FixConsole");
+                if (fixConsole != null) {
+                    var boxCollider = fixConsole.GetComponent<BoxCollider2D>();
+                    if (boxCollider != null) UnityEngine.Object.Destroy(boxCollider);
+                }
+            }
+
+
             if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
@@ -789,6 +804,8 @@ namespace TheOtherRoles
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
                 vent.myRend.color = new Color(1f, 1f, 1f, 0.5f);
                 vent.name = "FutureSealedVent_" + vent.name;
             }
@@ -818,7 +835,7 @@ namespace TheOtherRoles
         public static void lawyerPromotesToPursuer() {
             PlayerControl player = Lawyer.lawyer;
             PlayerControl client = Lawyer.target;
-            Lawyer.clearAndReload();
+            Lawyer.clearAndReload(false);
             Pursuer.pursuer = player;
 
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
@@ -975,6 +992,9 @@ namespace TheOtherRoles
 
                 case (byte)CustomRPC.EngineerFixLights:
                     RPCProcedure.engineerFixLights();
+                    break;
+                case (byte)CustomRPC.EngineerFixSubmergedOxygen:
+                    RPCProcedure.engineerFixSubmergedOxygen();
                     break;
                 case (byte)CustomRPC.EngineerUsedRepair:
                     RPCProcedure.engineerUsedRepair();

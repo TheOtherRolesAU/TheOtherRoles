@@ -14,8 +14,12 @@ using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
+    [HarmonyPriority(Priority.First)]
     class ExileControllerBeginPatch {
+        public static GameData.PlayerInfo lastExiled;
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
+            lastExiled = exiled;
+
             // Medic shield
             if (Medic.medic != null && AmongUsClient.Instance.AmHost && Medic.futureShielded != null && !Medic.medic.Data.IsDead) { // We need to send the RPC from the host here, to make sure that the order of shifting and setting the shield is correct(for that reason the futureShifted and futureShielded are being synced)
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
@@ -88,6 +92,8 @@ namespace TheOtherRoles.Patches {
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
                 vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
@@ -110,6 +116,15 @@ namespace TheOtherRoles.Patches {
             public static void Postfix(AirshipExileController __instance) {
                 WrapUpPostfix(__instance.exiled);
             }
+        }
+
+        // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
+        [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
+        public static void Prefix(GameObject obj) {
+            if (!SubmergedCompatibility.isSubmerged()) return;
+            if (obj.name.Contains("ExileCutscene")) { 
+                WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
+            }            
         }
 
         static void WrapUpPostfix(GameData.PlayerInfo exiled) {
@@ -135,9 +150,11 @@ namespace TheOtherRoles.Patches {
             if (Seer.deadBodyPositions != null && Seer.seer != null && PlayerControl.LocalPlayer == Seer.seer && (Seer.mode == 0 || Seer.mode == 2)) {
                 foreach (Vector3 pos in Seer.deadBodyPositions) {
                     GameObject soul = new GameObject();
-                    soul.transform.position = pos;
+                    //soul.transform.position = pos;
+                    soul.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000 - 1f);
                     soul.layer = 5;
                     var rend = soul.AddComponent<SpriteRenderer>();
+                    soul.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
                     rend.sprite = Seer.getSoulSprite();
                     
                     if(Seer.limitSoulDuration) {
@@ -193,9 +210,11 @@ namespace TheOtherRoles.Patches {
                 if (Medium.featureDeadBodies != null) {
                     foreach ((DeadPlayer db, Vector3 ps) in Medium.featureDeadBodies) {
                         GameObject s = new GameObject();
-                        s.transform.position = ps;
+                        //s.transform.position = ps;
+                        s.transform.position = new Vector3(ps.x, ps.y, ps.y / 1000 - 1f);
                         s.layer = 5;
                         var rend = s.AddComponent<SpriteRenderer>();
+                        s.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
                         rend.sprite = Medium.getSoulSprite();
                         Medium.souls.Add(rend);
                     }
@@ -203,13 +222,13 @@ namespace TheOtherRoles.Patches {
                     Medium.featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
                 }
             }
-            // Lawyer add meeting
-            if (Lawyer.lawyer != null && PlayerControl.LocalPlayer == Lawyer.lawyer && !Lawyer.lawyer.Data.IsDead)
-                Lawyer.meetings++;
 
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
+                if (SubmergedCompatibility.isSubmerged()) {
+                    SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
+                }
             }
 
             // Invert add meeting

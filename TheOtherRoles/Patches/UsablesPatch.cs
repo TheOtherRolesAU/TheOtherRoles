@@ -21,6 +21,38 @@ namespace TheOtherRoles.Patches {
 
             bool roleCouldUse = @object.roleCanUseVents();
 
+            if (__instance.name.StartsWith("SealedVent_")) {
+                canUse = couldUse = false;
+                __result = num;
+                return false;
+            }
+
+            // Submerged Compatability if needed:
+            if (SubmergedCompatibility.isSubmerged()) {
+                // as submerged does, only change stuff for vents 9 and 14 of submerged. Code partially provided by AlexejheroYTB
+                if (SubmergedCompatibility.getInTransition()) {
+                    __result = float.MaxValue;
+                    return canUse = couldUse = false;
+                }                
+                switch (__instance.Id) {
+                    case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
+                        if (PlayerControl.LocalPlayer.inVent) break;
+                        __result = float.MaxValue;
+                        return canUse = couldUse = false;                    
+                    case 14: // Lower Central
+                        __result = float.MaxValue;
+                        couldUse = roleCouldUse && !pc.IsDead && (@object.CanMove || @object.inVent);
+                        canUse = couldUse;
+                        if (canUse) {
+                            Vector3 center = @object.Collider.bounds.center;
+                            Vector3 position = __instance.transform.position;
+                            __result = Vector2.Distance(center, position);
+                            canUse &= __result <= __instance.UsableDistance;
+                        }
+                        return false;
+                }
+            }
+
             var usableDistance = __instance.UsableDistance;
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
                 if(Trickster.trickster != PlayerControl.LocalPlayer) {
@@ -33,10 +65,6 @@ namespace TheOtherRoles.Patches {
                     // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
                     usableDistance = 0.4f; 
                 }
-            } else if (__instance.name.StartsWith("SealedVent_")) {
-                canUse = couldUse = false;
-                __result = num;
-                return false;
             }
 
             couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
@@ -192,11 +220,6 @@ namespace TheOtherRoles.Patches {
                 roleCanCallEmergency = false;
                 statusText = "The Jester can't start an emergency meeting";
             }
-            // Potentially deactivate emergency button for Lawyer
-            if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer && Lawyer.winsAfterMeetings) {
-                roleCanCallEmergency = false;
-                statusText = "The Lawyer can't start an emergency meeting (" + Lawyer.meetings + "/" + Lawyer.neededMeetings + " meetings)";
-            }
 
             if (!roleCanCallEmergency) {
                 __instance.StatusText.text = statusText;
@@ -293,7 +316,7 @@ namespace TheOtherRoles.Patches {
                 if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0) {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
-                        GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
+                        GameData.PlayerInfo player = vitalsPanel.PlayerInfo;
 
                         // Hacker update
                         if (vitalsPanel.IsDead) {
@@ -316,7 +339,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch]
     class AdminPanelPatch {
-        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, List<Color>>();
+        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, System.Collections.Generic.List<Color>>();
 
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
@@ -417,9 +440,10 @@ namespace TheOtherRoles.Patches {
                 bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
-
-                    for (int i = 0; i < __instance.myIcons.Count; i++) {
-                        PoolableBehavior icon = __instance.myIcons[i];
+                    int i = -1;
+                    foreach (var icon in __instance.myIcons)
+                    {
+                        i += 1;
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {

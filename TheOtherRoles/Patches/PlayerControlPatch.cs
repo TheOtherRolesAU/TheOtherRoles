@@ -23,9 +23,8 @@ namespace TheOtherRoles.Patches {
             if (targetingPlayer.Data.IsDead) return result;
 
             Vector2 truePosition = targetingPlayer.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++) {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.Role.IsImpostor)) {
                     PlayerControl @object = playerInfo.Object;
                     if (untargetablePlayers != null && untargetablePlayers.Any(x => x == @object)) {
@@ -108,6 +107,9 @@ namespace TheOtherRoles.Patches {
                     }
                     else if (localPlayerPositions.Any(x => x.Item2 == true)) {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
+                    }
+                    if (SubmergedCompatibility.isSubmerged()) {
+                        SubmergedCompatibility.ChangeFloor(next.Item1.y > -7);
                     }
 
                     localPlayerPositions.RemoveAt(0);
@@ -517,6 +519,7 @@ namespace TheOtherRoles.Patches {
             for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
                 Vent vent = ShipStatus.Instance.AllVents[i];
                 if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_") || vent.gameObject.name.StartsWith("FutureSealedVent_")) continue;
+                if (SubmergedCompatibility.isSubmerged() && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;
@@ -705,15 +708,6 @@ namespace TheOtherRoles.Patches {
 
         public static void lawyerUpdate() {
             if (Lawyer.lawyer == null || Lawyer.lawyer != PlayerControl.LocalPlayer) return;
-
-            // Meeting win
-            if (Lawyer.winsAfterMeetings && Lawyer.neededMeetings == Lawyer.meetings && Lawyer.target != null && !Lawyer.target.Data.IsDead) {
-                Lawyer.winsAfterMeetings = false; // Avoid sending mutliple RPCs until the host finshes the game
-                MessageWriter winWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerWin, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(winWriter);
-                RPCProcedure.lawyerWin();
-                return;
-            }
 
             // Promote to Pursuer
             if (Lawyer.target != null && Lawyer.target.Data.Disconnected) {
@@ -1188,12 +1182,18 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.sidekickPromotes();
             }
 
-            // Pursuer promotion trigger on exile (the host sends the call such that everyone recieves the update before a possible game End)
+            // Pursuer promotion trigger on exile & suicide (the host sends the call such that everyone recieves the update before a possible game End)
             if (__instance == Lawyer.target && Lawyer.target != Jester.jester && AmongUsClient.Instance.AmHost) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
+            if (__instance == Lawyer.target)
+            {
+                if (Lawyer.lawyer != null) Lawyer.lawyer.Exiled();
+                if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();
+            }
+
         }
     }
 

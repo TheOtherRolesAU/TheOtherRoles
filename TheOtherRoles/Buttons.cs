@@ -47,6 +47,7 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
+        public static CustomButton mayorMeetingButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
@@ -93,6 +94,7 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
+            mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -213,14 +215,20 @@ namespace TheOtherRoles
                         } else if (task.TaskType == TaskTypes.StopCharles) {
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 0 | 16);
                             ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 1 | 16);
+                        } else if (SubmergedCompatibility.isSubmerged() && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask) {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.EngineerFixSubmergedOxygen, Hazel.SendOption.Reliable, -1);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.engineerFixSubmergedOxygen();
                         }
+
                     }
                 },
                 () => { return Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer && Engineer.remainingFixes > 0 && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     bool sabotageActive = false;
                     foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
-                        if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles)
+                        if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles
+                            || SubmergedCompatibility.isSubmerged() && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask)
                             sabotageActive = true;
                     return sabotageActive && Engineer.remainingFixes > 0 && PlayerControl.LocalPlayer.CanMove;
                 },
@@ -746,9 +754,9 @@ namespace TheOtherRoles
             usePortalButton = new CustomButton(
                 () => {
                     bool didTeleport = false;
-                    Vector2 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
-                    Vector2 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
-                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);  // TODO: check for bans on servers
+                    Vector3 exit = Portal.findExit(PlayerControl.LocalPlayer.transform.position);
+                    Vector3 entry = Portal.findEntry(PlayerControl.LocalPlayer.transform.position);
+                    PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(entry);
 
                     if (!PlayerControl.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
@@ -761,6 +769,9 @@ namespace TheOtherRoles
                         PlayerControl.LocalPlayer.moveable = false;
                         PlayerControl.LocalPlayer.NetTransform.Halt();
                         if (p >= 0.5f && p <= 0.53f && !didTeleport) {
+                            if (SubmergedCompatibility.isSubmerged()) {
+                                SubmergedCompatibility.ChangeFloor(exit.y > -7);
+                            }
                             PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(exit);
                             didTeleport = true;
                         }
@@ -1005,7 +1016,7 @@ namespace TheOtherRoles
                         RPCProcedure.sealVent(SecurityGuard.ventTarget.Id);
                         SecurityGuard.ventTarget = null;
                         
-                    } else if (PlayerControl.GameOptions.MapId != 1) { // Place camera if there's no vent and it's not MiraHQ
+                    } else if (PlayerControl.GameOptions.MapId != 1 && !SubmergedCompatibility.isSubmerged()) { // Place camera if there's no vent and it's not MiraHQ or Submerged
                         var pos = PlayerControl.LocalPlayer.transform.position;
                         byte[] buff = new byte[sizeof(float) * 2];
                         Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
@@ -1020,12 +1031,12 @@ namespace TheOtherRoles
                 },
                 () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews >= Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
                 () => {
-                    securityGuardButton.actionButton.graphic.sprite = (SecurityGuard.ventTarget == null && PlayerControl.GameOptions.MapId != 1) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
+                    securityGuardButton.actionButton.graphic.sprite = (SecurityGuard.ventTarget == null && PlayerControl.GameOptions.MapId != 1 && !SubmergedCompatibility.isSubmerged()) ? SecurityGuard.getPlaceCameraButtonSprite() : SecurityGuard.getCloseVentButtonSprite(); 
                     if (securityGuardButtonScrewsText != null) securityGuardButtonScrewsText.text = $"{SecurityGuard.remainingScrews}/{SecurityGuard.totalScrews}";
 
                     if (SecurityGuard.ventTarget != null)
                         return SecurityGuard.remainingScrews >= SecurityGuard.ventPrice && PlayerControl.LocalPlayer.CanMove;
-                    return PlayerControl.GameOptions.MapId != 1 && SecurityGuard.remainingScrews >= SecurityGuard.camPrice && PlayerControl.LocalPlayer.CanMove;
+                    return PlayerControl.GameOptions.MapId != 1 && !SubmergedCompatibility.isSubmerged() && SecurityGuard.remainingScrews >= SecurityGuard.camPrice && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { securityGuardButton.Timer = securityGuardButton.MaxTimer; },
                 SecurityGuard.getPlaceCameraButtonSprite(),
@@ -1070,7 +1081,8 @@ namespace TheOtherRoles
                     if (SecurityGuard.cantMove) PlayerControl.LocalPlayer.moveable = false;
                     PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                 },
-                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice); },
+                () => { return SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && SecurityGuard.remainingScrews < Mathf.Min(SecurityGuard.ventPrice, SecurityGuard.camPrice)
+                               && !SubmergedCompatibility.isSubmerged(); },
                 () => {
                     if (securityGuardChargesText != null) securityGuardChargesText.text = $"{SecurityGuard.charges} / {SecurityGuard.maxCharges}";
                     securityGuardCamButton.actionButton.graphic.sprite = PlayerControl.GameOptions.MapId == 1 ? SecurityGuard.getLogSprite() : SecurityGuard.getCamSprite();
@@ -1230,7 +1242,7 @@ namespace TheOtherRoles
                     if (Medium.target == null || Medium.target.player == null) return;
                     string msg = "";
 
-                    int randomNumber = Medium.target.killerIfExisting?.PlayerId == Mini.mini?.PlayerId ? TheOtherRoles.rnd.Next(3) : TheOtherRoles.rnd.Next(4);
+                    int randomNumber = TheOtherRoles.rnd.Next(4);
                     string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.DefaultOutfit.ColorId) ? "lighter" : "darker";
                     float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
                     string name = " (" + Medium.target.player.Data.PlayerName + ")";
@@ -1239,7 +1251,7 @@ namespace TheOtherRoles
                     if (randomNumber == 0) msg = "What is your role? My role is " + RoleInfo.GetRolesString(Medium.target.player, false) + name;
                     else if (randomNumber == 1) msg = "What is your killer`s color type? My killer is a " + typeOfColor + " color" + name;
                     else if (randomNumber == 2) msg = "When did you die? I have died " + Math.Round(timeSinceDeath / 1000) + "s before meeting started" + name;
-                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false) + name; //exlude mini 
+                    else msg = "What is your killer`s role? My killer is " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false) + name;
 
                     DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
 
@@ -1392,6 +1404,9 @@ namespace TheOtherRoles
                             writer2.Write(Ninja.ninjaMarked.PlayerId);
                             writer2.Write(byte.MaxValue);
                             AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                            if (SubmergedCompatibility.isSubmerged()) {
+                                    SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
+                            }
                             RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
 
                             // Create Second trace after killing
@@ -1434,6 +1449,39 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F                   
             );
+
+            mayorMeetingButton = new CustomButton(
+               () => {
+                   PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+                   Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                   RPCProcedure.uncheckedCmdReportDeadBody(PlayerControl.LocalPlayer.PlayerId, Byte.MinValue);
+
+                   MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
+                   writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                   writer.Write(Byte.MaxValue);
+                   AmongUsClient.Instance.FinishRpcImmediately(writer);
+               },
+               () => { return Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
+               () => {
+                   mayorMeetingButton.actionButton.OverrideText("Emergency");
+                   bool sabotageActive = false;
+                   foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                       if (task.TaskType == TaskTypes.FixLights || task.TaskType == TaskTypes.RestoreOxy || task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.FixComms || task.TaskType == TaskTypes.StopCharles
+                           || SubmergedCompatibility.isSubmerged() && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask)
+                           sabotageActive = true;
+                   return !sabotageActive && PlayerControl.LocalPlayer.CanMove;
+               },
+               () => { mayorMeetingButton.Timer = mayorMeetingButton.MaxTimer; },
+               Mayor.getMeetingSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.F,
+               true,
+               0f,
+               () => {},
+               false,
+               "Meeting"
+           );
 
             // Set the default (or settings from the previous game) timers / durations when spawning the buttons
             setCustomButtonCooldowns();
