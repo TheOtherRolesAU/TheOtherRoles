@@ -123,6 +123,7 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         SetBlanked,
+        dynamicImpostors,
         Bloody,
         SetFirstKill,
         Invert,
@@ -378,6 +379,11 @@ namespace TheOtherRoles
 
         public static void dynamicMapOption(byte mapId) {
             PlayerControl.GameOptions.MapId = mapId;
+        }
+
+        public static void dynamicImpostors(byte impostorCount)
+        {
+            PlayerControl.GameOptions.NumImpostors = impostorCount;
         }
 
         // Role functionality
@@ -970,7 +976,10 @@ namespace TheOtherRoles
                     byte mapId = reader.ReadByte();
                     RPCProcedure.dynamicMapOption(mapId);
                     break;
-
+                case (byte)CustomRPC.dynamicImpostors:
+                    byte impostorCount = reader.ReadByte();
+                    RPCProcedure.dynamicImpostors(impostorCount);
+                    break;
                 // Role functionality
 
                 case (byte)CustomRPC.EngineerFixLights:

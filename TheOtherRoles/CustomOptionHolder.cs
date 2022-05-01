@@ -279,6 +279,8 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnablePolus;
         public static CustomOption dynamicMapEnableAirShip;
 
+        public static CustomOption dynamicImpostor;
+
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
 
@@ -392,7 +394,7 @@ namespace TheOtherRoles {
 
             vultureSpawnRate = CustomOption.Create(340, Types.Neutral, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, Types.Neutral, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
-            vultureNumberToWin = CustomOption.Create(342, Types.Neutral, "Number Of Corpses Needed To Be Eaten", 4f, 1f, 10f, 1f, vultureSpawnRate);
+            // vultureNumberToWin = CustomOption.Create(342, Types.Neutral, "Number Of Corpses Needed To Be Eaten", 4f, 1f, 10f, 1f, vultureSpawnRate);
             vultureCanUseVents = CustomOption.Create(343, Types.Neutral, "Vulture Can Use Vents", true, vultureSpawnRate);
             vultureShowArrows = CustomOption.Create(344, Types.Neutral, "Show Arrows Pointing Towards The Corpses", true, vultureSpawnRate);
 
@@ -557,6 +559,7 @@ namespace TheOtherRoles {
             allowParallelMedBayScans = CustomOption.Create(7, Types.General, "Allow Parallel MedBay Scans", false);
             shieldFirstKill = CustomOption.Create(8, Types.General, "Shield Last Game First Kill", false);
 
+            dynamicImpostor = CustomOption.Create(9, Types.General, "Dynamic Impostor Count", true, null, true);
             dynamicMap = CustomOption.Create(500, Types.General, "Play On A Random Map", false, null, false);
             dynamicMapEnableSkeld = CustomOption.Create(501, Types.General, "Enable Skeld Rotation", true, dynamicMap, false);
             dynamicMapEnableMira = CustomOption.Create(502, Types.General, "Enable Mira Rotation", true, dynamicMap, false);

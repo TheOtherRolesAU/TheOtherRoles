@@ -1274,7 +1274,9 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             vulture = null;
-            vultureNumberToWin = Mathf.RoundToInt(CustomOptionHolder.vultureNumberToWin.getFloat());
+            int playerCount = PlayerControl.AllPlayerControls.ToArray().ToList().Count;
+            vultureNumberToWin = (int)Mathf.Floor((float)playerCount / (float)3.0);
+            // vultureNumberToWin = Mathf.RoundToInt(CustomOptionHolder.vultureNumberToWin.getFloat());
             eatenBodies = 0;
             cooldown = CustomOptionHolder.vultureCooldown.getFloat();
             triggerVultureWin = false;

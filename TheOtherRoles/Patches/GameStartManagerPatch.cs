@@ -159,6 +159,18 @@ namespace TheOtherRoles.Patches {
                         }
                     }
 
+                    if (CustomOptionHolder.dynamicImpostor.getBool()) {
+                        var playerCount = GameData.Instance.PlayerCount;
+                        
+                        if (playerCount < 8) {
+                            PlayerControl.GameOptions.NumImpostors = 1;
+                        } else if(playerCount < 13) {
+                            PlayerControl.GameOptions.NumImpostors = 2;
+                        } else {
+                            PlayerControl.GameOptions.NumImpostors = 3;
+                        }
+                    }
+
                     if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
                         // 0 = Skeld
                         // 1 = Mira HQ

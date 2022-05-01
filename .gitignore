@@ -2,3 +2,5 @@
 .vscode/tasks.json
 TODO
 .DS_Store
+bin/
+obj/
