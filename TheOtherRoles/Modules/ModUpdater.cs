@@ -196,11 +196,20 @@ namespace TheOtherRoles.Modules
             if (downloadURI.Length == 0) return false;
 
             var res = await client.GetAsync(downloadURI, HttpCompletionOption.ResponseContentRead);
-            string codeBase = (isSubmerged ? SubmergedCompatibility.Assembly : Assembly.GetExecutingAssembly()).CodeBase;
+            string codeBase = "";
+            if (!isSubmerged)
+                codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            else if (SubmergedCompatibility.Loaded)
+                codeBase = SubmergedCompatibility.Assembly.CodeBase;
+            else {
+                Uri pluginsFolder = new Uri(new Uri(Assembly.GetExecutingAssembly().CodeBase), ".");
+                codeBase = pluginsFolder.OriginalString + "/Submerged.dll";
+            }
+
             UriBuilder uri = new UriBuilder(codeBase);
             string fullname = Uri.UnescapeDataString(uri.Path);
             if (File.Exists(fullname + ".old")) File.Delete(fullname + ".old");
-            File.Move(fullname, fullname + ".old");
+            if (File.Exists(fullname)) File.Move(fullname, fullname + ".old");
 
             await using var responseStream = await res.Content.ReadAsStreamAsync();
             await using var fileStream = File.Create(fullname);
