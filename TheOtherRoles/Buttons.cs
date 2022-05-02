@@ -768,7 +768,7 @@ namespace TheOtherRoles
                     HudManager.Instance.StartCoroutine(Effects.Lerp(Portal.teleportDuration, new Action<float>((p) => { // Delayed action
                         PlayerControl.LocalPlayer.moveable = false;
                         PlayerControl.LocalPlayer.NetTransform.Halt();
-                        if (p >= 0.5f && p <= 0.53f && !didTeleport) {
+                        if (p >= 0.5f && p <= 0.53f && !didTeleport && !MeetingHud.Instance) {
                             if (SubmergedCompatibility.isSubmerged()) {
                                 SubmergedCompatibility.ChangeFloor(exit.y > -7);
                             }
