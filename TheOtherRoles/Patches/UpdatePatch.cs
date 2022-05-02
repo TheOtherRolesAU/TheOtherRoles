@@ -245,7 +245,11 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
-            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor || MeetingHud.Instance) return;
+            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor) return;
+            if (MeetingHud.Instance) {
+                __instance.KillButton.Hide();
+                return;
+            }
             bool enabled = true;
             if (Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer)
                 enabled = false;
@@ -272,6 +276,14 @@ namespace TheOtherRoles.Patches {
 
         }
 
+        static void updateUseButton(HudManager __instance) {
+            if (MeetingHud.Instance) __instance.UseButton.Hide();
+        }
+
+        static void updateSabotageButton(HudManager __instance) {
+            if (MeetingHud.Instance) __instance.SabotageButton.Hide();
+        }
+
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -292,6 +304,9 @@ namespace TheOtherRoles.Patches {
             // Deputy Sabotage, Use and Vent Button Disabling
             updateReportButton(__instance);
             updateVentButton(__instance);
+            // Meeting hide buttons if needed (used for the map usage, because closing the map would show buttons)
+            updateSabotageButton(__instance);
+            updateUseButton(__instance);
 
         }
     }

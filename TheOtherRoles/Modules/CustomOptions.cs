@@ -635,6 +635,7 @@ namespace TheOtherRoles {
                 LastPosition = new Vector3(MinX, MinY);
                 lastAspect = aspect;
                 setLastPosition = true;
+                if (Scroller != null) Scroller.ContentXBounds = new FloatRange(MinX, MinX);                
             }
 
             CreateScroller(__instance);

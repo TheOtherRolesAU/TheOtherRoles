@@ -74,4 +74,19 @@ namespace TheOtherRoles.Modules {
             });
         }
     }
+
+    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.UpdateAnnounceText))]
+    public static class Announcement
+    {
+        public static ModUpdateBehaviour.UpdateData updateData = null;
+        public static bool Prefix(AnnouncementPopUp __instance)
+        {
+            if (ModUpdateBehaviour.showPopUp || updateData == null) return true;
+
+            var text = __instance.AnnounceTextMeshPro;            
+            text.text = $"<size=150%><color=#FC0303>THE OTHER ROLES </color> {(updateData.Tag)}\n{(updateData.Content)}";
+
+            return false;
+        }
+    }
 }
