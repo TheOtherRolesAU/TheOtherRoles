@@ -68,7 +68,10 @@ namespace TheOtherRoles.Modules
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name != "MainMenu") return;
-            if (RequiredUpdateData is null) return;
+            if (RequiredUpdateData is null) {
+                showPopUp = false;
+                return;
+            }
             
             var template = GameObject.Find("ExitGameButton");
             if (!template) return;
@@ -100,6 +103,7 @@ namespace TheOtherRoles.Modules
             var isSubmerged = TORUpdate == null;
             var announcement = $"<size=150%>A new <color=#FC0303>{(isSubmerged ? "Submerged" : "THE OTHER ROLES")}</color> update to {(isSubmerged ? SubmergedUpdate.Tag : TORUpdate.Tag)} is available</size>\n{(isSubmerged ? SubmergedUpdate.Content : TORUpdate.Content)}";
             var mgr = FindObjectOfType<MainMenuManager>(true);
+            if (isSubmerged && !SubmergedCompatibility.Loaded) showPopUp = false;
             if (showPopUp) mgr.StartCoroutine(CoShowAnnouncement(announcement));
             showPopUp = false;
         }
@@ -140,6 +144,7 @@ namespace TheOtherRoles.Modules
         {
             var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("Eisbison", "TheOtherRoles"));
             while (!torUpdateCheck.IsCompleted) yield return null;
+            Announcement.updateData = torUpdateCheck.Result;
             if (torUpdateCheck.Result != null && torUpdateCheck.Result.IsNewer(Version.Parse(TheOtherRolesPlugin.VersionString)))
             {
                 Instance.TORUpdate = torUpdateCheck.Result;
@@ -196,11 +201,20 @@ namespace TheOtherRoles.Modules
             if (downloadURI.Length == 0) return false;
 
             var res = await client.GetAsync(downloadURI, HttpCompletionOption.ResponseContentRead);
-            string codeBase = (isSubmerged ? SubmergedCompatibility.Assembly : Assembly.GetExecutingAssembly()).CodeBase;
+            string codeBase = "";
+            if (!isSubmerged)
+                codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            else if (SubmergedCompatibility.Loaded)
+                codeBase = SubmergedCompatibility.Assembly.CodeBase;
+            else {
+                Uri pluginsFolder = new Uri(new Uri(Assembly.GetExecutingAssembly().CodeBase), ".");
+                codeBase = pluginsFolder.OriginalString + "/Submerged.dll";
+            }
+
             UriBuilder uri = new UriBuilder(codeBase);
             string fullname = Uri.UnescapeDataString(uri.Path);
             if (File.Exists(fullname + ".old")) File.Delete(fullname + ".old");
-            File.Move(fullname, fullname + ".old");
+            if (File.Exists(fullname)) File.Move(fullname, fullname + ".old");
 
             await using var responseStream = await res.Content.ReadAsStreamAsync();
             await using var fileStream = File.Create(fullname);
