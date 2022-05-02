@@ -108,6 +108,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - Fixed a bug where the medium revealed a evil mini
 - Fixed a bug where the teleporter teleported while meeting is called
 - Fixed a bug where buttons appeared in meeting
+- Fixed the Popup  
 - Fixed some ui bugs  
   
 **Version 4.1.0**
