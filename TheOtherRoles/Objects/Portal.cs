@@ -87,7 +87,7 @@ namespace TheOtherRoles.Objects {
             portalRenderer.sprite = portalSprite;
 
             Vector3 fgPosition = new Vector3(0, 0, -1f);
-            portalFgAnimationGameObject = new GameObject("PortalAnimationFG") { layer = 11 };
+            portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
             portalFgAnimationGameObject.transform.SetParent(portalGameObject.transform);
             portalFgAnimationGameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             portalFgAnimationGameObject.transform.localPosition = fgPosition;
