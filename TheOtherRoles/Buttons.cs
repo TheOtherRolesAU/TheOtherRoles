@@ -49,7 +49,11 @@ namespace TheOtherRoles
         public static CustomButton ninjaButton;
         public static CustomButton mayorMeetingButton;
 
+        public static CustomButton zoomOutButton;
+
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
+
+        public static bool zoomOutStatus = false;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text securityGuardChargesText;
@@ -1482,6 +1486,23 @@ namespace TheOtherRoles
                false,
                "Meeting"
            );
+
+            zoomOutButton = new CustomButton(
+                () => { Helpers.toggleZoom();
+                },
+                () => { if (PlayerControl.LocalPlayer == null || !PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor) return false;
+                    var (playerCompleted, playerTotal) = TasksHandler.taskInfo(PlayerControl.LocalPlayer.Data);
+                    int numberOfLeftTasks = playerTotal - playerCompleted;
+                    return numberOfLeftTasks <= 0;
+                },
+                () => { return true; },
+                () => { return; },
+                new Sprite(),
+                new Vector3(0, 2, 0),
+                __instance,
+                KeyCode.KeypadPlus
+                ) ;
+            zoomOutButton.Timer = 0f;
 
             // Set the default (or settings from the previous game) timers / durations when spawning the buttons
             setCustomButtonCooldowns();

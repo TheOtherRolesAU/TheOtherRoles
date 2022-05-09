@@ -545,6 +545,9 @@ namespace TheOtherRoles.Patches {
 
                 // Remove first kill shield
                 MapOptions.firstKillPlayer = null;
+
+                // Reset zoomed out ghosts
+                Helpers.toggleZoom(reset: true);
             }
         }
 

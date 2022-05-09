@@ -369,6 +369,15 @@ namespace TheOtherRoles {
             
             return team;
         }
+
+        public static void toggleZoom(bool reset=false) {
+            float zoomFactor = 4f;
+            if (HudManagerStartPatch.zoomOutStatus)
+                zoomFactor = 1 / zoomFactor;
+            else if (reset) return; // Dont zoom out if meant to reset.
+            HudManagerStartPatch.zoomOutStatus = !HudManagerStartPatch.zoomOutStatus;
+            Camera.main.orthographicSize *= zoomFactor;
+        }
         
         public static object TryCast(this Il2CppObjectBase self, Type type)
         {
