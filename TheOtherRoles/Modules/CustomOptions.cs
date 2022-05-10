@@ -829,6 +829,7 @@ namespace TheOtherRoles {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode == AmongUs.GameOptions.GameModes.HideNSeek) return; // Allow Vanilla Hide N Seek
             int counter = TheOtherRolesPlugin.optionsPage;
             string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
+<<<<<<< HEAD
             int maxPage = 7;
             if (MapOptions.gameMode == CustomGamemodes.HideNSeek) {
                 if (TheOtherRolesPlugin.optionsPage > 1) TheOtherRolesPlugin.optionsPage = 0;
@@ -865,6 +866,31 @@ namespace TheOtherRoles {
                         hudString += "Page 7: Modifier Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Modifier, false);
                         break;
                 }
+=======
+
+            switch (counter) {
+                case 0:
+                    hudString += "Page 1: Vanilla Settings \n\n" + __result;
+                    break;
+                case 1:
+                    hudString += "Page 2: The Other Roles Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.General, false);
+                    break;
+                case 2:
+                    hudString += "Page 3: Role and Modifier Rates \n" + buildRoleOptions();
+                    break;
+                case 3:
+                    hudString += "Page 4: Impostor Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Impostor, false);
+                    break;
+                case 4:
+                    hudString += "Page 5: Neutral Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Neutral, false);
+                    break;
+                case 5:
+                    hudString += "Page 6: Crewmate Role Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Crewmate, false);
+                    break;
+                case 6:
+                    hudString += "Page 7: Modifier Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.Modifier, false);
+                    break;
+>>>>>>> 6b8b7a6 (Add Dadoum to contributors and remove debug code)
             }
 
             hudString += $"\n Press TAB or Page Number for more... ({counter+1}/{maxPage})";
