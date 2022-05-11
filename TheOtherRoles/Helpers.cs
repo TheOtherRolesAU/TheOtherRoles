@@ -381,7 +381,7 @@ namespace TheOtherRoles {
                 if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize *= zoomFactor;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
             }
 
-            HudManagerStartPatch.zoomOutButton.Sprite = HudManagerStartPatch.zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f / zoomFactor * 2) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 150f);
+            HudManagerStartPatch.zoomOutButton.Sprite = HudManagerStartPatch.zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 150f / zoomFactor * 2) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
             HudManagerStartPatch.zoomOutButton.PositionOffset = HudManagerStartPatch.zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
         }

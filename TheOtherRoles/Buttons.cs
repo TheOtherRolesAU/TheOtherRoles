@@ -1524,7 +1524,7 @@ namespace TheOtherRoles
                 },
                 () => { return true; },
                 () => { return; },
-                Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 150f),  // Invisible button!
+                Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f),  // Invisible button!
                 new Vector3(0.4f, 2.8f, 0),
                 __instance,
                 KeyCode.KeypadPlus
