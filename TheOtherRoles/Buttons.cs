@@ -430,16 +430,16 @@ namespace TheOtherRoles
                         morphlingButton.Sprite = Morphling.getMorphSprite();
                         morphlingButton.EffectDuration = 1f;
 
-                        morphlingButton.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);
+                        // Add poolable player to the button so that the target outfit is shown
+                        morphlingButton.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);  // Before the poolable player
                         morphTargetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, morphlingButton.actionButton.transform);
                         GameData.PlayerInfo data = Morphling.sampledTarget.Data;
                         PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, morphTargetDisplay.CurrentBodySprite.BodySprite);
                         morphTargetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
                         morphTargetDisplay.HatSlot.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
                         PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, morphTargetDisplay.PetSlot);
-                        morphTargetDisplay.NameText.text = data.PlayerName;
-
-                        morphTargetDisplay.transform.localPosition = new Vector3(0f, 0.2f, -0.01f);
+                        morphTargetDisplay.NameText.text = "";  // Hide the name!
+                        morphTargetDisplay.transform.localPosition = new Vector3(0f, 0.22f, -0.01f);
                         morphTargetDisplay.transform.localScale = Vector3.one * 0.33f;
                         morphTargetDisplay.setSemiTransparent(false);
                         morphTargetDisplay.gameObject.SetActive(true);
@@ -453,7 +453,7 @@ namespace TheOtherRoles
                     morphlingButton.isEffectActive = false;
                     morphlingButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Morphling.sampledTarget = null;
-                    if (morphTargetDisplay != null) {
+                    if (morphTargetDisplay != null) {  // Reset the poolable player
                         morphTargetDisplay.gameObject.SetActive(false);
                         GameObject.Destroy(morphTargetDisplay.gameObject);
                         morphTargetDisplay = null;
@@ -470,6 +470,7 @@ namespace TheOtherRoles
                         morphlingButton.Timer = morphlingButton.MaxTimer;
                         morphlingButton.Sprite = Morphling.getSampleSprite();
 
+                        // Reset the poolable player
                         morphTargetDisplay.gameObject.SetActive(false);
                         GameObject.Destroy(morphTargetDisplay.gameObject);
                         morphTargetDisplay = null;
