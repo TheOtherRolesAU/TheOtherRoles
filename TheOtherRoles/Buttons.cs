@@ -54,6 +54,7 @@ namespace TheOtherRoles
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
         public static bool zoomOutStatus = false;
+        public static PoolablePlayer morphTargetDisplay;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text securityGuardChargesText;
@@ -413,6 +414,7 @@ namespace TheOtherRoles
             );
 
             // Morphling morph
+            
             morphlingButton = new CustomButton(
                 () => {
                     if (Morphling.sampledTarget != null) {
@@ -422,10 +424,25 @@ namespace TheOtherRoles
                         RPCProcedure.morphlingMorph(Morphling.sampledTarget.PlayerId);
                         Morphling.sampledTarget = null;
                         morphlingButton.EffectDuration = Morphling.duration;
+
                     } else if (Morphling.currentTarget != null) {
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
                         morphlingButton.EffectDuration = 1f;
+
+                        morphlingButton.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);
+                        morphTargetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, morphlingButton.actionButton.transform);
+                        GameData.PlayerInfo data = Morphling.sampledTarget.Data;
+                        PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, morphTargetDisplay.CurrentBodySprite.BodySprite);
+                        morphTargetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
+                        morphTargetDisplay.HatSlot.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
+                        PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, morphTargetDisplay.PetSlot);
+                        morphTargetDisplay.NameText.text = data.PlayerName;
+
+                        morphTargetDisplay.transform.localPosition = new Vector3(0f, 0.2f, -0.01f);
+                        morphTargetDisplay.transform.localScale = Vector3.one * 0.33f;
+                        morphTargetDisplay.setSemiTransparent(false);
+                        morphTargetDisplay.gameObject.SetActive(true);
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
@@ -436,6 +453,11 @@ namespace TheOtherRoles
                     morphlingButton.isEffectActive = false;
                     morphlingButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Morphling.sampledTarget = null;
+                    if (morphTargetDisplay != null) {
+                        morphTargetDisplay.gameObject.SetActive(false);
+                        GameObject.Destroy(morphTargetDisplay.gameObject);
+                        morphTargetDisplay = null;
+                    }
                 },
                 Morphling.getSampleSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -447,6 +469,10 @@ namespace TheOtherRoles
                     if (Morphling.sampledTarget == null) {
                         morphlingButton.Timer = morphlingButton.MaxTimer;
                         morphlingButton.Sprite = Morphling.getSampleSprite();
+
+                        morphTargetDisplay.gameObject.SetActive(false);
+                        GameObject.Destroy(morphTargetDisplay.gameObject);
+                        morphTargetDisplay = null;
                     }
                 }
             );
