@@ -1497,11 +1497,11 @@ namespace TheOtherRoles
                 },
                 () => { return true; },
                 () => { return; },
-                new Sprite(),
-                new Vector3(0, 2, 0),
+                Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 150f),  // Invisible button!
+                new Vector3(0.4f, 2.8f, 0),
                 __instance,
                 KeyCode.KeypadPlus
-                ) ;
+                );
             zoomOutButton.Timer = 0f;
 
             // Set the default (or settings from the previous game) timers / durations when spawning the buttons
