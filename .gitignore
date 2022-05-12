@@ -1,4 +1,8 @@
-.vs
-.vscode/tasks.json
-TODO
-.DS_Store
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea
+/tools
+.vscode
