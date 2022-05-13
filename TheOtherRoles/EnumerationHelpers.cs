@@ -32,13 +32,23 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
 {
     private static readonly int _elemSize;
     private static readonly int _offset;
-    private static readonly T _object;
-    private static Action<T, uint> _setMyGcHandle;
+    private static Func<T, IntPtr> _cctor;
     
     static Il2CppListEnumerable()
     {
         _elemSize = IntPtr.Size;
         _offset = 4 * IntPtr.Size;
+
+        var constructor = typeof(T).GetConstructor(new[]
+        {
+            typeof(IntPtr)
+        });
+
+
+        ParameterExpression ptr = Expression.Parameter(typeof(IntPtr));
+        var create = Expression.New(constructor!, ptr);
+        create.
+        
         _object = (T) FormatterServices.GetUninitializedObject(typeof(T));
         var field = AccessTools.Field(typeof(T), "myGcHandle");
 
