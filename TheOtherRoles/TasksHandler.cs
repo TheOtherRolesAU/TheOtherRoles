@@ -10,7 +10,6 @@ namespace TheOtherRoles {
             int CompletedTasks = 0;
             if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
                 playerInfo.Object &&
-                (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks()
                 ) {
@@ -26,8 +25,11 @@ namespace TheOtherRoles {
         [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
         private static class GameDataRecomputeTaskCountsPatch {
             private static bool Prefix(GameData __instance) {
-                __instance.TotalTasks = 0;
-                __instance.CompletedTasks = 0;
+               
+
+                var totalTasks = 0;
+                var completedTasks = 0;
+                
                 foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
                 {
                     if (playerInfo.Object
@@ -37,9 +39,12 @@ namespace TheOtherRoles {
                        )
                         continue;
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
-                    __instance.TotalTasks += playerTotal;
-                    __instance.CompletedTasks += playerCompleted;
+                    totalTasks += playerTotal;
+                    completedTasks += playerCompleted;
                 }
+                
+                __instance.TotalTasks = totalTasks;
+                __instance.CompletedTasks = completedTasks;
                 return false;
             }
         }
