@@ -63,46 +63,48 @@ namespace TheOtherRoles.Patches {
                         player.NameText.color = color;
         }
 
-        static void setNameColors() {
-            if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer)
+        static void setNameColors()
+        {
+            var localPlayer = PlayerControl.LocalPlayer;
+            if (Jester.jester != null && Jester.jester == localPlayer)
                 setPlayerNameColor(Jester.jester, Jester.color);
-            else if (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer)
+            else if (Mayor.mayor != null && Mayor.mayor == localPlayer)
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
-            else if (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer)
+            else if (Engineer.engineer != null && Engineer.engineer == localPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
-            else if (Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer) {
+            else if (Sheriff.sheriff != null && Sheriff.sheriff == localPlayer) {
                 setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
-            } else if (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer) {
+            } else if (Deputy.deputy != null && Deputy.deputy == localPlayer) {
                 setPlayerNameColor(Deputy.deputy, Deputy.color);
                 if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 }
-            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == PlayerControl.LocalPlayer)
+            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == localPlayer)
                 setPlayerNameColor(Portalmaker.portalmaker, Portalmaker.color);
-            else if (Lighter.lighter != null && Lighter.lighter == PlayerControl.LocalPlayer)
+            else if (Lighter.lighter != null && Lighter.lighter == localPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
-            else if (Detective.detective != null && Detective.detective == PlayerControl.LocalPlayer)
+            else if (Detective.detective != null && Detective.detective == localPlayer)
                 setPlayerNameColor(Detective.detective, Detective.color);
-            else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer)
+            else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == localPlayer)
                 setPlayerNameColor(TimeMaster.timeMaster, TimeMaster.color);
-            else if (Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer)
+            else if (Medic.medic != null && Medic.medic == localPlayer)
                 setPlayerNameColor(Medic.medic, Medic.color);
-            else if (Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer)
+            else if (Shifter.shifter != null && Shifter.shifter == localPlayer)
                 setPlayerNameColor(Shifter.shifter, Shifter.color);
-            else if (Swapper.swapper != null && Swapper.swapper == PlayerControl.LocalPlayer)
+            else if (Swapper.swapper != null && Swapper.swapper == localPlayer)
                 setPlayerNameColor(Swapper.swapper, Swapper.color);
-            else if (Seer.seer != null && Seer.seer == PlayerControl.LocalPlayer)
+            else if (Seer.seer != null && Seer.seer == localPlayer)
                 setPlayerNameColor(Seer.seer, Seer.color);
-            else if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer)
+            else if (Hacker.hacker != null && Hacker.hacker == localPlayer)
                 setPlayerNameColor(Hacker.hacker, Hacker.color);
-            else if (Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer)
+            else if (Tracker.tracker != null && Tracker.tracker == localPlayer)
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
-            else if (Snitch.snitch != null && Snitch.snitch == PlayerControl.LocalPlayer)
+            else if (Snitch.snitch != null && Snitch.snitch == localPlayer)
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
-            else if (Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer) {
+            else if (Jackal.jackal != null && Jackal.jackal == localPlayer) {
                 // Jackal can see his sidekick
                 setPlayerNameColor(Jackal.jackal, Jackal.color);
                 if (Sidekick.sidekick != null) {
@@ -112,28 +114,28 @@ namespace TheOtherRoles.Patches {
                     setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
-            else if (Spy.spy != null && Spy.spy == PlayerControl.LocalPlayer) {
+            else if (Spy.spy != null && Spy.spy == localPlayer) {
                 setPlayerNameColor(Spy.spy, Spy.color);
-            } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == PlayerControl.LocalPlayer) {
+            } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == localPlayer) {
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
-            } else if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
+            } else if (Arsonist.arsonist != null && Arsonist.arsonist == localPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
-            } else if (Guesser.niceGuesser != null && Guesser.niceGuesser == PlayerControl.LocalPlayer) {
+            } else if (Guesser.niceGuesser != null && Guesser.niceGuesser == localPlayer) {
                 setPlayerNameColor(Guesser.niceGuesser, Guesser.color);
-            } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == PlayerControl.LocalPlayer) {
+            } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == localPlayer) {
                 setPlayerNameColor(Guesser.evilGuesser, Palette.ImpostorRed);
-            } else if (Vulture.vulture != null && Vulture.vulture == PlayerControl.LocalPlayer) {
+            } else if (Vulture.vulture != null && Vulture.vulture == localPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
-            } else if (Medium.medium != null && Medium.medium == PlayerControl.LocalPlayer) {
+            } else if (Medium.medium != null && Medium.medium == localPlayer) {
                 setPlayerNameColor(Medium.medium, Medium.color);
-            } else if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer) {
+            } else if (Lawyer.lawyer != null && Lawyer.lawyer == localPlayer) {
                 setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
-            } else if (Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer) {
+            } else if (Pursuer.pursuer != null && Pursuer.pursuer == localPlayer) {
                 setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
-            if (Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer) {
+            if (Sidekick.sidekick != null && Sidekick.sidekick == localPlayer) {
                 // Sidekick can see the jackal
                 setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
                 if (Jackal.jackal != null) {
@@ -142,13 +144,13 @@ namespace TheOtherRoles.Patches {
             }
 
             // No else if here, as the Impostors need the Spy name to be colored
-            if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+            if (Spy.spy != null && localPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
-            if (Sidekick.sidekick != null && Sidekick.wasTeamRed && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+            if (Sidekick.sidekick != null && Sidekick.wasTeamRed && localPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Sidekick.sidekick, Spy.color);
             }
-            if (Jackal.jackal != null && Jackal.wasTeamRed && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
+            if (Jackal.jackal != null && Jackal.wasTeamRed && localPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Jackal.jackal, Spy.color);
             }
 
@@ -216,13 +218,15 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        static void timerUpdate() {
-            Hacker.hackerTimer -= Time.deltaTime;
-            Lighter.lighterTimer -= Time.deltaTime;
-            Trickster.lightsOutTimer -= Time.deltaTime;
-            Tracker.corpsesTrackingTimer -= Time.deltaTime;
-            foreach (byte key in Deputy.handcuffedKnows.Keys.ToList())
-                Deputy.handcuffedKnows[key] -= Time.deltaTime;
+        static void timerUpdate()
+        {
+            var dt = Time.deltaTime;
+            Hacker.hackerTimer -= dt;
+            Lighter.lighterTimer -= dt;
+            Trickster.lightsOutTimer -= dt;
+            Tracker.corpsesTrackingTimer -= dt;
+            foreach (byte key in Deputy.handcuffedKnows.Keys)
+                Deputy.handcuffedKnows[key] -= dt;
         }
 
         public static void miniUpdate() {
