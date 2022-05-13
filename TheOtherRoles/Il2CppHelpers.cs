@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using UnityEngine;
 
 namespace TheOtherRoles;
 
@@ -10,10 +11,8 @@ public static class Il2CppHelpers
         public static Func<IntPtr, T> Cast;
         static CastHelper()
         {
-            var typeofT = typeof(T);
-            var typeofIntPtr = typeof(T);
-            var constructor = typeofT.GetConstructor(new[] {typeofIntPtr});
-            var ptr = Expression.Parameter(typeofIntPtr);
+            var constructor = typeof(T).GetConstructor(new[] {typeof(IntPtr)});
+            var ptr = Expression.Parameter(typeof(IntPtr));
             var create = Expression.New(constructor!, ptr);
             var lambda = Expression.Lambda<Func<IntPtr, T>>(create, ptr);
             Cast = lambda.Compile();
