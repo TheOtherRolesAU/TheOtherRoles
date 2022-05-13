@@ -239,6 +239,8 @@ namespace TheOtherRoles.Modules {
                 if (DestroyableSingleton<TutorialManager>.InstanceExists) {
                     try {
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
+                        if (!Directory.Exists(filePath))
+                            Directory.CreateDirectory(filePath);
                         DirectoryInfo d = new DirectoryInfo(filePath);
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
