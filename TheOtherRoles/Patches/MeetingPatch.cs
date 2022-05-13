@@ -2,15 +2,11 @@ using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
 using TheOtherRoles.Objects;
-using System.Collections;
 using System;
-using System.Text;
 using UnityEngine;
-using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]

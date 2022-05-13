@@ -2,15 +2,10 @@ using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
-using static TheOtherRoles.MapOptions;
-using System.Collections;
 using System;
-using System.Text;
 using UnityEngine;
-using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]

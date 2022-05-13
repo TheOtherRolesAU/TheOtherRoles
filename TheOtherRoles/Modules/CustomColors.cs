@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using Il2CppSystem;
 using HarmonyLib;
-using UnhollowerBaseLib;
-using Assets.CoreScripts;
 
 namespace TheOtherRoles.Modules {
     public class CustomColors {

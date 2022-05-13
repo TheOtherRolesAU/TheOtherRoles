@@ -1,7 +1,4 @@
 using HarmonyLib;
-using static TheOtherRoles.TheOtherRoles;
-using System.Collections;
-using System.Collections.Generic;
 using System;
 
 namespace TheOtherRoles {

@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using Hazel;
 using System;
-using UnhollowerBaseLib;
 
 namespace TheOtherRoles.Patches {
     public class GameStartManagerPatch  {

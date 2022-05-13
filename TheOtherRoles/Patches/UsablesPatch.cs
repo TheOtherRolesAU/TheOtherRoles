@@ -7,7 +7,6 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using TheOtherRoles.Objects;
 
 
 namespace TheOtherRoles.Patches {

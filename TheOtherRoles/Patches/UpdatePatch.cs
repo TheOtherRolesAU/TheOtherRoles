@@ -1,7 +1,5 @@
 using HarmonyLib;
 using System;
-using System.IO;
-using System.Net.Http;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
