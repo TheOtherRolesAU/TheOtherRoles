@@ -358,6 +358,9 @@ namespace TheOtherRoles.Modules {
         public static List<CustomHatOnline> hatdetails = new List<CustomHatOnline>();
         private static Task hatFetchTask = null;
         public static void LaunchHatFetcher() {
+#if CORECLR
+            return; 
+#endif
             if (running)
                 return;
             running = true;

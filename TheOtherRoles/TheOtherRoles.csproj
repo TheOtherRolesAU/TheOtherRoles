@@ -1,13 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
         <Version>4.1.1</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Configurations>Debug;Release;CoreCLR</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)'=='CoreCLR'">
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+    
     <ItemGroup>
         <EmbeddedResource Include="Resources\CustomHats\*.png" />
         <EmbeddedResource Include="Resources\*.png" />
@@ -15,9 +24,14 @@
 		<EmbeddedResource Include="Resources\PortalAnimation\*.png" />
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">
         <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.3.29" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.0" />
+    </ItemGroup>
+    
+    <ItemGroup Condition="'$(Configuration)'=='CoreCLR'">
+        <Reference Include="C:\Users\User\Documents\AmongUs\AmongUs/BepInEx/core/*.dll" />
+        <Reference Include="C:\Users\User\Documents\AmongUs\AmongUs/BepInEx/unhollowed/*.dll" />
     </ItemGroup>
 </Project>
