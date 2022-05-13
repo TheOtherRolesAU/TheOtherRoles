@@ -420,7 +420,7 @@ namespace TheOtherRoles.Patches {
 
         public static void playerSizeUpdate(PlayerControl p) {
             // Set default player size
-            CircleCollider2D collider = p.GetComponent<CircleCollider2D>();
+            CircleCollider2D collider = p.Collider.CastFast<CircleCollider2D>();
 
             p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             collider.radius = Mini.defaultColliderRadius;
