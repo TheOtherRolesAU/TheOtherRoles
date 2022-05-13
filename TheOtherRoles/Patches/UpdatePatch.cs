@@ -13,45 +13,48 @@ namespace TheOtherRoles.Patches {
     class HudManagerUpdatePatch
     {
         static void resetNameTagsAndColors() {
-            Dictionary<byte, PlayerControl> playersById = Helpers.allPlayersById();
+            var localPlayer = PlayerControl.LocalPlayer;
+            var myData = localPlayer.Data;
+            var amImpostor = myData.Role.IsImpostor;
+            var morphTimerNotUp = Morphling.morphTimer > 0f;
+            var morphTargetNotNull = Morphling.morphTarget != null;
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
-                String playerName = player.Data.PlayerName;
-                if (Morphling.morphTimer > 0f && Morphling.morphling == player && Morphling.morphTarget != null) playerName = Morphling.morphTarget.Data.PlayerName; // Temporary hotfix for the Morphling's name
-
-                player.nameText.text = Helpers.hidePlayerName(PlayerControl.LocalPlayer, player) ? "" : playerName;
-                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor) {
-                    player.nameText.color = Palette.ImpostorRed;
-                } else {
-                    player.nameText.color = Color.white;
+            var dict = new Dictionary<byte, (string name, Color color)>();
+            
+            foreach (var data in GameData.Instance.AllPlayers)
+            {
+                var player = data.Object;
+                string text;
+                Color color;
+                if (player)
+                {
+                    String playerName = data.PlayerName;
+                    if (morphTimerNotUp && morphTargetNotNull && Morphling.morphling == player) playerName = Morphling.morphTarget.Data.PlayerName;
+                    var nameText = player.nameText;
+                
+                    nameText.text = text = Helpers.hidePlayerName(localPlayer, player) ? "" : playerName;
+                    nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
+                }
+                else
+                {
+                    text = data.PlayerName;
+                    color = Color.white;
+                }
+                
+                
+                dict.Add(data.PlayerId, (text, color));
+            }
+            
+            if (MeetingHud.Instance != null) 
+            {
+                foreach (PlayerVoteArea playerVoteArea in MeetingHud.Instance.playerStates)
+                {
+                    var data = dict[playerVoteArea.TargetPlayerId];
+                    var text = playerVoteArea.NameText;
+                    text.text = data.name;
+                    text.color = data.color;
                 }
             }
-            if (MeetingHud.Instance != null) {
-                foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                    PlayerControl playerControl = playersById.ContainsKey((byte)player.TargetPlayerId) ? playersById[(byte)player.TargetPlayerId] : null;
-                    if (playerControl != null) {
-                        player.NameText.text = playerControl.Data.PlayerName;
-                        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && playerControl.Data.Role.IsImpostor) {
-                            player.NameText.color = Palette.ImpostorRed;
-                        } else {
-                            player.NameText.color = Color.white;
-                        }
-                    }
-                }
-            }
-            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
-                List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
-                foreach (PlayerControl player in impostors)
-                    player.nameText.color = Palette.ImpostorRed;
-                if (MeetingHud.Instance != null)
-                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
-                        PlayerControl playerControl = Helpers.playerById((byte)player.TargetPlayerId);
-                        if (playerControl != null && playerControl.Data.Role.IsImpostor)
-                            player.NameText.color =  Palette.ImpostorRed;
-                    }
-            }
-
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
