@@ -186,7 +186,7 @@ namespace TheOtherRoles.Modules {
             [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
             private static class PlayerControlCheckColorPatch {
                 private static bool isTaken(PlayerControl player, uint color) {
-                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers)
+                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers.GetFastEnumerator())
                         if (!p.Disconnected && p.PlayerId != player.PlayerId && p.DefaultOutfit.ColorId == color)
                             return true;
                     return false;

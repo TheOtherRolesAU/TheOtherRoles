@@ -21,7 +21,7 @@ namespace TheOtherRoles.Patches {
 
             var dict = new Dictionary<byte, (string name, Color color)>();
             
-            foreach (var data in GameData.Instance.AllPlayers)
+            foreach (var data in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var player = data.Object;
                 string text;
@@ -161,7 +161,7 @@ namespace TheOtherRoles.Patches {
         static void setNameTags() {
             // Mafia
             if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                     if (Godfather.godfather != null && Godfather.godfather == player)
                             player.nameText.text = player.Data.PlayerName + " (G)";
                     else if (Mafioso.mafioso != null && Mafioso.mafioso == player)

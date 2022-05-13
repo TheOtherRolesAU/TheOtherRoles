@@ -17,7 +17,7 @@ namespace TheOtherRoles {
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks()
                 ) {
-                foreach (var playerInfoTask in playerInfo.Tasks)
+                foreach (var playerInfoTask in playerInfo.Tasks.GetFastEnumerator())
                 {
                     if (playerInfoTask.Complete) CompletedTasks++;
                     TotalTasks++;
@@ -31,7 +31,7 @@ namespace TheOtherRoles {
             private static bool Prefix(GameData __instance) {
                 __instance.TotalTasks = 0;
                 __instance.CompletedTasks = 0;
-                foreach (var playerInfo in GameData.Instance.AllPlayers)
+                foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
                 {
                     if (playerInfo.Object
                         && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover

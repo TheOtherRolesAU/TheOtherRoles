@@ -68,7 +68,7 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref EndGameResult endGameResult) {
             AdditionalTempData.clear();
 
-            foreach(var playerControl in PlayerControl.AllPlayerControls) {
+            foreach(var playerControl in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
                 AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted });
@@ -87,7 +87,7 @@ namespace TheOtherRoles.Patches {
             notWinners.AddRange(Jackal.formerJackals);
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
-            foreach (WinningPlayerData winner in TempData.winners) {
+            foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator()) {
                 if (notWinners.Any(x => x.Data.PlayerName == winner.PlayerName)) winnersToRemove.Add(winner);
             }
             foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
@@ -141,7 +141,7 @@ namespace TheOtherRoles.Patches {
                 if (!Lovers.existingWithKiller()) {
                     AdditionalTempData.winCondition = WinCondition.LoversTeamWin;
                     TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
@@ -192,7 +192,7 @@ namespace TheOtherRoles.Patches {
             // Possible Additional winner: Lawyer
             if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && (!Lawyer.target.Data.IsDead || Lawyer.target == Jester.jester) && !Pursuer.notAckedExiled) {
                 WinningPlayerData winningClient = null;
-                foreach (WinningPlayerData winner in TempData.winners) {
+                foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator()) {
                     if (winner.PlayerName == Lawyer.target.Data.PlayerName)
                         winningClient = winner;
                 }
@@ -522,7 +522,7 @@ namespace TheOtherRoles.Patches {
             bool impLover = false;
             bool jackalLover = false;
 
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (!playerInfo.Disconnected)
                 {

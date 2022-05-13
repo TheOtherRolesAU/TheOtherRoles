@@ -62,7 +62,7 @@ namespace TheOtherRoles {
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -71,7 +71,7 @@ namespace TheOtherRoles {
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new Dictionary<byte, PlayerControl>();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -96,7 +96,7 @@ namespace TheOtherRoles {
             }
             
             var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask t in player.myTasks) 
+            foreach (PlayerTask t in player.myTasks.GetFastEnumerator()) 
             {
                 var textTask = t.TryCast<ImportantTextTask>();
                 if (textTask == null) continue;
@@ -158,7 +158,7 @@ namespace TheOtherRoles {
 
         public static void clearAllTasks(this PlayerControl player) {
             if (player == null) return;
-            foreach (var playerTask in player.myTasks)
+            foreach (var playerTask in player.myTasks.GetFastEnumerator())
             {
                 playerTask.OnRemove();
                 UnityEngine.Object.Destroy(playerTask.gameObject);
@@ -372,7 +372,7 @@ namespace TheOtherRoles {
 
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
             List<PlayerControl> team = new List<PlayerControl>();
-            foreach(PlayerControl p in PlayerControl.AllPlayerControls) {
+            foreach(PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
                 else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);

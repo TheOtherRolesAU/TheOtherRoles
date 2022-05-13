@@ -160,7 +160,7 @@ namespace TheOtherRoles
         }
 
         public static void forceEnd() {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (!player.Data.Role.IsImpostor)
                 {
@@ -172,7 +172,7 @@ namespace TheOtherRoles
         }
 
         public static void setRole(byte roleId, byte playerId) {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
                     case RoleId.Jester:
@@ -549,7 +549,7 @@ namespace TheOtherRoles
             if (Camouflager.camouflager == null) return;
 
             Camouflager.camouflageTimer = Camouflager.duration;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 player.setLook("", 6, "", "", "", "");
         }
 
@@ -560,7 +560,7 @@ namespace TheOtherRoles
             }
 
             if (Vampire.vampire == null) return;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (player.PlayerId == targetId && !player.Data.IsDead) {
                         Vampire.bitten = player;
                 }
@@ -576,7 +576,7 @@ namespace TheOtherRoles
 
         public static void trackerUsedTracker(byte targetId) {
             Tracker.usedTracker = true;
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
         }
@@ -815,7 +815,7 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (p != Arsonist.arsonist) p.Exiled();
             }
         }

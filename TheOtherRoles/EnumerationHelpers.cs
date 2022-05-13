@@ -11,7 +11,7 @@ namespace TheOtherRoles;
 
 public static class EnumerationHelpers
 { 
-    public static System.Collections.Generic.IEnumerable<T> GetFastRefEnumerator<T>(this List<T> list) where T : Il2CppSystem.Object => new Il2CppListEnumerable<T>(list);
+    public static System.Collections.Generic.IEnumerable<T> GetFastEnumerator<T>(this List<T> list) where T : Il2CppSystem.Object => new Il2CppListEnumerable<T>(list);
 }
 
 public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppSystem.Object
@@ -26,8 +26,7 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
         _offset = 4 * IntPtr.Size;
 
         var constructor = typeof(T).GetConstructor(new[] {typeof(IntPtr)});
-
-        ParameterExpression ptr = Expression.Parameter(typeof(IntPtr));
+        var ptr = Expression.Parameter(typeof(IntPtr));
         var create = Expression.New(constructor!, ptr);
         var lambda = Expression.Lambda<Func<IntPtr, T>>(create, ptr);
         _objFactory = lambda.Compile();

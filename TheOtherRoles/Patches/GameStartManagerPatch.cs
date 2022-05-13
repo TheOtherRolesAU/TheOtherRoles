@@ -140,7 +140,7 @@ namespace TheOtherRoles.Patches {
                 bool continueStart = true;
 
                 if (AmongUsClient.Instance.AmHost) {
-                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients) {
+                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator()) {
                         if (client.Character == null) continue;
                         var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
                         if (dummyComponent != null && dummyComponent.enabled)

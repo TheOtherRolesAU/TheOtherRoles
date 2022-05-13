@@ -23,7 +23,7 @@ namespace TheOtherRoles.Patches {
             if (targetingPlayer.Data.IsDead) return result;
 
             Vector2 truePosition = targetingPlayer.GetTruePosition();
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.Role.IsImpostor)) {
                     PlayerControl @object = playerInfo.Object;
@@ -55,7 +55,7 @@ namespace TheOtherRoles.Patches {
         // Update functions
 
         static void setBasePlayerOutlines() {
-            foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (target == null || target.MyRend == null) continue;
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
@@ -184,7 +184,7 @@ namespace TheOtherRoles.Patches {
             Detective.timer -= Time.fixedDeltaTime;
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) {
                         new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
                     }
@@ -446,7 +446,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void updatePlayerInfo() {
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {         
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {         
                 if ((Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target) || p == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
@@ -568,7 +568,7 @@ namespace TheOtherRoles.Patches {
             }
             else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0) {
                 int arrowIndex = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
                     bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
@@ -611,7 +611,7 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Sidekick.sidekick || !Sidekick.wasTeamRed) && (p != Jackal.jackal || !Jackal.wasTeamRed) && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];

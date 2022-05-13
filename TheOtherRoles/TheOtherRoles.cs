@@ -622,7 +622,7 @@ namespace TheOtherRoles
 
         public static void resetCamouflage() {
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 p.setDefaultLook();
         }
 

@@ -179,7 +179,7 @@ namespace TheOtherRoles.Patches {
                 int visibleCounter = 0;
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
                 bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
                         MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
