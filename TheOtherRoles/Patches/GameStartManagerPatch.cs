@@ -197,9 +197,6 @@ namespace TheOtherRoles.Patches {
             }
 
             public bool GuidMatches() {
-#if CORECLR
-                return true;
-#endif
                 return Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.Equals(this.guid);
             }
         }

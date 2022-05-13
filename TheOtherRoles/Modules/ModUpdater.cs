@@ -52,9 +52,6 @@ namespace TheOtherRoles.Modules
         
         public void Awake()
         {
-#if CORECLR
-            return;
-#endif
             if (Instance) Destroy(this);
             Instance = this;
             
