@@ -1,46 +1,82 @@
 ﻿using System;
 using System.Collections;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using UnhollowerBaseLib;
 
+namespace TheOtherRoles;
+
 public static class EnumerationHelpers
 {
-    public static System.Collections.Generic.IEnumerator<T> GetFastStructEnumerator<T>(this List<T> list) where T : unmanaged => new Il2CppStructListEnumerator<T>(list);
-    public static System.Collections.Generic.IEnumerator<T> GetFastRefEnumerator<T>(this List<T> list) where T : Il2CppObjectBase => new Il2CppRefListEnumerator<T>(list);
+    public static object ReferenceObj;
+
+    [HarmonyPatch(typeof(Il2CppObjectBase), nameof(Il2CppObjectBase.Pointer), MethodType.Getter)]
+    public static class ObjectPatches
+    {
+        [HarmonyPrefix]
+        private static bool Prefix(Il2CppObjectBase __instance, bool ___isWrapped, uint ___myGcHandle, ref IntPtr __result)
+        {
+            if (__instance != ReferenceObj) return true;
+            __result = (IntPtr) ___myGcHandle;
+            return false;
+        }
+    }
+
+    public static System.Collections.Generic.IEnumerable<T> GetFastRefEnumerator<T>(this List<T> list) where T : Il2CppSystem.Object => new Il2CppListEnumerable<T>(list);
 }
 
-public unsafe class Il2CppStructListEnumerator<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : unmanaged
+public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppSystem.Object
 {
-    private T* _arrayPtr;
-    private int _index;
-    private int _length;
-    private T _current;
-
-    internal Il2CppStructListEnumerator(List<T> list)
+    private static readonly int _elemSize;
+    private static readonly int _offset;
+    private static readonly T _object;
+    private static Action<T, uint> _setMyGcHandle;
+    
+    static Il2CppListEnumerable()
     {
-        _arrayPtr = (T*) IntPtr.Add(list.Pointer, 4 * IntPtr.Size).ToPointer();
-        _length = list.Count;
-        _current = default;
+        _elemSize = IntPtr.Size;
+        _offset = 4 * IntPtr.Size;
+        _object = (T) FormatterServices.GetUninitializedObject(typeof(T));
+        var field = AccessTools.Field(typeof(T), "myGcHandle");
+
+        ParameterExpression target = Expression.Parameter(typeof(T));
+        ParameterExpression value = Expression.Parameter(typeof(uint));
+
+        MemberExpression fieldExp = Expression.Field(target, field);
+        BinaryExpression setExp = Expression.Assign(fieldExp, value);
+
+        _setMyGcHandle = Expression.Lambda<Action<T, uint>>(setExp, target, value).Compile();
     }
+
+
+    private readonly IntPtr _arrayPointer;
+    private readonly int _count;
+    private int _index = -1;
+
+    public Il2CppListEnumerable(List<T> list)
+    {
+        _count = list.Count;
+        _arrayPointer = *(IntPtr*) list._items.Pointer;
+    }
+
+    object IEnumerator.Current => EnumerationHelpers.ReferenceObj = _object;
+    public T Current => (T) (EnumerationHelpers.ReferenceObj = _object);
 
     public bool MoveNext()
     {
-        if (_index >= _length)  return false;
-        
-        _current = _arrayPtr[_index];
-        _index++;
+        if (++_index >= _count) return false;
+        var refPtr = *(IntPtr*) IntPtr.Add(IntPtr.Add(_arrayPointer, _offset), _index * _elemSize);
+        _setMyGcHandle(_object, (uint)refPtr);
         return true;
     }
 
     public void Reset()
     {
-        _index = 0;
-        _current = default;
+        _index = -1;
     }
-
-    public T Current => _current;
-
-    object IEnumerator.Current => _current;
     
     public System.Collections.Generic.IEnumerator<T> GetEnumerator()
     {
@@ -51,56 +87,7 @@ public unsafe class Il2CppStructListEnumerator<T> : System.Collections.Generic.I
     {
         return this;
     }
-    
-    public void Dispose()
-    {
-    }
 
-}
-
-public class Il2CppRefListEnumerator<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppObjectBase
-{
-    private Il2CppReferenceArray<T> _array;
-    private int _index;
-    private int _length;
-    private T _current;
-
-    internal Il2CppRefListEnumerator(List<T> list)
-    {
-        _array = new(list._items.Pointer);
-        _length = list.Count;
-        _current = default;
-    }
-
-    public bool MoveNext()
-    {
-        if (_index >= _length)  return false;
-        
-        _current = _array[_index];
-        _index++;
-        return true;
-    }
-
-    public void Reset()
-    {
-        _index = 0;
-        _current = default;
-    }
-
-    public T Current => _current;
-
-    object IEnumerator.Current => _current;
-
-    public System.Collections.Generic.IEnumerator<T> GetEnumerator()
-    {
-        return this;
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this;
-    }
-    
     public void Dispose()
     {
     }
