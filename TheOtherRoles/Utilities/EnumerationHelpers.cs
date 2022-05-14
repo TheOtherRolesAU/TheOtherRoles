@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq.Expressions;
 using Il2CppSystem.Collections.Generic;
 
-namespace TheOtherRoles;
+namespace TheOtherRoles.Utilities;
 
 public static class EnumerationHelpers
 { 
@@ -12,6 +12,12 @@ public static class EnumerationHelpers
 
 public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IEnumerator<T> where T : Il2CppSystem.Object
 {
+    private struct Il2CppListStruct
+    {
+        public IntPtr _items;
+        public int _size;
+    }
+    
     private static readonly int _elemSize;
     private static readonly int _offset;
     private static Func<IntPtr, T> _objFactory;
@@ -34,8 +40,9 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
 
     public Il2CppListEnumerable(List<T> list)
     {
-        _count = list.Count;
-        _arrayPointer = *(IntPtr*) list._items.Pointer;
+        var listStruct = (Il2CppListStruct*) list.Pointer;
+        _count = listStruct->_size;
+        _arrayPointer = *(IntPtr*) listStruct->_items;
     }
 
     object IEnumerator.Current => Current;

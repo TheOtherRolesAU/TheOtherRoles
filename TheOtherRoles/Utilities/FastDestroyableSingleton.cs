@@ -24,6 +24,7 @@ public static unsafe class FastDestroyableSingleton<T> where T : MonoBehaviour
         {
             IntPtr objectPointer;
             IL2CPP.il2cpp_field_static_get_value(_fieldPtr, &objectPointer);
+            if (objectPointer == IntPtr.Zero) return DestroyableSingleton<T>.Instance;
             return _createObject(objectPointer);
         }
     }

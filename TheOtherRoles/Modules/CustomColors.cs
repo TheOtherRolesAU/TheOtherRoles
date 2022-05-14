@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using HarmonyLib;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
     public class CustomColors {

@@ -17,7 +17,7 @@ namespace TheOtherRoles.Patches {
         static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
-            if (!ShipStatus.Instance) return result;
+            if (!MapUtilities.CachedShipStatus) return result;
             if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
             if (targetingPlayer.Data.IsDead) return result;
 
@@ -91,7 +91,7 @@ namespace TheOtherRoles.Patches {
                     if (next.Item2 == true) {
                         // Exit current vent if necessary
                         if (PlayerControl.LocalPlayer.inVent) {
-                            foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                            foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                                 bool canUse;
                                 bool couldUse;
                                 vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
@@ -107,7 +107,7 @@ namespace TheOtherRoles.Patches {
                     else if (localPlayerPositions.Any(x => x.Item2 == true)) {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     }
-                    if (SubmergedCompatibility.isSubmerged()) {
+                    if (SubmergedCompatibility.IsSubmerged) {
                         SubmergedCompatibility.ChangeFloor(next.Item1.y > -7);
                     }
 
@@ -279,8 +279,8 @@ namespace TheOtherRoles.Patches {
         static void engineerUpdate() {
             bool jackalHighlight = Engineer.highlightForTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick);
             bool impostorHighlight = Engineer.highlightForImpostors && PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-            if ((jackalHighlight || impostorHighlight) && ShipStatus.Instance?.AllVents != null) {
-                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+            if ((jackalHighlight || impostorHighlight) && MapUtilities.CachedShipStatus?.AllVents != null) {
+                foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                     try {
                         if (vent?.myRend?.material != null) {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
@@ -510,15 +510,15 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void securityGuardSetTarget() {
-            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
+            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || MapUtilities.CachedShipStatus == null || MapUtilities.CachedShipStatus.AllVents == null) return;
 
             Vent target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             float closestDistance = float.MaxValue;
-            for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
-                Vent vent = ShipStatus.Instance.AllVents[i];
+            for (int i = 0; i < MapUtilities.CachedShipStatus.AllVents.Length; i++) {
+                Vent vent = MapUtilities.CachedShipStatus.AllVents[i];
                 if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_") || vent.gameObject.name.StartsWith("FutureSealedVent_")) continue;
-                if (SubmergedCompatibility.isSubmerged() && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
+                if (SubmergedCompatibility.IsSubmerged && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;
@@ -668,12 +668,12 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void mediumSetTarget() {
-            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || MapUtilities.CachedShipStatus?.AllVents == null) return;
 
             DeadPlayer target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             float closestDistance = float.MaxValue;
-            float usableDistance = ShipStatus.Instance.AllVents.FirstOrDefault().UsableDistance;
+            float usableDistance = MapUtilities.CachedShipStatus.AllVents.FirstOrDefault().UsableDistance;
             foreach ((DeadPlayer dp, Vector3 ps) in Medium.deadBodies) {
                 float distance = Vector2.Distance(ps, truePosition);
                 if (distance <= usableDistance && distance < closestDistance) {

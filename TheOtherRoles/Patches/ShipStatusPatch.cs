@@ -1,4 +1,5 @@
 using HarmonyLib;
+using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 
@@ -59,13 +60,13 @@ namespace TheOtherRoles.Patches {
         }
 
         public static float GetNeutralLightRadius(ShipStatus shipStatus, bool isImpostor) {
-            if (SubmergedCompatibility.isSubmerged()) {
+            if (SubmergedCompatibility.IsSubmerged) {
                 return SubmergedCompatibility.GetSubmergedNeutralLightRadius(isImpostor);
             }
 
             if (isImpostor) return shipStatus.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
 
-            SwitchSystem switchSystem = shipStatus.Systems[SystemTypes.Electrical].TryCast<SwitchSystem>();
+            SwitchSystem switchSystem = MapUtilities.Systems[SystemTypes.Electrical].CastFast<SwitchSystem>();
             float lerpValue = switchSystem.Value / 255f;
 
             return Mathf.Lerp(shipStatus.MinLightRadius, shipStatus.MaxLightRadius, lerpValue) * PlayerControl.GameOptions.CrewLightMod;

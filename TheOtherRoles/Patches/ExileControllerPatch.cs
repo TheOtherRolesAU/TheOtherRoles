@@ -74,13 +74,13 @@ namespace TheOtherRoles.Patches {
             Witch.futureSpelled = new List<PlayerControl>();
 
             // SecurityGuard vents and cameras
-            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
             MapOptions.camerasToAdd.ForEach(camera => {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
-            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
             MapOptions.camerasToAdd = new List<SurvCamera>();
 
             foreach (Vent vent in MapOptions.ventsToSeal) {
@@ -88,8 +88,8 @@ namespace TheOtherRoles.Patches {
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
                 vent.myRend.sprite = animator == null ? SecurityGuard.getStaticVentSealedSprite() : SecurityGuard.getAnimatedVentSealedSprite();
-                if (SubmergedCompatibility.isSubmerged() && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
-                if (SubmergedCompatibility.isSubmerged() && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
+                if (SubmergedCompatibility.IsSubmerged && vent.Id == 0) vent.myRend.sprite = SecurityGuard.getSubmergedCentralUpperSealedSprite();
+                if (SubmergedCompatibility.IsSubmerged && vent.Id == 14) vent.myRend.sprite = SecurityGuard.getSubmergedCentralLowerSealedSprite();
                 vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
@@ -117,7 +117,7 @@ namespace TheOtherRoles.Patches {
         // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
         [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
         public static void Prefix(GameObject obj) {
-            if (!SubmergedCompatibility.isSubmerged()) return;
+            if (!SubmergedCompatibility.IsSubmerged) return;
             if (obj.name.Contains("ExileCutscene")) { 
                 WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
             }            
@@ -222,7 +222,7 @@ namespace TheOtherRoles.Patches {
             // AntiTeleport set position
             if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
                 PlayerControl.LocalPlayer.transform.position = AntiTeleport.position;
-                if (SubmergedCompatibility.isSubmerged()) {
+                if (SubmergedCompatibility.IsSubmerged) {
                     SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
                 }
             }

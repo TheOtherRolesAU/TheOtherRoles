@@ -405,8 +405,8 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
-            if (__instance.Systems == null) return false;
-            ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
+            if (MapUtilities.Systems == null) return false;
+            var systemType = MapUtilities.Systems.ContainsKey(SystemTypes.LifeSupp) ? MapUtilities.Systems[SystemTypes.LifeSupp] : null;
             if (systemType != null) {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f) {
@@ -415,9 +415,9 @@ namespace TheOtherRoles.Patches {
                     return true;
                 }
             }
-            ISystemType systemType2 = __instance.Systems.ContainsKey(SystemTypes.Reactor) ? __instance.Systems[SystemTypes.Reactor] : null;
+            var systemType2 = MapUtilities.Systems.ContainsKey(SystemTypes.Reactor) ? MapUtilities.Systems[SystemTypes.Reactor] : null;
             if (systemType2 == null) {
-                systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
+                systemType2 = MapUtilities.Systems.ContainsKey(SystemTypes.Laboratory) ? MapUtilities.Systems[SystemTypes.Laboratory] : null;
             }
             if (systemType2 != null) {
                 ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
