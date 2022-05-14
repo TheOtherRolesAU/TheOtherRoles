@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Patches;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -117,7 +118,10 @@ namespace TheOtherRoles
         public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
-                if (target == null) text = defaultText; // Set text to defaultText if no target
+                if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
+                else if (ShipStatusPatch.lightsOut <= PlayerControl.GameOptions.CrewLightMod) text = defaultText; // set to default if lights are out
+                else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
+                else if (target == null) text = defaultText; // Set text to defaultText if no target
                 else text = target.name; // Set text to playername
                 button.actionButton.OverrideText(text);
                 button.showButtonText = true;
