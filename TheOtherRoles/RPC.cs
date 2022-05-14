@@ -872,7 +872,9 @@ namespace TheOtherRoles
         public static void prosecutorToPursuer() {
             PlayerControl player = Prosecutor.prosecutor;
             Prosecutor.clearAndReload();
+			Pursuer.clearAndReload();
             Pursuer.pursuer = player;
+			Pursuer.target = target;
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
