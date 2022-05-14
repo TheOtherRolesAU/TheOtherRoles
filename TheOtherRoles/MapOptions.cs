@@ -18,6 +18,8 @@ namespace TheOtherRoles{
         public static bool showRoleSummary = true;
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
+        public static bool toggleCursor = true;
+
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
 
@@ -51,6 +53,8 @@ namespace TheOtherRoles{
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
+            toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value;
+
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
             Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }

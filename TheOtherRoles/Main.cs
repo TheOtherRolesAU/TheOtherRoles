@@ -46,6 +46,8 @@ namespace TheOtherRoles
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
+        public static ConfigEntry<bool> ToggleCursor { get; set; }
+
 
         public static Sprite ModStamp;
 
@@ -70,6 +72,7 @@ namespace TheOtherRoles
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
             ShowRoleSummary = Config.Bind("Custom", "Show Role Summary", true);
             ShowLighterDarker = Config.Bind("Custom", "Show Lighter / Darker", true);
+            ToggleCursor = Config.Bind("Custom", "Better Cursor", true);
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
@@ -91,6 +94,9 @@ namespace TheOtherRoles
             CustomColors.Load();
             Patches.FreeNamePatch.Initialize();
             Harmony.PatchAll();
+            if (ToggleCursor.Value) {
+                Helpers.enableCursor(true);
+            }       
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
         }
