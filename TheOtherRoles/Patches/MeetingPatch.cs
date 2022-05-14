@@ -298,7 +298,7 @@ namespace TheOtherRoles.Patches {
             exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
             exitButtonParent.transform.localScale = new Vector3(0.217f, 0.9f, 1);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
                 __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
@@ -333,7 +333,7 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                if (!PlayerControl.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                if (!PlayerControl.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
                     if (selectedButton != button) {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
@@ -413,7 +413,7 @@ namespace TheOtherRoles.Patches {
                     swapperButtonList[i] = button;
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
-                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperOnClick(copiedIndex, __instance)));
+                    button.OnClick.AddListener((System.Action)(() => swapperOnClick(copiedIndex, __instance)));
                     
                     selections[i] = false;
                     renderers[i] = renderer;
@@ -492,7 +492,7 @@ namespace TheOtherRoles.Patches {
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
-                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
+                    button.OnClick.AddListener((System.Action)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
         }

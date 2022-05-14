@@ -103,6 +103,7 @@ namespace TheOtherRoles {
         public static CustomOption mayorSpawnRate;
         public static CustomOption mayorCanSeeVoteColors;
         public static CustomOption mayorTasksNeededToSeeVoteColors;
+        public static CustomOption mayorMeetingButton;
 
         public static CustomOption portalmakerSpawnRate;
         public static CustomOption portalmakerCooldown;
@@ -224,8 +225,6 @@ namespace TheOtherRoles {
 
         public static CustomOption lawyerSpawnRate;
         public static CustomOption lawyerTargetCanBeJester;
-        public static CustomOption lawyerWinsAfterMeetings;
-        public static CustomOption lawyerNeededMeetings;
         public static CustomOption lawyerVision;
         public static CustomOption lawyerKnowsRole;
         public static CustomOption pursuerCooldown;
@@ -278,6 +277,7 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnableMira;
         public static CustomOption dynamicMapEnablePolus;
         public static CustomOption dynamicMapEnableAirShip;
+        public static CustomOption dynamicMapEnableSubmerged;
 
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
@@ -398,8 +398,6 @@ namespace TheOtherRoles {
 
             lawyerSpawnRate = CustomOption.Create(350, Types.Neutral, cs(Lawyer.color, "Lawyer"), rates, null, true);
             lawyerTargetCanBeJester = CustomOption.Create(351, Types.Neutral, "Lawyer Target Can Be The Jester", false, lawyerSpawnRate);
-            lawyerWinsAfterMeetings = CustomOption.Create(352, Types.Neutral, "Lawyer Wins After Meetings", false, lawyerSpawnRate);
-            lawyerNeededMeetings = CustomOption.Create(353, Types.Neutral, "Lawyer Needed Meetings To Win", 5f, 1f, 15f, 1f, lawyerWinsAfterMeetings);
             lawyerVision = CustomOption.Create(354, Types.Neutral, "Lawyer Vision", 1f, 0.25f, 3f, 0.25f, lawyerSpawnRate);
             lawyerKnowsRole = CustomOption.Create(355, Types.Neutral, "Lawyer Knows Target Role", false, lawyerSpawnRate);
             pursuerCooldown = CustomOption.Create(356, Types.Neutral, "Pursuer Blank Cooldown", 30f, 5f, 60f, 2.5f, lawyerSpawnRate);
@@ -409,9 +407,9 @@ namespace TheOtherRoles {
             shifterShiftsModifiers = CustomOption.Create(71, Types.Crewmate, "Shifter Shifts Modifiers", false, shifterSpawnRate);
 
             mayorSpawnRate = CustomOption.Create(80, Types.Crewmate, cs(Mayor.color, "Mayor"), rates, null, true);
-
             mayorCanSeeVoteColors = CustomOption.Create(81, Types.Crewmate, "Mayor Can See Vote Colors", false, mayorSpawnRate);
             mayorTasksNeededToSeeVoteColors = CustomOption.Create(82, Types.Crewmate, "Completed Tasks Needed To See Vote Colors", 5f, 0f, 20f, 1f, mayorCanSeeVoteColors);
+            mayorMeetingButton = CustomOption.Create(83, Types.Crewmate, "Mobile Emergency Button", true, mayorSpawnRate);
 
             engineerSpawnRate = CustomOption.Create(90, Types.Crewmate, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, Types.Crewmate, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);
@@ -562,6 +560,8 @@ namespace TheOtherRoles {
             dynamicMapEnableMira = CustomOption.Create(502, Types.General, "Enable Mira Rotation", true, dynamicMap, false);
             dynamicMapEnablePolus = CustomOption.Create(503, Types.General, "Enable Polus Rotation", true, dynamicMap, false);
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Enable Airship Rotation", true, dynamicMap, false);
+
+            dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

@@ -224,7 +224,7 @@ namespace TheOtherRoles {
                 if (button == null) continue;
                 int copiedIndex = i;
                 button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                button.OnClick.AddListener((System.Action)(() => {
                     gameSettingMenu.RegularGameSettings.SetActive(false);
                     gameSettingMenu.RolesSettings.gameObject.SetActive(false);
                     torSettings.gameObject.SetActive(false);
@@ -635,6 +635,7 @@ namespace TheOtherRoles {
                 LastPosition = new Vector3(MinX, MinY);
                 lastAspect = aspect;
                 setLastPosition = true;
+                if (Scroller != null) Scroller.ContentXBounds = new FloatRange(MinX, MinX);                
             }
 
             CreateScroller(__instance);

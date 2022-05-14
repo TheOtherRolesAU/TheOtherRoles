@@ -17,13 +17,14 @@ using TheOtherRoles.Modules;
 namespace TheOtherRoles
 {
     [BepInPlugin(Id, "The Other Roles", VersionString)]
+    [BepInDependency(SubmergedCompatibility.SUBMERGED_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.0.0";
+        public const string VersionString = "4.1.1";
 
-        public static System.Version Version = System.Version.Parse(VersionString);
+        public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
 
         public Harmony Harmony { get; } = new Harmony(Id);
@@ -90,6 +91,8 @@ namespace TheOtherRoles
             CustomColors.Load();
             Patches.FreeNamePatch.Initialize();
             Harmony.PatchAll();
+            SubmergedCompatibility.Initialize();
+            AddComponent<ModUpdateBehaviour>();
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;

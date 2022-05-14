@@ -133,13 +133,28 @@ namespace TheOtherRoles
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
+            public static Minigame emergency = null;
+            public static Sprite emergencySprite = null;
+
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
+            public static bool meetingButton = true;
+
+            public static Sprite getMeetingSprite()
+            {
+                if (emergencySprite) return emergencySprite;
+                emergencySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.EmergencyButton.png", 550f);
+                return emergencySprite;
+            }
 
             public static void clearAndReload() {
                 mayor = null;
+                emergency = null;
+                emergencySprite = null;
+
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
+                meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
             }
         }
 
@@ -1074,9 +1089,16 @@ namespace TheOtherRoles
         }
 
         private static Sprite animatedVentSealedSprite;
+        private static float lastPPU;
         public static Sprite getAnimatedVentSealedSprite() {
+            float ppu = 185f;
+            if (SubmergedCompatibility.isSubmerged()) ppu = 120f;
+            if (lastPPU != ppu) {
+                animatedVentSealedSprite = null;
+                lastPPU = ppu;
+            }
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 185f);
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
             return animatedVentSealedSprite;
         }
 
@@ -1085,6 +1107,20 @@ namespace TheOtherRoles
             if (staticVentSealedSprite) return staticVentSealedSprite;
             staticVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.StaticVentSealed.png", 160f);
             return staticVentSealedSprite;
+        }
+
+        private static Sprite submergedCentralUpperVentSealedSprite;
+        public static Sprite getSubmergedCentralUpperSealedSprite() {
+            if (submergedCentralUpperVentSealedSprite) return submergedCentralUpperVentSealedSprite;
+            submergedCentralUpperVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralUpperBlocked.png", 145f);
+            return submergedCentralUpperVentSealedSprite;
+        }
+
+        private static Sprite submergedCentralLowerVentSealedSprite;
+        public static Sprite getSubmergedCentralLowerSealedSprite() {
+            if (submergedCentralLowerVentSealedSprite) return submergedCentralLowerVentSealedSprite;
+            submergedCentralLowerVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralLowerBlocked.png", 145f);
+            return submergedCentralLowerVentSealedSprite;
         }
 
         private static Sprite camSprite;
@@ -1338,11 +1374,8 @@ namespace TheOtherRoles
         public static Color color = new Color32(134, 153, 25, byte.MaxValue);
         public static Sprite targetSprite;
         public static bool triggerLawyerWin = false;
-        public static int meetings = 0;
 
         public static float vision = 1f;
-        public static bool winsAfterMeetings = false;
-        public static int neededMeetings = 4;
         public static bool lawyerKnowsRole = false;
         public static bool targetCanBeJester = false;
 
@@ -1352,14 +1385,11 @@ namespace TheOtherRoles
             return targetSprite;
         }
 
-        public static void clearAndReload() {
+        public static void clearAndReload(bool clearTarget = true) {
             lawyer = null;
-            target = null;
+            if (clearTarget) target = null;
             triggerLawyerWin = false;
-            meetings = 0;
 
-            winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
-            neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
             lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
             targetCanBeJester = CustomOptionHolder.lawyerTargetCanBeJester.getBool();
