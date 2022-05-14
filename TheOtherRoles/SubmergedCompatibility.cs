@@ -71,7 +71,7 @@ namespace TheOtherRoles
         private static FieldInfo RetrieveOxigenMaskField;
         public static TaskTypes RetrieveOxygenMask;
         private static Type SubmarineOxygenSystemType;
-        private static FieldInfo SubmarineOxygenSystemInstanceField;
+        private static MethodInfo SubmarineOxygenSystemInstanceField;
         private static MethodInfo RepairDamageMethod;
 
 
@@ -106,8 +106,8 @@ namespace TheOtherRoles
             RetrieveOxigenMaskField = AccessTools.Field(CustomTaskTypesType, "RetrieveOxygenMask");
             RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskField.GetValue(null);
 
-            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem");
-            SubmarineOxygenSystemInstanceField = AccessTools.Field(SubmarineOxygenSystemType, "Instance");
+            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem" && t.Namespace == "Submerged.Systems.CustomSystems.Oxygen");
+            SubmarineOxygenSystemInstanceField = AccessTools.PropertyGetter(SubmarineOxygenSystemType, "Instance");
             RepairDamageMethod = AccessTools.Method(SubmarineOxygenSystemType, "RepairDamage");
         }
 
@@ -138,7 +138,7 @@ namespace TheOtherRoles
             if (!Loaded) return;
             try {
                 ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
-                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.GetValue(null), new object[] { PlayerControl.LocalPlayer, 64 });
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.Invoke(null, Array.Empty<object>()), new object[] { PlayerControl.LocalPlayer, 64 });
             }
             catch (System.NullReferenceException) {
                 TheOtherRolesPlugin.Logger.LogMessage("null reference in engineer oxygen fix");
