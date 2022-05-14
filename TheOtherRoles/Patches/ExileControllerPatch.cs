@@ -135,7 +135,11 @@ namespace TheOtherRoles.Patches {
             // Jester win condition
             else if (exiled != null && Jester.jester != null && Jester.jester.PlayerId == exiled.PlayerId) {
                 Jester.triggerJesterWin = true;
-            } 
+            }
+            // Prosecutor win condition
+            else if (exiled != null && Prosecutor.prosecutor != null && Prosecutor.target.PlayerId == exiled.PlayerId && !Prosecutor.prosecutor.Data.IsDead) {
+                Prosecutor.triggerProsecutorWin = true;
+            }
 
             // Reset custom button timers where necessary
             CustomButton.MeetingEndedUpdate();
