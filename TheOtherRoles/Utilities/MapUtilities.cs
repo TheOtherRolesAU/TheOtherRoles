@@ -6,15 +6,15 @@ namespace TheOtherRoles.Utilities;
 
 public static class MapUtilities
 {
-    public static ShipStatus CachedShipStatus;
+    public static ShipStatus CachedShipStatus = ShipStatus.Instance;
 
     public static void MapDestroyed()
     {
-        CachedShipStatus = null;
+        CachedShipStatus = ShipStatus.Instance;
         _systems.Clear();
     }
 
-    private static readonly Dictionary<SystemTypes, Object> _systems;
+    private static readonly Dictionary<SystemTypes, Object> _systems = new();
     public static Dictionary<SystemTypes, Object> Systems
     {
         get
@@ -54,6 +54,7 @@ public static class ShipStatus_OnDestroy_Patch
     [HarmonyPostfix]
     public static void Postfix()
     {
+        MapUtilities.CachedShipStatus = null;
         MapUtilities.MapDestroyed();
         SubmergedCompatibility.SetupMap(null);
     }
