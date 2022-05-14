@@ -377,7 +377,7 @@ namespace TheOtherRoles {
             jesterCanCallEmergency = CustomOption.Create(61, Types.Neutral, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
-			prosecutorSpawnRate = CustomOption.Create(615, cs(Prosecutor.color, "Prosecutor"), "neutral", rates, null, true);
+            prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Prosecutor"),   rates, null, true);
 
 
             arsonistSpawnRate = CustomOption.Create(290, Types.Neutral, cs(Arsonist.color, "Arsonist"), rates, null, true);
