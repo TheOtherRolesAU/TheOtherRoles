@@ -71,7 +71,7 @@ namespace TheOtherRoles.Patches {
                 if (Prosecutor.target != null) {
                     setPlayerNameColor(Prosecutor.target, Prosecutor.targetColor);
                 }
-			} else if (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer)
+	    } else if (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Engineer.engineer, Engineer.color);
