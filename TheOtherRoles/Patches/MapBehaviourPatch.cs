@@ -1,4 +1,5 @@
 using HarmonyLib;
+using TheOtherRoles.Utilities;
 using UnityEngine;
 
 
@@ -31,7 +32,7 @@ namespace TheOtherRoles.Patches {
 			__instance.GenericShow();
 			__instance.taskOverlay.Show();
 			__instance.ColorControl.SetColor(new Color(0.05f, 0.2f, 1f, 1f));
-			DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+			FastDestroyableSingleton<HudManager>.Instance.SetHudActive(false);
 			return false;
 		}
 	}

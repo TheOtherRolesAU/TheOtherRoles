@@ -7,6 +7,7 @@ using HarmonyLib;
 using Hazel;
 using System.Reflection;
 using System.Text;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
     public class CustomOption {
@@ -590,9 +591,9 @@ namespace TheOtherRoles {
                 TheOtherRolesPlugin.optionsPage = 6;
             }
             if (page != TheOtherRolesPlugin.optionsPage) {
-                Vector3 position = (Vector3)HudManager.Instance?.GameSettings?.transform.localPosition;
+                Vector3 position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
                 if (position != null) {
-                    HudManager.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
+                    FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
                 }
             }
         }

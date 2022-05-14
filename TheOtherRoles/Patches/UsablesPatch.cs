@@ -7,6 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
+using TheOtherRoles.Utilities;
 
 
 namespace TheOtherRoles.Patches {
@@ -131,8 +132,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     class VentButtonVisibilityPatch {
         static void Postfix(PlayerControl __instance) {
-            if (__instance.AmOwner && __instance.roleCanUseVents() && HudManager.Instance.ReportButton.isActiveAndEnabled) {
-                HudManager.Instance.ImpostorVentButton.Show();
+            if (__instance.AmOwner && __instance.roleCanUseVents() && FastDestroyableSingleton<HudManager>.Instance.ReportButton.isActiveAndEnabled) {
+                FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
             }
         }
     }
@@ -190,7 +191,7 @@ namespace TheOtherRoles.Patches {
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (blockSabotageJanitor || blockSabotageMafioso) {
-                HudManager.Instance.SabotageButton.SetDisabled();
+                FastDestroyableSingleton<HudManager>.Instance.SabotageButton.SetDisabled();
             }
         }
     }

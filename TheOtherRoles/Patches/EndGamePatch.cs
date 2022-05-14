@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.Text;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Patches {
     enum CustomGameOverReason {

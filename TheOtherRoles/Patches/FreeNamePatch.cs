@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,7 @@ namespace TheOtherRoles.Patches {
                 if (!scene.name.Equals("MMOnline")) return;
                 if (!TryMoveObjects()) return;
 
-                var editName = DestroyableSingleton<AccountManager>.Instance.accountTab.editNameScreen;
+                var editName = FastDestroyableSingleton<AccountManager>.Instance.accountTab.editNameScreen;
                 var nameText = Object.Instantiate(editName.nameText.gameObject);
 
                 nameText.transform.localPosition += Vector3.up * 2.2f;
