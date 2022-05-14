@@ -1420,6 +1420,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
+		public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;

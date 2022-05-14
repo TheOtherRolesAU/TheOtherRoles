@@ -216,11 +216,19 @@ namespace TheOtherRoles.Patches {
                 } 
             }
 
+			bool pursuerWin = false;
             // Possible Additional winner: Pursuer
             if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead && !Pursuer.notAckedExiled && !isPursurerLose && !TempData.winners.ToArray().Any(x => x.IsImpostor)) {
                 if (!TempData.winners.ToArray().Any(x => x.PlayerName == Pursuer.pursuer.Data.PlayerName))
                     TempData.winners.Add(new WinningPlayerData(Pursuer.pursuer.Data));
                 AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAlivePursuerWin);
+				pursuerWin = true;
+            }
+			
+            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead && Pursuer.wasProsecutor) {
+				 TempData.winners.Add(new WinningPlayerData(Pursuer.pursuer.Data));
+                AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAlivePursuerWin);
+				pursuerWin = true;
             }
 
             // Reset Settings

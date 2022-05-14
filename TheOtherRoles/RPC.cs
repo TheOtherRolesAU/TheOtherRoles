@@ -874,7 +874,7 @@ namespace TheOtherRoles
             Prosecutor.clearAndReload();
 			Pursuer.clearAndReload();
             Pursuer.pursuer = player;
-			Pursuer.target = target;
+			Pursuer.wasProsecutor = true;
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
