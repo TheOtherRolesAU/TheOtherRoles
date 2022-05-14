@@ -366,7 +366,7 @@ namespace TheOtherRoles.Patches {
                     AmongUsClient.Instance.FinishRpcImmediately(w);
                     RPCProcedure.prosecutorChangesRole();
                 } else {
-                    var target = possibleTargets[TheEpicRoles.rnd.Next(0, possibleTargets.Count)];
+                    var target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorSetTarget, Hazel.SendOption.Reliable, -1);
                     writer.Write(target.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
