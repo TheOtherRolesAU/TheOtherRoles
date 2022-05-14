@@ -272,6 +272,9 @@ namespace TheOtherRoles {
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
+        public static CustomOption showButtonTarget;
+
+
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
         public static CustomOption dynamicMapEnableMira;
@@ -562,6 +565,9 @@ namespace TheOtherRoles {
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Enable Airship Rotation", true, dynamicMap, false);
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
+
+            showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
