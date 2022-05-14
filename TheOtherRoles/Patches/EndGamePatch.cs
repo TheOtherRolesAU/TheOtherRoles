@@ -225,7 +225,7 @@ namespace TheOtherRoles.Patches {
 				pursuerWin = true;
             }
 			
-            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead && Pursuer.wasProsecutor) {
+            if (Pursuer.pursuer != null && !Pursuer.pursuer.Data.IsDead && Pursuer.wasProsecutor && !pursuerWin) {
 				 TempData.winners.Add(new WinningPlayerData(Pursuer.pursuer.Data));
                 AdditionalTempData.additionalWinConditions.Add(WinCondition.AdditionalAlivePursuerWin);
 				pursuerWin = true;
