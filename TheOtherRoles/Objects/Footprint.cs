@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
     class Footprint {

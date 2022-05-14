@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 

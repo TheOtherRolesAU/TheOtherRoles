@@ -37,6 +37,7 @@ namespace TheOtherRoles.Patches {
         private static TextBoxTMP portField;
 
         public static void Postfix(RegionMenu __instance) {
+            if (!__instance.TryCast<RegionMenu>()) return;
             var template = DestroyableSingleton<JoinGameButton>.Instance;
             var joinGameButtons = GameObject.FindObjectsOfType<JoinGameButton>();
             foreach (var t in joinGameButtons) {  // The correct button has a background, the other 2 dont

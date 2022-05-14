@@ -3,8 +3,6 @@ using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using TheOtherRoles.Objects;
@@ -23,7 +21,7 @@ namespace TheOtherRoles.Patches {
             if (targetingPlayer.Data.IsDead) return result;
 
             Vector2 truePosition = targetingPlayer.GetTruePosition();
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (!playerInfo.Disconnected && playerInfo.PlayerId != targetingPlayer.PlayerId && !playerInfo.IsDead && (!onlyCrewmates || !playerInfo.Role.IsImpostor)) {
                     PlayerControl @object = playerInfo.Object;
@@ -55,7 +53,7 @@ namespace TheOtherRoles.Patches {
         // Update functions
 
         static void setBasePlayerOutlines() {
-            foreach (PlayerControl target in PlayerControl.AllPlayerControls) {
+            foreach (PlayerControl target in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (target == null || target.MyRend == null) continue;
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
@@ -184,7 +182,7 @@ namespace TheOtherRoles.Patches {
             Detective.timer -= Time.fixedDeltaTime;
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
-                foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) {
                         new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
                     }
@@ -422,7 +420,7 @@ namespace TheOtherRoles.Patches {
 
         public static void playerSizeUpdate(PlayerControl p) {
             // Set default player size
-            CircleCollider2D collider = p.GetComponent<CircleCollider2D>();
+            CircleCollider2D collider = p.Collider.CastFast<CircleCollider2D>();
 
             p.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             collider.radius = Mini.defaultColliderRadius;
@@ -446,7 +444,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void updatePlayerInfo() {
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {         
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {         
                 if ((Lawyer.lawyerKnowsRole && PlayerControl.LocalPlayer == Lawyer.lawyer && p == Lawyer.target) || p == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
@@ -484,8 +482,8 @@ namespace TheOtherRoles.Patches {
                         if (p.Data.IsDead) roleNames = roleText;
                         playerInfoText = $"{roleNames}";
                         if (p == Swapper.swapper) playerInfoText = $"{roleNames}" + Helpers.cs(Swapper.color, $" ({Swapper.charges})");
-                        if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists) {
-                            TMPro.TextMeshPro tabText = DestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                        if (TaskPanelBehaviour.InstanceExists) {
+                            TMPro.TextMeshPro tabText = TaskPanelBehaviour.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
                             tabText.SetText($"Tasks {taskInfo}");
                         }
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
@@ -568,7 +566,7 @@ namespace TheOtherRoles.Patches {
             }
             else if (PlayerControl.LocalPlayer == Snitch.snitch && numberOfTasks == 0) {
                 int arrowIndex = 0;
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
                     bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
@@ -611,7 +609,7 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     if (!p.Data.IsDead && !p.Data.Disconnected && p != p.Data.Role.IsImpostor && p != Spy.spy && (p != Sidekick.sidekick || !Sidekick.wasTeamRed) && (p != Jackal.jackal || !Jackal.wasTeamRed) && (p != Mini.mini || Mini.isGrownUp()) && (Lovers.getPartner(BountyHunter.bountyHunter) == null || p != Lovers.getPartner(BountyHunter.bountyHunter))) possibleTargets.Add(p);
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
@@ -816,7 +814,6 @@ namespace TheOtherRoles.Patches {
                 HudManagerStartPatch.witchSpellButton.MaxTimer = (Witch.cooldown + Witch.currentCooldownAddition) * multiplier;
             }
         }
-
     public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
 
@@ -896,7 +893,6 @@ namespace TheOtherRoles.Patches {
                 ninjaSetTarget();
                 NinjaTrace.UpdateAll();
                 ninjaUpdate();
-
                 hackerUpdate();
                 swapperUpdate();
 

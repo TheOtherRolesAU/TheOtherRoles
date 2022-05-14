@@ -7,7 +7,6 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using TheOtherRoles.Objects;
 
 
 namespace TheOtherRoles.Patches {
@@ -353,7 +352,7 @@ namespace TheOtherRoles.Patches {
                 __instance.timer = 0f;
                 players = new Dictionary<SystemTypes, List<Color>>();
                 bool commsActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
                         if (task.TaskType == TaskTypes.FixComms) commsActive = true;       
 
 
@@ -441,7 +440,7 @@ namespace TheOtherRoles.Patches {
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
                     int i = -1;
-                    foreach (var icon in __instance.myIcons)
+                    foreach (var icon in __instance.myIcons.GetFastEnumerator())
                     {
                         i += 1;
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();

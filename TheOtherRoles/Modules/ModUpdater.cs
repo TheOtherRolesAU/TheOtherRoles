@@ -9,7 +9,6 @@ using BepInEx.IL2CPP.Utils;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using Twitch;
-using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;

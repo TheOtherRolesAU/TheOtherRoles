@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Collections;
-using UnhollowerBaseLib;
 using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
@@ -62,7 +60,7 @@ namespace TheOtherRoles {
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -71,7 +69,7 @@ namespace TheOtherRoles {
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new Dictionary<byte, PlayerControl>();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -87,20 +85,24 @@ namespace TheOtherRoles {
         }
 
         public static void refreshRoleDescription(PlayerControl player) {
-            if (player == null) return;
-
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player); 
+            List<string> taskTexts = new(infos.Count); 
 
+            foreach (var roleInfo in infos)
+            {
+                taskTexts.Add(getRoleString(roleInfo));
+            }
+            
             var toRemove = new List<PlayerTask>();
-            foreach (PlayerTask t in player.myTasks) {
-                var textTask = t.gameObject.GetComponent<ImportantTextTask>();
-                if (textTask != null) {
-                    var info = infos.FirstOrDefault(x => textTask.Text.StartsWith(x.name));
-                    if (info != null)
-                        infos.Remove(info); // TextTask for this RoleInfo does not have to be added, as it already exists
-                    else
-                        toRemove.Add(t); // TextTask does not have a corresponding RoleInfo and will hence be deleted
-                }
+            foreach (PlayerTask t in player.myTasks.GetFastEnumerator()) 
+            {
+                var textTask = t.TryCast<ImportantTextTask>();
+                if (textTask == null) continue;
+                
+                var currentText = textTask.Text;
+                
+                if (taskTexts.Contains(currentText)) taskTexts.Remove(currentText); // TextTask for this RoleInfo does not have to be added, as it already exists
+                else toRemove.Add(t); // TextTask does not have a corresponding RoleInfo and will hence be deleted
             }   
 
             foreach (PlayerTask t in toRemove) {
@@ -110,23 +112,30 @@ namespace TheOtherRoles {
             }
 
             // Add TextTask for remaining RoleInfos
-            foreach (RoleInfo roleInfo in infos) {
+            foreach (string title in taskTexts) {
                 var task = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
                 task.transform.SetParent(player.transform, false);
-
-                if (roleInfo.name == "Jackal") {
-                    var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
-                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");  
-                } else if (roleInfo.name == "Invert") {
-                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription} ({Invert.meetings})");
-                } else {
-                    task.Text = cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");  
-                }
-
+                task.Text = title;
                 player.myTasks.Insert(0, task);
             }
         }
 
+        internal static string getRoleString(RoleInfo roleInfo)
+        {
+            if (roleInfo.name == "Jackal") 
+            {
+                var getSidekickText = Jackal.canCreateSidekick ? " and recruit a Sidekick" : "";
+                return cs(roleInfo.color, $"{roleInfo.name}: Kill everyone{getSidekickText}");  
+            }
+
+            if (roleInfo.name == "Invert") 
+            {
+                return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription} ({Invert.meetings})");
+            }
+            
+            return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
+        }
+        
         public static bool isLighterColor(int colorId) {
             return CustomColors.lighterColors.Contains(colorId);
         }
@@ -147,7 +156,7 @@ namespace TheOtherRoles {
 
         public static void clearAllTasks(this PlayerControl player) {
             if (player == null) return;
-            foreach (var playerTask in player.myTasks)
+            foreach (var playerTask in player.myTasks.GetFastEnumerator())
             {
                 playerTask.OnRemove();
                 UnityEngine.Object.Destroy(playerTask.gameObject);
@@ -361,7 +370,7 @@ namespace TheOtherRoles {
 
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
             List<PlayerControl> team = new List<PlayerControl>();
-            foreach(PlayerControl p in PlayerControl.AllPlayerControls) {
+            foreach(PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
                 else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
@@ -369,6 +378,7 @@ namespace TheOtherRoles {
             
             return team;
         }
+
 
         public static void toggleZoom(bool reset=false) {
             float zoomFactor = 4f;

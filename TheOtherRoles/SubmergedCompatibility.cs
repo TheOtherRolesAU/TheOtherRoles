@@ -5,7 +5,6 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using UnhollowerRuntimeLib;
 using UnityEngine;
 
 namespace TheOtherRoles

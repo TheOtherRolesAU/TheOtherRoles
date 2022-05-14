@@ -1,16 +1,15 @@
-﻿using BepInEx;
+﻿global using UnhollowerBaseLib;
+global using UnhollowerBaseLib.Attributes;
+global using UnhollowerRuntimeLib;
+
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Linq;
-using System.Net;
-using System.IO;
 using System;
-using System.Reflection;
-using UnhollowerBaseLib;
 using UnityEngine;
 using TheOtherRoles.Modules;
 
@@ -55,7 +54,7 @@ namespace TheOtherRoles
             IRegionInfo[] regions = defaultRegions;
 
             var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
+            regions = regions.Concat(new IRegionInfo[] { CustomRegion.CastFast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AvailableRegions = regions;
         }
