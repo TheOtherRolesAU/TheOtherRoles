@@ -76,6 +76,14 @@ namespace TheOtherRoles.Patches {
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
+			
+            // Intro Exe and Target
+            if (PlayerControl.LocalPlayer == Prosecutor.prosecutor) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(PlayerControl.LocalPlayer);
+				soloTeam.Add(Prosecutor.target);
+                yourTeam = soloTeam;
+            }
 
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
