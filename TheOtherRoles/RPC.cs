@@ -127,7 +127,8 @@ namespace TheOtherRoles
         Bloody,
         SetFirstKill,
         Invert,
-        SetTiebreak
+        SetTiebreak,
+        SetInvisible
     }
 
     public static class RPCProcedure {
@@ -607,6 +608,12 @@ namespace TheOtherRoles
                 bool wasSpy = Spy.spy != null && player == Spy.spy;
                 bool wasImpostor = player.Data.Role.IsImpostor;  // This can only be reached if impostors can be sidekicked.
                 DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+                if (player == Lawyer.lawyer && Lawyer.target != null)
+                {
+                    Transform playerInfoTransform = Lawyer.target.nameText.transform.parent.FindChild("Info");
+                    TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
+                    if (playerInfo != null) playerInfo.text = "";
+                }
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
                 if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
@@ -730,6 +737,26 @@ namespace TheOtherRoles
             position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
             position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
             new NinjaTrace(position, Ninja.traceTime);
+        }
+
+        public static void setInvisible(byte playerId, byte flag)
+        {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue)
+            {
+                target.MyRend.color = Color.white;
+                target.setDefaultLook();
+                Ninja.isInvisble = false;
+                return;
+            }
+
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            target.MyRend.color = color;
+            Ninja.invisibleTimer = Ninja.invisibleDuration;
+            Ninja.isInvisble = true;
         }
 
         public static void placePortal(byte[] buff) {
@@ -1126,6 +1153,11 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.SetTiebreak:
                     RPCProcedure.setTiebreak();
                     break;
+                case (byte)CustomRPC.SetInvisible:
+                    byte invisiblePlayer = reader.ReadByte();
+                    byte invisibleFlag = reader.ReadByte();
+                    RPCProcedure.setInvisible(invisiblePlayer, invisibleFlag);
+                    break;  
             }
         }
     }

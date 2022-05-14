@@ -1479,7 +1479,10 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
+        public static float invisibleDuration = 5f;
 
+        public static float invisibleTimer = 0f;
+        public static bool isInvisble = false;
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
         public static Arrow arrow = new Arrow(Color.black);
@@ -1501,7 +1504,9 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.ninjaCooldown.getFloat();
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
-
+            invisibleDuration = CustomOptionHolder.ninjaInvisibleDuration.getFloat();
+            invisibleTimer = 0f;
+            isInvisble = false;
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);

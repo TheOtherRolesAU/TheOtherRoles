@@ -220,6 +220,7 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= Time.deltaTime;
             Trickster.lightsOutTimer -= Time.deltaTime;
             Tracker.corpsesTrackingTimer -= Time.deltaTime;
+            Ninja.invisibleTimer -= Time.deltaTime;
             foreach (byte key in Deputy.handcuffedKnows.Keys.ToList())
                 Deputy.handcuffedKnows[key] -= Time.deltaTime;
         }
