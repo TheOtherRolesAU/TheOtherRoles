@@ -2,15 +2,11 @@ using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
 using TheOtherRoles.Objects;
-using System.Collections;
 using System;
-using System.Text;
 using UnityEngine;
-using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -448,7 +444,7 @@ namespace TheOtherRoles.Patches {
 
                 PassiveButton passiveButton = confirmSwapButton.GetComponent<PassiveButton>();
                 passiveButton.OnClick.RemoveAllListeners();               
-                if (!PlayerControl.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperConfirm(__instance)));
+                if (!PlayerControl.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
                 confirmSwapButton.parent.gameObject.SetActive(false);
                 __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) => { // Button appears delayed, so that its visible in the voting screen only!
                     if (p == 1f) {
@@ -545,6 +541,7 @@ namespace TheOtherRoles.Patches {
 
                 // Remove first kill shield
                 MapOptions.firstKillPlayer = null;
+
 
                 // Reset zoomed out ghosts
                 Helpers.toggleZoom(reset: true);

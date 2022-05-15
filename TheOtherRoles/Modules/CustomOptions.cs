@@ -7,7 +7,6 @@ using HarmonyLib;
 using Hazel;
 using System.Reflection;
 using System.Text;
-using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles {
     public class CustomOption {

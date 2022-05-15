@@ -16,7 +16,7 @@ namespace TheOtherRoles.Patches {
             int playerCounter = 0;
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null) {
                 Vector3 bottomLeft = new Vector3(-HudManager.Instance.UseButton.transform.localPosition.x, HudManager.Instance.UseButton.transform.localPosition.y, HudManager.Instance.UseButton.transform.localPosition.z);
-                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, HudManager.Instance.transform);
                     playerPrefab = __instance.PlayerPrefab;

@@ -1,13 +1,6 @@
 using System;
-using System.Security.Cryptography;
-using System.Text;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.IL2CPP;
 using HarmonyLib;
-using UnityEngine;
 using System.Linq;
-using UnhollowerBaseLib;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
