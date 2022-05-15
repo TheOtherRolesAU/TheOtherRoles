@@ -14,6 +14,9 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
 {
     private struct Il2CppListStruct
     {
+        private IntPtr _;
+        private IntPtr __;
+        
         public IntPtr _items;
         public int _size;
     }
@@ -42,7 +45,7 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
     {
         var listStruct = (Il2CppListStruct*) list.Pointer;
         _count = listStruct->_size;
-        _arrayPointer = *(IntPtr*) listStruct->_items;
+        _arrayPointer =  listStruct->_items;
     }
 
     object IEnumerator.Current => Current;

@@ -31,9 +31,10 @@ public static class MapUtilities
         var systems = CachedShipStatus.Systems;
         if (systems.Count <= 0) return;
         
-        foreach (Il2CppSystem.Collections.Generic.KeyValuePair<SystemTypes, ISystemType> keyValuePair in systems)
+        foreach (var systemTypes in SystemTypeHelpers.AllTypes)
         {
-            Systems[keyValuePair.Key] = keyValuePair.value.TryCast<Object>();
+            if (!systems.ContainsKey(systemTypes)) continue;
+            _systems[systemTypes] = systems[systemTypes].TryCast<Object>();
         }
     }
 }
