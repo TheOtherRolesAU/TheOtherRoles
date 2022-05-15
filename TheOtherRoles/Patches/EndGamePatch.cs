@@ -105,7 +105,7 @@ namespace TheOtherRoles.Patches {
             bool vultureWin = Vulture.vulture != null && gameOverReason == (GameOverReason)CustomGameOverReason.VultureWin;
             bool lawyerSoloWin = Lawyer.lawyer != null && gameOverReason == (GameOverReason)CustomGameOverReason.LawyerSoloWin;
 
-            bool isPursurerLose = jesterWin || arsonistWin || miniLose || vultureWin || teamJackalWin;
+            bool isPursurerLose = arsonistWin || miniLose;
 
             // Mini lose
             if (miniLose) {
