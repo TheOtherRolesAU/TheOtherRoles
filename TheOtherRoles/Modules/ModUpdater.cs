@@ -142,7 +142,7 @@ namespace TheOtherRoles.Modules
         [HideFromIl2Cpp]
         public static IEnumerator CoCheckUpdates()
         {
-            var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("JustASysAdmin", "TheOtherRole2s"));
+            var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("JustASysAdmin", "TheOtherRoles2"));
             while (!torUpdateCheck.IsCompleted) yield return null;
             Announcement.updateData = torUpdateCheck.Result;
             if (torUpdateCheck.Result != null && torUpdateCheck.Result.IsNewer(Version.Parse(TheOtherRolesPlugin.VersionString)))
