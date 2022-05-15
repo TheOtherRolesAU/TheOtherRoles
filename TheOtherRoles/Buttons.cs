@@ -1502,7 +1502,7 @@ namespace TheOtherRoles
                },
                () => { return Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
                () => {
-                   int meetingsLeft = (mayor.totalRemoteMeetings - Mayor.usedRemoteMeetings);
+                   int meetingsLeft = (Mayor.totalRemoteMeetings - Mayor.usedRemoteMeetings);
                    mayorMeetingButton.actionButton.OverrideText("Emergency ("+meetingsLeft+")");
                    bool sabotageActive = false;
                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())

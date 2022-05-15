@@ -149,7 +149,7 @@ namespace TheOtherRoles
                 emergency = null;
                 emergencySprite = null;
 		usedRemoteMeetings = 0;
-		totalRemoteMeetings = CustomOptionHolder.mayorMaxRemoteMeetings.getFloat(); 
+		totalRemoteMeetings = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat()); 
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
                 meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
