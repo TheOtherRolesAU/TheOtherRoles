@@ -129,6 +129,9 @@ namespace TheOtherRoles
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
             public static Minigame emergency = null;
             public static Sprite emergencySprite = null;
+            public static int totalRemoteMeetings = 1;           
+            public static int usedRemoteMeetings = 0;           
+
 
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
@@ -145,7 +148,8 @@ namespace TheOtherRoles
                 mayor = null;
                 emergency = null;
                 emergencySprite = null;
-
+		usedRemoteMeetings = 0;
+		totalRemoteMeetings = CustomOptionHolder.mayorMaxRemoteMeetings.getFloat(); 
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
                 meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
