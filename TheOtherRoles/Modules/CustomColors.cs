@@ -20,6 +20,8 @@ namespace TheOtherRoles.Modules {
                                                                     8, 32, 1, 21, 31,
                                                                     10, 34, 15, 28, 22,
                                                                     29, 11, 2, 26, 16,
+								    // CUSTOM COLORS FOR TORCE
+								    35, 36, 37, 38, 39,
                                                                     20, 24, 9, 12, 6 };
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
@@ -100,7 +102,34 @@ namespace TheOtherRoles.Modules {
             colors.Add(new CustomColor { longname = "Ice",
                                         color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue), 
                                         shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });     
+                                        isLighterColor = true });
+	    // NEW COLORS START ON ID 35!!!!
+            colors.Add(new CustomColor { longname = "Panda", //35
+			                 color = new Color32(0xE5, 0xE5, 0xE5, byte.MaxValue),
+			                 shadow = new Color32(0x0C, 0x0C, 0x0C, byte.MaxValue),
+			                 isLighterColor = true });
+
+            colors.Add(new CustomColor { longname = "True dark", //36
+ 			                 color = new Color32(0x00, 0x00, 0x00, byte.MaxValue),
+  			                 shadow = new Color32(0x13, 0x13, 0x13, byte.MaxValue),
+			                 isLighterColor = false });
+
+            colors.Add(new CustomColor { longname = "LJBlue", //37
+ 			                 color = new Color32(48, 213, 200, byte.MaxValue),
+  			                 shadow = new Color32(0, 0, 139, byte.MaxValue),
+			                 isLighterColor = true });
+
+            colors.Add(new CustomColor { longname = "ScoomRed", //38
+ 			                 color = new Color32(59, 5, 5, byte.MaxValue),
+  			                 shadow = new Color32(0, 0, 0, byte.MaxValue),
+			                 isLighterColor = false });
+
+            colors.Add(new CustomColor { longname = "SvettyBlue", //39
+ 			                 color = new Color32(19, 54, 82, byte.MaxValue),
+  			                 shadow = new Color32(9, 34, 56, byte.MaxValue),
+			                 isLighterColor = false });
+
+
 
             pickableColors += (uint)colors.Count; // Colors to show in Tab
             /** Hidden Colors **/     
