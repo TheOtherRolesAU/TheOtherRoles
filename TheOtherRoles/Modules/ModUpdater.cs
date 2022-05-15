@@ -190,7 +190,8 @@ namespace TheOtherRoles.Modules
             {
                 string browser_download_url = current["browser_download_url"]?.ToString();
                 if (browser_download_url != null && current["content_type"] != null) {
-                    if (browser_download_url.EndsWith(".dll")) {
+                    if (current["content_type"].ToString().Equals("application/x-msdownload") &&
+                        browser_download_url.EndsWith(".dll")) {
                         downloadURI = browser_download_url;
                         break;
                     }
