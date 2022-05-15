@@ -142,7 +142,7 @@ namespace TheOtherRoles.Modules
         [HideFromIl2Cpp]
         public static IEnumerator CoCheckUpdates()
         {
-            var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("Eisbison", "TheOtherRoles"));
+            var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("JustASysAdmin", "TheOtherRole2s"));
             while (!torUpdateCheck.IsCompleted) yield return null;
             Announcement.updateData = torUpdateCheck.Result;
             if (torUpdateCheck.Result != null && torUpdateCheck.Result.IsNewer(Version.Parse(TheOtherRolesPlugin.VersionString)))
@@ -190,8 +190,7 @@ namespace TheOtherRoles.Modules
             {
                 string browser_download_url = current["browser_download_url"]?.ToString();
                 if (browser_download_url != null && current["content_type"] != null) {
-                    if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                        browser_download_url.EndsWith(".dll")) {
+                    if (browser_download_url.EndsWith(".dll")) {
                         downloadURI = browser_download_url;
                         break;
                     }
