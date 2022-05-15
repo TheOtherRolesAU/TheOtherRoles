@@ -20,8 +20,6 @@ namespace TheOtherRoles.Modules {
                                                                     8, 32, 1, 21, 31,
                                                                     10, 34, 15, 28, 22,
                                                                     29, 11, 2, 26, 16,
-								    // CUSTOM COLORS FOR TORCE
-								    35, 36, 37, 38, 39,
                                                                     20, 24, 9, 12, 6 };
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
@@ -79,31 +77,8 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(0xDB, 0xFD, 0x2F, byte.MaxValue), 
                                         shadow = new Color32(0x74, 0xE5, 0x10, byte.MaxValue), 
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Signal Orange",
-                                        color = new Color32(0xF7, 0x44, 0x17, byte.MaxValue), 
-                                        shadow = new Color32(0x9B, 0x2E, 0x0F, byte.MaxValue),
-                                        isLighterColor = true });   
 
-            colors.Add(new CustomColor { longname = "Teal",
-                                        color = new Color32(0x25, 0xB8, 0xBF, byte.MaxValue), 
-                                        shadow = new Color32(0x12, 0x89, 0x86, byte.MaxValue),
-                                        isLighterColor = false });   
-
-            colors.Add(new CustomColor { longname = "Blurple",
-                                        color = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue), 
-                                        shadow = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
-                                        isLighterColor = false });   
-
-            colors.Add(new CustomColor { longname = "Sunrise", 
-                                        color = new Color32(0xFF, 0xCA, 0x19, byte.MaxValue), 
-                                        shadow = new Color32(0xDB, 0x44, 0x42, byte.MaxValue),
-                                        isLighterColor = true });
-
-            colors.Add(new CustomColor { longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue), 
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });
-	    // NEW COLORS START ON ID 35!!!!
+	    // NEW COLORS START ON ID 30!!!!
             colors.Add(new CustomColor { longname = "Panda", //35
 			                 color = new Color32(0xE5, 0xE5, 0xE5, byte.MaxValue),
 			                 shadow = new Color32(0x0C, 0x0C, 0x0C, byte.MaxValue),
