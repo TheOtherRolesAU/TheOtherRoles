@@ -1,12 +1,6 @@
-﻿#if CORECLR
-global using Il2CppInterop.Runtime;
-global using Il2CppInterop.Runtime.Injection;
-global using Il2CppInterop.Runtime.Attributes;
-#else
-global using UnhollowerBaseLib;
+﻿global using UnhollowerBaseLib;
 global using UnhollowerBaseLib.Attributes;
 global using UnhollowerRuntimeLib;
-#endif
 
 using BepInEx;
 using BepInEx.Configuration;
