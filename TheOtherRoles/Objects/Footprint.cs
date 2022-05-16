@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TheOtherRoles.Utilities;
 using UnityEngine;
 
 namespace TheOtherRoles.Objects {
@@ -43,7 +44,7 @@ namespace TheOtherRoles.Objects {
             footprint.SetActive(true);
             footprints.Add(this);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) => {
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(footprintDuration, new Action<float>((p) => {
             Color c = color;
             if (!anonymousFootprints && owner != null) {
                 if (owner == Morphling.morphling && Morphling.morphTimer > 0 && Morphling.morphTarget?.Data != null)

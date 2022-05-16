@@ -8,6 +8,7 @@ using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
 using HarmonyLib;
 using Hazel;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
 
@@ -141,8 +142,8 @@ namespace TheOtherRoles {
         }
 
         public static bool isCustomServer() {
-            if (DestroyableSingleton<ServerManager>.Instance == null) return false;
-            StringNames n = DestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
+            if (FastDestroyableSingleton<ServerManager>.Instance == null) return false;
+            StringNames n = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.TranslateName;
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
@@ -228,7 +229,7 @@ namespace TheOtherRoles {
             target.RawSetHat(hatId, colorId);
             target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
 
-            SkinViewData nextSkin = DestroyableSingleton<HatManager>.Instance.GetSkinById(skinId).viewData.viewData;
+            SkinViewData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId).viewData.viewData;
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.Skin.animator;
@@ -241,14 +242,14 @@ namespace TheOtherRoles {
             else clip = nextSkin.IdleAnim;
             float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             playerPhysics.Skin.skin = nextSkin;
-            if (playerPhysics.Skin.layer.material == DestroyableSingleton<HatManager>.Instance.PlayerMaterial)
+            if (playerPhysics.Skin.layer.material == FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial)
                 PlayerControl.SetPlayerMaterialColors(colorId, playerPhysics.Skin.layer);
             spriteAnim.Play(clip, 1f);
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);
 
             if (target.CurrentPet) UnityEngine.Object.Destroy(target.CurrentPet.gameObject);
-            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(DestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
+            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
             target.CurrentPet.transform.position = target.transform.position;
             target.CurrentPet.Source = target;
             target.CurrentPet.Visible = target.Visible;
@@ -256,11 +257,11 @@ namespace TheOtherRoles {
         }
 
         public static void showFlash(Color color, float duration=1f) {
-            if (HudManager.Instance == null || HudManager.Instance.FullScreen == null) return;
-            HudManager.Instance.FullScreen.gameObject.SetActive(true);
-            HudManager.Instance.FullScreen.enabled = true;
-            HudManager.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) => {
-                var renderer = HudManager.Instance.FullScreen;
+            if (FastDestroyableSingleton<HudManager>.Instance == null || FastDestroyableSingleton<HudManager>.Instance.FullScreen == null) return;
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.gameObject.SetActive(true);
+            FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = true;
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) => {
+                var renderer = FastDestroyableSingleton<HudManager>.Instance.FullScreen;
 
                 if (p < 0.5) {
                     if (renderer != null)

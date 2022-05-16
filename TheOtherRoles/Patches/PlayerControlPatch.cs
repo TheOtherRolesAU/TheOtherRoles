@@ -6,6 +6,7 @@ using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Utilities;
 using UnityEngine;
 
 namespace TheOtherRoles.Patches {
@@ -16,7 +17,7 @@ namespace TheOtherRoles.Patches {
         static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
-            if (!ShipStatus.Instance) return result;
+            if (!MapUtilities.CachedShipStatus) return result;
             if (targetingPlayer == null) targetingPlayer = PlayerControl.LocalPlayer;
             if (targetingPlayer.Data.IsDead) return result;
 
@@ -90,7 +91,7 @@ namespace TheOtherRoles.Patches {
                     if (next.Item2 == true) {
                         // Exit current vent if necessary
                         if (PlayerControl.LocalPlayer.inVent) {
-                            foreach (Vent vent in ShipStatus.Instance.AllVents) {
+                            foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                                 bool canUse;
                                 bool couldUse;
                                 vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
@@ -106,7 +107,7 @@ namespace TheOtherRoles.Patches {
                     else if (localPlayerPositions.Any(x => x.Item2 == true)) {
                         PlayerControl.LocalPlayer.transform.position = next.Item1;
                     }
-                    if (SubmergedCompatibility.isSubmerged()) {
+                    if (SubmergedCompatibility.IsSubmerged) {
                         SubmergedCompatibility.ChangeFloor(next.Item1.y > -7);
                     }
 
@@ -278,8 +279,8 @@ namespace TheOtherRoles.Patches {
         static void engineerUpdate() {
             bool jackalHighlight = Engineer.highlightForTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick);
             bool impostorHighlight = Engineer.highlightForImpostors && PlayerControl.LocalPlayer.Data.Role.IsImpostor;
-            if ((jackalHighlight || impostorHighlight) && ShipStatus.Instance?.AllVents != null) {
-                foreach (Vent vent in ShipStatus.Instance.AllVents) {
+            if ((jackalHighlight || impostorHighlight) && MapUtilities.CachedShipStatus?.AllVents != null) {
+                foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                     try {
                         if (vent?.myRend?.material != null) {
                             if (Engineer.engineer != null && Engineer.engineer.inVent) {
@@ -298,7 +299,7 @@ namespace TheOtherRoles.Patches {
 
         static void impostorSetTarget() {
             if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor ||!PlayerControl.LocalPlayer.CanMove || PlayerControl.LocalPlayer.Data.IsDead) { // !isImpostor || !canMove || isDead
-                HudManager.Instance.KillButton.SetTarget(null);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
                 return;
             }
 
@@ -315,7 +316,7 @@ namespace TheOtherRoles.Patches {
                 target = setTarget(true, true, new List<PlayerControl>() { Sidekick.wasImpostor ? Sidekick.sidekick : null, Jackal.wasImpostor ? Jackal.jackal : null});
             }
 
-            HudManager.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
+            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
         }
 
         static void warlockSetTarget() {
@@ -517,15 +518,15 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void securityGuardSetTarget() {
-            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null) return;
+            if (SecurityGuard.securityGuard == null || SecurityGuard.securityGuard != PlayerControl.LocalPlayer || MapUtilities.CachedShipStatus == null || MapUtilities.CachedShipStatus.AllVents == null) return;
 
             Vent target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             float closestDistance = float.MaxValue;
-            for (int i = 0; i < ShipStatus.Instance.AllVents.Length; i++) {
-                Vent vent = ShipStatus.Instance.AllVents[i];
+            for (int i = 0; i < MapUtilities.CachedShipStatus.AllVents.Length; i++) {
+                Vent vent = MapUtilities.CachedShipStatus.AllVents[i];
                 if (vent.gameObject.name.StartsWith("JackInTheBoxVent_") || vent.gameObject.name.StartsWith("SealedVent_") || vent.gameObject.name.StartsWith("FutureSealedVent_")) continue;
-                if (SubmergedCompatibility.isSubmerged() && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
+                if (SubmergedCompatibility.IsSubmerged && vent.Id == 9) continue; // cannot seal submergeds exit only vent!
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
                 if (distance <= vent.UsableDistance && distance < closestDistance) {
                     closestDistance = distance;
@@ -624,7 +625,7 @@ namespace TheOtherRoles.Patches {
                 if (BountyHunter.bounty == null) return;
 
                 // Show poolable player
-                if (HudManager.Instance != null && HudManager.Instance.UseButton != null) {
+                if (FastDestroyableSingleton<HudManager>.Instance != null && FastDestroyableSingleton<HudManager>.Instance.UseButton != null) {
                     foreach (PoolablePlayer pp in MapOptions.playerIcons.Values) pp.gameObject.SetActive(false);
                     if (MapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)
                         MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject.SetActive(true);
@@ -675,12 +676,12 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void mediumSetTarget() {
-            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || ShipStatus.Instance?.AllVents == null) return;
+            if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || MapUtilities.CachedShipStatus?.AllVents == null) return;
 
             DeadPlayer target = null;
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             float closestDistance = float.MaxValue;
-            float usableDistance = ShipStatus.Instance.AllVents.FirstOrDefault().UsableDistance;
+            float usableDistance = MapUtilities.CachedShipStatus.AllVents.FirstOrDefault().UsableDistance;
             foreach ((DeadPlayer dp, Vector3 ps) in Medium.deadBodies) {
                 float distance = Vector2.Distance(ps, truePosition);
                 if (distance <= usableDistance && distance < closestDistance) {
@@ -969,13 +970,13 @@ namespace TheOtherRoles.Patches {
 
                     if (!string.IsNullOrWhiteSpace(msg))
                     {   
-                        if (AmongUsClient.Instance.AmClient && DestroyableSingleton<HudManager>.Instance)
+                        if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                         {
-                            DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
+                            FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, msg);
                         }
                         if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            DestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
+                            FastDestroyableSingleton<Assets.CoreScripts.Telemetry>.Instance.SendWho();
                         }
                     }
                 }
@@ -1127,7 +1128,7 @@ namespace TheOtherRoles.Patches {
             if (BountyHunter.bountyHunter != null && PlayerControl.LocalPlayer == BountyHunter.bountyHunter) addition = BountyHunter.punishmentTime;
 
             __instance.killTimer = Mathf.Clamp(time, 0f, PlayerControl.GameOptions.KillCooldown * multiplier + addition);
-            DestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.KillCooldown * multiplier + addition);
+            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(__instance.killTimer, PlayerControl.GameOptions.KillCooldown * multiplier + addition);
             return false;
         }
     }

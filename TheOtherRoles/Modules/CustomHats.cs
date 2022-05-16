@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -117,7 +118,7 @@ namespace TheOtherRoles.Modules {
 
         private static HatData CreateHatBehaviour(CustomHat ch, bool fromDisk = false, bool testOnly = false) {
             if (hatShader == null) {
-                Material tmpShader = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+                Material tmpShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
                 hatShader = tmpShader;
             }
 
@@ -273,7 +274,7 @@ namespace TheOtherRoles.Modules {
                     ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(__instance.ColorTabPrefab, __instance.scroller.Inner);
                     if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard) {
                         colorChip.Button.OnMouseOver.AddListener((System.Action)(() => __instance.SelectHat(hat)));
-                        colorChip.Button.OnMouseOut.AddListener((System.Action)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                        colorChip.Button.OnMouseOut.AddListener((System.Action)(() => __instance.SelectHat(FastDestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
                         colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.ClickEquip()));
                     } else {
                         colorChip.Button.OnClick.AddListener((System.Action)(() => __instance.SelectHat(hat)));
@@ -315,7 +316,7 @@ namespace TheOtherRoles.Modules {
                     UnityEngine.Object.Destroy(__instance.scroller.Inner.GetChild(i).gameObject);
                 __instance.ColorChips = new Il2CppSystem.Collections.Generic.List<ColorChip>();
 
-                HatData[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
+                HatData[] unlockedHats = FastDestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
                 Dictionary<string, List<System.Tuple<HatData, HatExtension>>> packages = new Dictionary<string, List<System.Tuple<HatData, HatExtension>>>();
 
                 foreach (HatData hatBehaviour in unlockedHats) {

@@ -26,38 +26,10 @@ namespace TheOtherRoles
         public static Type[] Types { get; private set; }
         public static Dictionary<string, Type> InjectedTypes { get; private set; }
 
-        private static MonoBehaviour _submarineStatus;
-        public static MonoBehaviour SubmarineStatus
-        {
-            get
-            {
-                if (!Loaded) return null;
-                
-                if (_submarineStatus is null || _submarineStatus.WasCollected || !_submarineStatus || _submarineStatus == null)
-                {
-                    if (ShipStatus.Instance is null || ShipStatus.Instance.WasCollected || !ShipStatus.Instance || ShipStatus.Instance == null)
-                    {
-                        return _submarineStatus = null;
-                    }
-                    else
-                    {
-                        if (ShipStatus.Instance.Type == SUBMERGED_MAP_TYPE)
-                        {
-                            return _submarineStatus = ShipStatus.Instance.GetComponent(Il2CppType.From(SubmarineStatusType))?.TryCast(SubmarineStatusType) as MonoBehaviour;
-                        }
-                        else
-                        {
-                            return _submarineStatus = null;
-                        }
-                    }
-                }
-                else
-                {
-                    return _submarineStatus;
-                }
-            }
-        }
+        public static MonoBehaviour SubmarineStatus { get; private set; }
 
+        public static bool IsSubmerged { get; private set; }
+        
         public static bool DisableO2MaskCheckForEmergency
         {
             set
@@ -65,6 +37,21 @@ namespace TheOtherRoles
                 if (!Loaded) return;
                 DisableO2MaskCheckField.SetValue(null, value);
             }
+        }
+        
+        public static void SetupMap(ShipStatus map)
+        {
+            if (map == null)
+            {
+                IsSubmerged = false;
+                SubmarineStatus = null;
+                return;
+            }
+            
+            IsSubmerged = map.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE;
+            if (!IsSubmerged) return;
+            
+            SubmarineStatus = map.GetComponent(Il2CppType.From(SubmarineStatusType))?.TryCast(SubmarineStatusType) as MonoBehaviour;
         }
 
         private static Type SubmarineStatusType;
@@ -84,7 +71,7 @@ namespace TheOtherRoles
         private static FieldInfo RetrieveOxigenMaskField;
         public static TaskTypes RetrieveOxygenMask;
         private static Type SubmarineOxygenSystemType;
-        private static FieldInfo SubmarineOxygenSystemInstanceField;
+        private static MethodInfo SubmarineOxygenSystemInstanceField;
         private static MethodInfo RepairDamageMethod;
 
 
@@ -119,8 +106,8 @@ namespace TheOtherRoles
             RetrieveOxigenMaskField = AccessTools.Field(CustomTaskTypesType, "RetrieveOxygenMask");
             RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskField.GetValue(null);
 
-            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem");
-            SubmarineOxygenSystemInstanceField = AccessTools.Field(SubmarineOxygenSystemType, "Instance");
+            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem" && t.Namespace == "Submerged.Systems.CustomSystems.Oxygen");
+            SubmarineOxygenSystemInstanceField = AccessTools.PropertyGetter(SubmarineOxygenSystemType, "Instance");
             RepairDamageMethod = AccessTools.Method(SubmarineOxygenSystemType, "RepairDamage");
         }
 
@@ -151,16 +138,12 @@ namespace TheOtherRoles
             if (!Loaded) return;
             try {
                 ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
-                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.GetValue(null), new object[] { PlayerControl.LocalPlayer, 64 });
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.Invoke(null, Array.Empty<object>()), new object[] { PlayerControl.LocalPlayer, 64 });
             }
             catch (System.NullReferenceException) {
                 TheOtherRolesPlugin.Logger.LogMessage("null reference in engineer oxygen fix");
             }
 
-        }
-
-        public static bool isSubmerged() {
-            return Loaded && ShipStatus.Instance && ShipStatus.Instance.Type == SUBMERGED_MAP_TYPE;
         }
     }
 

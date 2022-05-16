@@ -2,6 +2,7 @@ using System;
 using HarmonyLib;
 using Hazel;
 using InnerNet;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -22,7 +23,7 @@ namespace TheOtherRoles.Modules {
                                     LobbyLimit = Math.Clamp(LobbyLimit, 4, 15);
                                     if (LobbyLimit != PlayerControl.GameOptions.MaxPlayers) {
                                         PlayerControl.GameOptions.MaxPlayers = LobbyLimit;
-                                        DestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
+                                        FastDestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
                                         PlayerControl.LocalPlayer.RpcSyncSettings(PlayerControl.GameOptions);
                                         __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size changed to {LobbyLimit} players");
                                     } else {

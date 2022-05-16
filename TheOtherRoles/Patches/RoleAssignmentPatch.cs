@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
+using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Patches {
