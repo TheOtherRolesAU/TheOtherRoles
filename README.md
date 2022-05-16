@@ -653,6 +653,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Ghosts Can Additionally See Modifier**
 - **Ghosts Can See The Number Of Remaining Tasks**
 - **The map is accessable during a meeting and will show your last location when a body gets reported/meeting gets called**
+- **When you're a ghost and done with tasks, you'll get a zoom out/overview function**
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 - **Darker/Lighter:** Displays color type of each player in meetings
