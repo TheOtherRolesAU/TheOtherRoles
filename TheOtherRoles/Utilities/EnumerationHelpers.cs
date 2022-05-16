@@ -14,11 +14,15 @@ public unsafe class Il2CppListEnumerable<T> : System.Collections.Generic.IEnumer
 {
     private struct Il2CppListStruct
     {
-        private IntPtr _;
-        private IntPtr __;
-        
+#pragma warning disable CS0169
+        private IntPtr _unusedPtr1;
+        private IntPtr _unusedPtr2;
+#pragma warning restore CS0169
+
+#pragma warning disable CS0649
         public IntPtr _items;
         public int _size;
+#pragma warning restore CS0649
     }
     
     private static readonly int _elemSize;
