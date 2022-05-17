@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
@@ -55,7 +56,7 @@ namespace TheOtherRoles.Objects {
             }
             teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
             
-            HudManager.Instance.StartCoroutine(Effects.Lerp(teleportDuration, new Action<float>((p) => {
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(teleportDuration, new Action<float>((p) => {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
                     firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
@@ -87,12 +88,12 @@ namespace TheOtherRoles.Objects {
             portalRenderer.sprite = portalSprite;
 
             Vector3 fgPosition = new Vector3(0, 0, -1f);
-            portalFgAnimationGameObject = new GameObject("PortalAnimationFG") { layer = 11 };
+            portalFgAnimationGameObject = new GameObject("PortalAnimationFG");
             portalFgAnimationGameObject.transform.SetParent(portalGameObject.transform);
             portalFgAnimationGameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             portalFgAnimationGameObject.transform.localPosition = fgPosition;
             animationFgRenderer = portalFgAnimationGameObject.AddComponent<SpriteRenderer>();
-            animationFgRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+            animationFgRenderer.material = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
 
             // Only render the inactive portals for the Portalmaker
             bool playerIsPortalmaker = PlayerControl.LocalPlayer == TheOtherRoles.Portalmaker.portalmaker;

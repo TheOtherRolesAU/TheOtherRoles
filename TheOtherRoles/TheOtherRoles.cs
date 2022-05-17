@@ -1,16 +1,10 @@
-using System.Net;
 using System.Linq;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.IL2CPP;
 using HarmonyLib;
-using Hazel;
 using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.IO;
 using UnityEngine;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
 {
@@ -115,7 +109,7 @@ namespace TheOtherRoles
 
             public static Sprite getLogSprite() {
                 if (logSprite) return logSprite;
-                logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
                 return logSprite;
             }
 
@@ -622,7 +616,7 @@ namespace TheOtherRoles
 
         public static void resetCamouflage() {
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 p.setDefaultLook();
         }
 
@@ -665,22 +659,22 @@ namespace TheOtherRoles
 
         public static Sprite getVitalsSprite() {
             if (vitalsSprite) return vitalsSprite;
-            vitalsSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
+            vitalsSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
             return vitalsSprite;
         }
 
         public static Sprite getLogSprite() {
             if (logSprite) return logSprite;
-            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
             return logSprite;
         }
 
         public static Sprite getAdminSprite() {
             byte mapId = PlayerControl.GameOptions.MapId;
-            UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
-            if (mapId == 0 || mapId == 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
-            else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
-            else if (mapId == 4) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+            UseButtonSettings button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+            if (mapId == 0 || mapId == 3) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+            else if (mapId == 1) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+            else if (mapId == 4) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
             adminSprite = button.Image;
             return adminSprite;
         }
@@ -1092,7 +1086,7 @@ namespace TheOtherRoles
         private static float lastPPU;
         public static Sprite getAnimatedVentSealedSprite() {
             float ppu = 185f;
-            if (SubmergedCompatibility.isSubmerged()) ppu = 120f;
+            if (SubmergedCompatibility.IsSubmerged) ppu = 120f;
             if (lastPPU != ppu) {
                 animatedVentSealedSprite = null;
                 lastPPU = ppu;
@@ -1126,14 +1120,14 @@ namespace TheOtherRoles
         private static Sprite camSprite;
         public static Sprite getCamSprite() {
             if (camSprite) return camSprite;
-            camSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+            camSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
             return camSprite;
         }
 
         private static Sprite logSprite;
         public static Sprite getLogSprite() {
             if (logSprite) return logSprite;
-            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
             return logSprite;
         }
 
@@ -1378,6 +1372,7 @@ namespace TheOtherRoles
         public static float vision = 1f;
         public static bool lawyerKnowsRole = false;
         public static bool targetCanBeJester = false;
+        public static bool targetWasGuessed = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1387,7 +1382,10 @@ namespace TheOtherRoles
 
         public static void clearAndReload(bool clearTarget = true) {
             lawyer = null;
-            if (clearTarget) target = null;
+            if (clearTarget) {
+                target = null;
+                targetWasGuessed = false;
+            }
             triggerLawyerWin = false;
 
             vision = CustomOptionHolder.lawyerVision.getFloat();
@@ -1479,7 +1477,10 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
+        public static float invisibleDuration = 5f;
 
+        public static float invisibleTimer = 0f;
+        public static bool isInvisble = false;
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
         public static Arrow arrow = new Arrow(Color.black);
@@ -1501,7 +1502,9 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.ninjaCooldown.getFloat();
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
-
+            invisibleDuration = CustomOptionHolder.ninjaInvisibleDuration.getFloat();
+            invisibleTimer = 0f;
+            isInvisble = false;
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);

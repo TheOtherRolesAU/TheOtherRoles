@@ -1,18 +1,23 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
+using BepInEx.Bootstrap;
+using BepInEx.IL2CPP;
 using BepInEx.IL2CPP.Utils;
+using Mono.Cecil;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using Twitch;
-using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Action = System.Action;
+using IntPtr = System.IntPtr;
 using Version = SemanticVersioning.Version;
 
 namespace TheOtherRoles.Modules 
@@ -21,15 +26,16 @@ namespace TheOtherRoles.Modules
     {
         public static readonly bool CheckForSubmergedUpdates = true;
         public static bool showPopUp = true;
-    
+        public static bool updateInProgress = false;
+
         public static ModUpdateBehaviour Instance { get; private set; }
         public ModUpdateBehaviour(IntPtr ptr) : base(ptr) { }
-
         public class UpdateData
         {
             public string Content;
             public string Tag;
             public JObject Request;
+            public Version Version => Version.Parse(Tag);
             
             public UpdateData(JObject data)
             {
@@ -41,7 +47,7 @@ namespace TheOtherRoles.Modules
             public bool IsNewer(Version version)
             {
                 if (!Version.TryParse(Tag, out var myVersion)) return false;
-                return myVersion > version;
+                return myVersion.BaseVersion() > version.BaseVersion();
             }
         }
 
@@ -56,7 +62,7 @@ namespace TheOtherRoles.Modules
             if (Instance) Destroy(this);
             Instance = this;
             
-            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>) (OnSceneLoaded));
+            SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>) (OnSceneLoaded));
             this.StartCoroutine(CoCheckUpdates());
             
             foreach (var file in Directory.GetFiles(Paths.PluginPath, "*.old"))
@@ -67,7 +73,7 @@ namespace TheOtherRoles.Modules
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name != "MainMenu") return;
+            if (updateInProgress || scene.name != "MainMenu") return;
             if (RequiredUpdateData is null) {
                 showPopUp = false;
                 return;
@@ -93,9 +99,9 @@ namespace TheOtherRoles.Modules
 
             var text = button.transform.GetChild(0).GetComponent<TMP_Text>();
             string t = "Update";
-            if (TORUpdate is null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
+            if (TORUpdate is null && SubmergedUpdate is not null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
 
-            StartCoroutine(Effects.Lerp(0.1f, (Action<float>)(p => text.SetText(t))));
+            StartCoroutine(Effects.Lerp(0.1f, (System.Action<float>)(p => text.SetText(t))));
 
             buttonSprite.color = text.color = Color.red;
             passiveButton.OnMouseOut.AddListener((Action)(() => buttonSprite.color = text.color = Color.red));
@@ -111,19 +117,25 @@ namespace TheOtherRoles.Modules
         [HideFromIl2Cpp]
         public IEnumerator CoUpdate()
         {
+            updateInProgress = true;
             var isSubmerged = TORUpdate is null;
             var updateName = (isSubmerged ? "Submerged" : "The Other Roles");
             
             var popup = Instantiate(TwitchManager.Instance.TwitchPopup);
             popup.TextAreaTMP.fontSize *= 0.7f;
             popup.TextAreaTMP.enableAutoSizing = false;
+            
             popup.Show();
-            popup.TextAreaTMP.text = $"Updating {updateName}\nPlease wait...";
 
+            var button = popup.transform.GetChild(2).gameObject;
+            button.SetActive(false);
+            popup.TextAreaTMP.text = $"Updating {updateName}\nPlease wait...";
+            
             var download = Task.Run(DownloadUpdate);
             while (!download.IsCompleted) yield return null;
+            
+            button.SetActive(true);
             popup.TextAreaTMP.text = download.Result ? $"{updateName}\nupdated successfully\nPlease restart the game." : "Update wasn't successful\nTry again later,\nor update manually.";
-
         }
 
         [HideFromIl2Cpp]
@@ -159,6 +171,8 @@ namespace TheOtherRoles.Modules
                     Instance.SubmergedUpdate = submergedUpdateCheck.Result;
                 }
             }
+            
+            Instance.OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
         }
 
         [HideFromIl2Cpp]
@@ -175,10 +189,38 @@ namespace TheOtherRoles.Modules
             return new UpdateData(data);
         }
 
+        private bool TryUpdateSubmergedInternally()
+        {
+            if (SubmergedUpdate == null) return false;
+            try
+            {
+                if (!SubmergedCompatibility.LoadedExternally) return false;
+                var thisAsm = Assembly.GetCallingAssembly();
+                var resourceName = thisAsm.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Submerged.dll"));
+                if (resourceName == default) return false;
+
+                using var submergedStream = thisAsm.GetManifestResourceStream(resourceName)!;
+                var asmDef = AssemblyDefinition.ReadAssembly(submergedStream, TypeLoader.ReaderParameters);
+                var pluginType = asmDef.MainModule.Types.FirstOrDefault(t => t.IsSubtypeOf(typeof(BasePlugin)));
+                var info = IL2CPPChainloader.ToPluginInfo(pluginType, "");
+                if (SubmergedUpdate.IsNewer(info.Metadata.Version)) return false;
+                File.Delete(SubmergedCompatibility.Assembly.Location);
+
+            }
+            catch (Exception e)
+            {
+                TheOtherRolesPlugin.Logger.LogError(e);
+                return false;
+            }
+            return true;
+        }
+            
+        
         [HideFromIl2Cpp]
         public async Task<bool> DownloadUpdate()
         {
             var isSubmerged = TORUpdate is null;
+            if (isSubmerged && TryUpdateSubmergedInternally()) return true;
             var data = isSubmerged ? SubmergedUpdate : TORUpdate;
             
             var client = new HttpClient();
@@ -201,23 +243,12 @@ namespace TheOtherRoles.Modules
             if (downloadURI.Length == 0) return false;
 
             var res = await client.GetAsync(downloadURI, HttpCompletionOption.ResponseContentRead);
-            string codeBase = "";
-            if (!isSubmerged)
-                codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            else if (SubmergedCompatibility.Loaded)
-                codeBase = SubmergedCompatibility.Assembly.CodeBase;
-            else {
-                Uri pluginsFolder = new Uri(new Uri(Assembly.GetExecutingAssembly().CodeBase), ".");
-                codeBase = pluginsFolder.OriginalString + "/Submerged.dll";
-            }
-
-            UriBuilder uri = new UriBuilder(codeBase);
-            string fullname = Uri.UnescapeDataString(uri.Path);
-            if (File.Exists(fullname + ".old")) File.Delete(fullname + ".old");
-            if (File.Exists(fullname)) File.Move(fullname, fullname + ".old");
+            string filePath = Path.Combine(Paths.PluginPath, isSubmerged ? "Submerged.dll" : "TheOtherRoles.dll");
+            if (File.Exists(filePath + ".old")) File.Delete(filePath + ".old");
+            if (File.Exists(filePath)) File.Move(filePath, filePath + ".old");
 
             await using var responseStream = await res.Content.ReadAsStreamAsync();
-            await using var fileStream = File.Create(fullname);
+            await using var fileStream = File.Create(filePath);
             await responseStream.CopyToAsync(fileStream);
 
             return true;
