@@ -117,6 +117,7 @@ namespace TheOtherRoles
             securityGuardCamButton.EffectDuration = SecurityGuard.duration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
+            zoomOutButton.MaxTimer = 0f;
         }
 
         public static void resetTimeMasterButton() {
