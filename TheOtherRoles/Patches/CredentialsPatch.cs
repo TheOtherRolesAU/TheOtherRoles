@@ -18,7 +18,7 @@ Design by <color=#FCCE03FF>Bavari</color>";
 
         public static string contributorsCredentials =
 $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color> 
-GitHub Contributors: Gendelo, Alex2911, amsyarasyiq, MaximeGillot, Psynomit, simonkelly</size>";
+GitHub Contributors: Gendelo, Alex2911, amsyarasyiq, MaximeGillot, Psynomit, probablyadnf</size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
