@@ -20,10 +20,10 @@ namespace TheOtherRoles.Modules
     {
         public static readonly bool CheckForSubmergedUpdates = true;
         public static bool showPopUp = true;
-    
+        public static bool updateInProgress = false;
+
         public static ModUpdateBehaviour Instance { get; private set; }
         public ModUpdateBehaviour(IntPtr ptr) : base(ptr) { }
-
         public class UpdateData
         {
             public string Content;
@@ -66,7 +66,7 @@ namespace TheOtherRoles.Modules
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (scene.name != "MainMenu") return;
+            if (updateInProgress || scene.name != "MainMenu") return;
             if (RequiredUpdateData is null) {
                 showPopUp = false;
                 return;
@@ -110,6 +110,7 @@ namespace TheOtherRoles.Modules
         [HideFromIl2Cpp]
         public IEnumerator CoUpdate()
         {
+            updateInProgress = true;
             var isSubmerged = TORUpdate is null;
             var updateName = (isSubmerged ? "Submerged" : "The Other Roles");
             
@@ -122,7 +123,6 @@ namespace TheOtherRoles.Modules
             var download = Task.Run(DownloadUpdate);
             while (!download.IsCompleted) yield return null;
             popup.TextAreaTMP.text = download.Result ? $"{updateName}\nupdated successfully\nPlease restart the game." : "Update wasn't successful\nTry again later,\nor update manually.";
-
         }
 
         [HideFromIl2Cpp]
@@ -158,6 +158,8 @@ namespace TheOtherRoles.Modules
                     Instance.SubmergedUpdate = submergedUpdateCheck.Result;
                 }
             }
+            
+            Instance.OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
         }
 
         [HideFromIl2Cpp]
