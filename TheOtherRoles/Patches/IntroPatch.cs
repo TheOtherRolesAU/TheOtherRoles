@@ -79,6 +79,14 @@ namespace TheOtherRoles.Patches {
                 soloTeam.Add(PlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
+			
+            // Intro Exe and Target
+            if (PlayerControl.LocalPlayer == Prosecutor.prosecutor) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(PlayerControl.LocalPlayer);
+				soloTeam.Add(Prosecutor.target);
+                yourTeam = soloTeam;
+            }
 
             // Add the Spy to the Impostor team (for the Impostors)
             if (Spy.spy != null && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
@@ -99,9 +107,21 @@ namespace TheOtherRoles.Patches {
             if (roleInfo == null) return;
             if (roleInfo.isNeutral) {
                 var neutralColor = new Color32(76, 84, 78, 255);
-                __instance.BackgroundBar.material.color = neutralColor;
-                __instance.TeamTitle.text = "Neutral";
-                __instance.TeamTitle.color = neutralColor;
+                __instance.BackgroundBar.material.color = roleInfo.color;
+                __instance.TeamTitle.text = roleInfo.name;
+                __instance.TeamTitle.color = roleInfo.color;
+            } else {
+                bool isCrew = true;
+                if (roleInfo.color == Palette.ImpostorRed) isCrew = false;
+                if (isCrew) {
+                    __instance.BackgroundBar.material.color = roleInfo.color;
+                    __instance.TeamTitle.text = "Crewmate";
+                    __instance.TeamTitle.color = Color.cyan;
+                } else {
+                    __instance.BackgroundBar.material.color = roleInfo.color;
+                    __instance.TeamTitle.text = "Impostor";
+                    __instance.TeamTitle.color = Palette.ImpostorRed;
+                }
             }
         }
 
@@ -136,6 +156,12 @@ namespace TheOtherRoles.Patches {
                         __instance.RoleBlurbText.text += Helpers.cs(Lovers.color, $"\n♥ You are in love with {otherLover?.Data?.PlayerName ?? ""} ♥");
                     }
                 }
+				
+				if (infos.Any(info => info.roleId == RoleId.Prosecutor)) {
+                    PlayerControl target = Prosecutor.target;
+                    __instance.RoleBlurbText.text += Helpers.cs(Prosecutor.color, $"\nVote out {target?.Data?.PlayerName ?? ""} ");
+                }
+
                 if (Deputy.knowsSheriff && Deputy.deputy != null && Sheriff.sheriff != null) {
                     if (infos.Any(info => info.roleId == RoleId.Sheriff))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Deputy is {Deputy.deputy?.Data?.PlayerName ?? ""}");

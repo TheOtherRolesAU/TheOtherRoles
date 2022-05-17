@@ -15,6 +15,7 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
+            Prosecutor.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
@@ -123,12 +124,30 @@ namespace TheOtherRoles
 
 
         }
+		
+        public static class Prosecutor {
+            public static PlayerControl prosecutor;
+            public static PlayerControl target;
+            public static Color color = new Color32(201, 204, 63, byte.MaxValue);
+            public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+
+            public static bool triggerProsecutorWin = false;
+
+            public static void clearAndReload() {
+              prosecutor = null;
+              triggerProsecutorWin = false;
+              target = null;
+            }
+        }
 
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
             public static Minigame emergency = null;
             public static Sprite emergencySprite = null;
+            public static int totalRemoteMeetings = 1;           
+            public static int usedRemoteMeetings = 0;           
+
 
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
@@ -145,7 +164,8 @@ namespace TheOtherRoles
                 mayor = null;
                 emergency = null;
                 emergencySprite = null;
-
+		usedRemoteMeetings = 0;
+		totalRemoteMeetings = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat()); 
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
                 meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
@@ -1402,6 +1422,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
+		public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;

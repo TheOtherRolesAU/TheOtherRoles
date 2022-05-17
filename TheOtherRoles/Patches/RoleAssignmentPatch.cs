@@ -86,6 +86,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Ninja, CustomOptionHolder.ninjaSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.prosecutorSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
@@ -346,6 +347,33 @@ namespace TheOtherRoles.Patches {
                     RPCProcedure.lawyerSetTarget(target.PlayerId);
                 }
             }
+			
+            // Start Set Prosecutor Target
+            if (Prosecutor.prosecutor != null) {
+                var possibleTargets = new List<PlayerControl>();
+                foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    if (p.Data.IsDead || p.Data.Disconnected) continue; // Don't assign dead people
+                    if (p == Lovers.lover1 || p == Lovers.lover2) continue; // Don't allow a lover target
+                    if (p.Data.Role.IsImpostor ||  p == Jackal.jackal) continue; // Dont allow imp / jackal target
+					if (p == Spy.spy) continue; // Dont allow Spy to be target
+					// I simply don't want these targets, as they can hard counter Prosecutor
+					if (p == Mayor.mayor || p == Sheriff.sheriff || p == Swapper.swapper) continue;
+                    if (RoleInfo.getRoleInfoForPlayer(p).FirstOrDefault().isNeutral) continue; // Don't allow neutral target
+                    possibleTargets.Add(p);
+                }
+                if (possibleTargets.Count == 0) {
+                    MessageWriter w = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorChangesRole, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(w);
+                    RPCProcedure.prosecutorChangesRole();
+                } else {
+                    var target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorSetTarget, Hazel.SendOption.Reliable, -1);
+                    writer.Write(target.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.prosecutorSetTarget(target.PlayerId);
+                }
+            }
+            // End Set Prosecutor Target
         }
 
         private static void assignModifiers() {
@@ -413,7 +441,10 @@ namespace TheOtherRoles.Patches {
             }
 
             assignModifiersToPlayers(chanceModifierToAssign, players, modifierCount); // Assign chance modifier
+			
         }
+
+
 
         private static byte setRoleToRandomPlayer(byte roleId, List<PlayerControl> playerList, bool removePlayer = true) {
             var index = rnd.Next(0, playerList.Count);
