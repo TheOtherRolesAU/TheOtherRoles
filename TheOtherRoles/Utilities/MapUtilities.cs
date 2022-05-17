@@ -42,7 +42,7 @@ public static class MapUtilities
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
 public static class ShipStatus_Awake_Patch
 {
-    [HarmonyPostfix]
+    [HarmonyPostfix, HarmonyPriority(Priority.Last)]
     public static void Postfix(ShipStatus __instance)
     {
         MapUtilities.CachedShipStatus = __instance;
@@ -52,7 +52,7 @@ public static class ShipStatus_Awake_Patch
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
 public static class ShipStatus_OnDestroy_Patch
 {
-    [HarmonyPostfix]
+    [HarmonyPostfix, HarmonyPriority(Priority.Last)]
     public static void Postfix()
     {
         MapUtilities.CachedShipStatus = null;
