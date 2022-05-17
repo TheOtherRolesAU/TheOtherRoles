@@ -74,16 +74,52 @@ namespace TheOtherRoles
         private static MethodInfo SubmarineOxygenSystemInstanceField;
         private static MethodInfo RepairDamageMethod;
 
+        public static bool TryLoadSubmerged()
+        {
+            try
+            {
+                TheOtherRolesPlugin.Logger.LogMessage("Trying to load Submerged...");
+                var thisAsm = Assembly.GetCallingAssembly();
+                var resourceName = thisAsm.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Submerged.dll"));
+                if (resourceName == default) return false;
+
+                using var submergedStream = thisAsm.GetManifestResourceStream(resourceName)!;
+                byte[] assemblyBuffer = new byte[submergedStream.Length];
+                submergedStream.Read(assemblyBuffer, 0, assemblyBuffer.Length);
+                Assembly = Assembly.Load(assemblyBuffer);
+
+                var pluginType = Assembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(BasePlugin)));
+                Plugin = (BasePlugin) Activator.CreateInstance(pluginType!);
+                Plugin.Load();
+
+                Version = pluginType.GetCustomAttribute<BepInPlugin>().Version.BaseVersion();;
+
+                IL2CPPChainloader.Instance.Plugins[SUBMERGED_GUID] = new();
+            }
+            catch (Exception e)
+            {
+                TheOtherRolesPlugin.Logger.LogError(e);
+            }
+            return false;
+        }
+        
 
         public static void Initialize()
         {
             Loaded = IL2CPPChainloader.Instance.Plugins.TryGetValue(SUBMERGED_GUID, out PluginInfo plugin);
-            if (!Loaded) return;
+            if (!Loaded)
+            {
+                if (TryLoadSubmerged()) Loaded = true;
+                else return;
+            }
+            else
+            {
+                Plugin = plugin!.Instance as BasePlugin;
+                Version = plugin.Metadata.Version.BaseVersion();
+                Assembly = Plugin!.GetType().Assembly;
+            }
             
-            Plugin = plugin!.Instance as BasePlugin;
-            Version = plugin.Metadata.Version;
-
-            Assembly = Plugin!.GetType().Assembly;
+            
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             
             InjectedTypes = (Dictionary<string, Type>) AccessTools.PropertyGetter(Types.FirstOrDefault(t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes")

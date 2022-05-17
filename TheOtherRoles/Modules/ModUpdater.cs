@@ -92,7 +92,7 @@ namespace TheOtherRoles.Modules
 
             var text = button.transform.GetChild(0).GetComponent<TMP_Text>();
             string t = "Update";
-            if (TORUpdate is null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
+            if (TORUpdate is null && SubmergedUpdate is not null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
 
             StartCoroutine(Effects.Lerp(0.1f, (Action<float>)(p => text.SetText(t))));
 
