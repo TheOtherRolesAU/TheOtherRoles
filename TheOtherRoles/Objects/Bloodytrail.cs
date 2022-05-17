@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections;
+using TheOtherRoles.Utilities;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 
@@ -26,8 +26,8 @@ namespace TheOtherRoles.Objects {
             var index = rnd.Next(0, sp.Count);
 
 
-            blood = new GameObject("Blood" + index) { layer = 11 };
-            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.y / 1000 + +0.001f);
+            blood = new GameObject("Blood" + index);
+            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.y / 1000 + 0.001f);
             blood.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             blood.transform.position = position;
             blood.transform.localPosition = position;
@@ -37,14 +37,14 @@ namespace TheOtherRoles.Objects {
 
             spriteRenderer = blood.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = sp[index];
-            spriteRenderer.material = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+            spriteRenderer.material = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
             PlayerControl.SetPlayerMaterialColors(color, spriteRenderer);
             // spriteRenderer.color = color;
 
             blood.SetActive(true);
             bloodytrail.Add(this);
 
-            HudManager.Instance.StartCoroutine(Effects.Lerp(10f, new Action<float>((p) => {
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(10f, new Action<float>((p) => {
             Color c = color;
             if (Camouflager.camouflageTimer > 0) c = Palette.PlayerColors[6];
             if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(1 - p));

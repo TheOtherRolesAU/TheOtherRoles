@@ -1,15 +1,12 @@
   
 using HarmonyLib;
 using static TheOtherRoles.TheOtherRoles;
-using static TheOtherRoles.GameHistory;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Hazel;
-using UnhollowerBaseLib;
 using System;
 using System.Text;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Patches {
     enum CustomGameOverReason {
@@ -63,12 +60,15 @@ namespace TheOtherRoles.Patches {
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)]ref EndGameResult endGameResult) {
             gameOverReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10) endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
+
+            // Reset zoomed out ghosts
+            Helpers.toggleZoom(reset: true);
         }
 
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref EndGameResult endGameResult) {
             AdditionalTempData.clear();
 
-            foreach(var playerControl in PlayerControl.AllPlayerControls) {
+            foreach(var playerControl in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                 var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
                 AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted });
@@ -87,7 +87,7 @@ namespace TheOtherRoles.Patches {
             notWinners.AddRange(Jackal.formerJackals);
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
-            foreach (WinningPlayerData winner in TempData.winners) {
+            foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator()) {
                 if (notWinners.Any(x => x.Data.PlayerName == winner.PlayerName)) winnersToRemove.Add(winner);
             }
             foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
@@ -141,7 +141,7 @@ namespace TheOtherRoles.Patches {
                 if (!Lovers.existingWithKiller()) {
                     AdditionalTempData.winCondition = WinCondition.LoversTeamWin;
                     TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
-                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             TempData.winners.Add(new WinningPlayerData(p.Data));
@@ -192,7 +192,7 @@ namespace TheOtherRoles.Patches {
             // Possible Additional winner: Lawyer
             if (!lawyerSoloWin && Lawyer.lawyer != null && Lawyer.target != null && (!Lawyer.target.Data.IsDead || Lawyer.target == Jester.jester) && !Pursuer.notAckedExiled) {
                 WinningPlayerData winningClient = null;
-                foreach (WinningPlayerData winner in TempData.winners) {
+                foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator()) {
                     if (winner.PlayerName == Lawyer.target.Data.PlayerName)
                         winningClient = winner;
                 }
@@ -408,8 +408,8 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForSabotageWin(ShipStatus __instance) {
-            if (__instance.Systems == null) return false;
-            ISystemType systemType = __instance.Systems.ContainsKey(SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
+            if (MapUtilities.Systems == null) return false;
+            var systemType = MapUtilities.Systems.ContainsKey(SystemTypes.LifeSupp) ? MapUtilities.Systems[SystemTypes.LifeSupp] : null;
             if (systemType != null) {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f) {
@@ -418,9 +418,9 @@ namespace TheOtherRoles.Patches {
                     return true;
                 }
             }
-            ISystemType systemType2 = __instance.Systems.ContainsKey(SystemTypes.Reactor) ? __instance.Systems[SystemTypes.Reactor] : null;
+            var systemType2 = MapUtilities.Systems.ContainsKey(SystemTypes.Reactor) ? MapUtilities.Systems[SystemTypes.Reactor] : null;
             if (systemType2 == null) {
-                systemType2 = __instance.Systems.ContainsKey(SystemTypes.Laboratory) ? __instance.Systems[SystemTypes.Laboratory] : null;
+                systemType2 = MapUtilities.Systems.ContainsKey(SystemTypes.Laboratory) ? MapUtilities.Systems[SystemTypes.Laboratory] : null;
             }
             if (systemType2 != null) {
                 ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
@@ -522,7 +522,7 @@ namespace TheOtherRoles.Patches {
             bool impLover = false;
             bool jackalLover = false;
 
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (!playerInfo.Disconnected)
                 {

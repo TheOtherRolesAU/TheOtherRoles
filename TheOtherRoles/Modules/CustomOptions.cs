@@ -7,7 +7,7 @@ using HarmonyLib;
 using Hazel;
 using System.Reflection;
 using System.Text;
-using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
     public class CustomOption {
@@ -58,10 +58,10 @@ namespace TheOtherRoles {
         }
 
         public static CustomOption Create(int id, CustomOptionType type, string name, float defaultValue, float min, float max, float step, CustomOption parent = null, bool isHeader = false) {
-            List<float> selections = new List<float>();
+            List<object> selections = new();
             for (float s = min; s <= max; s += step)
                 selections.Add(s);
-            return new CustomOption(id, type, name, selections.Cast<object>().ToArray(), defaultValue, parent, isHeader);
+            return new CustomOption(id, type, name, selections.ToArray(), defaultValue, parent, isHeader);
         }
 
         public static CustomOption Create(int id, CustomOptionType type, string name, bool defaultValue, CustomOption parent = null, bool isHeader = false) {
@@ -591,9 +591,9 @@ namespace TheOtherRoles {
                 TheOtherRolesPlugin.optionsPage = 6;
             }
             if (page != TheOtherRolesPlugin.optionsPage) {
-                Vector3 position = (Vector3)HudManager.Instance?.GameSettings?.transform.localPosition;
+                Vector3 position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
                 if (position != null) {
-                    HudManager.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
+                    FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
                 }
             }
         }

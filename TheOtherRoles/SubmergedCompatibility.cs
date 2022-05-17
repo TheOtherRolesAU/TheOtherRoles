@@ -5,8 +5,9 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
-using UnhollowerRuntimeLib;
+using TheOtherRoles.Patches;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TheOtherRoles
 {
@@ -22,43 +23,16 @@ namespace TheOtherRoles
         
         public static SemanticVersioning.Version Version { get; private set; }
         public static bool Loaded { get; private set; }
+        public static bool LoadedExternally { get; private set; }
         public static BasePlugin Plugin { get; private set; }
         public static Assembly Assembly { get; private set; }
         public static Type[] Types { get; private set; }
         public static Dictionary<string, Type> InjectedTypes { get; private set; }
 
-        private static MonoBehaviour _submarineStatus;
-        public static MonoBehaviour SubmarineStatus
-        {
-            get
-            {
-                if (!Loaded) return null;
-                
-                if (_submarineStatus is null || _submarineStatus.WasCollected || !_submarineStatus || _submarineStatus == null)
-                {
-                    if (ShipStatus.Instance is null || ShipStatus.Instance.WasCollected || !ShipStatus.Instance || ShipStatus.Instance == null)
-                    {
-                        return _submarineStatus = null;
-                    }
-                    else
-                    {
-                        if (ShipStatus.Instance.Type == SUBMERGED_MAP_TYPE)
-                        {
-                            return _submarineStatus = ShipStatus.Instance.GetComponent(Il2CppType.From(SubmarineStatusType))?.TryCast(SubmarineStatusType) as MonoBehaviour;
-                        }
-                        else
-                        {
-                            return _submarineStatus = null;
-                        }
-                    }
-                }
-                else
-                {
-                    return _submarineStatus;
-                }
-            }
-        }
+        public static MonoBehaviour SubmarineStatus { get; private set; }
 
+        public static bool IsSubmerged { get; private set; }
+        
         public static bool DisableO2MaskCheckForEmergency
         {
             set
@@ -66,6 +40,21 @@ namespace TheOtherRoles
                 if (!Loaded) return;
                 DisableO2MaskCheckField.SetValue(null, value);
             }
+        }
+        
+        public static void SetupMap(ShipStatus map)
+        {
+            if (map == null)
+            {
+                IsSubmerged = false;
+                SubmarineStatus = null;
+                return;
+            }
+            
+            IsSubmerged = map.Type == SubmergedCompatibility.SUBMERGED_MAP_TYPE;
+            if (!IsSubmerged) return;
+            
+            SubmarineStatus = map.GetComponent(Il2CppType.From(SubmarineStatusType))?.TryCast(SubmarineStatusType) as MonoBehaviour;
         }
 
         private static Type SubmarineStatusType;
@@ -85,19 +74,59 @@ namespace TheOtherRoles
         private static FieldInfo RetrieveOxigenMaskField;
         public static TaskTypes RetrieveOxygenMask;
         private static Type SubmarineOxygenSystemType;
-        private static FieldInfo SubmarineOxygenSystemInstanceField;
+        private static MethodInfo SubmarineOxygenSystemInstanceField;
         private static MethodInfo RepairDamageMethod;
 
+        public static bool TryLoadSubmerged()
+        {
+            try
+            {
+                TheOtherRolesPlugin.Logger.LogMessage("Trying to load Submerged...");
+                var thisAsm = Assembly.GetCallingAssembly();
+                var resourceName = thisAsm.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Submerged.dll"));
+                if (resourceName == default) return false;
+
+                using var submergedStream = thisAsm.GetManifestResourceStream(resourceName)!;
+                byte[] assemblyBuffer = new byte[submergedStream.Length];
+                submergedStream.Read(assemblyBuffer, 0, assemblyBuffer.Length);
+                Assembly = Assembly.Load(assemblyBuffer);
+
+                var pluginType = Assembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(BasePlugin)));
+                Plugin = (BasePlugin) Activator.CreateInstance(pluginType!);
+                Plugin.Load();
+
+                Version = pluginType.GetCustomAttribute<BepInPlugin>().Version.BaseVersion();;
+
+                IL2CPPChainloader.Instance.Plugins[SUBMERGED_GUID] = new();
+                return true;
+            }
+            catch (Exception e)
+            {
+                TheOtherRolesPlugin.Logger.LogError(e);
+            }
+            return false;
+        }
+        
 
         public static void Initialize()
         {
             Loaded = IL2CPPChainloader.Instance.Plugins.TryGetValue(SUBMERGED_GUID, out PluginInfo plugin);
-            if (!Loaded) return;
-            
-            Plugin = plugin!.Instance as BasePlugin;
-            Version = plugin.Metadata.Version;
+            if (!Loaded)
+            {
+                if (TryLoadSubmerged()) Loaded = true;
+                else return;
+            }
+            else
+            {
+                LoadedExternally = true;
+                Plugin = plugin!.Instance as BasePlugin;
+                Version = plugin.Metadata.Version.BaseVersion();
+                Assembly = Plugin!.GetType().Assembly;
+            }
 
-            Assembly = Plugin!.GetType().Assembly;
+            CredentialsPatch.PingTrackerPatch.modStamp = new GameObject();
+            Object.DontDestroyOnLoad(CredentialsPatch.PingTrackerPatch.modStamp);
+            
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             
             InjectedTypes = (Dictionary<string, Type>) AccessTools.PropertyGetter(Types.FirstOrDefault(t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes")
@@ -120,8 +149,8 @@ namespace TheOtherRoles
             RetrieveOxigenMaskField = AccessTools.Field(CustomTaskTypesType, "RetrieveOxygenMask");
             RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskField.GetValue(null);
 
-            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem");
-            SubmarineOxygenSystemInstanceField = AccessTools.Field(SubmarineOxygenSystemType, "Instance");
+            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem" && t.Namespace == "Submerged.Systems.CustomSystems.Oxygen");
+            SubmarineOxygenSystemInstanceField = AccessTools.PropertyGetter(SubmarineOxygenSystemType, "Instance");
             RepairDamageMethod = AccessTools.Method(SubmarineOxygenSystemType, "RepairDamage");
         }
 
@@ -152,16 +181,12 @@ namespace TheOtherRoles
             if (!Loaded) return;
             try {
                 ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
-                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.GetValue(null), new object[] { PlayerControl.LocalPlayer, 64 });
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.Invoke(null, Array.Empty<object>()), new object[] { PlayerControl.LocalPlayer, 64 });
             }
             catch (System.NullReferenceException) {
                 TheOtherRolesPlugin.Logger.LogMessage("null reference in engineer oxygen fix");
             }
 
-        }
-
-        public static bool isSubmerged() {
-            return Loaded && ShipStatus.Instance && ShipStatus.Instance.Type == SUBMERGED_MAP_TYPE;
         }
     }
 
