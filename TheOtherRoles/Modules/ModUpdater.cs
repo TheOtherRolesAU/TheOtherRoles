@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.IO;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.IL2CPP.Utils;
@@ -12,6 +10,8 @@ using Twitch;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Action = System.Action;
+using IntPtr = System.IntPtr;
 using Version = SemanticVersioning.Version;
 
 namespace TheOtherRoles.Modules 
@@ -55,7 +55,7 @@ namespace TheOtherRoles.Modules
             if (Instance) Destroy(this);
             Instance = this;
             
-            SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>) (OnSceneLoaded));
+            SceneManager.add_sceneLoaded((System.Action<Scene, LoadSceneMode>) (OnSceneLoaded));
             this.StartCoroutine(CoCheckUpdates());
             
             foreach (var file in Directory.GetFiles(Paths.PluginPath, "*.old"))
@@ -94,7 +94,7 @@ namespace TheOtherRoles.Modules
             string t = "Update";
             if (TORUpdate is null && SubmergedUpdate is not null) t = SubmergedCompatibility.Loaded ? $"Update\nSubmerged" : $"Download\nSubmerged";
 
-            StartCoroutine(Effects.Lerp(0.1f, (Action<float>)(p => text.SetText(t))));
+            StartCoroutine(Effects.Lerp(0.1f, (System.Action<float>)(p => text.SetText(t))));
 
             buttonSprite.color = text.color = Color.red;
             passiveButton.OnMouseOut.AddListener((Action)(() => buttonSprite.color = text.color = Color.red));
@@ -117,11 +117,17 @@ namespace TheOtherRoles.Modules
             var popup = Instantiate(TwitchManager.Instance.TwitchPopup);
             popup.TextAreaTMP.fontSize *= 0.7f;
             popup.TextAreaTMP.enableAutoSizing = false;
+            
             popup.Show();
-            popup.TextAreaTMP.text = $"Updating {updateName}\nPlease wait...";
 
+            var button = popup.transform.GetChild(2).gameObject;
+            button.SetActive(false);
+            popup.TextAreaTMP.text = $"Updating {updateName}\nPlease wait...";
+            
             var download = Task.Run(DownloadUpdate);
             while (!download.IsCompleted) yield return null;
+            
+            button.SetActive(true);
             popup.TextAreaTMP.text = download.Result ? $"{updateName}\nupdated successfully\nPlease restart the game." : "Update wasn't successful\nTry again later,\nor update manually.";
         }
 
@@ -202,23 +208,12 @@ namespace TheOtherRoles.Modules
             if (downloadURI.Length == 0) return false;
 
             var res = await client.GetAsync(downloadURI, HttpCompletionOption.ResponseContentRead);
-            string codeBase = "";
-            if (!isSubmerged)
-                codeBase = Assembly.GetExecutingAssembly().CodeBase;
-            else if (SubmergedCompatibility.Loaded)
-                codeBase = SubmergedCompatibility.Assembly.CodeBase;
-            else {
-                Uri pluginsFolder = new Uri(new Uri(Assembly.GetExecutingAssembly().CodeBase), ".");
-                codeBase = pluginsFolder.OriginalString + "/Submerged.dll";
-            }
-
-            UriBuilder uri = new UriBuilder(codeBase);
-            string fullname = Uri.UnescapeDataString(uri.Path);
-            if (File.Exists(fullname + ".old")) File.Delete(fullname + ".old");
-            if (File.Exists(fullname)) File.Move(fullname, fullname + ".old");
+            string filePath = Path.Combine(Paths.PluginPath, isSubmerged ? "Submerged.dll" : "TheOtherRoles.dll");
+            if (File.Exists(filePath + ".old")) File.Delete(filePath + ".old");
+            if (File.Exists(filePath)) File.Move(filePath, filePath + ".old");
 
             await using var responseStream = await res.Content.ReadAsStreamAsync();
-            await using var fileStream = File.Create(fullname);
+            await using var fileStream = File.Create(filePath);
             await responseStream.CopyToAsync(fileStream);
 
             return true;
