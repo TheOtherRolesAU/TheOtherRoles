@@ -1193,7 +1193,7 @@ namespace TheOtherRoles.Patches {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
             }
-            if (__instance == Lawyer.target)
+            if (__instance == Lawyer.target && !Lawyer.targetWasGuessed)
             {
                 if (Lawyer.lawyer != null) Lawyer.lawyer.Exiled();
                 if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();

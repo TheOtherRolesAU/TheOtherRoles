@@ -876,8 +876,10 @@ namespace TheOtherRoles
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
             if (dyingTarget == null ) return;
-            dyingTarget.Exiled();
+            if (Lawyer.target != null && dyingTarget == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
+            if (Lawyer.target != null && dyingLoverPartner == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
+            dyingTarget.Exiled();
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
 
             Guesser.remainingShots(killerId, true);
