@@ -23,6 +23,7 @@ namespace TheOtherRoles
         
         public static SemanticVersioning.Version Version { get; private set; }
         public static bool Loaded { get; private set; }
+        public static bool LoadedExternally { get; private set; }
         public static BasePlugin Plugin { get; private set; }
         public static Assembly Assembly { get; private set; }
         public static Type[] Types { get; private set; }
@@ -117,6 +118,7 @@ namespace TheOtherRoles
             }
             else
             {
+                LoadedExternally = true;
                 Plugin = plugin!.Instance as BasePlugin;
                 Version = plugin.Metadata.Version.BaseVersion();
                 Assembly = Plugin!.GetType().Assembly;

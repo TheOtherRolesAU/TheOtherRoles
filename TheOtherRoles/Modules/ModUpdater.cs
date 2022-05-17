@@ -1,9 +1,15 @@
+using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
+using BepInEx.Bootstrap;
+using BepInEx.IL2CPP;
 using BepInEx.IL2CPP.Utils;
+using Mono.Cecil;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using Twitch;
@@ -29,6 +35,7 @@ namespace TheOtherRoles.Modules
             public string Content;
             public string Tag;
             public JObject Request;
+            public Version Version => Version.Parse(Tag);
             
             public UpdateData(JObject data)
             {
@@ -40,7 +47,7 @@ namespace TheOtherRoles.Modules
             public bool IsNewer(Version version)
             {
                 if (!Version.TryParse(Tag, out var myVersion)) return false;
-                return myVersion > version;
+                return myVersion.BaseVersion() > version.BaseVersion();
             }
         }
 
@@ -182,10 +189,38 @@ namespace TheOtherRoles.Modules
             return new UpdateData(data);
         }
 
+        private bool TryUpdateSubmergedInternally()
+        {
+            if (SubmergedUpdate == null) return false;
+            try
+            {
+                if (!SubmergedCompatibility.LoadedExternally) return false;
+                var thisAsm = Assembly.GetCallingAssembly();
+                var resourceName = thisAsm.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Submerged.dll"));
+                if (resourceName == default) return false;
+
+                using var submergedStream = thisAsm.GetManifestResourceStream(resourceName)!;
+                var asmDef = AssemblyDefinition.ReadAssembly(submergedStream, TypeLoader.ReaderParameters);
+                var pluginType = asmDef.MainModule.Types.FirstOrDefault(t => t.IsSubtypeOf(typeof(BasePlugin)));
+                var info = IL2CPPChainloader.ToPluginInfo(pluginType, "");
+                if (SubmergedUpdate.IsNewer(info.Metadata.Version)) return false;
+                File.Delete(SubmergedCompatibility.Assembly.Location);
+
+            }
+            catch (Exception e)
+            {
+                TheOtherRolesPlugin.Logger.LogError(e);
+                return false;
+            }
+            return true;
+        }
+            
+        
         [HideFromIl2Cpp]
         public async Task<bool> DownloadUpdate()
         {
             var isSubmerged = TORUpdate is null;
+            if (isSubmerged && TryUpdateSubmergedInternally()) return true;
             var data = isSubmerged ? SubmergedUpdate : TORUpdate;
             
             var client = new HttpClient();
