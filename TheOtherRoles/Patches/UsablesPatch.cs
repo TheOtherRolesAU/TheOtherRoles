@@ -7,7 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using TheOtherRoles.Objects;
+using TheOtherRoles.Utilities;
 
 
 namespace TheOtherRoles.Patches {
@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Submerged Compatability if needed:
-            if (SubmergedCompatibility.isSubmerged()) {
+            if (SubmergedCompatibility.IsSubmerged) {
                 // as submerged does, only change stuff for vents 9 and 14 of submerged. Code partially provided by AlexejheroYTB
                 if (SubmergedCompatibility.getInTransition()) {
                     __result = float.MaxValue;
@@ -132,8 +132,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     class VentButtonVisibilityPatch {
         static void Postfix(PlayerControl __instance) {
-            if (__instance.AmOwner && __instance.roleCanUseVents() && HudManager.Instance.ReportButton.isActiveAndEnabled) {
-                HudManager.Instance.ImpostorVentButton.Show();
+            if (__instance.AmOwner && __instance.roleCanUseVents() && FastDestroyableSingleton<HudManager>.Instance.ReportButton.isActiveAndEnabled) {
+                FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
             }
         }
     }
@@ -191,7 +191,7 @@ namespace TheOtherRoles.Patches {
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (blockSabotageJanitor || blockSabotageMafioso) {
-                HudManager.Instance.SabotageButton.SetDisabled();
+                FastDestroyableSingleton<HudManager>.Instance.SabotageButton.SetDisabled();
             }
         }
     }
@@ -353,7 +353,7 @@ namespace TheOtherRoles.Patches {
                 __instance.timer = 0f;
                 players = new Dictionary<SystemTypes, List<Color>>();
                 bool commsActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
                         if (task.TaskType == TaskTypes.FixComms) commsActive = true;       
 
 
@@ -379,7 +379,7 @@ namespace TheOtherRoles.Patches {
 
                     if (!commsActive)
                     {
-                        PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
+                        PlainShipRoom plainShipRoom = MapUtilities.CachedShipStatus.FastRooms[counterArea.RoomType];
 
                         if (plainShipRoom != null && plainShipRoom.roomArea)
                         {
@@ -441,7 +441,7 @@ namespace TheOtherRoles.Patches {
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
                     int i = -1;
-                    foreach (var icon in __instance.myIcons)
+                    foreach (var icon in __instance.myIcons.GetFastEnumerator())
                     {
                         i += 1;
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
@@ -480,10 +480,10 @@ namespace TheOtherRoles.Patches {
                 // Add securityGuard cameras
                 page = 0;
                 timer = 0;
-                if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
-                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
-                    for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++) {
-                        SurvCamera surv = ShipStatus.Instance.AllCameras[i];
+                if (MapUtilities.CachedShipStatus.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
+                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[MapUtilities.CachedShipStatus.AllCameras.Length - 4]).ToArray();
+                    for (int i = 4; i < MapUtilities.CachedShipStatus.AllCameras.Length; i++) {
+                        SurvCamera surv = MapUtilities.CachedShipStatus.AllCameras[i];
                         Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
@@ -502,7 +502,7 @@ namespace TheOtherRoles.Patches {
             public static bool Prefix(SurveillanceMinigame __instance) {
                 // Update normal and securityGuard cameras
                 timer += Time.deltaTime;
-                int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
+                int numberOfPages = Mathf.CeilToInt(MapUtilities.CachedShipStatus.AllCameras.Length / 4f);
 
                 bool update = false;
 
