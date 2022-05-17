@@ -1372,6 +1372,7 @@ namespace TheOtherRoles
         public static float vision = 1f;
         public static bool lawyerKnowsRole = false;
         public static bool targetCanBeJester = false;
+        public static bool targetWasGuessed = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1381,7 +1382,10 @@ namespace TheOtherRoles
 
         public static void clearAndReload(bool clearTarget = true) {
             lawyer = null;
-            if (clearTarget) target = null;
+            if (clearTarget) {
+                target = null;
+                targetWasGuessed = false;
+            }
             triggerLawyerWin = false;
 
             vision = CustomOptionHolder.lawyerVision.getFloat();
