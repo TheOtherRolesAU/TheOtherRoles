@@ -40,6 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.3.29| v4.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.2/TheOtherRoles.zip)
 | 2022.3.29| v4.1.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.1/TheOtherRoles.zip)
 | 2022.3.29| v4.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.0/TheOtherRoles.zip)
 | 2022.3.29s| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
@@ -104,7 +105,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
 
 **Version 4.1.2**
-- Made some general performance fixes. Special thanks to [simonkellly](https://github.com/simonkellly)
+- Made some general performance fixes. Special thanks to [probablyadnf](https://github.com/simonkellly)
 - Added an option to the ninja to get invisible after kill for x-seconds
 - Added a zoom out/overview function if you're dead and done with tasks
 - Added the sampled player to the morphling button
