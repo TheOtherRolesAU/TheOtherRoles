@@ -97,6 +97,7 @@ namespace TheOtherRoles
                 Version = pluginType.GetCustomAttribute<BepInPlugin>().Version.BaseVersion();;
 
                 IL2CPPChainloader.Instance.Plugins[SUBMERGED_GUID] = new();
+                return true;
             }
             catch (Exception e)
             {
