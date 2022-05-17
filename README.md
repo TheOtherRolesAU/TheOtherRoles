@@ -105,9 +105,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 
 **Version 4.1.2**
 - Made some general performance fixes. Special thanks to [simonkellly](https://github.com/simonkellly)
-- Fixed a bug where footsteps of the Detective and certain other game objects were visible in the fog of war
 - Added an option to the ninja to get invisible after kill for x-seconds
 - Added a zoom out/overview function if you're dead and done with tasks
+- Added the sampled player to the morphling button
+- Fixed a bug where footsteps of the Detective and certain other game objects were visible in the fog of war
+- Fixed lawyer being exiled when their client is guessed in a meeting
+- Fixed multiple mod icons being shown when Submerged is loaded
+
 
 **Version 4.1.1**
 - Fixed a bug where the download submerged button did not work
