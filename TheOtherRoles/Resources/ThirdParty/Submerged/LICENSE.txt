@@ -1,0 +1,179 @@
+This mod is not affiliated with Among Us or Innersloth LLC, and the content contained
+therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials
+contained herein are property of Innersloth LLC. © Innersloth LLC.
+
+---
+
+VIDEO POLICY
+
+We allow and encourage our users to create and publish Submerged content or videos to 
+any websites, including YouTube, Twitch, and similar video sharing services, and also
+monetize them.
+
+---
+---
+---
+
+This is a human-readable summary of (and not a substitute for) the license.
+
+- You may share, distribute, or include Submerged inon-commerciallyi in your own modpack 
+or mod downloads, under the condition that you do not modify Submerged in any capacity, 
+(including physically modifying the assembly or patching the mod) with the exception of 
+ensuring compatibility between Submerged and your mod.
+  - For clarification, you are still allowed to request payments, donations, etc. or have
+    premium-only features in your mod, but you may not sell users the access to play on
+    Submerged with your modmodpack.
+- If Submerged stops being distributed, you must remove it from your modmodpack as well. 
+
+---
+
+
+                    Copyright © 2020-2022 5UP AND ASSOCIATES
+
+By exercising the Licensed Rights (defined below), You accept and agree to be bound by the
+terms and conditions of this license (License). To the extent this License may be 
+interpreted as a contract, You are granted the Licensed Rights in consideration of Your
+acceptance of these terms and conditions, and the Licensor grants You such rights in
+consideration of benefits the Licensor receives from making the Licensed Material available
+under these terms and conditions.
+
+    SECTION 1 – Definitions.
+
+a. Licensor means the individual(s) or entity(ies) granting rights under this Public 
+License.
+
+b. You means the individual or entity exercising the Licensed Rights under this Public
+License. Your has a corresponding meaning.
+
+c. Licensed Material means the technological or artistic work, or other material to which
+the Licensor applied this License.
+
+d. Licensed Rights means the rights granted to You subject to the terms and conditions of
+this License and that the Licensor has authority to license.
+
+e. Exceptions means any exemptions to the License negociated between You and the Licensor.
+
+f. Limitations means any limitations to the License imposed on You by the Licensor.
+
+g. Share means to provide material to the public by any means or process, such as
+redistribution, copying of digital files, uploading, and to make material available to the
+public including in ways that members of the public may access the material from a place
+and at a time individually chosen by them.
+
+
+    SECTION 2 – Scope.
+
+a. License grant
+
+    1. Subject to the terms and conditions of this Public License, the Licensor hereby
+    grants You a worldwide, royalty-free, non-sublicensable, non-exclusive, but
+    revocable license to exercise the Licensed Rights in the Licensed Material, and
+    to Share the Licensed Material, in whole, for non-commercial purposes only.
+
+    2. Exceptions and Limitations. For the avoidance of doubt, where Exceptions and
+    Limitations apply to Your use, this Public License does not apply, and You do not
+    need to comply with its terms and conditions.
+
+    3. Term. The term of this Public License is specified in Section 5(a).
+
+    4. Downstream recipients.
+        A. Offer from the Licensor – Licensed Material. Every recipient of the Licensed
+        Material automatically receives an offer from the Licensor to exercise the
+        Licensed Rights under the terms and conditions of this License.
+        B. No downstream restrictions. You may not offer or impose any additional or
+        different terms or conditions on the Licensed Material if doing so restricts
+        exercise of the Licensed Rights by any recipient of the Licensed Material.
+
+    5. No endorsement. Nothing in this Public License constitutes or may be construed as
+    permission to assert or imply that You are, or that Your use of the Licensed Material
+    is, connected with, or sponsored, endorsed, or granted official status by, the Licensor
+    or others designated to receive attribution as provided in Section 3(a)(1)(A)(i).
+
+
+    SECTION 3 – License Conditions.
+
+Your exercise of the Licensed Rights is expressly made subject to the following conditions.
+
+a. Attribution;
+
+    1. If You Share the Licensed Material, You must
+        A. retain the following if it is supplied by the Licensor with the Licensed Material
+            i. identification of the creator(s) of the Licensed Material and any others
+            designated to receive attribution, in any reasonable manner requested by the
+            Licensor (including by pseudonym if designated);
+        B. a third party notice file;
+        C. a notice that refers to this License;
+
+    2. You may satisfy the conditions in Section 3(a)(1) in any reasonable manner based on
+    the medium, means, and context in which You Share the Licensed Material. For example,
+    it may be reasonable to satisfy the conditions by providing a URI or hyperlink to a
+    resource that includes the required information.
+
+    3. If requested by the Licensor, You must remove any of the information required by 
+    Section 3(a)(1)(A) to the extent reasonably practicable.
+
+b. No Modification.
+
+    1. If You Share the Licensed Material, You must
+        A. not modify the Licensed Material in any capacity, including digital modifications
+        of the Licensed Material, and extensions or attachments to the Licensed Material
+        which modify how the Licensed Material operates.
+
+
+    SECTION 4 – Disclaimer of Warranties and Limitation of Liability.
+
+a. Unless otherwise separately undertaken by the Licensor, to the extent possible, the 
+Licensor offers the Licensed Material as-is and as-available, and makes no representations
+or warranties of any kind concerning the Licensed Material, whether express, implied,
+statutory, or other. This includes, without limitation, warranties of title, merchantability,
+fitness for a particular purpose, non-infringement, absence of latent or other defects,
+accuracy, or the presence or absence of errors, whether or not known or discoverable. Where
+disclaimers of warranties are not allowed in full or in part, this disclaimer may not apply 
+to You.
+
+b. To the extent possible, in no event will the Licensor be liable to You on any legal theory
+(including, without limitation, negligence) or otherwise for any direct, special, indirect, 
+incidental, consequential, punitive, exemplary, or other losses, costs, expenses, or damages
+arising out of this Public License or use of the Licensed Material, even if the Licensor has
+been advised of the possibility of such losses, costs, expenses, or damages. Where a
+limitation of liability is not allowed in full or in part, this limitation may not apply to 
+You.
+
+c. The disclaimer of warranties and limitation of liability provided above shall be
+interpreted in a manner that, to the extent possible, most closely approximates an absolute
+disclaimer and waiver of all liability.
+
+
+    SECTION 5 – Term and Termination.
+
+a. If You fail to comply with this License, then Your rights under this License terminate
+automatically. The Licensor may also choose to terminate Your rights under License at any
+time, without specifying a reason.
+
+b. Where Your right to use the Licensed Material has terminated under Section 5(a), it 
+reinstates
+    1. automatically as of the date the violation is cured, provided it is cured within 
+    15 days of Your discovery of the violation; or
+    2. upon express reinstatement by the Licensor.
+
+For the avoidance of doubt, this Section 5(b) does not affect any right the Licensor may have
+to seek remedies for Your violations of this License.
+
+c. The Licensor may offer the Licensed Material under separate terms or conditions; however,
+doing so will not terminate this License.
+
+d. The Licensor may choose to stop distributing the Licensed Material at any time. In doing
+so, Your rights under License will be terminated unless they are expressly reinstated by the
+Licensor.
+
+e. Sections 1, 4, 5, and 6 survive termination of this License.
+
+    SECTION 6 – Other Terms and Conditions.
+
+a. The Licensor shall not be bound by any additional or different terms or conditions
+communicated by You unless expressly agreed.
+
+b. Any arrangements, understandings, or agreements regarding the Licensed Material not stated
+herein are separate from and independent of the terms and conditions of this License.
+
+c. Exemptions from this License may be negotiated with the Licensor.
