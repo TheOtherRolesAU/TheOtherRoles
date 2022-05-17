@@ -5,7 +5,9 @@ using System.Reflection;
 using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
+using TheOtherRoles.Patches;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TheOtherRoles
 {
@@ -118,7 +120,9 @@ namespace TheOtherRoles
                 Version = plugin.Metadata.Version.BaseVersion();
                 Assembly = Plugin!.GetType().Assembly;
             }
-            
+
+            CredentialsPatch.PingTrackerPatch.modStamp = new GameObject();
+            Object.DontDestroyOnLoad(CredentialsPatch.PingTrackerPatch.modStamp);
             
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             

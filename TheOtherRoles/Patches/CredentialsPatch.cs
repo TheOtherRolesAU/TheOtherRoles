@@ -38,9 +38,9 @@ GitHub Contributors: Gendelo, Alex2911, amsyarasyiq, MaximeGillot, Psynomit</siz
         }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        private static class PingTrackerPatch
+        internal static class PingTrackerPatch
         {
-            private static GameObject modStamp;
+            public static GameObject modStamp;
             static void Prefix(PingTracker __instance) {
                 if (modStamp == null) {
                     modStamp = new GameObject("ModStamp");
