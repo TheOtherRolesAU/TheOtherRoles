@@ -33,6 +33,7 @@ namespace TheOtherRoles.Objects {
         public HudManager hudManager;
         public bool mirror;
         public string actionName;
+        public KeyCode? keyCode;
         private string buttonText;
         public bool isHandcuffed = false;
         private static readonly int Desat = Shader.PropertyToID("_Desat");
@@ -46,9 +47,12 @@ namespace TheOtherRoles.Objects {
             public static readonly Vector3 upperRowLeft = new Vector3(-2f, 1f, 0f);
             public static readonly Vector3 upperRowFarLeft = new Vector3(-3f, 1f, 0f);
         }
-
-        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, string actionName, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
+        
+        private CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds,
+            Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, bool HasEffect,
+            float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
+            
             this.hudManager = hudManager;
             this.OnClick = OnClick;
             this.InitialOnClick = OnClick;
@@ -76,10 +80,25 @@ namespace TheOtherRoles.Objects {
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
             setActive(false);
+        }      
+        
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, string actionName, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
+            : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror, buttonText)
+        {
+            this.actionName = actionName;
         }
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, string actionName, bool mirror = false, string buttonText = "")
-        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, actionName, false, 0f, () => {}, mirror, buttonText) { }
+        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, actionName, false, 0f, () => {}, mirror, buttonText) { }      
+        
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode keyCode, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
+            : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror, buttonText)
+        {
+            this.keyCode = keyCode;
+        }
+
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode keyCode, bool mirror = false, string buttonText = "")
+        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, keyCode, false, 0f, () => {}, mirror, buttonText) { }
 
         public void onClickEvent()
         {
@@ -227,7 +246,8 @@ namespace TheOtherRoles.Objects {
             actionButton.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
             // Trigger OnClickEvent if the actionName is triggered
-            if (!actionName.IsNullOrWhiteSpace() && Rewired.ReInput.players.GetPlayer(0).GetButtonDown(actionName)) onClickEvent();
+            if ((!actionName.IsNullOrWhiteSpace() && Rewired.ReInput.players.GetPlayer(0).GetButtonDown(actionName))
+                || (keyCode.HasValue && Input.GetKeyDown(keyCode.Value))) onClickEvent();
 
             // Deputy disable the button and display Handcuffs instead...
             if (Deputy.handcuffedPlayers.Contains(localPlayer.PlayerId)) {
