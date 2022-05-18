@@ -7,7 +7,7 @@ using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using static TheOtherRoles.MapOptions;
 using System.Collections.Generic;
-using TheOtherRoles.Objects;
+using TheOtherRoles.Utilities;
 
 
 namespace TheOtherRoles.Patches {
@@ -21,6 +21,38 @@ namespace TheOtherRoles.Patches {
 
             bool roleCouldUse = @object.roleCanUseVents();
 
+            if (__instance.name.StartsWith("SealedVent_")) {
+                canUse = couldUse = false;
+                __result = num;
+                return false;
+            }
+
+            // Submerged Compatability if needed:
+            if (SubmergedCompatibility.IsSubmerged) {
+                // as submerged does, only change stuff for vents 9 and 14 of submerged. Code partially provided by AlexejheroYTB
+                if (SubmergedCompatibility.getInTransition()) {
+                    __result = float.MaxValue;
+                    return canUse = couldUse = false;
+                }                
+                switch (__instance.Id) {
+                    case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
+                        if (PlayerControl.LocalPlayer.inVent) break;
+                        __result = float.MaxValue;
+                        return canUse = couldUse = false;                    
+                    case 14: // Lower Central
+                        __result = float.MaxValue;
+                        couldUse = roleCouldUse && !pc.IsDead && (@object.CanMove || @object.inVent);
+                        canUse = couldUse;
+                        if (canUse) {
+                            Vector3 center = @object.Collider.bounds.center;
+                            Vector3 position = __instance.transform.position;
+                            __result = Vector2.Distance(center, position);
+                            canUse &= __result <= __instance.UsableDistance;
+                        }
+                        return false;
+                }
+            }
+
             var usableDistance = __instance.UsableDistance;
             if (__instance.name.StartsWith("JackInTheBoxVent_")) {
                 if(Trickster.trickster != PlayerControl.LocalPlayer) {
@@ -33,10 +65,6 @@ namespace TheOtherRoles.Patches {
                     // Reduce the usable distance to reduce the risk of gettings stuck while trying to jump into the box if it's placed near objects
                     usableDistance = 0.4f; 
                 }
-            } else if (__instance.name.StartsWith("SealedVent_")) {
-                canUse = couldUse = false;
-                __result = num;
-                return false;
             }
 
             couldUse = (@object.inVent || roleCouldUse) && !pc.IsDead && (@object.CanMove || @object.inVent);
@@ -104,8 +132,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     class VentButtonVisibilityPatch {
         static void Postfix(PlayerControl __instance) {
-            if (__instance.AmOwner && __instance.roleCanUseVents() && HudManager.Instance.ReportButton.isActiveAndEnabled) {
-                HudManager.Instance.ImpostorVentButton.Show();
+            if (__instance.AmOwner && __instance.roleCanUseVents() && FastDestroyableSingleton<HudManager>.Instance.ReportButton.isActiveAndEnabled) {
+                FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
             }
         }
     }
@@ -147,6 +175,8 @@ namespace TheOtherRoles.Patches {
                         Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp() ? 0.66f : 2f));
                     else if (PlayerControl.LocalPlayer == Witch.witch)
                         Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+                    else if (PlayerControl.LocalPlayer == Ninja.ninja)
+                        Ninja.ninja.killTimer = HudManagerStartPatch.ninjaButton.Timer = HudManagerStartPatch.ninjaButton.MaxTimer;
                 }
                 __instance.SetTarget(null);
             }
@@ -161,7 +191,7 @@ namespace TheOtherRoles.Patches {
             bool blockSabotageJanitor = (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer);
             bool blockSabotageMafioso = (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead);
             if (blockSabotageJanitor || blockSabotageMafioso) {
-                HudManager.Instance.SabotageButton.SetDisabled();
+                FastDestroyableSingleton<HudManager>.Instance.SabotageButton.SetDisabled();
             }
         }
     }
@@ -189,11 +219,6 @@ namespace TheOtherRoles.Patches {
             if (Jester.jester != null && Jester.jester == PlayerControl.LocalPlayer && !Jester.canCallEmergency) {
                 roleCanCallEmergency = false;
                 statusText = "The Jester can't start an emergency meeting";
-            }
-            // Potentially deactivate emergency button for Lawyer
-            if (Lawyer.lawyer != null && Lawyer.lawyer == PlayerControl.LocalPlayer && Lawyer.winsAfterMeetings) {
-                roleCanCallEmergency = false;
-                statusText = "The Lawyer can't start an emergency meeting (" + Lawyer.meetings + "/" + Lawyer.neededMeetings + " meetings)";
             }
 
             if (!roleCanCallEmergency) {
@@ -291,7 +316,7 @@ namespace TheOtherRoles.Patches {
                 if (Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0) {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
-                        GameData.PlayerInfo player = GameData.Instance.AllPlayers[k];
+                        GameData.PlayerInfo player = vitalsPanel.PlayerInfo;
 
                         // Hacker update
                         if (vitalsPanel.IsDead) {
@@ -314,7 +339,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch]
     class AdminPanelPatch {
-        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, List<Color>>();
+        static Dictionary<SystemTypes, List<Color>> players = new Dictionary<SystemTypes, System.Collections.Generic.List<Color>>();
 
         [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
         class MapCountOverlayUpdatePatch {
@@ -328,7 +353,7 @@ namespace TheOtherRoles.Patches {
                 __instance.timer = 0f;
                 players = new Dictionary<SystemTypes, List<Color>>();
                 bool commsActive = false;
-                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                    foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
                         if (task.TaskType == TaskTypes.FixComms) commsActive = true;       
 
 
@@ -354,7 +379,7 @@ namespace TheOtherRoles.Patches {
 
                     if (!commsActive)
                     {
-                        PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
+                        PlainShipRoom plainShipRoom = MapUtilities.CachedShipStatus.FastRooms[counterArea.RoomType];
 
                         if (plainShipRoom != null && plainShipRoom.roomArea)
                         {
@@ -415,9 +440,10 @@ namespace TheOtherRoles.Patches {
                 bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
-
-                    for (int i = 0; i < __instance.myIcons.Count; i++) {
-                        PoolableBehavior icon = __instance.myIcons[i];
+                    int i = -1;
+                    foreach (var icon in __instance.myIcons.GetFastEnumerator())
+                    {
+                        i += 1;
                         SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
                         if (renderer != null) {
@@ -454,10 +480,10 @@ namespace TheOtherRoles.Patches {
                 // Add securityGuard cameras
                 page = 0;
                 timer = 0;
-                if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
-                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
-                    for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++) {
-                        SurvCamera surv = ShipStatus.Instance.AllCameras[i];
+                if (MapUtilities.CachedShipStatus.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0) {
+                    __instance.textures = __instance.textures.ToList().Concat(new RenderTexture[MapUtilities.CachedShipStatus.AllCameras.Length - 4]).ToArray();
+                    for (int i = 4; i < MapUtilities.CachedShipStatus.AllCameras.Length; i++) {
+                        SurvCamera surv = MapUtilities.CachedShipStatus.AllCameras[i];
                         Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
                         camera.transform.SetParent(__instance.transform);
                         camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
@@ -476,7 +502,7 @@ namespace TheOtherRoles.Patches {
             public static bool Prefix(SurveillanceMinigame __instance) {
                 // Update normal and securityGuard cameras
                 timer += Time.deltaTime;
-                int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
+                int numberOfPages = Mathf.CeilToInt(MapUtilities.CachedShipStatus.AllCameras.Length / 4f);
 
                 bool update = false;
 

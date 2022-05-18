@@ -1,25 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>3.4.5</Version>
+        <Version>4.1.2</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <DefineConstants>$(DefineConstants);STEAM</DefineConstants>
+		<LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\CustomHats\*.png" />
-        <EmbeddedResource Include="Resources\*.png" />
-        <EmbeddedResource Include="Resources\TricksterAnimation\*.png" />
+        <EmbeddedResource Include="Resources\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="$(AmongUs)/BepInEx/core/*.dll" />
-        <Reference Include="$(AmongUs)/BepInEx/unhollowed/*.dll" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.3.29" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
     </ItemGroup>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
