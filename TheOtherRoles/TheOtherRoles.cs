@@ -136,6 +136,8 @@ namespace TheOtherRoles
             public static PlayerControl target;
             public static Color color = new Color32(201, 204, 63, byte.MaxValue);
             public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+            public static bool shiftTarget = false;
+
 
             public static bool triggerProsecutorWin = false;
 
@@ -143,6 +145,7 @@ namespace TheOtherRoles
               prosecutor = null;
               triggerProsecutorWin = false;
               target = null;
+              shiftTarget = CustomOptionHolder.prosecutorShifterShiftsTarget.getBool();
             }
         }
 
