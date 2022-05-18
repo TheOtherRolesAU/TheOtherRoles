@@ -55,6 +55,7 @@ namespace TheOtherRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
+	    Blackmailer.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
