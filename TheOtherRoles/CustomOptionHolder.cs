@@ -272,6 +272,10 @@ namespace TheOtherRoles {
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
+
+        public static CustomOption randomGameStartPosition;
+        public static CustomOption resetRoundStartCooldown;
+
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
         public static CustomOption dynamicMapEnableMira;
@@ -562,6 +566,10 @@ namespace TheOtherRoles {
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Enable Airship Rotation", true, dynamicMap, false);
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
+
+
+            randomGameStartPosition = CustomOption.Create(9041, "Random Spawn Location", "option", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, "Reset Spawn Cooldown", "option", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
