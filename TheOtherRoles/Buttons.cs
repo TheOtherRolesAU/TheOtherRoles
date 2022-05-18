@@ -49,6 +49,7 @@ namespace TheOtherRoles
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
         public static CustomButton mayorMeetingButton;
+        public static CustomButton blackmailerButton;
         public static CustomButton zoomOutButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
@@ -99,6 +100,7 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
+            blackmailerButton.MaxTimer = Blackmailer.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
@@ -119,7 +121,7 @@ namespace TheOtherRoles
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
             zoomOutButton.MaxTimer = 0f;
         }
-		public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
+	public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
                 if (target == null) text = defaultText; // Set text to defaultText if no target
@@ -128,6 +130,16 @@ namespace TheOtherRoles
                 button.showButtonText = true;
             }
         }
+
+
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
+        }
+
         public static void resetTimeMasterButton() {
             timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer;
             timeMasterShieldButton.isEffectActive = false;

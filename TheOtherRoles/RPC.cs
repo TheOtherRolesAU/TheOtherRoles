@@ -187,6 +187,9 @@ namespace TheOtherRoles
                     case RoleId.Jester:
                         Jester.jester = player;
                         break;
+                    case RoleId.Blackmailer:
+                        Blackmailer.blackmailer = player;
+                        break;
                     case RoleId.Prosecutor:
                         Prosecutor.prosecutor = player;
                         break;
