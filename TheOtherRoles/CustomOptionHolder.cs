@@ -568,8 +568,8 @@ namespace TheOtherRoles {
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
 
 
-            randomGameStartPosition = CustomOption.Create(9041, Type.General, "Random Spawn Location", true);
-            resetRoundStartCooldown = CustomOption.Create(9042, Type.General, "Reset Spawn Cooldown", true);
+            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
