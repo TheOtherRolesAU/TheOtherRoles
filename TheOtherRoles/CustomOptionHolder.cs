@@ -272,7 +272,8 @@ namespace TheOtherRoles {
         public static CustomOption shieldFirstKill;
 
         public static CustomOption showButtonTarget;
-
+        public static CustomOption randomGameStartPosition;
+        public static CustomOption resetRoundStartCooldown;
 
         public static CustomOption dynamicMap;
         public static CustomOption dynamicMapEnableSkeld;
@@ -573,6 +574,10 @@ namespace TheOtherRoles {
 	    showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+
+
+            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", true);
+            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", true);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
