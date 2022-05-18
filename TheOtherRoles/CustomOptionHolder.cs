@@ -572,7 +572,6 @@ namespace TheOtherRoles {
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
 
-
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
             blockedRolePairings.Add((byte)RoleId.Spy, new [] { (byte)RoleId.Mini});
