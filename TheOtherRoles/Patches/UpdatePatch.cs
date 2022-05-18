@@ -23,20 +23,19 @@ namespace TheOtherRoles.Patches {
             foreach (var data in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var player = data.Object;
-                string text;
+                string text = data.PlayerName;
                 Color color;
                 if (player)
                 {
-                    String playerName = data.PlayerName;
+                    var playerName = text;
                     if (morphTimerNotUp && morphTargetNotNull && Morphling.morphling == player) playerName = Morphling.morphTarget.Data.PlayerName;
                     var nameText = player.nameText;
                 
-                    nameText.text = text = Helpers.hidePlayerName(localPlayer, player) ? "" : playerName;
+                    nameText.text = Helpers.hidePlayerName(localPlayer, player) ? "" : playerName;
                     nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
                 }
                 else
                 {
-                    text = data.PlayerName;
                     color = Color.white;
                 }
                 
