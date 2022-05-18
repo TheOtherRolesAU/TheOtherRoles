@@ -1533,6 +1533,36 @@ namespace TheOtherRoles
                 KeyCode.F                   
             );
 
+
+            blackmailerButton = new CustomButton(
+               () => { // Action when Pressed
+                  if (Blackmailer.currentTarget != null) {
+		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Blackmailer.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.blackmailPlayer(Blackmailer.currentTarget.PlayerId);
+	    	    blackmailerButton.Timer = blackmailerButton.MaxTimer;
+                  }
+               },
+               () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
+               () => { // Could Use
+		   var text = "Blackmail";
+		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
+                   showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
+                   return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);
+               },
+               () => { blackmailerButton.Timer = blackmailerButton.MaxTimer; },
+               Blackmailer.getBlackmailButtonSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.F,
+               true,
+               0f,
+               () => {},
+               false,
+               "Blackmail"
+           );
+
             mayorMeetingButton = new CustomButton(
                () => {
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
