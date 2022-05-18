@@ -167,8 +167,9 @@ namespace TheOtherRoles
             Vector3 positionOffsetValue = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
             positionOffsetValue.z = -0.1f;
             couldUse = couldUse ?? button.CouldUse;
-            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.actionName,
+            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.hotkey,
                 true, Deputy.handcuffDuration, () => { }, button.mirror);
+            replacementHandcuffedButton.actionName = button.actionName;
             replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
             replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
             replacementHandcuffedButton.isEffectActive = true;
@@ -825,7 +826,7 @@ namespace TheOtherRoles
                 Vampire.getGarlicButtonSprite(),
                 new Vector3(0, -0.06f, 0),
                 __instance,
-                null,
+                (KeyCode?) null,
                 true
             );
 

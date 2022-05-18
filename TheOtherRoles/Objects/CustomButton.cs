@@ -33,7 +33,7 @@ namespace TheOtherRoles.Objects {
         public HudManager hudManager;
         public bool mirror;
         public string actionName;
-        public KeyCode? keyCode;
+        public KeyCode? hotkey;
         private string buttonText;
         public bool isHandcuffed = false;
         private static readonly int Desat = Shader.PropertyToID("_Desat");
@@ -65,7 +65,6 @@ namespace TheOtherRoles.Objects {
             this.OnEffectEnds = OnEffectEnds;
             this.Sprite = Sprite;
             this.mirror = mirror;
-            this.actionName = actionName;
             this.buttonText = buttonText;
             Timer = 16.2f;
             buttons.Add(this);
@@ -91,14 +90,14 @@ namespace TheOtherRoles.Objects {
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, string actionName, bool mirror = false, string buttonText = "")
         : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, actionName, false, 0f, () => {}, mirror, buttonText) { }      
         
-        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode keyCode, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
             : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, false, 0f, () => {}, mirror, buttonText)
         {
-            this.keyCode = keyCode;
+            this.hotkey = hotkey;
         }
 
-        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode keyCode, bool mirror = false, string buttonText = "")
-        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, keyCode, false, 0f, () => {}, mirror, buttonText) { }
+        public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool mirror = false, string buttonText = "")
+        : this(OnClick, HasButton, CouldUse, OnMeetingEnds, Sprite, PositionOffset, hudManager, hotkey, false, 0f, () => {}, mirror, buttonText) { }
 
         public void onClickEvent()
         {
@@ -245,9 +244,9 @@ namespace TheOtherRoles.Objects {
         
             actionButton.SetCoolDown(Timer, (HasEffect && isEffectActive) ? EffectDuration : MaxTimer);
 
-            // Trigger OnClickEvent if the actionName is triggered
+            // Trigger OnClickEvent if either the action named "actionName" is triggered or the hotkey is being pressed down
             if ((!actionName.IsNullOrWhiteSpace() && Rewired.ReInput.players.GetPlayer(0).GetButtonDown(actionName))
-                || (keyCode.HasValue && Input.GetKeyDown(keyCode.Value))) onClickEvent();
+                || (hotkey.HasValue && Input.GetKeyDown(hotkey.Value))) onClickEvent();
 
             // Deputy disable the button and display Handcuffs instead...
             if (Deputy.handcuffedPlayers.Contains(localPlayer.PlayerId)) {
