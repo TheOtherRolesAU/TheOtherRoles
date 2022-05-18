@@ -53,7 +53,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
 		
-		public static CustomOption prosecutorSpawnRate;
+	public static CustomOption prosecutorSpawnRate;
 
 
         public static CustomOption arsonistSpawnRate;
