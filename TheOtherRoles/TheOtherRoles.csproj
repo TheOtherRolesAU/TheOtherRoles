@@ -19,7 +19,7 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
     </ItemGroup>
 
-    <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/') and '$(Configuration)'=='DEBUG'">
+    <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
         <Message Text="Second occurrence" />
         <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
     </Target>
