@@ -357,7 +357,7 @@ namespace TheOtherRoles.Patches {
                     if (p.Data.Role.IsImpostor ||  p == Jackal.jackal) continue; // Dont allow imp / jackal target
 					if (p == Spy.spy) continue; // Dont allow Spy to be target
 					// I simply don't want these targets, as they can hard counter Prosecutor
-					if (p == Mayor.mayor || p == Sheriff.sheriff || p == Swapper.swapper) continue;
+					if (p == Mayor.mayor || p == Sheriff.sheriff || p == Swapper.swapper || p == Shifter.shifter) continue;
                     if (RoleInfo.getRoleInfoForPlayer(p).FirstOrDefault().isNeutral) continue; // Don't allow neutral target
                     possibleTargets.Add(p);
                 }
