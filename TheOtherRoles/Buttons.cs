@@ -49,6 +49,7 @@ namespace TheOtherRoles
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
         public static CustomButton mayorMeetingButton;
+        public static CustomButton blackmailerButton;
         public static CustomButton zoomOutButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
@@ -99,6 +100,7 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
+            blackmailerButton.MaxTimer = Blackmailer.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
@@ -118,6 +120,15 @@ namespace TheOtherRoles
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
             zoomOutButton.MaxTimer = 0f;
+        }
+
+
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
         }
 
         public static void resetTimeMasterButton() {
