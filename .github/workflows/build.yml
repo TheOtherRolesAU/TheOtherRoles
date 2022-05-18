@@ -14,13 +14,13 @@ jobs:
     steps:
     - name: Setup Cache
     - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.nuget/packages
-            ~/.cache/bepinex
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+      with:
+        path: |
+          ~/.nuget/packages
+          ~/.cache/bepinex
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
 
 
      - name: Checkout Repository
