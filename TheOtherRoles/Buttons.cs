@@ -889,7 +889,7 @@ namespace TheOtherRoles
                 Portalmaker.getUsePortalButtonSprite(),
                 new Vector3(0.9f, -0.06f, 0),
                 __instance,
-                "ActionQuaternary", // TODO: find a way to put back the right button (needs to add an entry in the rewired input manager)
+                KeyCode.H,
                 mirror: true
             );
 
