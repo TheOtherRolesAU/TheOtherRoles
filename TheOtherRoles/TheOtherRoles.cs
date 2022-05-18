@@ -1530,6 +1530,44 @@ namespace TheOtherRoles
         }
     }
 
+
+    public static class Blackmailer {
+        public static PlayerControl blackmailer;
+        public static Color color = Palette.ImpostorRed;
+        public static Color blackmailedColor = Palette.White;
+
+	public static bool alreadyShook = false;
+        public static PlayerControl blackmailed;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+        private static Sprite blackmailButtonSprite;
+        private static Sprite overlaySprite;
+        public static Sprite getBlackmailOverlaySprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerOverlay.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailLetterSprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerLetter.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailButtonSprite() {
+            if (blackmailButtonSprite) return blackmailButtonSprite;
+            blackmailButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerBlackmailButton.png", 115f);
+            return blackmailButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            blackmailer = null;
+            currentTarget = null;
+	    blackmailed = null;
+            cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
+        }
+    }
+
     // Modifier
     public static class Bait {
         public static List<PlayerControl> bait = new List<PlayerControl>();

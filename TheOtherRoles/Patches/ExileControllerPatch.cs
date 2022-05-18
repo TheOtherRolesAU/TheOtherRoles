@@ -174,6 +174,14 @@ namespace TheOtherRoles.Patches {
             // Tracker reset deadBodyPositions
             Tracker.deadBodyPositions = new List<Vector3>();
 
+	    if (Blackmailer.blackmailer != null && Blackmailer.blackmailed != null) {
+    	        // Blackmailer reset blackmailed
+ 	        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UnblackmailPlayer, Hazel.SendOption.Reliable, -1);
+	        AmongUsClient.Instance.FinishRpcImmediately(writer);
+	        RPCProcedure.unblackmailPlayer();
+	    }	    
+
+
             // Arsonist deactivate dead poolable players
             if (Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer) {
                 int visibleCounter = 0;
