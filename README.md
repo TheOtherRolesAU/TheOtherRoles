@@ -104,6 +104,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 4.1.3**
+- Fixed morphling's being morphed during meetings
+- Fixed hide player names hiding the player's name during meetings
+
 **Version 4.1.2**
 - Made some general performance fixes. Special thanks to [probablyadnf](https://github.com/simonkellly)
 - Added an option to the ninja to get invisible after kill for x-seconds
