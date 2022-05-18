@@ -184,8 +184,9 @@ namespace TheOtherRoles.Patches {
             if (Detective.timer <= 0f) {
                 Detective.timer = Detective.footprintIntervall;
                 foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
-                    if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) {
-                        new Footprint(Detective.footprintDuration, Detective.anonymousFootprints, player);
+                    if (player != null && player != PlayerControl.LocalPlayer && !player.Data.IsDead && !player.inVent) 
+                    {
+                        FootprintHolder.Instance.MakeFootprint(player);
                     }
                 }
             }

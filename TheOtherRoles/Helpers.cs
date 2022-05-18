@@ -17,12 +17,19 @@ namespace TheOtherRoles {
         SuppressKill,
         BlankKill
     }
-    public static class Helpers {
+    public static class Helpers
+    {
+
+        public static Dictionary<string, Sprite> CachedSprites = new();
 
         public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
-            try {
+            try
+            {
+                if (CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
                 Texture2D texture = loadTextureFromResources(path);
-                return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+                sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+                sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+                return CachedSprites[path + pixelsPerUnit] = sprite;
             } catch {
                 System.Console.WriteLine("Error loading sprite from path: " + path);
             }
