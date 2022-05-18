@@ -271,7 +271,6 @@ namespace TheOtherRoles {
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
-        public static CustomOption showButtonTarget;
         public static CustomOption randomGameStartPosition;
         public static CustomOption resetRoundStartCooldown;
 
