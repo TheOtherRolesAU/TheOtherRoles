@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
 
