@@ -1,4 +1,3 @@
-
 name: AutoBuild .NET
 
 on:
@@ -13,17 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Setup Cache
+    - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.cache/bepinex
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+
+     - name: Checkout Repository
+     - uses: actions/checkout@v2
+        with:
+          submodules: true
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
+
     - name: Build
-      run: dotnet msbuild
-    - name: Upload TheOtherRoles.dll
-      uses: actions/upload-artifact@v3
+      run: dotnet build --configuration Release
+
+    - name: Upload TheOtherRoles 
+      uses: actions/upload-artifact@v2
       with:
         name: TheOtherRoles.dll
-        path: "TheOtherRoles/bin/Debug/netstandard2.1/TheOtherRoles.dll"
+        path: TheOtherRoles/bin/Release/netstandard2.1/TheOtherRoles.dll
