@@ -489,10 +489,6 @@ namespace TheOtherRoles
                 // TODO other Modifiers?
             }
 
-	     if (Prosecutor.shiftTarget) {
-		Prosecutor.target = oldShifter;
-	     }
-
             // Shift role
             if (Mayor.mayor != null && Mayor.mayor == player)
                 Mayor.mayor = oldShifter;
