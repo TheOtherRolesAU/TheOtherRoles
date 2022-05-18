@@ -130,10 +130,10 @@ namespace TheOtherRoles
         SetFirstKill,
         Invert,
         SetTiebreak,
-        SetInvisible
+        SetInvisible,
 	ProsecutorChangesRole,
 	ProsecutorSetTarget,
-        ProsecutorToPursuer,
+        ProsecutorToPursuer
     }
 
     public static class RPCProcedure {
