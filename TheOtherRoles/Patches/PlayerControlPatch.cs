@@ -1220,12 +1220,6 @@ namespace TheOtherRoles.Patches {
                 if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();
             }
 
-            // Prosecutor promotion trigger on target exile (the host sends the call such that everyone recieves the update before a possible game End)
-            if (__instance == Prosecutor.target && AmongUsClient.Instance.AmHost) {
-                MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
-                RPCProcedure.prosecutorToPursuer();
-            }
 
 
         }
