@@ -63,6 +63,8 @@ namespace TheOtherRoles
 
         public override void Load() {
             Logger = Log;
+            Instance = this;
+
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
@@ -87,11 +89,18 @@ namespace TheOtherRoles
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
-            Instance = this;
+            Harmony.PatchAll();
+
             CustomOptionHolder.Load();
             CustomColors.Load();
             Patches.FreeNamePatch.Initialize();
-            Harmony.PatchAll();
+
+            if (BepInExUpdater.UpdateRequired)
+            {
+                AddComponent<BepInExUpdater>();
+                return;
+            }
+            
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
         }
