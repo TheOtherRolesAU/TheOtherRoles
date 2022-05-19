@@ -79,7 +79,7 @@ namespace TheOtherRoles.Objects {
                 this.OnClick();
 
                 // Deputy skip onClickEvent if handcuffed
-                if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerControl.PlayerId] > 0f) return;
+                if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.DeputyTimer = this.EffectDuration;

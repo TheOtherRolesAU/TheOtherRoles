@@ -284,7 +284,7 @@ namespace TheOtherRoles
             public static void setHandcuffedKnows(bool active = true)
             {
                 if (active) {
-                    byte localPlayerId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+                    byte localPlayerId = CachedPlayer.LocalPlayer.PlayerId;
                     handcuffedKnows.Add(localPlayerId, handcuffDuration);
                     handcuffedPlayers.RemoveAll(x => x == localPlayerId);
                 }
@@ -1179,7 +1179,7 @@ namespace TheOtherRoles
         }
 
         public static bool dousedEveryoneAlive() {
-            return CachedPlayer.AllPlayers.All(x => { return x.PlayerControl == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerControl.PlayerId); });
+            return CachedPlayer.AllPlayers.All(x => { return x.PlayerControl == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
         }
 
         public static void clearAndReload() {

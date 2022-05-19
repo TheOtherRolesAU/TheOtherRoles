@@ -618,7 +618,7 @@ namespace TheOtherRoles
                 }
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
-                if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
+                if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
                 Sidekick.wasImpostor = wasImpostor;
@@ -867,7 +867,7 @@ namespace TheOtherRoles
             Lawyer.clearAndReload(false);
             Pursuer.pursuer = player;
 
-            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId && client != null) {
+            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId && client != null) {
                     Transform playerInfoTransform = client.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo != null) playerInfo.text = "";

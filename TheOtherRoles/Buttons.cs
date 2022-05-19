@@ -137,10 +137,10 @@ namespace TheOtherRoles
             replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
             replacementHandcuffedButton.actionButton.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
             replacementHandcuffedButton.isEffectActive = true;
-            if (deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId))
-                deputyHandcuffedButtons[CachedPlayer.LocalPlayer.PlayerControl.PlayerId].Add(replacementHandcuffedButton);
+            if (deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerId))
+                deputyHandcuffedButtons[CachedPlayer.LocalPlayer.PlayerId].Add(replacementHandcuffedButton);
             else
-                deputyHandcuffedButtons.Add(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, new List<CustomButton> { replacementHandcuffedButton });
+                deputyHandcuffedButtons.Add(CachedPlayer.LocalPlayer.PlayerId, new List<CustomButton> { replacementHandcuffedButton });
         }
         
         // Disables / Enables all Buttons (except the ones disabled in the Deputy class), and replaces them with new buttons.
@@ -150,7 +150,7 @@ namespace TheOtherRoles
                 deputyHandcuffedButtons = new Dictionary<byte, List<CustomButton>>();
                 return;
             }
-            if (handcuffed && !deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId))
+            if (handcuffed && !deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerId))
             {
                 int maxI = CustomButton.buttons.Count;
                 for (int i = 0; i < maxI; i++)
@@ -177,15 +177,15 @@ namespace TheOtherRoles
                 // Report Button
                 addReplacementHandcuffedButton(arsonistButton, new Vector3(-0.9f, -0.06f, 0), () => { return FastDestroyableSingleton<HudManager>.Instance.ReportButton.graphic.color == Palette.EnabledColor; });
             }
-            else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
+            else if (!handcuffed && deputyHandcuffedButtons.ContainsKey(CachedPlayer.LocalPlayer.PlayerId))  // Reset to original. Disables the replacements, enables the original buttons.
             {
-                foreach (CustomButton replacementButton in deputyHandcuffedButtons[CachedPlayer.LocalPlayer.PlayerControl.PlayerId])
+                foreach (CustomButton replacementButton in deputyHandcuffedButtons[CachedPlayer.LocalPlayer.PlayerId])
                 {
                     replacementButton.HasButton = () => { return false; };
                     replacementButton.Update(); // To make it disappear properly.
                     CustomButton.buttons.Remove(replacementButton);
                 }
-                deputyHandcuffedButtons.Remove(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                deputyHandcuffedButtons.Remove(CachedPlayer.LocalPlayer.PlayerId);
 
                 foreach (CustomButton button in CustomButton.buttons)
                 {
@@ -297,7 +297,7 @@ namespace TheOtherRoles
                             targetId = Sheriff.currentTarget.PlayerId;
                         }
                         else {
-                            targetId = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+                            targetId = CachedPlayer.LocalPlayer.PlayerId;
                         }
 
                         MessageWriter killWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
@@ -793,10 +793,10 @@ namespace TheOtherRoles
 
                     if (!CachedPlayer.LocalPlayer.Data.IsDead) {  // Ghosts can portal too, but non-blocking and only with a local animation
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UsePortal, Hazel.SendOption.Reliable, -1);
-                        writer.Write((byte)CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                        writer.Write((byte)CachedPlayer.LocalPlayer.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                     }
-                    RPCProcedure.usePortal(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                    RPCProcedure.usePortal(CachedPlayer.LocalPlayer.PlayerId);
                     usePortalButton.Timer = usePortalButton.MaxTimer;
                     FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Portal.teleportDuration, new Action<float>((p) => { // Delayed action
                         CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
@@ -1439,14 +1439,14 @@ namespace TheOtherRoles
 
                             // Perform Kill
                             MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                            writer2.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                            writer2.Write(CachedPlayer.LocalPlayer.PlayerId);
                             writer2.Write(Ninja.ninjaMarked.PlayerId);
                             writer2.Write(byte.MaxValue);
                             AmongUsClient.Instance.FinishRpcImmediately(writer2);
                             if (SubmergedCompatibility.IsSubmerged) {
                                     SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
                             }
-                            RPCProcedure.uncheckedMurderPlayer(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
+                            RPCProcedure.uncheckedMurderPlayer(CachedPlayer.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
 
                             // Create Second trace after killing
                             pos = Ninja.ninjaMarked.transform.position;
@@ -1494,10 +1494,10 @@ namespace TheOtherRoles
                    CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                    Mayor.remoteMeetingsLeft--;
 	               Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
-                   RPCProcedure.uncheckedCmdReportDeadBody(CachedPlayer.LocalPlayer.PlayerControl.PlayerId, Byte.MinValue);
+                   RPCProcedure.uncheckedCmdReportDeadBody(CachedPlayer.LocalPlayer.PlayerId, Byte.MinValue);
 
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
-                   writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                   writer.Write(CachedPlayer.LocalPlayer.PlayerId);
                    writer.Write(Byte.MaxValue);
                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                    mayorMeetingButton.Timer = 1f;

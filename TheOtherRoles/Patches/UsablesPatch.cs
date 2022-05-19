@@ -87,7 +87,7 @@ namespace TheOtherRoles.Patches {
     class VentButtonDoClickPatch {
         static  bool Prefix(VentButton __instance) {
             // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
-		    if (__instance.currentTarget != null && !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)) __instance.currentTarget.Use();
+		    if (__instance.currentTarget != null && !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId)) __instance.currentTarget.Use();
             return false;
         }
     }
@@ -96,7 +96,7 @@ namespace TheOtherRoles.Patches {
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
             // Deputy handcuff disables the vents
-            if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)) {
+            if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId)) {
                 Deputy.setHandcuffedKnows();
                 return false;
             }
@@ -113,10 +113,10 @@ namespace TheOtherRoles.Patches {
                 __instance.SetButtons(isEnter && canMoveInVents);
                 MessageWriter writer = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseUncheckedVent, Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
-                writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 writer.EndMessage();
-                RPCProcedure.useUncheckedVent(__instance.Id, CachedPlayer.LocalPlayer.PlayerControl.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+                RPCProcedure.useUncheckedVent(__instance.Id, CachedPlayer.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
                 return false;
             }
 
@@ -158,7 +158,7 @@ namespace TheOtherRoles.Patches {
         public static bool Prefix(KillButton __instance) {
             if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !CachedPlayer.LocalPlayer.Data.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove) {
                 // Deputy handcuff update.
-                if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)) {
+                if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId)) {
                     Deputy.setHandcuffedKnows();
                     return false;
                 }
@@ -200,8 +200,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ReportButton), nameof(ReportButton.DoClick))]
     class ReportButtonDoClickPatch {
         public static bool Prefix(ReportButton __instance) {
-            if (__instance.isActiveAndEnabled && Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) && __instance.graphic.color == Palette.EnabledColor) Deputy.setHandcuffedKnows();
-            return !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+            if (__instance.isActiveAndEnabled && Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId) && __instance.graphic.color == Palette.EnabledColor) Deputy.setHandcuffedKnows();
+            return !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId);
         }
     }
 
@@ -543,7 +543,7 @@ namespace TheOtherRoles.Patches {
     class MedScanMinigameFixedUpdatePatch {
         static void Prefix(MedScanMinigame __instance) {
             if (MapOptions.allowParallelMedBayScans) {
-                __instance.medscan.CurrentUser = CachedPlayer.LocalPlayer.PlayerControl.PlayerId;
+                __instance.medscan.CurrentUser = CachedPlayer.LocalPlayer.PlayerId;
                 __instance.medscan.UsersList.Clear();
             }
         }

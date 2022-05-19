@@ -1,14 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using InnerNet;
 using UnityEngine;
 
 namespace TheOtherRoles.Players;
 
 public class CachedPlayer
 {
+    public static readonly Dictionary<IntPtr, CachedPlayer> PlayerPtrs = new();
     public static readonly List<CachedPlayer> AllPlayers = new();
     public static CachedPlayer LocalPlayer;
 
@@ -17,6 +20,7 @@ public class CachedPlayer
     public PlayerPhysics PlayerPhysics;
     public CustomNetworkTransform NetTransform;
     public GameData.PlayerInfo Data;
+    public byte PlayerId;
     
     public static implicit operator bool(CachedPlayer player)
     {
@@ -65,14 +69,16 @@ public static class CachedPlayerPatches
     public static void CachePlayerPatch(PlayerControl __instance)
     {
         if (__instance.notRealPlayer) return;
-        CachedPlayer.AllPlayers.Add(new CachedPlayer
+        var player = new CachedPlayer
         {
             transform = __instance.transform,
             PlayerControl = __instance,
             PlayerPhysics = __instance.MyPhysics,
             NetTransform = __instance.NetTransform
-        });
-
+        };
+        CachedPlayer.AllPlayers.Add(player);
+        CachedPlayer.PlayerPtrs[__instance.Pointer] = player;
+        
 #if DEBUG
         foreach (var cachedPlayer in CachedPlayer.AllPlayers)
         {
@@ -90,6 +96,7 @@ public static class CachedPlayerPatches
     {
         if (__instance.notRealPlayer) return;
         CachedPlayer.AllPlayers.RemoveAll(p => p.PlayerControl.Pointer == __instance.Pointer);
+        CachedPlayer.PlayerPtrs.Remove(__instance.Pointer);
     }
     
     [HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
@@ -99,6 +106,7 @@ public static class CachedPlayerPatches
         foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
         {
             cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
+            cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
         }
     }
     
@@ -109,6 +117,14 @@ public static class CachedPlayerPatches
         foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
         {
             cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
+            cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
         }
+    }
+    
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
+    [HarmonyPostfix]
+    public static void SetCachedPlayerId(PlayerControl __instance)
+    {
+        CachedPlayer.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
     }
 }

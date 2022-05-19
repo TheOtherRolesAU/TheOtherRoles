@@ -221,7 +221,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // AntiTeleport set position
-            if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId).Count > 0) {
+            if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0) {
                 CachedPlayer.LocalPlayer.transform.position = AntiTeleport.position;
                 if (SubmergedCompatibility.IsSubmerged) {
                     SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);

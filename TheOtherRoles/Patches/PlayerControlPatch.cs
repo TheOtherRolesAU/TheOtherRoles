@@ -267,11 +267,11 @@ namespace TheOtherRoles.Patches {
 
         static void deputyUpdate()
         {
-            if (CachedPlayer.LocalPlayer.PlayerControl == null || !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)) return;
+            if (CachedPlayer.LocalPlayer.PlayerControl == null || !Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId)) return;
             
-            if (Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerControl.PlayerId] <= 0)
+            if (Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] <= 0)
             {
-                Deputy.handcuffedKnows.Remove(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                Deputy.handcuffedKnows.Remove(CachedPlayer.LocalPlayer.PlayerId);
                 // Resets the buttons
                 Deputy.setHandcuffedKnows(false);
             }
@@ -555,7 +555,7 @@ namespace TheOtherRoles.Patches {
                 untargetables = new();
                 foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
                 {
-                    if (cachedPlayer.PlayerControl.PlayerId != Arsonist.douseTarget.PlayerId)
+                    if (cachedPlayer.PlayerId != Arsonist.douseTarget.PlayerId)
                     {
                         untargetables.Add(cachedPlayer);
                     }
@@ -1218,7 +1218,7 @@ namespace TheOtherRoles.Patches {
         {
             if (__instance.AmOwner && 
                 !CachedPlayer.LocalPlayer.Data.IsDead && 
-                Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId).Count > 0 && 
+                Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 && 
                 Invert.meetings > 0 && 
                 GameData.Instance && 
                 __instance.myPlayer.CanMove)  

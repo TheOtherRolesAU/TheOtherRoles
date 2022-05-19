@@ -93,7 +93,7 @@ namespace TheOtherRoles.Modules {
                 if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat)
                     return true;
                 PlayerControl localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-                return localPlayer == null || (MeetingHud.Instance != null || LobbyBehaviour.Instance != null || (localPlayer.Data.IsDead || localPlayer.isLover() && Lovers.enableChat) || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
+                return localPlayer == null || (MeetingHud.Instance != null || LobbyBehaviour.Instance != null || (localPlayer.Data.IsDead || localPlayer.isLover() && Lovers.enableChat) || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId);
 
             }
         }
