@@ -381,7 +381,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
         class PlayerVoteAreaSelectPatch {
             static bool Prefix(MeetingHud __instance) {
-                return !(CachedPlayer.LocalPlayer.PlayerControl != null && Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId) && guesserUI != null);
+                return !(CachedPlayer.LocalPlayer != null && Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId) && guesserUI != null);
             }
         }
 

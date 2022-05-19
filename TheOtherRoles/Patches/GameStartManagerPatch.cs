@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
         public class AmongUsClientOnPlayerJoinedPatch {
             public static void Postfix() {
-                if (CachedPlayer.LocalPlayer.PlayerControl != null) {
+                if (CachedPlayer.LocalPlayer != null) {
                     Helpers.shareGameVersion();
                 }
             }
@@ -53,7 +53,7 @@ namespace TheOtherRoles.Patches {
 
             public static void Postfix(GameStartManager __instance) {
                 // Send version as soon as CachedPlayer.LocalPlayer.PlayerControl exists
-                if (CachedPlayer.LocalPlayer.PlayerControl != null && !versionSent) {
+                if (CachedPlayer.LocalPlayer != null && !versionSent) {
                     versionSent = true;
                     Helpers.shareGameVersion();
                 }

@@ -652,7 +652,7 @@ namespace TheOtherRoles {
             Scroller.ContentYBounds = new FloatRange(MinY, maxY);
 
             // Prevent scrolling when the player is interacting with a menu
-            if (CachedPlayer.LocalPlayer.PlayerControl?.CanMove != true) {
+            if (CachedPlayer.LocalPlayer?.PlayerControl.CanMove != true) {
                 __instance.GameSettings.transform.localPosition = LastPosition;
 
                 return;

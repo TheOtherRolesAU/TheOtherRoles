@@ -161,7 +161,7 @@ namespace TheOtherRoles.Patches {
 
         static void setNameTags() {
             // Mafia
-            if (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor) {
+            if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor) {
                 foreach (PlayerControl player in CachedPlayer.AllPlayers)
                     if (Godfather.godfather != null && Godfather.godfather == player)
                             player.nameText.text = player.Data.PlayerName + " (G)";
@@ -203,7 +203,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Display lighter / darker color for all alive players
-            if (CachedPlayer.LocalPlayer.PlayerControl != null && MeetingHud.Instance != null && MapOptions.showLighterDarker) {
+            if (CachedPlayer.LocalPlayer != null && MeetingHud.Instance != null && MapOptions.showLighterDarker) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                     var target = Helpers.playerById(player.TargetPlayerId);
                     if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
