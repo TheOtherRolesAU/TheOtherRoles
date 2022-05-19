@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TheOtherRoles.Players;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,7 +79,7 @@ namespace TheOtherRoles.Objects {
                 this.OnClick();
 
                 // Deputy skip onClickEvent if handcuffed
-                if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0f) return;
+                if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerControl.PlayerId] > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.DeputyTimer = this.EffectDuration;
@@ -150,7 +151,7 @@ namespace TheOtherRoles.Objects {
 
         public void Update()
         {
-            var localPlayer = PlayerControl.LocalPlayer;
+            var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
             var moveable = localPlayer.moveable;
             
             if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {

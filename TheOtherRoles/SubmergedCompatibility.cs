@@ -6,6 +6,7 @@ using BepInEx;
 using BepInEx.IL2CPP;
 using HarmonyLib;
 using TheOtherRoles.Patches;
+using TheOtherRoles.Players;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -168,7 +169,7 @@ namespace TheOtherRoles
 
         public static void ChangeFloor(bool toUpper) {
             if (!Loaded) return;
-            MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { PlayerControl.LocalPlayer })).TryCast(FloorHandlerType) as MonoBehaviour;
+            MonoBehaviour _floorHandler = ((Component)GetFloorHandlerMethod.Invoke(null, new object[] { CachedPlayer.LocalPlayer.PlayerControl })).TryCast(FloorHandlerType) as MonoBehaviour;
             RpcRequestChangeFloorMethod.Invoke(_floorHandler, new object[] { toUpper });
         }
 
@@ -181,7 +182,7 @@ namespace TheOtherRoles
             if (!Loaded) return;
             try {
                 ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
-                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.Invoke(null, Array.Empty<object>()), new object[] { PlayerControl.LocalPlayer, 64 });
+                RepairDamageMethod.Invoke(SubmarineOxygenSystemInstanceField.Invoke(null, Array.Empty<object>()), new object[] { CachedPlayer.LocalPlayer.PlayerControl, 64 });
             }
             catch (System.NullReferenceException) {
                 TheOtherRolesPlugin.Logger.LogMessage("null reference in engineer oxygen fix");

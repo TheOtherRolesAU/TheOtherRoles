@@ -12,6 +12,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
@@ -139,7 +140,7 @@ namespace TheOtherRoles
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
                 
-                playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+                playerControl.transform.position = CachedPlayer.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
@@ -149,7 +150,7 @@ namespace TheOtherRoles
 
             // Terminate round
             if(Input.GetKeyDown(KeyCode.L)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.forceEnd();
             }
