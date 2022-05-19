@@ -161,7 +161,7 @@ namespace TheOtherRoles.Patches {
 
         static void setNameTags() {
             // Mafia
-            if (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
+            if (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor) {
                 foreach (PlayerControl player in CachedPlayer.AllPlayers)
                     if (Godfather.godfather != null && Godfather.godfather == player)
                             player.nameText.text = player.Data.PlayerName + " (G)";
@@ -251,7 +251,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
-            if (!CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) return;
+            if (!CachedPlayer.LocalPlayer.Data.Role.IsImpostor) return;
             if (MeetingHud.Instance) {
                 __instance.KillButton.Hide();
                 return;

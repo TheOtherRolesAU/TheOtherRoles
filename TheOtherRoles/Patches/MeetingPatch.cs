@@ -123,7 +123,7 @@ namespace TheOtherRoles.Patches {
         class MeetingHudBloopAVoteIconPatch {
             public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                if (!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerControl.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors)
+                if (!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors)
                     PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
                 else
                     PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
@@ -331,7 +331,7 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                if (!CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
+                if (!CachedPlayer.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
                     if (selectedButton != button) {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
@@ -446,7 +446,7 @@ namespace TheOtherRoles.Patches {
 
                 PassiveButton passiveButton = confirmSwapButton.GetComponent<PassiveButton>();
                 passiveButton.OnClick.RemoveAllListeners();               
-                if (!CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
+                if (!CachedPlayer.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
                 confirmSwapButton.parent.gameObject.SetActive(false);
                 __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) => { // Button appears delayed, so that its visible in the voting screen only!
                     if (p == 1f) {
@@ -476,7 +476,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) > 0) {
+            if (Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) && !CachedPlayer.LocalPlayer.Data.IsDead && Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerControl.PlayerId) > 0) {
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) continue;
@@ -532,7 +532,7 @@ namespace TheOtherRoles.Patches {
 
 
                 // Add Portal info into Portalmaker Chat:
-                if (Portalmaker.portalmaker != null && CachedPlayer.LocalPlayer.PlayerControl == Portalmaker.portalmaker && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) {
+                if (Portalmaker.portalmaker != null && CachedPlayer.LocalPlayer.PlayerControl == Portalmaker.portalmaker && !CachedPlayer.LocalPlayer.Data.IsDead) {
                     foreach (var entry in Portal.teleportedPlayers) {
                         float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
                         string msg = Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting}s ago: " : "";

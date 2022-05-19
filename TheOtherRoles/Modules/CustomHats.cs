@@ -303,7 +303,7 @@ namespace TheOtherRoles.Modules {
                     }
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
-                    colorChip.Inner.SetHat(hat, __instance.HasLocalPlayer() ? CachedPlayer.LocalPlayer.PlayerControl.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor));
+                    colorChip.Inner.SetHat(hat, __instance.HasLocalPlayer() ? CachedPlayer.LocalPlayer.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor));
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
                     colorChip.SelectionHighlight.gameObject.SetActive(false);

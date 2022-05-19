@@ -103,7 +103,7 @@ namespace TheOtherRoles.Patches {
 
             bool canUse;
             bool couldUse;
-            __instance.CanUse(CachedPlayer.LocalPlayer.PlayerControl.Data, out canUse, out couldUse);
+            __instance.CanUse(CachedPlayer.LocalPlayer.Data, out canUse, out couldUse);
             bool canMoveInVents = CachedPlayer.LocalPlayer.PlayerControl != Spy.spy;
             if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
 
@@ -156,7 +156,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
     class KillButtonDoClickPatch {
         public static bool Prefix(KillButton __instance) {
-            if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove) {
+            if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !CachedPlayer.LocalPlayer.Data.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove) {
                 // Deputy handcuff update.
                 if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerControl.PlayerId)) {
                     Deputy.setHandcuffedKnows();

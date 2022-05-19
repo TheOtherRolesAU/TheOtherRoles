@@ -95,7 +95,7 @@ namespace TheOtherRoles.Patches {
                             foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                                 bool canUse;
                                 bool couldUse;
-                                vent.CanUse(CachedPlayer.LocalPlayer.PlayerControl.Data, out canUse, out couldUse);
+                                vent.CanUse(CachedPlayer.LocalPlayer.Data, out canUse, out couldUse);
                                 if (canUse) {
                                     CachedPlayer.LocalPlayer.PlayerPhysics.RpcExitVent(vent.Id);
                                     vent.SetButtons(false);
@@ -280,7 +280,7 @@ namespace TheOtherRoles.Patches {
 
         static void engineerUpdate() {
             bool jackalHighlight = Engineer.highlightForTeamJackal && (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick);
-            bool impostorHighlight = Engineer.highlightForImpostors && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor;
+            bool impostorHighlight = Engineer.highlightForImpostors && CachedPlayer.LocalPlayer.Data.Role.IsImpostor;
             if ((jackalHighlight || impostorHighlight) && MapUtilities.CachedShipStatus?.AllVents != null) {
                 foreach (Vent vent in MapUtilities.CachedShipStatus.AllVents) {
                     try {
@@ -300,7 +300,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void impostorSetTarget() {
-            if (!CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor ||!CachedPlayer.LocalPlayer.PlayerControl.CanMove || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) { // !isImpostor || !canMove || isDead
+            if (!CachedPlayer.LocalPlayer.Data.Role.IsImpostor ||!CachedPlayer.LocalPlayer.PlayerControl.CanMove || CachedPlayer.LocalPlayer.Data.IsDead) { // !isImpostor || !canMove || isDead
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(null);
                 return;
             }
@@ -353,7 +353,7 @@ namespace TheOtherRoles.Patches {
                     Ninja.arrow.arrow.SetActive(false);
                     return;
                 }
-                if (Ninja.ninjaMarked != null && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)
+                if (Ninja.ninjaMarked != null && !CachedPlayer.LocalPlayer.Data.IsDead)
                 {
                     bool trackedOnMap = !Ninja.ninjaMarked.Data.IsDead;
                     Vector3 position = Ninja.ninjaMarked.transform.position;
@@ -456,7 +456,7 @@ namespace TheOtherRoles.Patches {
 
         public static void updatePlayerInfo() {
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {         
-                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) {
+                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo == null) {
@@ -551,9 +551,17 @@ namespace TheOtherRoles.Patches {
             if (Arsonist.arsonist == null || Arsonist.arsonist != CachedPlayer.LocalPlayer.PlayerControl) return;
             List<PlayerControl> untargetables;
             if (Arsonist.douseTarget != null)
-                untargetables = PlayerControl.AllPlayerControls.ToArray().Where(x => x.PlayerId != Arsonist.douseTarget.PlayerId).ToList();
-            else
-                untargetables = Arsonist.dousedPlayers;
+            {
+                untargetables = new();
+                foreach (CachedPlayer cachedPlayer in CachedPlayer.AllPlayers)
+                {
+                    if (cachedPlayer.PlayerControl.PlayerId != Arsonist.douseTarget.PlayerId)
+                    {
+                        untargetables.Add(cachedPlayer);
+                    }
+                }
+            }
+            else untargetables = Arsonist.dousedPlayers;
             Arsonist.currentTarget = setTarget(untargetablePlayers: untargetables);
             if (Arsonist.currentTarget != null) setPlayerOutline(Arsonist.currentTarget, Arsonist.color);
         }
@@ -568,7 +576,7 @@ namespace TheOtherRoles.Patches {
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
             int numberOfTasks = playerTotal - playerCompleted;
 
-            if (numberOfTasks <= Snitch.taskCountForReveal && (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick)))) {
+            if (numberOfTasks <= Snitch.taskCountForReveal && (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick)))) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
                     Snitch.localArrows[0].arrow.SetActive(true);
@@ -739,8 +747,8 @@ namespace TheOtherRoles.Patches {
 
         // For swapper swap charges        
         public static void swapperUpdate() {
-            if (Swapper.swapper == null || CachedPlayer.LocalPlayer.PlayerControl != Swapper.swapper || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) return;
-            var (playerCompleted, _) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.PlayerControl.Data);
+            if (Swapper.swapper == null || CachedPlayer.LocalPlayer.PlayerControl != Swapper.swapper || CachedPlayer.LocalPlayer.Data.IsDead) return;
+            var (playerCompleted, _) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
             if (playerCompleted == Swapper.rechargedTasks) {
                 Swapper.rechargedTasks += Swapper.rechargeTasksNumber;
                 Swapper.charges++;
@@ -1209,7 +1217,7 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(PlayerPhysics __instance)
         {
             if (__instance.AmOwner && 
-                !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && 
+                !CachedPlayer.LocalPlayer.Data.IsDead && 
                 Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId).Count > 0 && 
                 Invert.meetings > 0 && 
                 GameData.Instance && 

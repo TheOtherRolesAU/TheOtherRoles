@@ -41,7 +41,7 @@ namespace TheOtherRoles.Modules {
                 if (AmongUsClient.Instance.GameMode == GameModes.FreePlay) {
                     if (text.ToLower().Equals("/murder")) {
                         CachedPlayer.LocalPlayer.PlayerControl.Exiled();
-                        FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.PlayerControl.Data, CachedPlayer.LocalPlayer.PlayerControl.Data);
+                        FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(CachedPlayer.LocalPlayer.Data, CachedPlayer.LocalPlayer.Data);
                         handled = true;
                     } else if (text.ToLower().StartsWith("/color ")) {
                         handled = true;
@@ -55,7 +55,7 @@ namespace TheOtherRoles.Modules {
                     } 
                 }
 
-                if (text.ToLower().StartsWith("/tp ") && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) {
+                if (text.ToLower().StartsWith("/tp ") && CachedPlayer.LocalPlayer.Data.IsDead) {
                     string playerName = text.Substring(4).ToLower();
                     PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.ToLower().Equals(playerName));
                     if (target != null) {
@@ -83,7 +83,7 @@ namespace TheOtherRoles.Modules {
         public static class SetBubbleName { 
             public static void Postfix(ChatBubble __instance, [HarmonyArgument(0)] string playerName) {
                 PlayerControl sourcePlayer = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
-                if (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor && (Spy.spy != null && sourcePlayer.PlayerId == Spy.spy.PlayerId || Sidekick.sidekick != null && Sidekick.wasTeamRed && sourcePlayer.PlayerId == Sidekick.sidekick.PlayerId || Jackal.jackal != null && Jackal.wasTeamRed && sourcePlayer.PlayerId == Jackal.jackal.PlayerId) && __instance != null) __instance.NameText.color = Palette.ImpostorRed;
+                if (CachedPlayer.LocalPlayer.PlayerControl != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor && (Spy.spy != null && sourcePlayer.PlayerId == Spy.spy.PlayerId || Sidekick.sidekick != null && Sidekick.wasTeamRed && sourcePlayer.PlayerId == Sidekick.sidekick.PlayerId || Jackal.jackal != null && Jackal.wasTeamRed && sourcePlayer.PlayerId == Jackal.jackal.PlayerId) && __instance != null) __instance.NameText.color = Palette.ImpostorRed;
             }
         }
 

@@ -755,7 +755,7 @@ namespace TheOtherRoles
 
             target.setLook("", 6, "", "", "", "");
             Color color = Color.clear;           
-            if (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead) color.a = 0.1f;
+            if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
             target.MyRend.color = color;
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
@@ -782,7 +782,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
+            if(CachedPlayer.LocalPlayer.Data.Role.IsImpostor) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
@@ -911,7 +911,7 @@ namespace TheOtherRoles
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
             
             PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
-            if (Guesser.showInfoInGhostChat && CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && guessedTarget != null) {
+            if (Guesser.showInfoInGhostChat && CachedPlayer.LocalPlayer.Data.IsDead && guessedTarget != null) {
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
                 string msg = $"Guesser guessed the role {roleInfo?.name ?? ""} for {guessedTarget.Data.PlayerName}!";
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
