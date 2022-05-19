@@ -32,7 +32,7 @@ public class BepInExUpdater : MonoBehaviour
     [HideFromIl2Cpp]
     public IEnumerator CoUpdate()
     {
-        yield return new WaitForSeconds(5f);
+        Task.Run(() => MessageBox(IntPtr.Zero, "Required BepInEx update is downloading, please wait...","The Other Roles", 0));
         UnityWebRequest www = UnityWebRequest.Get(BepInExDownloadURL);
         yield return www.Send();        
         if (www.isNetworkError || www.isHttpError)
@@ -57,12 +57,14 @@ public class BepInExUpdater : MonoBehaviour
             } 
         }
         
-        
         var startInfo = new ProcessStartInfo(tempPath, $"--game-path {Paths.GameRootPath} --zip {zipPath}");
         startInfo.UseShellExecute = false;
         Process.Start(startInfo);
         Application.Quit();
     }
+    
+    [DllImport("user32.dll")]
+    public static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
 }
 
 [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
