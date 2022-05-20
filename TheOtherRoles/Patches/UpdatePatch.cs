@@ -12,6 +12,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     class HudManagerUpdatePatch
     {
+        private static Dictionary<byte, (string name, Color color)> TagColorDict = new();
         static void resetNameTagsAndColors() {
             var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
             var myData = CachedPlayer.LocalPlayer.Data;
@@ -19,7 +20,8 @@ namespace TheOtherRoles.Patches {
             var morphTimerNotUp = Morphling.morphTimer > 0f;
             var morphTargetNotNull = Morphling.morphTarget != null;
 
-            var dict = new Dictionary<byte, (string name, Color color)>();
+            var dict = TagColorDict;
+            dict.Clear();
             
             foreach (var data in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
