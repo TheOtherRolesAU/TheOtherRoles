@@ -540,11 +540,7 @@ namespace TheOtherRoles.Patches {
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{msg}");
                     }
                 }
-
-                // Remove first kill shield
-                MapOptions.firstKillPlayer = null;
-
-
+                
                 // Reset zoomed out ghosts
                 Helpers.toggleZoom(reset: true);
             }
@@ -556,6 +552,12 @@ namespace TheOtherRoles.Patches {
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
+
+                if (__instance.state >= MeetingHud.VoteStates.Discussion)
+                {
+                    // Remove first kill shield
+                    MapOptions.firstKillPlayer = null;
+                }
             }
         }
     }
