@@ -149,12 +149,12 @@ namespace TheOtherRoles
             setCustomButtonCooldowns();
         }
 
-        public static void ShareOptions(int numberOfOptions, MessageReader reader) {            
+        public static void HandleShareOptions(byte numberOfOptions, MessageReader reader) {            
             try {
                 for (int i = 0; i < numberOfOptions; i++) {
                     uint optionId = reader.ReadPackedUInt32();
                     uint selection = reader.ReadPackedUInt32();
-                    CustomOption option = CustomOption.options.FirstOrDefault(option => option.id == (int)optionId);
+                    CustomOption option = CustomOption.options.First(option => option.id == (int)optionId);
                     option.updateSelection((int)selection);
                 }
             } catch (Exception e) {
@@ -960,7 +960,7 @@ namespace TheOtherRoles
                     RPCProcedure.resetVariables();
                     break;
                 case (byte)CustomRPC.ShareOptions:
-                    RPCProcedure.ShareOptions((int)reader.ReadPackedUInt32(), reader);
+                    RPCProcedure.HandleShareOptions(reader.ReadByte(), reader);
                     break;
                 case (byte)CustomRPC.ForceEnd:
                     RPCProcedure.forceEnd();

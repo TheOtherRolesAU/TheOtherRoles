@@ -86,15 +86,23 @@ namespace TheOtherRoles {
         }
 
         public static void ShareOptionSelections() {
-            if (CachedPlayer.AllPlayers.Count <= 1 || AmongUsClient.Instance?.AmHost == false && CachedPlayer.LocalPlayer.PlayerControl == null) return;
-            
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, Hazel.SendOption.Reliable);
-            messageWriter.WritePacked((uint)CustomOption.options.Count);
-            foreach (CustomOption option in CustomOption.options) {
-                messageWriter.WritePacked((uint)option.id);
-                messageWriter.WritePacked((uint)Convert.ToUInt32(option.selection));
+            if (CachedPlayer.AllPlayers.Count <= 1 || AmongUsClient.Instance!.AmHost == false && CachedPlayer.LocalPlayer.PlayerControl == null) return;
+
+            var optionsList = new List<CustomOption>(CustomOption.options);
+            while (optionsList.Any())
+            {
+                byte amount = (byte) Math.Min(optionsList.Count, 20);
+                var writer = AmongUsClient.Instance!.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, SendOption.Reliable, -1);
+                writer.Write(amount);
+                for (int i = 0; i < amount; i++)
+                {
+                    var option = optionsList[0];
+                    optionsList.RemoveAt(0);
+                    writer.WritePacked((uint) option.id);
+                    writer.WritePacked(Convert.ToUInt32(option.selection));
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-            messageWriter.EndMessage();
         }
 
         // Getter
