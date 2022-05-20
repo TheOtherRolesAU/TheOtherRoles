@@ -108,7 +108,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   
 **Version 4.1.4**
 - Added auto updating for BepInEx
+- Fixed hat testing in freeplay for meetings / exile etc.
 - Fixed players not being able to move
+- Fixed getting stuck on the polus laboratory vent
+- Fixed Sherrif suicide with bloody modifier having a trail as a ghost
+- Fixed being able to kill the first killed protected player when a meeting was starting
+- Fixed some cases of the Reliable Packet Not Ack'ed disconnections
+- Fixed the double mod stamp being shown in game
 - Further improvements towards rubberbanding
 
 **Version 4.1.3**
