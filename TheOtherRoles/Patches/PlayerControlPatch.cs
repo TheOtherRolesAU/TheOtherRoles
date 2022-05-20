@@ -913,6 +913,8 @@ namespace TheOtherRoles.Patches {
                 morphlingAndCamouflagerUpdate();
                 // Lawyer
                 lawyerUpdate();
+		// Prosecutor
+		prosecutorCheckPromotion();
                 // Pursuer
                 pursuerSetTarget();
                 // Blackmailer
