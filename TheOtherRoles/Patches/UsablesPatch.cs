@@ -72,11 +72,10 @@ namespace TheOtherRoles.Patches {
             canUse = couldUse;
             if (canUse)
             {
-                Vector2 truePosition = @object.GetTruePosition();
+                Vector3 center = @object.Collider.bounds.center;
                 Vector3 position = __instance.transform.position;
-                num = Vector2.Distance(truePosition, position);
-                
-                canUse &= (num <= usableDistance && !PhysicsHelpers.AnythingBetween(truePosition, position, Constants.ShipOnlyMask, false));
+                num = Vector2.Distance(center, position);
+                canUse &= (num <= usableDistance && !PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false));
             }
             __result = num;
             return false;
