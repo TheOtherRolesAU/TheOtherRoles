@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Objects {
@@ -40,7 +41,7 @@ namespace TheOtherRoles.Objects {
             gameObject = new GameObject("JackInTheBox"){layer = 11};
             gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
             Vector3 position = new Vector3(p.x, p.y,  p.y/1000f + 0.01f);
-            position += (Vector3)PlayerControl.LocalPlayer.Collider.offset; // Add collider offset that DoMove moves the player up at a valid position
+            position += (Vector3)CachedPlayer.LocalPlayer.PlayerControl.Collider.offset; // Add collider offset that DoMove moves the player up at a valid position
             // Create the marker
             gameObject.transform.position = position;
             boxRenderer = gameObject.AddComponent<SpriteRenderer>();
@@ -69,7 +70,7 @@ namespace TheOtherRoles.Objects {
             vent.name = "JackInTheBoxVent_" + vent.Id;
 
             // Only render the box for the Trickster
-            var playerIsTrickster = PlayerControl.LocalPlayer == Trickster.trickster;
+            var playerIsTrickster = CachedPlayer.LocalPlayer.PlayerControl == Trickster.trickster;
             gameObject.SetActive(playerIsTrickster);
 
             AllJackInTheBoxes.Add(this);
@@ -78,7 +79,7 @@ namespace TheOtherRoles.Objects {
         public static void UpdateStates() {
             if (boxesConvertedToVents == true) return;
             foreach (var box in AllJackInTheBoxes) {
-                var playerIsTrickster = PlayerControl.LocalPlayer == Trickster.trickster;
+                var playerIsTrickster = CachedPlayer.LocalPlayer.PlayerControl == Trickster.trickster;
                 box.gameObject.SetActive(playerIsTrickster);
             }
         }
