@@ -813,10 +813,14 @@ namespace TheOtherRoles.Patches {
             if (!Bloody.active.Any()) return;
             foreach (KeyValuePair<byte, float> entry in new Dictionary<byte, float>(Bloody.active)) {
                 PlayerControl player = Helpers.playerById(entry.Key);
-                PlayerControl bloodyPlayer = Helpers.playerById(Bloody.bloodyKillerMap[player.PlayerId]);                
-                new Bloodytrail(player, bloodyPlayer);
+                PlayerControl bloodyPlayer = Helpers.playerById(Bloody.bloodyKillerMap[player.PlayerId]);      
+
                 Bloody.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
-                if (entry.Value <= 0) Bloody.active.Remove(entry.Key);
+                if (entry.Value <= 0 || player.Data.IsDead) {
+                    Bloody.active.Remove(entry.Key);
+                    continue;  // Skip the creation of the next blood drop, if the killer is dead or the time is up
+                }
+                new Bloodytrail(player, bloodyPlayer);
             }
         }
 
