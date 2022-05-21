@@ -115,13 +115,14 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) of submerged
+        // Workaround to add a "postfix" to the destroying of the exile controller (i.e. cutscene) and SpwanInMinigame of submerged
         [HarmonyPatch(typeof(UnityEngine.Object), nameof(UnityEngine.Object.Destroy), new Type[] { typeof(GameObject) })]
         public static void Prefix(GameObject obj) {
             if (!SubmergedCompatibility.IsSubmerged) return;
-            if (obj.name.Contains("ExileCutscene")) { 
+            if (obj.name.Contains("ExileCutscene")) {
                 WrapUpPostfix(ExileControllerBeginPatch.lastExiled);
-            }            
+            } else if (obj.name.Contains("SpawnInMinigame"))
+                AntiTeleport.setPosition();
         }
 
         static void WrapUpPostfix(GameData.PlayerInfo exiled) {
@@ -221,15 +222,17 @@ namespace TheOtherRoles.Patches {
             }
 
             // AntiTeleport set position
-            if (AntiTeleport.antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0) {
-                CachedPlayer.LocalPlayer.transform.position = AntiTeleport.position;
-                if (SubmergedCompatibility.IsSubmerged) {
-                    SubmergedCompatibility.ChangeFloor(AntiTeleport.position.y > -7);
-                }
-            }
+            AntiTeleport.setPosition();
 
             // Invert add meeting
             if (Invert.meetings > 0) Invert.meetings--;
+        }
+    }
+
+    [HarmonyPatch(typeof(SpawnInMinigame), nameof(SpawnInMinigame.Close))]  // Set position of AntiTp players AFTER they have selected a spawn.
+    class AirshipSpawnInPatch {
+        static void Postfix() {
+            AntiTeleport.setPosition();
         }
     }
 
