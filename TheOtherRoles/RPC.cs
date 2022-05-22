@@ -99,6 +99,7 @@ namespace TheOtherRoles
         TimeMasterShield,
         TimeMasterRewindTime,
         VeterenAlert,
+        VeterenKill,
 	ShifterShift,
         SwapperSwap,
         MorphlingMorph,
@@ -460,6 +461,11 @@ namespace TheOtherRoles
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Veteren.alertDuration, new Action<float>((p) => {
                 if (p == 1f) Veteren.alertActive = false;
             })));
+        }
+
+        public static void veterenKill(byte targetId) {
+          PlayerControl player = Helpers.playerById(targetId);
+	  Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
         }
 
         public static void medicSetShielded(byte shieldedId) {
@@ -1114,6 +1120,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VeterenAlert:
                     RPCProcedure.veterenAlert();
+                    break;
+                case (byte)CustomRPC.VeterenKill:
+                    RPCProcedure.veterenKill(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
                     RPCProcedure.medicSetShielded(reader.ReadByte());

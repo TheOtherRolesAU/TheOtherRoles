@@ -343,20 +343,16 @@ namespace TheOtherRoles {
                 return MurderAttemptResult.BlankKill;
             }
 
+
             // Kill the killer if the Veteren is on alert
             else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
-	        if (Veteren.dieOnKill) {
-		    if (Medic.shielded != null && Medic.shielded == target) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        RPCProcedure.shieldedMurderAttempt();
-	                return MurderAttemptResult.ReverseKill;
-		    } else
-    		        return MurderAttemptResult.BothKill;
-		} else {
-                    return MurderAttemptResult.ReverseKill;
-		}
-            }
+              if (Medic.shielded != null && Medic.shielded == target) {
+                   MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                   AmongUsClient.Instance.FinishRpcImmediately(writer);
+                   RPCProcedure.shieldedMurderAttempt();
+              }
+              return MurderAttemptResult.ReverseKill;
+	    }
 
 
             // Block impostor shielded kill
@@ -403,11 +399,6 @@ namespace TheOtherRoles {
 
             if (murder == MurderAttemptResult.ReverseKill) {
 		checkMuderAttemptAndKill(target, killer, isMeetingStart);
-            }
-
-            if (murder == MurderAttemptResult.BothKill) {
-		checkMuderAttemptAndKill(target, killer, isMeetingStart);
-		checkMuderAttemptAndKill(killer, target, isMeetingStart);
             }
 
             return murder;            

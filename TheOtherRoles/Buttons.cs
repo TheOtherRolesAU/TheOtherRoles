@@ -352,14 +352,14 @@ namespace TheOtherRoles
             deputyHandcuffButton = new CustomButton(
                 () => {
                     byte targetId = 0;
-                    PlayerControl target = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
+                    PlayerControl target = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget : Deputy.currentTarget;  // If the deputy is now the sheriff, sheriffs target, else deputies target
 		    targetId = target.PlayerId;
 		   
 		    if (Veteren.veteren == target && Veteren.alertActive) {
 			MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VeterenKill, Hazel.SendOption.Reliable, -1);
-			writer.Write(PlayerControl.LocalPlayer);
+			writer.Write(PlayerControl.LocalPlayer.PlayerId);
 			AmongUsClient.Instance.FinishRpcImmediately(writer);
-			RPCProcedure.veterenKill(PlayerControl.LocalPlayer);
+			RPCProcedure.veterenKill(PlayerControl.LocalPlayer.PlayerId);
 		    } else {
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyUsedHandcuffs, Hazel.SendOption.Reliable, -1);
                         writer.Write(targetId);
