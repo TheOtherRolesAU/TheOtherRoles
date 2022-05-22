@@ -309,7 +309,7 @@ namespace TheOtherRoles
                 () => {
                     MurderAttemptResult murderAttemptResult = Helpers.checkMuderAttempt(Sheriff.sheriff, Sheriff.currentTarget);
                     if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
-
+/// What do? Add in code to account for vet alert for ALL buttons. Here I need to add a check for ReverseKill
                     if (murderAttemptResult == MurderAttemptResult.PerformKill) {
                         byte targetId = 0;
                         if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
