@@ -408,9 +408,8 @@ namespace TheOtherRoles
 
     public static class Veteren {
         public static PlayerControl veteren;
-        public static Color color = new Color32(112, 142, 239, byte.MaxValue);
+        public static Color color = new Color32(255, 77, 0, byte.MaxValue);
 
-        public static bool dieOnKill = false;
         public static float alertDuration = 3f;
         public static float cooldown = 30f;
 
@@ -428,7 +427,6 @@ namespace TheOtherRoles
             alertActive = false;
             alertDuration = CustomOptionHolder.veterenAlertDuration.getFloat();
             cooldown = CustomOptionHolder.veterenCooldown.getFloat();
-            dieOnKill = CustomOptionHolder.veterenBothDie.getBool();
         }
     }
 
