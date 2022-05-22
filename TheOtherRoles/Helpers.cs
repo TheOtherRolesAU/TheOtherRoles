@@ -343,6 +343,22 @@ namespace TheOtherRoles {
                 return MurderAttemptResult.BlankKill;
             }
 
+            // Kill the killer if the Veteren is on alert
+            else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
+	        if (Veteren.dieOnKill) {
+		    if (Medic.shielded != null && Medic.shielded == target) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.shieldedMurderAttempt();
+	                return MurderAttemptResult.ReverseKill;
+		    } else
+    		        return MurderAttemptResult.BothKill;
+		} else {
+                    return MurderAttemptResult.ReverseKill;
+		}
+            }
+
+
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
@@ -357,14 +373,6 @@ namespace TheOtherRoles {
             }
 
 
-            // Kill the killer if the Veteren is on alert
-            else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
-	        if (Veteren.dieOnKill) {
-		    return MurderAttemptResult.BothKill;
-		} else {
-                    return MurderAttemptResult.ReverseKill;
-		}
-            }
 
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
