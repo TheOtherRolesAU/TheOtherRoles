@@ -68,12 +68,9 @@ namespace TheOtherRoles.Patches {
             var localPlayer = PlayerControl.LocalPlayer;
             if (Jester.jester != null && Jester.jester == localPlayer)
                 setPlayerNameColor(Jester.jester, Jester.color);
-            else if (Prosecutor.prosecutor != null && Prosecutor.prosecutor == PlayerControl.LocalPlayer) { // Make Prosecutor see target
+            else if (Prosecutor.prosecutor != null && (Prosecutor.prosecutor == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead)) { // Make Prosecutor see target
                 // Prosecutor can see their target
-                setPlayerNameColor(Prosecutor.prosecutor, Prosecutor.color);
-                if (Prosecutor.target != null) {
-                    setPlayerNameColor(Prosecutor.target, Prosecutor.targetColor);
-                }
+                setPlayerNameColor(Prosecutor.target, Prosecutor.color);
 	    } else if (Mayor.mayor != null && Mayor.mayor == PlayerControl.LocalPlayer)
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
             else if (Engineer.engineer != null && Engineer.engineer == localPlayer)
