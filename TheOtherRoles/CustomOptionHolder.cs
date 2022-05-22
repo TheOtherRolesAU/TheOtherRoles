@@ -464,7 +464,7 @@ namespace TheOtherRoles {
             timeMasterRewindTime = CustomOption.Create(132, Types.Crewmate, "Rewind Time", 3f, 1f, 10f, 1f, timeMasterSpawnRate);
             timeMasterShieldDuration = CustomOption.Create(133, Types.Crewmate, "Time Master Shield Duration", 3f, 1f, 20f, 1f, timeMasterSpawnRate);
 
-            veterenSpawnRate = CustomOption.Create(350, Types.Crewmate, cs(Veteren.color, "Veteren"), rates, null, true);
+            veterenSpawnRate = CustomOption.Create(350, Types.Crewmate, cs(Veteren.color, "Veteran"), rates, null, true);
             veterenCooldown = CustomOption.Create(131, Types.Crewmate, "Alert Cooldown", 30f, 10f, 120f, 2.5f, veterenSpawnRate);
             veterenAlertDuration = CustomOption.Create(353, Types.Crewmate, "Alert Duration", 3f, 1f, 20f, 1f, veterenSpawnRate);
 
