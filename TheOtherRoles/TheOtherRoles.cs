@@ -27,6 +27,7 @@ namespace TheOtherRoles
             Janitor.clearAndReload();
             Detective.clearAndReload();
             TimeMaster.clearAndReload();
+            Veteren.clearAndReload();
             Medic.clearAndReload();
             Shifter.clearAndReload();
             Swapper.clearAndReload();
@@ -402,6 +403,31 @@ namespace TheOtherRoles
             rewindTime = CustomOptionHolder.timeMasterRewindTime.getFloat();
             shieldDuration = CustomOptionHolder.timeMasterShieldDuration.getFloat();
             cooldown = CustomOptionHolder.timeMasterCooldown.getFloat();
+        }
+    }
+
+    public static class Veteren {
+        public static PlayerControl veteren;
+        public static Color color = new Color32(112, 142, 239, byte.MaxValue);
+
+        public static bool dieOnKill = false;
+        public static float alertdDuration = 3f;
+        public static float cooldown = 30f;
+
+        public static bool alertActive = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TimeShieldButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            veteren = null;
+            alertActive = false;
+            alertDuration = CustomOptionHolder.veterenAlertDuration.getFloat();
+            cooldown = CustomOptionHolder.veterenCooldown.getFloat();
         }
     }
 

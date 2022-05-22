@@ -46,6 +46,7 @@ namespace TheOtherRoles
         public static RoleInfo bountyHunter = new RoleInfo("Bounty Hunter", BountyHunter.color, "Hunt your bounty down", "Hunt your bounty down", RoleId.BountyHunter);
         public static RoleInfo detective = new RoleInfo("Detective", Detective.color, "Find the <color=#FF1919FF>Impostors</color> by examining footprints", "Examine footprints", RoleId.Detective);
         public static RoleInfo timeMaster = new RoleInfo("Time Master", TimeMaster.color, "Save yourself with your time shield", "Use your time shield", RoleId.TimeMaster);
+        public static RoleInfo veteren = new RoleInfo("Veteren", Veteren.color, "Protect yourself from other", "Protect yourself from others", RoleId.Veteren);
         public static RoleInfo medic = new RoleInfo("Medic", Medic.color, "Protect someone with your shield", "Protect other players", RoleId.Medic);
         public static RoleInfo shifter = new RoleInfo("Shifter", Shifter.color, "Shift your role", "Shift your role", RoleId.Shifter);
         public static RoleInfo swapper = new RoleInfo("Swapper", Swapper.color, "Swap votes to exile the <color=#FF1919FF>Impostors</color>", "Swap votes", RoleId.Swapper);
@@ -120,6 +121,7 @@ namespace TheOtherRoles
             lighter,
             detective,
             timeMaster,
+	    vetern,
             medic,
             swapper,
             seer,
@@ -180,6 +182,7 @@ namespace TheOtherRoles
             if (p == Blackmailer.blackmailer) infos.Add(blackmailer);
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
+            if (p == TimeMaster.veteren) infos.Add(veteren);
             if (p == Medic.medic) infos.Add(medic);
             if (p == Shifter.shifter) infos.Add(shifter);
             if (p == Swapper.swapper) infos.Add(swapper);

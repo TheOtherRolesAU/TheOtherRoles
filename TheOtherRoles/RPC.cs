@@ -28,6 +28,7 @@ namespace TheOtherRoles
         Janitor,
         Detective,
         TimeMaster,
+	Veteren,
         Medic,
         Shifter,
         Swapper,
@@ -97,7 +98,8 @@ namespace TheOtherRoles
         ShieldedMurderAttempt,
         TimeMasterShield,
         TimeMasterRewindTime,
-        ShifterShift,
+        VeterenAlert,
+	ShifterShift,
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
@@ -225,6 +227,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.TimeMaster:
                         TimeMaster.timeMaster = player;
+                        break;
+                    case RoleId.Veteren:
+                        Veteren.veteren = player;
                         break;
                     case RoleId.Medic:
                         Medic.medic = player;
@@ -450,6 +455,13 @@ namespace TheOtherRoles
             })));
         }
 
+        public static void veterenAlert() {
+            Veteren.alertActive = true;
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Veteren.alertDuration, new Action<float>((p) => {
+                if (p == 1f) Veteren.alertActive = false;
+            })));
+        }
+
         public static void medicSetShielded(byte shieldedId) {
             Medic.usedShield = true;
             Medic.shielded = Helpers.playerById(shieldedId);
@@ -516,6 +528,8 @@ namespace TheOtherRoles
                 Detective.detective = oldShifter;
             if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == player)
                 TimeMaster.timeMaster = oldShifter;
+            if (Veteren.veteren != null && Veteren.veteren == player)
+                Veteren.veteren = oldShifter;
             if (Medic.medic != null && Medic.medic == player)
                 Medic.medic = oldShifter;
             if (Swapper.swapper != null && Swapper.swapper == player)
@@ -665,6 +679,7 @@ namespace TheOtherRoles
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
+            if (player == Veteren.timeMaster) Veteren.clearAndReload();
             if (player == Medic.medic) Medic.clearAndReload();
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
@@ -1096,6 +1111,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TimeMasterShield:
                     RPCProcedure.timeMasterShield();
+                    break;
+                case (byte)CustomRPC.VeterenAlert:
+                    RPCProcedure.veterenAlert();
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
                     RPCProcedure.medicSetShielded(reader.ReadByte());

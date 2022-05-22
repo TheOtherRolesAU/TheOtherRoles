@@ -14,6 +14,8 @@ using TheOtherRoles.Utilities;
 namespace TheOtherRoles {
 
     public enum MurderAttemptResult {
+        ReverseKill,
+	BothKill,
         PerformKill,
         SuppressKill,
         BlankKill
@@ -350,8 +352,18 @@ namespace TheOtherRoles {
             }
 
             // Block impostor not fully grown mini kill
-            else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
+            else if (Mini.mini != null && target.isRole(RoleType.Mini) && !Mini.isGrownUp()) {
                 return MurderAttemptResult.SuppressKill;
+            }
+
+
+            // Kill the killer if the Veteren is on alert
+            else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
+	        if (Veteren.dieOnKill) {
+		    return MurderAttemptResult.BothKill;
+		} else {
+                    return MurderAttemptResult.ReverseKill;
+		}
             }
 
             // Block Time Master with time shield kill
@@ -371,6 +383,7 @@ namespace TheOtherRoles {
             // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
 
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
+
             if (murder == MurderAttemptResult.PerformKill) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
@@ -379,6 +392,32 @@ namespace TheOtherRoles {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
             }
+
+            if (murder == MurderAttemptResult.ReverseKill) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
+                writer.Write(killer.PlayerId);
+                writer.Write(showAnimation ? Byte.MaxValue : 0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+            }
+
+            if (murder == MurderAttemptResult.BothKill) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
+                writer.Write(killer.PlayerId);
+                writer.Write(showAnimation ? Byte.MaxValue : 0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                writer.Write(target.PlayerId);
+                writer.Write(showAnimation ? Byte.MaxValue : 0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+            }
+
             return murder;            
         }
     

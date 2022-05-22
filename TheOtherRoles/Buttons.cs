@@ -18,6 +18,7 @@ namespace TheOtherRoles
         public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
+        private static CustomButton veterenAlertButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
@@ -70,6 +71,7 @@ namespace TheOtherRoles
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
             deputyHandcuffButton.MaxTimer = Deputy.handcuffCooldown;
             timeMasterShieldButton.MaxTimer = TimeMaster.cooldown;
+            veterenAlertButton.MaxTimer = Veteren.cooldown;
             medicShieldButton.MaxTimer = 0f;
             shifterShiftButton.MaxTimer = 0f;
             morphlingButton.MaxTimer = Morphling.cooldown;
@@ -104,6 +106,7 @@ namespace TheOtherRoles
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
+            veterenAlertButton.EffectDuration = Veteren.alertDuration;
             hackerButton.EffectDuration = Hacker.duration;
             hackerVitalsButton.EffectDuration = Hacker.duration;
             hackerAdminTableButton.EffectDuration = Hacker.duration;
@@ -395,6 +398,29 @@ namespace TheOtherRoles
                 true,
                 TimeMaster.shieldDuration,
                 () => { timeMasterShieldButton.Timer = timeMasterShieldButton.MaxTimer; }
+            );
+
+            // Veteren Alert
+            veterenAlertButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VeterenAlert, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.veterenAlert();
+                },
+                () => { return Veteren.veteren != null && Veteren.veteren == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    veterenAlertButton.Timer = veterenAlertButton.MaxTimer;
+                    veterenAlertButton.isEffectActive = false;
+                    veterenAlertButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                Veteren.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F, 
+                true,
+                Veteren.shieldDuration,
+                () => { veterenAlertButton.Timer = veterenAlertButton.MaxTimer; }
             );
 
             // Medic Shield
