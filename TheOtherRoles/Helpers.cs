@@ -402,28 +402,12 @@ namespace TheOtherRoles {
             }
 
             if (murder == MurderAttemptResult.ReverseKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(target.PlayerId);
-                writer.Write(killer.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+		checkMuderAttemptAndKill(target, killer, isMeetingStart);
             }
 
             if (murder == MurderAttemptResult.BothKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(target.PlayerId);
-                writer.Write(killer.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
-
-                MessageWriter writer1 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer1.Write(killer.PlayerId);
-                writer1.Write(target.PlayerId);
-                writer1.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer1);
-                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+		checkMuderAttemptAndKill(target, killer, isMeetingStart);
+		checkMuderAttemptAndKill(killer, target, isMeetingStart);
             }
 
             return murder;            

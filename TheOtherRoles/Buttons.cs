@@ -329,6 +329,9 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                         RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
                     }
+                    if (murderAttemptResult == MurderAttemptResult.ReverseKill) {
+			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(target, Sheriff.sheriff);
+                    }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
                     Sheriff.currentTarget = null;
