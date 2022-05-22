@@ -1518,7 +1518,7 @@ namespace TheOtherRoles
                     if (Ninja.ninjaMarked != null) {
                         // Murder attempt with teleport
                         MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
-                        if (attempt == MurderAttemptResult.PerformKill) {
+                        if (attempt == MurderAttemptResult.PerformKill || attempt == MurderAttemptResult.ReverseKill) {
                             // Create first trace before killing
                             var pos = PlayerControl.LocalPlayer.transform.position;
                             byte[] buff = new byte[sizeof(float) * 2];
@@ -1535,18 +1535,19 @@ namespace TheOtherRoles
                             invisibleWriter.Write(byte.MinValue);
                             AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
                             RPCProcedure.setInvisible(Ninja.ninja.PlayerId, byte.MinValue);
+                            if (!Helpers.checkAndDoVetKill(Ninja.ninjaMarked)) {
 
-                            // Perform Kill
-                            MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                            writer2.Write(PlayerControl.LocalPlayer.PlayerId);
-                            writer2.Write(Ninja.ninjaMarked.PlayerId);
-                            writer2.Write(byte.MaxValue);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer2);
-                            if (SubmergedCompatibility.IsSubmerged) {
-                                    SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
-                            }
-                            RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
-
+                                // Perform Kill
+                                MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                                writer2.Write(PlayerControl.LocalPlayer.PlayerId);
+                                writer2.Write(Ninja.ninjaMarked.PlayerId);
+                                writer2.Write(byte.MaxValue);
+                                AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                                if (SubmergedCompatibility.IsSubmerged) {
+                                        SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
+                                }
+                                RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
+    			    }
                             // Create Second trace after killing
                             pos = Ninja.ninjaMarked.transform.position;
                             buff = new byte[sizeof(float) * 2];
