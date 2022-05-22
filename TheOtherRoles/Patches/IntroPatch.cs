@@ -144,7 +144,6 @@ namespace TheOtherRoles.Patches {
                 new Vector3(27f, -16.5f, 0.0f), //office lifelines
                 new Vector3(32.7f, -15.7f, 0.0f), //lavapool
                 new Vector3(31.5f, -12f, 0.0f), //snowmad below lab
-                new Vector3(25.9f, -12.9f, 0.0f), //behind rock
                 new Vector3(10f, -14f, 0.0f), //below storrage
                 new Vector3(21.5f, -12.5f, 0.0f), //storrage vent
                 new Vector3(19f, -11f, 0.0f), //storrage toolrack
@@ -165,7 +164,6 @@ namespace TheOtherRoles.Patches {
                 new Vector3(11f, -17f, 0.0f), //comms table
                 new Vector3(12.7f, -15.5f, 0.0f), //coms antenna pult
                 new Vector3(13f, -24.5f, 0.0f), //weapons window
-                new Vector3(11f, -23.5f, 0.0f), //weapons generator
                 new Vector3(15f, -17f, 0.0f), //between coms-office
                 new Vector3(17.5f, -25.7f, 0.0f), //snowman under office
                 };
