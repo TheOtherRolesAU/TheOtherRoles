@@ -464,8 +464,10 @@ namespace TheOtherRoles
         }
 
         public static void veterenKill(byte targetId) {
-          PlayerControl player = Helpers.playerById(targetId);
-	  Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
+	  if (PlayerControl.LocalPlayer == Veteren.veteren) {
+            PlayerControl player = Helpers.playerById(targetId);
+  	    Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
+          }
         }
 
         public static void medicSetShielded(byte shieldedId) {
