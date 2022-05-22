@@ -419,7 +419,7 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F, 
                 true,
-                Veteren.shieldDuration,
+                Veteren.alertDuration,
                 () => { veterenAlertButton.Timer = veterenAlertButton.MaxTimer; }
             );
 

@@ -411,7 +411,7 @@ namespace TheOtherRoles
         public static Color color = new Color32(112, 142, 239, byte.MaxValue);
 
         public static bool dieOnKill = false;
-        public static float alertdDuration = 3f;
+        public static float alertDuration = 3f;
         public static float cooldown = 30f;
 
         public static bool alertActive = false;
@@ -428,6 +428,7 @@ namespace TheOtherRoles
             alertActive = false;
             alertDuration = CustomOptionHolder.veterenAlertDuration.getFloat();
             cooldown = CustomOptionHolder.veterenCooldown.getFloat();
+            dieOnKill = CustomOptionHolder.veterenBothDie.getBool();
         }
     }
 
