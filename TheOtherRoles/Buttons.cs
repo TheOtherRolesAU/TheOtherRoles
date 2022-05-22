@@ -1641,7 +1641,7 @@ namespace TheOtherRoles
                 },
                 () => { if (PlayerControl.LocalPlayer == null || !PlayerControl.LocalPlayer.Data.IsDead) return false;
                     return true;;
-		}
+                },
                 () => { return true; },
                 () => { return; },
                 Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f),  // Invisible button!
