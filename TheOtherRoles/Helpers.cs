@@ -343,6 +343,18 @@ namespace TheOtherRoles {
                 return MurderAttemptResult.BlankKill;
             }
 
+
+            // Kill the killer if the Veteren is on alert
+            else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
+              if (Medic.shielded != null && Medic.shielded == target) {
+                   MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                   AmongUsClient.Instance.FinishRpcImmediately(writer);
+                   RPCProcedure.shieldedMurderAttempt();
+              }
+              return MurderAttemptResult.ReverseKill;
+	    }
+
+
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
@@ -357,14 +369,6 @@ namespace TheOtherRoles {
             }
 
 
-            // Kill the killer if the Veteren is on alert
-            else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
-	        if (Veteren.dieOnKill) {
-		    return MurderAttemptResult.BothKill;
-		} else {
-                    return MurderAttemptResult.ReverseKill;
-		}
-            }
 
             // Block Time Master with time shield kill
             else if (TimeMaster.shieldActive && TimeMaster.timeMaster != null && TimeMaster.timeMaster == target) {
@@ -394,33 +398,24 @@ namespace TheOtherRoles {
             }
 
             if (murder == MurderAttemptResult.ReverseKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(target.PlayerId);
-                writer.Write(killer.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
-            }
-
-            if (murder == MurderAttemptResult.BothKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(target.PlayerId);
-                writer.Write(killer.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(target.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
-
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                writer.Write(killer.PlayerId);
-                writer.Write(target.PlayerId);
-                writer.Write(showAnimation ? Byte.MaxValue : 0);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+		checkMuderAttemptAndKill(target, killer, isMeetingStart);
             }
 
             return murder;            
         }
     
+
+	public static bool checkAndDoVetKill(PlayerControl target) {
+	  bool shouldVetKill = (Veteren.veteren == target && Veteren.alertActive);
+	  if (shouldVetKill) {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VeterenKill, Hazel.SendOption.Reliable, -1);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.veterenKill(PlayerControl.LocalPlayer.PlayerId);
+	  }
+	  return shouldVetKill;
+	}
+
         public static void shareGameVersion() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
             writer.Write((byte)TheOtherRolesPlugin.Version.Major);

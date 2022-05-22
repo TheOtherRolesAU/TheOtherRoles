@@ -121,7 +121,7 @@ namespace TheOtherRoles
             lighter,
             detective,
             timeMaster,
-	    vetern,
+	    veteren,
             medic,
             swapper,
             seer,
@@ -182,7 +182,7 @@ namespace TheOtherRoles
             if (p == Blackmailer.blackmailer) infos.Add(blackmailer);
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
-            if (p == TimeMaster.veteren) infos.Add(veteren);
+            if (p == Veteren.veteren) infos.Add(veteren);
             if (p == Medic.medic) infos.Add(medic);
             if (p == Shifter.shifter) infos.Add(shifter);
             if (p == Swapper.swapper) infos.Add(swapper);

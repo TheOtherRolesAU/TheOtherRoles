@@ -309,7 +309,7 @@ namespace TheOtherRoles
                 () => {
                     MurderAttemptResult murderAttemptResult = Helpers.checkMuderAttempt(Sheriff.sheriff, Sheriff.currentTarget);
                     if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
-
+/// What do? Add in code to account for vet alert for ALL buttons. Here I need to add a check for ReverseKill
                     if (murderAttemptResult == MurderAttemptResult.PerformKill) {
                         byte targetId = 0;
                         if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
@@ -328,6 +328,9 @@ namespace TheOtherRoles
                         killWriter.Write(byte.MaxValue);
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                         RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
+                    }
+                    if (murderAttemptResult == MurderAttemptResult.ReverseKill) {
+			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(Sheriff.currentTarget, Sheriff.sheriff);
                     }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
@@ -349,8 +352,10 @@ namespace TheOtherRoles
             deputyHandcuffButton = new CustomButton(
                 () => {
                     byte targetId = 0;
-                    targetId = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget.PlayerId : Deputy.currentTarget.PlayerId;  // If the deputy is now the sheriff, sheriffs target, else deputies target
-
+                    PlayerControl target = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget : Deputy.currentTarget;  // If the deputy is now the sheriff, sheriffs target, else deputies target
+		    targetId = target.PlayerId;
+		   
+		    if (Helpers.checkAndDoVetKill(target)) return;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyUsedHandcuffs, Hazel.SendOption.Reliable, -1);
                     writer.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -419,13 +424,14 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.F, 
                 true,
-                Veteren.shieldDuration,
+                Veteren.alertDuration,
                 () => { veterenAlertButton.Timer = veterenAlertButton.MaxTimer; }
             );
 
             // Medic Shield
             medicShieldButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Medic.currentTarget)) return;
                     medicShieldButton.Timer = 0f;
  
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, Medic.setShieldAfterMeeting ? (byte)CustomRPC.SetFutureShielded : (byte)CustomRPC.MedicSetShielded, Hazel.SendOption.Reliable, -1);
@@ -453,6 +459,7 @@ namespace TheOtherRoles
             // Shifter shift
             shifterShiftButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Shifter.currentTarget)) return;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetFutureShifted, Hazel.SendOption.Reliable, -1);
                     writer.Write(Shifter.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -483,6 +490,7 @@ namespace TheOtherRoles
                         morphlingButton.EffectDuration = Morphling.duration;
 
                     } else if (Morphling.currentTarget != null) {
+                    if (Helpers.checkAndDoVetKill(Morphling.currentTarget)) return;
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
                         morphlingButton.EffectDuration = 1f;
@@ -690,6 +698,7 @@ namespace TheOtherRoles
             // Tracker button
             trackerTrackPlayerButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Tracker.currentTarget)) return;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TrackerUsedTracker, Hazel.SendOption.Reliable, -1);
                     writer.Write(Tracker.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -729,6 +738,7 @@ namespace TheOtherRoles
     
             vampireKillButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Vampire.currentTarget)) return;
                     MurderAttemptResult murder = Helpers.checkMuderAttempt(Vampire.vampire, Vampire.currentTarget);
                     if (murder == MurderAttemptResult.PerformKill) {
                         if (Vampire.targetNearGarlic) {
@@ -889,6 +899,7 @@ namespace TheOtherRoles
             // Jackal Sidekick Button
             jackalSidekickButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Jackal.currentTarget)) return;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.JackalCreatesSidekick, Hazel.SendOption.Reliable, -1);
                     writer.Write(Jackal.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -909,6 +920,7 @@ namespace TheOtherRoles
             // Jackal Kill
             jackalKillButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Jackal.currentTarget)) return;
                     if (Helpers.checkMuderAttemptAndKill(Jackal.jackal, Jackal.currentTarget) == MurderAttemptResult.SuppressKill) return;
 
                     jackalKillButton.Timer = jackalKillButton.MaxTimer; 
@@ -929,6 +941,7 @@ namespace TheOtherRoles
             // Sidekick Kill
             sidekickKillButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Sidekick.currentTarget)) return;
                     if (Helpers.checkMuderAttemptAndKill(Sidekick.sidekick, Sidekick.currentTarget) == MurderAttemptResult.SuppressKill) return;
                     sidekickKillButton.Timer = sidekickKillButton.MaxTimer; 
                     Sidekick.currentTarget = null;
@@ -969,6 +982,7 @@ namespace TheOtherRoles
             // Eraser erase button
             eraserButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Eraser.currentTarget)) return;
                     eraserButton.MaxTimer += 10;
                     eraserButton.Timer = eraserButton.MaxTimer;
 
@@ -1074,6 +1088,7 @@ namespace TheOtherRoles
             warlockCurseButton = new CustomButton(
                 () => {
                     if (Warlock.curseVictim == null) {
+                        if (Helpers.checkAndDoVetKill(Warlock.currentTarget)) return;
                         // Apply Curse
                         Warlock.curseVictim = Warlock.currentTarget;
                         warlockCurseButton.Sprite = Warlock.getCurseKillButtonSprite();
@@ -1239,6 +1254,7 @@ namespace TheOtherRoles
                         RPCProcedure.arsonistWin();
                         arsonistButton.HasEffect = false;
                     } else if (Arsonist.currentTarget != null) {
+                        if (Helpers.checkAndDoVetKill(Arsonist.currentTarget)) return;
                         Arsonist.douseTarget = Arsonist.currentTarget;
                         arsonistButton.HasEffect = true;              
                     }
@@ -1406,6 +1422,7 @@ namespace TheOtherRoles
             pursuerButton = new CustomButton(
                 () => {
                     if (Pursuer.target != null) {
+                        if (Helpers.checkAndDoVetKill(Pursuer.target)) return;
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                         writer.Write(Pursuer.target.PlayerId);
                         writer.Write(Byte.MaxValue);
@@ -1445,6 +1462,7 @@ namespace TheOtherRoles
             witchSpellButton = new CustomButton(
                 () => {
                     if (Witch.currentTarget != null) {
+                        if (Helpers.checkAndDoVetKill(Witch.currentTarget)) return;
                         Witch.spellCastingTarget = Witch.currentTarget;
                     }
                 },
@@ -1500,7 +1518,7 @@ namespace TheOtherRoles
                     if (Ninja.ninjaMarked != null) {
                         // Murder attempt with teleport
                         MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
-                        if (attempt == MurderAttemptResult.PerformKill) {
+                        if (attempt == MurderAttemptResult.PerformKill || attempt == MurderAttemptResult.ReverseKill) {
                             // Create first trace before killing
                             var pos = PlayerControl.LocalPlayer.transform.position;
                             byte[] buff = new byte[sizeof(float) * 2];
@@ -1517,18 +1535,19 @@ namespace TheOtherRoles
                             invisibleWriter.Write(byte.MinValue);
                             AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
                             RPCProcedure.setInvisible(Ninja.ninja.PlayerId, byte.MinValue);
+                            if (!Helpers.checkAndDoVetKill(Ninja.ninjaMarked)) {
 
-                            // Perform Kill
-                            MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
-                            writer2.Write(PlayerControl.LocalPlayer.PlayerId);
-                            writer2.Write(Ninja.ninjaMarked.PlayerId);
-                            writer2.Write(byte.MaxValue);
-                            AmongUsClient.Instance.FinishRpcImmediately(writer2);
-                            if (SubmergedCompatibility.IsSubmerged) {
-                                    SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
-                            }
-                            RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
-
+                                // Perform Kill
+                                MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                                writer2.Write(PlayerControl.LocalPlayer.PlayerId);
+                                writer2.Write(Ninja.ninjaMarked.PlayerId);
+                                writer2.Write(byte.MaxValue);
+                                AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                                if (SubmergedCompatibility.IsSubmerged) {
+                                        SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
+                                }
+                                RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
+    			    }
                             // Create Second trace after killing
                             pos = Ninja.ninjaMarked.transform.position;
                             buff = new byte[sizeof(float) * 2];
@@ -1551,6 +1570,7 @@ namespace TheOtherRoles
                         return;
                     } 
                     if (Ninja.currentTarget != null) {
+                        if (Helpers.checkAndDoVetKill(Ninja.currentTarget)) return;
                         Ninja.ninjaMarked = Ninja.currentTarget;
                         ninjaButton.Timer = 5f;
                     }
@@ -1575,6 +1595,7 @@ namespace TheOtherRoles
             blackmailerButton = new CustomButton(
                () => { // Action when Pressed
                   if (Blackmailer.currentTarget != null) {
+                    if (Helpers.checkAndDoVetKill(Blackmailer.currentTarget)) return;
 		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
                     writer.Write(Blackmailer.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);

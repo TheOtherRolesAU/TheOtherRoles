@@ -99,6 +99,7 @@ namespace TheOtherRoles
         TimeMasterShield,
         TimeMasterRewindTime,
         VeterenAlert,
+        VeterenKill,
 	ShifterShift,
         SwapperSwap,
         MorphlingMorph,
@@ -462,6 +463,13 @@ namespace TheOtherRoles
             })));
         }
 
+        public static void veterenKill(byte targetId) {
+	  if (PlayerControl.LocalPlayer == Veteren.veteren) {
+            PlayerControl player = Helpers.playerById(targetId);
+  	    Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
+          }
+        }
+
         public static void medicSetShielded(byte shieldedId) {
             Medic.usedShield = true;
             Medic.shielded = Helpers.playerById(shieldedId);
@@ -679,7 +687,7 @@ namespace TheOtherRoles
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
-            if (player == Veteren.timeMaster) Veteren.clearAndReload();
+            if (player == Veteren.veteren) Veteren.clearAndReload();
             if (player == Medic.medic) Medic.clearAndReload();
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
@@ -1114,6 +1122,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VeterenAlert:
                     RPCProcedure.veterenAlert();
+                    break;
+                case (byte)CustomRPC.VeterenKill:
+                    RPCProcedure.veterenKill(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.MedicSetShielded:
                     RPCProcedure.medicSetShielded(reader.ReadByte());
