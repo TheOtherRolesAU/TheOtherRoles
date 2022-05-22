@@ -404,6 +404,18 @@ namespace TheOtherRoles {
             return murder;            
         }
     
+
+	public static bool checkAndDoVetKill(PlayerControl target) {
+	  bool shouldVetKill = (Veteren.veteren == target && Veteren.alertActive);
+	  if (shouldVetKill) {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VeterenKill, Hazel.SendOption.Reliable, -1);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.veterenKill(PlayerControl.LocalPlayer.PlayerId);
+	  }
+	  return shouldVetKill;
+	}
+
         public static void shareGameVersion() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
             writer.Write((byte)TheOtherRolesPlugin.Version.Major);
