@@ -330,7 +330,12 @@ namespace TheOtherRoles
                         RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
                     }
                     if (murderAttemptResult == MurderAttemptResult.ReverseKill) {
-			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(target, Sheriff.sheriff);
+			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(Sheriff.currentTarget, Sheriff.sheriff);
+                    }
+
+                    if (murderAttemptResult == MurderAttemptResult.BothKill) {
+			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(Sheriff.currentTarget, Sheriff.sheriff);
+			MurderAttemptResult checkKill = Helpers.checkMuderAttemptAndKill(Sheriff.sheriff, Sheriff.currentTarget);
                     }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
