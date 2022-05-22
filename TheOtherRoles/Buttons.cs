@@ -1639,8 +1639,10 @@ namespace TheOtherRoles
             zoomOutButton = new CustomButton(
                 () => { Helpers.toggleZoom();
                 },
-                () => { if (PlayerControl.LocalPlayer == null || !PlayerControl.LocalPlayer.Data.IsDead) return false;
-                    return true;;
+                () => { if (PlayerControl.LocalPlayer == null || !PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.Data.Role.IsImpostor) return false;
+                    var (playerCompleted, playerTotal) = TasksHandler.taskInfo(PlayerControl.LocalPlayer.Data);
+                    int numberOfLeftTasks = playerTotal - playerCompleted;
+                    return numberOfLeftTasks <= 0;
                 },
                 () => { return true; },
                 () => { return; },
