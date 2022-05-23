@@ -132,6 +132,9 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         BlackmailPlayer,
+        UseAdminTime,
+        UseCameraTime,
+        UseVitalsTime,
         UnblackmailPlayer,
         SetBlanked,
         Bloody,
@@ -1284,6 +1287,22 @@ namespace TheOtherRoles
             }
         }
 
+        public static void useAdminTime(float time)
+        {
+            MapOptions.restrictAdminTime -= time;
+        }
+
+        public static void useCameraTime(float time)
+        {
+            MapOptions.restrictCamerasTime -= time;
+        }
+
+        public static void useVitalsTime(float time)
+        {
+            MapOptions.restrictVitalsTime -= time;
+        }
+
+
 	public static void blackmailPlayer(byte playerId) {
 	  PlayerControl target = Helpers.playerById(playerId);
 	  Blackmailer.blackmailed = target;
@@ -1405,6 +1424,15 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.UseAdminTime:
+                    RPCProcedure.useAdminTime(reader.ReadSingle());
+                    break;
+                case (byte)CustomRPC.UseCameraTime:
+                    RPCProcedure.useCameraTime(reader.ReadSingle());
+                    break;
+                case (byte)CustomRPC.UseVitalsTime:
+                    RPCProcedure.useVitalsTime(reader.ReadSingle());
                     break;
                 case (byte)CustomRPC.BlackmailPlayer:
                     RPCProcedure.blackmailPlayer(reader.ReadByte());

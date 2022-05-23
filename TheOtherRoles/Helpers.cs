@@ -187,6 +187,18 @@ namespace TheOtherRoles {
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
+        public static bool isDead(this PlayerControl player)
+        {
+            return player == null || player?.Data?.IsDead == true || player?.Data?.Disconnected == true;
+        }
+
+
+        public static bool isAlive(this PlayerControl player)
+        {
+            return !isDead(player);
+        }
+
+
         public static bool hasFakeTasks(this PlayerControl player) {
             return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }

@@ -17,6 +17,15 @@ namespace TheOtherRoles{
         public static bool showLighterDarker = true;
         public static bool toggleCursor = true;
 
+        public static int restrictDevices = 0;
+        public static float restrictAdminTime = 600f;
+        public static float restrictAdminTimeMax = 600f;
+        public static float restrictCamerasTime = 600f;
+        public static float restrictCamerasTimeMax = 600f;
+        public static float restrictVitalsTime = 600f;
+        public static float restrictVitalsTimeMax = 600f;
+
+
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
 
@@ -41,6 +50,11 @@ namespace TheOtherRoles{
             allowParallelMedBayScans = CustomOptionHolder.allowParallelMedBayScans.getBool();
             shieldFirstKill = CustomOptionHolder.shieldFirstKill.getBool();
             firstKillPlayer = null;
+            restrictDevices = CustomOptionHolder.restrictDevices.getSelection();
+            restrictAdminTime = restrictAdminTimeMax = CustomOptionHolder.restrictAdmin.getFloat();
+            restrictCamerasTime = restrictCamerasTimeMax = CustomOptionHolder.restrictCameras.getFloat();
+            restrictVitalsTime = restrictVitalsTimeMax = CustomOptionHolder.restrictVents.getFloat();
+
         }
 
         public static void reloadPluginOptions() {
@@ -55,5 +69,24 @@ namespace TheOtherRoles{
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
             Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }
+
+        public static void resetDeviceTimes() {
+            restrictAdminTime = restrictAdminTimeMax;
+            restrictCamerasTime = restrictCamerasTimeMax;
+            restrictVitalsTime = restrictVitalsTimeMax;
+        }
+
+        public static bool canUseAdmin  { get { return restrictDevices == 0 || restrictAdminTime > 0f; }}
+
+        public static bool couldUseAdmin { get { return restrictDevices == 0 || restrictAdminTimeMax > 0f; }}
+
+        public static bool canUseCameras {get { return restrictDevices == 0 || restrictCamerasTime > 0f; }}
+
+        public static bool couldUseCameras { get { return restrictDevices == 0 || restrictCamerasTimeMax > 0f; }}
+
+        public static bool canUseVitals { get { return restrictDevices == 0 || restrictVitalsTime > 0f; }}
+
+        public static bool couldUseVitals { get { return restrictDevices == 0 || restrictVitalsTimeMax > 0f; }}
+
     }
 }
