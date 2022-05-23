@@ -18,7 +18,7 @@ namespace TheOtherRoles
         public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
-	private static CustomButton amnisiasRememberButton;
+	private static CustomButton amnisiacRememberButton;
         private static CustomButton veterenAlertButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
