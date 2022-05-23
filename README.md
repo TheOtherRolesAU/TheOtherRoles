@@ -22,7 +22,7 @@ Even more roles are coming soon. :)
 | [Camouflager](#camouflager) | [Deputy](#deputy) | [Vulture](#vulture) | [Lovers](#lovers) |
 | [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
 | [Eraser](#eraser) | [Detective](#detective) | [Prosecutor](#prosecutor) | [Mini](#mini) |
-| [Trickster](#trickster) | [Time Master](#time-master) | | [VIP](#vip) |
+| [Trickster](#trickster) | [Time Master](#time-master) | [Amnesiac](#amnesiac) | [VIP](#vip) |
 | [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
 | [Warlock](#warlock) | [Swapper](#swapper) |
 | [Bounty Hunter](#bounty-hunter) | [Seer](#seer) |  |
@@ -1154,6 +1154,23 @@ If the taget disconnects: Prosecutor -> [Pursuer](#pursuer)\
 If the target is sidekicked: Prosecutor -> [Lawyer](#Lawyer) (Client: Target)\
 \
 The target of a Prosecutor cannot be the following: Impostor, [Jackal](#jackal), [Mayor](#mayor), [Sheriff](#sheriff), [Spy](#spy), [Swapper](#swapper), or a [Lover](#lovers)
+
+## Amnesiac
+### **Team: Neutral**
+The Amesiac has no win condition and cannot win the game as Amnesiac.\
+In order to gain a win condition, they must take a role from a dead body.\
+There are a few things to note about how the Amnesiacs role can change.\
+If the target is Bounty Hunter: Amnesiac -> Impostor (Red flash to signafy this)\
+If the taget is Arsonist: Red Flash; Arsonist cannot be taken\
+If the target body was on a team with Jackal or Impostor, that player will still be on that team.
+\
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Amnesiac Spawn Chance | -
+| Show arrows to dead bodies | If set to true, the Amnesiac will get arrows to dead bodies when they die.
+| Reset role when taken | If set to true, the role that is taken will be fully reset, allowing the abilities to be reused. Note: Weird stuff might happen with this setting off.
+-----------------------
 
 -----------------------
 
