@@ -1162,8 +1162,8 @@ In order to gain a win condition, they must take a role from a dead body.\
 There are a few things to note about how the Amnesiacs role can change.\
 If the target is Bounty Hunter: Amnesiac -> Impostor (Red flash to signafy this)\
 If the taget is Arsonist: Red Flash; Arsonist cannot be taken\
-If the target body was on a team with Jackal or Impostor, that player will still be on that team.
-\
+If the target body was on a team with Jackal or Impostor, that player will still be on that team.\
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
