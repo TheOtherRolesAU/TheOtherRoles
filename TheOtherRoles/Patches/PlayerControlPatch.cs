@@ -696,7 +696,7 @@ namespace TheOtherRoles.Patches {
 
         static void amnisiacUpdate() {
             if (Amnisiac.amnisiac == null || PlayerControl.LocalPlayer != Amnisiac.amnisiac || Amnisiac.localArrows == null || !Amnisiac.showArrows) return;
-            if (Amnisiac.amnisiacData.IsDead) {
+            if (Amnisiac.amnisiac.Data.IsDead) {
                 foreach (Arrow arrow in Amnisiac.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
                 Amnisiac.localArrows = new List<Arrow>();
                 return;
@@ -934,6 +934,8 @@ namespace TheOtherRoles.Patches {
                 bountyHunterUpdate();
                 // Vulture
                 vultureUpdate();
+		// Amnisiac
+		amnisiacUpdate();
                 // Medium
                 mediumSetTarget();
                 // Morphling and Camouflager
