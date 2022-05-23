@@ -469,14 +469,269 @@ namespace TheOtherRoles
             RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
             switch((RoleId)roleInfo.roleId) {
                 case RoleId.Jester:
-		    if (Amnisiac.resetRole) Jester.clearAndReload();
+                    if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
-		    Amnisiac.clearAndReload();
+                    Amnisiac.clearAndReload();
+		    Amnisiac.amnisiac = target;
                     break;
+
+                case RoleId.Prosecutor:
+                    if (Amnisiac.resetRole) Prosecutor.clearAndReload();
+                    Prosecutor.prosecutor = amnisiac;
+                    Amnisiac.clearAndReload();
+		    Amnisiac.amnisiac = target;
+                    break;
+
+                case RoleId.Mayor:
+                    if (Amnisiac.resetRole) Mayor.clearAndReload();
+                    Mayor.mayor = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Portalmaker:
+                    if (Amnisiac.resetRole) Portalmaker.clearAndReload();
+                    Portalmaker.portalmaker = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Engineer:
+                    if (Amnisiac.resetRole) Engineer.clearAndReload();
+                    Engineer.engineer = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Sheriff:
+		    // Never reload Sheriff
+                    if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = amnisiac; // Ensure amni gets handcuffs
+                    Sheriff.sheriff = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Deputy:
+                    if (Amnisiac.resetRole) Deputy.clearAndReload();
+                    Deputy.deputy = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Lighter:
+                    if (Amnisiac.resetRole) Lighter.clearAndReload();
+                    Lighter.lighter = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Godfather:
+                    if (Amnisiac.resetRole) Godfather.clearAndReload();
+                    Godfather.godfather = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Mafioso:
+                    if (Amnisiac.resetRole) Mafioso.clearAndReload();
+                    Mafioso.mafioso = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Janitor:
+                    if (Amnisiac.resetRole) Janitor.clearAndReload();
+                    Janitor.janitor = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Detective:
+                    if (Amnisiac.resetRole) Detective.clearAndReload();
+                    Detective.detective = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.TimeMaster:
+                    if (Amnisiac.resetRole) TimeMaster.clearAndReload();
+                    TimeMaster.timemaster = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Veteren:
+                    if (Amnisiac.resetRole) Veteren.clearAndReload();
+                    Veteren.veteren = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
                 case RoleId.Medic:
-		    if (Amnisiac.resetRole) Medic.clearAndReload();
+                    if (Amnisiac.resetRole) Medic.clearAndReload();
                     Medic.medic = amnisiac;
-		    Amnisiac.clearAndReload();
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Shifter:
+                    if (Amnisiac.resetRole) Shifter.clearAndReload();
+                    Shifter.shifter = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Swapper:
+                    if (Amnisiac.resetRole) Swapper.clearAndReload();
+                    Swapper.swapper = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Seer:
+                    if (Amnisiac.resetRole) Seer.clearAndReload();
+                    Seer.seer = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Morphling:
+                    if (Amnisiac.resetRole) Morphling.clearAndReload();
+                    Morphling.morphling = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Camouflager:
+                    if (Amnisiac.resetRole) Camouflager.clearAndReload();
+                    Camouflager.camouflager = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Hacker:
+                    if (Amnisiac.resetRole) Hacker.clearAndReload();
+                    Hacker.hacker = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Tracker:
+                    if (Amnisiac.resetRole) Tracker.clearAndReload();
+                    Tracker.tracker = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Vampire:
+                    if (Amnisiac.resetRole) Vampire.clearAndReload();
+                    Vampire.vampire = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Snitch:
+                    if (Amnisiac.resetRole) Snitch.clearAndReload();
+                    Snitch.snitch = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Jackal:
+                    Jackal.jackal = amnisiac;
+					Jackal.formerJackals.add(target);
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Sidekick:
+					Jackal.formerJackals.add(target);
+                    if (Amnisiac.resetRole) Sidekick.clearAndReload();
+                    Sidekick.sidekick = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Eraser:
+                    if (Amnisiac.resetRole) Eraser.clearAndReload();
+                    Eraser.eraser = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Spy:
+                    if (Amnisiac.resetRole) Spy.clearAndReload();
+                    Spy.spy = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Trickster:
+                    if (Amnisiac.resetRole) Trickster.clearAndReload();
+                    Trickster.trickster = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Cleaner:
+                    if (Amnisiac.resetRole) Cleaner.clearAndReload();
+                    Cleaner.cleaner = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Warlock:
+                    if (Amnisiac.resetRole) Warlock.clearAndReload();
+                    Warlock.warlock = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.SecurityGuard:
+                    if (Amnisiac.resetRole) SecurityGuard.clearAndReload();
+                    SecurityGuard.securityguard = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Arsonist:
+                    if (Amnisiac.resetRole) Arsonist.clearAndReload();
+                    Arsonist.arsonist = amnisiac;
+                    Amnisiac.clearAndReload();
+		    Amnisiac.amnisiac = target;
+                    break;
+
+                case RoleId.EvilGuesser:
+                    if (Amnisiac.resetRole) EvilGuesser.clearAndReload();
+                    EvilGuesser.evilguesser = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.NiceGuesser:
+                    if (Amnisiac.resetRole) NiceGuesser.clearAndReload();
+                    NiceGuesser.niceguesser = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.BountyHunter:
+                    if (Amnisiac.resetRole) BountyHunter.clearAndReload();
+                    BountyHunter.bountyhunter = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Vulture:
+                    if (Amnisiac.resetRole) Vulture.clearAndReload();
+                    Vulture.vulture = amnisiac;
+                    Amnisiac.clearAndReload();
+		    Amnisiac.amnisiac = target;
+                    break;
+
+                case RoleId.Medium:
+                    if (Amnisiac.resetRole) Medium.clearAndReload();
+                    Medium.medium = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Lawyer:
+                    // Never reset Lawyer
+                    Lawyer.lawyer = amnisiac;
+                    Amnisiac.clearAndReload();
+   		    Amnisiac.amnisiac = target;
+                    break;
+
+                case RoleId.Pursuer:
+                    if (Amnisiac.resetRole) Pursuer.clearAndReload();
+                    Pursuer.pursuer = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
+                    break;
+
+                case RoleId.Witch:
+                    if (Amnisiac.resetRole) Witch.clearAndReload();
+                    Witch.witch = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Ninja:
+                    if (Amnisiac.resetRole) Ninja.clearAndReload();
+                    Ninja.ninja = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+
+                case RoleId.Blackmailer:
+                    if (Amnisiac.resetRole) Blackmailer.clearAndReload();
+                    Blackmailer.blackmailer = amnisiac;
+                    Amnisiac.clearAndReload();
                     break;
 	    }
 	}
