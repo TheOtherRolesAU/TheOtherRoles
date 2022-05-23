@@ -407,7 +407,7 @@ namespace TheOtherRoles
         }
     }
 
-    public static class Amnisias {
+    public static class Amnisiac {
         public static PlayerControl amnisiac;
         public static List<Arrow> localArrows = new List<Arrow>();
         public static Color color = new Color(0.5f, 0.7f, 1f, 1f);
