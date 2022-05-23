@@ -55,6 +55,9 @@ namespace TheOtherRoles {
 		
 	public static CustomOption prosecutorSpawnRate;
 
+        public static CustomOption amnisiacSpawnRate;
+        public static CustomOption amnisiacShowArrows;
+        public static CustomOption amnisiacResetRole;
 
         public static CustomOption arsonistSpawnRate;
         public static CustomOption arsonistCooldown;
@@ -390,6 +393,10 @@ namespace TheOtherRoles {
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Prosecutor"),   rates, null, true);
+
+            amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, null, true);
+            amnisiacShowArrows = CustomOption.Create(617, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, true, true);
+            amnisiacResetRole = CustomOption.Create(617, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, false, true);
 
 
             arsonistSpawnRate = CustomOption.Create(290, Types.Neutral, cs(Arsonist.color, "Arsonist"), rates, null, true);

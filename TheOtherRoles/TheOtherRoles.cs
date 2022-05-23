@@ -21,6 +21,7 @@ namespace TheOtherRoles
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
             Deputy.clearAndReload();
+	    Amnisiac.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
@@ -403,6 +404,35 @@ namespace TheOtherRoles
             rewindTime = CustomOptionHolder.timeMasterRewindTime.getFloat();
             shieldDuration = CustomOptionHolder.timeMasterShieldDuration.getFloat();
             cooldown = CustomOptionHolder.timeMasterCooldown.getFloat();
+        }
+    }
+
+    public static class Amnisias {
+        public static PlayerControl amnisiac;
+        public static List<Arrow> localArrows = new List<Arrow>();
+        public static Color color = new Color(0.5f, 0.7f, 1f, 1f);
+
+        public static bool showArrows = true;
+        public static bool resetRole = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Remember.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            amnisiac = null;
+            showArrows = CustomOptionHolder.amnisiacShowArrows.getBool();
+            resetRole = CustomOptionHolder.amnisiacResetRole.getBool();
+            cooldown = CustomOptionHolder.veterenCooldown.getFloat();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localArrows = new List<Arrow>();
         }
     }
 

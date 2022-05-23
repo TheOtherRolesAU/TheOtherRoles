@@ -694,6 +694,33 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void amnisiacUpdate() {
+            if (Amnisiac.amnisiac == null || PlayerControl.LocalPlayer != Amnisiac.amnisiac || Amnisiac.localArrows == null || !Amnisiac.showArrows) return;
+            if (Amnisiac.amnisiacData.IsDead) {
+                foreach (Arrow arrow in Amnisiac.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Amnisiac.localArrows = new List<Arrow>();
+                return;
+            }
+
+            DeadBody[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            bool arrowUpdate = Amnisiac.localArrows.Count != deadBodies.Count();
+            int index = 0;
+
+            if (arrowUpdate) {
+                foreach (Arrow arrow in Amnisiac.localArrows) UnityEngine.Object.Destroy(arrow.arrow);
+                Amnisiac.localArrows = new List<Arrow>();
+            }
+
+            foreach (DeadBody db in deadBodies) {
+                if (arrowUpdate) {
+                    Amnisiac.localArrows.Add(new Arrow(Color.blue));
+                    Amnisiac.localArrows[index].arrow.SetActive(true);
+                }
+                if (Amnisiac.localArrows[index] != null) Amnisiac.localArrows[index].Update(db.transform.position);
+                index++;
+            }
+        }
+
         public static void mediumSetTarget() {
             if (Medium.medium == null || Medium.medium != PlayerControl.LocalPlayer || Medium.medium.Data.IsDead || Medium.deadBodies == null || MapUtilities.CachedShipStatus?.AllVents == null) return;
 

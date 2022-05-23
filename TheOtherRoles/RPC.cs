@@ -29,6 +29,7 @@ namespace TheOtherRoles
         Detective,
         TimeMaster,
 	Veteren,
+	Amnisiac,
         Medic,
         Shifter,
         Swapper,
@@ -118,6 +119,7 @@ namespace TheOtherRoles
         SetFutureSpelled,
         PlaceNinjaTrace,
         PlacePortal,
+	AmnisiacTakeRole,
         UsePortal,
         PlaceJackInTheBox,
         LightsOut,
@@ -228,6 +230,12 @@ namespace TheOtherRoles
                         break;
                     case RoleId.TimeMaster:
                         TimeMaster.timeMaster = player;
+                        break;
+                    case RoleId.TimeMaster:
+                        TimeMaster.timeMaster = player;
+                        break;
+                    case RoleId.Amnisiac:
+                        Amnisiac.amnisiac = player;
                         break;
                     case RoleId.Veteren:
                         Veteren.veteren = player;
@@ -456,6 +464,26 @@ namespace TheOtherRoles
             })));
         }
 
+	public static void amnisiacTakeRole(byte targetId) {
+	    PlayerControl target = Helpers.playerById(targetId);
+	    PlayerControl amnisiac = Amnisiac.amnisiac;
+            if (player == null || oldShifter == null) return;
+            List<RoleInfo> targetInfo = RoleInfo.getRoleInfoForPlayer(target);
+            RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
+            switch((RoleId)roleInfo.roleId) {
+                case RoleId.Jester:
+		    if (Amnisias.resetRole) Jester.clearAndReload();
+                    Jester.jester = amnisiac;
+		    Amnisiac.clearAndReload();
+                    break;
+                case RoleId.Medic:
+		    if (Amnisiac.resetRole) Medic.clearAndReload();
+                    Medic.medic = amnisiac;
+		    Amnisiac.clearAndReload();
+                    break;
+	    }
+	}
+
         public static void veterenAlert() {
             Veteren.alertActive = true;
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Veteren.alertDuration, new Action<float>((p) => {
@@ -536,6 +564,8 @@ namespace TheOtherRoles
                 Detective.detective = oldShifter;
             if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == player)
                 TimeMaster.timeMaster = oldShifter;
+            if (Amnisiac.amnisiac != null && Amnisiac.amnisiac == player)
+                Amnisiac.amnisiac = oldShifter;
             if (Veteren.veteren != null && Veteren.veteren == player)
                 Veteren.veteren = oldShifter;
             if (Medic.medic != null && Medic.medic == player)
@@ -687,6 +717,7 @@ namespace TheOtherRoles
             if (player == Lighter.lighter) Lighter.clearAndReload();
             if (player == Detective.detective) Detective.clearAndReload();
             if (player == TimeMaster.timeMaster) TimeMaster.clearAndReload();
+            if (player == Amnisiac.amnisiac) Amnisiac.clearAndReload();
             if (player == Veteren.veteren) Veteren.clearAndReload();
             if (player == Medic.medic) Medic.clearAndReload();
             if (player == Shifter.shifter) Shifter.clearAndReload();
@@ -1119,6 +1150,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TimeMasterShield:
                     RPCProcedure.timeMasterShield();
+                    break;
+                case (byte)CustomRPC.AmnisiacTakeRole:
+                    RPCProcedure.AmnisiacTakeRole(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.VeterenAlert:
                     RPCProcedure.veterenAlert();
