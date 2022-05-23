@@ -545,7 +545,7 @@ namespace TheOtherRoles
 
                 case RoleId.TimeMaster:
                     if (Amnisiac.resetRole) TimeMaster.clearAndReload();
-                    TimeMaster.timemaster = amnisiac;
+                    TimeMaster.timeMaster = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
@@ -617,12 +617,12 @@ namespace TheOtherRoles
 
                 case RoleId.Jackal:
                     Jackal.jackal = amnisiac;
-					Jackal.formerJackals.add(target);
+		    Jackal.formerJackals.Add(target);
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Sidekick:
-					Jackal.formerJackals.add(target);
+		    Jackal.formerJackals.Add(target);
                     if (Amnisiac.resetRole) Sidekick.clearAndReload();
                     Sidekick.sidekick = amnisiac;
                     Amnisiac.clearAndReload();
@@ -660,7 +660,7 @@ namespace TheOtherRoles
 
                 case RoleId.SecurityGuard:
                     if (Amnisiac.resetRole) SecurityGuard.clearAndReload();
-                    SecurityGuard.securityguard = amnisiac;
+                    SecurityGuard.securityGuard = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
@@ -672,20 +672,20 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.EvilGuesser:
-                    if (Amnisiac.resetRole) EvilGuesser.clearAndReload();
-                    EvilGuesser.evilguesser = amnisiac;
+		    // Never Reload Guesser
+                    Guesser.evilGuesser = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.NiceGuesser:
-                    if (Amnisiac.resetRole) NiceGuesser.clearAndReload();
-                    NiceGuesser.niceguesser = amnisiac;
+		    // Never Reload Guesser
+                    Guesser.niceGuesser = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.BountyHunter:
                     if (Amnisiac.resetRole) BountyHunter.clearAndReload();
-                    BountyHunter.bountyhunter = amnisiac;
+                    BountyHunter.bountyHunter = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
