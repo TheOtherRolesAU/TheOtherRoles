@@ -26,8 +26,8 @@ namespace TheOtherRoles
         private static CustomButton portalmakerPlacePortalButton;
         private static CustomButton usePortalButton;
         private static CustomButton hackerButton;
-        private static CustomButton hackerVitalsButton;
-        private static CustomButton hackerAdminTableButton;
+        public static CustomButton hackerVitalsButton;
+        public static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
         public static CustomButton vampireKillButton;
