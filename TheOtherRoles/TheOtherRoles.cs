@@ -411,6 +411,7 @@ namespace TheOtherRoles
         public static PlayerControl amnisiac;
         public static List<Arrow> localArrows = new List<Arrow>();
         public static Color color = new Color(0.5f, 0.7f, 1f, 1f);
+        public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
 
         public static bool showArrows = true;
         public static bool resetRole = false;
@@ -1233,6 +1234,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
+	public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {

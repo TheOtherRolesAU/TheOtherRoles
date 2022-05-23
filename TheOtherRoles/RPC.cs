@@ -476,7 +476,7 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Prosecutor:
-                    if (Amnisiac.resetRole) Prosecutor.clearAndReload();
+		    // Never reload Prosecutor
                     Prosecutor.prosecutor = amnisiac;
                     Amnisiac.clearAndReload();
 		    Amnisiac.amnisiac = target;
@@ -520,18 +520,21 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Godfather:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Godfather.clearAndReload();
                     Godfather.godfather = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Mafioso:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Mafioso.clearAndReload();
                     Mafioso.mafioso = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Janitor:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Janitor.clearAndReload();
                     Janitor.janitor = amnisiac;
                     Amnisiac.clearAndReload();
@@ -580,12 +583,14 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Morphling:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Morphling.clearAndReload();
                     Morphling.morphling = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Camouflager:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Camouflager.clearAndReload();
                     Camouflager.camouflager = amnisiac;
                     Amnisiac.clearAndReload();
@@ -604,6 +609,7 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Vampire:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Vampire.clearAndReload();
                     Vampire.vampire = amnisiac;
                     Amnisiac.clearAndReload();
@@ -629,6 +635,7 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Eraser:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Eraser.clearAndReload();
                     Eraser.eraser = amnisiac;
                     Amnisiac.clearAndReload();
@@ -641,18 +648,21 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Trickster:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Trickster.clearAndReload();
                     Trickster.trickster = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Cleaner:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Cleaner.clearAndReload();
                     Cleaner.cleaner = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Warlock:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Warlock.clearAndReload();
                     Warlock.warlock = amnisiac;
                     Amnisiac.clearAndReload();
@@ -665,13 +675,13 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Arsonist:
-                    if (Amnisiac.resetRole) Arsonist.clearAndReload();
-                    Arsonist.arsonist = amnisiac;
-                    Amnisiac.clearAndReload();
-		    Amnisiac.amnisiac = target;
+                    if (PlayerControl.LocalPlayer == Amnisiac.amnisiac) {
+                       Helpers.showFlash(Palette.ImpostorRed, duration: 1f);
+                    }
                     break;
 
                 case RoleId.EvilGuesser:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
 		    // Never Reload Guesser
                     Guesser.evilGuesser = amnisiac;
                     Amnisiac.clearAndReload();
@@ -684,8 +694,10 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.BountyHunter:
-                    if (Amnisiac.resetRole) BountyHunter.clearAndReload();
-                    BountyHunter.bountyHunter = amnisiac;
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (PlayerControl.LocalPlayer == Amnisiac.amnisiac) {
+                       Helpers.showFlash(Palette.ImpostorRed, duration: 1f);
+                    }
                     Amnisiac.clearAndReload();
                     break;
 
@@ -717,18 +729,21 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Witch:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Witch.clearAndReload();
                     Witch.witch = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Ninja:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Ninja.clearAndReload();
                     Ninja.ninja = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Blackmailer:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Blackmailer.clearAndReload();
                     Blackmailer.blackmailer = amnisiac;
                     Amnisiac.clearAndReload();

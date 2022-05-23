@@ -667,6 +667,15 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+	static void arsonistUpdate() {
+	    if (Arsonist.arsonist == null || PlayerControl.LocalPlayer != Arsonist.arsonist) return;
+            foreach (PlayerControl p in Arsonist.dousedPlayers) {
+                if (MapOptions.playerIcons.ContainsKey(p.PlayerId)) {
+                    MapOptions.playerIcons[p.PlayerId].setSemiTransparent(false);
+                }
+            }
+        }
+
         static void vultureUpdate() {
             if (Vulture.vulture == null || PlayerControl.LocalPlayer != Vulture.vulture || Vulture.localArrows == null || !Vulture.showArrows) return;
             if (Vulture.vulture.Data.IsDead) {
@@ -932,7 +941,9 @@ namespace TheOtherRoles.Patches {
                 snitchUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
-                // Vulture
+                // Arsonist
+		arsonistUpdate();
+		// Vulture
                 vultureUpdate();
 		// Amnisiac
 		amnisiacUpdate();
