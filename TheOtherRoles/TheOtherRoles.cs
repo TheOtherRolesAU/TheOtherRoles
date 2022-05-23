@@ -426,7 +426,6 @@ namespace TheOtherRoles
             amnisiac = null;
             showArrows = CustomOptionHolder.amnisiacShowArrows.getBool();
             resetRole = CustomOptionHolder.amnisiacResetRole.getBool();
-            cooldown = CustomOptionHolder.veterenCooldown.getFloat();
             if (localArrows != null) {
                 foreach (Arrow arrow in localArrows)
                     if (arrow?.arrow != null)
