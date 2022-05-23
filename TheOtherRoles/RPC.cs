@@ -464,7 +464,7 @@ namespace TheOtherRoles
 	public static void amnisiacTakeRole(byte targetId) {
 	    PlayerControl target = Helpers.playerById(targetId);
 	    PlayerControl amnisiac = Amnisiac.amnisiac;
-            if (player == null || oldShifter == null) return;
+            if (target == null || amnisiac == null) return;
             List<RoleInfo> targetInfo = RoleInfo.getRoleInfoForPlayer(target);
             RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
             switch((RoleId)roleInfo.roleId) {
