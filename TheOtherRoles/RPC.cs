@@ -1152,7 +1152,7 @@ namespace TheOtherRoles
                     RPCProcedure.timeMasterShield();
                     break;
                 case (byte)CustomRPC.AmnisiacTakeRole:
-                    RPCProcedure.AmnisiacTakeRole(reader.ReadByte());
+                    RPCProcedure.amnisiacTakeRole(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.VeterenAlert:
                     RPCProcedure.veterenAlert();
