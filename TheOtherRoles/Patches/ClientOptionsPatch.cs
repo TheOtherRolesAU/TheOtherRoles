@@ -2,9 +2,9 @@ using HarmonyLib;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 
@@ -21,6 +21,8 @@ namespace TheOtherRoles.Patches
             new SelectionBehaviour("Ghosts Can Additionally See Modifier", () => MapOptions.ghostsSeeModifier = TheOtherRolesPlugin.GhostsSeeModifier.Value = !TheOtherRolesPlugin.GhostsSeeModifier.Value, TheOtherRolesPlugin.GhostsSeeModifier.Value),
             new SelectionBehaviour("Show Role Summary", () => MapOptions.showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value = !TheOtherRolesPlugin.ShowRoleSummary.Value, TheOtherRolesPlugin.ShowRoleSummary.Value),
             new SelectionBehaviour("Show Lighter / Darker", () => MapOptions.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
+            new SelectionBehaviour("Better Cursor", () => MapOptions.toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value = !TheOtherRolesPlugin.ToggleCursor.Value, TheOtherRolesPlugin.ToggleCursor.Value),
+
         };
         
         private static GameObject popUp;
@@ -110,9 +112,9 @@ namespace TheOtherRoles.Patches
             {
                 if (!popUp) return;
 
-                if (__instance.transform.parent && __instance.transform.parent == HudManager.Instance.transform)
+                if (__instance.transform.parent && __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
                 {
-                    popUp.transform.SetParent(HudManager.Instance.transform);
+                    popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                     popUp.transform.localPosition = new Vector3(0, 0, -800f);
                 }
                 else
@@ -180,6 +182,9 @@ namespace TheOtherRoles.Patches
 
                 passiveButton.OnClick.AddListener((Action) (() =>
                 {
+                    if(info.Title == "Better Cursor") {
+                        Helpers.enableCursor(false);                  
+                    }
                     button.onState = info.OnClick();
                     button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
                 }));

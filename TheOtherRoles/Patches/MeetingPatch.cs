@@ -2,15 +2,12 @@ using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
-using UnhollowerBaseLib;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.MapOptions;
 using TheOtherRoles.Objects;
-using System.Collections;
 using System;
-using System.Text;
+using TheOtherRoles.Utilities;
 using UnityEngine;
-using System.Reflection;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -22,6 +19,12 @@ namespace TheOtherRoles.Patches {
         private static TMPro.TextMeshPro swapperChargesText;
         private static PassiveButton[] swapperButtonList;
         private static TMPro.TextMeshPro swapperConfirmButtonLabel;
+        public static bool shookAlready = false;
+        public static Sprite PrevXMark = null;
+        public static Sprite PrevOverlay = null;
+        public const float LetterXOffset = 0.22f;
+        public const float LetterYOffset = -0.32f;
+
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
         class MeetingCalculateVotesPatch {
@@ -156,7 +159,7 @@ namespace TheOtherRoles.Patches {
                 }
 
 
-                __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
+                __instance.TitleText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = 0;
                 for (int i = 0; i < __instance.playerStates.Length; i++) {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -298,7 +301,7 @@ namespace TheOtherRoles.Patches {
             exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
             exitButtonParent.transform.localScale = new Vector3(0.217f, 0.9f, 1);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
                 __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
@@ -321,7 +324,7 @@ namespace TheOtherRoles.Patches {
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate, buttonParent);
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
-                button.GetComponent<SpriteRenderer>().sprite = DestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+                button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
                 buttons.Add(button);
                 int row = i/5, col = i%5;
                 buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
@@ -333,7 +336,7 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                if (!PlayerControl.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
+                if (!PlayerControl.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
                     if (selectedButton != button) {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
@@ -413,7 +416,7 @@ namespace TheOtherRoles.Patches {
                     swapperButtonList[i] = button;
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
-                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperOnClick(copiedIndex, __instance)));
+                    button.OnClick.AddListener((System.Action)(() => swapperOnClick(copiedIndex, __instance)));
                     
                     selections[i] = false;
                     renderers[i] = renderer;
@@ -438,7 +441,7 @@ namespace TheOtherRoles.Patches {
 
                 Transform confirmSwapButtonMask = UnityEngine.Object.Instantiate(maskTemplate, confirmSwapButtonParent);
                 swapperConfirmButtonLabel = UnityEngine.Object.Instantiate(textTemplate, confirmSwapButton);
-                confirmSwapButton.GetComponent<SpriteRenderer>().sprite = DestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+                confirmSwapButton.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
                 confirmSwapButtonParent.localPosition = new Vector3(0, -2.225f, -5);
                 confirmSwapButtonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 swapperConfirmButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
@@ -448,7 +451,7 @@ namespace TheOtherRoles.Patches {
 
                 PassiveButton passiveButton = confirmSwapButton.GetComponent<PassiveButton>();
                 passiveButton.OnClick.RemoveAllListeners();               
-                if (!PlayerControl.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => swapperConfirm(__instance)));
+                if (!PlayerControl.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
                 confirmSwapButton.parent.gameObject.SetActive(false);
                 __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) => { // Button appears delayed, so that its visible in the voting screen only!
                     if (p == 1f) {
@@ -492,7 +495,7 @@ namespace TheOtherRoles.Patches {
                     PassiveButton button = targetBox.GetComponent<PassiveButton>();
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
-                    button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => guesserOnClick(copiedIndex, __instance)));
+                    button.OnClick.AddListener((System.Action)(() => guesserOnClick(copiedIndex, __instance)));
                 }
             }
         }
@@ -539,22 +542,66 @@ namespace TheOtherRoles.Patches {
                         float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
                         string msg = Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting}s ago: " : "";
                         msg = msg + $"{entry.name} used the teleporter";
-                        DestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
+                        FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(PlayerControl.LocalPlayer, $"{msg}");
                     }
                 }
 
                 // Remove first kill shield
                 MapOptions.firstKillPlayer = null;
+
+
+                // Reset zoomed out ghosts
+                Helpers.toggleZoom(reset: true);
             }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
         class MeetingHudUpdatePatch {
+	    public static Sprite Overlay => Blackmailer.getBlackmailOverlaySprite();
             static void Postfix(MeetingHud __instance) {
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
+
+		if (Blackmailer.blackmailer != null ) {
+			// Blackmailer show overlay
+			var playerState = __instance.playerStates.FirstOrDefault(x => x.TargetPlayerId == Blackmailer.blackmailed.PlayerId);
+			playerState.Overlay.gameObject.SetActive(true);
+			playerState.Overlay.sprite = Overlay;
+                        if (__instance.state != MeetingHud.VoteStates.Animating && shookAlready == false) {
+                            shookAlready = true;
+                            (__instance as MonoBehaviour).StartCoroutine(Effects.SwayX(playerState.transform));
+                        }
+		}
             }
         }
+
+        [HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
+        public class BlockChatBlackmailed {
+            public static bool Prefix(TextBoxTMP __instance) {
+		if (Blackmailer.blackmailer != null) {
+		  if (Blackmailer.blackmailed != null) {
+		    if (Blackmailer.blackmailed == PlayerControl.LocalPlayer) {
+                      return false;
+  		    }
+		    return true;
+		  }
+		}
+                return true;
+            }
+        }
+
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
+    public class MeetingHudStart {
+	public static Sprite Letter => Blackmailer.getBlackmailOverlaySprite();
+	public static void Postfix(MeetingHud __instance) {
+		shookAlready = false;
+		if (Blackmailer.blackmailed.Data.PlayerId == PlayerControl.LocalPlayer.PlayerId && !Blackmailer.blackmailed.Data.IsDead) {
+			  // Nothing here for now. What to do when local player who is blackmailed starts meeting
+			  //Coroutines.Start(BlackmailShhh());
+		}
+	}
     }
+  }
 }

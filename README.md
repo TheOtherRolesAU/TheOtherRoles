@@ -22,7 +22,7 @@ Even more roles are coming soon. :)
 | [Camouflager](#camouflager) | [Deputy](#deputy) | [Vulture](#vulture) | [Lovers](#lovers) |
 | [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
 | [Eraser](#eraser) | [Detective](#detective) | [Prosecutor](#prosecutor) | [Mini](#mini) |
-| [Trickster](#trickster) | [Time Master](#time-master) | | [VIP](#vip) |
+| [Trickster](#trickster) | [Time Master](#time-master) | [Amnesiac](#amnesiac) | [VIP](#vip) |
 | [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
 | [Warlock](#warlock) | [Swapper](#swapper) |
 | [Bounty Hunter](#bounty-hunter) | [Seer](#seer) |  |
@@ -40,7 +40,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2022.3.29| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
+| 2022.3.29| v4.1.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.3/TheOtherRoles.zip)
+| 2022.3.29| v4.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.2/TheOtherRoles.zip)
+| 2022.3.29| v4.1.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.1/TheOtherRoles.zip)
+| 2022.3.29| v4.1.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.0/TheOtherRoles.zip)
+| 2022.3.29s| v4.0.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.0.0/TheOtherRoles.zip)
 | 2022.3.29s| v3.4.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.5/TheOtherRoles.zip)
 | 2022.2.23s| v3.4.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.4/TheOtherRoles.zip)
 | 2021.12.15s| v3.4.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v3.4.3/TheOtherRoles.zip)
@@ -101,6 +105,36 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
 
+**Version 4.1.3**
+- Fixed morphling's being morphed during meetings
+- Fixed hide player names hiding the player's name during meetings
+- Added an option to the mayor: "Number Of Remote Meetings", so that the amount of mobile meetings is limited.
+
+**Version 4.1.2**
+- Made some general performance fixes. Special thanks to [probablyadnf](https://github.com/simonkellly)
+- Added an option to the ninja to get invisible after kill for x-seconds
+- Added a zoom out/overview function if you're dead and done with tasks
+- Added the sampled player to the morphling button
+- Fixed a bug where footsteps of the Detective and certain other game objects were visible in the fog of war
+- Fixed lawyer being exiled when their client is guessed in a meeting
+- Fixed multiple mod icons being shown when Submerged is loaded
+
+
+**Version 4.1.1**
+- Fixed a bug where the download submerged button did not work
+- Fixed a bug where the medium revealed a evil mini
+- Fixed a bug where the teleporter teleported while meeting is called
+- Fixed a bug where buttons appeared in meeting
+- Fixed the Popup  
+- Fixed some ui bugs  
+  
+**Version 4.1.0**
+- Added support for the Submerged map (https://github.com/SubmergedAmongUs/Submerged), which can be downloaded ingame with the Update button. If there is also a mod update, it will be prioritized
+- Added an option to give the Mayor a portable Meeting Button
+- Fixed a bug where the Lawyer didn't die with their client when voted out
+- Removed Lawyer option "Wins after Meetings"
+- Changed Medium question if the killer of a body is the Mini, the medium can now randomly ask the role question
+  
 **Version 4.0.0**
 - Added new role [Ninja](#ninja) thanks [gendelo3](https://github.com/gendelo3)
 - Added new role [Portalmaker](#portalmaker) thanks [gendelo3](https://github.com/gendelo3)
@@ -627,8 +661,10 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Play On A Random Map** If enabled it allows you to set a rotation of all current maps, except ehT dlekS 
 - **Ghosts Can See Roles**
 - **Ghosts Can See Votes**
+- **Ghosts Can Additionally See Modifier**
 - **Ghosts Can See The Number Of Remaining Tasks**
 - **The map is accessable during a meeting and will show your last location when a body gets reported/meeting gets called**
+- **When you're a ghost and done with tasks, you'll get a zoom out/overview function**
 - **Task Counts:** You are now able to select more tasks.
 - **Role Summary:** When a game ends there will be a list of all players and their roles and their task progress
 - **Darker/Lighter:** Displays color type of each player in meetings
@@ -685,8 +721,6 @@ Here are a few instructions, on how to create a custom hat:
 # Roles
 
 ## Role Assignment
-We are still improving the role assignment system. It's not that intuitive right now, but it's more flexible than the older one
-if you're using it right.
 
 First you need to choose how many special roles of each kind (Impostor/Neutral/Crewmate) you want in the game.
 The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
@@ -910,6 +944,7 @@ The Ninja is an Impostor who has the ability to kill another player all over the
 You can mark a player with your ability and by using the ability again, you jump to the position of the marked player and kill it.\
 Depending on the options you know where your marked player is.\
 If the Ninja uses its ability, it will leave a trace (leaves) for a configurable amount of time where it activated the ability and additionally where it killed the before marked player.\
+When performing a ninja ability kill, the ninja can be invisible for some seconds (depends on options)\
 \
 **NOTE:**
 - The Ninja has a 5 second cooldown after marking a player
@@ -917,6 +952,7 @@ If the Ninja uses its ability, it will leave a trace (leaves) for a configurable
 - The mark on the marked player will reset after a meeting or after using the ability to kill the marked player. Performing a normal kill will **NOT** reset the mark
 - If the Ninja tries to kill a shielded player (e.g. Medic shield, Shield last game first kill ), the kill will not be performed
 - If the Ninja tries to kill the Time Master while the shield is active, the Ninja won't teleport to the players position, but the Time Master shield will still be activated
+- If the marked target is on a different floor on Submerged, the arrow will always point to the elevator
 
 ### Game Options
 | Name | Description |
@@ -926,6 +962,7 @@ If the Ninja uses its ability, it will leave a trace (leaves) for a configurable
 | Ninja Knows Location Of Target | -
 | Trace Duration | -
 | Time Till Trace Color Has Faded | -
+| Time The Ninja Is Invisible | -
 -----------------------
 
 ## Guesser
@@ -1056,6 +1093,9 @@ The Vulture is a neutral role that must eat a specified number of corpses (depen
 Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.\
 If there is a Vulture in the game, there can't be a Cleaner.
 
+**NOTE**
+- If the corpse is on a different floor on Submerged, the arrow will always point to the elevator
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
@@ -1115,6 +1155,23 @@ If the target is sidekicked: Prosecutor -> [Lawyer](#Lawyer) (Client: Target)\
 \
 The target of a Prosecutor cannot be the following: Impostor, [Jackal](#jackal), [Mayor](#mayor), [Sheriff](#sheriff), [Spy](#spy), [Swapper](#swapper), or a [Lover](#lovers)
 
+## Amnesiac
+### **Team: Neutral**
+The Amesiac has no win condition and cannot win the game as Amnesiac.\
+In order to gain a win condition, they must take a role from a dead body.\
+There are a few things to note about how the Amnesiacs role can change.\
+If the target is Bounty Hunter: Amnesiac -> Impostor (Red flash to signafy this)\
+If the taget is Arsonist: Red Flash; Arsonist cannot be taken\
+If the target body was on a team with Jackal or Impostor, that player will still be on that team.
+\
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Amnesiac Spawn Chance | -
+| Show arrows to dead bodies | If set to true, the Amnesiac will get arrows to dead bodies when they die.
+| Reset role when taken | If set to true, the role that is taken will be fully reset, allowing the abilities to be reused. Note: Weird stuff might happen with this setting off.
+-----------------------
+
 -----------------------
 
 ## Shifter
@@ -1144,6 +1201,7 @@ can only use them, if the previous player did not use them before)
 ### **Team: Crewmates**
 The Mayor leads the Crewmates by having a vote that counts twice.\
 The Mayor can always use their meeting, even if the maximum number of meetings was reached.\
+The Mayor has a portable Meeting Button, depending on the options.\
 The Mayor can see the vote colors after completing a configurable amount of tasks, depending on the options.
 
 ### Game Options
@@ -1151,7 +1209,8 @@ The Mayor can see the vote colors after completing a configurable amount of task
 |----------|:-------------:|
 | Mayor Spawn Chance | -
 | Mayor Can See Vote Colors | -
-| Mayor Completed Tasks Needed To See Vote Colors | -
+| Completed Tasks Needed To See Vote Colors | -
+| Mobile Emergency Button | -
 -----------------------
 
 ## Engineer
@@ -1369,6 +1428,9 @@ An arrow points to the last tracked position of the player.\
 The arrow updates its position every few seconds (configurable).\
 Depending on the options, the Tracker has another ability: They can track all corpses on the map for a set amount of time. They will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
+**NOTE**
+- If the tracked player is on a different floor on Submerged, the arrow will always point to the elevator
+
 ### Game Options
 | Name | Description
 |----------|:-------------:|
@@ -1384,6 +1446,9 @@ Depending on the options, the Tracker has another ability: They can track all co
 ### **Team: Crewmates**
 When the Snitch finishes all the tasks, arrows will appear (only visible to the Snitch) that point to the Impostors (depending on the options also to members of team Jackal).\
 When the Snitch has one task left (configurable) the Snitch will be revealed to the Impostors (depending on the options also to members of team Jackal) with an arrow pointing to the Snitch.
+
+**NOTE**
+- If the Impostor(s)/Jackal(s) is/are on a different floor on Submerged when the Snitch finished their tasks, the arrow will always point to the elevator
 
 ### Game Options
 | Name | Description
@@ -1429,7 +1494,7 @@ Additionally to that, the Portalmaker gets information about who used the portal
 - While one player uses a portal, it is blocked for any other player until the player got teleported.
 - All ghosts can still use the portals, but won't block any living player from using it and the Portalmaker won't get any information about it in chat.
 - If a morphed person uses a portal it will show the morphed name/color depending on the options.
-- If a comouflaged person uses a portal it will show "A comouflaged person used the portal."
+- If a camouflaged person uses a portal it will show "A comouflaged person used the portal."
 
 ### Game Options
 | Name | Description
@@ -1480,7 +1545,7 @@ Questions:
 What is your Role?
 What is your killer's color type?
 When did you die?
-What is your killers role? (mini exluded)
+What is your killers role?
 
 ### Game Options
 | Name | Description
@@ -1493,6 +1558,7 @@ What is your killers role? (mini exluded)
 
 # Modifier
 A modifier is an addition to your Impostor/Neutral/Crewmate role.
+Some modifiers can be ingame more than once (Quantity option).
 
 ## Bloody
 ### Bloody
@@ -1535,6 +1601,9 @@ Everyone will know if the Tie Breaker was involved in the Meeting or not.
 
 The Bait forces the killer to self report the body (you can configure a delay in the options).\
 There can be more than one Bait.
+
+**NOTE:**
+- If the Sheriff has the Bait modifier and dies while trying to kill a Crewmate, the Sheriff will *NOT* report themself.
 
 ### Game Options
 | Name | Description
@@ -1650,7 +1719,6 @@ The Invert can affect all teams (Impostor, Neutral, Crewmate).
 -----------------------
 
 # Source code
-It's bad I know, this is a side project and my second week of modding. So there are no best practices around here.
 You can use parts of the code but don't copy paste the whole thing. Make sure you give credits to the other developers, because some parts of the code are based on theirs.
 
 # Bugs, suggestions and requests

@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using Il2CppSystem;
 using HarmonyLib;
-using UnhollowerBaseLib;
-using Assets.CoreScripts;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
     public class CustomColors {
@@ -57,50 +53,54 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(160, 101, 56, byte.MaxValue), 
                                         shadow = new Color32(115, 15, 78, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Peach",
-                                        color = new Color32(255, 164, 119, byte.MaxValue), 
-                                        shadow = new Color32(238, 128, 100, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "HazardCamo", // 25
+                                        color = new Color32(75, 83, 32, byte.MaxValue), 
+                                        shadow = new Color32(60, 66, 26, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Wasabi",
+            colors.Add(new CustomColor { longname = "Wasabi", // 26
                                         color = new Color32(112, 143, 46, byte.MaxValue), 
                                         shadow = new Color32(72, 92, 29, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Hot Pink",
+            colors.Add(new CustomColor { longname = "Hot Pink", // 27
                                         color = new Color32(255, 51, 102, byte.MaxValue), 
                                         shadow = new Color32(232, 0, 58, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Petrol", 
-                                        color = new Color32(0, 99, 105, byte.MaxValue), 
-                                        shadow = new Color32(0, 61, 54, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "DuckGreen",  // 28
+                                        color = new Color32(35, 107, 56, byte.MaxValue), 
+                                        shadow = new Color32(26, 28, 27, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Lemon",
+            colors.Add(new CustomColor { longname = "Lemon", // 29
                                         color = new Color32(0xDB, 0xFD, 0x2F, byte.MaxValue), 
                                         shadow = new Color32(0x74, 0xE5, 0x10, byte.MaxValue), 
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Signal Orange",
-                                        color = new Color32(0xF7, 0x44, 0x17, byte.MaxValue), 
-                                        shadow = new Color32(0x9B, 0x2E, 0x0F, byte.MaxValue),
-                                        isLighterColor = true });   
 
-            colors.Add(new CustomColor { longname = "Teal",
-                                        color = new Color32(0x25, 0xB8, 0xBF, byte.MaxValue), 
-                                        shadow = new Color32(0x12, 0x89, 0x86, byte.MaxValue),
-                                        isLighterColor = false });   
+	    // NEW COLORS START ON ID 30!!!!
+            colors.Add(new CustomColor { longname = "Panda", //30
+			                 color = new Color32(0xE5, 0xE5, 0xE5, byte.MaxValue),
+			                 shadow = new Color32(0x0C, 0x0C, 0x0C, byte.MaxValue),
+			                 isLighterColor = true });
 
-            colors.Add(new CustomColor { longname = "Blurple",
-                                        color = new Color32(0x59, 0x3C, 0xD6, byte.MaxValue), 
-                                        shadow = new Color32(0x29, 0x17, 0x96, byte.MaxValue),
-                                        isLighterColor = false });   
+            colors.Add(new CustomColor { longname = "True dark", //31
+ 			                 color = new Color32(0x00, 0x00, 0x00, byte.MaxValue),
+  			                 shadow = new Color32(0x13, 0x13, 0x13, byte.MaxValue),
+			                 isLighterColor = false });
 
-            colors.Add(new CustomColor { longname = "Sunrise", 
-                                        color = new Color32(0xFF, 0xCA, 0x19, byte.MaxValue), 
-                                        shadow = new Color32(0xDB, 0x44, 0x42, byte.MaxValue),
-                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "LJBlue", //32
+ 			                 color = new Color32(48, 213, 200, byte.MaxValue),
+  			                 shadow = new Color32(0, 0, 139, byte.MaxValue),
+			                 isLighterColor = true });
 
-            colors.Add(new CustomColor { longname = "Ice",
-                                        color = new Color32(0xA8, 0xDF, 0xFF, byte.MaxValue), 
-                                        shadow = new Color32(0x59, 0x9F, 0xC8, byte.MaxValue),
-                                        isLighterColor = true });     
+            colors.Add(new CustomColor { longname = "ScoomRed", //33
+ 			                 color = new Color32(59, 5, 5, byte.MaxValue),
+  			                 shadow = new Color32(0, 0, 0, byte.MaxValue),
+			                 isLighterColor = false });
+
+            colors.Add(new CustomColor { longname = "SvettyBlue", //34
+ 			                 color = new Color32(19, 54, 82, byte.MaxValue),
+  			                 shadow = new Color32(9, 34, 56, byte.MaxValue),
+			                 isLighterColor = false });
+
+
 
             pickableColors += (uint)colors.Count; // Colors to show in Tab
             /** Hidden Colors **/     
@@ -186,7 +186,7 @@ namespace TheOtherRoles.Modules {
             [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
             private static class PlayerControlCheckColorPatch {
                 private static bool isTaken(PlayerControl player, uint color) {
-                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers)
+                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers.GetFastEnumerator())
                         if (!p.Disconnected && p.PlayerId != player.PlayerId && p.DefaultOutfit.ColorId == color)
                             return true;
                     return false;

@@ -1,27 +1,22 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TheOtherRoles.Utilities;
 using UnityEngine;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
     public static class CredentialsPatch {
         public static string fullCredentials = 
-$@"<size=130%><color=#ff351f>TheOtherRoles</color></size> v{TheOtherRolesPlugin.Version.ToString()}
-<size=60%>Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>EndOfFile</color>
-<color=#FCCE03FF>Thunderstorm584</color> & <color=#FCCE03FF>Mallöris</color>
-Design by <color=#FCCE03FF>Bavari</color></size>";
+$@"<size=130%><color=#ff351f>TheOtherRoles Community Edition</color></size> v{TheOtherRolesPlugin.Version.ToString()}
+<size=60%>
+Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";
 
     public static string mainMenuCredentials = 
-$@"Modded by <color=#FCCE03FF>Eisbison</color>, <color=#FCCE03FF>Thunderstorm584</color>, <color=#FCCE03FF>EndOfFile</color> & <color=#FCCE03FF>Mallöris</color>
-Design by <color=#FCCE03FF>Bavari</color>";
+$@"Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";
 
         public static string contributorsCredentials =
 $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color> 
-GitHub Contributors: Gendelo3, Alex2911, amsyarasyiq, MaximeGillot, Psynomit</size>";
+GitHub Contributors: Gendelo, Alex2911, amsyarasyiq, MaximeGillot, Psynomit, probablyadnf</size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch
@@ -41,9 +36,9 @@ GitHub Contributors: Gendelo3, Alex2911, amsyarasyiq, MaximeGillot, Psynomit</si
         }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
-        private static class PingTrackerPatch
+        internal static class PingTrackerPatch
         {
-            private static GameObject modStamp;
+            public static GameObject modStamp;
             static void Prefix(PingTracker __instance) {
                 if (modStamp == null) {
                     modStamp = new GameObject("ModStamp");
@@ -54,7 +49,7 @@ GitHub Contributors: Gendelo3, Alex2911, amsyarasyiq, MaximeGillot, Psynomit</si
                     modStamp.transform.localScale *= 0.6f;
                 }
                 float offset = (AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started) ? 0.75f : 0f;
-                modStamp.transform.position = HudManager.Instance.MapButton.transform.position + Vector3.down * offset;
+                modStamp.transform.position = FastDestroyableSingleton<HudManager>.Instance.MapButton.transform.position + Vector3.down * offset;
             }
 
             static void Postfix(PingTracker __instance){

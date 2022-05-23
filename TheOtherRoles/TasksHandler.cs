@@ -1,8 +1,6 @@
 using HarmonyLib;
-using static TheOtherRoles.TheOtherRoles;
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
     [HarmonyPatch]
@@ -13,16 +11,13 @@ namespace TheOtherRoles {
             int CompletedTasks = 0;
             if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
                 playerInfo.Object &&
-                (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks()
                 ) {
-
-                for (int j = 0; j < playerInfo.Tasks.Count; j++) {
+                foreach (var playerInfoTask in playerInfo.Tasks.GetFastEnumerator())
+                {
+                    if (playerInfoTask.Complete) CompletedTasks++;
                     TotalTasks++;
-                    if (playerInfo.Tasks[j].Complete) {
-                        CompletedTasks++;
-                    }
                 }
             }
             return Tuple.Create(CompletedTasks, TotalTasks);
@@ -31,20 +26,26 @@ namespace TheOtherRoles {
         [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
         private static class GameDataRecomputeTaskCountsPatch {
             private static bool Prefix(GameData __instance) {
-                __instance.TotalTasks = 0;
-                __instance.CompletedTasks = 0;
-                for (int i = 0; i < __instance.AllPlayers.Count; i++) {
-                    GameData.PlayerInfo playerInfo = __instance.AllPlayers[i];
+               
+
+                var totalTasks = 0;
+                var completedTasks = 0;
+                
+                foreach (var playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
                     if (playerInfo.Object
-                    && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover
-                    || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId // Tasks of the Lawyer do not count
-                    || (playerInfo.PlayerId == Pursuer.pursuer?.PlayerId && Pursuer.pursuer.Data.IsDead) // Tasks of the Pursuer only count, if he's alive
-                    )
+                        && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover
+                        || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId // Tasks of the Lawyer do not count
+                        || (playerInfo.PlayerId == Pursuer.pursuer?.PlayerId && Pursuer.pursuer.Data.IsDead) // Tasks of the Pursuer only count, if he's alive
+                       )
                         continue;
                     var (playerCompleted, playerTotal) = taskInfo(playerInfo);
-                    __instance.TotalTasks += playerTotal;
-                    __instance.CompletedTasks += playerCompleted;
+                    totalTasks += playerTotal;
+                    completedTasks += playerCompleted;
                 }
+                
+                __instance.TotalTasks = totalTasks;
+                __instance.CompletedTasks = completedTasks;
                 return false;
             }
         }

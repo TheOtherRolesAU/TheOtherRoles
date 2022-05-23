@@ -1,16 +1,10 @@
-using System.Net;
 using System.Linq;
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.IL2CPP;
 using HarmonyLib;
-using Hazel;
 using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.IO;
 using UnityEngine;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
 {
@@ -21,17 +15,20 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
+            Prosecutor.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
             Deputy.clearAndReload();
+	    Amnisiac.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
             Janitor.clearAndReload();
             Detective.clearAndReload();
             TimeMaster.clearAndReload();
+            Veteren.clearAndReload();
             Medic.clearAndReload();
             Shifter.clearAndReload();
             Swapper.clearAndReload();
@@ -60,6 +57,7 @@ namespace TheOtherRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
+	    Blackmailer.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -115,7 +113,7 @@ namespace TheOtherRoles
 
             public static Sprite getLogSprite() {
                 if (logSprite) return logSprite;
-                logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
                 return logSprite;
             }
 
@@ -129,17 +127,49 @@ namespace TheOtherRoles
 
 
         }
+		
+        public static class Prosecutor {
+            public static PlayerControl prosecutor;
+            public static PlayerControl target;
+            public static Color color = new Color32(201, 204, 63, byte.MaxValue);
+            public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+
+            public static bool triggerProsecutorWin = false;
+
+            public static void clearAndReload() {
+              prosecutor = null;
+              triggerProsecutorWin = false;
+              target = null;
+            }
+        }
 
         public static class Mayor {
             public static PlayerControl mayor;
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
+            public static Minigame emergency = null;
+            public static Sprite emergencySprite = null;
+            public static int remoteMeetingsLeft = 1;        
+
+
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
+            public static bool meetingButton = true;
+
+            public static Sprite getMeetingSprite()
+            {
+                if (emergencySprite) return emergencySprite;
+                emergencySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.EmergencyButton.png", 550f);
+                return emergencySprite;
+            }
 
             public static void clearAndReload() {
                 mayor = null;
+                emergency = null;
+                emergencySprite = null;
+		        remoteMeetingsLeft = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat()); 
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
+                meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
             }
         }
 
@@ -377,6 +407,59 @@ namespace TheOtherRoles
         }
     }
 
+    public static class Amnisiac {
+        public static PlayerControl amnisiac;
+        public static List<Arrow> localArrows = new List<Arrow>();
+        public static Color color = new Color(0.5f, 0.7f, 1f, 1f);
+        public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
+
+        public static bool showArrows = true;
+        public static bool resetRole = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Remember.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            amnisiac = null;
+            showArrows = CustomOptionHolder.amnisiacShowArrows.getBool();
+            resetRole = CustomOptionHolder.amnisiacResetRole.getBool();
+            if (localArrows != null) {
+                foreach (Arrow arrow in localArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localArrows = new List<Arrow>();
+        }
+    }
+
+    public static class Veteren {
+        public static PlayerControl veteren;
+        public static Color color = new Color32(255, 77, 0, byte.MaxValue);
+
+        public static float alertDuration = 3f;
+        public static float cooldown = 30f;
+
+        public static bool alertActive = false;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Alert.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload() {
+            veteren = null;
+            alertActive = false;
+            alertDuration = CustomOptionHolder.veterenAlertDuration.getFloat();
+            cooldown = CustomOptionHolder.veterenCooldown.getFloat();
+        }
+    }
+
     public static class Medic {
         public static PlayerControl medic;
         public static PlayerControl shielded;
@@ -607,7 +690,7 @@ namespace TheOtherRoles
 
         public static void resetCamouflage() {
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 p.setDefaultLook();
         }
 
@@ -650,22 +733,22 @@ namespace TheOtherRoles
 
         public static Sprite getVitalsSprite() {
             if (vitalsSprite) return vitalsSprite;
-            vitalsSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
+            vitalsSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.VitalsButton].Image;
             return vitalsSprite;
         }
 
         public static Sprite getLogSprite() {
             if (logSprite) return logSprite;
-            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
             return logSprite;
         }
 
         public static Sprite getAdminSprite() {
             byte mapId = PlayerControl.GameOptions.MapId;
-            UseButtonSettings button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
-            if (mapId == 0 || mapId == 3) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
-            else if (mapId == 1) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
-            else if (mapId == 4) button = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
+            UseButtonSettings button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
+            if (mapId == 0 || mapId == 3) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
+            else if (mapId == 1) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
+            else if (mapId == 4) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AirshipAdminButton]; // Airship
             adminSprite = button.Image;
             return adminSprite;
         }
@@ -1074,9 +1157,16 @@ namespace TheOtherRoles
         }
 
         private static Sprite animatedVentSealedSprite;
+        private static float lastPPU;
         public static Sprite getAnimatedVentSealedSprite() {
+            float ppu = 185f;
+            if (SubmergedCompatibility.IsSubmerged) ppu = 120f;
+            if (lastPPU != ppu) {
+                animatedVentSealedSprite = null;
+                lastPPU = ppu;
+            }
             if (animatedVentSealedSprite) return animatedVentSealedSprite;
-            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", 185f);
+            animatedVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.AnimatedVentSealed.png", ppu);
             return animatedVentSealedSprite;
         }
 
@@ -1087,17 +1177,31 @@ namespace TheOtherRoles
             return staticVentSealedSprite;
         }
 
+        private static Sprite submergedCentralUpperVentSealedSprite;
+        public static Sprite getSubmergedCentralUpperSealedSprite() {
+            if (submergedCentralUpperVentSealedSprite) return submergedCentralUpperVentSealedSprite;
+            submergedCentralUpperVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralUpperBlocked.png", 145f);
+            return submergedCentralUpperVentSealedSprite;
+        }
+
+        private static Sprite submergedCentralLowerVentSealedSprite;
+        public static Sprite getSubmergedCentralLowerSealedSprite() {
+            if (submergedCentralLowerVentSealedSprite) return submergedCentralLowerVentSealedSprite;
+            submergedCentralLowerVentSealedSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CentralLowerBlocked.png", 145f);
+            return submergedCentralLowerVentSealedSprite;
+        }
+
         private static Sprite camSprite;
         public static Sprite getCamSprite() {
             if (camSprite) return camSprite;
-            camSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+            camSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
             return camSprite;
         }
 
         private static Sprite logSprite;
         public static Sprite getLogSprite() {
             if (logSprite) return logSprite;
-            logSprite = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+            logSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
             return logSprite;
         }
 
@@ -1130,6 +1234,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
+	public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -1338,13 +1443,11 @@ namespace TheOtherRoles
         public static Color color = new Color32(134, 153, 25, byte.MaxValue);
         public static Sprite targetSprite;
         public static bool triggerLawyerWin = false;
-        public static int meetings = 0;
 
         public static float vision = 1f;
-        public static bool winsAfterMeetings = false;
-        public static int neededMeetings = 4;
         public static bool lawyerKnowsRole = false;
         public static bool targetCanBeJester = false;
+        public static bool targetWasGuessed = false;
 
         public static Sprite getTargetSprite() {
             if (targetSprite) return targetSprite;
@@ -1352,14 +1455,14 @@ namespace TheOtherRoles
             return targetSprite;
         }
 
-        public static void clearAndReload() {
+        public static void clearAndReload(bool clearTarget = true) {
             lawyer = null;
-            target = null;
+            if (clearTarget) {
+                target = null;
+                targetWasGuessed = false;
+            }
             triggerLawyerWin = false;
-            meetings = 0;
 
-            winsAfterMeetings = CustomOptionHolder.lawyerWinsAfterMeetings.getBool();
-            neededMeetings = Mathf.RoundToInt(CustomOptionHolder.lawyerNeededMeetings.getFloat());
             vision = CustomOptionHolder.lawyerVision.getFloat();
             lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
             targetCanBeJester = CustomOptionHolder.lawyerTargetCanBeJester.getBool();
@@ -1374,6 +1477,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
+		public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
@@ -1449,7 +1553,10 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
+        public static float invisibleDuration = 5f;
 
+        public static float invisibleTimer = 0f;
+        public static bool isInvisble = false;
         private static Sprite markButtonSprite;
         private static Sprite killButtonSprite;
         public static Arrow arrow = new Arrow(Color.black);
@@ -1471,10 +1578,50 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.ninjaCooldown.getFloat();
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
-
+            invisibleDuration = CustomOptionHolder.ninjaInvisibleDuration.getFloat();
+            invisibleTimer = 0f;
+            isInvisble = false;
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = new Arrow(Color.black);
             if (arrow.arrow != null) arrow.arrow.SetActive(false);
+        }
+    }
+
+
+    public static class Blackmailer {
+        public static PlayerControl blackmailer;
+        public static Color color = Palette.ImpostorRed;
+        public static Color blackmailedColor = Palette.White;
+
+	public static bool alreadyShook = false;
+        public static PlayerControl blackmailed;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+        private static Sprite blackmailButtonSprite;
+        private static Sprite overlaySprite;
+        public static Sprite getBlackmailOverlaySprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerOverlay.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailLetterSprite() {
+            if (overlaySprite) return overlaySprite;
+            overlaySprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerLetter.png", 115f);
+            return overlaySprite;
+        }
+
+        public static Sprite getBlackmailButtonSprite() {
+            if (blackmailButtonSprite) return blackmailButtonSprite;
+            blackmailButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.BlackmailerBlackmailButton.png", 115f);
+            return blackmailButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            blackmailer = null;
+            currentTarget = null;
+	    blackmailed = null;
+            cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
         }
     }
 
