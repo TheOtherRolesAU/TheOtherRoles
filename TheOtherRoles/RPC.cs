@@ -231,9 +231,6 @@ namespace TheOtherRoles
                     case RoleId.TimeMaster:
                         TimeMaster.timeMaster = player;
                         break;
-                    case RoleId.TimeMaster:
-                        TimeMaster.timeMaster = player;
-                        break;
                     case RoleId.Amnisiac:
                         Amnisiac.amnisiac = player;
                         break;
