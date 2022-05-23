@@ -394,9 +394,9 @@ namespace TheOtherRoles {
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Prosecutor"),   rates, null, true);
 
-            amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, null, true);
-            amnisiacShowArrows = CustomOption.Create(617, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, true, true);
-            amnisiacResetRole = CustomOption.Create(617, Types.Neutral, cs(Amnisiac.color, "Amnisiac"),   rates, false, true);
+            amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnisiac"), rates, null, true);
+            amnisiacShowArrows = CustomOption.Create(617, Types.Neutral, cs(Amnisiac.color, "Amnisiac"), rates, true, amnisiacSpawnRate);
+            amnisiacResetRole = CustomOption.Create(618, Types.Neutral, cs(Amnisiac.color, "Amnisiac"), rates, false, amnisiacSpawnRate);
 
 
             arsonistSpawnRate = CustomOption.Create(290, Types.Neutral, cs(Arsonist.color, "Arsonist"), rates, null, true);
