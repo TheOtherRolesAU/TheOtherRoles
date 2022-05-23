@@ -469,7 +469,7 @@ namespace TheOtherRoles
             RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
             switch((RoleId)roleInfo.roleId) {
                 case RoleId.Jester:
-		    if (Amnisias.resetRole) Jester.clearAndReload();
+		    if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
 		    Amnisiac.clearAndReload();
                     break;
