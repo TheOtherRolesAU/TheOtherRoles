@@ -992,7 +992,7 @@ namespace TheOtherRoles
 					RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MinValue);
 
 				},
-                () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {  /* On CLick */ return (PlayerControl.LocalPlayer.CanMove); },
                 () => {  
 					// on meeting ends

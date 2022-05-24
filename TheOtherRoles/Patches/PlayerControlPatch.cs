@@ -252,7 +252,7 @@ namespace TheOtherRoles.Patches {
         }
 		
         static void swooperSetTarget() {
-            if (Swooper.swooper == null || Swooper.swooper != CachedPlayer.LocalPlayer.PlayerControl) return;
+            if (Swooper.swooper == null || Swooper.swooper != PlayerControl.LocalPlayer) return;
             var untargetablePlayers = new List<PlayerControl>();
             if (Mini.mini != null && !Mini.isGrownUp()) untargetablePlayers.Add(Mini.mini); // Exclude Jackal from targeting the Mini unless it has grown up
             Swooper.currentTarget = setTarget(untargetablePlayers: untargetablePlayers);

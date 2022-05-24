@@ -193,7 +193,7 @@ namespace TheOtherRoles {
         }
 
 		public static void setInvisable(PlayerControl  player) {
-			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
+			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
 			invisibleWriter.Write(player.PlayerId);
 			invisibleWriter.Write(byte.MinValue);
 			AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);

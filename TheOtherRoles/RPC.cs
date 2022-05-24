@@ -1133,7 +1133,7 @@ namespace TheOtherRoles
 
             target.setLook("", 6, "", "", "", "");
             Color color = Color.clear;           
-            if (CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            if (PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
             target.MyRend.color = color;
         }
 
