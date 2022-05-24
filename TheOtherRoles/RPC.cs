@@ -1109,11 +1109,21 @@ namespace TheOtherRoles
         }
 
 		public static void setSwoop(byte playerId, byte flag) {
-			setInvisibleGen(playerId, flag);
-			if (flag == byte.MaxValue) {
-				Swooper.isInvisable = false;
-				return;
-			}
+			
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue)
+            {
+                target.MyRend.color = Color.white;
+                target.setDefaultLook();
+                Swooper.isInvisable = false;
+                return;
+            }
+
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            target.MyRend.color = color;
 			Swooper.swoopTimer = Swooper.duration;
 			Swooper.isInvisable = true;
 		}
