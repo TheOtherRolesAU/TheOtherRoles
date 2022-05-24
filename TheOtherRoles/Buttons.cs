@@ -1002,7 +1002,10 @@ namespace TheOtherRoles
                 Swooper.getSwoopButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.F                   
+                KeyCode.F,
+				true,
+				Swooper.duration,
+				() => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
             );
 
             // Lighter light
