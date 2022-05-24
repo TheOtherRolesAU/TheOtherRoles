@@ -291,7 +291,8 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnablePolus;
         public static CustomOption dynamicMapEnableAirShip;
         public static CustomOption dynamicMapEnableSubmerged;
-
+		public static CustomOption enableCamoComms;
+		
         public static CustomOption restrictDevices;
         public static CustomOption restrictAdmin;
         public static CustomOption restrictCameras;
@@ -597,6 +598,7 @@ namespace TheOtherRoles {
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Enable Airship Rotation", true, dynamicMap, false);
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
+			enableCamoComms = CustomOption.Create(1105, Types.General, "Enable Camouflage Comms", false,  null, false);
 
             restrictDevices = CustomOption.Create(1101, Types.General, "Restrict Map Information", new string[] {"Off", "Per Round", "Per Game"},  null, false);
             restrictAdmin = CustomOption.Create(1102, Types.General, "Restrict Admin Table", 30f, 0f, 600f, 5f, restrictDevices);

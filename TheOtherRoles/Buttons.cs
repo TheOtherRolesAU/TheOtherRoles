@@ -552,11 +552,12 @@ namespace TheOtherRoles
             camouflagerButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CamouflagerCamouflage, Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.camouflagerCamouflage();
+					writer.Write(1);
+					AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.camouflagerCamouflage(1);
                 },
                 () => { return Camouflager.camouflager != null && Camouflager.camouflager == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => { return !Helpers.isActiveCamoComms() && PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     camouflagerButton.Timer = camouflagerButton.MaxTimer;
                     camouflagerButton.isEffectActive = false;

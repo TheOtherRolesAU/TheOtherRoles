@@ -882,10 +882,12 @@ namespace TheOtherRoles
                 Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
-        public static void camouflagerCamouflage() {
-            if (Camouflager.camouflager == null) return;
+        public static void camouflagerCamouflage(byte setTimer) {
+			if (Helpers.isActiveCamoComms()) return;
+			if (Helpers.isCamoComms()) Camouflager.camoComms = true;
+            if (Camouflager.camouflager == null && !Camouflager.camoComms) return;
 
-            Camouflager.camouflageTimer = Camouflager.duration;
+            if (setTimer == 1) Camouflager.camouflageTimer = Camouflager.duration;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 player.setLook("", 6, "", "", "", "");
         }
@@ -1473,8 +1475,9 @@ namespace TheOtherRoles
                     RPCProcedure.morphlingMorph(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
-                    RPCProcedure.camouflagerCamouflage();
-                    break;
+					byte setTimer = reader.ReadByte();
+                    RPCProcedure.camouflagerCamouflage(setTimer);
+				break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = reader.ReadByte();
                     byte reset = reader.ReadByte();

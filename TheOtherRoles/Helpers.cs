@@ -20,6 +20,16 @@ namespace TheOtherRoles {
         SuppressKill,
         BlankKill
     }
+
+	public enum SabatageTypes {
+		Comms,
+		O2,
+		Reactor,
+		OxyMask,
+		Lights,
+		None
+	}
+	
     public static class Helpers
     {
 
@@ -39,6 +49,70 @@ namespace TheOtherRoles {
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
             }
         }
+
+		public static SabatageTypes getActiveSabo() {
+			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator()) {
+				if (task.TaskType == TaskTypes.FixLights) {
+					return SabatageTypes.Lights;
+				} else if (task.TaskType == TaskTypes.RestoreOxy) {
+					return SabatageTypes.O2;
+				} else if (task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.StopCharles || task.TaskType == TaskTypes.StopCharles) {
+					return SabatageTypes.Reactor;
+				} else if (task.TaskType == TaskTypes.FixComms) {
+					return SabatageTypes.Comms;
+				} else if (SubmergedCompatibility.IsSubmerged && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask) {
+					return SabatageTypes.OxyMask;
+				}
+			}
+			return SabatageTypes.None;
+		}
+
+		public static bool isSaboActive() {
+			return !(Helpers.getActiveSabo() == SabatageTypes.None);
+		}
+
+		public static bool isReactorActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Reactor);
+		}
+
+		public static bool isLightsActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Lights);
+		}
+
+		public static bool isO2Active() {
+			return (Helpers.getActiveSabo() == SabatageTypes.O2);
+		}
+
+		public static bool isO2MaskActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.OxyMask);
+		}		
+
+		public static bool isCommsActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Comms);
+		}
+
+
+		public static bool isCamoComms() {
+			return (isCommsActive() && MapOptions.camoComms);
+		}
+
+
+
+		public static bool isActiveCamoComms() {
+			return (isCamoComms() && Camouflager.camoComms);
+		}
+
+		public static bool wasActiveCamoComms() {
+			return (!isCamoComms() && Camouflager.camoComms);
+		}
+
+		public static void camoReset() {
+			Camouflager.resetCamouflage();
+			if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
+				PlayerControl target = Morphling.morphTarget;
+				Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
+			}
+		}
 
         public static void turnToImpostor(PlayerControl player) {
             player.Data.Role.TeamType = RoleTeamTypes.Impostor;
