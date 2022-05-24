@@ -1,26 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
-		<Version>4.1.3</Version>
-		<Description>TheOtherRoles</Description>
-		<Authors>Eisbison</Authors>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Version>4.1.4</Version>
+        <Description>TheOtherRoles</Description>
+        <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-	</PropertyGroup>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Resources\**" />
-	</ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\**" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.3.29" />
-		<PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
-		<PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.3.29" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
+    </ItemGroup>
 
-	<Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
-		<Message Text="Second occurrence" />
-		<Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
-	</Target>
+    <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
+        <Message Text="Second occurrence" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
+    </Target>
 </Project>

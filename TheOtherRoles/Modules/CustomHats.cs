@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
@@ -223,26 +224,72 @@ namespace TheOtherRoles.Modules {
             }
         }
 
-        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), new System.Type[] { typeof(string), typeof(int) })]
-        private static class HatParentSetHatPatch {
-            static void Postfix(HatParent __instance, string hatId, int color) {
-                if (DestroyableSingleton<TutorialManager>.InstanceExists) {
-                    try {
+        // public void SetHat(HatData hat, HatViewData hatViewData, int color)
+        // {
+        //     this.Hat = hat;
+        //     this.hatView = hatViewData;
+        //     this.PopulateFromHatViewData();
+        //     this.SetColor(color);
+        // }
+
+        [HarmonyPatch]
+        private static class FreeplayHatTestingPatches
+        {
+            [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(int))]
+            private static class HatParentSetHatPatchColor {
+                static void Prefix(HatParent __instance) {
+                    if (DestroyableSingleton<TutorialManager>.InstanceExists) {
+                        try {
+                            string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
+                            if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+                            DirectoryInfo d = new DirectoryInfo(filePath);
+                            string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
+                            List<CustomHat> hats = createCustomHatDetails(filePaths, true);
+                            if (hats.Count > 0) {
+                                __instance.Hat = CreateHatBehaviour(hats[0], true, true);
+                            }
+                        } catch (System.Exception e) {
+                            System.Console.WriteLine("Unable to create test hat\n" + e);
+                        }
+                    }
+                }     
+            }
+            
+            [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(HatData), typeof(HatViewData), typeof(int))]
+            private static class HatParentSetHatPatchExtra {
+                static bool Prefix(HatParent __instance, HatData hat, HatViewData hatViewData, int color)
+                {
+                    if (!DestroyableSingleton<TutorialManager>.InstanceExists) return true;
+                    
+                    try 
+                    {
+                        __instance.Hat = hat;
+                        __instance.hatView = hatViewData;
+                        
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
-                        if (!Directory.Exists(filePath))
-                            Directory.CreateDirectory(filePath);
+                        if (!Directory.Exists(filePath)) return true;
                         DirectoryInfo d = new DirectoryInfo(filePath);
                         string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
-                        if (hats.Count > 0) {
+                        if (hats.Count > 0) 
+                        {
                             __instance.Hat = CreateHatBehaviour(hats[0], true, true);
-                            __instance.SetHat(color);
+                            __instance.hatView = __instance.Hat.hatViewData.viewData;
+
                         }
-                    } catch (System.Exception e) {
+                    } 
+                    catch (System.Exception e) 
+                    {
                         System.Console.WriteLine("Unable to create test hat\n" + e);
+                        return true;
                     }
-                }
-            }     
+                    
+                    
+                    __instance.PopulateFromHatViewData();
+                    __instance.SetColor(color);
+                    return false;
+                }     
+            }
         }
 
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
@@ -302,7 +349,7 @@ namespace TheOtherRoles.Modules {
                     }
                     
                     colorChip.transform.localPosition = new Vector3(xpos, ypos, -1f);
-                    colorChip.Inner.SetHat(hat, __instance.HasLocalPlayer() ? PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor));
+                    colorChip.Inner.SetHat(hat, __instance.HasLocalPlayer() ? CachedPlayer.LocalPlayer.Data.DefaultOutfit.ColorId : ((int)SaveManager.BodyColor));
                     colorChip.Inner.transform.localPosition = hat.ChipOffset;
                     colorChip.Tag = hat;
                     colorChip.SelectionHighlight.gameObject.SetActive(false);

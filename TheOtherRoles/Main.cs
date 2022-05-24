@@ -12,6 +12,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
@@ -22,7 +23,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.1.3";
+        public const string VersionString = "4.1.4";
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -62,6 +63,8 @@ namespace TheOtherRoles
 
         public override void Load() {
             Logger = Log;
+            Instance = this;
+
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
             StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
@@ -86,11 +89,18 @@ namespace TheOtherRoles
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
-            Instance = this;
+            Harmony.PatchAll();
+
             CustomOptionHolder.Load();
             CustomColors.Load();
             Patches.FreeNamePatch.Initialize();
-            Harmony.PatchAll();
+
+            if (BepInExUpdater.UpdateRequired)
+            {
+                AddComponent<BepInExUpdater>();
+                return;
+            }
+            
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
         }
@@ -139,7 +149,7 @@ namespace TheOtherRoles
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
                 
-                playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+                playerControl.transform.position = CachedPlayer.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
@@ -149,7 +159,7 @@ namespace TheOtherRoles
 
             // Terminate round
             if(Input.GetKeyDown(KeyCode.L)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.forceEnd();
             }

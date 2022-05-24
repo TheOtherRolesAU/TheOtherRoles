@@ -7,6 +7,7 @@ using HarmonyLib;
 using Hazel;
 using System.Reflection;
 using System.Text;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
@@ -85,15 +86,23 @@ namespace TheOtherRoles {
         }
 
         public static void ShareOptionSelections() {
-            if (PlayerControl.AllPlayerControls.Count <= 1 || AmongUsClient.Instance?.AmHost == false && PlayerControl.LocalPlayer == null) return;
-            
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareOptions, Hazel.SendOption.Reliable);
-            messageWriter.WritePacked((uint)CustomOption.options.Count);
-            foreach (CustomOption option in CustomOption.options) {
-                messageWriter.WritePacked((uint)option.id);
-                messageWriter.WritePacked((uint)Convert.ToUInt32(option.selection));
+            if (CachedPlayer.AllPlayers.Count <= 1 || AmongUsClient.Instance!.AmHost == false && CachedPlayer.LocalPlayer.PlayerControl == null) return;
+
+            var optionsList = new List<CustomOption>(CustomOption.options);
+            while (optionsList.Any())
+            {
+                byte amount = (byte) Math.Min(optionsList.Count, 20);
+                var writer = AmongUsClient.Instance!.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, SendOption.Reliable, -1);
+                writer.Write(amount);
+                for (int i = 0; i < amount; i++)
+                {
+                    var option = optionsList[0];
+                    optionsList.RemoveAt(0);
+                    writer.WritePacked((uint) option.id);
+                    writer.WritePacked(Convert.ToUInt32(option.selection));
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-            messageWriter.EndMessage();
         }
 
         // Getter
@@ -122,7 +131,7 @@ namespace TheOtherRoles {
                 stringOption.oldValue = stringOption.Value = selection;
                 stringOption.ValueText.text = selections[selection].ToString();
 
-                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer) {
+                if (AmongUsClient.Instance?.AmHost == true && CachedPlayer.LocalPlayer.PlayerControl) {
                     if (id == 0) switchPreset(selection); // Switch presets
                     else if (entry != null) entry.Value = selection; // Save selection to config
 
@@ -651,7 +660,7 @@ namespace TheOtherRoles {
             Scroller.ContentYBounds = new FloatRange(MinY, maxY);
 
             // Prevent scrolling when the player is interacting with a menu
-            if (PlayerControl.LocalPlayer?.CanMove != true) {
+            if (CachedPlayer.LocalPlayer?.PlayerControl.CanMove != true) {
                 __instance.GameSettings.transform.localPosition = LastPosition;
 
                 return;
