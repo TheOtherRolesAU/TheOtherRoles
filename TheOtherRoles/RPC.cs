@@ -26,7 +26,6 @@ namespace TheOtherRoles
         Godfather,
         Mafioso,
         Janitor,
-		Swooper,
         Detective,
         TimeMaster,
 		Swooper,
