@@ -996,7 +996,7 @@ namespace TheOtherRoles
                 () => {  /* On CLick */ return (PlayerControl.LocalPlayer.CanMove); },
                 () => {  
 					// on meeting ends
-                    swooperSwoopButton.Timer = ninjaButton.MaxTimer;
+                    swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer;
                     Swooper.isInvisable = false;
                 },
                 Swooper.getSwoopButtonSprite(),

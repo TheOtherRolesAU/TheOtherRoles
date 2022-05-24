@@ -362,6 +362,18 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void swooperUpdate()
+        {
+            if (Swooper.isInvisble && Swooper.swoopTimer <= 0 && Swooper.swooper == PlayerControl.LocalPlayer)
+            {
+				MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetSwoop, Hazel.SendOption.Reliable, -1);
+				invisibleWriter.Write(Swooper.swooper.PlayerId);
+				invisibleWriter.Write(byte.MaxValue);
+				AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+				RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MaxValue);
+            }
+        }
+
         static void ninjaUpdate()
         {
             if (Ninja.isInvisble && Ninja.invisibleTimer <= 0 && Ninja.ninja == PlayerControl.LocalPlayer)
