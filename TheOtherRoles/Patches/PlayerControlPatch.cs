@@ -987,6 +987,7 @@ namespace TheOtherRoles.Patches {
                 ninjaSetTarget();
                 NinjaTrace.UpdateAll();
                 ninjaUpdate();
+				swooperUpdate();
                 hackerUpdate();
                 swapperUpdate();
 
