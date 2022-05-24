@@ -454,9 +454,9 @@ namespace TheOtherRoles.Patches {
             byte playerId = playerList[index].PlayerId;
             if (removePlayer) playerList.RemoveAt(index);
 
-			if (roleId == RoleId.Jackal) {
+			if (roleId == (byte)RoleId.Jackal) {
 				if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
-					roleId = RoleId.Swooper;
+					roleId = (byte)RoleId.Swooper;
 				}
 			}
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
