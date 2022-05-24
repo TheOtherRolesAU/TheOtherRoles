@@ -520,12 +520,11 @@ namespace TheOtherRoles.Patches {
                 // Resett Bait list
                 Bait.active = new Dictionary<DeadPlayer, float>();
                 // Save AntiTeleport position, if the player is able to move (i.e. not on a ladder or a gap thingy)
-                if (CachedPlayer.LocalPlayer.PlayerPhysics.enabled && CachedPlayer.LocalPlayer.PlayerControl.moveable || CachedPlayer.LocalPlayer.PlayerControl.inVent || Warlock.rootTime > 0
+                if (CachedPlayer.LocalPlayer.PlayerPhysics.enabled && CachedPlayer.LocalPlayer.PlayerControl.moveable || CachedPlayer.LocalPlayer.PlayerControl.inVent
                     || HudManagerStartPatch.hackerVitalsButton.isEffectActive || HudManagerStartPatch.hackerAdminTableButton.isEffectActive || HudManagerStartPatch.securityGuardCamButton.isEffectActive
-                    || Portal.isTeleporting && Portal.teleportedPlayers.Last().playerId == CachedPlayer.LocalPlayer.PlayerId)
+                    || Portal.isTeleporting && Portal.teleportedPlayers.Last().playerId == CachedPlayer.LocalPlayer.PlayerId) {
                     AntiTeleport.position = CachedPlayer.LocalPlayer.transform.position;
-                else if (MapUtilities.CachedShipStatus.Type == ShipStatus.MapType.Ship) // Clear the anti tp position - else it will be the position of the last non-failing round
-                    AntiTeleport.position = Vector3.zero;
+                }
 
                 // Medium meeting start time
                 Medium.meetingStartTime = DateTime.UtcNow;
