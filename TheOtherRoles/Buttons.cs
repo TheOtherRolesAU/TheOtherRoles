@@ -974,7 +974,7 @@ namespace TheOtherRoles
                     swooperKillButton.Timer = swooperKillButton.MaxTimer; 
                     Swooper.currentTarget = null;
                 },
-                () => { return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer. && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, "KILL"); return Swooper.currentTarget && PlayerControl.LocalPlayer.CanMove; },
                 () => { swooperKillButton.Timer = swooperKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
@@ -994,7 +994,8 @@ namespace TheOtherRoles
 				},
                 () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !CachedPlayer.LocalPlayer.Data.IsDead; },
                 () => {  /* On CLick */ return (PlayerControl.LocalPlayer.CanMove); },
-                () => {  // on meeting ends
+                () => {  
+					// on meeting ends
                     swooperSwoopButton.Timer = ninjaButton.MaxTimer;
                     Swooper.isInvisable = false;
                 },
