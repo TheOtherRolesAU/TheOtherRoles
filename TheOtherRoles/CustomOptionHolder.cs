@@ -424,7 +424,7 @@ namespace TheOtherRoles {
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, Types.Neutral, "Jackals Can Make An Impostor To His Sidekick", true, jackalCanCreateSidekick);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, Types.Neutral, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
-			swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, "Chance for Alternate Solo Killer", rates, null, true);
+			swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, "Alternate Solo Killer", rates, jackalSpawnRate);
 			swooperCooldown = CustomOption.Create(1111, Types.Neutral, "Swoop Cooldown", 30f, 10f, 60f, 2.5f, swooperSpawnRate);
 			swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
 			
