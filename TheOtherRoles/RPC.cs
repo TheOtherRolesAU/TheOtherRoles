@@ -29,6 +29,7 @@ namespace TheOtherRoles
 		Swooper,
         Detective,
         TimeMaster,
+		Swooper,
 	Veteren,
 	Amnisiac,
         Medic,
@@ -274,12 +275,11 @@ namespace TheOtherRoles
                         Snitch.snitch = player;
                         break;
                     case RoleId.Jackal:
-						if (true) { //rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
-							Swooper.swooper = player;
-						} else {
-							Jackal.jackal = player;
-						}
-                        break;
+						Jackal.jackal = player;
+						break;
+                    case RoleId.Swooper:
+						Swooper.swooper = player;
+						break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
                         break;
