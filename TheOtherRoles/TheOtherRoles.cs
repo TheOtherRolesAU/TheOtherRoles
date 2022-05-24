@@ -16,6 +16,7 @@ namespace TheOtherRoles
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
             Prosecutor.clearAndReload();
+			Swooper.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
@@ -899,6 +900,33 @@ namespace TheOtherRoles
             snitch = null;
         }
     }
+
+	 public static class Swooper {
+		public static PlayerControl swooper;
+        public static PlayerControl currentTarget;
+        public static float cooldown = 30f;
+		public static bool isInvisable = false;
+		public static Color color = new Color32(224, 197, 219, byte.MaxValue);
+		public static float duration = 5f;
+		public static float swoopCooldown = 30f;
+		public static float swoopTimer = 0f;
+		public static Sprite buttonSprite;
+
+        public static Sprite getSwoopButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Swoop.png", 115f);
+            return buttonSprite;
+        }
+
+		public static void clearAndReload() {
+		  swooper = null;
+		  isInvisable = false;
+		  cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+		  swoopCooldown = CustomOptionHolder.swooperCooldown.getFloat();
+		  duration = CustomOptionHolder.swooperDuration.getFloat();
+
+		}
+	}
 
     public static class Jackal {
         public static PlayerControl jackal;

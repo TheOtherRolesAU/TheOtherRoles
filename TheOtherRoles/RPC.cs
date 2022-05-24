@@ -28,6 +28,7 @@ namespace TheOtherRoles
         Janitor,
         Detective,
         TimeMaster,
+		Swooper,
 	Veteren,
 	Amnisiac,
         Medic,
@@ -142,6 +143,8 @@ namespace TheOtherRoles
         Invert,
         SetTiebreak,
         SetInvisible,
+		SetInvisibleGen,
+		SetSwoop,
 	ProsecutorChangesRole,
 	ProsecutorSetTarget,
         ProsecutorToPursuer
@@ -271,8 +274,11 @@ namespace TheOtherRoles
                         Snitch.snitch = player;
                         break;
                     case RoleId.Jackal:
-                        Jackal.jackal = player;
-                        break;
+						Jackal.jackal = player;
+						break;
+                    case RoleId.Swooper:
+						Swooper.swooper = player;
+						break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
                         break;
@@ -793,8 +799,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {
-                oldShifter.Exiled();
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Swooper.swooper || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {                oldShifter.Exiled();
                 return;
             }
 
@@ -1020,6 +1025,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
+			if (player == Swooper.swooper) Swooper.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
@@ -1102,6 +1108,44 @@ namespace TheOtherRoles
             target.MyRend.color = color;
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
+        }
+
+		public static void setSwoop(byte playerId, byte flag) {
+			
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue)
+            {
+                target.MyRend.color = Color.white;
+                target.setDefaultLook();
+                Swooper.isInvisable = false;
+                return;
+            }
+
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            target.MyRend.color = color;
+			Swooper.swoopTimer = Swooper.duration;
+			Swooper.isInvisable = true;
+		}
+
+
+        public static void setInvisibleGen(byte playerId, byte flag)
+        {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue)
+            {
+                target.MyRend.color = Color.white;
+                target.setDefaultLook();
+                return;
+            }
+
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            target.MyRend.color = color;
         }
 
         public static void placePortal(byte[] buff) {
@@ -1589,6 +1633,16 @@ namespace TheOtherRoles
                     byte invisiblePlayer = reader.ReadByte();
                     byte invisibleFlag = reader.ReadByte();
                     RPCProcedure.setInvisible(invisiblePlayer, invisibleFlag);
+                    break; 
+                case (byte)CustomRPC.SetSwoop:
+                    byte invisiblePlayer2 = reader.ReadByte();
+                    byte invisibleFlag2 = reader.ReadByte();
+                    RPCProcedure.setSwoop(invisiblePlayer2, invisibleFlag2);
+                    break;  
+                case (byte)CustomRPC.SetInvisibleGen:
+                    byte invisiblePlayer3 = reader.ReadByte();
+                    byte invisibleFlag3 = reader.ReadByte();
+                    RPCProcedure.setInvisibleGen(invisiblePlayer3, invisibleFlag3);
                     break;  
             }
         }

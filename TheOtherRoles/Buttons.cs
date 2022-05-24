@@ -50,6 +50,8 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
+		public static CustomButton swooperSwoopButton;
+		public static CustomButton swooperKillButton;
         public static CustomButton mayorMeetingButton;
         public static CustomButton blackmailerButton;
         public static CustomButton zoomOutButton;
@@ -86,6 +88,7 @@ namespace TheOtherRoles
             trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
+			swooperKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
@@ -104,6 +107,7 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
+			swooperSwoopButton.MaxTimer = Swooper.swoopCooldown;
             blackmailerButton.MaxTimer = Blackmailer.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
@@ -114,6 +118,7 @@ namespace TheOtherRoles
             hackerAdminTableButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
+			swooperSwoopButton.EffectDuration = Swooper.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
@@ -317,7 +322,8 @@ namespace TheOtherRoles
                         if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
                             (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
                             (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget || Lawyer.lawyer == Sheriff.currentTarget || Pursuer.pursuer == Sheriff.currentTarget)) ||
-                            (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget)) {
+                            (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget) ||
+							(Swooper.swooper == Sheriff.currentTarget)) {
                             targetId = Sheriff.currentTarget.PlayerId;
                         }
                         else {
@@ -959,6 +965,49 @@ namespace TheOtherRoles
                 new Vector3(0, 1f, 0),
                 __instance,
                 KeyCode.Q
+            );
+			
+            // Swooper Kill
+            swooperKillButton = new CustomButton(
+                () => {
+                    if (Helpers.checkAndDoVetKill(Swooper.currentTarget)) return;
+                    if (Helpers.checkMuderAttemptAndKill(Swooper.swooper, Swooper.currentTarget) == MurderAttemptResult.SuppressKill) return;
+
+                    swooperKillButton.Timer = swooperKillButton.MaxTimer; 
+                    Swooper.currentTarget = null;
+                },
+                () => { return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { showTargetNameOnButton(Swooper.currentTarget, swooperKillButton, "KILL"); return Swooper.currentTarget && PlayerControl.LocalPlayer.CanMove; },
+                () => { swooperKillButton.Timer = swooperKillButton.MaxTimer;},
+                __instance.KillButton.graphic.sprite,
+                new Vector3(0, 1f, 0),
+                __instance,
+                KeyCode.Q
+            );
+
+            swooperSwoopButton = new CustomButton(
+                () => { /* On Use */ 
+					MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetSwoop, Hazel.SendOption.Reliable, -1);
+					invisibleWriter.Write(Swooper.swooper.PlayerId);
+					invisibleWriter.Write(byte.MinValue);
+					AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+					RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MinValue);
+
+				},
+                () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {  /* On CLick */ return (PlayerControl.LocalPlayer.CanMove); },
+                () => {  
+					// on meeting ends
+                    swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer;
+                    Swooper.isInvisable = false;
+                },
+                Swooper.getSwoopButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+				true,
+				Swooper.duration,
+				() => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
             );
 
             // Lighter light

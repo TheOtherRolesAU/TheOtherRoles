@@ -266,6 +266,13 @@ namespace TheOtherRoles {
             return player == null || player?.Data?.IsDead == true || player?.Data?.Disconnected == true;
         }
 
+		public static void setInvisable(PlayerControl  player) {
+			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
+			invisibleWriter.Write(player.PlayerId);
+			invisibleWriter.Write(byte.MinValue);
+			AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+			RPCProcedure.setInvisibleGen(player.PlayerId, byte.MinValue);
+		}
 
         public static bool isAlive(this PlayerControl player)
         {

@@ -233,6 +233,7 @@ namespace TheOtherRoles.Patches {
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
             Ninja.invisibleTimer -= dt;
+			Swooper.swoopTimer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)
                 Deputy.handcuffedKnows[key] -= dt;
         }
