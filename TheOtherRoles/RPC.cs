@@ -274,7 +274,7 @@ namespace TheOtherRoles
                         Snitch.snitch = player;
                         break;
                     case RoleId.Jackal:
-						if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
+						if (true) { //rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
 							Swooper.swooper = player;
 						} else {
 							Jackal.jackal = player;
