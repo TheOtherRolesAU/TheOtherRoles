@@ -250,6 +250,14 @@ namespace TheOtherRoles.Patches {
             Jackal.currentTarget = setTarget(untargetablePlayers: untargetablePlayers);
             setPlayerOutline(Jackal.currentTarget, Palette.ImpostorRed);
         }
+		
+        static void swooperSetTarget() {
+            if (Swooper.swooper == null || Swooper.swooper != CachedPlayer.LocalPlayer.PlayerControl) return;
+            var untargetablePlayers = new List<PlayerControl>();
+            if (Mini.mini != null && !Mini.isGrownUp()) untargetablePlayers.Add(Mini.mini); // Exclude Jackal from targeting the Mini unless it has grown up
+            Swooper.currentTarget = setTarget(untargetablePlayers: untargetablePlayers);
+            setPlayerOutline(Swooper.currentTarget, Palette.ImpostorRed);
+        }
 
         static void sidekickSetTarget() {
             if (Sidekick.sidekick == null || Sidekick.sidekick != PlayerControl.LocalPlayer) return;
@@ -924,6 +932,8 @@ namespace TheOtherRoles.Patches {
                 jackalSetTarget();
                 // Sidekick
                 sidekickSetTarget();
+				// Swooper
+				swooperSetTarget();
                 // Impostor
                 impostorSetTarget();
                 // Warlock
