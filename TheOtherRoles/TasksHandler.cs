@@ -36,6 +36,7 @@ namespace TheOtherRoles {
                     if (playerInfo.Object
                         && playerInfo.Object.hasAliveKillingLover() // Tasks do not count if a Crewmate has an alive killing Lover
                         || playerInfo.PlayerId == Lawyer.lawyer?.PlayerId // Tasks of the Lawyer do not count
+                        || playerInfo.PlayerId == Swooper.swooper?.PlayerId // Tasks of the Swooper do not count
                         || (playerInfo.PlayerId == Pursuer.pursuer?.PlayerId && Pursuer.pursuer.Data.IsDead) // Tasks of the Pursuer only count, if he's alive
                        )
                         continue;
