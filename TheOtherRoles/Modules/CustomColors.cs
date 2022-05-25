@@ -10,12 +10,12 @@ namespace TheOtherRoles.Modules {
         public static List<int> lighterColors = new List<int>(){ 3, 4, 5, 7, 10, 11, 13, 14, 17 };
         public static uint pickableColors = (uint)Palette.ColorNames.Length;
 
-        private static readonly List<int> ORDER = new List<int>() { 28, 25, 32, 33, 44, 
-                                                                    21, 29, 19, 27, 3,
-                                                                    17, 14, 18, 13, 23,
-                                                                    8, 5, 1, 30, 31,
-                                                                    10, 4, 15, 7, 22,
-                                                                    0, 11, 2, 26, 16,
+        private static readonly List<int> ORDER = new List<int>() { 7, 14, 5, 33, 4, 
+                                                                    30, 0, 19, 27, 3,
+                                                                    17, 25, 18, 13, 23,
+                                                                    8, 32, 1, 21, 31,
+                                                                    10, 34, 15, 28, 22,
+                                                                    29, 11, 2, 26, 16,
                                                                     20, 24, 9, 12, 6 };
         public static void Load() {
             List<StringNames> longlist = Enumerable.ToList<StringNames>(Palette.ColorNames);
@@ -25,53 +25,53 @@ namespace TheOtherRoles.Modules {
             List<CustomColor> colors = new List<CustomColor>();
 
             /* Custom Colors */
-            colors.Add(new CustomColor { longname = "Salmon", // 18
+            colors.Add(new CustomColor { longname = "Salmon",
                                         color = new Color32(239, 191, 192, byte.MaxValue), // color = new Color32(0xD8, 0x82, 0x83, byte.MaxValue),
                                         shadow = new Color32(182, 119, 114, byte.MaxValue), // shadow = new Color32(0xA5, 0x63, 0x65, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Bordeaux", // 19
+            colors.Add(new CustomColor { longname = "Bordeaux",
                                         color = new Color32(109, 7, 26, byte.MaxValue), 
                                         shadow = new Color32(54, 2, 11, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Olive", // 20
+            colors.Add(new CustomColor { longname = "Olive",
                                         color = new Color32(154, 140, 61, byte.MaxValue), 
                                         shadow = new Color32(104, 95, 40, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "LilyBan", //21
-                                        color = new Color32(255, 255, 190, byte.MaxValue), 
-                                        shadow = new Color32(68, 255, 246, byte.MaxValue),
-                                        isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Mint",  // 22
+            colors.Add(new CustomColor { longname = "Turqoise",
+                                        color = new Color32(22, 132, 176, byte.MaxValue), 
+                                        shadow = new Color32(15, 89, 117, byte.MaxValue),
+                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "Mint", 
                                         color = new Color32(111, 192, 156, byte.MaxValue), 
                                         shadow = new Color32(65, 148, 111, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Lavender", //23
+            colors.Add(new CustomColor { longname = "Lavender",
                                         color = new Color32(173, 126, 201, byte.MaxValue), 
                                         shadow = new Color32(131, 58, 203, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Nougat", //24
+            colors.Add(new CustomColor { longname = "Nougat",
                                         color = new Color32(160, 101, 56, byte.MaxValue), 
                                         shadow = new Color32(115, 15, 78, byte.MaxValue),
                                         isLighterColor = false });
             colors.Add(new CustomColor { longname = "HazardCamo", // 25
                                         color = new Color32(75, 83, 32, byte.MaxValue), 
                                         shadow = new Color32(60, 66, 26, byte.MaxValue),
-                                        isLighterColor = false });
+                                        isLighterColor = true });
             colors.Add(new CustomColor { longname = "Wasabi", // 26
                                         color = new Color32(112, 143, 46, byte.MaxValue), 
                                         shadow = new Color32(72, 92, 29, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Hot Pink", // 27
-                                        color = new Color32(255, 51, 102, byte.MaxValue), 
-                                        shadow = new Color32(232, 0, 58, byte.MaxValue),
-                                        isLighterColor = true });
+            colors.Add(new CustomColor { longname = "LilyBan", //27
+                                        color = new Color32(255, 255, 190, byte.MaxValue),
+                                        shadow = new Color32(68, 255, 246, byte.MaxValue),
+                                        isLigherColor = true });
             colors.Add(new CustomColor { longname = "DuckGreen",  // 28
                                         color = new Color32(35, 107, 56, byte.MaxValue), 
                                         shadow = new Color32(26, 28, 27, byte.MaxValue),
                                         isLighterColor = false });
             colors.Add(new CustomColor { longname = "NorthOrange", // 29
-                                        color = new Color32(255, 185, 0, byte.MaxValue), 
-                                        shadow = new Color32(255, 175, 0, byte.MaxValue), 
+                                        color = new Color32(255, 185, 0, byte.MaxValue),
+                                        shadow = new Color32(255, 175, 0, byte.MaxValue),
                                         isLighterColor = true });
 
 	    // NEW COLORS START ON ID 30!!!!
