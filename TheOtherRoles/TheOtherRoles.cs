@@ -694,8 +694,11 @@ namespace TheOtherRoles
 			if (Helpers.isCamoComms()) return;
 			camoComms = false;
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
+		if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
+		if (Ninja.ninja == p && Ninja.isInvisble) continue;
                 p.setDefaultLook();
+            }
         }
 
         public static void clearAndReload() {

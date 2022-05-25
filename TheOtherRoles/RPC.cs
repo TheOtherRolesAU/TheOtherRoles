@@ -888,7 +888,7 @@ namespace TheOtherRoles
         }
 
         public static void camouflagerCamouflage(byte setTimer) {
-			if (Helpers.isActiveCamoComms()) return;
+			if (Helpers.isActiveCamoComms() && setTimer != 2) return;
 			if (Helpers.isCamoComms()) Camouflager.camoComms = true;
             if (Camouflager.camouflager == null && !Camouflager.camoComms) return;
 
@@ -1110,25 +1110,27 @@ namespace TheOtherRoles
             Ninja.isInvisble = true;
         }
 
-		public static void setSwoop(byte playerId, byte flag) {
-			
+	public static void setSwoop(byte playerId, byte flag) {		
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
-            if (flag == byte.MaxValue)
-            {
-                target.MyRend.color = Color.white;
-                target.setDefaultLook();
+            if (flag == byte.MaxValue) {
+		if (Camouflager.camouflageTimer > 0f) {
+			camouflagerCamouflage((byte)2);
+                } else {
+	                target.MyRend.color = Color.white;
+			target.setDefaultLook();
+		}
                 Swooper.isInvisable = false;
                 return;
+            } else {
+                target.setLook("", 6, "", "", "", "");
+                Color color = Color.clear;           
+                if (Swooper.swooper == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+                target.MyRend.color = color;
+    	        Swooper.swoopTimer = Swooper.duration;
+	        Swooper.isInvisable = true;
             }
-
-            target.setLook("", 6, "", "", "", "");
-            Color color = Color.clear;           
-            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
-            target.MyRend.color = color;
-			Swooper.swoopTimer = Swooper.duration;
-			Swooper.isInvisable = true;
-		}
+        }
 
 
         public static void setInvisibleGen(byte playerId, byte flag)
