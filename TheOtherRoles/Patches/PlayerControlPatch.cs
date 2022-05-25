@@ -606,7 +606,7 @@ namespace TheOtherRoles.Patches {
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
             int numberOfTasks = playerTotal - playerCompleted;
 
-            if (numberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick)))) {
+            if (numberOfTasks <= Snitch.taskCountForReveal && (PlayerControl.LocalPlayer.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (PlayerControl.LocalPlayer == Jackal.jackal || PlayerControl.LocalPlayer == Sidekick.sidekick || PlayerControl.LocalPlayer == Swooper.swooper)))) {
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
                     Snitch.localArrows[0].arrow.SetActive(true);
@@ -618,7 +618,7 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
-                    bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
+                    bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick || p == Swooper.swooper);
 
                     if (!p.Data.IsDead && (arrowForImp || arrowForTeamJackal)) {
                         if (arrowIndex >= Snitch.localArrows.Count) {
