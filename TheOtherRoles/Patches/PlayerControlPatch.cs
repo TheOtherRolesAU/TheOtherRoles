@@ -364,7 +364,7 @@ namespace TheOtherRoles.Patches {
 
         static void swooperUpdate()
         {
-            if (Swooper.isInvisable && Swooper.swoopTimer <= 0 && Swooper.swooper == PlayerControl.LocalPlayer)
+            if (Swooper.isInvisable && Swooper.swoopTimer <= 0 && Camouflager.camouflageTimer <= 0f && Swooper.swooper == PlayerControl.LocalPlayer)
             {
 				MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetSwoop, Hazel.SendOption.Reliable, -1);
 				invisibleWriter.Write(Swooper.swooper.PlayerId);
