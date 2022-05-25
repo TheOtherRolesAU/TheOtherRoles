@@ -91,7 +91,9 @@ namespace TheOtherRoles.Patches {
             neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
-  	    // Don't assign Swooper neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
+  	    // Don't assign Swooper unless Both option is one
+	    if (!CustomOptionHolder.swooperAsWell.getBool()) 
+                neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
 
@@ -455,7 +457,7 @@ namespace TheOtherRoles.Patches {
             byte playerId = playerList[index].PlayerId;
             if (removePlayer) playerList.RemoveAt(index);
 
-			if (roleId == (byte)RoleId.Jackal) {
+			if (roleId == (byte)RoleId.Jackal && CustomOptionHolder.swooperAsWell.getBool()) {
 				if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
 					roleId = (byte)RoleId.Swooper;
 				}

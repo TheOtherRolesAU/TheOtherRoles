@@ -618,15 +618,19 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 {
                     bool arrowForImp = p.Data.Role.IsImpostor;
-                    bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick || p == Swooper.swooper);
+                    bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
+		    bool arrowForTeamSwoop = Snitch.includeTeamJackal && (p == Swooper.swooper);
 
-                    if (!p.Data.IsDead && (arrowForImp || arrowForTeamJackal)) {
+                    if (!p.Data.IsDead && (arrowForImp || arrowForTeamJackal || arrowForTeamSwoop)) {
                         if (arrowIndex >= Snitch.localArrows.Count) {
                             Snitch.localArrows.Add(new Arrow(Palette.ImpostorRed));
                         }
                         if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
                             Snitch.localArrows[arrowIndex].arrow.SetActive(true);
-                            Snitch.localArrows[arrowIndex].Update(p.transform.position, (arrowForTeamJackal && Snitch.teamJackalUseDifferentArrowColor ? Jackal.color : Palette.ImpostorRed));
+			    if (arrowForTeamSwoop) {
+                                Snitch.localArrows[arrowIndex].Update(p.transform.position, Swooper.color);
+			    } else 
+                                Snitch.localArrows[arrowIndex].Update(p.transform.position, (arrowForTeamJackal && Snitch.teamJackalUseDifferentArrowColor ? Jackal.color : Palette.ImpostorRed));
                         }
                         arrowIndex++;
                     }
