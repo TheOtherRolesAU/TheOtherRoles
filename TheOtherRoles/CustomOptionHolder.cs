@@ -20,10 +20,11 @@ namespace TheOtherRoles {
         public static CustomOption modifiersCountMin;
         public static CustomOption modifiersCountMax;
 
-		public static CustomOption swooperSpawnRate;
-		public static CustomOption swooperCooldown;
-		public static CustomOption swooperAsWell;
+        public static CustomOption swooperSpawnRate;
+        public static CustomOption swooperCooldown;
+        public static CustomOption swooperAsWell;
         public static CustomOption swooperDuration;
+        public static CustomOption swooperHasImpVision;
 		
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -426,10 +427,11 @@ namespace TheOtherRoles {
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, Types.Neutral, "Jackals Can Make An Impostor To His Sidekick", true, jackalCanCreateSidekick);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, Types.Neutral, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
-			swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, cs(Swooper.color, "Swooper"), rates, null, true); //jackalSpawnRate);
-            swooperAsWell = CustomOption.Create(1113, Types.Neutral, "Spawn as Alternate Jackal", true, swooperSpawnRate);
-			swooperCooldown = CustomOption.Create(1111, Types.Neutral, "Swoop Cooldown", 30f, 10f, 60f, 2.5f, swooperSpawnRate);
-			swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
+            swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, cs(Swooper.color, "Swooper"), rates, null, true); //jackalSpawnRate);
+            swooperAsWell = CustomOption.Create(1113, Types.Neutral, "Spawn as Alternate Jackal", false, swooperSpawnRate);
+            swooperCooldown = CustomOption.Create(1111, Types.Neutral, "Swoop Cooldown", 30f, 10f, 60f, 2.5f, swooperSpawnRate);
+            swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
+            swooperHasImpVision = CustomOption.Create(1114, Types.Neutral, "Swooper Has Impostor Vision", true, swooperSpawnRate);
 			
             vultureSpawnRate = CustomOption.Create(340, Types.Neutral, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, Types.Neutral, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);

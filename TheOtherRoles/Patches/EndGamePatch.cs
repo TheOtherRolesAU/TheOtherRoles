@@ -1,4 +1,3 @@
-  
 using HarmonyLib;
 using static TheOtherRoles.TheOtherRoles;
 using System.Collections.Generic;
@@ -99,7 +98,7 @@ namespace TheOtherRoles.Patches {
             foreach (var winner in winnersToRemove) TempData.winners.Remove(winner);
 
             bool jesterWin = Jester.jester != null && gameOverReason == (GameOverReason)CustomGameOverReason.JesterWin;
-			bool swooperWin = gameOverReason == (GameOverReason)CustomGameOverReason.SwooperWin && ((Swooper.swooper != null && !Swooper.swooper.Data.IsDead));
+	    bool swooperWin = gameOverReason == (GameOverReason)CustomGameOverReason.SwooperWin && ((Swooper.swooper != null && !Swooper.swooper.Data.IsDead));
             bool prosecutorWin = Prosecutor.prosecutor != null && gameOverReason == (GameOverReason)CustomGameOverReason.ProsecutorWin;
             bool arsonistWin = Arsonist.arsonist != null && gameOverReason == (GameOverReason)CustomGameOverReason.ArsonistWin;
             bool miniLose = Mini.mini != null && gameOverReason == (GameOverReason)CustomGameOverReason.MiniLose;
@@ -505,7 +504,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && statistics.TeamSwooperAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && (statistics.TeamSwooperAlive == 0 || Swooper.swooper == Jackal.jackal) && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                 return true;
@@ -514,6 +513,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForSwooperWin(ShipStatus __instance, PlayerStatistics statistics) {
+            if (Swooper.swooper == Jackal.jackal) return false;
             if (statistics.TeamSwooperAlive >= statistics.TotalAlive - statistics.TeamSwooperAlive && statistics.TeamImpostorsAlive == 0 && !(statistics.TeamSwooperHasAliveLover && statistics.TeamLoversAlive == 2)) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.SwooperWin, false);

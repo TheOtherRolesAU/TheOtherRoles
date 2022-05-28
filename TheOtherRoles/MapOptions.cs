@@ -16,6 +16,7 @@ namespace TheOtherRoles{
         public static bool allowParallelMedBayScans = false;
         public static bool showLighterDarker = true;
         public static bool toggleCursor = true;
+        public static bool showKillAnimation = true;
         public static bool camoComms = false;
 
         public static int restrictDevices = 0;
@@ -67,6 +68,7 @@ namespace TheOtherRoles{
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
             toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value;
+            showKillAnimation = TheOtherRolesPlugin.showKillAnimation.Value;
 
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
             Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;

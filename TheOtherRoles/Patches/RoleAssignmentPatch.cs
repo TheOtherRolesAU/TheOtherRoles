@@ -91,7 +91,7 @@ namespace TheOtherRoles.Patches {
             neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
-  	    // Don't assign Swooper unless Both option is one
+  	    // Don't assign Swooper unless Both option is on
 	    if (!CustomOptionHolder.swooperAsWell.getBool()) 
                 neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
@@ -457,16 +457,22 @@ namespace TheOtherRoles.Patches {
             byte playerId = playerList[index].PlayerId;
             if (removePlayer) playerList.RemoveAt(index);
 
-			if (roleId == (byte)RoleId.Jackal && CustomOptionHolder.swooperAsWell.getBool()) {
-				if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
-					roleId = (byte)RoleId.Swooper;
-				}
-			}
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.setRole(roleId, playerId);
+
+            if (roleId == (byte)RoleId.Jackal && CustomOptionHolder.swooperAsWell.getBool()) {
+                if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
+                    MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
+                    writer2.Write((byte)RoleId.Swooper);
+                    writer2.Write(playerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                    RPCProcedure.setRole((byte)RoleId.Swooper, playerId);
+                }
+            }
+
             return playerId;
         }
 

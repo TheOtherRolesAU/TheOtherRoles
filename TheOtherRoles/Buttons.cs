@@ -1002,9 +1002,9 @@ namespace TheOtherRoles
                     Swooper.isInvisable = false;
                 },
                 Swooper.getSwoopButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                Swooper.getSwooperSwoopVector(),
                 __instance,
-                KeyCode.F,
+                KeyCode.V,
 				true,
 				Swooper.duration,
 				() => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
