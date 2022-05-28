@@ -145,7 +145,7 @@ namespace TheOtherRoles
             invert
         };
 
-        public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p, bool showModifier = true) {
+        public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p, bool showModifier = true, bool onlyMods = false) {
             List<RoleInfo> infos = new List<RoleInfo>();
             if (p == null) return infos;
 
@@ -161,6 +161,7 @@ namespace TheOtherRoles
                 if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }
+            if (onlyMods) return infos;
 
             // Special roles
             if (p == Jester.jester) infos.Add(jester);

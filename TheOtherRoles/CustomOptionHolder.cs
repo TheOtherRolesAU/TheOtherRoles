@@ -289,6 +289,7 @@ namespace TheOtherRoles {
         public static CustomOption shieldFirstKill;
 
         public static CustomOption randomGameStartPosition;
+        public static CustomOption allowModGuess;
         public static CustomOption resetRoundStartCooldown;
 
         public static CustomOption dynamicMap;
@@ -621,8 +622,9 @@ namespace TheOtherRoles {
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
 
 
-            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", true);
-            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", true);
+            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);
+            allowModGuess = CustomOption.Create(9043, Types.General, "Allow Guessing Some Modifiers", false);
+            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});
