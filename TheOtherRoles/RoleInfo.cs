@@ -166,7 +166,7 @@ namespace TheOtherRoles
             // Special roles
             if (p == Jester.jester) infos.Add(jester);
             if (p == Prosecutor.prosecutor) infos.Add(prosecutor);
-			if (p == Swooper.swooper) infos.Add(swooper);
+            if (p == Swooper.swooper) infos.Add(swooper);
             if (p == Mayor.mayor) infos.Add(mayor);
             if (p == Portalmaker.portalmaker) infos.Add(portalmaker);
             if (p == Engineer.engineer) infos.Add(engineer);
@@ -197,7 +197,7 @@ namespace TheOtherRoles
             if (p == Hacker.hacker) infos.Add(hacker);
             if (p == Tracker.tracker) infos.Add(tracker);
             if (p == Snitch.snitch) infos.Add(snitch);
-            if (p == Jackal.jackal || (Jackal.formerJackals != null && Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) infos.Add(jackal);
+            if (p == Jackal.jackal || (Jackal.formerJackals != null && Jackal.formerJackals.Any(x => x.PlayerId == p.PlayerId))) if (Jackal.jackal != Swooper.swooper) infos.Add(jackal);
             if (p == Sidekick.sidekick) infos.Add(sidekick);
             if (p == Spy.spy) infos.Add(spy);
             if (p == SecurityGuard.securityGuard) infos.Add(securityGuard);
