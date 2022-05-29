@@ -848,6 +848,7 @@ namespace TheOtherRoles
         public static bool canKillNearGarlics = true;
         public static bool localPlacedGarlic = false;
         public static bool garlicsActive = true;
+        public static bool garlicButton = true;
 
         public static PlayerControl currentTarget;
         public static PlayerControl bitten; 
@@ -877,6 +878,7 @@ namespace TheOtherRoles
             delay = CustomOptionHolder.vampireKillDelay.getFloat();
             cooldown = CustomOptionHolder.vampireCooldown.getFloat();
             canKillNearGarlics = CustomOptionHolder.vampireCanKillNearGarlics.getBool();
+            garlicButton = CustomOptionHolder.vampireGarlicButton.getBool();
         }
     }
 
