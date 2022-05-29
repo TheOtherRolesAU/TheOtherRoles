@@ -807,7 +807,6 @@ namespace TheOtherRoles
                     }
                     else {
                         vampireKillButton.actionButton.graphic.sprite = Vampire.getButtonSprite();
-                        vampireKillButton.showButtonText = false;
                     }
                     return Vampire.currentTarget != null && PlayerControl.LocalPlayer.CanMove && (!Vampire.targetNearGarlic || Vampire.canKillNearGarlics);
                 },
@@ -923,7 +922,7 @@ namespace TheOtherRoles
                 },
                 () => { return Jackal.canCreateSidekick && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-                    showTargetNameOnButton(Jackal.currentTarget, jackalSidekickButton, "SIDEKICK");
+                    showTargetNameOnButton(Jackal.currentTarget, jackalSidekickButton, ""); // Show now text since the button already says sidekick
                     return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove;
                 },
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
