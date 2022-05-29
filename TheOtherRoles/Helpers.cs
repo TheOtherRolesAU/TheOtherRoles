@@ -342,6 +342,7 @@ namespace TheOtherRoles {
         public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
             if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
             else if (Ninja.isInvisble && Ninja.ninja == target) return true; 
+            else if (Swooper.isInvisable && Swooper.swooper == target) return true; 
             else if (!MapOptions.hidePlayerNames) return false; // All names are visible
             else if (source == null || target == null) return true;
             else if (source == target) return false; // Player sees his own name
