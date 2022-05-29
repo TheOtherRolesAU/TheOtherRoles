@@ -134,8 +134,13 @@ namespace TheOtherRoles
 	public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
-                if (target == null) text = defaultText; // Set text to defaultText if no target
+                if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
+                else if (ShipStatusPatch.lightsOut <= PlayerControl.GameOptions.CrewLightMod) text = defaultText; // set to default if lights are out
+                else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
+                else if (target == Swooper.swooper && Swooper.isInvisable) text = defaultText;
+                else if (target == null) text = defaultText; // Set text to defaultText if no target
                 else text = target.name; // Set text to playername
+                if (target == Swooper.swooper && 
                 button.actionButton.OverrideText(text);
                 button.showButtonText = true;
             }
@@ -314,9 +319,9 @@ namespace TheOtherRoles
             // Sheriff Kill
             sheriffKillButton = new CustomButton(
                 () => {
+                    if (Helpers.checkAndDoVetKill(Sheriff.currentTarget)) return;
                     MurderAttemptResult murderAttemptResult = Helpers.checkMuderAttempt(Sheriff.sheriff, Sheriff.currentTarget);
                     if (murderAttemptResult == MurderAttemptResult.SuppressKill) return;
-/// What do? Add in code to account for vet alert for ALL buttons. Here I need to add a check for ReverseKill
                     if (murderAttemptResult == MurderAttemptResult.PerformKill) {
                         byte targetId = 0;
                         if ((Sheriff.currentTarget.Data.Role.IsImpostor && (Sheriff.currentTarget != Mini.mini || Mini.isGrownUp())) ||
@@ -337,18 +342,15 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                         RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
                     }
-                    if (murderAttemptResult == MurderAttemptResult.ReverseKill) {
-			MurderAttemptResult checkReverseKill = Helpers.checkMuderAttemptAndKill(Sheriff.currentTarget, Sheriff.sheriff);
-                    }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
                     Sheriff.currentTarget = null;
                 },
                 () => { return Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Sheriff.currentTarget, sheriffKillButton, "KILL");
-					return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove;
-				},
+                    showTargetNameOnButton(Sheriff.currentTarget, sheriffKillButton, "KILL");
+                    return Sheriff.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { sheriffKillButton.Timer = sheriffKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0f, 1f, 0),
@@ -373,7 +375,7 @@ namespace TheOtherRoles
                 },
                 () => { return (Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Deputy.keepsHandcuffsOnPromotion) && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-					showTargetNameOnButton(Deputy.currentTarget, deputyHandcuffButton, "");
+                    showTargetNameOnButton(Deputy.currentTarget, deputyHandcuffButton, "CUFF");
                     if (deputyButtonHandcuffsText != null) deputyButtonHandcuffsText.text = $"{Deputy.remainingHandcuffs}";
                     return ((Deputy.deputy != null && Deputy.deputy == PlayerControl.LocalPlayer && Deputy.currentTarget || Sheriff.sheriff != null && Sheriff.sheriff == PlayerControl.LocalPlayer && Sheriff.sheriff == Sheriff.formerDeputy && Sheriff.currentTarget) && Deputy.remainingHandcuffs > 0 && PlayerControl.LocalPlayer.CanMove);
                 },
@@ -453,9 +455,9 @@ namespace TheOtherRoles
                 },
                 () => { return Medic.medic != null && Medic.medic == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Medic.currentTarget, medicShieldButton, "");
-					return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove;
-				},
+                    showTargetNameOnButton(Medic.currentTarget, medicShieldButton, "SHIELD");
+                    return !Medic.usedShield && Medic.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => {},
                 Medic.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -474,10 +476,10 @@ namespace TheOtherRoles
                     RPCProcedure.setFutureShifted(Shifter.currentTarget.PlayerId);
                 },
                 () => { return Shifter.shifter != null && Shifter.shifter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { 
-					showTargetNameOnButton(Shifter.currentTarget, shifterShiftButton, "");
-					return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove;
-				},
+                () => {
+                    showTargetNameOnButton(Shifter.currentTarget, shifterShiftButton, "SHIFT");
+                    return Shifter.currentTarget && Shifter.futureShift == null && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { },
                 Shifter.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -498,7 +500,7 @@ namespace TheOtherRoles
                         morphlingButton.EffectDuration = Morphling.duration;
 
                     } else if (Morphling.currentTarget != null) {
-                    if (Helpers.checkAndDoVetKill(Morphling.currentTarget)) return;
+                        if (Helpers.checkAndDoVetKill(Morphling.currentTarget)) return;
                         Morphling.sampledTarget = Morphling.currentTarget;
                         morphlingButton.Sprite = Morphling.getMorphSprite();
                         morphlingButton.EffectDuration = 1f;
@@ -519,10 +521,11 @@ namespace TheOtherRoles
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => { 
-					showTargetNameOnButton(Morphling.currentTarget, morphlingButton, "");
-					return (Morphling.currentTarget || Morphling.sampledTarget) && PlayerControl.LocalPlayer.CanMove;
-				},
+                () => {
+                    if (Morphling.sampledTarget == null) 
+                        showTargetNameOnButton(Morphling.currentTarget, morphlingButton, "SAMPLE");
+                    return (Morphling.currentTarget || Morphling.sampledTarget) && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { 
                     morphlingButton.Timer = morphlingButton.MaxTimer;
                     morphlingButton.Sprite = Morphling.getSampleSprite();
@@ -715,8 +718,9 @@ namespace TheOtherRoles
                 },
                 () => { return Tracker.tracker != null && Tracker.tracker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Tracker.currentTarget, trackerTrackPlayerButton, "");
-					return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker;
+                    if (!Tracker.usedTracker)
+                        showTargetNameOnButton(Tracker.currentTarget, trackerTrackPlayerButton, "");
+                    return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker;
 				},
                 () => { if(Tracker.resetTargetAfterMeeting) Tracker.resetTracked(); },
                 Tracker.getButtonSprite(),
@@ -793,7 +797,10 @@ namespace TheOtherRoles
                 () => {
                     return Vampire.vampire != null && Vampire.vampire == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-					showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "");
+                    if (Vampire.targetNearGarlic)
+                        showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "KILL");
+                    else
+                        showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "BITE");
                     if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics) {
                         vampireKillButton.actionButton.graphic.sprite = __instance.KillButton.graphic.sprite;
                         vampireKillButton.showButtonText = true;
@@ -916,9 +923,9 @@ namespace TheOtherRoles
                 },
                 () => { return Jackal.canCreateSidekick && Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Jackal.currentTarget, jackalSidekickButton, "");
-					return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove;
-				},
+                    showTargetNameOnButton(Jackal.currentTarget, jackalSidekickButton, "SIDEKICK");
+                    return Jackal.canCreateSidekick && Jackal.currentTarget != null && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
                 Jackal.getSidekickButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -937,9 +944,9 @@ namespace TheOtherRoles
                 },
                 () => { return Jackal.jackal != null && Jackal.jackal == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-					showTargetNameOnButton(Jackal.currentTarget, jackalKillButton, "KILL");
-					return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove;
-				},
+                    showTargetNameOnButton(Jackal.currentTarget, jackalKillButton, "KILL");
+                    return Jackal.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { jackalKillButton.Timer = jackalKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0, 1f, 0),
@@ -957,9 +964,9 @@ namespace TheOtherRoles
                 },
                 () => { return Sidekick.canKill && Sidekick.sidekick != null && Sidekick.sidekick == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Sidekick.currentTarget, sidekickKillButton, "KILL");
-					return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove;
-				},
+                    showTargetNameOnButton(Sidekick.currentTarget, sidekickKillButton, "KILL");
+                    return Sidekick.currentTarget && PlayerControl.LocalPlayer.CanMove;
+                },
                 () => { sidekickKillButton.Timer = sidekickKillButton.MaxTimer;},
                 __instance.KillButton.graphic.sprite,
                 new Vector3(0, 1f, 0),
@@ -987,17 +994,15 @@ namespace TheOtherRoles
 
             swooperSwoopButton = new CustomButton(
                 () => { /* On Use */ 
-					MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetSwoop, Hazel.SendOption.Reliable, -1);
-					invisibleWriter.Write(Swooper.swooper.PlayerId);
-					invisibleWriter.Write(byte.MinValue);
-					AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
-					RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MinValue);
-
-				},
+                    MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetSwoop, Hazel.SendOption.Reliable, -1);
+                    invisibleWriter.Write(Swooper.swooper.PlayerId);
+                    invisibleWriter.Write(byte.MinValue);
+                    AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+                    RPCProcedure.setSwoop(Swooper.swooper.PlayerId, byte.MinValue);
+                },
                 () => { /* Can See */ return Swooper.swooper != null && Swooper.swooper == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
-                () => {  /* On CLick */ return (PlayerControl.LocalPlayer.CanMove); },
-                () => {  
-					// on meeting ends
+                () => {  /* On Click */ return (PlayerControl.LocalPlayer.CanMove); },
+                () => {  /* On Meeting End */
                     swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer;
                     Swooper.isInvisable = false;
                 },
@@ -1005,9 +1010,9 @@ namespace TheOtherRoles
                 Swooper.getSwooperSwoopVector(),
                 __instance,
                 KeyCode.V,
-				true,
-				Swooper.duration,
-				() => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
+                true,
+                Swooper.duration,
+                () => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
             );
 
             // Lighter light
@@ -1045,9 +1050,9 @@ namespace TheOtherRoles
                 },
                 () => { return Eraser.eraser != null && Eraser.eraser == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Eraser.currentTarget, eraserButton, "");
-					return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null;
-				},
+                    showTargetNameOnButton(Eraser.currentTarget, eraserButton, "ERASE");
+                    return PlayerControl.LocalPlayer.CanMove && Eraser.currentTarget != null;
+                },
                 () => { eraserButton.Timer = eraserButton.MaxTimer;},
                 Eraser.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -1169,8 +1174,11 @@ namespace TheOtherRoles
                 },
                 () => { return Warlock.warlock != null && Warlock.warlock == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { 
-					showTargetNameOnButton(Warlock.currentTarget, warlockCurseButton, "");
-					return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove;
+                    if (Warlock.curseVictim != null)
+                        showTargetNameOnButton(Warlock.currentTarget, warlockCurseButton, "KILL");
+                    else
+                        showTargetNameOnButton(Warlock.currentTarget, warlockCurseButton, "CURSE");
+                    return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove;
 				},
                 () => { 
                     warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
@@ -1313,8 +1321,11 @@ namespace TheOtherRoles
                 },
                 () => { return Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-					showTargetNameOnButton(Arsonist.currentTarget, arsonistButton, "");
                     bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
+                    if (dousedEveryoneAlive)
+                        showTargetNameOnButton(null, arsonistButton, "IGNITE");
+                    else
+                        showTargetNameOnButton(null, arsonistButton, "IGNITE");
                     if (dousedEveryoneAlive) arsonistButton.actionButton.graphic.sprite = Arsonist.getIgniteSprite();
                     
                     if (arsonistButton.isEffectActive && Arsonist.douseTarget != Arsonist.currentTarget) {
@@ -1521,7 +1532,7 @@ namespace TheOtherRoles
                 },
                 () => { return Pursuer.pursuer != null && Pursuer.pursuer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && Pursuer.blanks < Pursuer.blanksNumber; },
                 () => {
-					showTargetNameOnButton(Pursuer.target, pursuerButton, "");
+                    showTargetNameOnButton(Pursuer.target, pursuerButton, "BLANK");
                     if (pursuerButtonBlanksText != null) pursuerButtonBlanksText.text = $"{Pursuer.blanksNumber - Pursuer.blanks}";
 
                     return Pursuer.blanksNumber > Pursuer.blanks && PlayerControl.LocalPlayer.CanMove && Pursuer.target != null;
@@ -1560,6 +1571,7 @@ namespace TheOtherRoles
                     return PlayerControl.LocalPlayer.CanMove && Witch.currentTarget != null;
                 },
                 () => {
+                    showTargetNameOnButton(null, arsonistButton, "SPELL");
                     witchSpellButton.Timer = witchSpellButton.MaxTimer;
                     witchSpellButton.isEffectActive = false;
                     Witch.spellCastingTarget = null;
@@ -1660,7 +1672,7 @@ namespace TheOtherRoles
                 },
                 () => { return Ninja.ninja != null && Ninja.ninja == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {  // CouldUse
-					showTargetNameOnButton(Ninja.currentTarget, ninjaButton, "Ninja");
+                    showTargetNameOnButton(Ninja.currentTarget, ninjaButton, "NINJA");
                     ninjaButton.Sprite = Ninja.ninjaMarked != null ? Ninja.getKillButtonSprite() : Ninja.getMarkButtonSprite(); 
                     return (Ninja.currentTarget != null || Ninja.ninjaMarked != null) && PlayerControl.LocalPlayer.CanMove;
                 },
@@ -1688,7 +1700,7 @@ namespace TheOtherRoles
                },
                () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
                () => { // Could Use
-		   var text = "Blackmail";
+		   var text = "BLACKMAIL";
 		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
                    showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
                    return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);

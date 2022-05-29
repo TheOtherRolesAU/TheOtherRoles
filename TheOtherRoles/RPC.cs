@@ -1125,7 +1125,7 @@ namespace TheOtherRoles
             } else {
                 target.setLook("", 6, "", "", "", "");
                 Color color = Color.clear;           
-                if (Swooper.swooper == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+                if (Swooper.swooper == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead || (Swooper.swooper == Sidekick.sidekick && Sidekick.sidekick = PlayerControl.LocalPlayer)) color.a = 0.1f;
                 target.MyRend.color = color;
     	        Swooper.swoopTimer = Swooper.duration;
 	        Swooper.isInvisable = true;
