@@ -140,7 +140,6 @@ namespace TheOtherRoles
                 else if (target == Swooper.swooper && Swooper.isInvisable) text = defaultText;
                 else if (target == null) text = defaultText; // Set text to defaultText if no target
                 else text = target.name; // Set text to playername
-                if (target == Swooper.swooper && 
                 button.actionButton.OverrideText(text);
                 button.showButtonText = true;
             }
