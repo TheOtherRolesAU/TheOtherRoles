@@ -23,7 +23,7 @@ Even more roles are coming soon. :)
 | [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
 | [Eraser](#eraser) | [Detective](#detective) | [Prosecutor](#prosecutor) | [Mini](#mini) |
 | [Trickster](#trickster) | [Time Master](#time-master) | [Amnesiac](#amnesiac) | [VIP](#vip) |
-| [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
+| [Cleaner](#cleaner) | [Medic](#medic) | [Swooper](#swooper) | [Invert](#invert) |
 | [Warlock](#warlock) | [Swapper](#swapper) |
 | [Bounty Hunter](#bounty-hunter) | [Seer](#seer) |  |
 | [Witch](#witch) | [Hacker](#hacker) |  |  |
@@ -1163,13 +1163,30 @@ There are a few things to note about how the Amnesiacs role can change.\
 If the target is Bounty Hunter: Amnesiac -> Impostor (Red flash to signafy this)\
 If the taget is Arsonist: Red Flash; Arsonist cannot be taken\
 If the target body was on a team with Jackal or Impostor, that player will still be on that team.
-\
+
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
 | Amnesiac Spawn Chance | -
 | Show arrows to dead bodies | If set to true, the Amnesiac will get arrows to dead bodies when they die.
 | Reset role when taken | If set to true, the role that is taken will be fully reset, allowing the abilities to be reused. Note: Weird stuff might happen with this setting off.
+
+## Swooper
+### **Team: Neutral**
+The Swooper is a solo nuetral killer with the option to replace the Jackal.\
+
+If it is not an Alternate Jackal, it is on it's own team, and must eliminate all opposing factions.
+The Swooper uses the [Jackal](#jackal) kill cooldown.
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Swooper Spawn Chance | -
+| Spawn as Alternate Jackal | false
+| Swoop Cooldown | -
+| Swoop Duration | -
+| Has Impostor Vision | true
+
 -----------------------
 
 -----------------------
