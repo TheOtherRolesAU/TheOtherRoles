@@ -799,8 +799,19 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Swooper.swooper || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {                oldShifter.Exiled();
-                return;
+            if (player.Data.Role.IsImpostor ||  // Don't shift on Imps
+                player == Jackal.jackal || Don't shift on Jackal
+                player == Swooper.swooper || // Don't shift on Swooper
+                player == Sidekick.sidekick || // Don't shift on Sidekick 
+                Jackal.formerJackals.Contains(player) || // Don't shift on former jackals
+                player == Jester.jester || // Don't shift on Jester
+                player == Arsonist.arsonist || // Don't shift on Arso
+                player == Vulture.vulture || // Don't shift on Vulture
+                player == Lawyer.lawyer || // Don't shift on Lawyer
+                player == Prosecutor.prosecutor || // Don't shift on Prosecutor
+                player == Amisiac.amnisiac) { // Don't shift on Amnesiac
+                    oldShifter.Exiled();
+                    return;
             }
 
             if (Shifter.shiftModifiers) {
