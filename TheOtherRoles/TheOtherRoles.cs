@@ -134,12 +134,14 @@ namespace TheOtherRoles
             public static PlayerControl target;
             public static Color color = new Color32(201, 204, 63, byte.MaxValue);
             public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+            public static bool targetWasGuessed = false;
 
             public static bool triggerProsecutorWin = false;
 
             public static void clearAndReload() {
               prosecutor = null;
               triggerProsecutorWin = false;
+              targetWasGuessed = false;
               target = null;
             }
         }
@@ -1534,7 +1536,7 @@ namespace TheOtherRoles
             blankedList = new List<PlayerControl>();
             blanks = 0;
             notAckedExiled = false;
-
+//            targetWasGuessed = false;
             cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
             blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());
         }
