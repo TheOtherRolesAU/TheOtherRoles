@@ -28,6 +28,7 @@ namespace TheOtherRoles
         Janitor,
         Detective,
         TimeMaster,
+		Swooper,
 	Veteren,
 	Amnisiac,
         Medic,
@@ -132,6 +133,9 @@ namespace TheOtherRoles
         LawyerSetTarget,
         LawyerPromotesToPursuer,
         BlackmailPlayer,
+        UseAdminTime,
+        UseCameraTime,
+        UseVitalsTime,
         UnblackmailPlayer,
         SetBlanked,
         Bloody,
@@ -139,6 +143,8 @@ namespace TheOtherRoles
         Invert,
         SetTiebreak,
         SetInvisible,
+		SetInvisibleGen,
+		SetSwoop,
 	ProsecutorChangesRole,
 	ProsecutorSetTarget,
         ProsecutorToPursuer
@@ -268,8 +274,11 @@ namespace TheOtherRoles
                         Snitch.snitch = player;
                         break;
                     case RoleId.Jackal:
-                        Jackal.jackal = player;
-                        break;
+						Jackal.jackal = player;
+						break;
+                    case RoleId.Swooper:
+						Swooper.swooper = player;
+						break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
                         break;
@@ -790,8 +799,7 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {
-                oldShifter.Exiled();
+            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Swooper.swooper || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {                oldShifter.Exiled();
                 return;
             }
 
@@ -879,10 +887,12 @@ namespace TheOtherRoles
                 Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
         }
 
-        public static void camouflagerCamouflage() {
-            if (Camouflager.camouflager == null) return;
+        public static void camouflagerCamouflage(byte setTimer) {
+			if (Helpers.isActiveCamoComms() && setTimer != 2) return;
+			if (Helpers.isCamoComms()) Camouflager.camoComms = true;
+            if (Camouflager.camouflager == null && !Camouflager.camoComms) return;
 
-            Camouflager.camouflageTimer = Camouflager.duration;
+            if (setTimer == 1) Camouflager.camouflageTimer = Camouflager.duration;
             foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
                 player.setLook("", 6, "", "", "", "");
         }
@@ -1015,6 +1025,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
+			if (player == Swooper.swooper) Swooper.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
@@ -1097,6 +1108,46 @@ namespace TheOtherRoles
             target.MyRend.color = color;
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
+        }
+
+	public static void setSwoop(byte playerId, byte flag) {		
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue) {
+		if (Camouflager.camouflageTimer > 0f) {
+			camouflagerCamouflage((byte)2);
+                } else {
+	                target.MyRend.color = Color.white;
+			target.setDefaultLook();
+		}
+                Swooper.isInvisable = false;
+                return;
+            } else {
+                target.setLook("", 6, "", "", "", "");
+                Color color = Color.clear;           
+                if (Swooper.swooper == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == PlayerControl.LocalPlayer)) color.a = 0.1f;
+                target.MyRend.color = color;
+    	        Swooper.swoopTimer = Swooper.duration;
+	        Swooper.isInvisable = true;
+            }
+        }
+
+
+        public static void setInvisibleGen(byte playerId, byte flag)
+        {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (target == null) return;
+            if (flag == byte.MaxValue)
+            {
+                target.MyRend.color = Color.white;
+                target.setDefaultLook();
+                return;
+            }
+
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (PlayerControl.LocalPlayer.Data.IsDead) color.a = 0.1f;
+            target.MyRend.color = color;
         }
 
         public static void placePortal(byte[] buff) {
@@ -1284,6 +1335,22 @@ namespace TheOtherRoles
             }
         }
 
+        public static void useAdminTime(float time)
+        {
+            MapOptions.restrictAdminTime -= time;
+        }
+
+        public static void useCameraTime(float time)
+        {
+            MapOptions.restrictCamerasTime -= time;
+        }
+
+        public static void useVitalsTime(float time)
+        {
+            MapOptions.restrictVitalsTime -= time;
+        }
+
+
 	public static void blackmailPlayer(byte playerId) {
 	  PlayerControl target = Helpers.playerById(playerId);
 	  Blackmailer.blackmailed = target;
@@ -1406,6 +1473,15 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.CleanBody:
                     RPCProcedure.cleanBody(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.UseAdminTime:
+                    RPCProcedure.useAdminTime(reader.ReadSingle());
+                    break;
+                case (byte)CustomRPC.UseCameraTime:
+                    RPCProcedure.useCameraTime(reader.ReadSingle());
+                    break;
+                case (byte)CustomRPC.UseVitalsTime:
+                    RPCProcedure.useVitalsTime(reader.ReadSingle());
+                    break;
                 case (byte)CustomRPC.BlackmailPlayer:
                     RPCProcedure.blackmailPlayer(reader.ReadByte());
                     break;
@@ -1445,8 +1521,9 @@ namespace TheOtherRoles
                     RPCProcedure.morphlingMorph(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
-                    RPCProcedure.camouflagerCamouflage();
-                    break;
+					byte setTimer = reader.ReadByte();
+                    RPCProcedure.camouflagerCamouflage(setTimer);
+				break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = reader.ReadByte();
                     byte reset = reader.ReadByte();
@@ -1558,6 +1635,16 @@ namespace TheOtherRoles
                     byte invisiblePlayer = reader.ReadByte();
                     byte invisibleFlag = reader.ReadByte();
                     RPCProcedure.setInvisible(invisiblePlayer, invisibleFlag);
+                    break; 
+                case (byte)CustomRPC.SetSwoop:
+                    byte invisiblePlayer2 = reader.ReadByte();
+                    byte invisibleFlag2 = reader.ReadByte();
+                    RPCProcedure.setSwoop(invisiblePlayer2, invisibleFlag2);
+                    break;  
+                case (byte)CustomRPC.SetInvisibleGen:
+                    byte invisiblePlayer3 = reader.ReadByte();
+                    byte invisibleFlag3 = reader.ReadByte();
+                    RPCProcedure.setInvisibleGen(invisiblePlayer3, invisibleFlag3);
                     break;  
             }
         }

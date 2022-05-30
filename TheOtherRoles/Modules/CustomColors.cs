@@ -61,17 +61,17 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(112, 143, 46, byte.MaxValue), 
                                         shadow = new Color32(72, 92, 29, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Hot Pink", // 27
-                                        color = new Color32(255, 51, 102, byte.MaxValue), 
-                                        shadow = new Color32(232, 0, 58, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "LilyBan", //27
+                                        color = new Color32(255, 255, 190, byte.MaxValue),
+                                        shadow = new Color32(68, 255, 246, byte.MaxValue),
                                         isLighterColor = true });
             colors.Add(new CustomColor { longname = "DuckGreen",  // 28
                                         color = new Color32(35, 107, 56, byte.MaxValue), 
                                         shadow = new Color32(26, 28, 27, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Lemon", // 29
-                                        color = new Color32(0xDB, 0xFD, 0x2F, byte.MaxValue), 
-                                        shadow = new Color32(0x74, 0xE5, 0x10, byte.MaxValue), 
+            colors.Add(new CustomColor { longname = "NorthOrange", // 29
+                                        color = new Color32(255, 185, 0, byte.MaxValue),
+                                        shadow = new Color32(255, 175, 0, byte.MaxValue),
                                         isLighterColor = true });
 
 	    // NEW COLORS START ON ID 30!!!!

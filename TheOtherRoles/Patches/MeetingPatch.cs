@@ -311,7 +311,15 @@ namespace TheOtherRoles.Patches {
 
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 RoleId guesserRole = (Guesser.niceGuesser != null && PlayerControl.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser :  RoleId.EvilGuesser;
-                if (roleInfo.isModifier || roleInfo.roleId == guesserRole || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles & modifier
+                if (roleInfo.roleId == guesserRole || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles & modifier
+                if (CustomOptionHolder.allowModGuess.getBool() && roleInfo.isModifier) {
+                    // Allow Guessing the following mods: Bait, TieBreaker, Bloody, and VIP
+                    if (roleInfo.roleId != RoleId.Bait &&
+                        roleInfo.roleId != RoleId.Tiebreaker &&
+                        roleInfo.roleId != RoleId.Bloody &&
+                        roleInfo.roleId != RoleId.Vip) continue;
+                } else
+                    if (roleInfo.isModifier) continue;
                 
                 if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
@@ -357,7 +365,9 @@ namespace TheOtherRoles.Patches {
                         var mainRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, false).FirstOrDefault();
                         if (mainRoleInfo == null) return;
 
-                        PlayerControl dyingTarget = (mainRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
+                        var modRoleInfo = RoleInfo.getRoleInfoForPlayer(focusedTarget, true, true).FirstOrDefault();
+
+                        PlayerControl dyingTarget = (mainRoleInfo == roleInfo || modRoleInfo == roleInfo) ? focusedTarget : PlayerControl.LocalPlayer;
 
                         // Reset the GUI
                         __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));

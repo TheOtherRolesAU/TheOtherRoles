@@ -20,6 +20,16 @@ namespace TheOtherRoles {
         SuppressKill,
         BlankKill
     }
+
+	public enum SabatageTypes {
+		Comms,
+		O2,
+		Reactor,
+		OxyMask,
+		Lights,
+		None
+	}
+	
     public static class Helpers
     {
 
@@ -39,6 +49,70 @@ namespace TheOtherRoles {
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
             }
         }
+
+		public static SabatageTypes getActiveSabo() {
+			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator()) {
+				if (task.TaskType == TaskTypes.FixLights) {
+					return SabatageTypes.Lights;
+				} else if (task.TaskType == TaskTypes.RestoreOxy) {
+					return SabatageTypes.O2;
+				} else if (task.TaskType == TaskTypes.ResetReactor || task.TaskType == TaskTypes.StopCharles || task.TaskType == TaskTypes.StopCharles) {
+					return SabatageTypes.Reactor;
+				} else if (task.TaskType == TaskTypes.FixComms) {
+					return SabatageTypes.Comms;
+				} else if (SubmergedCompatibility.IsSubmerged && task.TaskType == SubmergedCompatibility.RetrieveOxygenMask) {
+					return SabatageTypes.OxyMask;
+				}
+			}
+			return SabatageTypes.None;
+		}
+
+		public static bool isSaboActive() {
+			return !(Helpers.getActiveSabo() == SabatageTypes.None);
+		}
+
+		public static bool isReactorActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Reactor);
+		}
+
+		public static bool isLightsActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Lights);
+		}
+
+		public static bool isO2Active() {
+			return (Helpers.getActiveSabo() == SabatageTypes.O2);
+		}
+
+		public static bool isO2MaskActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.OxyMask);
+		}		
+
+		public static bool isCommsActive() {
+			return (Helpers.getActiveSabo() == SabatageTypes.Comms);
+		}
+
+
+		public static bool isCamoComms() {
+			return (isCommsActive() && MapOptions.camoComms);
+		}
+
+
+
+		public static bool isActiveCamoComms() {
+			return (isCamoComms() && Camouflager.camoComms);
+		}
+
+		public static bool wasActiveCamoComms() {
+			return (!isCamoComms() && Camouflager.camoComms);
+		}
+
+		public static void camoReset() {
+			Camouflager.resetCamouflage();
+			if (Morphling.morphTimer > 0f && Morphling.morphling != null && Morphling.morphTarget != null) {
+				PlayerControl target = Morphling.morphTarget;
+				Morphling.morphling.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId);
+			}
+		}
 
         public static void turnToImpostor(PlayerControl player) {
             player.Data.Role.TeamType = RoleTeamTypes.Impostor;
@@ -187,8 +261,27 @@ namespace TheOtherRoles {
             return n != StringNames.ServerNA && n != StringNames.ServerEU && n != StringNames.ServerAS;
         }
 
+        public static bool isDead(this PlayerControl player)
+        {
+            return player == null || player?.Data?.IsDead == true || player?.Data?.Disconnected == true;
+        }
+
+		public static void setInvisable(PlayerControl  player) {
+			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
+			invisibleWriter.Write(player.PlayerId);
+			invisibleWriter.Write(byte.MinValue);
+			AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+			RPCProcedure.setInvisibleGen(player.PlayerId, byte.MinValue);
+		}
+
+        public static bool isAlive(this PlayerControl player)
+        {
+            return !isDead(player);
+        }
+
+
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
+            return (player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
@@ -249,6 +342,7 @@ namespace TheOtherRoles {
         public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
             if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
             else if (Ninja.isInvisble && Ninja.ninja == target) return true; 
+            else if (Swooper.isInvisable && Swooper.swooper == target) return true; 
             else if (!MapOptions.hidePlayerNames) return false; // All names are visible
             else if (source == null || target == null) return true;
             else if (source == target) return false; // Player sees his own name
@@ -318,6 +412,8 @@ namespace TheOtherRoles {
         public static bool roleCanUseVents(this PlayerControl player) {
             bool roleCouldUse = false;
             if (Engineer.engineer != null && Engineer.engineer == player)
+                roleCouldUse = true;
+            if (Swooper.swooper != null && Swooper.swooper == player)
                 roleCouldUse = true;
             else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == player)
                 roleCouldUse = true;

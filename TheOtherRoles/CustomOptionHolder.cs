@@ -20,6 +20,12 @@ namespace TheOtherRoles {
         public static CustomOption modifiersCountMin;
         public static CustomOption modifiersCountMax;
 
+        public static CustomOption swooperSpawnRate;
+        public static CustomOption swooperCooldown;
+        public static CustomOption swooperAsWell;
+        public static CustomOption swooperDuration;
+        public static CustomOption swooperHasImpVision;
+		
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
 
@@ -283,6 +289,7 @@ namespace TheOtherRoles {
         public static CustomOption shieldFirstKill;
 
         public static CustomOption randomGameStartPosition;
+        public static CustomOption allowModGuess;
         public static CustomOption resetRoundStartCooldown;
 
         public static CustomOption dynamicMap;
@@ -291,6 +298,12 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnablePolus;
         public static CustomOption dynamicMapEnableAirShip;
         public static CustomOption dynamicMapEnableSubmerged;
+		public static CustomOption enableCamoComms;
+		
+        public static CustomOption restrictDevices;
+        public static CustomOption restrictAdmin;
+        public static CustomOption restrictCameras;
+        public static CustomOption restrictVents;
 
 
         internal static Dictionary<byte, byte[]> blockedRolePairings = new Dictionary<byte, byte[]>();
@@ -415,6 +428,12 @@ namespace TheOtherRoles {
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, Types.Neutral, "Jackals Can Make An Impostor To His Sidekick", true, jackalCanCreateSidekick);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, Types.Neutral, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
+            swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, cs(Swooper.color, "Swooper"), rates, null, true); //jackalSpawnRate);
+            swooperAsWell = CustomOption.Create(1113, Types.Neutral, "Spawn as Alternate Jackal", false, swooperSpawnRate);
+            swooperCooldown = CustomOption.Create(1111, Types.Neutral, "Swoop Cooldown", 30f, 10f, 60f, 2.5f, swooperSpawnRate);
+            swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
+            swooperHasImpVision = CustomOption.Create(1114, Types.Neutral, "Swooper Has Impostor Vision", true, swooperSpawnRate);
+			
             vultureSpawnRate = CustomOption.Create(340, Types.Neutral, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, Types.Neutral, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
             vultureNumberToWin = CustomOption.Create(342, Types.Neutral, "Number Of Corpses Needed To Be Eaten", 4f, 1f, 10f, 1f, vultureSpawnRate);
@@ -592,12 +611,20 @@ namespace TheOtherRoles {
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Enable Airship Rotation", true, dynamicMap, false);
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
+			enableCamoComms = CustomOption.Create(1105, Types.General, "Enable Camouflage Comms", false,  null, false);
+
+            restrictDevices = CustomOption.Create(1101, Types.General, "Restrict Map Information", new string[] {"Off", "Per Round", "Per Game"},  null, false);
+            restrictAdmin = CustomOption.Create(1102, Types.General, "Restrict Admin Table", 30f, 0f, 600f, 5f, restrictDevices);
+            restrictCameras = CustomOption.Create(1103, Types.General, "Restrict Cameras", 30f, 0f, 600f, 5f, restrictDevices);
+            restrictVents = CustomOption.Create(1104, Types.General, "Restrict Vitals", 30f, 0f, 600f, 5f, restrictDevices);
+
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
 
 
-            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", true);
-            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", true);
+            randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);
+            allowModGuess = CustomOption.Create(9043, Types.General, "Allow Guessing Some Modifiers", false);
+            resetRoundStartCooldown = CustomOption.Create(9042, Types.General, "Reset Spawn Cooldown", false);
 
             blockedRolePairings.Add((byte)RoleId.Vampire, new [] { (byte)RoleId.Warlock});
             blockedRolePairings.Add((byte)RoleId.Warlock, new [] { (byte)RoleId.Vampire});

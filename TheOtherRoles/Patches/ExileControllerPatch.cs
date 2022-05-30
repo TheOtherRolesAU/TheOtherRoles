@@ -94,6 +94,11 @@ namespace TheOtherRoles.Patches {
                 vent.name = "SealedVent_" + vent.name;
             }
             MapOptions.ventsToSeal = new List<Vent>();
+
+            // 1 = reset per turn
+            if (MapOptions.restrictDevices == 1)
+                MapOptions.resetDeviceTimes();
+
         }
     }
 

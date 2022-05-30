@@ -109,7 +109,8 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Snitch.snitch, Snitch.color);
             else if (Jackal.jackal != null && Jackal.jackal == localPlayer) {
                 // Jackal can see his sidekick
-                setPlayerNameColor(Jackal.jackal, Jackal.color);
+                if (Jackal.jackal != Swooper.swooper) setPlayerNameColor(Jackal.jackal, Jackal.color);
+                if (Jackal.jackal == Swooper.swooper) setPlayerNameColor(Jackal.jackal, Swooper.color);
                 if (Sidekick.sidekick != null) {
                     setPlayerNameColor(Sidekick.sidekick, Jackal.color);
                 }
@@ -135,6 +136,8 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
             } else if (Pursuer.pursuer != null && Pursuer.pursuer == localPlayer) {
                 setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
+            } else if (Swooper.swooper != null && Swooper.swooper == localPlayer) {
+                setPlayerNameColor(Swooper.swooper, Swooper.color);
             }
 
             // No else if here, as a Lover of team Jackal needs the colors
@@ -142,10 +145,11 @@ namespace TheOtherRoles.Patches {
                 // Sidekick can see the jackal
                 setPlayerNameColor(Sidekick.sidekick, Sidekick.color);
                 if (Jackal.jackal != null) {
-                    setPlayerNameColor(Jackal.jackal, Jackal.color);
+                    if (Jackal.jackal == Swooper.swooper) setPlayerNameColor(Jackal.jackal, Swooper.color);
+                    else setPlayerNameColor(Jackal.jackal, Jackal.color);
                 }
             }
-
+            
             // No else if here, as the Impostors need the Spy name to be colored
             if (Spy.spy != null && localPlayer.Data.Role.IsImpostor) {
                 setPlayerNameColor(Spy.spy, Spy.color);
@@ -233,6 +237,7 @@ namespace TheOtherRoles.Patches {
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
             Ninja.invisibleTimer -= dt;
+			Swooper.swoopTimer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)
                 Deputy.handcuffedKnows[key] -= dt;
         }

@@ -91,6 +91,9 @@ namespace TheOtherRoles.Patches {
             neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
+  	    // Don't assign Swooper unless Both option is on
+	    if (!CustomOptionHolder.swooperAsWell.getBool()) 
+                neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
 
@@ -335,7 +338,7 @@ namespace TheOtherRoles.Patches {
             if (Lawyer.lawyer != null) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || (Lawyer.targetCanBeJester && p == Jester.jester)))
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Swooper.swooper || (Lawyer.targetCanBeJester && p == Jester.jester)))
                         possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {
@@ -357,7 +360,7 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                     if (p.Data.IsDead || p.Data.Disconnected) continue; // Don't assign dead people
                     if (p == Lovers.lover1 || p == Lovers.lover2) continue; // Don't allow a lover target
-                    if (p.Data.Role.IsImpostor ||  p == Jackal.jackal) continue; // Dont allow imp / jackal target
+                    if (p.Data.Role.IsImpostor ||  p == Jackal.jackal || p == Swooper.swooper) continue; // Dont allow imp / jackal target
 					if (p == Spy.spy) continue; // Dont allow Spy to be target
 					// I simply don't want these targets, as they can hard counter Prosecutor
 					if (p == Mayor.mayor || p == Sheriff.sheriff || p == Swapper.swapper || p == Shifter.shifter) continue;
@@ -459,6 +462,17 @@ namespace TheOtherRoles.Patches {
             writer.Write(playerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.setRole(roleId, playerId);
+
+            if (roleId == (byte)RoleId.Jackal && CustomOptionHolder.swooperAsWell.getBool()) {
+                if (rnd.Next(1, 101) <= CustomOptionHolder.swooperSpawnRate.getSelection() * 10) {
+                    MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
+                    writer2.Write((byte)RoleId.Swooper);
+                    writer2.Write(playerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                    RPCProcedure.setRole((byte)RoleId.Swooper, playerId);
+                }
+            }
+
             return playerId;
         }
 
