@@ -21,7 +21,7 @@ Even more roles are coming soon. :)
 | [Morphling](#morphling) | [Sheriff](#sheriff) | [Sidekick](#sidekick) | [Bait](#bait) |
 | [Camouflager](#camouflager) | [Deputy](#deputy) | [Vulture](#vulture) | [Lovers](#lovers) |
 | [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
-| [Eraser](#eraser) | [Detective](#detective) | [Executioner](#executioner) | [Mini](#mini) |
+| [Eraser](#eraser) | [Detective](#detective) | [Prosecutor](#prosecutor) | [Mini](#mini) |
 | [Trickster](#trickster) | [Time Master](#time-master) | [Amnesiac](#amnesiac) | [VIP](#vip) |
 | [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
 | [Warlock](#warlock) | [Swapper](#swapper) |
@@ -1144,16 +1144,16 @@ In order to achieve this goal, the Pursuer has an ability called "Blank", where 
 If the killer fires the "Blank", shields (e.g. Medic shield or Time Master shield) will not be triggered.\
 The Pursuer has tasks (which can already be done while being a Lawyer), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
 
-## Executioner
+## Prosecutor
 ### **Team: Neutral**
-The Executioner is still a neutral role, but has a different goal to win the game; they have to vote out a specific player.\
+The Prosecutor is still a neutral role, but has a different goal to win the game; they have to vote out a specific player.\
 In order to achieve this goal, they will always be able to see their targets name, even when names are hidden. They will also see the skin of their target on their intro screen.\
-There are a few things to note about how the Executioners role can change.\
+There are a few things to note about how the Prosecutors role can change.\
 If the target is killed: Prosecutor -> [Pursuer](#pursuer)\
 If the taget disconnects: Prosecutor -> [Pursuer](#pursuer)\
 If the target is sidekicked: Prosecutor -> [Lawyer](#Lawyer) (Client: Target)\
 \
-The target of a Executioner cannot be the following: Impostor, [Jackal](#jackal), [Mayor](#mayor), [Jester](#jester), [Sheriff](#sheriff), [Spy](#spy), [Swapper](#swapper), or a [Lover](#lovers)
+The target of a Prosecutor cannot be the following: Impostor, [Jackal](#jackal), [Mayor](#mayor), [Sheriff](#sheriff), [Spy](#spy), [Swapper](#swapper), or a [Lover](#lovers)
 
 ## Amnesiac
 ### **Team: Neutral**
