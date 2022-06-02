@@ -800,7 +800,7 @@ namespace TheOtherRoles
 
             // Suicide (exile) when impostor or impostor variants
             if (player.Data.Role.IsImpostor ||  // Don't shift on Imps
-                player == Jackal.jackal || Don't shift on Jackal
+                player == Jackal.jackal || //  Don't shift on Jackal
                 player == Swooper.swooper || // Don't shift on Swooper
                 player == Sidekick.sidekick || // Don't shift on Sidekick 
                 Jackal.formerJackals.Contains(player) || // Don't shift on former jackals
@@ -809,7 +809,7 @@ namespace TheOtherRoles
                 player == Vulture.vulture || // Don't shift on Vulture
                 player == Lawyer.lawyer || // Don't shift on Lawyer
                 player == Prosecutor.prosecutor || // Don't shift on Prosecutor
-                player == Amisiac.amnisiac) { // Don't shift on Amnesiac
+                player == Amnisiac.amnisiac) { // Don't shift on Amnesiac
                     oldShifter.Exiled();
                     return;
             }
