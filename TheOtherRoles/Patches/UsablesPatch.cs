@@ -157,9 +157,9 @@ namespace TheOtherRoles.Patches {
 
             Vector2 vector = pc.GetTruePosition() - truePosition;
             var magnitude = vector.magnitude;
-            if (pc.AmOwner || magnitude < PlayerControl.LocalPlayer.myLight.LightRadius && !MapOptions.ventInFog &&
-                !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude,
-                    ShipAndObjectsMask))
+            bool hideInFog = (magnitude < PlayerControl.LocalPlayer.myLight.LightRadius && !MapOptions.ventInFog && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, ShipAndObjectsMask));
+            if (Engineer.engineer != null && MapOptions.engineerSeeVentInFog && PlayerControl.LocalPlayer == Engineer.engineer) hideInFog = true;
+            if (pc.AmOwner || !hideInFog)
             {
                 __instance.GetComponent<SpriteAnim>().Play(__instance.EnterVentAnim, 1f);
             }
@@ -195,9 +195,9 @@ namespace TheOtherRoles.Patches {
 
             Vector2 vector = pc.GetTruePosition() - truePosition;
             var magnitude = vector.magnitude;
-            if (pc.AmOwner || magnitude < PlayerControl.LocalPlayer.myLight.LightRadius && !MapOptions.ventInFog &&
-                !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude,
-                    ShipAndObjectsMask))
+            bool hideInFog = (magnitude < PlayerControl.LocalPlayer.myLight.LightRadius && !MapOptions.ventInFog && !PhysicsHelpers.AnyNonTriggersBetween(truePosition, vector.normalized, magnitude, ShipAndObjectsMask));
+            if (Engineer.engineer != null && MapOptions.engineerSeeVentInFog && PlayerControl.LocalPlayer == Engineer.engineer) hideInFog = true;
+            if (pc.AmOwner || !hideInFog)
             {
                 __instance.GetComponent<SpriteAnim>().Play(__instance.ExitVentAnim, 1f);
             }
