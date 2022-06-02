@@ -300,6 +300,7 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnableSubmerged;
 		public static CustomOption enableCamoComms;
         public static CustomOption ventInFog;
+        public static CustomOption engineerSeeVentInFog;
 
         public static CustomOption restrictDevices;
         public static CustomOption restrictAdmin;
@@ -460,6 +461,7 @@ namespace TheOtherRoles {
             engineerSpawnRate = CustomOption.Create(90, Types.Crewmate, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, Types.Crewmate, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);
             engineerHighlightForImpostors = CustomOption.Create(92, Types.Crewmate, "Impostors See Vents Highlighted", true, engineerSpawnRate);
+            engineerSeeVentInFog = CustomOption.Create(1115, Types.Crewmate, "Can see vents outside vision", true, engineerSpawnRate);
             engineerHighlightForTeamJackal = CustomOption.Create(93, Types.Crewmate, "Jackal and Sidekick See Vents Highlighted ", true, engineerSpawnRate);
 
             sheriffSpawnRate = CustomOption.Create(100, Types.Crewmate, cs(Sheriff.color, "Sheriff"), rates, null, true);
