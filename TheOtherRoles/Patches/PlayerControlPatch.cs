@@ -13,7 +13,6 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch {
         // Helpers
-
         static PlayerControl setTarget(bool onlyCrewmates = false, bool targetPlayersInVents = false, List<PlayerControl> untargetablePlayers = null, PlayerControl targetingPlayer = null) {
             PlayerControl result = null;
             float num = GameOptionsData.KillDistances[Mathf.Clamp(PlayerControl.GameOptions.KillDistance, 0, 2)];
@@ -638,6 +637,15 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void undertakerDragBodyUpdate() {
+            if (Undertaker.undertaker == null || Undertaker.undertaker.Data.IsDead ) return;
+            if (Undertaker.deadBodyDraged != null ) {
+                Vector3 currentPosition = Undertaker.undertaker.transform.position;
+                Undertaker.deadBodyDraged.transform.position = currentPosition;
+            }
+              
+        }
+
         static void bountyHunterUpdate() {
             if (BountyHunter.bountyHunter == null || PlayerControl.LocalPlayer != BountyHunter.bountyHunter) return;
 
@@ -971,6 +979,8 @@ namespace TheOtherRoles.Patches {
                 arsonistSetTarget();
                 // Snitch
                 snitchUpdate();
+                // undertaker
+                undertakerDragBodyUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
                 // Arsonist
@@ -1129,6 +1139,10 @@ namespace TheOtherRoles.Patches {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.lawyerPromotesToPursuer();
+
+            // Undertaker Button Sync
+            if (Undertaker.undertaker!= null && PlayerControl.LocalPlayer == Undertaker.undertaker && __instance == Undertaker.undertaker && HudManagerStartPatch.undertakerDragButton != null)
+                HudManagerStartPatch.undertakerDragButton.Timer = Undertaker.dragingDelaiAfterKill;
             }
 
             // Seer show flash and add dead player position

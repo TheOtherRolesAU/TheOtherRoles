@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Spy.clearAndReload();
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
+            Undertaker.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
@@ -1116,6 +1117,35 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             cleaner = null;
             cooldown = CustomOptionHolder.cleanerCooldown.getFloat();
+        }
+    }
+
+
+    public static class Undertaker
+    {
+        public static PlayerControl undertaker;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float dragingDelaiAfterKill = 0f;
+
+        public static bool isDraging = false;
+        public static DeadBody deadBodyDraged = null;
+
+        
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.UndertakerDragButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            undertaker = null;
+            isDraging = false;
+            deadBodyDraged = null;
+            dragingDelaiAfterKill = CustomOptionHolder.undertakerDragingDelaiAfterKill.getFloat();
         }
     }
 
