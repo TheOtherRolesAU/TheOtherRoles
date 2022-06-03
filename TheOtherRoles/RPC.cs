@@ -1534,6 +1534,7 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.UnblackmailPlayer:
                     RPCProcedure.unblackmailPlayer();
+                    break;
                 case (byte)CustomRPC.DragBody:
                     RPCProcedure.dragBody(reader.ReadByte());
                     break;

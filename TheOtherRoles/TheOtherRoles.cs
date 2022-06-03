@@ -1130,7 +1130,7 @@ namespace TheOtherRoles
 
         public static bool isDraging = false;
         public static DeadBody deadBodyDraged = null;
-
+        public static bool canDragAndVent = false;
         
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite()
@@ -1144,6 +1144,7 @@ namespace TheOtherRoles
         {
             undertaker = null;
             isDraging = false;
+            canDragAndVent = CustomOptionHolder.undertakerCanDragAndVent.getBool();
             deadBodyDraged = null;
             dragingDelaiAfterKill = CustomOptionHolder.undertakerDragingDelaiAfterKill.getFloat();
         }

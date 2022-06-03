@@ -35,6 +35,7 @@ namespace TheOtherRoles {
 
         public static CustomOption undertakerSpawnRate;
         public static CustomOption undertakerDragingDelaiAfterKill;
+        public static CustomOption undertakerCanDragAndVent;
 
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
@@ -346,6 +347,7 @@ namespace TheOtherRoles {
 
             undertakerSpawnRate = CustomOption.Create(1201, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
             undertakerDragingDelaiAfterKill = CustomOption.Create(1202, Types.Impostor, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
+            undertakerCanDragAndVent = CustomOption.Create(1203, Types.Impostor, "Can Vent while dragging", true, undertakerSpawnRate);
 
 
             camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, "Camouflager"), rates, null, true);
