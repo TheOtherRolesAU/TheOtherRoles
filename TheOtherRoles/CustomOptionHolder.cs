@@ -299,9 +299,7 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnableAirShip;
         public static CustomOption dynamicMapEnableSubmerged;
 		public static CustomOption enableCamoComms;
-        public static CustomOption ventInFog;
-        public static CustomOption engineerSeeVentInFog;
-
+		
         public static CustomOption restrictDevices;
         public static CustomOption restrictAdmin;
         public static CustomOption restrictCameras;
@@ -461,7 +459,6 @@ namespace TheOtherRoles {
             engineerSpawnRate = CustomOption.Create(90, Types.Crewmate, cs(Engineer.color, "Engineer"), rates, null, true);
             engineerNumberOfFixes = CustomOption.Create(91, Types.Crewmate, "Number Of Sabotage Fixes", 1f, 1f, 3f, 1f, engineerSpawnRate);
             engineerHighlightForImpostors = CustomOption.Create(92, Types.Crewmate, "Impostors See Vents Highlighted", true, engineerSpawnRate);
-            engineerSeeVentInFog = CustomOption.Create(1115, Types.Crewmate, "Can see vents outside vision", true, engineerSpawnRate);
             engineerHighlightForTeamJackal = CustomOption.Create(93, Types.Crewmate, "Jackal and Sidekick See Vents Highlighted ", true, engineerSpawnRate);
 
             sheriffSpawnRate = CustomOption.Create(100, Types.Crewmate, cs(Sheriff.color, "Sheriff"), rates, null, true);
@@ -615,7 +612,6 @@ namespace TheOtherRoles {
 
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Enable Submerged Rotation", true, dynamicMap, false);
 			enableCamoComms = CustomOption.Create(1105, Types.General, "Enable Camouflage Comms", false,  null, false);
-            ventInFog = CustomOption.Create(1106, Types.General, "See Vent Animation in Fog", true, null, false);
 
             restrictDevices = CustomOption.Create(1101, Types.General, "Restrict Map Information", new string[] {"Off", "Per Round", "Per Game"},  null, false);
             restrictAdmin = CustomOption.Create(1102, Types.General, "Restrict Admin Table", 30f, 0f, 600f, 5f, restrictDevices);

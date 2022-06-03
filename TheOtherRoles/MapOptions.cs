@@ -18,9 +18,6 @@ namespace TheOtherRoles{
         public static bool toggleCursor = true;
         public static bool showKillAnimation = true;
         public static bool camoComms = false;
-        public static bool ventInFog = true;
-        public static bool engineerSeeVentInFog = true;
-
 
         public static int restrictDevices = 0;
         public static float restrictAdminTime = 600f;
@@ -60,8 +57,6 @@ namespace TheOtherRoles{
             restrictCamerasTime = restrictCamerasTimeMax = CustomOptionHolder.restrictCameras.getFloat();
             restrictVitalsTime = restrictVitalsTimeMax = CustomOptionHolder.restrictVents.getFloat();
             camoComms = CustomOptionHolder.enableCamoComms.getBool();
-            engineerSeeVentInFog= CustomOptionHolder.engineerSeeVentInFog.getBool();
-            ventInFog = CustomOptionHolder.ventInFog.getBool();
 
         }
 
