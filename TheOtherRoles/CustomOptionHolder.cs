@@ -33,6 +33,9 @@ namespace TheOtherRoles {
         public static CustomOption morphlingCooldown;
         public static CustomOption morphlingDuration;
 
+        public static CustomOption undertakerSpawnRate;
+        public static CustomOption undertakerDragingDelaiAfterKill;
+
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
         public static CustomOption camouflagerDuration;
@@ -340,6 +343,10 @@ namespace TheOtherRoles {
             morphlingSpawnRate = CustomOption.Create(20, Types.Impostor, cs(Morphling.color, "Morphling"), rates, null, true);
             morphlingCooldown = CustomOption.Create(21, Types.Impostor, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
             morphlingDuration = CustomOption.Create(22, Types.Impostor, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
+
+            undertakerSpawnRate = CustomOption.Create(1201, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
+            undertakerDragingDelaiAfterKill = CustomOption.Create(1202, Types.Impostor, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
+
 
             camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, "Camouflager"), rates, null, true);
             camouflagerCooldown = CustomOption.Create(31, Types.Impostor, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
