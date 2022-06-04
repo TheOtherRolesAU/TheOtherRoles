@@ -39,6 +39,7 @@ namespace TheOtherRoles
         public static RoleInfo janitor = new RoleInfo("Janitor", Janitor.color, "Work with the <color=#FF1919FF>Mafia</color> by hiding dead bodies", "Hide dead bodies", RoleId.Janitor);
         public static RoleInfo morphling = new RoleInfo("Morphling", Morphling.color, "Change your look to not get caught", "Change your look", RoleId.Morphling);
         public static RoleInfo camouflager = new RoleInfo("Camouflager", Camouflager.color, "Camouflage and kill the Crewmates", "Hide among others", RoleId.Camouflager);
+        public static RoleInfo miner = new RoleInfo("Miner", Miner.color, "Make new Vents", "Create Vents", RoleId.Miner);
         public static RoleInfo vampire = new RoleInfo("Vampire", Vampire.color, "Kill the Crewmates with your bites", "Bite your enemies", RoleId.Vampire);
         public static RoleInfo eraser = new RoleInfo("Eraser", Eraser.color, "Kill the Crewmates and erase their roles", "Erase the roles of your enemies", RoleId.Eraser);
         public static RoleInfo trickster = new RoleInfo("Trickster", Trickster.color, "Use your jack-in-the-boxes to surprise others", "Surprise your enemies", RoleId.Trickster);
@@ -102,7 +103,8 @@ namespace TheOtherRoles
             bountyHunter,
             witch,
             ninja,
-	    blackmailer,
+            blackmailer,
+            miner,
 			swooper,
             goodGuesser,
             badGuesser,
@@ -125,8 +127,8 @@ namespace TheOtherRoles
             lighter,
             detective,
             timeMaster,
-	    amnisiac,
-	    veteren,
+            amnisiac,
+            veteren,
             medic,
             swapper,
             seer,
@@ -175,6 +177,7 @@ namespace TheOtherRoles
             if (p == Deputy.deputy) infos.Add(deputy);
             if (p == Lighter.lighter) infos.Add(lighter);
             if (p == Godfather.godfather) infos.Add(godfather);
+            if (p == Miner.miner) infos.Add(miner);
             if (p == Mafioso.mafioso) infos.Add(mafioso);
             if (p == Janitor.janitor) infos.Add(janitor);
             if (p == Morphling.morphling) infos.Add(morphling);
