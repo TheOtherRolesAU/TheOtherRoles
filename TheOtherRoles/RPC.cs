@@ -16,7 +16,7 @@ namespace TheOtherRoles
 {
     enum RoleId {
         Jester,
-		Prosecutor,
+        Prosecutor,
         Mayor,
         Portalmaker,
         Engineer,
@@ -28,9 +28,9 @@ namespace TheOtherRoles
         Janitor,
         Detective,
         TimeMaster,
-		Swooper,
-	Veteren,
-	Amnisiac,
+        Swooper,
+        Veteren,
+        Amnisiac,
         Medic,
         Shifter,
         Swapper,
@@ -47,19 +47,21 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
+        Undertaker,
         Warlock,
         SecurityGuard,
         Arsonist,
         EvilGuesser,
         NiceGuesser,
         BountyHunter,
+        Miner,
         Vulture,
         Medium,
         Lawyer,
         Pursuer,
         Witch,
         Ninja,
-	Blackmailer,
+        Blackmailer,
         Crewmate,
         Impostor,
         // Modifier ---
@@ -96,13 +98,17 @@ namespace TheOtherRoles
         EngineerFixSubmergedOxygen,
         EngineerUsedRepair,
         CleanBody,
+        Mine,
+        DragBody,
+        DropBody,
+        SheriffKill,
         MedicSetShielded,
         ShieldedMurderAttempt,
         TimeMasterShield,
         TimeMasterRewindTime,
         VeterenAlert,
         VeterenKill,
-	ShifterShift,
+    ShifterShift,
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
@@ -120,7 +126,7 @@ namespace TheOtherRoles
         SetFutureSpelled,
         PlaceNinjaTrace,
         PlacePortal,
-	AmnisiacTakeRole,
+    AmnisiacTakeRole,
         UsePortal,
         PlaceJackInTheBox,
         LightsOut,
@@ -143,10 +149,10 @@ namespace TheOtherRoles
         Invert,
         SetTiebreak,
         SetInvisible,
-		SetInvisibleGen,
-		SetSwoop,
-	ProsecutorChangesRole,
-	ProsecutorSetTarget,
+        SetInvisibleGen,
+        SetSwoop,
+    ProsecutorChangesRole,
+    ProsecutorSetTarget,
         ProsecutorToPursuer
     }
 
@@ -200,6 +206,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Blackmailer:
                         Blackmailer.blackmailer = player;
+                        break;
+                    case RoleId.Miner:
+                        Miner.miner = player;
                         break;
                     case RoleId.Prosecutor:
                         Prosecutor.prosecutor = player;
@@ -274,11 +283,11 @@ namespace TheOtherRoles
                         Snitch.snitch = player;
                         break;
                     case RoleId.Jackal:
-						Jackal.jackal = player;
-						break;
+                        Jackal.jackal = player;
+                        break;
                     case RoleId.Swooper:
-						Swooper.swooper = player;
-						break;
+                        Swooper.swooper = player;
+                        break;
                     case RoleId.Sidekick:
                         Sidekick.sidekick = player;
                         break;
@@ -293,6 +302,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Cleaner:
                         Cleaner.cleaner = player;
+                        break;
+                    case RoleId.Undertaker:
+                        Undertaker.undertaker= player;
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
@@ -436,7 +448,36 @@ namespace TheOtherRoles
             for (int i = 0; i < array.Length; i++) {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
                     UnityEngine.Object.Destroy(array[i].gameObject);
-                }     
+                }
+            }
+        }
+
+        public static void dragBody(byte playerId)
+        {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; i++) {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId) {
+                    Undertaker.deadBodyDraged = array[i];
+                }
+            }
+        }
+
+        public static void dropBody(byte playerId)
+        {
+            if (Undertaker.undertaker == null || Undertaker.deadBodyDraged == null) return;
+            var deadBody = Undertaker.deadBodyDraged;
+            Undertaker.deadBodyDraged = null;
+            deadBody.transform.position = new Vector3(Undertaker.undertaker.GetTruePosition().x, Undertaker.undertaker.GetTruePosition().y, Undertaker.undertaker.transform.position.z);
+        }
+
+        public static void sheriffKill(byte targetId) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == targetId)
+                {
+                    Sheriff.sheriff.MurderPlayer(player);
+                    return;
+                }
             }
         }
 
@@ -470,9 +511,9 @@ namespace TheOtherRoles
             })));
         }
 
-	public static void amnisiacTakeRole(byte targetId) {
-	    PlayerControl target = Helpers.playerById(targetId);
-	    PlayerControl amnisiac = Amnisiac.amnisiac;
+    public static void amnisiacTakeRole(byte targetId) {
+        PlayerControl target = Helpers.playerById(targetId);
+        PlayerControl amnisiac = Amnisiac.amnisiac;
             if (target == null || amnisiac == null) return;
             List<RoleInfo> targetInfo = RoleInfo.getRoleInfoForPlayer(target);
             RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
@@ -481,14 +522,14 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
                     Amnisiac.clearAndReload();
-		    Amnisiac.amnisiac = target;
+            Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Prosecutor:
-		    // Never reload Prosecutor
+            // Never reload Prosecutor
                     Prosecutor.prosecutor = amnisiac;
                     Amnisiac.clearAndReload();
-		    Amnisiac.amnisiac = target;
+            Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Mayor:
@@ -510,7 +551,7 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Sheriff:
-		    // Never reload Sheriff
+            // Never reload Sheriff
                     if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = amnisiac; // Ensure amni gets handcuffs
                     Sheriff.sheriff = amnisiac;
                     Amnisiac.clearAndReload();
@@ -632,12 +673,12 @@ namespace TheOtherRoles
 
                 case RoleId.Jackal:
                     Jackal.jackal = amnisiac;
-		    Jackal.formerJackals.Add(target);
+            Jackal.formerJackals.Add(target);
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Sidekick:
-		    Jackal.formerJackals.Add(target);
+            Jackal.formerJackals.Add(target);
                     if (Amnisiac.resetRole) Sidekick.clearAndReload();
                     Sidekick.sidekick = amnisiac;
                     Amnisiac.clearAndReload();
@@ -691,13 +732,13 @@ namespace TheOtherRoles
 
                 case RoleId.EvilGuesser:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
-		    // Never Reload Guesser
+            // Never Reload Guesser
                     Guesser.evilGuesser = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.NiceGuesser:
-		    // Never Reload Guesser
+            // Never Reload Guesser
                     Guesser.niceGuesser = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
@@ -714,7 +755,7 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) Vulture.clearAndReload();
                     Vulture.vulture = amnisiac;
                     Amnisiac.clearAndReload();
-		    Amnisiac.amnisiac = target;
+            Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Medium:
@@ -727,7 +768,7 @@ namespace TheOtherRoles
                     // Never reset Lawyer
                     Lawyer.lawyer = amnisiac;
                     Amnisiac.clearAndReload();
-   		    Amnisiac.amnisiac = target;
+               Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Pursuer:
@@ -757,8 +798,8 @@ namespace TheOtherRoles
                     Blackmailer.blackmailer = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
-	    }
-	}
+        }
+    }
 
         public static void veterenAlert() {
             Veteren.alertActive = true;
@@ -768,9 +809,9 @@ namespace TheOtherRoles
         }
 
         public static void veterenKill(byte targetId) {
-	  if (PlayerControl.LocalPlayer == Veteren.veteren) {
+      if (PlayerControl.LocalPlayer == Veteren.veteren) {
             PlayerControl player = Helpers.playerById(targetId);
-  	    Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
+          Helpers.checkMuderAttemptAndKill(Veteren.veteren, player);
           }
         }
 
@@ -799,8 +840,19 @@ namespace TheOtherRoles
             Shifter.clearAndReload();
 
             // Suicide (exile) when impostor or impostor variants
-            if (player.Data.Role.IsImpostor || player == Jackal.jackal || player == Swooper.swooper || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player) || player == Jester.jester || player == Arsonist.arsonist || player == Vulture.vulture || player == Lawyer.lawyer || player == Prosecutor.prosecutor) {                oldShifter.Exiled();
-                return;
+            if (player.Data.Role.IsImpostor ||  // Don't shift on Imps
+                player == Jackal.jackal || //  Don't shift on Jackal
+                player == Swooper.swooper || // Don't shift on Swooper
+                player == Sidekick.sidekick || // Don't shift on Sidekick 
+                Jackal.formerJackals.Contains(player) || // Don't shift on former jackals
+                player == Jester.jester || // Don't shift on Jester
+                player == Arsonist.arsonist || // Don't shift on Arso
+                player == Vulture.vulture || // Don't shift on Vulture
+                player == Lawyer.lawyer || // Don't shift on Lawyer
+                player == Prosecutor.prosecutor || // Don't shift on Prosecutor
+                player == Amnisiac.amnisiac) { // Don't shift on Amnesiac
+                    oldShifter.Exiled();
+                    return;
             }
 
             if (Shifter.shiftModifiers) {
@@ -888,8 +940,8 @@ namespace TheOtherRoles
         }
 
         public static void camouflagerCamouflage(byte setTimer) {
-			if (Helpers.isActiveCamoComms() && setTimer != 2) return;
-			if (Helpers.isCamoComms()) Camouflager.camoComms = true;
+            if (Helpers.isActiveCamoComms() && setTimer != 2) return;
+            if (Helpers.isCamoComms()) Camouflager.camoComms = true;
             if (Camouflager.camouflager == null && !Camouflager.camoComms) return;
 
             if (setTimer == 1) Camouflager.camouflageTimer = Camouflager.duration;
@@ -959,9 +1011,9 @@ namespace TheOtherRoles
                 }
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
-				if (Prosecutor.prosecutor != null && Prosecutor.target == player) {
-						  prosecutorChangesRole();
-				}
+                if (Prosecutor.prosecutor != null && Prosecutor.target == player) {
+                          prosecutorChangesRole();
+                }
                 if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
@@ -1017,6 +1069,7 @@ namespace TheOtherRoles
             if (player == Eraser.eraser) Eraser.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
+            if (player == Undertaker.undertaker) Undertaker.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
@@ -1025,7 +1078,8 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
-			if (player == Swooper.swooper) Swooper.clearAndReload();
+            if (player == Swooper.swooper) Swooper.clearAndReload();
+            if (player == Miner.miner) Miner.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
             if (Guesser.isGuesser(player.PlayerId)) Guesser.clear(player.PlayerId);
             if (player == Jackal.jackal) { // Promote Sidekick and hence override the the Jackal or erase Jackal
@@ -1109,17 +1163,52 @@ namespace TheOtherRoles
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
         }
+        
+        public static void Mine(int ventId, PlayerControl role, byte[] buff, float zAxis) {
+            Vector3 position = Vector3.zero;
+            position.x = BitConverter.ToSingle(buff, 0*sizeof(float));
+            position.y = BitConverter.ToSingle(buff, 1*sizeof(float));
+            
+            var ventPrefab = UnityEngine.Object.FindObjectOfType<Vent>();
+            var vent = UnityEngine.Object.Instantiate(ventPrefab, ventPrefab.transform.parent);
+            vent.Id = ventId;
+            vent.transform.position = new Vector3(position.x, position.y, zAxis);
 
-	public static void setSwoop(byte playerId, byte flag) {		
+            if (Miner.Vents.Count > 0) {
+                var leftVent = Miner.Vents[^1];
+                vent.Left = leftVent;
+                leftVent.Right = vent;
+            } else {
+                vent.Left = null;
+            }
+            vent.Right = null;
+            vent.Center = null;
+            var allVents = ShipStatus.Instance.AllVents.ToList();
+            allVents.Add(vent);
+            ShipStatus.Instance.AllVents = allVents.ToArray();
+            Miner.Vents.Add(vent);
+            Miner.LastMined = DateTime.UtcNow;
+            if (SubmergedCompatibility.IsSubmerged) {
+                vent.gameObject.layer = 12;
+                vent.gameObject.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover); // just in case elevator vent is not blocked
+                if (vent.gameObject.transform.position.y > -7) vent.gameObject.transform.position = new Vector3(vent.gameObject.transform.position.x, vent.gameObject.transform.position.y, 0.03f);
+                else {
+                    vent.gameObject.transform.position = new Vector3(vent.gameObject.transform.position.x, vent.gameObject.transform.position.y, 0.0009f);
+                    vent.gameObject.transform.localPosition = new Vector3(vent.gameObject.transform.localPosition.x, vent.gameObject.transform.localPosition.y, -0.003f);
+                }
+            }
+        }
+
+        public static void setSwoop(byte playerId, byte flag) {        
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             if (flag == byte.MaxValue) {
-		if (Camouflager.camouflageTimer > 0f) {
-			camouflagerCamouflage((byte)2);
+                if (Camouflager.camouflageTimer > 0f) {
+                    camouflagerCamouflage((byte)2);
                 } else {
-	                target.MyRend.color = Color.white;
-			target.setDefaultLook();
-		}
+                    target.MyRend.color = Color.white;
+                    target.setDefaultLook();
+                }
                 Swooper.isInvisable = false;
                 return;
             } else {
@@ -1127,8 +1216,8 @@ namespace TheOtherRoles
                 Color color = Color.clear;           
                 if (Swooper.swooper == PlayerControl.LocalPlayer || PlayerControl.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == PlayerControl.LocalPlayer)) color.a = 0.1f;
                 target.MyRend.color = color;
-    	        Swooper.swoopTimer = Swooper.duration;
-	        Swooper.isInvisable = true;
+                Swooper.swoopTimer = Swooper.duration;
+            Swooper.isInvisable = true;
             }
         }
 
@@ -1279,18 +1368,17 @@ namespace TheOtherRoles
         public static void prosecutorToPursuer() {
             PlayerControl player = Prosecutor.prosecutor;
             Prosecutor.clearAndReload();
-			Pursuer.clearAndReload();
+            Pursuer.clearAndReload();
             Pursuer.pursuer = player;
-			Pursuer.wasProsecutor = true;
+            Pursuer.wasProsecutor = true;
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
             if (dyingTarget == null ) return;
             if (Lawyer.target != null && dyingTarget == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
-	    if (Prosecutor.prosecutor != null && Prosecutor.target == dyingTarget) {
-	        prosecutorToPursuer();
-	    }
+            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) Prosecutor.targetWasGuessed = true;  // Prosecutor needs to turn into Pursuer if client is guessed
+
             dyingTarget.Exiled();
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             if (Lawyer.target != null && dyingLoverPartner == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
@@ -1351,15 +1439,15 @@ namespace TheOtherRoles
         }
 
 
-	public static void blackmailPlayer(byte playerId) {
-	  PlayerControl target = Helpers.playerById(playerId);
-	  Blackmailer.blackmailed = target;
-	}
+    public static void blackmailPlayer(byte playerId) {
+      PlayerControl target = Helpers.playerById(playerId);
+      Blackmailer.blackmailed = target;
+    }
 
-	public static void unblackmailPlayer() {
-	  Blackmailer.blackmailed = null;
-	  Blackmailer.alreadyShook = false;
-	}
+    public static void unblackmailPlayer() {
+      Blackmailer.blackmailed = null;
+      Blackmailer.alreadyShook = false;
+    }
 
         public static void setBlanked(byte playerId, byte value) {
             PlayerControl target = Helpers.playerById(playerId);
@@ -1488,6 +1576,15 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.UnblackmailPlayer:
                     RPCProcedure.unblackmailPlayer();
                     break;
+                case (byte)CustomRPC.DragBody:
+                    RPCProcedure.dragBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DropBody:
+                    RPCProcedure.dropBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.SheriffKill:
+                    RPCProcedure.sheriffKill(reader.ReadByte());
+                    break;
                 case (byte)CustomRPC.TimeMasterRewindTime:
                     RPCProcedure.timeMasterRewindTime();
                     break;
@@ -1521,9 +1618,9 @@ namespace TheOtherRoles
                     RPCProcedure.morphlingMorph(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.CamouflagerCamouflage:
-					byte setTimer = reader.ReadByte();
+                    byte setTimer = reader.ReadByte();
                     RPCProcedure.camouflagerCamouflage(setTimer);
-				break;
+                break;
                 case (byte)CustomRPC.VampireSetBitten:
                     byte bittenId = reader.ReadByte();
                     byte reset = reader.ReadByte();
@@ -1641,6 +1738,13 @@ namespace TheOtherRoles
                     byte invisibleFlag2 = reader.ReadByte();
                     RPCProcedure.setSwoop(invisiblePlayer2, invisibleFlag2);
                     break;  
+                case (byte)CustomRPC.Mine:
+                    var newVentId = reader.ReadInt32();
+                    var role = Helpers.playerById(reader.ReadByte());
+                    var pos = reader.ReadBytesAndSize();
+                    var zAxis = reader.ReadSingle();            
+                    RPCProcedure.Mine(newVentId, role, pos, zAxis);
+                    break;
                 case (byte)CustomRPC.SetInvisibleGen:
                     byte invisiblePlayer3 = reader.ReadByte();
                     byte invisibleFlag3 = reader.ReadByte();

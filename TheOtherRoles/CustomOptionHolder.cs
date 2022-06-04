@@ -25,6 +25,9 @@ namespace TheOtherRoles {
         public static CustomOption swooperAsWell;
         public static CustomOption swooperDuration;
         public static CustomOption swooperHasImpVision;
+        
+        public static CustomOption minerSpawnRate;
+		public static CustomOption minerCooldown;
 		
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -33,6 +36,10 @@ namespace TheOtherRoles {
         public static CustomOption morphlingCooldown;
         public static CustomOption morphlingDuration;
 
+        public static CustomOption undertakerSpawnRate;
+        public static CustomOption undertakerDragingDelaiAfterKill;
+        public static CustomOption undertakerCanDragAndVent;
+
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
         public static CustomOption camouflagerDuration;
@@ -40,7 +47,9 @@ namespace TheOtherRoles {
         public static CustomOption vampireSpawnRate;
         public static CustomOption vampireKillDelay;
         public static CustomOption vampireCooldown;
+        public static CustomOption vampireGarlicButton;
         public static CustomOption vampireCanKillNearGarlics;
+
 
         public static CustomOption eraserSpawnRate;
         public static CustomOption eraserCooldown;
@@ -341,6 +350,11 @@ namespace TheOtherRoles {
             morphlingCooldown = CustomOption.Create(21, Types.Impostor, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
             morphlingDuration = CustomOption.Create(22, Types.Impostor, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
 
+            undertakerSpawnRate = CustomOption.Create(1201, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
+            undertakerDragingDelaiAfterKill = CustomOption.Create(1202, Types.Impostor, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
+            undertakerCanDragAndVent = CustomOption.Create(1203, Types.Impostor, "Can Vent while dragging", true, undertakerSpawnRate);
+
+
             camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, "Camouflager"), rates, null, true);
             camouflagerCooldown = CustomOption.Create(31, Types.Impostor, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
             camouflagerDuration = CustomOption.Create(32, Types.Impostor, "Camo Duration", 10f, 1f, 20f, 0.5f, camouflagerSpawnRate);
@@ -348,7 +362,8 @@ namespace TheOtherRoles {
             vampireSpawnRate = CustomOption.Create(40, Types.Impostor, cs(Vampire.color, "Vampire"), rates, null, true);
             vampireKillDelay = CustomOption.Create(41, Types.Impostor, "Vampire Kill Delay", 10f, 1f, 20f, 1f, vampireSpawnRate);
             vampireCooldown = CustomOption.Create(42, Types.Impostor, "Vampire Cooldown", 30f, 10f, 60f, 2.5f, vampireSpawnRate);
-            vampireCanKillNearGarlics = CustomOption.Create(43, Types.Impostor, "Vampire Can Kill Near Garlics", true, vampireSpawnRate);
+            vampireGarlicButton = CustomOption.Create(43, Types.Impostor, "Enable Garlic", true, vampireSpawnRate);
+            vampireCanKillNearGarlics = CustomOption.Create(44, Types.Impostor, "Vampire Can Kill Near Garlics", true, vampireGarlicButton);
 
             eraserSpawnRate = CustomOption.Create(230, Types.Impostor, cs(Eraser.color, "Eraser"), rates, null, true);
             eraserCooldown = CustomOption.Create(231, Types.Impostor, "Eraser Cooldown", 30f, 10f, 120f, 5f, eraserSpawnRate);
@@ -434,6 +449,9 @@ namespace TheOtherRoles {
             swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
             swooperHasImpVision = CustomOption.Create(1114, Types.Neutral, "Swooper Has Impostor Vision", true, swooperSpawnRate);
 			
+            minerSpawnRate = CustomOption.Create(1120, Types.Impostor, cs(Miner.color, "Miner"), rates, null, true); //jackalSpawnRate);
+            minerCooldown = CustomOption.Create(1121, Types.Impostor, "Mine Cooldown", 25f, 10f, 60f, 2.5f, minerSpawnRate);
+
             vultureSpawnRate = CustomOption.Create(340, Types.Neutral, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, Types.Neutral, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
             vultureNumberToWin = CustomOption.Create(342, Types.Neutral, "Number Of Corpses Needed To Be Eaten", 4f, 1f, 10f, 1f, vultureSpawnRate);

@@ -96,7 +96,13 @@ namespace TheOtherRoles {
 			return (isCommsActive() && MapOptions.camoComms);
 		}
 
-
+        public static int getAvailableId() {
+            var id = 0;
+            while (true) {
+                if (ShipStatus.Instance.AllVents.All(v => v.Id != id)) return id;
+                id++;
+            }
+        }
 
 		public static bool isActiveCamoComms() {
 			return (isCamoComms() && Camouflager.camoComms);
@@ -423,6 +429,8 @@ namespace TheOtherRoles {
                 roleCouldUse = true;
             else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
                 roleCouldUse = true;
+            else if (Undertaker.deadBodyDraged != null && !Undertaker.canDragAndVent && Undertaker.undertaker== player)
+                roleCouldUse = false;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
                 if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
                     roleCouldUse = false;

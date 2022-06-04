@@ -16,13 +16,13 @@ namespace TheOtherRoles
         public static void clearAndReloadRoles() {
             Jester.clearAndReload();
             Prosecutor.clearAndReload();
-			Swooper.clearAndReload();
+            Swooper.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
             Deputy.clearAndReload();
-	    Amnisiac.clearAndReload();
+            Amnisiac.clearAndReload();
             Lighter.clearAndReload();
             Godfather.clearAndReload();
             Mafioso.clearAndReload();
@@ -47,6 +47,7 @@ namespace TheOtherRoles
             Spy.clearAndReload();
             Trickster.clearAndReload();
             Cleaner.clearAndReload();
+            Undertaker.clearAndReload();
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
@@ -58,7 +59,8 @@ namespace TheOtherRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
-	    Blackmailer.clearAndReload();
+            Blackmailer.clearAndReload();
+            Miner.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -128,18 +130,20 @@ namespace TheOtherRoles
 
 
         }
-		
+        
         public static class Prosecutor {
             public static PlayerControl prosecutor;
             public static PlayerControl target;
             public static Color color = new Color32(201, 204, 63, byte.MaxValue);
             public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
+            public static bool targetWasGuessed = false;
 
             public static bool triggerProsecutorWin = false;
 
             public static void clearAndReload() {
               prosecutor = null;
               triggerProsecutorWin = false;
+              targetWasGuessed = false;
               target = null;
             }
         }
@@ -167,7 +171,7 @@ namespace TheOtherRoles
                 mayor = null;
                 emergency = null;
                 emergencySprite = null;
-		        remoteMeetingsLeft = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat()); 
+                remoteMeetingsLeft = Mathf.RoundToInt(CustomOptionHolder.mayorMaxRemoteMeetings.getFloat()); 
                 canSeeVoteColors = CustomOptionHolder.mayorCanSeeVoteColors.getBool();
                 tasksNeededToSeeVoteColors = (int)CustomOptionHolder.mayorTasksNeededToSeeVoteColors.getFloat();
                 meetingButton = CustomOptionHolder.mayorMeetingButton.getBool();
@@ -681,7 +685,7 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float duration = 10f;
         public static float camouflageTimer = 0f;
-		public static bool camoComms = false;
+        public static bool camoComms = false;
 
         private static Sprite buttonSprite;
         public static Sprite getButtonSprite() {
@@ -691,12 +695,12 @@ namespace TheOtherRoles
         }
 
         public static void resetCamouflage() {
-			if (Helpers.isCamoComms()) return;
-			camoComms = false;
+            if (Helpers.isCamoComms()) return;
+            camoComms = false;
             camouflageTimer = 0f;
             foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
-		if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
-		if (Ninja.ninja == p && Ninja.isInvisble) continue;
+        if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
+        if (Ninja.ninja == p && Ninja.isInvisble) continue;
                 p.setDefaultLook();
             }
         }
@@ -848,6 +852,7 @@ namespace TheOtherRoles
         public static bool canKillNearGarlics = true;
         public static bool localPlacedGarlic = false;
         public static bool garlicsActive = true;
+        public static bool garlicButton = true;
 
         public static PlayerControl currentTarget;
         public static PlayerControl bitten; 
@@ -877,6 +882,7 @@ namespace TheOtherRoles
             delay = CustomOptionHolder.vampireKillDelay.getFloat();
             cooldown = CustomOptionHolder.vampireCooldown.getFloat();
             canKillNearGarlics = CustomOptionHolder.vampireCanKillNearGarlics.getBool();
+            garlicButton = CustomOptionHolder.vampireGarlicButton.getBool();
         }
     }
 
@@ -908,12 +914,12 @@ namespace TheOtherRoles
         public static PlayerControl swooper;
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
-	public static bool isInvisable = false;
-	public static Color color = new Color32(224, 197, 219, byte.MaxValue);
-	public static float duration = 5f;
-	public static float swoopCooldown = 30f;
-	public static float swoopTimer = 0f;
-	public static Sprite buttonSprite;
+        public static bool isInvisable = false;
+        public static Color color = new Color32(224, 197, 219, byte.MaxValue);
+        public static float duration = 5f;
+        public static float swoopCooldown = 30f;
+        public static float swoopTimer = 0f;
+        public static Sprite buttonSprite;
         public static bool hasImpVision = false;
 
         public static Sprite getSwoopButtonSprite() {
@@ -926,16 +932,41 @@ namespace TheOtherRoles
             return new Vector3(-2.7f, -0.06f, 0);
         }
 
-		public static void clearAndReload() {
-		  swooper = null;
-		  isInvisable = false;
-		  cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
-		  swoopCooldown = CustomOptionHolder.swooperCooldown.getFloat();
-		  duration = CustomOptionHolder.swooperDuration.getFloat();
-		  hasImpVision = CustomOptionHolder.swooperHasImpVision.getBool();
+        public static void clearAndReload() {
+          swooper = null;
+          isInvisable = false;
+          cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
+          swoopCooldown = CustomOptionHolder.swooperCooldown.getFloat();
+          duration = CustomOptionHolder.swooperDuration.getFloat();
+          hasImpVision = CustomOptionHolder.swooperHasImpVision.getBool();
 
-		}
-	}
+        }
+    }
+    
+    public class Miner {
+        public readonly static List<Vent> Vents = new List<Vent>();
+        public static PlayerControl miner;
+        public KillButton _mineButton;
+        public static DateTime LastMined;
+        public static Sprite buttonSprite;
+
+        public static float cooldown = 30f;
+        public static Color color = Palette.ImpostorRed;
+
+        public bool CanPlace { get; set; }
+        public static Vector2 VentSize { get; set; }
+
+        public static void clearAndReload() {
+            miner = null;
+            cooldown = CustomOptionHolder.minerCooldown.getFloat();
+        }
+        
+        public static Sprite getMineButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Mine.png", 115f);
+            return buttonSprite;
+        }
+    }
 
     public static class Jackal {
         public static PlayerControl jackal;
@@ -1117,6 +1148,36 @@ namespace TheOtherRoles
         }
     }
 
+
+    public static class Undertaker
+    {
+        public static PlayerControl undertaker;
+        public static Color color = Palette.ImpostorRed;
+
+        public static float dragingDelaiAfterKill = 0f;
+
+        public static bool isDraging = false;
+        public static DeadBody deadBodyDraged = null;
+        public static bool canDragAndVent = false;
+        
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite()
+        {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.UndertakerDragButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void clearAndReload()
+        {
+            undertaker = null;
+            isDraging = false;
+            canDragAndVent = CustomOptionHolder.undertakerCanDragAndVent.getBool();
+            deadBodyDraged = null;
+            dragingDelaiAfterKill = CustomOptionHolder.undertakerDragingDelaiAfterKill.getFloat();
+        }
+    }
+
     public static class Warlock {
 
         public static PlayerControl warlock;
@@ -1274,7 +1335,7 @@ namespace TheOtherRoles
         public static PlayerControl currentTarget;
         public static PlayerControl douseTarget;
         public static List<PlayerControl> dousedPlayers = new List<PlayerControl>();
-	public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
+    public static List<PoolablePlayer> poolIcons = new List<PoolablePlayer>();
 
         private static Sprite douseSprite;
         public static Sprite getDouseSprite() {
@@ -1517,7 +1578,7 @@ namespace TheOtherRoles
         public static int blanks = 0;
         public static Sprite blank;
         public static bool notAckedExiled = false;
-		public static bool wasProsecutor = false;
+        public static bool wasProsecutor = false;
 
         public static float cooldown = 30f;
         public static int blanksNumber = 5;
@@ -1534,7 +1595,7 @@ namespace TheOtherRoles
             blankedList = new List<PlayerControl>();
             blanks = 0;
             notAckedExiled = false;
-
+//            targetWasGuessed = false;
             cooldown = CustomOptionHolder.pursuerCooldown.getFloat();
             blanksNumber = Mathf.RoundToInt(CustomOptionHolder.pursuerBlanksNumber.getFloat());
         }
@@ -1633,7 +1694,7 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
         public static Color blackmailedColor = Palette.White;
 
-	public static bool alreadyShook = false;
+    public static bool alreadyShook = false;
         public static PlayerControl blackmailed;
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
@@ -1660,7 +1721,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             blackmailer = null;
             currentTarget = null;
-	    blackmailed = null;
+        blackmailed = null;
             cooldown = CustomOptionHolder.blackmailerCooldown.getFloat();
         }
     }
