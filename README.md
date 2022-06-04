@@ -992,8 +992,8 @@ The blackmailer has a special ability that allows them to see who they are targe
 ### Game Options
 | Name | Description |
 |----------|:-------------:|
-| Miner Spawn Chance | -
-| Mine Cooldown | -
+| Blackmailer Spawn Chance | - 
+| Blackmail Cooldown | - 
 -----------------------
 
 ## Guesser
