@@ -142,9 +142,8 @@ namespace TheOtherRoles
                 else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
                 else if (target == Swooper.swooper && Swooper.isInvisable) text = defaultText;
                 else if (target == null) text = defaultText; // Set text to defaultText if no target
-                else text = target.name; // Set text to playername
-                button.actionButton.OverrideText(text);
-                button.showButtonText = true;
+                else text = target.Data.PlayerName; // Set text to playername
+                showTargetNameOnButtonExplicit(null, button, text);
             }
         }
 
@@ -1390,10 +1389,9 @@ namespace TheOtherRoles
                 () => { return Arsonist.arsonist != null && Arsonist.arsonist == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
                     bool dousedEveryoneAlive = Arsonist.dousedEveryoneAlive();
-                    if (dousedEveryoneAlive)
-                        showTargetNameOnButton(null, arsonistButton, "IGNITE");
-                    else
-                        showTargetNameOnButton(null, arsonistButton, "IGNITE");
+                    if (!dousedEveryoneAlive)
+                        showTargetNameOnButton(Arsonist.currentTarget, arsonistButton, "");
+
                     if (dousedEveryoneAlive) arsonistButton.actionButton.graphic.sprite = Arsonist.getIgniteSprite();
                     
                     if (arsonistButton.isEffectActive && Arsonist.douseTarget != Arsonist.currentTarget) {
