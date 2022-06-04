@@ -18,7 +18,7 @@ namespace TheOtherRoles
         public static CustomButton sheriffKillButton;
         private static CustomButton deputyHandcuffButton;
         private static CustomButton timeMasterShieldButton;
-	private static CustomButton amnisiacRememberButton;
+        private static CustomButton amnisiacRememberButton;
         private static CustomButton veterenAlertButton;
         private static CustomButton medicShieldButton;
         private static CustomButton shifterShiftButton;
@@ -51,8 +51,11 @@ namespace TheOtherRoles
         public static CustomButton pursuerButton;
         public static CustomButton witchSpellButton;
         public static CustomButton ninjaButton;
-		public static CustomButton swooperSwoopButton;
-		public static CustomButton swooperKillButton;
+        public static CustomButton swooperSwoopButton;
+        public static CustomButton swooperKillButton;
+        
+        public static CustomButton minerMineButton;
+        
         public static CustomButton mayorMeetingButton;
         public static CustomButton blackmailerButton;
         public static CustomButton zoomOutButton;
@@ -89,7 +92,7 @@ namespace TheOtherRoles
             trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
-			swooperKillButton.MaxTimer = Jackal.cooldown;
+            swooperKillButton.MaxTimer = Jackal.cooldown;
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
@@ -109,7 +112,8 @@ namespace TheOtherRoles
             trackerTrackCorpsesButton.MaxTimer = Tracker.corpsesTrackingCooldown;
             witchSpellButton.MaxTimer = Witch.cooldown;
             ninjaButton.MaxTimer = Ninja.cooldown;
-			swooperSwoopButton.MaxTimer = Swooper.swoopCooldown;
+            swooperSwoopButton.MaxTimer = Swooper.swoopCooldown;
+            minerMineButton.MaxTimer = Miner.cooldown;
             blackmailerButton.MaxTimer = Blackmailer.cooldown;
             mayorMeetingButton.MaxTimer = PlayerControl.GameOptions.EmergencyCooldown;
 
@@ -120,7 +124,8 @@ namespace TheOtherRoles
             hackerAdminTableButton.EffectDuration = Hacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
-			swooperSwoopButton.EffectDuration = Swooper.duration; 
+            swooperSwoopButton.EffectDuration = Swooper.duration;
+            minerMineButton.EffectDuration = Swooper.duration;
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
             lightsOutButton.EffectDuration = Trickster.lightsOutDuration;
@@ -133,7 +138,7 @@ namespace TheOtherRoles
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
             zoomOutButton.MaxTimer = 0f;
         }
-	public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
+        public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
                 if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
@@ -330,7 +335,7 @@ namespace TheOtherRoles
                             (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
                             (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget || Lawyer.lawyer == Sheriff.currentTarget || Pursuer.pursuer == Sheriff.currentTarget)) ||
                             (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget) ||
-							(Swooper.swooper == Sheriff.currentTarget)) {
+                            (Swooper.swooper == Sheriff.currentTarget)) {
                             targetId = Sheriff.currentTarget.PlayerId;
                         }
                         else {
@@ -365,9 +370,9 @@ namespace TheOtherRoles
                 () => {
                     byte targetId = 0;
                     PlayerControl target = Sheriff.sheriff == PlayerControl.LocalPlayer ? Sheriff.currentTarget : Deputy.currentTarget;  // If the deputy is now the sheriff, sheriffs target, else deputies target
-		    targetId = target.PlayerId;
-		   
-		    if (Helpers.checkAndDoVetKill(target)) return;
+            targetId = target.PlayerId;
+           
+            if (Helpers.checkAndDoVetKill(target)) return;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DeputyUsedHandcuffs, Hazel.SendOption.Reliable, -1);
                     writer.Write(targetId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -563,8 +568,8 @@ namespace TheOtherRoles
             camouflagerButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.CamouflagerCamouflage, Hazel.SendOption.Reliable, -1);
-					writer.Write(1);
-					AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    writer.Write(1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.camouflagerCamouflage(1);
                 },
                 () => { return Camouflager.camouflager != null && Camouflager.camouflager == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
@@ -723,7 +728,7 @@ namespace TheOtherRoles
                     if (!Tracker.usedTracker)
                         showTargetNameOnButton(Tracker.currentTarget, trackerTrackPlayerButton, "");
                     return PlayerControl.LocalPlayer.CanMove && Tracker.currentTarget != null && !Tracker.usedTracker;
-				},
+                },
                 () => { if(Tracker.resetTargetAfterMeeting) Tracker.resetTracked(); },
                 Tracker.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
@@ -974,7 +979,49 @@ namespace TheOtherRoles
                 __instance,
                 KeyCode.Q
             );
-			
+            
+
+
+
+            minerMineButton = new CustomButton(
+                () => { /* On Use */ 
+                    minerMineButton.Timer = minerMineButton.MaxTimer;
+
+                    var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte) CustomRPC.Mine, SendOption.Reliable, -1);
+                    var pos = PlayerControl.LocalPlayer.transform.position;
+                    byte[] buff = new byte[sizeof(float) * 2];
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0*sizeof(float), sizeof(float));
+                    Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1*sizeof(float), sizeof(float));
+                    
+                    var id = Helpers.getAvailableId();
+                    writer.Write(id);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                    
+                    
+                    writer.WriteBytesAndSize(buff);
+                    
+                    
+                    writer.Write(0.01f);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.Mine(id, Miner.miner, buff, 0.01f);
+                },
+                () => { /* Can See */ return Miner.miner != null && Miner.miner == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {  /* Can Use */ 
+                    var hits = Physics2D.OverlapBoxAll(PlayerControl.LocalPlayer.transform.position, Miner.VentSize, 0);
+                    hits = hits.ToArray().Where(c =>(c.name.Contains("Vent") || !c.isTrigger) && c.gameObject.layer != 8 && c.gameObject.layer != 5).ToArray();
+                    return (hits.Count == 0 && PlayerControl.LocalPlayer.CanMove);
+                },
+                () => {  /* On Meeting End */
+                    minerMineButton.Timer = minerMineButton.MaxTimer;
+                },
+                Miner.getMineButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.V
+            );
+
+
+
             // Swooper Kill
             swooperKillButton = new CustomButton(
                 () => {
@@ -1247,7 +1294,7 @@ namespace TheOtherRoles
                     else
                         showTargetNameOnButton(Warlock.currentTarget, warlockCurseButton, "CURSE");
                     return ((Warlock.curseVictim == null && Warlock.currentTarget != null) || (Warlock.curseVictim != null && Warlock.curseVictimTarget != null)) && PlayerControl.LocalPlayer.CanMove;
-				},
+                },
                 () => { 
                     warlockCurseButton.Timer = warlockCurseButton.MaxTimer;
                     warlockCurseButton.Sprite = Warlock.getCurseButtonSprite();
@@ -1630,7 +1677,7 @@ namespace TheOtherRoles
                 },
                 () => { return Witch.witch != null && Witch.witch == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => {
-					showTargetNameOnButton(Witch.currentTarget, witchSpellButton, "");
+                    showTargetNameOnButton(Witch.currentTarget, witchSpellButton, "");
                     if (witchSpellButton.isEffectActive && Witch.spellCastingTarget != Witch.currentTarget) {
                         Witch.spellCastingTarget = null;
                         witchSpellButton.Timer = 0f;
@@ -1710,7 +1757,7 @@ namespace TheOtherRoles
                                         SubmergedCompatibility.ChangeFloor(Ninja.ninjaMarked.transform.localPosition.y > -7);
                                 }
                                 RPCProcedure.uncheckedMurderPlayer(PlayerControl.LocalPlayer.PlayerId, Ninja.ninjaMarked.PlayerId, byte.MaxValue);
-    			    }
+                    }
                             // Create Second trace after killing
                             pos = Ninja.ninjaMarked.transform.position;
                             buff = new byte[sizeof(float) * 2];
@@ -1759,17 +1806,17 @@ namespace TheOtherRoles
                () => { // Action when Pressed
                   if (Blackmailer.currentTarget != null) {
                     if (Helpers.checkAndDoVetKill(Blackmailer.currentTarget)) return;
-		    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.BlackmailPlayer, Hazel.SendOption.Reliable, -1);
                     writer.Write(Blackmailer.currentTarget.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.blackmailPlayer(Blackmailer.currentTarget.PlayerId);
-	    	    blackmailerButton.Timer = blackmailerButton.MaxTimer;
+                blackmailerButton.Timer = blackmailerButton.MaxTimer;
                   }
                },
                () => { return Blackmailer.blackmailer != null && Blackmailer.blackmailer == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead ;},
                () => { // Could Use
-		   var text = "BLACKMAIL";
-		   if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
+           var text = "BLACKMAIL";
+           if (Blackmailer.blackmailed != null) text = Blackmailer.blackmailed.Data.PlayerName;
                    showTargetNameOnButtonExplicit(Blackmailer.currentTarget, blackmailerButton, text); //Show target name under button if setting is true
                    return (Blackmailer.currentTarget != null && PlayerControl.LocalPlayer.CanMove);
                },
@@ -1789,7 +1836,7 @@ namespace TheOtherRoles
                () => {
                    PlayerControl.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                    Mayor.remoteMeetingsLeft--;
-	               Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                   Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
                    RPCProcedure.uncheckedCmdReportDeadBody(PlayerControl.LocalPlayer.PlayerId, Byte.MinValue);
 
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);

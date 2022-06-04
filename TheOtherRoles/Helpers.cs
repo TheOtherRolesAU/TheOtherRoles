@@ -96,7 +96,13 @@ namespace TheOtherRoles {
 			return (isCommsActive() && MapOptions.camoComms);
 		}
 
-
+        public static int getAvailableId() {
+            var id = 0;
+            while (true) {
+                if (ShipStatus.Instance.AllVents.All(v => v.Id != id)) return id;
+                id++;
+            }
+        }
 
 		public static bool isActiveCamoComms() {
 			return (isCamoComms() && Camouflager.camoComms);

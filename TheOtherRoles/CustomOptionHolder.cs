@@ -25,6 +25,9 @@ namespace TheOtherRoles {
         public static CustomOption swooperAsWell;
         public static CustomOption swooperDuration;
         public static CustomOption swooperHasImpVision;
+        
+        public static CustomOption minerSpawnRate;
+		public static CustomOption minerCooldown;
 		
         public static CustomOption mafiaSpawnRate;
         public static CustomOption janitorCooldown;
@@ -443,6 +446,9 @@ namespace TheOtherRoles {
             swooperDuration = CustomOption.Create(1112, Types.Neutral, "Swoop Duration", 10f, 1f, 20f, 0.5f, swooperSpawnRate);
             swooperHasImpVision = CustomOption.Create(1114, Types.Neutral, "Swooper Has Impostor Vision", true, swooperSpawnRate);
 			
+            minerSpawnRate = CustomOption.Create(1120, Types.Impostor, cs(Miner.color, "Miner"), rates, null, true); //jackalSpawnRate);
+            minerCooldown = CustomOption.Create(1121, Types.Impostor, "Mine Cooldown", 25f, 10f, 60f, 2.5f, minerSpawnRate);
+
             vultureSpawnRate = CustomOption.Create(340, Types.Neutral, cs(Vulture.color, "Vulture"), rates, null, true);
             vultureCooldown = CustomOption.Create(341, Types.Neutral, "Vulture Cooldown", 15f, 10f, 60f, 2.5f, vultureSpawnRate);
             vultureNumberToWin = CustomOption.Create(342, Types.Neutral, "Number Of Corpses Needed To Be Eaten", 4f, 1f, 10f, 1f, vultureSpawnRate);
