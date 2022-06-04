@@ -1200,7 +1200,7 @@ namespace TheOtherRoles
                 //() => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove) || Undertaker.deadBodyDraged != null); },
                 () => { },
                 Undertaker.getButtonSprite(),
-                new Vector3(-1.3f, 1.3f, 0f),
+                new Vector3(-1.8f, -0.06f, 0),
                 __instance,
                 KeyCode.F,
                 true,
