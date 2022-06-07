@@ -835,6 +835,7 @@ namespace TheOtherRoles.Patches {
                 HudManagerStartPatch.warlockCurseButton.MaxTimer = Warlock.cooldown * multiplier;
                 HudManagerStartPatch.cleanerCleanButton.MaxTimer = Cleaner.cooldown * multiplier;
                 HudManagerStartPatch.witchSpellButton.MaxTimer = (Witch.cooldown + Witch.currentCooldownAddition) * multiplier;
+                HudManagerStartPatch.ninjaButton.MaxTimer = Ninja.cooldown * multiplier;
             }
         }
     public static void Postfix(PlayerControl __instance) {
