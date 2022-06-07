@@ -748,7 +748,7 @@ namespace TheOtherRoles
             if (flag == byte.MaxValue)
             {
                 target.MyRend.color = Color.white;
-                target.setDefaultLook();
+                if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
                 Ninja.isInvisble = false;
                 return;
             }
