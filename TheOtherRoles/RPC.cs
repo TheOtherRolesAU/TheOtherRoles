@@ -518,6 +518,13 @@ namespace TheOtherRoles
             List<RoleInfo> targetInfo = RoleInfo.getRoleInfoForPlayer(target);
             RoleInfo roleInfo = targetInfo.Where(info => !info.isModifier).FirstOrDefault();
             switch((RoleId)roleInfo.roleId) {
+                case RoleId.Crewmate:
+                    Amnisiac.clearAndReload();
+                    break;
+                case RoleId.Impostor:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    Amnisiac.clearAndReload();
+                    break;
                 case RoleId.Jester:
                     if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
