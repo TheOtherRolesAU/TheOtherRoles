@@ -291,7 +291,7 @@ namespace TheOtherRoles {
         }
 
         public static bool canBeErased(this PlayerControl player) {
-            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player) && player != Swooper.swooper);
         }
 
         public static void clearAllTasks(this PlayerControl player) {
