@@ -343,7 +343,6 @@ namespace TheOtherRoles.Patches {
             }
 
             FastDestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target); // Includes setPlayerOutline(target, Palette.ImpstorRed);
-            Helpers.showTargetNameOnButtonExplicit(target, FastDestroyableSingleton<HudManager>.Instance.KillButton, "");            
         }
 
         static void warlockSetTarget() {
