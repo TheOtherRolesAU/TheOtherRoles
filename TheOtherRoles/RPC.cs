@@ -1449,6 +1449,7 @@ namespace TheOtherRoles
     public static void blackmailPlayer(byte playerId) {
       PlayerControl target = Helpers.playerById(playerId);
       Blackmailer.blackmailed = target;
+      
     }
 
     public static void unblackmailPlayer() {

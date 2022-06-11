@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Hazel;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
@@ -546,6 +547,7 @@ namespace TheOtherRoles.Patches {
                 // Save the meeting target
                 target = meetingTarget;
 
+                if (Blackmailer.blackmailed == PlayerControl.LocalPlayer) { Helpers.BlackmailShhh(); }
 
                 // Add Portal info into Portalmaker Chat:
                 if (Portalmaker.portalmaker != null && PlayerControl.LocalPlayer == Portalmaker.portalmaker && !PlayerControl.LocalPlayer.Data.IsDead) {
@@ -606,11 +608,16 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     public class MeetingHudStart {
 	public static Sprite Letter => Blackmailer.getBlackmailOverlaySprite();
+
+
+
 	public static void Postfix(MeetingHud __instance) {
 		shookAlready = false;
 		if (Blackmailer.blackmailed.Data.PlayerId == PlayerControl.LocalPlayer.PlayerId && !Blackmailer.blackmailed.Data.IsDead) {
 			  // Nothing here for now. What to do when local player who is blackmailed starts meeting
 			  //Coroutines.Start(BlackmailShhh());
+                    if (Blackmailer.blackmailed == PlayerControl.LocalPlayer) { Helpers.BlackmailShhh(); }
+
 		}
 	}
     }

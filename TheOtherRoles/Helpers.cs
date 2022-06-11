@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -95,6 +96,12 @@ namespace TheOtherRoles {
 		public static bool isCamoComms() {
 			return (isCommsActive() && MapOptions.camoComms);
 		}
+
+
+        public static void BlackmailShhh() {
+            Helpers.showFlash(new Color32(49, 28, 69, byte.MinValue), 3f, false, 0.75f);
+        }
+
 
         public static int getAvailableId() {
             var id = 0;
@@ -420,19 +427,23 @@ namespace TheOtherRoles {
             PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
         }
 
-        public static void showFlash(Color color, float duration=1f) {
+        public static void showFlash(Color color, float duration=1f, bool fade = true, float opacity = 100f) {
             if (FastDestroyableSingleton<HudManager>.Instance == null || FastDestroyableSingleton<HudManager>.Instance.FullScreen == null) return;
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.gameObject.SetActive(true);
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = true;
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) => {
                 var renderer = FastDestroyableSingleton<HudManager>.Instance.FullScreen;
-
-                if (p < 0.5) {
+                if (!fade) {
                     if (renderer != null)
-                        renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+                        renderer.color = new Color(color.r, color.g, color.b, opacity);
                 } else {
-                    if (renderer != null)
-                        renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+                    } else {
+                        if (renderer != null)
+                            renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    }
                 }
                 if (p == 1f && renderer != null) renderer.enabled = false;
             })));
