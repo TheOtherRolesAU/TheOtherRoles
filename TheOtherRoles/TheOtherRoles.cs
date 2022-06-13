@@ -476,6 +476,7 @@ namespace TheOtherRoles
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
         public static bool showAttemptToMedic = false;
+        public static bool unbreakableShield = true;
         public static bool setShieldAfterMeeting = false;
         public static bool showShieldAfterMeeting = false;
         public static bool meetingAfterShielding = false;
@@ -498,6 +499,7 @@ namespace TheOtherRoles
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            unbreakableShield = CustomOptionHolder.medicBreakShield.getBool();
             showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 2;
             showShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 1;

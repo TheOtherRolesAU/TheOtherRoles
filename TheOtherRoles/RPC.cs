@@ -828,9 +828,13 @@ namespace TheOtherRoles
             Medic.futureShielded = null;
         }
 
-        public static void shieldedMurderAttempt() {
+        public static void shieldedMurderAttempt(byte blank) {
             if (Medic.shielded == null || Medic.medic == null) return;
-            
+            if (!Medic.unbreakableShield && blank != 0) {
+                Medic.shielded = null;
+                Helpers.resetKill(blank);
+                return;
+            }
             bool isShieldedAndShow = Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded;
             isShieldedAndShow = isShieldedAndShow && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting);  // Dont show attempt, if shield is not shown yet
             bool isMedicAndShow = Medic.medic == PlayerControl.LocalPlayer && Medic.showAttemptToMedic;
@@ -1612,7 +1616,7 @@ namespace TheOtherRoles
                     RPCProcedure.medicSetShielded(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShieldedMurderAttempt:
-                    RPCProcedure.shieldedMurderAttempt();
+                    RPCProcedure.shieldedMurderAttempt(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShifterShift:
                     RPCProcedure.shifterShift(reader.ReadByte());
