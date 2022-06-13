@@ -24,7 +24,7 @@ namespace TheOtherRoles.Patches {
         static void UseCameraTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictCamerasTime > 0f && PlayerControl.LocalPlayer.isAlive())
+            if (MapOptions.restrictDevices > 0 && MapOptions.restrictCamerasTime > 0f && PlayerControl.LocalPlayer.isAlive()  && PlayerControl.LocalPlayer != Hacker.hacker && PlayerControl.LocalPlayer != SecurityGuard.securityGuard)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseCameraTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(cameraTimer);
@@ -102,7 +102,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f  && PlayerControl.LocalPlayer != Hacker.hacker && PlayerControl.LocalPlayer != SecurityGuard.securityGuard)
                         {
                             __instance.Close();
                             return false;
@@ -213,7 +213,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f   && PlayerControl.LocalPlayer != Hacker.hacker && PlayerControl.LocalPlayer != SecurityGuard.securityGuard)
                         {
                             __instance.Close();
                             return false;
@@ -284,7 +284,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f  && PlayerControl.LocalPlayer != Hacker.hacker && PlayerControl.LocalPlayer != SecurityGuard.securityGuard)
                         {
                             __instance.Close();
                             return false;

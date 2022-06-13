@@ -33,6 +33,7 @@ namespace TheOtherRoles.Patches {
 
         static void UseAdminTime()
         {
+            if (PlayerControl.LocalPlayer == Hacker.hacker) return;
             // Don't waste network traffic if we're out of time.
             if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdminTime > 0f && PlayerControl.LocalPlayer.isAlive())
             {
@@ -120,7 +121,7 @@ namespace TheOtherRoles.Patches {
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (MapOptions.restrictAdminTime <= 0f)
+                    if (MapOptions.restrictAdminTime <= 0f && PlayerControl.LocalPlayer != Hacker.hacker)
                     {
                         __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                         OutOfTime.gameObject.SetActive(true);
