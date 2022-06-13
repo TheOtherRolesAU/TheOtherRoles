@@ -360,7 +360,7 @@ namespace TheOtherRoles.Patches {
 
                             MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                             AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
-                            RPCProcedure.shieldedMurderAttempt();
+                            RPCProcedure.shieldedMurderAttempt(0);
                             return;
                         }
 

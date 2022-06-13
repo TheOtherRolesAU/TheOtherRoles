@@ -68,6 +68,32 @@ namespace TheOtherRoles {
 			return SabatageTypes.None;
 		}
 
+                public static void resetKill(byte playerId) {
+                    PlayerControl player = playerById(playerId);
+                    player.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        if (player == Cleaner.cleaner)
+                            Cleaner.cleaner.killTimer = HudManagerStartPatch.cleanerCleanButton.Timer = HudManagerStartPatch.cleanerCleanButton.MaxTimer;
+                        else if (player == Warlock.warlock)
+                            Warlock.warlock.killTimer = HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
+                        else if (player == Mini.mini && Mini.mini.Data.Role.IsImpostor)
+                            Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp() ? 0.66f : 2f));
+                        else if (player == Witch.witch)
+                            Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+                        else if (player == Ninja.ninja)
+                            Ninja.ninja.killTimer = HudManagerStartPatch.ninjaButton.Timer = HudManagerStartPatch.ninjaButton.MaxTimer;
+                        else if (player == Sheriff.sheriff)
+                            Sheriff.sheriff.killTimer = HudManagerStartPatch.sheriffKillButton.Timer = HudManagerStartPatch.sheriffKillButton.MaxTimer;
+                        else if (player == Vampire.vampire)
+                            Vampire.vampire.killTimer = HudManagerStartPatch.vampireKillButton.Timer = HudManagerStartPatch.vampireKillButton.MaxTimer;
+                        else if (player == Jackal.jackal)
+                            Jackal.jackal.killTimer = HudManagerStartPatch.jackalKillButton.Timer = HudManagerStartPatch.jackalKillButton.MaxTimer;
+                        else if (player == Sidekick.sidekick)
+                            Sidekick.sidekick.killTimer = HudManagerStartPatch.sidekickKillButton.Timer = HudManagerStartPatch.sidekickKillButton.MaxTimer;
+                        else if (player == Swooper.swooper)
+                            Swooper.swooper.killTimer = HudManagerStartPatch.swooperKillButton.Timer = HudManagerStartPatch.swooperKillButton.MaxTimer;
+
+                }
+
 		public static bool isSaboActive() {
 			return !(Helpers.getActiveSabo() == SabatageTypes.None);
 		}
@@ -501,8 +527,9 @@ namespace TheOtherRoles {
             else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
               if (Medic.shielded != null && Medic.shielded == target) {
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                   writer.Write(target.PlayerId);
                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                   RPCProcedure.shieldedMurderAttempt();
+                   RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
               }
               return MurderAttemptResult.ReverseKill;
 	    }
@@ -511,8 +538,9 @@ namespace TheOtherRoles {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shieldedMurderAttempt();
+                RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
                 return MurderAttemptResult.SuppressKill;
             }
 
