@@ -10,9 +10,11 @@ using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
-namespace TheOtherRoles.Patches {
+namespace TheOtherRoles.Patches
+{
     [HarmonyPatch]
-    class MeetingHudPatch {
+    class MeetingHudPatch
+    {
         static bool[] selections;
         static SpriteRenderer[] renderers;
         private static GameData.PlayerInfo target = null;
@@ -22,12 +24,16 @@ namespace TheOtherRoles.Patches {
         private static TMPro.TextMeshPro swapperConfirmButtonLabel;
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
-        class MeetingCalculateVotesPatch {
-            private static Dictionary<byte, int> CalculateVotes(MeetingHud __instance) {
+        class MeetingCalculateVotesPatch
+        {
+            private static Dictionary<byte, int> CalculateVotes(MeetingHud __instance)
+            {
                 Dictionary<byte, int> dictionary = new Dictionary<byte, int>();
-                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.VotedFor != 252 && playerVoteArea.VotedFor != 255 && playerVoteArea.VotedFor != 254) {
+                    if (playerVoteArea.VotedFor != 252 && playerVoteArea.VotedFor != 255 && playerVoteArea.VotedFor != 254)
+                    {
                         PlayerControl player = Helpers.playerById((byte)playerVoteArea.TargetPlayerId);
                         if (player == null || player.Data == null || player.Data.IsDead || player.Data.Disconnected) continue;
 
@@ -40,15 +46,18 @@ namespace TheOtherRoles.Patches {
                     }
                 }
                 // Swapper swap votes
-                if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead) {
+                if (Swapper.swapper != null && !Swapper.swapper.Data.IsDead)
+                {
                     PlayerVoteArea swapped1 = null;
                     PlayerVoteArea swapped2 = null;
-                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                    foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+                    {
                         if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                         if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
                     }
 
-                    if (swapped1 != null && swapped2 != null) {
+                    if (swapped1 != null && swapped2 != null)
+                    {
                         if (!dictionary.ContainsKey(swapped1.TargetPlayerId)) dictionary[swapped1.TargetPlayerId] = 0;
                         if (!dictionary.ContainsKey(swapped2.TargetPlayerId)) dictionary[swapped2.TargetPlayerId] = 0;
                         int tmp = dictionary[swapped1.TargetPlayerId];
@@ -63,46 +72,53 @@ namespace TheOtherRoles.Patches {
             }
 
 
-            static bool Prefix(MeetingHud __instance) {
-                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) {
+            static bool Prefix(MeetingHud __instance)
+            {
+                if (__instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote))
+                {
                     // If skipping is disabled, replace skipps/no-votes with self vote
-                    if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote) {
-                        foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                    if (target == null && blockSkippingInEmergencyMeetings && noVoteIsSelfVote)
+                    {
+                        foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+                        {
                             if (playerVoteArea.VotedFor == byte.MaxValue - 1) playerVoteArea.VotedFor = playerVoteArea.TargetPlayerId; // TargetPlayerId
                         }
                     }
 
-			        Dictionary<byte, int> self = CalculateVotes(__instance);
+                    Dictionary<byte, int> self = CalculateVotes(__instance);
                     bool tie;
-			        KeyValuePair<byte, int> max = self.MaxPair(out tie);
+                    KeyValuePair<byte, int> max = self.MaxPair(out tie);
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
                     // TieBreaker 
-                    Tiebreaker.isTiebreak = false;
-                    int maxVoteValue = self.Values.Max();
                     List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+                    if (self.Count > 0)
+                    {
+                        Tiebreaker.isTiebreak = false;
+                        int maxVoteValue = self.Values.Max();
 
-                    
-                    PlayerVoteArea tb = null;
-                    if (Tiebreaker.tiebreaker != null)
-                        tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
-                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
-                    if (tb != null && tb.AmDead) isTiebreakerSkip = true;
+                        PlayerVoteArea tb = null;
+                        if (Tiebreaker.tiebreaker != null)
+                            tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
+                        bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
+                        if (tb != null && tb.AmDead) isTiebreakerSkip = true;
 
-                    foreach (KeyValuePair<byte, int> pair in self)
-                        if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
-                            potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
-
+                        foreach (KeyValuePair<byte, int> pair in self)
+                            if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
+                                potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+                    }
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
                     {
                         PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                        array[i] = new MeetingHud.VoterState {
+                        array[i] = new MeetingHud.VoterState
+                        {
                             VoterId = playerVoteArea.TargetPlayerId,
                             VotedForId = playerVoteArea.VotedFor
                         };
 
-                        if (Tiebreaker.tiebreaker != null && tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x != null && x.PlayerId == playerVoteArea.VotedFor).Count > 0) {
+                        if (Tiebreaker.tiebreaker != null && tie && playerVoteArea.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId && potentialExiled.FindAll(x => x != null && x.PlayerId == playerVoteArea.VotedFor).Count > 0)
+                        {
                             exiled = potentialExiled.ToArray().FirstOrDefault(v => v.PlayerId == playerVoteArea.VotedFor);
                             tie = false;
 
@@ -120,8 +136,10 @@ namespace TheOtherRoles.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
-        class MeetingHudBloopAVoteIconPatch {
-            public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
+        class MeetingHudBloopAVoteIconPatch
+        {
+            public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)] GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)] int index, [HarmonyArgument(2)] Transform parent)
+            {
                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
                 if (!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors)
                     PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
@@ -133,22 +151,26 @@ namespace TheOtherRoles.Patches {
                 parent.GetComponent<VoteSpreader>().AddVote(spriteRenderer);
                 return false;
             }
-        } 
+        }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
-        class MeetingHudPopulateVotesPatch {
-            
-            static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states) {
+        class MeetingHudPopulateVotesPatch
+        {
+
+            static bool Prefix(MeetingHud __instance, Il2CppStructArray<MeetingHud.VoterState> states)
+            {
                 // Swapper swap
 
                 PlayerVoteArea swapped1 = null;
                 PlayerVoteArea swapped2 = null;
-                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates) {
+                foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+                {
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId1) swapped1 = playerVoteArea;
                     if (playerVoteArea.TargetPlayerId == Swapper.playerId2) swapped2 = playerVoteArea;
                 }
                 bool doSwap = swapped1 != null && swapped2 != null && Swapper.swapper != null && !Swapper.swapper.Data.IsDead;
-                if (doSwap) {
+                if (doSwap)
+                {
                     __instance.StartCoroutine(Effects.Slide3D(swapped1.transform, swapped1.transform.localPosition, swapped2.transform.localPosition, 1.5f));
                     __instance.StartCoroutine(Effects.Slide3D(swapped2.transform, swapped2.transform.localPosition, swapped1.transform.localPosition, 1.5f));
                 }
@@ -156,7 +178,8 @@ namespace TheOtherRoles.Patches {
 
                 __instance.TitleText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.MeetingVotingResults, new Il2CppReferenceArray<Il2CppSystem.Object>(0));
                 int num = 0;
-                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     byte targetPlayerId = playerVoteArea.TargetPlayerId;
                     // Swapper change playerVoteArea that gets the votes
@@ -166,24 +189,30 @@ namespace TheOtherRoles.Patches {
                     playerVoteArea.ClearForResults();
                     int num2 = 0;
                     bool mayorFirstVoteDisplayed = false;
-                    for (int j = 0; j < states.Length; j++) {
+                    for (int j = 0; j < states.Length; j++)
+                    {
                         MeetingHud.VoterState voterState = states[j];
                         GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
-                        if (playerById == null) {
+                        if (playerById == null)
+                        {
                             Debug.LogError(string.Format("Couldn't find player info for voter: {0}", voterState.VoterId));
-                        } else if (i == 0 && voterState.SkippedVote && !playerById.IsDead) {
+                        }
+                        else if (i == 0 && voterState.SkippedVote && !playerById.IsDead)
+                        {
                             __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
                             num++;
                         }
-                        else if (voterState.VotedForId == targetPlayerId && !playerById.IsDead) {
+                        else if (voterState.VotedForId == targetPlayerId && !playerById.IsDead)
+                        {
                             __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
                             num2++;
                         }
 
                         // Major vote, redo this iteration to place a second vote
-                        if (Mayor.mayor != null && voterState.VoterId == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed) {
+                        if (Mayor.mayor != null && voterState.VoterId == (sbyte)Mayor.mayor.PlayerId && !mayorFirstVoteDisplayed)
+                        {
                             mayorFirstVoteDisplayed = true;
-                            j--;    
+                            j--;
                         }
                     }
                 }
@@ -192,8 +221,9 @@ namespace TheOtherRoles.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
-        class MeetingHudVotingCompletedPatch {
-            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)]byte[] states, [HarmonyArgument(1)]GameData.PlayerInfo exiled, [HarmonyArgument(2)]bool tie)
+        class MeetingHudVotingCompletedPatch
+        {
+            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)] byte[] states, [HarmonyArgument(1)] GameData.PlayerInfo exiled, [HarmonyArgument(2)] bool tie)
             {
                 // Reset swapper values
                 Swapper.playerId1 = Byte.MaxValue;
@@ -202,36 +232,47 @@ namespace TheOtherRoles.Patches {
                 // Lovers, Lawyer & Pursuer save next to be exiled, because RPC of ending game comes before RPC of exiled
                 Lovers.notAckedExiledIsLover = false;
                 Pursuer.notAckedExiled = false;
-                if (exiled != null) {
+                if (exiled != null)
+                {
                     Lovers.notAckedExiledIsLover = ((Lovers.lover1 != null && Lovers.lover1.PlayerId == exiled.PlayerId) || (Lovers.lover2 != null && Lovers.lover2.PlayerId == exiled.PlayerId));
                     Pursuer.notAckedExiled = (Pursuer.pursuer != null && Pursuer.pursuer.PlayerId == exiled.PlayerId) || (Lawyer.lawyer != null && Lawyer.target != null && Lawyer.target.PlayerId == exiled.PlayerId && Lawyer.target != Jester.jester);
                 }
-                               
+
             }
         }
 
 
-        static void swapperOnClick(int i, MeetingHud __instance) {
+        static void swapperOnClick(int i, MeetingHud __instance)
+        {
             if (__instance.state == MeetingHud.VoteStates.Results || Swapper.charges <= 0) return;
             if (__instance.playerStates[i].AmDead) return;
 
             int selectedCount = selections.Where(b => b).Count();
             SpriteRenderer renderer = renderers[i];
 
-            if (selectedCount == 0) {
+            if (selectedCount == 0)
+            {
                 renderer.color = Color.yellow;
                 selections[i] = true;
-            } else if (selectedCount == 1) {
-                if (selections[i]) {
+            }
+            else if (selectedCount == 1)
+            {
+                if (selections[i])
+                {
                     renderer.color = Color.red;
                     selections[i] = false;
-                } else {
+                }
+                else
+                {
                     selections[i] = true;
                     renderer.color = Color.yellow;
                     swapperConfirmButtonLabel.text = Helpers.cs(Color.yellow, "Confirm Swap");
                 }
-            } else if (selectedCount == 2) {
-                if (selections[i]) {
+            }
+            else if (selectedCount == 2)
+            {
+                if (selections[i])
+                {
                     renderer.color = Color.red;
                     selections[i] = false;
                     swapperConfirmButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
@@ -239,7 +280,8 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        static void swapperConfirm(MeetingHud __instance) {
+        static void swapperConfirm(MeetingHud __instance)
+        {
             __instance.playerStates[0].Cancel();  // This will stop the underlying buttons of the template from showing up
             if (__instance.state == MeetingHud.VoteStates.Results) return;
             if (selections.Where(b => b).Count() != 2) return;
@@ -247,20 +289,28 @@ namespace TheOtherRoles.Patches {
 
             PlayerVoteArea firstPlayer = null;
             PlayerVoteArea secondPlayer = null;
-            for (int A = 0; A < selections.Length; A++) {
-                if (selections[A]) {
-                    if (firstPlayer == null) {
+            for (int A = 0; A < selections.Length; A++)
+            {
+                if (selections[A])
+                {
+                    if (firstPlayer == null)
+                    {
                         firstPlayer = __instance.playerStates[A];
-                    } else {
+                    }
+                    else
+                    {
                         secondPlayer = __instance.playerStates[A];
                     }
                     renderers[A].color = Color.green;
-                } else if (renderers[A] != null) {
+                }
+                else if (renderers[A] != null)
+                {
                     renderers[A].color = Color.gray;
-                    }
+                }
                 if (swapperButtonList[A] != null) swapperButtonList[A].OnClick.RemoveAllListeners();  // Swap buttons can't be clicked / changed anymore
             }
-            if (firstPlayer != null && secondPlayer != null) {
+            if (firstPlayer != null && secondPlayer != null)
+            {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SwapperSwap, Hazel.SendOption.Reliable, -1);
                 writer.Write((byte)firstPlayer.TargetPlayerId);
                 writer.Write((byte)secondPlayer.TargetPlayerId);
@@ -274,7 +324,8 @@ namespace TheOtherRoles.Patches {
         }
 
         private static GameObject guesserUI;
-        static void guesserOnClick(int buttonTarget, MeetingHud __instance) {
+        static void guesserOnClick(int buttonTarget, MeetingHud __instance)
+        {
             if (guesserUI != null || !(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted)) return;
             __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(false));
 
@@ -296,7 +347,8 @@ namespace TheOtherRoles.Patches {
             exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
             exitButtonParent.transform.localScale = new Vector3(0.217f, 0.9f, 1);
             exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
+            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() =>
+            {
                 __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
@@ -304,11 +356,13 @@ namespace TheOtherRoles.Patches {
             List<Transform> buttons = new List<Transform>();
             Transform selectedButton = null;
 
-            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
-                RoleId guesserRole = (Guesser.niceGuesser != null && CachedPlayer.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser :  RoleId.EvilGuesser;
+            foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos)
+            {
+                RoleId guesserRole = (Guesser.niceGuesser != null && CachedPlayer.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser : RoleId.EvilGuesser;
                 if (roleInfo.isModifier || roleInfo.roleId == guesserRole || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles & modifier
-                
-                if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
+
+                if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null)
+                {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
                     int numberOfLeftTasks = playerTotal - playerCompleted;
                     if (numberOfLeftTasks <= 0 && roleInfo.roleId == RoleId.Snitch) continue;
@@ -321,7 +375,7 @@ namespace TheOtherRoles.Patches {
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
                 button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
                 buttons.Add(button);
-                int row = i/5, col = i%5;
+                int row = i / 5, col = i % 5;
                 buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
                 buttonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 label.text = Helpers.cs(roleInfo.color, roleInfo.name);
@@ -331,16 +385,21 @@ namespace TheOtherRoles.Patches {
                 int copiedIndex = i;
 
                 button.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-                if (!CachedPlayer.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
-                    if (selectedButton != button) {
+                if (!CachedPlayer.LocalPlayer.Data.IsDead) button.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() =>
+                {
+                    if (selectedButton != button)
+                    {
                         selectedButton = button;
                         buttons.ForEach(x => x.GetComponent<SpriteRenderer>().color = x == selectedButton ? Color.red : Color.white);
-                    } else {
+                    }
+                    else
+                    {
                         PlayerControl focusedTarget = Helpers.playerById((byte)__instance.playerStates[buttonTarget].TargetPlayerId);
-                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) <= 0 ) return;
+                        if (!(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted) || focusedTarget == null || Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) <= 0) return;
 
-                        if (!Guesser.killsThroughShield && focusedTarget == Medic.shielded) { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
-                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true)); 
+                        if (!Guesser.killsThroughShield && focusedTarget == Medic.shielded)
+                        { // Depending on the options, shooting the shielded player will not allow the guess, notifiy everyone about the kill attempt and close the window
+                            __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
                             UnityEngine.Object.Destroy(container.gameObject);
 
                             MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
@@ -379,20 +438,25 @@ namespace TheOtherRoles.Patches {
         }
 
         [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
-        class PlayerVoteAreaSelectPatch {
-            static bool Prefix(MeetingHud __instance) {
+        class PlayerVoteAreaSelectPatch
+        {
+            static bool Prefix(MeetingHud __instance)
+            {
                 return !(CachedPlayer.LocalPlayer != null && Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId) && guesserUI != null);
             }
         }
 
-        static void populateButtonsPostfix(MeetingHud __instance) {
+        static void populateButtonsPostfix(MeetingHud __instance)
+        {
             // Add Swapper Buttons
-            if (Swapper.swapper != null && CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper && !Swapper.swapper.Data.IsDead) {
+            if (Swapper.swapper != null && CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper && !Swapper.swapper.Data.IsDead)
+            {
                 selections = new bool[__instance.playerStates.Length];
                 renderers = new SpriteRenderer[__instance.playerStates.Length];
                 swapperButtonList = new PassiveButton[__instance.playerStates.Length];
 
-                for (int i = 0; i < __instance.playerStates.Length; i++) {
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
 
@@ -412,7 +476,7 @@ namespace TheOtherRoles.Patches {
                     button.OnClick.RemoveAllListeners();
                     int copiedIndex = i;
                     button.OnClick.AddListener((System.Action)(() => swapperOnClick(copiedIndex, __instance)));
-                    
+
                     selections[i] = false;
                     renderers[i] = renderer;
                 }
@@ -445,27 +509,34 @@ namespace TheOtherRoles.Patches {
                 swapperConfirmButtonLabel.transform.localScale *= 1.7f;
 
                 PassiveButton passiveButton = confirmSwapButton.GetComponent<PassiveButton>();
-                passiveButton.OnClick.RemoveAllListeners();               
+                passiveButton.OnClick.RemoveAllListeners();
                 if (!CachedPlayer.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
                 confirmSwapButton.parent.gameObject.SetActive(false);
-                __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) => { // Button appears delayed, so that its visible in the voting screen only!
-                    if (p == 1f) {
+                __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) =>
+                { // Button appears delayed, so that its visible in the voting screen only!
+                    if (p == 1f)
+                    {
                         confirmSwapButton.parent.gameObject.SetActive(true);
                     }
                 })));
             }
 
             //Fix visor in Meetings 
-            foreach (PlayerVoteArea pva in __instance.playerStates) {
-                if(pva.PlayerIcon != null && pva.PlayerIcon.VisorSlot != null){
+            foreach (PlayerVoteArea pva in __instance.playerStates)
+            {
+                if (pva.PlayerIcon != null && pva.PlayerIcon.VisorSlot != null)
+                {
                     pva.PlayerIcon.VisorSlot.transform.position += new Vector3(0, 0, -1f);
                 }
             }
 
             // Add overlay for spelled players
-            if (Witch.witch != null && Witch.futureSpelled != null) {
-                foreach (PlayerVoteArea pva in __instance.playerStates) {
-                    if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId)) {
+            if (Witch.witch != null && Witch.futureSpelled != null)
+            {
+                foreach (PlayerVoteArea pva in __instance.playerStates)
+                {
+                    if (Witch.futureSpelled.Any(x => x.PlayerId == pva.TargetPlayerId))
+                    {
                         SpriteRenderer rend = (new GameObject()).AddComponent<SpriteRenderer>();
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
@@ -476,8 +547,10 @@ namespace TheOtherRoles.Patches {
             }
 
             // Add Guesser Buttons
-            if (Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId) && !CachedPlayer.LocalPlayer.Data.IsDead && Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) > 0) {
-                for (int i = 0; i < __instance.playerStates.Length; i++) {
+            if (Guesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId) && !CachedPlayer.LocalPlayer.Data.IsDead && Guesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId) > 0)
+            {
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                     if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == CachedPlayer.LocalPlayer.PlayerId) continue;
 
@@ -496,7 +569,8 @@ namespace TheOtherRoles.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
-        class MeetingServerStartPatch {
+        class MeetingServerStartPatch
+        {
             static void Postfix(MeetingHud __instance)
             {
                 populateButtonsPostfix(__instance);
@@ -504,19 +578,23 @@ namespace TheOtherRoles.Patches {
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Deserialize))]
-        class MeetingDeserializePatch {
-            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)]MessageReader reader, [HarmonyArgument(1)]bool initialState)
+        class MeetingDeserializePatch
+        {
+            static void Postfix(MeetingHud __instance, [HarmonyArgument(0)] MessageReader reader, [HarmonyArgument(1)] bool initialState)
             {
                 // Add swapper buttons
-                if (initialState) {
+                if (initialState)
+                {
                     populateButtonsPostfix(__instance);
                 }
             }
         }
 
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
-        class StartMeetingPatch {
-            public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
+        class StartMeetingPatch
+        {
+            public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
+            {
                 // Resett Bait list
                 Bait.active = new Dictionary<DeadPlayer, float>();
                 // Safe AntiTeleport positions
@@ -532,23 +610,27 @@ namespace TheOtherRoles.Patches {
 
 
                 // Add Portal info into Portalmaker Chat:
-                if (Portalmaker.portalmaker != null && CachedPlayer.LocalPlayer.PlayerControl == Portalmaker.portalmaker && !CachedPlayer.LocalPlayer.Data.IsDead) {
-                    foreach (var entry in Portal.teleportedPlayers) {
+                if (Portalmaker.portalmaker != null && CachedPlayer.LocalPlayer.PlayerControl == Portalmaker.portalmaker && !CachedPlayer.LocalPlayer.Data.IsDead)
+                {
+                    foreach (var entry in Portal.teleportedPlayers)
+                    {
                         float timeBeforeMeeting = ((float)(DateTime.UtcNow - entry.time).TotalMilliseconds) / 1000;
                         string msg = Portalmaker.logShowsTime ? $"{(int)timeBeforeMeeting}s ago: " : "";
                         msg = msg + $"{entry.name} used the teleporter";
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"{msg}");
                     }
                 }
-                
+
                 // Reset zoomed out ghosts
                 Helpers.toggleZoom(reset: true);
             }
         }
 
         [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
-        class MeetingHudUpdatePatch {
-            static void Postfix(MeetingHud __instance) {
+        class MeetingHudUpdatePatch
+        {
+            static void Postfix(MeetingHud __instance)
+            {
                 // Deactivate skip Button if skipping on emergency meetings is disabled
                 if (target == null && blockSkippingInEmergencyMeetings)
                     __instance.SkipVoteButton.gameObject.SetActive(false);
