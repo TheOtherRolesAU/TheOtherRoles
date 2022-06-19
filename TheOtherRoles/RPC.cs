@@ -782,7 +782,6 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) BountyHunter.clearAndReload();
                     BountyHunter.bountyHunter = amnisiac;
                     Amnisiac.clearAndReload();
-                    Amnisiac.amnisiac = target;
 
                     BountyHunter.bountyUpdateTimer = 0f;
                     if (CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter)
