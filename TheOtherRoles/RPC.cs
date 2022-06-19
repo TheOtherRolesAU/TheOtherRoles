@@ -733,10 +733,10 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Arsonist:
-                    if (Amnesiac.resetRole) Arsonist.clearAndReload();
-                    Arsonist.arsonist = amnesiac;
-                    Amnesiac.clearAndReload();
-                    Amnesiac.amnesiac = target;
+                    if (Amnisiac.resetRole) Arsonist.clearAndReload();
+                    Arsonist.arsonist = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
 
                     if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist)
                     {
@@ -778,11 +778,11 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.BountyHunter:
-                    Helpers.turnToImpostor(Amnesiac.amnesiac);
-                    if (Amnesiac.resetRole) BountyHunter.clearAndReload();
-                    BountyHunter.bountyHunter = amnesiac;
-                    Amnesiac.clearAndReload();
-                    Amnesiac.amnesiac = target;
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (Amnisiac.resetRole) BountyHunter.clearAndReload();
+                    BountyHunter.bountyHunter = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
 
                     BountyHunter.bountyUpdateTimer = 0f;
                     if (CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter)
