@@ -122,7 +122,7 @@ namespace TheOtherRoles.Patches {
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (MapOptions.restrictAdminTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
+                    if (MapOptions.restrictAdminTime <= 0f && (CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && !CachedPlayer.LocalPlayer.Data.IsDead))
                     {
                         __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                         OutOfTime.gameObject.SetActive(true);
