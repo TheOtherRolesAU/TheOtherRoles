@@ -31,25 +31,25 @@ namespace TheOtherRoles.Patches {
                     player.SetFlipX(true);
                     MapOptions.playerIcons[p.PlayerId] = player;
 
-                    if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist) {
-			Arsonist.poolIcons.Add(player);
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist)
+                    {
+                        Arsonist.poolIcons.Add(player);
                         player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
                         player.transform.localScale = Vector3.one * 0.2f;
                         player.setSemiTransparent(true);
                         player.gameObject.SetActive(true);
-                    } else if (CachedPlayer.LocalPlayer.PlayerControl == Amnisiac.amnisiac && p != Amnisiac.amnisiac) {
-                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, -0.25f, 0) + Vector3.right * playerCounter++ * 0.35f;
-                        player.transform.localScale = Vector3.one * 0.2f;
-                        player.setSemiTransparent(true);
-                        player.gameObject.SetActive(false);
-                        Amnisiac.poolIcons.Add(player);
-                    } else if (CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter) {
+                    }
+
+                    else if (CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter)
+                    {
                         player.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0);
                         player.transform.localScale = Vector3.one * 0.4f;
                         player.gameObject.SetActive(false);
+
                     } else {
                         player.gameObject.SetActive(false);
                     }
+
                 }
             }
 
