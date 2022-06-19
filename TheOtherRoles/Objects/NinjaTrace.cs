@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TheOtherRoles.Utilities;
+
 using UnityEngine;
 
 namespace TheOtherRoles.Objects {
@@ -20,7 +21,7 @@ namespace TheOtherRoles.Objects {
         public NinjaTrace(Vector2 p, float duration=1f) {
             trace = new GameObject("NinjaTrace");
             trace.AddSubmergedComponent(SubmergedCompatibility.Classes.ElevatorMover);
-            //Vector3 position = new Vector3(p.x, p.y, PlayerControl.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
+            //Vector3 position = new Vector3(p.x, p.y, CachedPlayer.LocalPlayer.transform.localPosition.z + 0.001f); // just behind player
             Vector3 position = new Vector3(p.x, p.y, p.y / 1000f + 0.01f);
             trace.transform.position = position;
             trace.transform.localPosition = position;

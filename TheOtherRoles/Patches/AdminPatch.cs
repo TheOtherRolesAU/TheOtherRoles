@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
+using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Patches {
     [Harmony]
@@ -33,11 +34,11 @@ namespace TheOtherRoles.Patches {
 
         static void UseAdminTime()
         {
-            if (PlayerControl.LocalPlayer == Hacker.hacker) return;
+            if (CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker) return;
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdminTime > 0f && PlayerControl.LocalPlayer.isAlive())
+            if (MapOptions.restrictDevices > 0 && MapOptions.restrictAdminTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive())
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseAdminTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(adminTimer);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.useAdminTime(adminTimer);
@@ -121,7 +122,7 @@ namespace TheOtherRoles.Patches {
                         TimeRemaining.color = Palette.White;
                     }
 
-                    if (MapOptions.restrictAdminTime <= 0f && PlayerControl.LocalPlayer != Hacker.hacker)
+                    if (MapOptions.restrictAdminTime <= 0f && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker)
                     {
                         __instance.BackgroundColor.SetColor(Palette.DisabledGrey);
                         OutOfTime.gameObject.SetActive(true);
@@ -143,7 +144,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 bool commsActive = false;
-                foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks)
                     if (task.TaskType == TaskTypes.FixComms) commsActive = true;
 
                 if (!__instance.isSab && commsActive)
@@ -238,7 +239,7 @@ namespace TheOtherRoles.Patches {
             static void Postfix(CounterArea __instance)
             {
                 // Hacker display saved colors on the admin panel
-                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == PlayerControl.LocalPlayer && Hacker.hackerTimer > 0;
+                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0;
                 if (playerColors.ContainsKey(__instance.RoomType))
                 {
                     List<Color> colors = playerColors[__instance.RoomType];

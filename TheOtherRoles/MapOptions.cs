@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TheOtherRoles.Players;
 
 namespace TheOtherRoles{
     static class MapOptions {
@@ -80,17 +81,17 @@ namespace TheOtherRoles{
             restrictVitalsTime = restrictVitalsTimeMax;
         }
 
-        public static bool canUseAdmin  { get { return restrictDevices == 0 || restrictAdminTime > 0f || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool canUseAdmin  { get { return restrictDevices == 0 || restrictAdminTime > 0f || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
-        public static bool couldUseAdmin { get { return restrictDevices == 0 || restrictAdminTimeMax > 0f  || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool couldUseAdmin { get { return restrictDevices == 0 || restrictAdminTimeMax > 0f  || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
-        public static bool canUseCameras {get { return restrictDevices == 0 || restrictCamerasTime > 0f || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool canUseCameras {get { return restrictDevices == 0 || restrictCamerasTime > 0f || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
-        public static bool couldUseCameras { get { return restrictDevices == 0 || restrictCamerasTimeMax > 0f || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool couldUseCameras { get { return restrictDevices == 0 || restrictCamerasTimeMax > 0f || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
-        public static bool canUseVitals { get { return restrictDevices == 0 || restrictVitalsTime > 0f || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool canUseVitals { get { return restrictDevices == 0 || restrictVitalsTime > 0f || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
-        public static bool couldUseVitals { get { return restrictDevices == 0 || restrictVitalsTimeMax > 0f || PlayerControl.LocalPlayer == Hacker.hacker; }}
+        public static bool couldUseVitals { get { return restrictDevices == 0 || restrictVitalsTimeMax > 0f || CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker; }}
 
     }
 }
