@@ -1326,12 +1326,6 @@ namespace TheOtherRoles.Patches {
                 RPCProcedure.lawyerPromotesToPursuer();
             }
 
-            // Promote Prosecutor to Pursuer if target is guessed (the host sends the call such that everyone recieves the update before a possible game End)
-            if (__instance == Prosecutor.target && Prosecutor.targetWasGuessed && AmongUsClient.Instance.AmHost) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.prosecutorToPursuer();
-            }
 
             if (__instance == Lawyer.target && !Lawyer.targetWasGuessed)
             {

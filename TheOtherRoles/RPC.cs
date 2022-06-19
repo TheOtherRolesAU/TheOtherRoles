@@ -1378,6 +1378,7 @@ namespace TheOtherRoles
         }
 
         public static void prosecutorToPursuer() {
+            if (Prosecutor.triggerProsecutorWin) return;
             if (Prosecutor.prosecutor == null) return;
             PlayerControl player = Prosecutor.prosecutor;
             Prosecutor.clearAndReload();
@@ -1389,7 +1390,7 @@ namespace TheOtherRoles
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
             if (dyingTarget == null ) return;
             if (Lawyer.target != null && dyingTarget == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
-            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) Prosecutor.targetWasGuessed = true;  // Prosecutor needs to turn into Pursuer if client is guessed
+            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) prosecutorToPursuer();  // Prosecutor needs to turn into Pursuer if client is guessed
 
             dyingTarget.Exiled();
             PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
