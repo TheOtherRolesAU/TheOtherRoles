@@ -22,7 +22,7 @@ Even more roles are coming soon. :)
 | [Camouflager](#camouflager) | [Deputy](#deputy) | [Vulture](#vulture) | [Lovers](#lovers) |
 | [Vampire](#vampire) | [Lighter](#lighter) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
 | [Eraser](#eraser) | [Detective](#detective) | | [Mini](#mini) |
-| [Trickster](#trickster) | [Time Master](#time-master) | | [VIP](#vip) |
+| [Trickster](#trickster) | [Time Master](#time-master) | [Pursuer](#pursuer) | [VIP](#vip) |
 | [Cleaner](#cleaner) | [Medic](#medic) |  | [Invert](#invert) |
 | [Warlock](#warlock) | [Swapper](#swapper) |
 | [Bounty Hunter](#bounty-hunter) | [Seer](#seer) |  |
