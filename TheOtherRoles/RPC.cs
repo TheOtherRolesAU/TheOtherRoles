@@ -913,6 +913,7 @@ namespace TheOtherRoles
                 player == Jackal.jackal || //  Don't shift on Jackal
                 player == Swooper.swooper || // Don't shift on Swooper
                 player == Sidekick.sidekick || // Don't shift on Sidekick 
+                player == Werewolf.werewolf || // Don't shift on Swooper
                 Jackal.formerJackals.Contains(player) || // Don't shift on former jackals
                 player == Jester.jester || // Don't shift on Jester
                 player == Arsonist.arsonist || // Don't shift on Arso
