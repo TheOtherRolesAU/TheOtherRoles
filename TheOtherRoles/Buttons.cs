@@ -54,6 +54,9 @@ namespace TheOtherRoles
         public static CustomButton ninjaButton;
         public static CustomButton swooperSwoopButton;
         public static CustomButton swooperKillButton;
+
+        public static CustomButton werewolfRampageButton;
+        public static CustomButton werewolfKillButton;
         
         public static CustomButton minerMineButton;
         
@@ -94,6 +97,8 @@ namespace TheOtherRoles
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
             swooperKillButton.MaxTimer = Jackal.cooldown;
+            werewolfKillButton.MaxTimer = Werewolf.killCooldown;
+            
             sidekickKillButton.MaxTimer = Sidekick.cooldown;
             jackalSidekickButton.MaxTimer = Jackal.createSidekickCooldown;
             lighterButton.MaxTimer = Lighter.cooldown;
@@ -126,6 +131,11 @@ namespace TheOtherRoles
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             swooperSwoopButton.EffectDuration = Swooper.duration;
+            
+            werewolfRampageButton.MaxTimer = Werewolf.rampageCooldown;
+            werewolfRampageButton.EffectDuration = Werewolf.rampageDuration;
+
+
             minerMineButton.EffectDuration = Swooper.duration;
             camouflagerButton.EffectDuration = Camouflager.duration;
             morphlingButton.EffectDuration = Morphling.duration;
@@ -321,7 +331,8 @@ namespace TheOtherRoles
                             (Sheriff.spyCanDieToSheriff && Spy.spy == Sheriff.currentTarget) ||
                             (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget || Lawyer.lawyer == Sheriff.currentTarget || Pursuer.pursuer == Sheriff.currentTarget)) ||
                             (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget) ||
-                            (Swooper.swooper == Sheriff.currentTarget)) {
+                            (Swooper.swooper == Sheriff.currentTarget)
+                            (Werewolf.werewolf == Sheriff.currentTarget)) {
                             targetId = Sheriff.currentTarget.PlayerId;
                         }
                         else {
@@ -1050,6 +1061,42 @@ namespace TheOtherRoles
                 true,
                 Swooper.duration,
                 () => { swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer; }
+            );
+            
+            
+            // Swooper Kill
+            werewolfKillButton = new CustomButton(
+                () => {
+                    if (Helpers.checkAndDoVetKill(Werewolf.currentTarget)) return;
+                    if (Helpers.checkMuderAttemptAndKill(Werewolf.werewolf, Werewolf.currentTarget) == MurderAttemptResult.SuppressKill) return;
+
+                    werewolfKillButton.Timer = werewolfKillButton.MaxTimer; 
+                    Werewolf.currentTarget = null;
+                },
+                () => { return Werewolf.werewolf != null && Werewolf.werewolf == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead && Werewolf.canKill; },
+                () => { showTargetNameOnButton(Werewolf.currentTarget, werewolfKillButton, "KILL"); return Werewolf.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
+                () => { werewolfKillButton.Timer = werewolfKillButton.MaxTimer;},
+                __instance.KillButton.graphic.sprite,
+                new Vector3(0, 1f, 0),
+                __instance,
+                KeyCode.Q
+            );
+
+            werewolfRampageButton = new CustomButton(
+                () => { Werewolf.canKill = true; werewolfKillButton.Timer = werewolfKillButton.MaxTimer;},
+                () => { /* Can See */ return Werewolf.werewolf != null && Werewolf.werewolf == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
+                () => {  /* On Click */ return (CachedPlayer.LocalPlayer.PlayerControl.CanMove); },
+                () => {  /* On Meeting End */
+                    werewolfRampageButton.Timer = werewolfRampageButton.MaxTimer;
+                    Werewolf.canKill = false;
+                },
+                Werewolf.getRampageButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.G,
+                true,
+                Werewolf.rampageDuration,
+                () => { werewolfRampageButton.Timer = werewolfRampageButton.MaxTimer; Werewolf.canKill = false; }
             );
 
             // Lighter light

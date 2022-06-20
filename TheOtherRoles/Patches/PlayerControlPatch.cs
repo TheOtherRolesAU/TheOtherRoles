@@ -131,6 +131,11 @@ namespace TheOtherRoles.Patches {
             Medic.currentTarget = setTarget();
             if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
+        
+        static void werewolfSetTarget() {
+            if (Werewolf.werewolf == null || Werewolf.werewolf != CachedPlayer.LocalPlayer.PlayerControl) return;
+            Werewolf.currentTarget = setTarget();
+        }
 
         static void blackMailerSetTarget() {
             if (Blackmailer.blackmailer == null || Blackmailer.blackmailer != CachedPlayer.LocalPlayer.PlayerControl) return;
@@ -952,6 +957,9 @@ namespace TheOtherRoles.Patches {
                 morphlingSetTarget();
                 // Medic
                 medicSetTarget();
+                
+                // Set Werewolf Target
+                werewolfSetTarget();
                 // Shifter
                 shifterSetTarget();
                 // Sheriff
