@@ -1083,7 +1083,7 @@ namespace TheOtherRoles
             );
 
             werewolfRampageButton = new CustomButton(
-                () => { Werewolf.canKill = true; werewolfKillButton.Timer = werewolfKillButton.MaxTimer;},
+                () => { Werewolf.canKill = true; werewolfKillButton.Timer = 0f;},
                 () => { /* Can See */ return Werewolf.werewolf != null && Werewolf.werewolf == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
                 () => {  /* On Click */ return (CachedPlayer.LocalPlayer.PlayerControl.CanMove); },
                 () => {  /* On Meeting End */
