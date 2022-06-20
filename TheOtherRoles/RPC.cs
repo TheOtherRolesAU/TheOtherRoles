@@ -24,6 +24,7 @@ namespace TheOtherRoles
         Sheriff,
         Deputy,
         Lighter,
+        Werewolf,
         Godfather,
         Mafioso,
         Janitor,
@@ -206,6 +207,9 @@ namespace TheOtherRoles
                     switch((RoleId)roleId) {
                     case RoleId.Jester:
                         Jester.jester = player;
+                        break;
+                    case RoleId.Werewolf:
+                        Werewolf.werewolf = player;
                         break;
                     case RoleId.Blackmailer:
                         Blackmailer.blackmailer = player;
@@ -542,14 +546,21 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
                     Amnisiac.clearAndReload();
-            Amnisiac.amnisiac = target;
+                    Amnisiac.amnisiac = target;
+                    break;
+                    
+                case RoleId.Werewolf:
+                    if (Amnisiac.resetRole) Werewolf.clearAndReload();
+                    Werewolf.werewolf = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Prosecutor:
-            // Never reload Prosecutor
+                    // Never reload Prosecutor
                     Prosecutor.prosecutor = amnisiac;
                     Amnisiac.clearAndReload();
-            Amnisiac.amnisiac = target;
+                    Amnisiac.amnisiac = target;
                     break;
 
                 case RoleId.Mayor:
@@ -914,6 +925,7 @@ namespace TheOtherRoles
                 player == Jackal.jackal || //  Don't shift on Jackal
                 player == Swooper.swooper || // Don't shift on Swooper
                 player == Sidekick.sidekick || // Don't shift on Sidekick 
+                player == Werewolf.werewolf || // Don't shift on Swooper
                 Jackal.formerJackals.Contains(player) || // Don't shift on former jackals
                 player == Jester.jester || // Don't shift on Jester
                 player == Arsonist.arsonist || // Don't shift on Arso

@@ -29,6 +29,7 @@ namespace TheOtherRoles
             Mafioso.clearAndReload();
             Janitor.clearAndReload();
             Detective.clearAndReload();
+            Werewolf.clearAndReload();
             TimeMaster.clearAndReload();
             Veteren.clearAndReload();
             Medic.clearAndReload();
@@ -945,6 +946,43 @@ namespace TheOtherRoles
           duration = CustomOptionHolder.swooperDuration.getFloat();
           hasImpVision = CustomOptionHolder.swooperHasImpVision.getBool();
 
+        }
+    }
+    
+    public static class Werewolf {
+        public static PlayerControl werewolf;
+        public static PlayerControl currentTarget;
+        public static Color color = new Color32(79, 56, 21, byte.MaxValue);
+        
+        // Kill Button 
+        public static float killCooldown = 3f;
+        
+        // Rampage Button
+        public static float rampageCooldown = 30f;
+        public static float rampageDuration = 5f;
+        
+        public static bool canKill = false;
+        
+        public static Sprite buttonSprite;
+        
+        public static Sprite getRampageButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Rampage.png", 115f);
+            return buttonSprite;
+        }
+      
+        public static Vector3 getRampageVector() {
+            return new Vector3(-2.7f, -0.06f, 0);
+        }
+
+        public static void clearAndReload() {
+            werewolf = null;
+            currentTarget = null;
+            canKill = false;
+            rampageCooldown = CustomOptionHolder.werewolfRampageCooldown.getFloat();
+            rampageDuration = CustomOptionHolder.werewolfRampageDuration.getFloat();
+            killCooldown = CustomOptionHolder.werewolfKillCooldown.getFloat();
+            
         }
     }
     

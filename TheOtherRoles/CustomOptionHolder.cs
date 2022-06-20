@@ -68,7 +68,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
 		
-	public static CustomOption prosecutorSpawnRate;
+        public static CustomOption prosecutorSpawnRate;
 
         public static CustomOption amnisiacSpawnRate;
         public static CustomOption amnisiacShowArrows;
@@ -253,6 +253,11 @@ namespace TheOtherRoles {
         public static CustomOption lawyerKnowsRole;
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
+
+        public static CustomOption werewolfSpawnRate;
+        public static CustomOption werewolfRampageCooldown;
+        public static CustomOption werewolfRampageDuration;
+        public static CustomOption werewolfKillCooldown;
 
         public static CustomOption modifierBait;
         public static CustomOption modifierBaitQuantity;
@@ -466,6 +471,11 @@ namespace TheOtherRoles {
             lawyerKnowsRole = CustomOption.Create(355, Types.Neutral, "Lawyer Knows Target Role", false, lawyerSpawnRate);
             pursuerCooldown = CustomOption.Create(356, Types.Neutral, "Pursuer Blank Cooldown", 30f, 5f, 60f, 2.5f, lawyerSpawnRate);
             pursuerBlanksNumber = CustomOption.Create(357, Types.Neutral, "Pursuer Number Of Blanks", 5f, 1f, 20f, 1f, lawyerSpawnRate);
+            
+            werewolfSpawnRate = CustomOption.Create(1501, Types.Neutral, cs(Werewolf.color, "Werewolf"), rates, null, true);
+            werewolfRampageCooldown  = CustomOption.Create(1502, Types.Neutral, "Rampage Cooldown", 30f, 10f, 60f, 2.5f, werewolfSpawnRate);
+            werewolfRampageDuration = CustomOption.Create(1503, Types.Neutral, "Rampage Duration", 15f, 1f, 20f, 0.5f, werewolfSpawnRate);
+            werewolfKillCooldown = CustomOption.Create(1504, Types.Neutral, "KillCooldown", 3f, 1f, 60f, 1f, werewolfSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, Types.Crewmate, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, Types.Crewmate, "Shifter Shifts Modifiers", false, shifterSpawnRate);

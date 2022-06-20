@@ -94,9 +94,10 @@ namespace TheOtherRoles.Patches {
             neutralSettings.Add((byte)RoleId.Amnisiac, CustomOptionHolder.amnisiacSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
-  	    // Don't assign Swooper unless Both option is on
-	    if (!CustomOptionHolder.swooperAsWell.getBool()) 
+            // Don't assign Swooper unless Both option is on
+            if (!CustomOptionHolder.swooperAsWell.getBool()) 
                 neutralSettings.Add((byte)RoleId.Swooper, CustomOptionHolder.swooperSpawnRate.getSelection());
+            neutralSettings.Add((byte)RoleId.Werewolf, CustomOptionHolder.werewolfSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Vulture, CustomOptionHolder.vultureSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
 
@@ -341,7 +342,7 @@ namespace TheOtherRoles.Patches {
             if (Lawyer.lawyer != null) {
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor || p == Jackal.jackal || p == Swooper.swooper || (Lawyer.targetCanBeJester && p == Jester.jester)))
+                    if (!p.Data.IsDead && !p.Data.Disconnected && p != Lovers.lover1 && p != Lovers.lover2 && (p.Data.Role.IsImpostor ||  p == Jackal.jackal || p == Swooper.swooper || p == Werewolf.werewolf || (Lawyer.targetCanBeJester && p == Jester.jester)))
                         possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {

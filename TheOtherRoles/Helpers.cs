@@ -171,7 +171,7 @@ namespace TheOtherRoles {
         public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
             if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
                 var text = "";
-                if (Camouflager.camouflageTimer >= 0.1f) text = defaultText; // set text to default if camo is on
+                if (Camouflager.camouflageTimer >= 0.1f || isActiveCamoComms()) text = defaultText; // set text to default if camo is on
                 else if (Helpers.isLightsActive()) text = defaultText; // set to default if lights are out
                 else if (Trickster.trickster != null && Trickster.lightsOutTimer > 0f) text = defaultText; // set to default if trickster ability is active
                 else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
@@ -344,7 +344,7 @@ namespace TheOtherRoles {
 
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Prosecutor.prosecutor || player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
+            return (player == Prosecutor.prosecutor || player == Werewolf.werewolf || player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
@@ -481,6 +481,8 @@ namespace TheOtherRoles {
             if (Engineer.engineer != null && Engineer.engineer == player)
                 roleCouldUse = true;
             if (Swooper.swooper != null && Swooper.swooper == player)
+                roleCouldUse = true;
+            if (Werewolf.werewolf != null && Werewolf.werewolf == player)
                 roleCouldUse = true;
             else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == player)
                 roleCouldUse = true;
