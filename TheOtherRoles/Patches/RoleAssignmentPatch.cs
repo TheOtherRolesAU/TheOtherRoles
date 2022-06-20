@@ -406,7 +406,8 @@ namespace TheOtherRoles.Patches {
                 RoleId.AntiTeleport,
                 RoleId.Sunglasses,
                 RoleId.Vip,
-                RoleId.Invert
+                RoleId.Invert,
+                RoleId.Indomitable
             });
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
@@ -529,6 +530,8 @@ namespace TheOtherRoles.Patches {
                     selection = CustomOptionHolder.modifierLover.getSelection(); break;
                 case RoleId.Tiebreaker:
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
+                case RoleId.Indomitable:
+                    selection = CustomOptionHolder.modifierIndomitable.getSelection(); break;
                 case RoleId.Mini:
                     selection = CustomOptionHolder.modifierMini.getSelection(); break;
                 case RoleId.Bait:

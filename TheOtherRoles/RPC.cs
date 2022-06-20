@@ -71,6 +71,7 @@ namespace TheOtherRoles
         Bloody,
         AntiTeleport,
         Tiebreaker,
+        Indomitable,
         Sunglasses,
         Mini,
         Vip,
@@ -100,6 +101,7 @@ namespace TheOtherRoles
         EngineerUsedRepair,
         CleanBody,
         Mine,
+        ShowIndomitableFlash,
         DragBody,
         DropBody,
         SheriffKill,
@@ -375,6 +377,10 @@ namespace TheOtherRoles
                 case RoleId.Vip:
                     Vip.vip.Add(player);
                     break;
+                case RoleId.Indomitable:
+                    TheOtherRolesPlugin.Logger.LogError("Assigning "+ player.Data.PlayerName +" the Indomitable modifier...does it fail somewhere?");
+                    Indomitable.indomitable = player;
+                    break;
                 case RoleId.Invert:
                     Invert.invert.Add(player);
                     break;
@@ -442,6 +448,12 @@ namespace TheOtherRoles
 
         public static void engineerUsedRepair() {
             Engineer.remainingFixes--;
+        }
+        
+        public static void showIndomitableFlash() {
+            if (Indomitable.indomitable  == CachedPlayer.LocalPlayer.PlayerControl) {
+                Helpers.showFlash(Indomitable.color);
+            }
         }
 
         public static void cleanBody(byte playerId) {
@@ -1653,6 +1665,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.AmnisiacTakeRole:
                     RPCProcedure.amnisiacTakeRole(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.ShowIndomitableFlash:
+                    RPCProcedure.showIndomitableFlash();
                     break;
                 case (byte)CustomRPC.VeterenAlert:
                     RPCProcedure.veterenAlert();

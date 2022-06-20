@@ -86,6 +86,7 @@ namespace TheOtherRoles
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover, false, true);
         public static RoleInfo mini = new RoleInfo("Mini", Color.yellow, "No one will harm you until you grow up", "No one will harm you", RoleId.Mini, false, true);
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
+        public static RoleInfo indomitable  = new RoleInfo("Indomitable", Indomitable.color, "Your role cannot be guessed", "You are Indomitable!", RoleId.Indomitable, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
 
 
@@ -146,6 +147,7 @@ namespace TheOtherRoles
             sunglasses,
             mini,
             vip,
+            indomitable,
             invert
         };
 
@@ -162,6 +164,7 @@ namespace TheOtherRoles
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
+                if (p == Indomitable.indomitable) infos.Add(indomitable);
                 if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }

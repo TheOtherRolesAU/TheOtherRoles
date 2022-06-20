@@ -70,6 +70,7 @@ namespace TheOtherRoles
             Tiebreaker.clearAndReload();
             Sunglasses.clearAndReload();
             Mini.clearAndReload();
+            Indomitable.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
         }
@@ -1793,6 +1794,16 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             tiebreaker = null;
             isTiebreak = false;
+        }
+    }
+    
+    public static class Indomitable {
+        public static PlayerControl indomitable;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            indomitable = null;
         }
     }
 

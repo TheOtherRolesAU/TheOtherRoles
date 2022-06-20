@@ -281,6 +281,8 @@ namespace TheOtherRoles {
         public static CustomOption modifierMini;
         public static CustomOption modifierMiniGrowingUpDuration;
 
+        public static CustomOption modifierIndomitable;
+
         public static CustomOption modifierVip;
         public static CustomOption modifierVipQuantity;
         public static CustomOption modifierVipShowColor;
@@ -604,6 +606,8 @@ namespace TheOtherRoles {
 
             modifierMini = CustomOption.Create(1061, Types.Modifier, cs(Color.yellow, "Mini"), rates, null, true);
             modifierMiniGrowingUpDuration = CustomOption.Create(1062, Types.Modifier, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
+            
+            modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Indomitable.color, "Indomitable"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, Types.Modifier, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
