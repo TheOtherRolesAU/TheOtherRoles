@@ -46,17 +46,17 @@ namespace TheOtherRoles.Patches {
         }
 
         static void setPlayerOutline(PlayerControl target, Color color) {
-            if (target == null || target.MyRend == null) return;
+            if (target == null || target.cosmetics?.currentBodySprite?.BodySprite == null) return;
 
-            target.MyRend.material.SetFloat("_Outline", 1f);
-            target.MyRend.material.SetColor("_OutlineColor", color);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", color);
         }
 
         // Update functions
 
         static void setBasePlayerOutlines() {
             foreach (PlayerControl target in CachedPlayer.AllPlayers) {
-                if (target == null || target.MyRend == null) continue;
+                if (target == null || target.cosmetics?.currentBodySprite?.BodySprite == null) continue;
 
                 bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
                 bool hasVisibleShield = false;
@@ -75,11 +75,11 @@ namespace TheOtherRoles.Patches {
                 }
 
                 if (hasVisibleShield) {
-                target.MyRend.material.SetFloat("_Outline", 1f);
-                target.MyRend.material.SetColor("_OutlineColor", color);
+                target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
+                target.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", color);
                 }
                 else {
-                    target.MyRend.material.SetFloat("_Outline", 0f);
+                    target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
                 }
             }
         }
@@ -457,10 +457,10 @@ namespace TheOtherRoles.Patches {
         public static void updatePlayerInfo() {
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {         
                 if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
-                    Transform playerInfoTransform = p.nameText.transform.parent.FindChild("Info");
+                    Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo == null) {
-                        playerInfo = UnityEngine.Object.Instantiate(p.nameText, p.nameText.transform.parent);
+                        playerInfo = UnityEngine.Object.Instantiate(p.cosmetics.nameText, p.cosmetics.nameText.transform.parent);
                         playerInfo.transform.localPosition += Vector3.up * 0.5f;
                         playerInfo.fontSize *= 0.75f;
                         playerInfo.gameObject.name = "Info";
@@ -1162,7 +1162,7 @@ namespace TheOtherRoles.Patches {
     class KillAnimationSetMovementPatch {
         private static int? colorId = null;
         public static void Prefix(PlayerControl source, bool canMove) {
-            Color color = source.MyRend.material.GetColor("_BodyColor");
+            Color color = source.cosmetics.currentBodySprite.BodySprite.material.GetColor("_BodyColor");
             if (color != null && Morphling.morphling != null && source.Data.PlayerId == Morphling.morphling.PlayerId) {
                 var index = Palette.PlayerColors.IndexOf(color);
                 if (index != -1) colorId = index;

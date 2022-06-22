@@ -436,11 +436,11 @@ namespace TheOtherRoles
                         morphlingButton.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);  // Before the poolable player
                         morphTargetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, morphlingButton.actionButton.transform);
                         GameData.PlayerInfo data = Morphling.sampledTarget.Data;
-                        PlayerControl.SetPlayerMaterialColors(data.DefaultOutfit.ColorId, morphTargetDisplay.CurrentBodySprite.BodySprite);
+                        Morphling.sampledTarget.SetPlayerMaterialColors(morphTargetDisplay.cosmetics.currentBodySprite.BodySprite);
                         morphTargetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
-                        morphTargetDisplay.HatSlot.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
-                        PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, morphTargetDisplay.PetSlot);
-                        morphTargetDisplay.NameText.text = "";  // Hide the name!
+                        morphTargetDisplay.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
+                       // PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, morphTargetDisplay.PetSlot);
+                        morphTargetDisplay.cosmetics.nameText.text = "";  // Hide the name!
                         morphTargetDisplay.transform.localPosition = new Vector3(0f, 0.22f, -0.01f);
                         morphTargetDisplay.transform.localScale = Vector3.one * 0.33f;
                         morphTargetDisplay.setSemiTransparent(false);
