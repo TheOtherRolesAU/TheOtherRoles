@@ -106,6 +106,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
   
+**Version 4.1.5**
+- updated to among us version 2022.6.21
+- added custom servers (Modded Eu & Modded Na) thanks to [miniduikboot](https://github.com/miniduikboot) & GD
+- changed that the guesser can only guess roles > 0%
+- changed min/max default values
+- fixed a bug where the lighter vision did not work properly
+- fixed a bug where a mini Ninja revealed himself
+- fixed a bug where a mini Ninja cooldown did not work properly
+- fixed a bug where a camoflaged Ninja revealed himself
+- fixed a bug where a Vampire reported the bait multiple times
+- fixed a bug where a last second guess locked the meeting
+- fixed a bug where the version handshake did not work properly 
+- fixed a bug where players with anti tp were stuck on airship 
+- removed streamer mode
+  
 **Version 4.1.4**
 - Added auto updating for BepInEx
 - Fixed hat testing in freeplay for meetings / exile etc.
