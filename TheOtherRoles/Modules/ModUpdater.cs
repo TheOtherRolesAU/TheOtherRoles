@@ -169,7 +169,6 @@ namespace TheOtherRoles.Modules
                 if (submergedUpdateCheck.Result != null && (!SubmergedCompatibility.Loaded || submergedUpdateCheck.Result.IsNewer(SubmergedCompatibility.Version)))
                 {
                     Instance.SubmergedUpdate = submergedUpdateCheck.Result;
-                    if (Instance.SubmergedUpdate.Tag.Equals("2022.6.23")) Instance.SubmergedUpdate = null;
                 }
             }
             
