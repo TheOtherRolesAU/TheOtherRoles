@@ -78,20 +78,20 @@ namespace TheOtherRoles.Patches {
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
                     // TieBreaker 
-                    Tiebreaker.isTiebreak = false;
-                    int maxVoteValue = self.Values.Max();
                     List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+                    if (self.Count > 0) {
+                        Tiebreaker.isTiebreak = false;
+                        int maxVoteValue = self.Values.Max();
+                        PlayerVoteArea tb = null;
+                        if (Tiebreaker.tiebreaker != null)
+                            tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
+                        bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
+                        if (tb != null && tb.AmDead) isTiebreakerSkip = true;
 
-                    
-                    PlayerVoteArea tb = null;
-                    if (Tiebreaker.tiebreaker != null)
-                        tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
-                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
-                    if (tb != null && tb.AmDead) isTiebreakerSkip = true;
-
-                    foreach (KeyValuePair<byte, int> pair in self)
-                        if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
-                            potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+                        foreach (KeyValuePair<byte, int> pair in self)
+                            if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
+                                potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+                    }
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -123,14 +123,15 @@ namespace TheOtherRoles.Patches {
         class MeetingHudBloopAVoteIconPatch {
             public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                if (!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors)
-                    PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
-                else
-                    PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
+                int cId = voterPlayer.DefaultOutfit.ColorId;
+                if (!(!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors))
+                    voterPlayer.Object.SetColor(6);                    
+                voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
                 spriteRenderer.transform.SetParent(parent);
                 spriteRenderer.transform.localScale = Vector3.zero;
                 __instance.StartCoroutine(Effects.Bloop((float)index * 0.3f, spriteRenderer.transform, 1f, 0.5f));
                 parent.GetComponent<VoteSpreader>().AddVote(spriteRenderer);
+                voterPlayer.Object.SetColor(cId);
                 return false;
             }
         } 
@@ -307,7 +308,16 @@ namespace TheOtherRoles.Patches {
             foreach (RoleInfo roleInfo in RoleInfo.allRoleInfos) {
                 RoleId guesserRole = (Guesser.niceGuesser != null && CachedPlayer.LocalPlayer.PlayerId == Guesser.niceGuesser.PlayerId) ? RoleId.NiceGuesser :  RoleId.EvilGuesser;
                 if (roleInfo.isModifier || roleInfo.roleId == guesserRole || (!Guesser.evilGuesserCanGuessSpy && guesserRole == RoleId.EvilGuesser && roleInfo.roleId == RoleId.Spy)) continue; // Not guessable roles & modifier
-                
+                // remove all roles that cannot spawn due to the settings from the ui.
+                RoleManagerSelectRolesPatch.RoleAssignmentData roleData = RoleManagerSelectRolesPatch.getRoleAssignmentData();
+                if (roleData.neutralSettings.ContainsKey((byte)roleInfo.roleId) && roleData.neutralSettings[(byte)roleInfo.roleId] == 0) continue;
+                else if (roleData.impSettings.ContainsKey((byte)roleInfo.roleId) && roleData.impSettings[(byte)roleInfo.roleId] == 0) continue;
+                else if (roleData.crewSettings.ContainsKey((byte)roleInfo.roleId) && roleData.crewSettings[(byte)roleInfo.roleId] == 0) continue;
+                else if (new List<RoleId>() { RoleId.Janitor, RoleId.Godfather, RoleId.Mafioso }.Contains(roleInfo.roleId) && CustomOptionHolder.mafiaSpawnRate.getSelection() == 0) continue;
+                else if (roleInfo.roleId == RoleId.Sidekick && (!CustomOptionHolder.jackalCanCreateSidekick.getBool() || CustomOptionHolder.jackalSpawnRate.getSelection() == 0)) continue;
+                if (roleInfo.roleId == RoleId.Deputy && (CustomOptionHolder.deputySpawnRate.getSelection() == 0 || CustomOptionHolder.sheriffSpawnRate.getSelection() == 0)) continue;
+                if (roleInfo.roleId == RoleId.Spy && roleData.impostors.Count <= 1) continue;
+
                 if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
                     int numberOfLeftTasks = playerTotal - playerCompleted;
@@ -456,11 +466,12 @@ namespace TheOtherRoles.Patches {
             }
 
             //Fix visor in Meetings 
+            /**
             foreach (PlayerVoteArea pva in __instance.playerStates) {
                 if(pva.PlayerIcon != null && pva.PlayerIcon.VisorSlot != null){
                     pva.PlayerIcon.VisorSlot.transform.position += new Vector3(0, 0, -1f);
                 }
-            }
+            } */
 
             // Add overlay for spelled players
             if (Witch.witch != null && Witch.futureSpelled != null) {
@@ -514,13 +525,18 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
+        [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
                 // Resett Bait list
                 Bait.active = new Dictionary<DeadPlayer, float>();
-                // Safe AntiTeleport positions
-                AntiTeleport.position = CachedPlayer.LocalPlayer.transform.position;
+                // Save AntiTeleport position, if the player is able to move (i.e. not on a ladder or a gap thingy)
+                if (CachedPlayer.LocalPlayer.PlayerPhysics.enabled && CachedPlayer.LocalPlayer.PlayerControl.moveable || CachedPlayer.LocalPlayer.PlayerControl.inVent
+                    || HudManagerStartPatch.hackerVitalsButton.isEffectActive || HudManagerStartPatch.hackerAdminTableButton.isEffectActive || HudManagerStartPatch.securityGuardCamButton.isEffectActive
+                    || Portal.isTeleporting && Portal.teleportedPlayers.Last().playerId == CachedPlayer.LocalPlayer.PlayerId) {
+                    AntiTeleport.position = CachedPlayer.LocalPlayer.transform.position;
+                }
+
                 // Medium meeting start time
                 Medium.meetingStartTime = DateTime.UtcNow;
                 // Reset vampire bitten

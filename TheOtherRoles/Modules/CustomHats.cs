@@ -203,19 +203,19 @@ namespace TheOtherRoles.Modules {
             private static void Postfix(PlayerPhysics __instance) {
                 AnimationClip currentAnimation = __instance.Animator.GetCurrentAnimation();
                 if (currentAnimation == __instance.CurrentAnimationGroup.ClimbAnim || currentAnimation == __instance.CurrentAnimationGroup.ClimbDownAnim) return;
-                HatParent hp = __instance.myPlayer.HatRenderer;
+                HatParent hp = __instance.myPlayer.cosmetics.hat;
                 if (hp.Hat == null) return;
                 HatExtension extend = hp.Hat.getHatExtension();
                 if (extend == null) return;
                 if (extend.FlipImage != null) {
-                    if (__instance.rend.flipX) {
+                    if (__instance.FlipX) {
                         hp.FrontLayer.sprite = extend.FlipImage;
                     } else {
                         hp.FrontLayer.sprite = hp.hatView.MainImage;
                     }
                 }
                 if (extend.BackFlipImage != null) {
-                    if (__instance.rend.flipX) {
+                    if (__instance.FlipX) {
                         hp.BackLayer.sprite = extend.BackFlipImage;
                     } else {
                         hp.BackLayer.sprite = hp.hatView.BackImage;
@@ -286,7 +286,7 @@ namespace TheOtherRoles.Modules {
                     
                     
                     __instance.PopulateFromHatViewData();
-                    __instance.SetColor(color);
+                    __instance.SpriteColor = Palette.PlayerColors[color];
                     return false;
                 }     
             }

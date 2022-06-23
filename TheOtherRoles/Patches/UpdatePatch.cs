@@ -32,7 +32,7 @@ namespace TheOtherRoles.Patches {
                 {
                     var playerName = text;
                     if (morphTimerNotUp && morphTargetNotNull && Morphling.morphling == player) playerName = Morphling.morphTarget.Data.PlayerName;
-                    var nameText = player.nameText;
+                    var nameText = player.cosmetics.nameText;
                 
                     nameText.text = Helpers.hidePlayerName(localPlayer, player) ? "" : playerName;
                     nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
@@ -59,7 +59,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
-            p.nameText.color = color;
+            p.cosmetics.nameText.color = color;
             if (MeetingHud.Instance != null)
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
                     if (player.NameText != null && p.PlayerId == player.TargetPlayerId)
@@ -166,11 +166,11 @@ namespace TheOtherRoles.Patches {
             if (CachedPlayer.LocalPlayer != null && CachedPlayer.LocalPlayer.Data.Role.IsImpostor) {
                 foreach (PlayerControl player in CachedPlayer.AllPlayers)
                     if (Godfather.godfather != null && Godfather.godfather == player)
-                            player.nameText.text = player.Data.PlayerName + " (G)";
+                            player.cosmetics.nameText.text = player.Data.PlayerName + " (G)";
                     else if (Mafioso.mafioso != null && Mafioso.mafioso == player)
-                            player.nameText.text = player.Data.PlayerName + " (M)";
+                            player.cosmetics.nameText.text = player.Data.PlayerName + " (M)";
                     else if (Janitor.janitor != null && Janitor.janitor == player)
-                            player.nameText.text = player.Data.PlayerName + " (J)";
+                            player.cosmetics.nameText.text = player.Data.PlayerName + " (J)";
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
                         if (Godfather.godfather != null && Godfather.godfather.PlayerId == player.TargetPlayerId)
@@ -184,8 +184,8 @@ namespace TheOtherRoles.Patches {
             // Lovers
             if (Lovers.lover1 != null && Lovers.lover2 != null && (Lovers.lover1 == CachedPlayer.LocalPlayer.PlayerControl || Lovers.lover2 == CachedPlayer.LocalPlayer.PlayerControl)) {
                 string suffix = Helpers.cs(Lovers.color, " ♥");
-                Lovers.lover1.nameText.text += suffix;
-                Lovers.lover2.nameText.text += suffix;
+                Lovers.lover1.cosmetics.nameText.text += suffix;
+                Lovers.lover2.cosmetics.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
@@ -196,7 +196,7 @@ namespace TheOtherRoles.Patches {
             // Lawyer
             if (Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl) {
                 string suffix = Helpers.cs(Lawyer.color, " §");
-                Lawyer.target.nameText.text += suffix;
+                Lawyer.target.cosmetics.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
@@ -233,7 +233,7 @@ namespace TheOtherRoles.Patches {
         }
 
         public static void miniUpdate() {
-            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f) return;
+            if (Mini.mini == null || Camouflager.camouflageTimer > 0f || Mini.mini == Morphling.morphling && Morphling.morphTimer > 0f || Mini.mini == Ninja.ninja && Ninja.isInvisble) return;
                 
             float growingProgress = Mini.growingProgress();
             float scale = growingProgress * 0.35f + 0.35f;
@@ -241,7 +241,7 @@ namespace TheOtherRoles.Patches {
             if (growingProgress != 1f)
                 suffix = " <color=#FAD934FF>(" + Mathf.FloorToInt(growingProgress * 18) + ")</color>"; 
 
-            Mini.mini.nameText.text += suffix;
+            Mini.mini.cosmetics.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
                     if (player.NameText != null && Mini.mini.PlayerId == player.TargetPlayerId)
@@ -249,7 +249,7 @@ namespace TheOtherRoles.Patches {
             }
 
             if (Morphling.morphling != null && Morphling.morphTarget == Mini.mini && Morphling.morphTimer > 0f)
-                Morphling.morphling.nameText.text += suffix;
+                Morphling.morphling.cosmetics.nameText.text += suffix;
         }
 
         static void updateImpostorKillButton(HudManager __instance) {
