@@ -796,7 +796,7 @@ namespace TheOtherRoles.Patches {
                 Bait.active[entry.Key] = entry.Value - Time.fixedDeltaTime;
                 if (entry.Value <= 0) {
                     Bait.active.Remove(entry.Key);
-                    if (entry.Key.killerIfExisting != null) {
+                    if (entry.Key.killerIfExisting != null && entry.Key.killerIfExisting.PlayerId == CachedPlayer.LocalPlayer.PlayerId) {
                         Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
                         RPCProcedure.uncheckedCmdReportDeadBody(entry.Key.killerIfExisting.PlayerId, entry.Key.player.PlayerId);
 

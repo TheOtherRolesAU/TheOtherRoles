@@ -34,7 +34,6 @@ namespace TheOtherRoles
         public static int optionsPage = 2;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
-        public static ConfigEntry<bool> StreamerMode { get; set; }
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
         public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
@@ -42,8 +41,6 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> ShowRoleSummary { get; set; }
         public static ConfigEntry<bool> ShowLighterDarker { get; set; }
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
-        public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
-        public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
@@ -51,14 +48,34 @@ namespace TheOtherRoles
         public static Sprite ModStamp;
 
         public static IRegionInfo[] defaultRegions;
+
+        // This is part of the Mini.RegionInstaller, Licensed under GPLv3
+        // file="RegionInstallPlugin.cs" company="miniduikboot">
         public static void UpdateRegions() {
             ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
-            IRegionInfo[] regions = defaultRegions;
+            var regions = new IRegionInfo[] {
+                new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo("mods.hopto.org", "Modded NA (MNA)", StringNames.NoTranslation, "mods.hopto.org", 443, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo("au-eu.duikbo.at", "Modded EU (MEU)", StringNames.NoTranslation, "au-eu.duikbo.at", 22023, false).CastFast<IRegionInfo>()
+            };
+            
+            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
+            Logger.LogInfo($"Adding {regions.Length} regions");
+            foreach (IRegionInfo region in regions) {
+                if (region == null) 
+                    Logger.LogError("Could not add region");
+                else {
+                    if (currentRegion != null && region.Name.Equals(currentRegion.Name, StringComparison.OrdinalIgnoreCase)) 
+                        currentRegion = region;               
+                    serverManager.AddOrUpdateRegion(region);
+                }
+            }
 
-            var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.CastFast<IRegionInfo>() }).ToArray();
-            ServerManager.DefaultRegions = regions;
-            serverManager.AvailableRegions = regions;
+            // AU remembers the previous region that was set, so we need to restore it
+            if (currentRegion != null) {
+                Logger.LogDebug("Resetting previous region");
+                serverManager.SetRegion(currentRegion);
+            }
         }
 
         public override void Load() {
@@ -66,7 +83,6 @@ namespace TheOtherRoles
             Instance = this;
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
-            StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
@@ -75,8 +91,6 @@ namespace TheOtherRoles
             ShowLighterDarker = Config.Bind("Custom", "Show Lighter / Darker", true);
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
-            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
-            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");

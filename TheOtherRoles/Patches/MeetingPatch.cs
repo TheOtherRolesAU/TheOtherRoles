@@ -78,20 +78,20 @@ namespace TheOtherRoles.Patches {
                     GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(v => !tie && v.PlayerId == max.Key && !v.IsDead);
 
                     // TieBreaker 
-                    Tiebreaker.isTiebreak = false;
-                    int maxVoteValue = self.Values.Max();
                     List<GameData.PlayerInfo> potentialExiled = new List<GameData.PlayerInfo>();
+                    if (self.Count > 0) {
+                        Tiebreaker.isTiebreak = false;
+                        int maxVoteValue = self.Values.Max();
+                        PlayerVoteArea tb = null;
+                        if (Tiebreaker.tiebreaker != null)
+                            tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
+                        bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
+                        if (tb != null && tb.AmDead) isTiebreakerSkip = true;
 
-                    
-                    PlayerVoteArea tb = null;
-                    if (Tiebreaker.tiebreaker != null)
-                        tb = __instance.playerStates.ToArray().FirstOrDefault(x => x.TargetPlayerId == Tiebreaker.tiebreaker.PlayerId);
-                    bool isTiebreakerSkip = tb == null || tb.VotedFor == 253;
-                    if (tb != null && tb.AmDead) isTiebreakerSkip = true;
-
-                    foreach (KeyValuePair<byte, int> pair in self)
-                        if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
-                            potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+                        foreach (KeyValuePair<byte, int> pair in self)
+                            if (pair.Value == maxVoteValue && !isTiebreakerSkip && pair.Key != 253)
+                                potentialExiled.Add(GameData.Instance.AllPlayers.ToArray().FirstOrDefault(x => x.PlayerId == pair.Key));
+                    }
 
                     MeetingHud.VoterState[] array = new MeetingHud.VoterState[__instance.playerStates.Length];
                     for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -123,14 +123,15 @@ namespace TheOtherRoles.Patches {
         class MeetingHudBloopAVoteIconPatch {
             public static bool Prefix(MeetingHud __instance, [HarmonyArgument(0)]GameData.PlayerInfo voterPlayer, [HarmonyArgument(1)]int index, [HarmonyArgument(2)]Transform parent) {
                 SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(__instance.PlayerVotePrefab);
-                if (!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors)
-                    voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
-                else
-                    voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
+                int cId = voterPlayer.DefaultOutfit.ColorId;
+                if (!(!PlayerControl.GameOptions.AnonymousVotes || (CachedPlayer.LocalPlayer.Data.IsDead && MapOptions.ghostsSeeVotes) || Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && Mayor.canSeeVoteColors && TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data).Item1 >= Mayor.tasksNeededToSeeVoteColors))
+                    voterPlayer.Object.SetColor(6);                    
+                voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
                 spriteRenderer.transform.SetParent(parent);
                 spriteRenderer.transform.localScale = Vector3.zero;
                 __instance.StartCoroutine(Effects.Bloop((float)index * 0.3f, spriteRenderer.transform, 1f, 0.5f));
                 parent.GetComponent<VoteSpreader>().AddVote(spriteRenderer);
+                voterPlayer.Object.SetColor(cId);
                 return false;
             }
         } 
