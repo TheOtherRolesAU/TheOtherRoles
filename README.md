@@ -40,6 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.6.21| v4.1.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.5/TheOtherRoles.zip)
 | 2022.3.29| v4.1.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.4/TheOtherRoles.zip)
 | 2022.3.29| v4.1.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.3/TheOtherRoles.zip)
 | 2022.3.29| v4.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.2/TheOtherRoles.zip)
@@ -107,19 +108,19 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
   <summary>Click to show the Changelog</summary>
   
 **Version 4.1.5**
-- updated to among us version 2022.6.21
-- added custom servers (Modded Eu & Modded Na) thanks to [miniduikboot](https://github.com/miniduikboot) & GD
-- changed that the guesser can only guess roles > 0%
-- changed min/max default values
-- fixed a bug where the lighter vision did not work properly
-- fixed a bug where a mini Ninja revealed himself
-- fixed a bug where a mini Ninja cooldown did not work properly
-- fixed a bug where a camoflaged Ninja revealed himself
-- fixed a bug where a Vampire reported the bait multiple times
-- fixed a bug where a last second guess locked the meeting
-- fixed a bug where the version handshake did not work properly 
-- fixed a bug where players with anti tp were stuck on airship 
-- removed streamer mode
+- Updated to Among Us version 2022.6.21
+- Added Custom servers (Modded EU & Modded NA). Thanks to [miniduikboot](https://github.com/miniduikboot) & GD
+- Changed that the Guesser can only guess roles > 0%
+- Changed min/max default values
+- Fixed a bug where the Lighter's vision did not work properly
+- Fixed a bug where a Mini Ninja revealed themself
+- Fixed a bug where a Mini Ninja's cooldown did not work properly
+- Fixed a bug where a camouflaged Ninja revealed themself
+- Fixed a bug where a Vampire reported the Bait multiple times
+- Fixed a bug where a last second guess locked the Meeting
+- Fixed a bug where the version handshake did not work properly 
+- Fixed a bug where players with Anti TP were stuck on Airship 
+- Removed streamer mode
   
 **Version 4.1.4**
 - Added auto updating for BepInEx
