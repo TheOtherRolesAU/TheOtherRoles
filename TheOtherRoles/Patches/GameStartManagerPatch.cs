@@ -53,39 +53,42 @@ namespace TheOtherRoles.Patches {
 
             public static void Postfix(GameStartManager __instance) {
                 // Send version as soon as CachedPlayer.LocalPlayer.PlayerControl exists
-                if (CachedPlayer.LocalPlayer != null && !versionSent) {
+                if (PlayerControl.LocalPlayer != null && !versionSent) {
                     versionSent = true;
                     Helpers.shareGameVersion();
                 }
 
-                // Host update with version handshake infos
-                if (AmongUsClient.Instance.AmHost) {
-                    bool blockStart = false;
-                    string message = "";
-                    foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray()) {
-                        if (client.Character == null) continue;
-                        var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                        if (dummyComponent != null && dummyComponent.enabled)
-                            continue;
-                        else if (!playerVersions.ContainsKey(client.Id))  {
-                            blockStart = true;
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different or no version of The Other Roles\n</color>";
-                        } else {
-                            PlayerVersion PV = playerVersions[client.Id];
-                            int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
-                            if (diff > 0) {
-                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an older version of The Other Roles (v{playerVersions[client.Id].version.ToString()})\n</color>";
-                                blockStart = true;
-                            } else if (diff < 0) {
-                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a newer version of The Other Roles (v{playerVersions[client.Id].version.ToString()})\n</color>";
-                                blockStart = true;
-                            } else if (!PV.GuidMatches()) { // version presumably matches, check if Guid matches
-                                message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a modified version of TOR v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid.ToString()})</size>\n</color>";
-                                blockStart = true;
-                            }
+                // Check version handshake infos
+                
+                bool versionMismatch = false;
+                string message = "";
+                foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray()) {
+                    if (client.Character == null) continue;
+                    var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+                    if (dummyComponent != null && dummyComponent.enabled)
+                        continue;
+                    else if (!playerVersions.ContainsKey(client.Id))  {
+                        versionMismatch = true;
+                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a different or no version of The Other Roles\n</color>";
+                    } else {
+                        PlayerVersion PV = playerVersions[client.Id];
+                        int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
+                        if (diff > 0) {
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has an older version of The Other Roles (v{playerVersions[client.Id].version.ToString()})\n</color>";
+                            versionMismatch = true;
+                        } else if (diff < 0) {
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a newer version of The Other Roles (v{playerVersions[client.Id].version.ToString()})\n</color>";
+                            versionMismatch = true;
+                        } else if (!PV.GuidMatches()) { // version presumably matches, check if Guid matches
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName} has a modified version of TOR v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid.ToString()})</size>\n</color>";
+                            versionMismatch = true;
                         }
                     }
-                    if (blockStart) {
+                }
+
+                // Display message to the host
+                if (AmongUsClient.Instance.AmHost) {
+                    if (versionMismatch) {
                         __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
                         __instance.GameStartText.text = message;
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
@@ -96,7 +99,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 // Client update with handshake infos
-                if (!AmongUsClient.Instance.AmHost) {
+                else {
                     if (!playerVersions.ContainsKey(AmongUsClient.Instance.HostId) || TheOtherRolesPlugin.Version.CompareTo(playerVersions[AmongUsClient.Instance.HostId].version) != 0) {
                         kickingTimer += Time.deltaTime;
                         if (kickingTimer > 10) {
@@ -107,6 +110,9 @@ namespace TheOtherRoles.Patches {
 
                         __instance.GameStartText.text = $"<color=#FF0000FF>The host has no or a different version of The Other Roles\nYou will be kicked in {Math.Round(10 - kickingTimer)}s</color>";
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
+                    } else if (versionMismatch) {
+                        __instance.GameStartText.text = $"<color=#FF0000FF>Players With Different Versions:\n</color>" + message;
+                        __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                         if (__instance.startState != GameStartManager.StartingStates.Countdown) {
@@ -114,9 +120,6 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
-
-                // Lobby code replacement
-                __instance.GameRoomName.text = TheOtherRolesPlugin.StreamerMode.Value ? $"<color={TheOtherRolesPlugin.StreamerModeReplacementColor.Value}>{TheOtherRolesPlugin.StreamerModeReplacementText.Value}</color>" : lobbyCodeText;
 
                 // Lobby timer
                 if (!AmongUsClient.Instance.AmHost || !GameData.Instance) return; // Not host or no instance
