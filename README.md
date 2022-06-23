@@ -40,6 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.6.21| v4.1.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.5/TheOtherRoles.zip)
 | 2022.3.29| v4.1.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.4/TheOtherRoles.zip)
 | 2022.3.29| v4.1.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.3/TheOtherRoles.zip)
 | 2022.3.29| v4.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.2/TheOtherRoles.zip)
@@ -105,6 +106,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 4.1.5**
+- Updated to Among Us version 2022.6.21
+- Added Custom servers (Modded EU & Modded NA). Thanks to [miniduikboot](https://github.com/miniduikboot) & GD
+- Changed that the Guesser can only guess roles > 0%
+- Changed min/max default values
+- Fixed a bug where the Lighter's vision did not work properly
+- Fixed a bug where a Mini Ninja revealed themself
+- Fixed a bug where a Mini Ninja's cooldown did not work properly
+- Fixed a bug where a camouflaged Ninja revealed themself
+- Fixed a bug where a Vampire reported the Bait multiple times
+- Fixed a bug where a last second guess locked the Meeting
+- Fixed a bug where the version handshake did not work properly 
+- Fixed a bug where players with Anti TP were stuck on Airship 
+- Removed streamer mode
   
 **Version 4.1.4**
 - Added auto updating for BepInEx
@@ -565,76 +581,63 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 </details>
 
 # Installation
-## Windows Auto Installation/Updating Using The AmongUsModUpdater
-This tool was made by [Narua](https://github.com/Narua2010) and [Jolle](https://github.com/joelweih). It automatically installs/updates the TheOtherRoles mod to the newest version, runs the game and
-syncs your game options automatically.
 
-1. Simply get the newest [release](https://github.com/Narua2010/AmongUsModUpdater/releases/latest) of the [AmongUsModUpdater](https://github.com/Narua2010/AmongUsModUpdater)
-2. Unzip the folder and run the **setup.exe**
+## Windows Installation Steam
+1. Download the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
+2. Find the folder of your game. You can right click on the game in your library, a menu will appear, click on properties, local data, browse
+3. Go back one folder to common and make a copy of your Among Us game folder and paste it somewhere on the same drive.
+4. Now unzip and drag or extract the files from the .zip into your Among Us game folder that you just copied, at the `.exe` level (just into the folder).
+5. Run the game by starting the .exe from this folder (the first launch might take a while).
 
-If you have problems with the AmongUsModUpdater, make sure to [contact us](https://discord.gg/csa3pHYdPU).
+Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
-## Windows Manual Installation
-1. Download and unzip the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
-2. Find the folder of your game, for Steam players you can right click in Steam, on the game, a menu will appear proposing you to go to the folders.
-3. Make a copy of your game, it's not obligatory but advised, put it where you want.
-4. Drag or extract the files from the zip into your game, at the `.exe` level.
-5. Run the game (the first launch might take a while)
+## Windows Installation Epic
+1. Download the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
+2. Find the folder of your game. Should be stored in "Epic/AmongUs" (wherever you installed Epic on your PC)
+3. Now unzip and drag or extract the files from the .zip into the original Epic Among Us game folder.
+4. Run the game by starting the game in your Epic Games launcher (the first launch might take a while).
 
 Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
-**Linux Manual**
+## Linux Installation
 1. Install Among Us via Steam
 2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
 3. Enable `winhttp.dll` via the proton winecfg (https://docs.bepinex.dev/articles/advanced/steam_interop.html#open-winecfg-for-the-target-game)
 4. Launch the game via Steam
 
-# Custom Servers and 10+ Players
-We always recommend you to play on custom servers rather than on the official ones. If you want to play with more than 10 players in one lobby, you're required to use a custom server. Credits for the original implementation that allowed 10+ player lobbies go to the creators of the [CrowdedMod](https://github.com/CrowdedMods/CrowdedMod).
-
-**Setup the Clients:**
-1. Open the region menu where you can choose between the different regions
-2. Select the region *Custom*
-3. Enter the ip/domain and the port of your custom server in the corresponding text fields
+## The Other Roles Custom Servers
+**A custom server is not necessary and official servers are working just fine with the mod, but in case you want to set up and host your own server, here's a guide for you to follow.**
 
 **Setup the Server:**
-1. Get the [Impostor](https://github.com/Impostor/Impostor) release for the Among Us version **2021.3.31 - 2021.4.2**
-2. Follow the steps (using the server release you just downloaded) on the official [Impostor-Documentation](https://github.com/Impostor/Impostor/wiki/Running-the-server)
-3. Make sure to set the following values to false in the `config.json` file:
-```
-    ...
-    "AntiCheat": {
-      "Enabled": false,
-      "BanIpFromGame": false
+1. Get the Impostor release (https://github.com/Impostor/Impostor)
+2. Follow the steps (using the server release you just downloaded) on the official Impostor-Documentation (https://github.com/Impostor/Impostor/wiki/Running-the-server)
+3. Make sure to set the following values to false in the config.json file:
+```    ...
+     'AntiCheat': {
+       'Enabled': false,
+      'BanIpFromGame': false
     }
 ```
-4. Make sure to forward the right ports on the hosting machine
-5. Run the server and setup the client
-
-**Setting up Server as Docker Container:** \
+4. Make sure to forward the right ports on the hosting machine.
+5. Run the server and setup the client.
+Setting up Server as Docker Container:
 If you want to run the server as a docker container you'll need to use the image
-```
 aeonlucid/impostor:nightly
-```
-(Currently only the "nightly" tag is starting a server supporting 2021.3.31 or later)
 
-In addition to running it, the environment variables to disable the AntiCheat feature need to be set.
-```
-IMPOSTOR_AntiCheat__Enabled=false
-IMPOSTOR_AntiCheat__BanIpFromGame=false
-```
+(Currently only the 'nightly' tag is starting a server supporting 2021.3.31 or later)
+In addition to running it we need to set the environment variables to disable the AntiCheat feature.
+IMPOSTOR_AntiCheatEnabled=false
+IMPOSTOR_AntiCheatBanIpFromGame=false
 
 Example to docker run command:
-```
-docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
-```
+docker run -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMPOSTOR_AntiCheatBanIpFromGame=false aeonlucid/impostor:nightly
 
 Or use to run it in the background
-```
-docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheat__Enabled=false --env IMPOSTOR_AntiCheat__BanIpFromGame=false aeonlucid/impostor:nightly
-```
+docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMPOSTOR_AntiCheatBanIpFromGame=false aeonlucid/impostor:nightly
+
+**If you have any problems regarding custom servers, please contact https://github.com/Impostor/Impostor or https://discord.gg/ThJUGAsz**
 
 
 # Credits & Resources
@@ -988,8 +991,6 @@ Depending on the options, the Guesser can't guess the shielded player and depend
 \
 **NOTE:**
 - If a player gets shot, you'll get back your votes
-- You can't guess the role **Nice Mini** for obvious reasons
-- You can't guess the role **Lover**, you'll have to guess the primary role of one of the Lovers, to kill both of them
 - Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out
 
 ### Game Options
@@ -1625,6 +1626,9 @@ In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are
 | Enable Lover Chat | -
 -----------------------
 
+**NOTE:**
+- The role **Lover** can't be guessed, you'll have to guess the primary role of one of the Lovers, to kill both of them.
+
 ## Sunglasses
 
 The Sunglasses will lower the Crewmate's vision by small percentage. The percentage is configurable in the options.\
@@ -1663,6 +1667,7 @@ The Mini cannot be killed until it turns 18 years old, however it can be voted o
 **NOTE:**
 - If the Sheriff tries to kill the Mini before it's fully grown, nothing happens.
 - The Sheriff can kill the Impostor/Neutral Mini, but only if it's fully grown up.
+- If the Mini's primary role is guessed correctly, it dies like every other role and nothing further happens.
 
 ### Game Options
 | Name | Description |
