@@ -1234,7 +1234,7 @@ namespace TheOtherRoles
             if (flag == byte.MaxValue)
             {
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
-                if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
+                if (Camouflager.camouflageTimer <= 0 && !Helpers.isActiveCamoComms()) target.setDefaultLook();
                 Ninja.isInvisble = false;
                 return;
             }
@@ -1287,7 +1287,7 @@ namespace TheOtherRoles
             if (target == null) return;
             if (flag == byte.MaxValue) {
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
-                if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
+                if (Camouflager.camouflageTimer <= 0 && !Helpers.isActiveCamoComms()) target.setDefaultLook();
                 Swooper.isInvisable = false;
                 return;
             }
