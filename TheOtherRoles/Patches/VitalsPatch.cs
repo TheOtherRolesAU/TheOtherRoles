@@ -11,7 +11,7 @@ using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Patches
 {
-    //[Harmony]
+    [Harmony]
     public class VitalsPatch
     {
         static float vitalsTimer = 0f;
@@ -41,7 +41,7 @@ namespace TheOtherRoles.Patches
             vitalsTimer = 0f;
         }
 
-        //[HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+        [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
         class VitalsMinigameStartPatch
         {
             static void Postfix(VitalsMinigame __instance)
@@ -65,7 +65,7 @@ namespace TheOtherRoles.Patches
             }
         }
 
-        //[HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
+        [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
         class VitalsMinigameUpdatePatch
         {
             static bool Prefix(VitalsMinigame __instance)
@@ -130,21 +130,6 @@ namespace TheOtherRoles.Patches
                         if (text != null && text.gameObject != null)
                             text.gameObject.SetActive(false);
                 }
-            }
-        }
-
-        //[HarmonyPatch]
-        class VitalsMinigameClosePatch
-        {
-            private static IEnumerable<MethodBase> TargetMethods()
-            {
-                return typeof(Minigame).GetMethods().Where(x => x.Name == "Close");
-            }
-
-            static void Prefix(Minigame __instance)
-            {
-                if (__instance is VitalsMinigame)
-                    UseVitalsTime();
             }
         }
     }
