@@ -128,7 +128,10 @@ namespace TheOtherRoles {
         public static void BlackmailShhh() {
             Helpers.showFlash(new Color32(49, 28, 69, byte.MinValue), 3f, false, 0.75f);
         }
-
+        
+        public static void Log(string e) {
+            TheOtherRolesPlugin.Logger.LogMessage(e);
+        }
 
         public static int getAvailableId() {
             var id = 0;

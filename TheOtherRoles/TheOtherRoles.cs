@@ -586,6 +586,7 @@ namespace TheOtherRoles
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
                                || lover1 == Swooper.swooper || lover2 == Swooper.swooper
+                               || lover1 == Werewolf.werewolf || lover2 == Werewolf.werewolf
                                || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 

@@ -252,8 +252,7 @@ namespace TheOtherRoles.Patches {
     class IntroPatch {
         public static void setupIntroTeamIcons(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             // Intro solo teams
-            if (CachedPlayer.LocalPlayer.PlayerControl == Jester.jester || CachedPlayer.LocalPlayer.PlayerControl == Swooper.swooper || CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist || CachedPlayer.LocalPlayer.PlayerControl == Vulture.vulture || CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer) {
-                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+            if (CachedPlayer.LocalPlayer.PlayerControl == Jester.jester || CachedPlayer.LocalPlayer.PlayerControl == Swooper.swooper || CachedPlayer.LocalPlayer.PlayerControl == Werewolf.werewolf || CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist || CachedPlayer.LocalPlayer.PlayerControl == Vulture.vulture) {                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
                 yourTeam = soloTeam;
             }
@@ -263,6 +262,14 @@ namespace TheOtherRoles.Patches {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
 				soloTeam.Add(Prosecutor.target);
+                yourTeam = soloTeam;
+            }
+            
+            // Intro Lawyer and Client
+            if (CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
+				soloTeam.Add(Lawyer.target);
                 yourTeam = soloTeam;
             }
 
