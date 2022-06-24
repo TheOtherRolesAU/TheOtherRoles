@@ -332,6 +332,7 @@ namespace TheOtherRoles
                             (Sheriff.canKillNeutrals && (Arsonist.arsonist == Sheriff.currentTarget || Jester.jester == Sheriff.currentTarget || Vulture.vulture == Sheriff.currentTarget || Lawyer.lawyer == Sheriff.currentTarget || Pursuer.pursuer == Sheriff.currentTarget)) ||
                             (Jackal.jackal == Sheriff.currentTarget || Sidekick.sidekick == Sheriff.currentTarget) ||
                             (Swooper.swooper == Sheriff.currentTarget) ||
+                            (Prosecutor.prosecutor == Sheriff.currentTarget) ||
                             (Werewolf.werewolf == Sheriff.currentTarget)) {
                             targetId = Sheriff.currentTarget.PlayerId;
                         }
