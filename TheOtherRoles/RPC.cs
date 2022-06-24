@@ -1289,7 +1289,7 @@ namespace TheOtherRoles
                 if (Camouflager.camouflageTimer > 0f) {
                     camouflagerCamouflage((byte)2);
                 } else {
-                    target.MyRend.color = Color.white;
+                    target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
                     target.setDefaultLook();
                 }
                 Swooper.isInvisable = false;
@@ -1298,7 +1298,7 @@ namespace TheOtherRoles
                 target.setLook("", 6, "", "", "", "");
                 Color color = Color.clear;           
                 if (Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl)) color.a = 0.1f;
-                target.MyRend.color = color;
+                target.cosmetics.currentBodySprite.BodySprite.color = color;
                 Swooper.swoopTimer = Swooper.duration;
             Swooper.isInvisable = true;
             }
@@ -1311,7 +1311,7 @@ namespace TheOtherRoles
             if (target == null) return;
             if (flag == byte.MaxValue)
             {
-                target.MyRend.color = Color.white;
+                target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
                 target.setDefaultLook();
                 return;
             }
@@ -1319,7 +1319,7 @@ namespace TheOtherRoles
             target.setLook("", 6, "", "", "", "");
             Color color = Color.clear;           
             if (CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
-            target.MyRend.color = color;
+            target.cosmetics.currentBodySprite.BodySprite.color = color;
         }
 
         public static void placePortal(byte[] buff) {

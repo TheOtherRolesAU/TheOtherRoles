@@ -62,7 +62,7 @@ namespace TheOtherRoles
                 new DnsRegionInfo("au-eu.duikbo.at", "Modded EU (MEU)", StringNames.NoTranslation, "au-eu.duikbo.at", 22023, false).CastFast<IRegionInfo>()
             };
             
-            IRegionInfo currentRegion = serverManager.CurrentRegion;
+            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
             Logger.LogInfo($"Adding {regions.Length} regions");
             foreach (IRegionInfo region in regions) {
                 if (region == null) 

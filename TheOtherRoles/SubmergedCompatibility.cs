@@ -83,6 +83,8 @@ namespace TheOtherRoles
             try
             {
                 TheOtherRolesPlugin.Logger.LogMessage("Trying to load Submerged...");
+                TheOtherRolesPlugin.Logger.LogMessage("Force ending load Submerged...");
+                return false;
                 var thisAsm = Assembly.GetCallingAssembly();
                 var resourceName = thisAsm.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Submerged.dll"));
                 if (resourceName == default) return false;
