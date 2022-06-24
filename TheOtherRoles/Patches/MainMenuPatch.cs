@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 using TheOtherRoles.Patches;
 
 namespace TheOtherRoles.Modules {
+    
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public class MainMenuPatch {
         private static bool horseButtonState = MapOptions.enableHorseMode;
@@ -89,4 +90,5 @@ namespace TheOtherRoles.Modules {
             return false;
         }
     }
+
 }

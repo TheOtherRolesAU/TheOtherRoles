@@ -43,7 +43,7 @@ namespace TheOtherRoles.Objects {
             
             // Generate log info
             PlayerControl playerControl = Helpers.playerById(playerId);
-            bool flip = playerControl.MyRend.flipX; // use the original player control here, not the morhpTarget.
+            bool flip = playerControl.cosmetics.currentBodySprite.BodySprite.flipX; // use the original player control here, not the morhpTarget.
             firstPortal.animationFgRenderer.flipX = flip;
             secondPortal.animationFgRenderer.flipX = flip;
             if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
@@ -61,8 +61,8 @@ namespace TheOtherRoles.Objects {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
                     firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
-                    PlayerControl.SetPlayerMaterialColors(colorId, firstPortal.animationFgRenderer);
-                    PlayerControl.SetPlayerMaterialColors(colorId, secondPortal.animationFgRenderer);
+                    playerControl.SetPlayerMaterialColors(firstPortal.animationFgRenderer);
+                    playerControl.SetPlayerMaterialColors(secondPortal.animationFgRenderer);
                     if (p == 1f) {
                         firstPortal.animationFgRenderer.sprite = null;
                         secondPortal.animationFgRenderer.sprite = null;
