@@ -12,6 +12,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 using TheOtherRoles.Modules;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
@@ -22,7 +23,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "5.2.0";
+        public const string VersionString = "5.4.0";
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -33,7 +34,6 @@ namespace TheOtherRoles
         public static int optionsPage = 2;
 
         public static ConfigEntry<bool> DebugMode { get; private set; }
-        public static ConfigEntry<bool> StreamerMode { get; set; }
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
         public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
@@ -41,8 +41,6 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> ShowRoleSummary { get; set; }
         public static ConfigEntry<bool> ShowLighterDarker { get; set; }
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
-        public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
-        public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
@@ -53,20 +51,41 @@ namespace TheOtherRoles
         public static Sprite ModStamp;
 
         public static IRegionInfo[] defaultRegions;
+
+        // This is part of the Mini.RegionInstaller, Licensed under GPLv3
+        // file="RegionInstallPlugin.cs" company="miniduikboot">
         public static void UpdateRegions() {
             ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
-            IRegionInfo[] regions = defaultRegions;
+            var regions = new IRegionInfo[] {
+                new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo("mods.hopto.org", "Modded NA (MNA)", StringNames.NoTranslation, "mods.hopto.org", 443, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo("au-eu.duikbo.at", "Modded EU (MEU)", StringNames.NoTranslation, "au-eu.duikbo.at", 22023, false).CastFast<IRegionInfo>(),
+                new DnsRegionInfo("play.scumscyb.org", "Scoom", StringNames.NoTranslation, "play.scumscyb.org", 22023, false).CastFast<IRegionInfo>()
+            };
+            
+            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
+            Logger.LogInfo($"Adding {regions.Length} regions");
+            foreach (IRegionInfo region in regions) {
+                if (region == null) 
+                    Logger.LogError("Could not add region");
+                else {
+                    if (currentRegion != null && region.Name.Equals(currentRegion.Name, StringComparison.OrdinalIgnoreCase)) 
+                        currentRegion = region;               
+                    serverManager.AddOrUpdateRegion(region);
+                }
+            }
 
-            var CustomRegion = new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false);
-            regions = regions.Concat(new IRegionInfo[] { CustomRegion.CastFast<IRegionInfo>() }).ToArray();
-            ServerManager.DefaultRegions = regions;
-            serverManager.AvailableRegions = regions;
+            // AU remembers the previous region that was set, so we need to restore it
+            if (currentRegion != null) {
+                Logger.LogDebug("Resetting previous region");
+                serverManager.SetRegion(currentRegion);
+            }
         }
 
         public override void Load() {
             Logger = Log;
+            Instance = this;
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
-            StreamerMode = Config.Bind("Custom", "Enable Streamer Mode", false);
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
@@ -77,8 +96,6 @@ namespace TheOtherRoles
             showKillAnimation = Config.Bind("Custom", "Supress Kill Animation", true);
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
-            StreamerModeReplacementText = Config.Bind("Custom", "Streamer Mode Replacement Text", "\n\nThe Other Roles");
-            StreamerModeReplacementColor = Config.Bind("Custom", "Streamer Mode Replacement Text Hex Color", "#87AAF5FF");
             
 
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
@@ -91,14 +108,19 @@ namespace TheOtherRoles
             GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
-            Instance = this;
+            Harmony.PatchAll();
             CustomOptionHolder.Load();
             CustomColors.Load();
-            Patches.FreeNamePatch.Initialize();
-            Harmony.PatchAll();
             if (ToggleCursor.Value) {
                 Helpers.enableCursor(true);
-            }       
+            }
+
+            Patches.FreeNamePatch.Initialize();
+            if (BepInExUpdater.UpdateRequired)
+            {
+                AddComponent<BepInExUpdater>();
+                return;
+            }
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
         }
@@ -120,7 +142,7 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.Awake))]
     public static class ChatControllerAwakePatch {
         private static void Prefix() {
-            if (!EOSManager.Instance.IsMinor()) {
+            if (!EOSManager.Instance.isKWSMinor) {
                 SaveManager.chatModeType = 1;
                 SaveManager.isGuest = false;
             }
@@ -147,7 +169,7 @@ namespace TheOtherRoles
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
                 
-                playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+                playerControl.transform.position = CachedPlayer.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
@@ -157,7 +179,7 @@ namespace TheOtherRoles
 
             // Terminate round
             if(Input.GetKeyDown(KeyCode.L)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.forceEnd();
             }

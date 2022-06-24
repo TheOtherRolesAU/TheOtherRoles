@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
@@ -28,6 +29,7 @@ namespace TheOtherRoles
             Mafioso.clearAndReload();
             Janitor.clearAndReload();
             Detective.clearAndReload();
+            Werewolf.clearAndReload();
             TimeMaster.clearAndReload();
             Veteren.clearAndReload();
             Medic.clearAndReload();
@@ -69,6 +71,7 @@ namespace TheOtherRoles
             Tiebreaker.clearAndReload();
             Sunglasses.clearAndReload();
             Mini.clearAndReload();
+            Indomitable.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
         }
@@ -153,8 +156,7 @@ namespace TheOtherRoles
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
             public static Minigame emergency = null;
             public static Sprite emergencySprite = null;
-            public static int remoteMeetingsLeft = 1;        
-
+            public static int remoteMeetingsLeft = 1;
 
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
@@ -307,7 +309,7 @@ namespace TheOtherRoles
             public static void setHandcuffedKnows(bool active = true)
             {
                 if (active) {
-                    byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+                    byte localPlayerId = CachedPlayer.LocalPlayer.PlayerId;
                     handcuffedKnows.Add(localPlayerId, handcuffDuration);
                     handcuffedPlayers.RemoveAll(x => x == localPlayerId);
                 }
@@ -476,6 +478,7 @@ namespace TheOtherRoles
         public static int showShielded = 0;
         public static bool showAttemptToShielded = false;
         public static bool showAttemptToMedic = false;
+        public static bool unbreakableShield = true;
         public static bool setShieldAfterMeeting = false;
         public static bool showShieldAfterMeeting = false;
         public static bool meetingAfterShielding = false;
@@ -498,6 +501,7 @@ namespace TheOtherRoles
             usedShield = false;
             showShielded = CustomOptionHolder.medicShowShielded.getSelection();
             showAttemptToShielded = CustomOptionHolder.medicShowAttemptToShielded.getBool();
+            unbreakableShield = true; //CustomOptionHolder.medicBreakShield.getBool();
             showAttemptToMedic = CustomOptionHolder.medicShowAttemptToMedic.getBool();
             setShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 2;
             showShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 1;
@@ -580,6 +584,8 @@ namespace TheOtherRoles
         public static bool existingWithKiller() {
             return existing() && (lover1 == Jackal.jackal     || lover2 == Jackal.jackal
                                || lover1 == Sidekick.sidekick || lover2 == Sidekick.sidekick
+                               || lover1 == Swooper.swooper || lover2 == Swooper.swooper
+                               || lover1 == Werewolf.werewolf || lover2 == Werewolf.werewolf
                                || lover1.Data.Role.IsImpostor      || lover2.Data.Role.IsImpostor);
         }
 
@@ -698,9 +704,9 @@ namespace TheOtherRoles
             if (Helpers.isCamoComms()) return;
             camoComms = false;
             camouflageTimer = 0f;
-            foreach (PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
-        if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
-        if (Ninja.ninja == p && Ninja.isInvisble) continue;
+            foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+                if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
+                if (Ninja.ninja == p && Ninja.isInvisble) continue;
                 p.setDefaultLook();
             }
         }
@@ -940,6 +946,43 @@ namespace TheOtherRoles
           duration = CustomOptionHolder.swooperDuration.getFloat();
           hasImpVision = CustomOptionHolder.swooperHasImpVision.getBool();
 
+        }
+    }
+    
+    public static class Werewolf {
+        public static PlayerControl werewolf;
+        public static PlayerControl currentTarget;
+        public static Color color = new Color32(79, 56, 21, byte.MaxValue);
+        
+        // Kill Button 
+        public static float killCooldown = 3f;
+        
+        // Rampage Button
+        public static float rampageCooldown = 30f;
+        public static float rampageDuration = 5f;
+        
+        public static bool canKill = false;
+        
+        public static Sprite buttonSprite;
+        
+        public static Sprite getRampageButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Rampage.png", 115f);
+            return buttonSprite;
+        }
+      
+        public static Vector3 getRampageVector() {
+            return new Vector3(-2.7f, -0.06f, 0);
+        }
+
+        public static void clearAndReload() {
+            werewolf = null;
+            currentTarget = null;
+            canKill = false;
+            rampageCooldown = CustomOptionHolder.werewolfRampageCooldown.getFloat();
+            rampageDuration = CustomOptionHolder.werewolfRampageDuration.getFloat();
+            killCooldown = CustomOptionHolder.werewolfKillCooldown.getFloat();
+            
         }
     }
     
@@ -1352,7 +1395,7 @@ namespace TheOtherRoles
         }
 
         public static bool dousedEveryoneAlive() {
-            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
+            return CachedPlayer.AllPlayers.All(x => { return x.PlayerControl == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
         }
 
         public static void clearAndReload() {
@@ -1767,7 +1810,17 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             antiTeleport = new List<PlayerControl>();
-            position = new Vector3();
+            position = Vector3.zero;
+        }
+
+        public static void setPosition() {
+            if (position == Vector3.zero) return;  // Check if this has been set, otherwise first spawn on submerged will fail
+            if (antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0) {
+                CachedPlayer.LocalPlayer.NetTransform.RpcSnapTo(position);
+                if (SubmergedCompatibility.IsSubmerged) {
+                    SubmergedCompatibility.ChangeFloor(position.y > -7);
+                }
+            }
         }
     }
 
@@ -1779,6 +1832,16 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             tiebreaker = null;
             isTiebreak = false;
+        }
+    }
+    
+    public static class Indomitable {
+        public static PlayerControl indomitable;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            indomitable = null;
         }
     }
 

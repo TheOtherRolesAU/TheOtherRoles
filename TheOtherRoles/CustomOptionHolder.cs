@@ -68,7 +68,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterCanCallEmergency;
         public static CustomOption jesterHasImpostorVision;
 		
-	public static CustomOption prosecutorSpawnRate;
+        public static CustomOption prosecutorSpawnRate;
 
         public static CustomOption amnisiacSpawnRate;
         public static CustomOption amnisiacShowArrows;
@@ -254,6 +254,11 @@ namespace TheOtherRoles {
         public static CustomOption pursuerCooldown;
         public static CustomOption pursuerBlanksNumber;
 
+        public static CustomOption werewolfSpawnRate;
+        public static CustomOption werewolfRampageCooldown;
+        public static CustomOption werewolfRampageDuration;
+        public static CustomOption werewolfKillCooldown;
+
         public static CustomOption modifierBait;
         public static CustomOption modifierBaitQuantity;
         public static CustomOption modifierBaitReportDelayMin;
@@ -280,6 +285,8 @@ namespace TheOtherRoles {
         
         public static CustomOption modifierMini;
         public static CustomOption modifierMiniGrowingUpDuration;
+
+        public static CustomOption modifierIndomitable;
 
         public static CustomOption modifierVip;
         public static CustomOption modifierVipQuantity;
@@ -334,14 +341,14 @@ namespace TheOtherRoles {
             activateRoles = CustomOption.Create(1, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Enable Mod Roles And Block Vanilla Roles"), true, null, true);
 
             // Using new id's for the options to not break compatibilty with older versions
-            crewmateRolesCountMin = CustomOption.Create(300, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 0f, 0f, 15f, 1f, null, true);
-            crewmateRolesCountMax = CustomOption.Create(301, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), 0f, 0f, 15f, 1f);
-            neutralRolesCountMin = CustomOption.Create(302, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), 0f, 0f, 15f, 1f);
-            neutralRolesCountMax = CustomOption.Create(303, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 0f, 0f, 15f, 1f);
-            impostorRolesCountMin = CustomOption.Create(304, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 0f, 0f, 3f, 1f);
-            impostorRolesCountMax = CustomOption.Create(305, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 0f, 0f, 3f, 1f);
-            modifiersCountMin = CustomOption.Create(306, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 0f, 0f, 15f, 1f);
-            modifiersCountMax = CustomOption.Create(307, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 0f, 0f, 15f, 1f);
+            crewmateRolesCountMin = CustomOption.Create(300, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Crewmate Roles"), 15f, 0f, 15f, 1f, null, true);
+            crewmateRolesCountMax = CustomOption.Create(301, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Crewmate Roles"), 15f, 0f, 15f, 1f);
+            neutralRolesCountMin = CustomOption.Create(302, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Neutral Roles"), 15f, 0f, 15f, 1f);
+            neutralRolesCountMax = CustomOption.Create(303, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Neutral Roles"), 15f, 0f, 15f, 1f);
+            impostorRolesCountMin = CustomOption.Create(304, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Impostor Roles"), 15f, 0f, 3f, 1f);
+            impostorRolesCountMax = CustomOption.Create(305, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Impostor Roles"), 15f, 0f, 3f, 1f);
+            modifiersCountMin = CustomOption.Create(306, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Minimum Modifiers"), 15f, 0f, 15f, 1f);
+            modifiersCountMax = CustomOption.Create(307, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Maximum Modifiers"), 15f, 0f, 15f, 1f);
 
             mafiaSpawnRate = CustomOption.Create(10, Types.Impostor, cs(Janitor.color, "Mafia"), rates, null, true);
             janitorCooldown = CustomOption.Create(11, Types.Impostor, "Janitor Cooldown", 30f, 10f, 60f, 2.5f, mafiaSpawnRate);
@@ -401,7 +408,7 @@ namespace TheOtherRoles {
             ninjaKnowsTargetLocation = CustomOption.Create(382, Types.Impostor, "Ninja Knows Location Of Target", true, ninjaSpawnRate);
             ninjaTraceTime = CustomOption.Create(383, Types.Impostor, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
             ninjaTraceColorTime = CustomOption.Create(384, Types.Impostor, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
-            ninjaInvisibleDuration = CustomOption.Create(385, Types.Impostor, "Time The Ninja Is Invisble", 3f, 0f, 20f, 1f, ninjaSpawnRate);
+            ninjaInvisibleDuration = CustomOption.Create(385, Types.Impostor, "Time The Ninja Is Invisible", 3f, 0f, 20f, 1f, ninjaSpawnRate);
 
             blackmailerSpawnRate = CustomOption.Create(710, Types.Impostor, cs(Blackmailer.color, "Blackmailer"), rates, null, true);
             blackmailerCooldown = CustomOption.Create(711, Types.Impostor, "Blackmail Cooldown", 30f, 5f, 120f, 5f, blackmailerSpawnRate);
@@ -424,7 +431,7 @@ namespace TheOtherRoles {
 
             amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnesiac"), rates, null, true);
             amnisiacShowArrows = CustomOption.Create(617, Types.Neutral, "Show arrows to dead bodies", true, amnisiacSpawnRate);
-            amnisiacResetRole = CustomOption.Create(618, Types.Neutral, "Reset role when taken", false, amnisiacSpawnRate);
+            amnisiacResetRole = CustomOption.Create(618, Types.Neutral, "Reset role when taken", true, amnisiacSpawnRate);
 
 
             arsonistSpawnRate = CustomOption.Create(290, Types.Neutral, cs(Arsonist.color, "Arsonist"), rates, null, true);
@@ -464,6 +471,11 @@ namespace TheOtherRoles {
             lawyerKnowsRole = CustomOption.Create(355, Types.Neutral, "Lawyer Knows Target Role", false, lawyerSpawnRate);
             pursuerCooldown = CustomOption.Create(356, Types.Neutral, "Pursuer Blank Cooldown", 30f, 5f, 60f, 2.5f, lawyerSpawnRate);
             pursuerBlanksNumber = CustomOption.Create(357, Types.Neutral, "Pursuer Number Of Blanks", 5f, 1f, 20f, 1f, lawyerSpawnRate);
+            
+            werewolfSpawnRate = CustomOption.Create(1501, Types.Neutral, cs(Werewolf.color, "Werewolf"), rates, null, true);
+            werewolfRampageCooldown  = CustomOption.Create(1502, Types.Neutral, "Rampage Cooldown", 30f, 10f, 60f, 2.5f, werewolfSpawnRate);
+            werewolfRampageDuration = CustomOption.Create(1503, Types.Neutral, "Rampage Duration", 15f, 1f, 20f, 0.5f, werewolfSpawnRate);
+            werewolfKillCooldown = CustomOption.Create(1504, Types.Neutral, "KillCooldown", 3f, 1f, 60f, 1f, werewolfSpawnRate);
 
             shifterSpawnRate = CustomOption.Create(70, Types.Crewmate, cs(Shifter.color, "Shifter"), rates, null, true);
             shifterShiftsModifiers = CustomOption.Create(71, Types.Crewmate, "Shifter Shifts Modifiers", false, shifterSpawnRate);
@@ -516,7 +528,6 @@ namespace TheOtherRoles {
             medicShowShielded = CustomOption.Create(143, Types.Crewmate, "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"}, medicSpawnRate);
             medicShowAttemptToShielded = CustomOption.Create(144, Types.Crewmate, "Shielded Player Sees Murder Attempt", false, medicSpawnRate);
             medicSetOrShowShieldAfterMeeting = CustomOption.Create(145, Types.Crewmate, "Shield Will Be Activated", new string[] { "Instantly", "Instantly, Visible\nAfter Meeting", "After Meeting" }, medicSpawnRate);
-
             medicShowAttemptToMedic = CustomOption.Create(146, Types.Crewmate, "Medic Sees Murder Attempt On Shielded Player", false, medicSpawnRate);
 
             swapperSpawnRate = CustomOption.Create(150, Types.Crewmate, cs(Swapper.color, "Swapper"), rates, null, true);
@@ -605,6 +616,8 @@ namespace TheOtherRoles {
 
             modifierMini = CustomOption.Create(1061, Types.Modifier, cs(Color.yellow, "Mini"), rates, null, true);
             modifierMiniGrowingUpDuration = CustomOption.Create(1062, Types.Modifier, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
+            
+            modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Indomitable.color, "Indomitable"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, Types.Modifier, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);

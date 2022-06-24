@@ -21,6 +21,7 @@ namespace TheOtherRoles.Patches {
                 || (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == player.PlayerId && Sidekick.hasImpostorVision)
                 || (Spy.spy != null && Spy.spy.PlayerId == player.PlayerId && Spy.hasImpostorVision)
                 || (Jester.jester != null && Jester.jester.PlayerId == player.PlayerId && Jester.hasImpostorVision)
+                || (Werewolf.werewolf != null && Werewolf.werewolf.PlayerId == player.PlayerId)
                 || (Swooper.swooper != null && Swooper.swooper.PlayerId == player.PlayerId && Swooper.hasImpVision)) {
                 //__result = __instance.MaxLightRadius * PlayerControl.GameOptions.ImpostorLightMod;
                 __result = GetNeutralLightRadius(__instance, true);
@@ -29,7 +30,7 @@ namespace TheOtherRoles.Patches {
 
             // If player is Lighter with ability active
             if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId && Lighter.lighterTimer > 0f) {
-                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, true));
+                float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, unlerped);
             }
 

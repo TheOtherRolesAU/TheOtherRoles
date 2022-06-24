@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
+using TheOtherRoles.Players;
 
 namespace TheOtherRoles
 {
@@ -26,6 +27,7 @@ namespace TheOtherRoles
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
+        public static RoleInfo werewolf = new RoleInfo("Werewolf", Werewolf.color, "Rampage and kill everyone", "Rampage and kill everyone", RoleId.Werewolf, true);
         public static RoleInfo prosecutor = new RoleInfo("Prosecutor", Prosecutor.color, "Vote out your target", "Vote our your target", RoleId.Prosecutor, true);
 		public static RoleInfo swooper = new RoleInfo("Swooper", Swooper.color, "Turn Invisable and kill everyone", "Turn Invisable", RoleId.Swooper, true);
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
@@ -85,6 +87,7 @@ namespace TheOtherRoles
         public static RoleInfo lover = new RoleInfo("Lover", Lovers.color, $"You are in love", $"You are in love", RoleId.Lover, false, true);
         public static RoleInfo mini = new RoleInfo("Mini", Color.yellow, "No one will harm you until you grow up", "No one will harm you", RoleId.Mini, false, true);
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
+        public static RoleInfo indomitable  = new RoleInfo("Indomitable", Indomitable.color, "Your role cannot be guessed", "You are Indomitable!", RoleId.Indomitable, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
 
 
@@ -100,6 +103,7 @@ namespace TheOtherRoles
             trickster,
             cleaner,
             warlock,
+            werewolf,
             bountyHunter,
             witch,
             ninja,
@@ -145,6 +149,7 @@ namespace TheOtherRoles
             sunglasses,
             mini,
             vip,
+            indomitable,
             invert
         };
 
@@ -161,6 +166,7 @@ namespace TheOtherRoles
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
+                if (p == Indomitable.indomitable) infos.Add(indomitable);
                 if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }
@@ -168,6 +174,7 @@ namespace TheOtherRoles
 
             // Special roles
             if (p == Jester.jester) infos.Add(jester);
+            if (p == Werewolf.werewolf) infos.Add(werewolf);
             if (p == Prosecutor.prosecutor) infos.Add(prosecutor);
             if (p == Swooper.swooper) infos.Add(swooper);
             if (p == Mayor.mayor) infos.Add(mayor);
@@ -225,7 +232,7 @@ namespace TheOtherRoles
         public static String GetRolesString(PlayerControl p, bool useColors, bool showModifier = true) {
             string roleName;
             roleName = String.Join(" ", getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? Helpers.cs(x.color, x.name) : x.name).ToArray());
-            if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId && PlayerControl.LocalPlayer != Lawyer.target) roleName += (useColors ? Helpers.cs(Pursuer.color, " §") : " §");
+            if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId && CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) roleName += (useColors ? Helpers.cs(Pursuer.color, " §") : " §");
             return roleName;
         }
     }

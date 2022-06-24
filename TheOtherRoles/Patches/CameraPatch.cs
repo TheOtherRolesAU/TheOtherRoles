@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using System.Reflection;
+using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Patches {
 
@@ -24,9 +25,9 @@ namespace TheOtherRoles.Patches {
         static void UseCameraTime()
         {
             // Don't waste network traffic if we're out of time.
-            if (MapOptions.restrictDevices > 0 && MapOptions.restrictCamerasTime > 0f && PlayerControl.LocalPlayer.isAlive())
+            if (MapOptions.restrictDevices > 0 && MapOptions.restrictCamerasTime > 0f && CachedPlayer.LocalPlayer.PlayerControl.isAlive()  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UseCameraTime, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UseCameraTime, Hazel.SendOption.Reliable, -1);
                 writer.Write(cameraTimer);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.useCameraTime(cameraTimer);
@@ -102,7 +103,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
@@ -133,7 +134,7 @@ namespace TheOtherRoles.Patches {
                         timer = 0f;
                     }
 
-                    if ((__instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+                    if ((__instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(CachedPlayer.LocalPlayer.PlayerControl))
                     {
                         __instance.isStatic = false;
                         for (int i = 0; i < __instance.ViewPorts.Length; i++)
@@ -146,7 +147,7 @@ namespace TheOtherRoles.Patches {
                                 __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
                         }
                     }
-                    else if (!__instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
+                    else if (!__instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(CachedPlayer.LocalPlayer.PlayerControl))
                     {
                         __instance.isStatic = true;
                         for (int j = 0; j < __instance.ViewPorts.Length; j++)
@@ -213,7 +214,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f   && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
@@ -284,7 +285,7 @@ namespace TheOtherRoles.Patches {
                             TimeRemaining.color = Palette.White;
                         }
 
-                        if (MapOptions.restrictCamerasTime <= 0f)
+                        if (MapOptions.restrictCamerasTime <= 0f  && CachedPlayer.LocalPlayer.PlayerControl != Hacker.hacker && CachedPlayer.LocalPlayer.PlayerControl != SecurityGuard.securityGuard && !CachedPlayer.LocalPlayer.Data.IsDead)
                         {
                             __instance.Close();
                             return false;
@@ -296,22 +297,6 @@ namespace TheOtherRoles.Patches {
                     }
 
                     return true;
-                }
-            }
-
-
-            [HarmonyPatch]
-            class SecurityLogGameClosePatch
-            {
-                private static IEnumerable<MethodBase> TargetMethods()
-                {
-                    return typeof(Minigame).GetMethods().Where(x => x.Name == "Close");
-                }
-
-                static void Prefix(Minigame __instance)
-                {
-                    if (__instance is SecurityLogGame)
-                        UseCameraTime();
                 }
             }
         }

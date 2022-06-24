@@ -33,9 +33,9 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(109, 7, 26, byte.MaxValue), 
                                         shadow = new Color32(54, 2, 11, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "Olive",
-                                        color = new Color32(154, 140, 61, byte.MaxValue), 
-                                        shadow = new Color32(104, 95, 40, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "ParaGreen",
+                                        color = new Color32(50, 205, 50, byte.MaxValue), 
+                                        shadow = new Color32(42, 245, 154, byte.MaxValue),
                                         isLighterColor = false });
             colors.Add(new CustomColor { longname = "Turqoise",
                                         color = new Color32(22, 132, 176, byte.MaxValue), 
@@ -53,9 +53,9 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(160, 101, 56, byte.MaxValue), 
                                         shadow = new Color32(115, 15, 78, byte.MaxValue),
                                         isLighterColor = false });
-            colors.Add(new CustomColor { longname = "HazardCamo", // 25
-                                        color = new Color32(75, 83, 32, byte.MaxValue), 
-                                        shadow = new Color32(60, 66, 26, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "LuLuBlue", // 25
+                                        color = new Color32(148, 190, 224, byte.MaxValue), 
+                                        shadow = new Color32(100, 135, 163, byte.MaxValue),
                                         isLighterColor = true });
             colors.Add(new CustomColor { longname = "Wasabi", // 26
                                         color = new Color32(112, 143, 46, byte.MaxValue), 

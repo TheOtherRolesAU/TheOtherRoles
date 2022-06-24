@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
@@ -9,6 +10,7 @@ using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
 using HarmonyLib;
 using Hazel;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles {
@@ -51,7 +53,7 @@ namespace TheOtherRoles {
         }
 
 		public static SabatageTypes getActiveSabo() {
-			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator()) {
+			foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator()) {
 				if (task.TaskType == TaskTypes.FixLights) {
 					return SabatageTypes.Lights;
 				} else if (task.TaskType == TaskTypes.RestoreOxy) {
@@ -66,6 +68,32 @@ namespace TheOtherRoles {
 			}
 			return SabatageTypes.None;
 		}
+
+                public static void resetKill(byte playerId) {
+                    PlayerControl player = playerById(playerId);
+                    player.killTimer = PlayerControl.GameOptions.KillCooldown;
+                        if (player == Cleaner.cleaner)
+                            Cleaner.cleaner.killTimer = HudManagerStartPatch.cleanerCleanButton.Timer = HudManagerStartPatch.cleanerCleanButton.MaxTimer;
+                        else if (player == Warlock.warlock)
+                            Warlock.warlock.killTimer = HudManagerStartPatch.warlockCurseButton.Timer = HudManagerStartPatch.warlockCurseButton.MaxTimer;
+                        else if (player == Mini.mini && Mini.mini.Data.Role.IsImpostor)
+                            Mini.mini.SetKillTimer(PlayerControl.GameOptions.KillCooldown * (Mini.isGrownUp() ? 0.66f : 2f));
+                        else if (player == Witch.witch)
+                            Witch.witch.killTimer = HudManagerStartPatch.witchSpellButton.Timer = HudManagerStartPatch.witchSpellButton.MaxTimer;
+                        else if (player == Ninja.ninja)
+                            Ninja.ninja.killTimer = HudManagerStartPatch.ninjaButton.Timer = HudManagerStartPatch.ninjaButton.MaxTimer;
+                        else if (player == Sheriff.sheriff)
+                            Sheriff.sheriff.killTimer = HudManagerStartPatch.sheriffKillButton.Timer = HudManagerStartPatch.sheriffKillButton.MaxTimer;
+                        else if (player == Vampire.vampire)
+                            Vampire.vampire.killTimer = HudManagerStartPatch.vampireKillButton.Timer = HudManagerStartPatch.vampireKillButton.MaxTimer;
+                        else if (player == Jackal.jackal)
+                            Jackal.jackal.killTimer = HudManagerStartPatch.jackalKillButton.Timer = HudManagerStartPatch.jackalKillButton.MaxTimer;
+                        else if (player == Sidekick.sidekick)
+                            Sidekick.sidekick.killTimer = HudManagerStartPatch.sidekickKillButton.Timer = HudManagerStartPatch.sidekickKillButton.MaxTimer;
+                        else if (player == Swooper.swooper)
+                            Swooper.swooper.killTimer = HudManagerStartPatch.swooperKillButton.Timer = HudManagerStartPatch.swooperKillButton.MaxTimer;
+
+                }
 
 		public static bool isSaboActive() {
 			return !(Helpers.getActiveSabo() == SabatageTypes.None);
@@ -95,6 +123,15 @@ namespace TheOtherRoles {
 		public static bool isCamoComms() {
 			return (isCommsActive() && MapOptions.camoComms);
 		}
+
+
+        public static void BlackmailShhh() {
+            Helpers.showFlash(new Color32(49, 28, 69, byte.MinValue), 3f, false, 0.75f);
+        }
+        
+        public static void Log(string e) {
+            TheOtherRolesPlugin.Logger.LogMessage(e);
+        }
 
         public static int getAvailableId() {
             var id = 0;
@@ -128,10 +165,33 @@ namespace TheOtherRoles {
             System.Console.WriteLine("PROOF I AM IMP VANILLA ROLE: "+player.Data.Role.IsImpostor);
 
             foreach (var player2 in PlayerControl.AllPlayerControls) {
-                if (player2.Data.Role.IsImpostor && PlayerControl.LocalPlayer.Data.Role.IsImpostor) {
-                    player2.nameText.color = Palette.ImpostorRed;
+                if (player2.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
+                    player.cosmetics.nameText.color = Palette.ImpostorRed;
                 }
             }
+        }
+
+        public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
+            if (CustomOptionHolder.showButtonTarget.getBool()) { // Should the button show the target name option
+                var text = "";
+                if (Camouflager.camouflageTimer >= 0.1f || isActiveCamoComms()) text = defaultText; // set text to default if camo is on
+                else if (Helpers.isLightsActive()) text = defaultText; // set to default if lights are out
+                else if (Trickster.trickster != null && Trickster.lightsOutTimer > 0f) text = defaultText; // set to default if trickster ability is active
+                else if (Morphling.morphling != null && Morphling.morphTarget != null && target == Morphling.morphling && Morphling.morphTimer > 0) text = Morphling.morphTarget.Data.PlayerName;  // set to morphed player
+                else if (target == Swooper.swooper && Swooper.isInvisable) text = defaultText;
+                else if (target == null) text = defaultText; // Set text to defaultText if no target
+                else text = target.Data.PlayerName; // Set text to playername
+                showTargetNameOnButtonExplicit(null, button, text);
+            }
+        }
+
+
+        public static void showTargetNameOnButtonExplicit(PlayerControl target, CustomButton button, string defaultText) {
+            var text = defaultText;
+            if (target == null) text = defaultText; // Set text to defaultText if no target
+            else text = target.Data.PlayerName; // Set text to playername
+            button.actionButton.OverrideText(text);
+            button.showButtonText = true;
         }
 
 
@@ -181,7 +241,7 @@ namespace TheOtherRoles {
 
         public static PlayerControl playerById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == id)
                     return player;
             return null;
@@ -190,7 +250,7 @@ namespace TheOtherRoles {
         public static Dictionary<byte, PlayerControl> allPlayersById()
         {
             Dictionary<byte, PlayerControl> res = new Dictionary<byte, PlayerControl>();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls.GetFastEnumerator())
+            foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 res.Add(player.PlayerId, player);
             return res;
         }
@@ -198,7 +258,7 @@ namespace TheOtherRoles {
         public static void handleVampireBiteOnBodyReport() {
             // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
             Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
             writer.Write(byte.MaxValue);
             writer.Write(byte.MaxValue);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -273,7 +333,7 @@ namespace TheOtherRoles {
         }
 
 		public static void setInvisable(PlayerControl  player) {
-			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
+			MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisibleGen, Hazel.SendOption.Reliable, -1);
 			invisibleWriter.Write(player.PlayerId);
 			invisibleWriter.Write(byte.MinValue);
 			AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
@@ -287,11 +347,11 @@ namespace TheOtherRoles {
 
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
+            return (player == Prosecutor.prosecutor || player == Werewolf.werewolf || player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
-            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player));
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player) && player != Swooper.swooper);
         }
 
         public static void clearAllTasks(this PlayerControl player) {
@@ -311,7 +371,7 @@ namespace TheOtherRoles {
             float alpha = value ? 0.25f : 1f;
             foreach (SpriteRenderer r in player.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 r.color = new Color(r.color.r, r.color.g, r.color.b, alpha);
-            player.NameText.color = new Color(player.NameText.color.r, player.NameText.color.g, player.NameText.color.b, alpha);
+            player.cosmetics.nameText.color = new Color(player.cosmetics.nameText.color.r, player.cosmetics.nameText.color.g, player.cosmetics.nameText.color.b, alpha);
         }
 
         public static string GetString(this TranslationController t, StringNames key, params Il2CppSystem.Object[] parts) {
@@ -368,12 +428,12 @@ namespace TheOtherRoles {
             target.RawSetColor(colorId);
             target.RawSetVisor(visorId);
             target.RawSetHat(hatId, colorId);
-            target.RawSetName(hidePlayerName(PlayerControl.LocalPlayer, target) ? "" : playerName);
+            target.RawSetName(hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target) ? "" : playerName);
 
             SkinViewData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId).viewData.viewData;
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
-            var spriteAnim = playerPhysics.Skin.animator;
+            var spriteAnim = playerPhysics.myPlayer.cosmetics.skin.animator;
             var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
             if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.RunAnim) clip = nextSkin.RunAnim;
             else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.SpawnAnim) clip = nextSkin.SpawnAnim;
@@ -382,34 +442,38 @@ namespace TheOtherRoles {
             else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.IdleAnim) clip = nextSkin.IdleAnim;
             else clip = nextSkin.IdleAnim;
             float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            playerPhysics.Skin.skin = nextSkin;
-            if (playerPhysics.Skin.layer.material == FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial)
-                PlayerControl.SetPlayerMaterialColors(colorId, playerPhysics.Skin.layer);
+            playerPhysics.myPlayer.cosmetics.skin.skin = nextSkin;
+            if (playerPhysics.myPlayer.cosmetics.skin.layer.material == FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial)
+                target.SetPlayerMaterialColors(playerPhysics.myPlayer.cosmetics.skin.layer);
             spriteAnim.Play(clip, 1f);
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);
 
-            if (target.CurrentPet) UnityEngine.Object.Destroy(target.CurrentPet.gameObject);
-            target.CurrentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
-            target.CurrentPet.transform.position = target.transform.position;
-            target.CurrentPet.Source = target;
-            target.CurrentPet.Visible = target.Visible;
-            PlayerControl.SetPlayerMaterialColors(colorId, target.CurrentPet.rend);
+            if (target.cosmetics.currentPet) UnityEngine.Object.Destroy(target.cosmetics.currentPet.gameObject);
+            target.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
+            target.cosmetics.currentPet.transform.position = target.transform.position;
+            target.cosmetics.currentPet.Source = target;
+            target.cosmetics.currentPet.Visible = target.Visible;
+            target.SetPlayerMaterialColors(target.cosmetics.currentPet.rend);
         }
 
-        public static void showFlash(Color color, float duration=1f) {
+        public static void showFlash(Color color, float duration=1f, bool fade = true, float opacity = 100f) {
             if (FastDestroyableSingleton<HudManager>.Instance == null || FastDestroyableSingleton<HudManager>.Instance.FullScreen == null) return;
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.gameObject.SetActive(true);
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = true;
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(duration, new Action<float>((p) => {
                 var renderer = FastDestroyableSingleton<HudManager>.Instance.FullScreen;
-
-                if (p < 0.5) {
+                if (!fade) {
                     if (renderer != null)
-                        renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+                        renderer.color = new Color(color.r, color.g, color.b, opacity);
                 } else {
-                    if (renderer != null)
-                        renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    if (p < 0.5) {
+                        if (renderer != null)
+                            renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+                    } else {
+                        if (renderer != null)
+                            renderer.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    }
                 }
                 if (p == 1f && renderer != null) renderer.enabled = false;
             })));
@@ -420,6 +484,8 @@ namespace TheOtherRoles {
             if (Engineer.engineer != null && Engineer.engineer == player)
                 roleCouldUse = true;
             if (Swooper.swooper != null && Swooper.swooper == player)
+                roleCouldUse = true;
+            if (Werewolf.werewolf != null && Werewolf.werewolf == player)
                 roleCouldUse = true;
             else if (Jackal.canUseVents && Jackal.jackal != null && Jackal.jackal == player)
                 roleCouldUse = true;
@@ -432,9 +498,9 @@ namespace TheOtherRoles {
             else if (Undertaker.deadBodyDraged != null && !Undertaker.canDragAndVent && Undertaker.undertaker== player)
                 roleCouldUse = false;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
-                if (Janitor.janitor != null && Janitor.janitor == PlayerControl.LocalPlayer)
+                if (Janitor.janitor != null && Janitor.janitor == CachedPlayer.LocalPlayer.PlayerControl)
                     roleCouldUse = false;
-                else if (Mafioso.mafioso != null && Mafioso.mafioso == PlayerControl.LocalPlayer && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
+                else if (Mafioso.mafioso != null && Mafioso.mafioso == CachedPlayer.LocalPlayer.PlayerControl && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
@@ -453,7 +519,7 @@ namespace TheOtherRoles {
 
             // Handle blank shot
             if (Pursuer.blankedList.Any(x => x.PlayerId == killer.PlayerId)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write((byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -467,8 +533,9 @@ namespace TheOtherRoles {
             else if (Veteren.veteren != null && target == Veteren.veteren && Veteren.alertActive) {
               if (Medic.shielded != null && Medic.shielded == target) {
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                   writer.Write(target.PlayerId);
                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                   RPCProcedure.shieldedMurderAttempt();
+                   RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
               }
               return MurderAttemptResult.ReverseKill;
 	    }
@@ -477,8 +544,9 @@ namespace TheOtherRoles {
             // Block impostor shielded kill
             if (Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.shieldedMurderAttempt();
+                RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
                 return MurderAttemptResult.SuppressKill;
             }
 
@@ -508,7 +576,7 @@ namespace TheOtherRoles {
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart);
 
             if (murder == MurderAttemptResult.PerformKill) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 writer.Write(target.PlayerId);
                 writer.Write(showAnimation ? Byte.MaxValue : 0);
@@ -527,16 +595,16 @@ namespace TheOtherRoles {
 	public static bool checkAndDoVetKill(PlayerControl target) {
 	  bool shouldVetKill = (Veteren.veteren == target && Veteren.alertActive);
 	  if (shouldVetKill) {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VeterenKill, Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VeterenKill, Hazel.SendOption.Reliable, -1);
+            writer.Write(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCProcedure.veterenKill(PlayerControl.LocalPlayer.PlayerId);
+            RPCProcedure.veterenKill(CachedPlayer.LocalPlayer.PlayerControl.PlayerId);
 	  }
 	  return shouldVetKill;
 	}
 
         public static void shareGameVersion() {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VersionHandshake, Hazel.SendOption.Reliable, -1);
             writer.Write((byte)TheOtherRolesPlugin.Version.Major);
             writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
             writer.Write((byte)TheOtherRolesPlugin.Version.Build);
@@ -549,7 +617,7 @@ namespace TheOtherRoles {
 
         public static List<PlayerControl> getKillerTeamMembers(PlayerControl player) {
             List<PlayerControl> team = new List<PlayerControl>();
-            foreach(PlayerControl p in PlayerControl.AllPlayerControls.GetFastEnumerator()) {
+            foreach(PlayerControl p in CachedPlayer.AllPlayers) {
                 if (player.Data.Role.IsImpostor && p.Data.Role.IsImpostor && player.PlayerId != p.PlayerId && team.All(x => x.PlayerId != p.PlayerId)) team.Add(p);
                 else if (player == Jackal.jackal && p == Sidekick.sidekick) team.Add(p); 
                 else if (player == Sidekick.sidekick && p == Jackal.jackal) team.Add(p);
