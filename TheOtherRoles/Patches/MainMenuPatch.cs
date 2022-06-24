@@ -6,14 +6,15 @@ using Object = UnityEngine.Object;
 using TheOtherRoles.Patches;
 
 namespace TheOtherRoles.Modules {
-    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
+    
+//    [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public class MainMenuPatch {
         private static bool horseButtonState = MapOptions.enableHorseMode;
         private static Sprite horseModeOffSprite = null;
         private static Sprite horseModeOnSprite = null;
 
         private static void Prefix(MainMenuManager __instance) {
-            CustomHatLoader.LaunchHatFetcher();
+            //CustomHatLoader.LaunchHatFetcher();
             var template = GameObject.Find("ExitGameButton");
             if (template == null) return;
 
@@ -75,7 +76,7 @@ namespace TheOtherRoles.Modules {
         }
     }
 
-    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.UpdateAnnounceText))]
+//    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.UpdateAnnounceText))]
     public static class Announcement
     {
         public static ModUpdateBehaviour.UpdateData updateData = null;
@@ -89,4 +90,5 @@ namespace TheOtherRoles.Modules {
             return false;
         }
     }
+
 }

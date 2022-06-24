@@ -10,7 +10,7 @@ using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Patches {
 
-    [Harmony]
+    //[Harmony]
     public class CameraPatch
     {
         static float cameraTimer = 0f;
@@ -35,7 +35,7 @@ namespace TheOtherRoles.Patches {
             cameraTimer = 0f;
         }
 
-        [HarmonyPatch]
+        //[HarmonyPatch]
         class SurveillanceMinigamePatch
         {
             private static int page = 0;
@@ -51,7 +51,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
+            //[HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
             class SurveillanceMinigameBeginPatch
             {
                 public static void Prefix(SurveillanceMinigame __instance)
@@ -82,7 +82,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Update))]
+            //[HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Update))]
             class SurveillanceMinigameUpdatePatch
             {
                 public static bool Prefix(SurveillanceMinigame __instance)
@@ -160,7 +160,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Close))]
+            //[HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Close))]
             class SurveillanceMinigameClosePatch
             {
                 static void Prefix(SurveillanceMinigame __instance)
@@ -170,7 +170,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        [HarmonyPatch]
+        //[HarmonyPatch]
         class PlanetSurveillanceMinigamePatch
         {
             static TMPro.TextMeshPro TimeRemaining;
@@ -184,7 +184,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Begin))]
+            //[HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Begin))]
             class PlanetSurveillanceMinigameBeginPatch
             {
                 public static void Prefix(PlanetSurveillanceMinigame __instance)
@@ -193,7 +193,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Update))]
+            //[HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Update))]
             class PlanetSurveillanceMinigameUpdatePatch
             {
                 public static bool Prefix(PlanetSurveillanceMinigame __instance)
@@ -230,7 +230,7 @@ namespace TheOtherRoles.Patches {
             }
 
 
-            [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Close))]
+            //[HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Close))]
             class PlanetSurveillanceMinigameClosePatch
             {
                 static void Prefix(PlanetSurveillanceMinigame __instance)
@@ -240,7 +240,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        [HarmonyPatch]
+        //[HarmonyPatch]
         class DoorLogPatch
         {
             static TMPro.TextMeshPro TimeRemaining;
@@ -254,7 +254,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(Minigame), nameof(Minigame.Begin))]
+            //[HarmonyPatch(typeof(Minigame), nameof(Minigame.Begin))]
             class SecurityLogGameBeginPatch
             {
                 public static void Prefix(Minigame __instance)
@@ -264,7 +264,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-            [HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Update))]
+            //[HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Update))]
             class SecurityLogGameUpdatePatch
             {
                 public static bool Prefix(SecurityLogGame __instance)
@@ -301,7 +301,7 @@ namespace TheOtherRoles.Patches {
             }
 
 
-            [HarmonyPatch]
+            //[HarmonyPatch]
             class SecurityLogGameClosePatch
             {
                 private static IEnumerable<MethodBase> TargetMethods()
