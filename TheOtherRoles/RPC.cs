@@ -1286,22 +1286,17 @@ namespace TheOtherRoles
             PlayerControl target = Helpers.playerById(playerId);
             if (target == null) return;
             if (flag == byte.MaxValue) {
-                if (Camouflager.camouflageTimer > 0f) {
-                    camouflagerCamouflage((byte)2);
-                } else {
-                    target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
-                    target.setDefaultLook();
-                }
+                target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
+                if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
                 Swooper.isInvisable = false;
                 return;
-            } else {
-                target.setLook("", 6, "", "", "", "");
-                Color color = Color.clear;           
-                if (Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl)) color.a = 0.1f;
-                target.cosmetics.currentBodySprite.BodySprite.color = color;
-                Swooper.swoopTimer = Swooper.duration;
-            Swooper.isInvisable = true;
             }
+            target.setLook("", 6, "", "", "", "");
+            Color color = Color.clear;           
+            if (Swooper.swooper == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || (Swooper.swooper == Jackal.jackal && Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl)) color.a = 0.1f;
+            target.cosmetics.currentBodySprite.BodySprite.color = color;
+            Swooper.swoopTimer = Swooper.duration;
+            Swooper.isInvisable = true;
         }
 
 
