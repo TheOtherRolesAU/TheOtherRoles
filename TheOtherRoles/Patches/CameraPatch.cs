@@ -299,22 +299,6 @@ namespace TheOtherRoles.Patches {
                     return true;
                 }
             }
-
-
-            [HarmonyPatch]
-            class SecurityLogGameClosePatch
-            {
-                private static IEnumerable<MethodBase> TargetMethods()
-                {
-                    return typeof(Minigame).GetMethods().Where(x => x.Name == "Close");
-                }
-
-                static void Prefix(Minigame __instance)
-                {
-                    if (__instance is SecurityLogGame)
-                        UseCameraTime();
-                }
-            }
         }
     }
 }
