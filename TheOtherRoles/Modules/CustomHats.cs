@@ -9,7 +9,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
-using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 

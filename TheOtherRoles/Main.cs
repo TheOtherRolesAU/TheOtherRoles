@@ -23,7 +23,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "5.3.5";
+        public const string VersionString = "5.4.0";
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -62,7 +62,7 @@ namespace TheOtherRoles
                 new DnsRegionInfo("au-eu.duikbo.at", "Modded EU (MEU)", StringNames.NoTranslation, "au-eu.duikbo.at", 22023, false).CastFast<IRegionInfo>()
             };
             
-            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
+            IRegionInfo currentRegion = serverManager.CurrentRegion;
             Logger.LogInfo($"Adding {regions.Length} regions");
             foreach (IRegionInfo region in regions) {
                 if (region == null) 

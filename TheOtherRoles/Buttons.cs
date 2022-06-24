@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Objects;
-using TheOtherRoles.Players;
 using System.Linq;
 using System.Collections.Generic;
 using TheOtherRoles.Players;
@@ -800,17 +799,15 @@ namespace TheOtherRoles
                 },
                 () => { return Vampire.vampire != null && Vampire.vampire == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
                 () => {
-                    return Vampire.vampire != null && Vampire.vampire == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead; },
-                () => {
-                    if (Vampire.targetNearGarlic)
+                    if (Vampire.targetNearGarlic) {
                         showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "KILL");
-                    else
+                    } else {
                         showTargetNameOnButton(Vampire.currentTarget, vampireKillButton, "BITE");
+                    }
                     if (Vampire.targetNearGarlic && Vampire.canKillNearGarlics) {
                         vampireKillButton.actionButton.graphic.sprite = __instance.KillButton.graphic.sprite;
                         vampireKillButton.showButtonText = true;
-                    }
-                    else {
+                    } else {
                         vampireKillButton.actionButton.graphic.sprite = Vampire.getButtonSprite();
                     }
                     return Vampire.currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove && (!Vampire.targetNearGarlic || Vampire.canKillNearGarlics);

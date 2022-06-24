@@ -8,7 +8,6 @@ using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Objects;
-using TheOtherRoles.Players;
 using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Players;
@@ -164,7 +163,7 @@ namespace TheOtherRoles {
 
             foreach (var player2 in PlayerControl.AllPlayerControls) {
                 if (player2.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
-                    player2.nameText.color = Palette.ImpostorRed;
+                    player.cosmetics.nameText.color = Palette.ImpostorRed;
                 }
             }
         }

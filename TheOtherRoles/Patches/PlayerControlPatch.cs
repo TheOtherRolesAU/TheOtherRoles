@@ -6,7 +6,6 @@ using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using TheOtherRoles.Objects;
-using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using TheOtherRoles.Players;

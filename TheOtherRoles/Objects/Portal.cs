@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Players;
