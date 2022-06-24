@@ -127,4 +127,8 @@ public static class CachedPlayerPatches
     {
         CachedPlayer.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f87e7b855179c27b6df581a1e3ce513b1c77d900

@@ -2,6 +2,7 @@ using System;
 using HarmonyLib;
 using Hazel;
 using InnerNet;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 

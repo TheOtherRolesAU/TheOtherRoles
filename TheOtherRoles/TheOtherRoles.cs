@@ -156,8 +156,7 @@ namespace TheOtherRoles
             public static Color color = new Color32(32, 77, 66, byte.MaxValue);
             public static Minigame emergency = null;
             public static Sprite emergencySprite = null;
-            public static int remoteMeetingsLeft = 1;        
-
+            public static int remoteMeetingsLeft = 1;
 
             public static bool canSeeVoteColors = false;
             public static int tasksNeededToSeeVoteColors;
@@ -705,8 +704,8 @@ namespace TheOtherRoles
             camoComms = false;
             camouflageTimer = 0f;
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-        if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
-        if (Ninja.ninja == p && Ninja.isInvisble) continue;
+                if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
+                if (Ninja.ninja == p && Ninja.isInvisble) continue;
                 p.setDefaultLook();
             }
         }

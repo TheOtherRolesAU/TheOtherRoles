@@ -7,6 +7,7 @@ using HarmonyLib;
 using Hazel;
 using System.Reflection;
 using System.Text;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 

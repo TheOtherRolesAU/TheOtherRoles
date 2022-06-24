@@ -74,4 +74,8 @@ public static class StopLoadingMainMenu
     {
         return !BepInExUpdater.UpdateRequired;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f87e7b855179c27b6df581a1e3ce513b1c77d900
