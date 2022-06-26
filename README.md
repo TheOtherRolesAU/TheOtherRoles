@@ -1219,12 +1219,12 @@ Because of the vents the Engineer might not be able to start some tasks using th
 
 ## Sheriff
 ### **Team: Crewmates**
-The Sheriff has the ability to kill Impostors.\
+The Sheriff has the ability to kill Impostors or Neutral roles if enabled.\
 If they try to kill a Crewmate, they die instead.\
 \
 **NOTE:**
 - If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
-- If the Sheriff shoots a Mini Impostor, the Sheriff dies if the Mini is still growing up. If it's 18, the Mini Impostor dies.
+- If the Sheriff shoots a Mini Impostor while growing up, nothing happens. If it's fully grown, the Mini Impostor dies.
 
 ### Game Options
 | Name | Description |
