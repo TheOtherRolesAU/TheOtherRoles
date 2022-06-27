@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using Il2CppSystem;
 using HarmonyLib;
-using UnhollowerBaseLib;
-using Assets.CoreScripts;
+using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
     public class CustomColors {
@@ -186,7 +182,7 @@ namespace TheOtherRoles.Modules {
             [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]
             private static class PlayerControlCheckColorPatch {
                 private static bool isTaken(PlayerControl player, uint color) {
-                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers)
+                    foreach (GameData.PlayerInfo p in GameData.Instance.AllPlayers.GetFastEnumerator())
                         if (!p.Disconnected && p.PlayerId != player.PlayerId && p.DefaultOutfit.ColorId == color)
                             return true;
                     return false;
