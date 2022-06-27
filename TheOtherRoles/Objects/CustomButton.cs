@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
+using TheOtherRoles.Players;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static TheOtherRoles.TheOtherRoles;
@@ -11,6 +11,10 @@ namespace TheOtherRoles.Objects {
     {
         public static List<CustomButton> buttons = new List<CustomButton>();
         public ActionButton actionButton;
+        public GameObject actionButtonGameObject;
+        public SpriteRenderer actionButtonRenderer;
+        public Material actionButtonMat;
+        public TextMeshPro actionButtonLabelText;
         public Vector3 PositionOffset;
         public float MaxTimer = float.MaxValue;
         public float Timer = 0f;
@@ -31,6 +35,7 @@ namespace TheOtherRoles.Objects {
         public KeyCode? hotkey;
         private string buttonText;
         public bool isHandcuffed = false;
+        private static readonly int Desat = Shader.PropertyToID("_Desat");
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
@@ -51,8 +56,12 @@ namespace TheOtherRoles.Objects {
             Timer = 16.2f;
             buttons.Add(this);
             actionButton = UnityEngine.Object.Instantiate(hudManager.KillButton, hudManager.KillButton.transform.parent);
+            actionButtonGameObject = actionButton.gameObject;
+            actionButtonRenderer = actionButton.graphic;
+            actionButtonMat = actionButtonRenderer.material;
+            actionButtonLabelText = actionButton.buttonLabelText;
             PassiveButton button = actionButton.GetComponent<PassiveButton>();
-            this.showButtonText = (actionButton.graphic.sprite == Sprite || buttonText != "");
+            this.showButtonText = (actionButtonRenderer.sprite == Sprite || buttonText != "");
             button.OnClick = new Button.ButtonClickedEvent();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)onClickEvent);
 
@@ -66,11 +75,11 @@ namespace TheOtherRoles.Objects {
         {
             if (this.Timer < 0f && HasButton() && CouldUse())
             {
-                actionButton.graphic.color = new Color(1f, 1f, 1f, 0.3f);
+                actionButtonRenderer.color = new Color(1f, 1f, 1f, 0.3f);
                 this.OnClick();
 
                 // Deputy skip onClickEvent if handcuffed
-                if (Deputy.handcuffedKnows.ContainsKey(PlayerControl.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[PlayerControl.LocalPlayer.PlayerId] > 0f) return;
+                if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] > 0f) return;
 
                 if (this.HasEffect && !this.isEffectActive) {
                     this.DeputyTimer = this.EffectDuration;
@@ -132,17 +141,20 @@ namespace TheOtherRoles.Objects {
 
         public void setActive(bool isActive) {
             if (isActive) {
-                actionButton.gameObject.SetActive(true);
-                actionButton.graphic.enabled = true;
+                actionButtonGameObject.SetActive(true);
+                actionButtonRenderer.enabled = true;
             } else {
-                actionButton.gameObject.SetActive(false);
-                actionButton.graphic.enabled = false;
+                actionButtonGameObject.SetActive(false);
+                actionButtonRenderer.enabled = false;
             }
         }
 
         public void Update()
         {
-            if (PlayerControl.LocalPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
+            var localPlayer = CachedPlayer.LocalPlayer;
+            var moveable = localPlayer.PlayerControl.moveable;
+            
+            if (localPlayer.Data == null || MeetingHud.Instance || ExileController.Instance || !HasButton()) {
                 setActive(false);
                 return;
             }
@@ -151,7 +163,7 @@ namespace TheOtherRoles.Objects {
             if (DeputyTimer >= 0) { // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
                 if (HasEffect && isEffectActive)
                     DeputyTimer -= Time.deltaTime;
-                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
+                else if (!localPlayer.PlayerControl.inVent && moveable)
                     DeputyTimer -= Time.deltaTime;
             }
 
@@ -166,28 +178,28 @@ namespace TheOtherRoles.Objects {
                 return;
             }
 
-            actionButton.graphic.sprite = Sprite;
+            actionButtonRenderer.sprite = Sprite;
             if (showButtonText && buttonText != ""){
                 actionButton.OverrideText(buttonText);
             }
-            actionButton.buttonLabelText.enabled = showButtonText; // Only show the text if it's a kill button
+            actionButtonLabelText.enabled = showButtonText; // Only show the text if it's a kill button
             if (hudManager.UseButton != null) {
                 Vector3 pos = hudManager.UseButton.transform.localPosition;
                 if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
                 actionButton.transform.localPosition = pos + PositionOffset;
             }
             if (CouldUse()) {
-                actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.EnabledColor;
-                actionButton.graphic.material.SetFloat("_Desat", 0f);
+                actionButtonRenderer.color = actionButtonLabelText.color = Palette.EnabledColor;
+                actionButtonMat.SetFloat(Desat, 0f);
             } else {
-                actionButton.graphic.color = actionButton.buttonLabelText.color = Palette.DisabledClear;
-                actionButton.graphic.material.SetFloat("_Desat", 1f);
+                actionButtonRenderer.color = actionButtonLabelText.color = Palette.DisabledClear;
+                actionButtonMat.SetFloat(Desat, 1f);
             }
         
             if (Timer >= 0) {
                 if (HasEffect && isEffectActive)
                     Timer -= Time.deltaTime;
-                else if (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable)
+                else if (!localPlayer.PlayerControl.inVent && moveable)
                     Timer -= Time.deltaTime;
             }
             
@@ -203,7 +215,7 @@ namespace TheOtherRoles.Objects {
             if (hotkey.HasValue && Input.GetKeyDown(hotkey.Value)) onClickEvent();
 
             // Deputy disable the button and display Handcuffs instead...
-            if (Deputy.handcuffedPlayers.Contains(PlayerControl.LocalPlayer.PlayerId)) {
+            if (Deputy.handcuffedPlayers.Contains(localPlayer.PlayerId)) {
                 OnClick = () => {
                     Deputy.setHandcuffedKnows();
                 };
