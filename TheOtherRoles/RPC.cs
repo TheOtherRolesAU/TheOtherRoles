@@ -147,6 +147,7 @@ namespace TheOtherRoles
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
+            Helpers.toggleZoom(reset : true);
         }
 
         public static void HandleShareOptions(byte numberOfOptions, MessageReader reader) {            

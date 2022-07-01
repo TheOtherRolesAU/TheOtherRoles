@@ -54,7 +54,6 @@ namespace TheOtherRoles
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
 
-        public static bool zoomOutStatus = false;
         public static PoolablePlayer morphTargetDisplay;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
