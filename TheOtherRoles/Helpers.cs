@@ -395,7 +395,7 @@ namespace TheOtherRoles {
             TheOtherRolesPlugin.Logger.LogMessage(Camera.main.orthographicSize);
             float orthographicSize = reset || zoomOutStatus ? 3f : 12f;
 
-            zoomOutStatus = !zoomOutStatus;
+            zoomOutStatus = !zoomOutStatus && !reset;
             Camera.main.orthographicSize = orthographicSize;
             foreach (var cam in Camera.allCameras) {
                 if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize = orthographicSize;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
