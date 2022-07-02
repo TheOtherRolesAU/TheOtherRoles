@@ -39,6 +39,7 @@ namespace TheOtherRoles
             Seer.clearAndReload();
             Morphling.clearAndReload();
             Camouflager.clearAndReload();
+            Cultist.clearAndReload();
             Hacker.clearAndReload();
             Tracker.clearAndReload();
             Vampire.clearAndReload();
@@ -148,6 +149,35 @@ namespace TheOtherRoles
               triggerProsecutorWin = false;
               targetWasGuessed = false;
               target = null;
+            }
+        }
+        
+        public static class Cultist {
+            public static PlayerControl cultist;
+            public static Color color = Palette.ImpostorRed;
+            public static bool needsFollower = true;
+            public static PlayerControl currentFollower;
+                public static Sprite buttonSprite;
+
+
+            public static Sprite getSidekickButtonSprite() {
+                if (buttonSprite) return buttonSprite;
+                buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.SidekickButton.png", 115f);
+                return buttonSprite;
+            }
+
+            public static void clearAndReload() {
+                cultist = null;
+                currentFollower = null;
+                needsFollower = true;
+            }
+        }
+
+        public static class Crew {
+            public static PlayerControl crew;
+            public static Color color = Palette.White;
+            public static void clearAndReload() {
+                crew = null;
             }
         }
 

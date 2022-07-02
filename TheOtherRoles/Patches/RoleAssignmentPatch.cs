@@ -88,6 +88,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Witch, CustomOptionHolder.witchSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Ninja, CustomOptionHolder.ninjaSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Blackmailer, CustomOptionHolder.blackmailerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.Cultist, CustomOptionHolder.cultistSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.prosecutorSpawnRate.getSelection());
@@ -135,6 +136,23 @@ namespace TheOtherRoles.Patches {
         }
 
         private static void assignSpecialRoles(RoleAssignmentData data) {
+            
+            // //Assign Cultist
+            // if (data.impostors.Count >= 2 && data.maxImpostorRoles >= 2 && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10))
+            // {
+                // var index = rnd.Next(0, data.impostors.Count);
+                // PlayerControl playerControl = data.impostors[index];
+
+                // Helpers.turnToCrewmate(playerControl);
+                
+                // data.impostors.RemoveAt(index);
+                // data.crewmates.Add(playerControl);
+                // setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
+                // //data.impostors.Count = 1;
+                // data.maxImpostorRoles = 1;
+
+
+            // }
             // Assign Mafia
             if (data.impostors.Count >= 3 && data.maxImpostorRoles >= 3 && (rnd.Next(1, 101) <= CustomOptionHolder.mafiaSpawnRate.getSelection() * 10)) {
                 setRoleToRandomPlayer((byte)RoleId.Godfather, data.impostors);

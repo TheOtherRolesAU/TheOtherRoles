@@ -157,6 +157,27 @@ namespace TheOtherRoles {
 			}
 		}
 
+        public static void turnToCrewmate(PlayerControl player) {
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TurnToCrewmate, Hazel.SendOption.Reliable, -1);
+            writer.Write(player.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.turnToCrewmate(player.PlayerId);
+            foreach (var player2 in PlayerControl.AllPlayerControls) {
+                if (player2.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
+                    player.cosmetics.nameText.color = Palette.White;
+                }
+            }
+
+        }
+        
+        public static void turnToCrewmate(List<PlayerControl> players, PlayerControl player) {
+            foreach (PlayerControl p in players) {
+                if (p == player) continue;
+                turnToCrewmate(p);
+            }
+        }
+
         public static void turnToImpostor(PlayerControl player) {
             player.Data.Role.TeamType = RoleTeamTypes.Impostor;
             RoleManager.Instance.SetRole(player, RoleTypes.Impostor);

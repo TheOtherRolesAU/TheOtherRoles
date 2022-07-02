@@ -23,10 +23,12 @@ namespace TheOtherRoles
         Engineer,
         Sheriff,
         Deputy,
+        Cultist,
         Lighter,
         Werewolf,
         Godfather,
         Mafioso,
+        Crew,
         Janitor,
         Detective,
         TimeMaster,
@@ -122,6 +124,7 @@ namespace TheOtherRoles
         DeputyUsedHandcuffs,
         DeputyPromotes,
         JackalCreatesSidekick,
+        CreateCrewmate,
         SidekickPromotes,
         ErasePlayerRoles,
         SetFutureErased,
@@ -132,6 +135,8 @@ namespace TheOtherRoles
         PlacePortal,
     AmnisiacTakeRole,
         UsePortal,
+        CultistCreateImposter,
+        TurnToCrewmate,
         PlaceJackInTheBox,
         LightsOut,
         PlaceCamera,
@@ -207,6 +212,9 @@ namespace TheOtherRoles
                     switch((RoleId)roleId) {
                     case RoleId.Jester:
                         Jester.jester = player;
+                        break;
+                    case RoleId.Crew:
+                        Crew.crew = player;
                         break;
                     case RoleId.Werewolf:
                         Werewolf.werewolf = player;
@@ -349,6 +357,13 @@ namespace TheOtherRoles
                     case RoleId.Ninja:
                         Ninja.ninja = player;
                         break;
+                    case RoleId.Cultist:
+                        Cultist.cultist = player;
+                        List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                        impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
+                        Helpers.turnToCrewmate(impostors,player);
+
+                        break;
                     }
                 }
         }
@@ -439,7 +454,26 @@ namespace TheOtherRoles
             PlayerControl.GameOptions.MapId = mapId;
         }
 
+        public static void setCrewmate(PlayerControl player) {
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
+
+        }
+
+     public static void turnToCrewmate(byte targetId) {
+            PlayerControl player = Helpers.playerById(targetId);
+            if (player == null) return;
+            player.Data.Role.TeamType = RoleTeamTypes.Crewmate;
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
+            erasePlayerRoles(player.PlayerId, true);
+            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;   
+            setRole((byte)RoleId.Crew,targetId);
+         //   player.Data.Role.IsImpostor = false;
+        }
+
         // Role functionality
+
+
 
         public static void engineerFixLights() {
             SwitchSystem switchSystem = MapUtilities.Systems[SystemTypes.Electrical].CastFast<SwitchSystem>();
@@ -603,21 +637,23 @@ namespace TheOtherRoles
                 case RoleId.Godfather:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Godfather.clearAndReload();
-                    Godfather.godfather = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+                    
+                case RoleId.Cultist:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Mafioso:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Mafioso.clearAndReload();
-                    Mafioso.mafioso = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Janitor:
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Janitor.clearAndReload();
-                    Janitor.janitor = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
@@ -878,6 +914,14 @@ namespace TheOtherRoles
         }
     }
 
+
+
+        public static void cultistCreateImposter(byte targetId) {
+            PlayerControl player = Helpers.playerById(targetId);
+            Helpers.turnToImpostor(player);
+            Cultist.needsFollower = false;
+        }
+        
         public static void veterenAlert() {
             Veteren.alertActive = true;
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Veteren.alertDuration, new Action<float>((p) => {
@@ -1150,6 +1194,7 @@ namespace TheOtherRoles
             if (player == Janitor.janitor) Janitor.clearAndReload();
             if (player == Vampire.vampire) Vampire.clearAndReload();
             if (player == Eraser.eraser) Eraser.clearAndReload();
+            if (player == Cultist.cultist) Cultist.clearAndReload();
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Undertaker.undertaker) Undertaker.clearAndReload();
@@ -1833,6 +1878,13 @@ namespace TheOtherRoles
                     byte invisibleFlag3 = reader.ReadByte();
                     RPCProcedure.setInvisibleGen(invisiblePlayer3, invisibleFlag3);
                     break;  
+                case (byte)CustomRPC.CultistCreateImposter:
+                    RPCProcedure.cultistCreateImposter(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.TurnToCrewmate:
+                    RPCProcedure.turnToCrewmate(reader.ReadByte());
+                    break;
+
             }
         }
     }

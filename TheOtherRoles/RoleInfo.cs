@@ -27,6 +27,7 @@ namespace TheOtherRoles
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
+        public static RoleInfo crew = new RoleInfo("Crewmate", Crew.color, "Find the Impostors", "Find the Impostors", RoleId.Crew, true);
         public static RoleInfo werewolf = new RoleInfo("Werewolf", Werewolf.color, "Rampage and kill everyone", "Rampage and kill everyone", RoleId.Werewolf, true);
         public static RoleInfo prosecutor = new RoleInfo("Prosecutor", Prosecutor.color, "Vote out your target", "Vote our your target", RoleId.Prosecutor, true);
 		public static RoleInfo swooper = new RoleInfo("Swooper", Swooper.color, "Turn Invisable and kill everyone", "Turn Invisable", RoleId.Swooper, true);
@@ -74,6 +75,7 @@ namespace TheOtherRoles
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch);
+        public static RoleInfo cultist = new RoleInfo("Cultist", Cultist.color, "Recruit for your cause", "Recruit for your cause", RoleId.Cultist);
         public static RoleInfo ninja = new RoleInfo("Ninja", Ninja.color, "Surprise and assassinate your foes", "Surprise and assassinate your foes", RoleId.Ninja);
         public static RoleInfo blackmailer = new RoleInfo("Blackmailer", Blackmailer.color, "Blackmail those who seek to hurt you", "Blackmail those who seek to hurt you", RoleId.Blackmailer);
 
@@ -104,6 +106,7 @@ namespace TheOtherRoles
             cleaner,
             warlock,
             werewolf,
+            cultist,
             bountyHunter,
             witch,
             ninja,
@@ -126,6 +129,7 @@ namespace TheOtherRoles
             mayor,
             portalmaker,
             engineer,
+            crew,
             sheriff,
             deputy,
             lighter,
@@ -199,7 +203,9 @@ namespace TheOtherRoles
             if (p == Ninja.ninja) infos.Add(ninja);
             if (p == Blackmailer.blackmailer) infos.Add(blackmailer);
             if (p == Detective.detective) infos.Add(detective);
+            if (p == Crew.crew) infos.Add(crew);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
+            if (p == Cultist.cultist) infos.Add(cultist);
             if (p == Amnisiac.amnisiac) infos.Add(amnisiac);
             if (p == Veteren.veteren) infos.Add(veteren);
             if (p == Medic.medic) infos.Add(medic);
