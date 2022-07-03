@@ -11,7 +11,7 @@ using TheOtherRoles.Utilities;
 namespace TheOtherRoles.Patches {
     public class GameStartManagerPatch  {
         public static Dictionary<int, PlayerVersion> playerVersions = new Dictionary<int, PlayerVersion>();
-        private static float timer = 600f;
+        public static float timer = 600f;
         private static float kickingTimer = 0f;
         private static bool versionSent = false;
         private static string lobbyCodeText = "";
@@ -122,7 +122,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 // Lobby timer
-                if (!AmongUsClient.Instance.AmHost || !GameData.Instance) return; // Not host or no instance
+                if (!GameData.Instance) return; // No instance
 
                 if (update) currentText = __instance.PlayerCounter.text;
 
