@@ -22,6 +22,7 @@ namespace TheOtherRoles
         private static CustomButton amnisiacRememberButton;
         private static CustomButton veterenAlertButton;
         private static CustomButton medicShieldButton;
+        private static CustomButton cultistTurnButton;
         private static CustomButton shifterShiftButton;
         private static CustomButton morphlingButton;
         private static CustomButton camouflagerButton;
@@ -1896,6 +1897,23 @@ namespace TheOtherRoles
                false,
                "Meeting"
            );
+           
+            // Jackal Sidekick Button
+            cultistTurnButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CultistCreateImposter, Hazel.SendOption.Reliable, -1);
+                    writer.Write(Cultist.currentFollower.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.cultistCreateImposter(Cultist.currentFollower.PlayerId);
+                },
+                () => { return Cultist.needsFollower && Cultist.cultist != null && Cultist.cultist == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { return Cultist.needsFollower && Cultist.currentFollower != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
+                () => { jackalSidekickButton.Timer = jackalSidekickButton.MaxTimer;},
+                Cultist.getSidekickButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
 
             zoomOutButton = new CustomButton(
                 () => { Helpers.toggleZoom();

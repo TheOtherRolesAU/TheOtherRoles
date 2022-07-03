@@ -284,6 +284,13 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+       static void cultistSetFollower() {
+            var untargetablePlayers = new List<PlayerControl>();
+            if (Mini.mini != null && !Mini.isGrownUp()) untargetablePlayers.Add(Mini.mini); // Exclude Jackal from targeting the Mini unless it has grown up
+            Cultist.currentFollower = setTarget(untargetablePlayers: untargetablePlayers);
+            setPlayerOutline(Cultist.currentFollower, Palette.ImpostorRed);
+        }
+
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != CachedPlayer.LocalPlayer.PlayerControl) return;
 
@@ -1010,6 +1017,9 @@ namespace TheOtherRoles.Patches {
 		arsonistUpdate();
 		// Vulture
                 vultureUpdate();
+                
+                //Cultist
+                cultistSetFollower();
 		// Amnisiac
 		amnisiacUpdate();
                 // Medium
