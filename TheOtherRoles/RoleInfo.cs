@@ -145,7 +145,7 @@ namespace TheOtherRoles
             if (showModifier) {
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
                 if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
-                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
+                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId) && (!Bait.isHidden || PlayerControl.LocalPlayer.Data.IsDead)) infos.Add(bait);
                 if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);

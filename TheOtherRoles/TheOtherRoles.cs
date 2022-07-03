@@ -1522,6 +1522,7 @@ namespace TheOtherRoles
         public static float reportDelayMin = 0f;
         public static float reportDelayMax = 0f;
         public static bool showKillFlash = true;
+        public static bool isHidden;
 
         public static void clearAndReload() {
             bait = new List<PlayerControl>();
@@ -1530,6 +1531,7 @@ namespace TheOtherRoles
             reportDelayMax = CustomOptionHolder.modifierBaitReportDelayMax.getFloat();
             if (reportDelayMin > reportDelayMax) reportDelayMin = reportDelayMax;
             showKillFlash = CustomOptionHolder.modifierBaitShowKillFlash.getBool();
+            isHidden = CustomOptionHolder.modifierBaitIsHidden.getBool();
         }
     }
 

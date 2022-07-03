@@ -230,6 +230,7 @@ namespace TheOtherRoles {
         public static CustomOption modifierBaitReportDelayMin;
         public static CustomOption modifierBaitReportDelayMax;
         public static CustomOption modifierBaitShowKillFlash;
+        public static CustomOption modifierBaitIsHidden;
 
         public static CustomOption modifierLover;
         public static CustomOption modifierLoverImpLoverRate;
@@ -524,6 +525,7 @@ namespace TheOtherRoles {
             modifierBaitReportDelayMin = CustomOption.Create(1032, Types.Modifier, "Bait Report Delay Min", 0f, 0f, 10f, 1f, modifierBait);
             modifierBaitReportDelayMax = CustomOption.Create(1033, Types.Modifier, "Bait Report Delay Max", 0f, 0f, 10f, 1f, modifierBait);
             modifierBaitShowKillFlash = CustomOption.Create(1034, Types.Modifier, "Warn The Killer With A Flash", true, modifierBait);
+            modifierBaitIsHidden = CustomOption.Create(1035, Types.Modifier, "Bait Is Hidden", true, modifierBait);
 
             modifierLover = CustomOption.Create(1040, Types.Modifier, cs(Color.yellow, "Lovers"), rates, null, true);
             modifierLoverImpLoverRate = CustomOption.Create(1041, Types.Modifier, "Chance That One Lover Is Impostor", rates, modifierLover);
