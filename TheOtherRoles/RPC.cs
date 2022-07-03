@@ -918,6 +918,7 @@ namespace TheOtherRoles
 
         public static void cultistCreateImposter(byte targetId) {
             PlayerControl player = Helpers.playerById(targetId);
+            erasePlayerRoles(player.PlayerId, false);
             Helpers.turnToImpostor(player);
             Cultist.needsFollower = false;
         }

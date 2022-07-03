@@ -88,7 +88,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Witch, CustomOptionHolder.witchSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Ninja, CustomOptionHolder.ninjaSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Blackmailer, CustomOptionHolder.blackmailerSpawnRate.getSelection());
-            impSettings.Add((byte)RoleId.Cultist, CustomOptionHolder.cultistSpawnRate.getSelection());
+            // Don't spawn cultist normally : impSettings.Add((byte)RoleId.Cultist, CustomOptionHolder.cultistSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.prosecutorSpawnRate.getSelection());
@@ -138,6 +138,9 @@ namespace TheOtherRoles.Patches {
         private static void assignSpecialRoles(RoleAssignmentData data) {
             
             // //Assign Cultist
+            if (Cultist.isCultistGame) {
+                setRoleToRandomPlayer((byte)RoleId.Cultist, data.impostors);
+            }
             // if (data.impostors.Count >= 2 && data.maxImpostorRoles >= 2 && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10))
             // {
                 // var index = rnd.Next(0, data.impostors.Count);
