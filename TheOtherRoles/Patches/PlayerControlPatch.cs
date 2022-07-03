@@ -1028,6 +1028,9 @@ namespace TheOtherRoles.Patches {
             if (target.hasFakeTasks())
                 target.clearAllTasks();
 
+            // First kill (set before lover suicide)
+            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
+
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
@@ -1127,9 +1130,6 @@ namespace TheOtherRoles.Patches {
                 }
                 Helpers.showFlash(color, 1.5f);
             }
-
-            // First kill
-            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
         }
     }
 
