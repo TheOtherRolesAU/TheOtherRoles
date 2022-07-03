@@ -47,7 +47,7 @@ namespace TheOtherRoles.Patches {
             private static string currentText = "";
         
             public static void Prefix(GameStartManager __instance) {
-                if (!AmongUsClient.Instance.AmHost  || !GameData.Instance ) return; // Not host or no instance
+                if (!GameData.Instance ) return; // No instance
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
             }
 
