@@ -155,6 +155,7 @@ namespace TheOtherRoles
         public static class Cultist {
             public static PlayerControl cultist;
             public static Color color = Palette.ImpostorRed;
+            public static bool isCultistGame = false;
             public static bool needsFollower = true;
             public static PlayerControl currentFollower;
                 public static Sprite buttonSprite;
