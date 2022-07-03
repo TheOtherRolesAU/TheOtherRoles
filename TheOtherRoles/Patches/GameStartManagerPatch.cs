@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Hazel;
 using System;
 using TheOtherRoles.Players;
+using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Patches {
@@ -162,6 +163,19 @@ namespace TheOtherRoles.Patches {
                             break;
                         }
                     }
+                    if (Cultist.isCultistGame)  {
+                       PlayerControl.GameOptions.NumImpostors = 2;
+                       Cultist.isCultistGame = false;
+                    }
+
+                    if (CustomOptionHolder.swooperSpawnRate.getSelection() != 0 && (rnd.Next(1, 101) <= CustomOptionHolder.cultistSpawnRate.getSelection() * 10)) {
+                      // We should have Custist (Cultist is only supported on 2 Impostors)
+                      Cultist.isCultistGame = true;
+                      PlayerControl.GameOptions.NumImpostors = 1;
+                    } else {
+                      Cultist.isCultistGame = false;
+                    }
+
 
                     if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
                         // 0 = Skeld
