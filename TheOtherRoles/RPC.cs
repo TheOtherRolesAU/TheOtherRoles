@@ -749,6 +749,7 @@ namespace TheOtherRoles
             if (flag == byte.MaxValue)
             {
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
+                target.cosmetics.colorBlindText.gameObject.SetActive(SaveManager.colorblindMode);
                 if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
                 Ninja.isInvisble = false;
                 return;
@@ -758,6 +759,7 @@ namespace TheOtherRoles
             Color color = Color.clear;           
             if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
             target.cosmetics.currentBodySprite.BodySprite.color = color;
+            target.cosmetics.colorBlindText.gameObject.SetActive(false);
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
         }
