@@ -36,6 +36,21 @@ namespace TheOtherRoles {
     {
 
         public static Dictionary<string, Sprite> CachedSprites = new();
+        public static Sprite teamJackalChat = null;
+        public static Sprite teamLoverChat = null;
+
+            public static Sprite getTeamJackalChatButtonSprite() {
+                if (teamJackalChat) return teamJackalChat;
+                teamJackalChat = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TeamJackalChat.png", 115f);
+                return teamJackalChat;
+            }
+
+            public static Sprite getLoversChatButtonSprite() {
+                if (teamLoverChat) return teamLoverChat;
+                teamLoverChat = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LoversChat.png", 115f);
+                return teamLoverChat;
+            }
+
 
         public static void enableCursor(bool initalSetCursor) {
             if (initalSetCursor) {
@@ -51,6 +66,11 @@ namespace TheOtherRoles {
                 Cursor.SetCursor(sprite.texture, Vector2.zero, CursorMode.Auto);
             }
         }
+
+
+                public static int flipBitwise(int bit) {
+                    return -(Math.Abs(bit - 1));
+                }
 
 		public static SabatageTypes getActiveSabo() {
 			foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator()) {
@@ -94,6 +114,45 @@ namespace TheOtherRoles {
                             Swooper.swooper.killTimer = HudManagerStartPatch.swooperKillButton.Timer = HudManagerStartPatch.swooperKillButton.MaxTimer;
 
                 }
+
+                public static bool isTeamJackal(PlayerControl player) {
+                    if (Jackal.jackal == player) return true;
+                    if (Sidekick.sidekick == player) return true;
+                    return false;
+                }
+ 
+                public static bool isTeamJackalWithChat(PlayerControl player) {
+                    if (!isTeamJackal(player)) return false;
+                    return Jackal.hasChat;
+                }
+
+public static bool isPlayerLover(PlayerControl player) {
+     return !(player == null) && (player == Lovers.lover1 || player == Lovers.lover2);
+}
+
+        public static PlayerControl getChatPartner(this PlayerControl player)
+        {
+            if (!Jackal.hasChat || Sidekick.sidekick == null) return Lovers.getPartner(player);
+
+            if (isPlayerLover(player) && !isTeamJackal(player))
+                return Lovers.getPartner(player);
+            if (isTeamJackal(player) && !isPlayerLover(player)) {
+              if (Jackal.jackal == player) return Sidekick.sidekick;
+              if (Sidekick.sidekick == player) return Jackal.jackal;
+            }
+            if (isPlayerLover(player) && isTeamJackal(player)) {
+              if (Jackal.jackal == player) {
+                if (Jackal.chatTarget == 1) return Sidekick.sidekick;
+                else return Lovers.getPartner(player);
+              }
+
+              if (Sidekick.sidekick == player) {
+                if (Sidekick.chatTarget == 1) return Jackal.jackal;
+                else return Lovers.getPartner(player);
+              }
+            } 
+            return null;
+        }
 
 		public static bool isSaboActive() {
 			return !(Helpers.getActiveSabo() == SabatageTypes.None);

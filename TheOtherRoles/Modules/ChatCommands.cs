@@ -8,6 +8,7 @@ namespace TheOtherRoles.Modules {
     [HarmonyPatch]
     public static class ChatCommands {
         public static bool isLover(this PlayerControl player) => !(player == null) && (player == Lovers.lover1 || player == Lovers.lover2);
+        public static bool isTeamJackal(this PlayerControl player) => !(player == null) && (player == Jackal.jackal || player == Sidekick.sidekick);
 
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
         private static class SendChatPatch {
@@ -64,6 +65,15 @@ namespace TheOtherRoles.Modules {
                     }
                 }
 
+
+                if (text.ToLower().StartsWith("/team")) {
+                    if (CachedPlayer.LocalPlayer.PlayerControl.isLover() && CachedPlayer.LocalPlayer.PlayerControl.isTeamJackal() && Jackal.hasChat) {
+                        if (Sidekick.sidekick == CachedPlayer.LocalPlayer.PlayerControl) Sidekick.chatTarget = Helpers.flipBitwise(Sidekick.chatTarget);
+                        if (Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl) Jackal.chatTarget = Helpers.flipBitwise(Jackal.chatTarget);
+                        handled = true;
+                    }
+                }
+
                 if (handled) {
                     __instance.TextArea.Clear();
                     __instance.quickChatMenu.ResetGlyphs();
@@ -74,7 +84,11 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
         public static class EnableChat {
             public static void Postfix(HudManager __instance) {
+                PlayerControl player = CachedPlayer.LocalPlayer.PlayerControl;
                 if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.GameMode == GameModes.FreePlay || (CachedPlayer.LocalPlayer.PlayerControl.isLover() && Lovers.enableChat)))
+                    __instance.Chat.SetVisible(true);
+
+                if (!__instance.Chat.isActiveAndEnabled && (AmongUsClient.Instance.GameMode == GameModes.FreePlay || (CachedPlayer.LocalPlayer.PlayerControl.isTeamJackal() && Jackal.hasChat)))
                     __instance.Chat.SetVisible(true);
             }
         }
@@ -93,7 +107,12 @@ namespace TheOtherRoles.Modules {
                 if (__instance != FastDestroyableSingleton<HudManager>.Instance.Chat)
                     return true;
                 PlayerControl localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-                return localPlayer == null || (MeetingHud.Instance != null || LobbyBehaviour.Instance != null || (localPlayer.Data.IsDead || localPlayer.isLover() && Lovers.enableChat) || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId);
+                bool isTeamJackalWithChat = CachedPlayer.LocalPlayer.PlayerControl.isTeamJackal() && Jackal.hasChat;
+                return localPlayer == null || 
+                    (MeetingHud.Instance != null || LobbyBehaviour.Instance != null ||
+                    localPlayer.Data.IsDead || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId ||
+                    (localPlayer.isLover() && Lovers.enableChat && Helpers.getChatPartner(sourcePlayer) == localPlayer) || 
+                    (isTeamJackalWithChat && Helpers.getChatPartner(sourcePlayer) == localPlayer));
 
             }
         }

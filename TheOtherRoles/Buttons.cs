@@ -29,6 +29,7 @@ namespace TheOtherRoles
         private static CustomButton portalmakerPlacePortalButton;
         private static CustomButton usePortalButton;
         private static CustomButton hackerButton;
+        private static CustomButton changeChatButton;
         public static CustomButton hackerVitalsButton;
         public static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
@@ -149,6 +150,7 @@ namespace TheOtherRoles
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
             zoomOutButton.MaxTimer = 0f;
+            changeChatButton.MaxTimer = 0f;
         }
         public static void showTargetNameOnButton(PlayerControl target, CustomButton button, string defaultText) {
                 Helpers.showTargetNameOnButton(target, button, defaultText);
@@ -1929,6 +1931,29 @@ namespace TheOtherRoles
                 KeyCode.KeypadPlus
                 );
             zoomOutButton.Timer = 0f;
+
+
+            changeChatButton = new CustomButton(
+                () => { 
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal) Jackal.chatTarget = Helpers.flipBitwise(Jackal.chatTarget);
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick) Sidekick.chatTarget = Helpers.flipBitwise(Sidekick.chatTarget);
+                },
+                () => { return (Helpers.isPlayerLover(CachedPlayer.LocalPlayer.PlayerControl) && Helpers.isTeamJackal(CachedPlayer.LocalPlayer.PlayerControl)); },
+                () => { 
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal) {
+                        changeChatButton.Sprite = Jackal.chatTarget == 1 ? Helpers.getTeamJackalChatButtonSprite() : Helpers.getLoversChatButtonSprite(); 
+                    }
+                    if (CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick) {
+                        changeChatButton.Sprite = Sidekick.chatTarget == 1 ? Helpers.getTeamJackalChatButtonSprite() : Helpers.getLoversChatButtonSprite(); 
+                    }
+                    return true; },
+                () => { return; },
+                Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LoversChatButton.png", 150f),  // Invisible button!
+                new Vector3(0.4f, 3.8f, 0),
+                __instance,
+                KeyCode.KeypadMinus
+                );
+            changeChatButton.Timer = 0f;
 
             // Set the default (or settings from the previous game) timers / durations when spawning the buttons
             setCustomButtonCooldowns();

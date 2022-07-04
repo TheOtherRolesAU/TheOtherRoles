@@ -1057,7 +1057,9 @@ namespace TheOtherRoles
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
         public static bool hasImpostorVision = false;
+        public static int chatTarget = 1;
         public static bool wasTeamRed;
+        public static bool hasChat = false;
         public static bool wasImpostor;
         public static bool wasSpy;
 
@@ -1079,6 +1081,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             jackal = null;
             currentTarget = null;
+            chatTarget = 1;
             fakeSidekick = null;
             cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
             createSidekickCooldown = CustomOptionHolder.jackalCreateSidekickCooldown.getFloat();
@@ -1087,6 +1090,7 @@ namespace TheOtherRoles
             jackalPromotedFromSidekickCanCreateSidekick = CustomOptionHolder.jackalPromotedFromSidekickCanCreateSidekick.getBool();
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
             formerJackals.Clear();
+            hasChat = CustomOptionHolder.jackalhasChat.getBool();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
             wasTeamRed = wasImpostor = wasSpy = false;
         }
@@ -1108,6 +1112,8 @@ namespace TheOtherRoles
         public static bool canKill = true;
         public static bool promotesToJackal = true;
         public static bool hasImpostorVision = false;
+        public static int chatTarget = 1;
+
 
         public static void clearAndReload() {
             sidekick = null;
@@ -1118,6 +1124,7 @@ namespace TheOtherRoles
             promotesToJackal = CustomOptionHolder.sidekickPromotesToJackal.getBool();
             hasImpostorVision = CustomOptionHolder.jackalAndSidekickHaveImpostorVision.getBool();
             wasTeamRed = wasImpostor = wasSpy = false;
+            chatTarget = 1;
         }
     }
 
