@@ -147,6 +147,7 @@ namespace TheOtherRoles
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
+            Helpers.toggleZoom(reset : true);
         }
 
         public static void HandleShareOptions(byte numberOfOptions, MessageReader reader) {            
@@ -749,6 +750,7 @@ namespace TheOtherRoles
             if (flag == byte.MaxValue)
             {
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
+                target.cosmetics.colorBlindText.gameObject.SetActive(SaveManager.colorblindMode);
                 if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
                 Ninja.isInvisble = false;
                 return;
@@ -758,6 +760,7 @@ namespace TheOtherRoles
             Color color = Color.clear;           
             if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
             target.cosmetics.currentBodySprite.BodySprite.color = color;
+            target.cosmetics.colorBlindText.gameObject.SetActive(false);
             Ninja.invisibleTimer = Ninja.invisibleDuration;
             Ninja.isInvisble = true;
         }
@@ -981,6 +984,8 @@ namespace TheOtherRoles
                     byte major = reader.ReadByte();
                     byte minor = reader.ReadByte();
                     byte patch = reader.ReadByte();
+                    float timer = reader.ReadSingle();
+                    if (!AmongUsClient.Instance.AmHost && timer >= 0f) GameStartManagerPatch.timer = timer;
                     int versionOwnerId = reader.ReadPackedInt32();
                     byte revision = 0xFF;
                     Guid guid;

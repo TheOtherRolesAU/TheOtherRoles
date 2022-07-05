@@ -118,6 +118,14 @@ namespace TheOtherRoles.Patches {
            
         }
 
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CreatePlayer))]
+        class CreatePlayerPatch {
+            public static void Postfix(IntroCutscene __instance, bool impostorPositioning, ref PoolablePlayer __result) {
+                if (impostorPositioning) __result.SetNameColor(Palette.ImpostorRed);
+            }
+        }
+
+
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
             static public void SetRoleTexts(IntroCutscene __instance) {

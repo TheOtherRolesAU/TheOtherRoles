@@ -1,0 +1,38 @@
+name: AutoBuild .NET
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.cache/bepinex
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.x
+
+      - name: Build
+        run: dotnet build TheOtherRoles/TheOtherRoles.csproj --configuration Release
+
+      - name: Upload TheOtherRoles
+        uses: actions/upload-artifact@v2
+        with:
+          name: TheOtherRoles.dll
+          path: TheOtherRoles/bin/Release/netstandard2.1/TheOtherRoles.dll

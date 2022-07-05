@@ -142,15 +142,15 @@ namespace TheOtherRoles
             if (p == null) return infos;
 
             // Modifier
-            if (showModifier) {
+            if (showModifier && (CustomOptionHolder.modifiersAreHidden.getSelection() < 2 || PlayerControl.LocalPlayer.Data.IsDead)) {
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
                 if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
-                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
+                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId) && (CustomOptionHolder.modifiersAreHidden.getSelection() == 0 || PlayerControl.LocalPlayer.Data.IsDead)) infos.Add(bait);
                 if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
-                if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
+                if (Vip.vip.Any(x => x.PlayerId == p.PlayerId) && (CustomOptionHolder.modifiersAreHidden.getSelection() == 0 || PlayerControl.LocalPlayer.Data.IsDead)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }
 
