@@ -100,24 +100,24 @@ Psynomit    probablyadnf    JustASysAdmin
 
 ";
                 creditsString += $@"<size=60%> Other Credits & Resources:
-OxygenFilter - For all the version v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation
-Reactor - The framework used for all version before v2.0.0
-BepInEx - Used to hook game functions
-Essentials - Custom game options by DorCoMaNdO:
+OxygenFilter - For all the versions between v2.3.0 and v2.6.1, we were using the OxygenFilter for automatic deobfuscation
+Reactor - The framework used for all versions before v2.0.0
+BepInEx - Used to hook to game functions
+Essentials - Custom game options by DorCoMaNdO
 
 Before v1.6: We used the default Essentials release
-v1.6-v1.8: We slightly changed the default Essentials. The changes can be found on this branch of our fork.
-v2.0.0 and later: As we're not using Reactor anymore, we are using our own implementation, inspired by the one from DorCoMaNdO
-Jackal and Sidekick - Original idea for the Jackal and Sidekick comes from Dhalucard
-Among-Us-Love-Couple-Mod - Idea for the Lovers role comes from Woodi-dev
-Jester - Idea for the Jester role comes from Maartii
-ExtraRolesAmongUs - Idea for the Engineer and Medic role comes from NotHunter101. Also some code snippets come of the implementation were used.
-Among-Us-Sheriff-Mod - Idea for the Sheriff role comes from Woodi-dev
-TooManyRolesMods - Idea for the Detective and Time Master roles comes from Hardel-DW. Also some code snippets of the implementation were used.
-TownOfUs - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role come from Slushiegoose
-Ottomated - Idea for the Morphling, Snitch and Camouflager role come from Ottomated
+v1.6-v1.8: We slightly changed the default Essentials release. The changes can be found on GitHub Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption.
+v2.0.0 and later: We're no longer using Reactor anymore we are using our own implementation inspired by the one from DorCoMaNdO
+Jackal and Sidekick - Original idea for the Jackal and Sidekick came from Dhalucard
+Among-Us-Love-Couple-Mod - Idea for the Lovers modifier came from Woodi-dev
+Jester - Idea for the Jester role came from Maartii
+ExtraRolesAmongUs - Idea for the Engineer and Medic role came from NotHunter101. Also some code snippets from their implementation were used.
+Among-Us-Sheriff-Mod - Idea for the Sheriff role came from Woodi-dev
+TooManyRolesMods - Idea for the Detective and Time Master roles came from Hardel-DW. Also some code snippets from their implementation were used.
+TownOfUs - Idea for the Swapper, Shifter, Arsonist, and a similar Mayor role came from Slushiegoose
+Ottomated - Idea for the Morphling, Snitch and Camouflager role came from Ottomated
 Crowded-Mod - Our implementation for 10+ player lobbies is inspired by the one from the Crowded Mod Team
-Goose-Goose-Duck - Idea for the Vulture role come from Slushygoose</size>";
+Goose-Goose-Duck - Idea for the Vulture role come from Slushiegoose</size>";
                 creditsString += "</align>";
                 popUp.AnnounceTextMeshPro.text = creditsString;
                 __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) => {
