@@ -55,7 +55,10 @@ namespace TheOtherRoles.Patches {
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
                 }
-            } 
+            }
+
+            // Force Reload of SoundEffectHolder
+            SoundEffectsManager.Load();
 
             // First kill
             if (AmongUsClient.Instance.AmHost && MapOptions.shieldFirstKill && MapOptions.firstKillName != "") {
@@ -114,6 +117,14 @@ namespace TheOtherRoles.Patches {
             __instance.ourCrewmate.gameObject.SetActive(false);
            
         }
+
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CreatePlayer))]
+        class CreatePlayerPatch {
+            public static void Postfix(IntroCutscene __instance, bool impostorPositioning, ref PoolablePlayer __result) {
+                if (impostorPositioning) __result.SetNameColor(Palette.ImpostorRed);
+            }
+        }
+
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {

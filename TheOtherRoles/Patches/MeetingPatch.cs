@@ -274,7 +274,8 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        private static GameObject guesserUI;
+        public static GameObject guesserUI;
+        public static PassiveButton guesserUIExitButton;
         static void guesserOnClick(int buttonTarget, MeetingHud __instance) {
             if (guesserUI != null || !(__instance.state == MeetingHud.VoteStates.Voted || __instance.state == MeetingHud.VoteStates.NotVoted)) return;
             __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(false));
@@ -296,9 +297,13 @@ namespace TheOtherRoles.Patches {
             exitButton.gameObject.GetComponent<SpriteRenderer>().sprite = smallButtonTemplate.GetComponent<SpriteRenderer>().sprite;
             exitButtonParent.transform.localPosition = new Vector3(2.725f, 2.1f, -5);
             exitButtonParent.transform.localScale = new Vector3(0.217f, 0.9f, 1);
-            exitButton.GetComponent<PassiveButton>().OnClick.RemoveAllListeners();
-            exitButton.GetComponent<PassiveButton>().OnClick.AddListener((System.Action)(() => {
-                __instance.playerStates.ToList().ForEach(x => x.gameObject.SetActive(true));
+            guesserUIExitButton = exitButton.GetComponent<PassiveButton>();
+            guesserUIExitButton.OnClick.RemoveAllListeners();
+            guesserUIExitButton.OnClick.AddListener((System.Action)(() => {
+                __instance.playerStates.ToList().ForEach(x => {
+                    x.gameObject.SetActive(true);
+                    if (CachedPlayer.LocalPlayer.Data.IsDead && x.transform.FindChild("ShootButton") != null) UnityEngine.Object.Destroy(x.transform.FindChild("ShootButton").gameObject);
+                });
                 UnityEngine.Object.Destroy(container.gameObject);
             }));
 
@@ -316,6 +321,7 @@ namespace TheOtherRoles.Patches {
                 else if (new List<RoleId>() { RoleId.Janitor, RoleId.Godfather, RoleId.Mafioso }.Contains(roleInfo.roleId) && CustomOptionHolder.mafiaSpawnRate.getSelection() == 0) continue;
                 else if (roleInfo.roleId == RoleId.Sidekick && (!CustomOptionHolder.jackalCanCreateSidekick.getBool() || CustomOptionHolder.jackalSpawnRate.getSelection() == 0)) continue;
                 if (roleInfo.roleId == RoleId.Deputy && (CustomOptionHolder.deputySpawnRate.getSelection() == 0 || CustomOptionHolder.sheriffSpawnRate.getSelection() == 0)) continue;
+                if (roleInfo.roleId == RoleId.Pursuer && CustomOptionHolder.lawyerSpawnRate.getSelection() == 0) continue;
                 if (roleInfo.roleId == RoleId.Spy && roleData.impostors.Count <= 1) continue;
 
                 if (Guesser.guesserCantGuessSnitch && Snitch.snitch != null) {
@@ -356,6 +362,7 @@ namespace TheOtherRoles.Patches {
                             MessageWriter murderAttemptWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                             AmongUsClient.Instance.FinishRpcImmediately(murderAttemptWriter);
                             RPCProcedure.shieldedMurderAttempt();
+                            SoundEffectsManager.play("fail");
                             return;
                         }
 
@@ -559,6 +566,9 @@ namespace TheOtherRoles.Patches {
                 
                 // Reset zoomed out ghosts
                 Helpers.toggleZoom(reset: true);
+
+                // Stop all playing sounds
+                SoundEffectsManager.stopAll();
             }
         }
 

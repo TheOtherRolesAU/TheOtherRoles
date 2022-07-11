@@ -286,6 +286,7 @@ namespace TheOtherRoles
                     byte localPlayerId = CachedPlayer.LocalPlayer.PlayerId;
                     handcuffedKnows.Add(localPlayerId, handcuffDuration);
                     handcuffedPlayers.RemoveAll(x => x == localPlayerId);
+                    SoundEffectsManager.play("deputyHandcuff");
                 }
 
                 HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);

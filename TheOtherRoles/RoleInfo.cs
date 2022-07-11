@@ -143,14 +143,18 @@ namespace TheOtherRoles
 
             // Modifier
             if (showModifier) {
+                // after dead modifier
+                if (!CustomOptionHolder.modifiersAreHidden.getBool() || PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
+                    if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
+                    if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
+                }
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
                 if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
-                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
-                if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
-                if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }
 
