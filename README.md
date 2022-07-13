@@ -803,6 +803,7 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 | Morphling Spawn Chance | -
 | Morphling Cooldown | -
 | Morph Duration | Time the Morphling stays morphed
+| Morphling Can Use Vents | Yes/No |
 -----------------------
 
 ## Camouflager
@@ -997,6 +998,7 @@ When performing a ninja ability kill, the ninja can be invisible for some second
 | Trace Duration | -
 | Time Till Trace Color Has Faded | -
 | Time The Ninja Is Invisible | -
+| Ninja Can Use Vents | Yes/No |
 -----------------------
 
 ## Guesser
