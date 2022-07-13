@@ -26,6 +26,7 @@ namespace TheOtherRoles {
         public static CustomOption morphlingSpawnRate;
         public static CustomOption morphlingCooldown;
         public static CustomOption morphlingDuration;
+        public static CustomOption morphlingCanUseVents;
 
         public static CustomOption camouflagerSpawnRate;
         public static CustomOption camouflagerCooldown;
@@ -90,6 +91,7 @@ namespace TheOtherRoles {
         public static CustomOption ninjaTraceTime;
         public static CustomOption ninjaTraceColorTime;
         public static CustomOption ninjaInvisibleDuration;
+        public static CustomOption ninjaCanUseVents;
 
         public static CustomOption shifterSpawnRate;
         public static CustomOption shifterShiftsModifiers;
@@ -311,6 +313,7 @@ namespace TheOtherRoles {
             morphlingSpawnRate = CustomOption.Create(20, Types.Impostor, cs(Morphling.color, "Morphling"), rates, null, true);
             morphlingCooldown = CustomOption.Create(21, Types.Impostor, "Morphling Cooldown", 30f, 10f, 60f, 2.5f, morphlingSpawnRate);
             morphlingDuration = CustomOption.Create(22, Types.Impostor, "Morph Duration", 10f, 1f, 20f, 0.5f, morphlingSpawnRate);
+            morphlingCanUseVents = CustomOption.Create(23, Types.Impostor, "Morphling Can Use Vents", true, morphlingSpawnRate);
 
             camouflagerSpawnRate = CustomOption.Create(30, Types.Impostor, cs(Camouflager.color, "Camouflager"), rates, null, true);
             camouflagerCooldown = CustomOption.Create(31, Types.Impostor, "Camouflager Cooldown", 30f, 10f, 60f, 2.5f, camouflagerSpawnRate);
@@ -358,6 +361,7 @@ namespace TheOtherRoles {
             ninjaTraceTime = CustomOption.Create(383, Types.Impostor, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
             ninjaTraceColorTime = CustomOption.Create(384, Types.Impostor, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
             ninjaInvisibleDuration = CustomOption.Create(385, Types.Impostor, "Time The Ninja Is Invisible", 3f, 0f, 20f, 1f, ninjaSpawnRate);
+            ninjaCanUseVents = CustomOption.Create(386, Types.Impostor, "Ninja Can Use Vents", true, ninjaSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
