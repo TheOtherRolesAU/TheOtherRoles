@@ -660,28 +660,28 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 
 
 # Credits & Resources
-[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all the version v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation\
-[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all version before v2.0.0\
-[BepInEx](https://github.com/BepInEx) - Used to hook game functions\
+[OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all the versions between v2.3.0 and v2.6.1, we were using the OxygenFilter for automatic deobfuscation\
+[Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all versions before v2.0.0\
+[BepInEx](https://github.com/BepInEx) - Used to hook to game functions\
 [Essentials](https://github.com/DorCoMaNdO/Reactor-Essentials) - Custom game options by **DorCoMaNdO**:
 - Before v1.6: We used the default Essentials release
-- v1.6-v1.8: We slightly changed the default Essentials. The changes can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of our fork.
-- v2.0.0 and later: As we're not using Reactor anymore, we are using our own implementation, inspired by the one from **DorCoMaNdO**
+- v1.6-v1.8: We slightly changed the default Essentials release. The changes can be found on this [branch](https://github.com/Eisbison/Reactor-Essentials/tree/feature/TheOtherRoles-Adaption) of our fork.
+- v2.0.0 and later: We're no longer using Reactor anymore we are using our own implementation inspired by the one from **DorCoMaNdO**
 
-[Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick comes from **Dhalucard**\
-[Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers role comes from **Woodi-dev**\
-[Jester](https://github.com/Maartii/Jester) - Idea for the Jester role comes from **Maartii**\
-[ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role comes from **NotHunter101**. Also some code snippets come of the implementation were used.\
-[Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role comes from **Woodi-dev**\
-[TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles comes from **Hardel-DW**. Also some code snippets of the implementation were used.\
-[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role come from **Slushiegoose**\
-[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role come from **Ottomated**\
+[Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick came from **Dhalucard**\
+[Among-Us-Love-Couple-Mod](https://github.com/Woodi-dev/Among-Us-Love-Couple-Mod) - Idea for the Lovers modifier came from **Woodi-dev**\
+[Jester](https://github.com/Maartii/Jester) - Idea for the Jester role came from **Maartii**\
+[ExtraRolesAmongUs](https://github.com/NotHunter101/ExtraRolesAmongUs) - Idea for the Engineer and Medic role came from **NotHunter101**. Also some code snippets from their implementation were used.\
+[Among-Us-Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Idea for the Sheriff role came from **Woodi-dev**\
+[TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Idea for the Detective and Time Master roles came from **Hardel-DW**. Also some code snippets from their implementation were used.\
+[TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Swapper, Shifter, Arsonist, and a similar Mayor role came from **Slushiegoose**\
+[Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role came from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies is inspired by the one from the **Crowded Mod Team**\
-[Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role come from **Slushygoose**
+[Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server ip and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the `BepInEx\config\me.eisbison.theotherroles.cfg` file.
+- **Streamer Mode:** You can activate the streamer mode in the Among Us settings. It hides the lobby code, the custom server IP and the custom server port. You can set a custom lobby code replacement text, by changing the *Streamer Mode Replacement Text* in the `BepInEx\config\me.eisbison.theotherroles.cfg` file.
 - **Number of Crewmates:** The number of Crewmate roles can be set inside a lobby.
 - **Number of Neutrals:** The number of Neutral roles can be set inside a lobby.
 - **Number of Impostors:** The number of Impostor roles can be set inside a lobby.
@@ -803,6 +803,7 @@ The Morphling is an Impostor which can additionally scan the appearance of a pla
 | Morphling Spawn Chance | -
 | Morphling Cooldown | -
 | Morph Duration | Time the Morphling stays morphed
+| Morphling Can Use Vents | Yes/No |
 -----------------------
 
 ## Camouflager
@@ -997,6 +998,7 @@ When performing a ninja ability kill, the ninja can be invisible for some second
 | Trace Duration | -
 | Time Till Trace Color Has Faded | -
 | Time The Ninja Is Invisible | -
+| Ninja Can Use Vents | Yes/No |
 -----------------------
 
 ## Guesser
