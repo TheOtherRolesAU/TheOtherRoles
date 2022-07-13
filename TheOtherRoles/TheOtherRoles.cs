@@ -570,6 +570,7 @@ namespace TheOtherRoles
         public static PlayerControl sampledTarget;
         public static PlayerControl morphTarget;
         public static float morphTimer = 0f;
+        public static bool canUseVents = true;
 
         public static void resetMorph() {
             morphTarget = null;
@@ -585,6 +586,7 @@ namespace TheOtherRoles
             sampledTarget = null;
             morphTarget = null;
             morphTimer = 0f;
+            canUseVents = CustomOptionHolder.morphlingCanUseVents.getBool();
             cooldown = CustomOptionHolder.morphlingCooldown.getFloat();
             duration = CustomOptionHolder.morphlingDuration.getFloat();
         }
@@ -1481,6 +1483,7 @@ namespace TheOtherRoles
         public static float traceTime = 1f;
         public static bool knowsTargetLocation = false;
         public static float invisibleDuration = 5f;
+        public static bool canUseVents = true;
 
         public static float invisibleTimer = 0f;
         public static bool isInvisble = false;
@@ -1506,6 +1509,7 @@ namespace TheOtherRoles
             knowsTargetLocation = CustomOptionHolder.ninjaKnowsTargetLocation.getBool();
             traceTime = CustomOptionHolder.ninjaTraceTime.getFloat();
             invisibleDuration = CustomOptionHolder.ninjaInvisibleDuration.getFloat();
+            canUseVents = CustomOptionHolder.ninjaCanUseVents.getBool();
             invisibleTimer = 0f;
             isInvisble = false;
             if (arrow?.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
