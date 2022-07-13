@@ -322,14 +322,14 @@ namespace TheOtherRoles {
                 roleCouldUse = true;
             else if (Vulture.canUseVents && Vulture.vulture != null && Vulture.vulture == player)
                 roleCouldUse = true;
-            else if (Morphling.canUseVents && Morphling.morphling != null && Morphling.morphling == player)
-                roleCouldUse = true;
-            else if (Ninja.canUseVents && Ninja.ninja != null && Ninja.ninja == player)
-                roleCouldUse = true;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
                 if (Janitor.janitor != null && Janitor.janitor == CachedPlayer.LocalPlayer.PlayerControl)
                     roleCouldUse = false;
                 else if (Mafioso.mafioso != null && Mafioso.mafioso == CachedPlayer.LocalPlayer.PlayerControl && Godfather.godfather != null && !Godfather.godfather.Data.IsDead)
+                    roleCouldUse = false;
+                else if (!Ninja.canUseVents && Ninja.ninja != null && Ninja.ninja == player)
+                    roleCouldUse = false;
+                else if (!Morphling.canUseVents && Morphling.morphling != null && Morphling.morphling == player)
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
