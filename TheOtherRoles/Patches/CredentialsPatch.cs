@@ -2,7 +2,6 @@
 using System;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
-using TheOtherRoles.Players;
 using UnityEngine;
 
 namespace TheOtherRoles.Patches {

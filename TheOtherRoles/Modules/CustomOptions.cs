@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Text;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
-using TheOtherRoles.Players;
 
 namespace TheOtherRoles {
     public class CustomOption {

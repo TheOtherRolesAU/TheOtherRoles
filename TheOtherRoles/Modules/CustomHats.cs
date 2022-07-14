@@ -11,7 +11,6 @@ using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
-using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]

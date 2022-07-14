@@ -1,11 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-<<<<<<< HEAD
-        <Version>5.4.1</Version>
-=======
-        <Version>4.1.6</Version>
->>>>>>> 5829cb380e670f8e3ed0d9bd14eb9544ff6b5b10
+        <Version>5.4.6</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>

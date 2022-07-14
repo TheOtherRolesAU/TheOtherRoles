@@ -4,7 +4,6 @@ using Hazel;
 using InnerNet;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
-using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]

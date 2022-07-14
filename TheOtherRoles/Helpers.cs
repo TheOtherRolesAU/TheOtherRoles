@@ -653,12 +653,8 @@ public static bool isPlayerLover(PlayerControl player) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-<<<<<<< HEAD
                 RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
-=======
-                RPCProcedure.shieldedMurderAttempt();
                 SoundEffectsManager.play("fail");
->>>>>>> 5829cb380e670f8e3ed0d9bd14eb9544ff6b5b10
                 return MurderAttemptResult.SuppressKill;
             }
 

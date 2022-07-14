@@ -3,7 +3,6 @@ using HarmonyLib;
 using System.Linq;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
-using TheOtherRoles.Players;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]

@@ -742,7 +742,6 @@ namespace TheOtherRoles
                 // if (Ninja.ninja == p && Ninja.isInvisble) continue;
             foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 p.setDefaultLook();
-            }
         }
 
         public static void clearAndReload() {
