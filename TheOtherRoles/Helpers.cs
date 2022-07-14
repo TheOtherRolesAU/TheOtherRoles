@@ -72,6 +72,19 @@ namespace TheOtherRoles {
                     return -(Math.Abs(bit - 1));
                 }
 
+
+        public static bool roleCanSabotage(this PlayerControl player) {
+            bool roleCouldUse = false;
+            if (Jackal.canSabotage) {
+                if (player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player)) {
+                    roleCouldUse = true;
+                }
+            } else if (player.Data?.Role != null && player.Data.Role.IsImpostor)
+                roleCouldUse = true;
+            return roleCouldUse;
+        }
+
+
 		public static SabatageTypes getActiveSabo() {
 			foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator()) {
 				if (task.TaskType == TaskTypes.FixLights) {
@@ -248,6 +261,14 @@ public static bool isPlayerLover(PlayerControl player) {
                 if (player2.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor) {
                     player.cosmetics.nameText.color = Palette.ImpostorRed;
                 }
+            }
+        }
+        
+          public static bool ShowButtons {
+            get {
+                return !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) &&
+                      !MeetingHud.Instance &&
+                      !ExileController.Instance;
             }
         }
 

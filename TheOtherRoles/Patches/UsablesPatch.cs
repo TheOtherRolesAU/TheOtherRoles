@@ -136,6 +136,11 @@ namespace TheOtherRoles.Patches {
             if (__instance.AmOwner && __instance.roleCanUseVents() && FastDestroyableSingleton<HudManager>.Instance.ReportButton.isActiveAndEnabled) {
                 FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.Show();
             }
+            if (__instance.roleCanSabotage()) {
+                HudManager.Instance.SabotageButton.Show();
+                HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+            }
+
         }
     }
 

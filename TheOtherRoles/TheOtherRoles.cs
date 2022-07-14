@@ -1056,6 +1056,7 @@ namespace TheOtherRoles
         public static float cooldown = 30f;
         public static float createSidekickCooldown = 30f;
         public static bool canUseVents = true;
+        public static bool canSabotage = false;
         public static bool canCreateSidekick = true;
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
@@ -1085,6 +1086,7 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             jackal = null;
             currentTarget = null;
+            canSabotage = CustomOptionHolder.jackalCanUseSabo.getBool();
             chatTarget = 1;
             fakeSidekick = null;
             cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
@@ -1879,6 +1881,7 @@ namespace TheOtherRoles
     
     public static class Indomitable {
         public static PlayerControl indomitable;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
 
 
         public static void clearAndReload() {

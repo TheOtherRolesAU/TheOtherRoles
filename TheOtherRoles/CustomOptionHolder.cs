@@ -71,6 +71,7 @@ namespace TheOtherRoles {
         public static CustomOption jesterHasImpostorVision;
 		
         public static CustomOption prosecutorSpawnRate;
+        public static CustomOption prosecutorPreferAmnesiac;
 
         public static CustomOption amnisiacSpawnRate;
         public static CustomOption amnisiacShowArrows;
@@ -84,6 +85,7 @@ namespace TheOtherRoles {
         public static CustomOption jackalKillCooldown;
         public static CustomOption jackalCreateSidekickCooldown;
         public static CustomOption jackalCanUseVents;
+        public static CustomOption jackalCanUseSabo;
         public static CustomOption jackalhasChat;
         public static CustomOption jackalCanCreateSidekick;
         public static CustomOption sidekickPromotesToJackal;
@@ -452,6 +454,7 @@ namespace TheOtherRoles {
             jackalCreateSidekickCooldown = CustomOption.Create(222, Types.Neutral, "Jackal Create Sidekick Cooldown", 30f, 10f, 60f, 2.5f, jackalSpawnRate);
             jackalhasChat = CustomOption.Create(1197, Types.Neutral, "Jackal team has Chat", false, jackalSpawnRate);
             jackalCanUseVents = CustomOption.Create(223, Types.Neutral, "Jackal Can Use Vents", true, jackalSpawnRate);
+            jackalCanUseSabo = CustomOption.Create(8876, Types.Neutral, "Jackal Team Can Sabo", false, jackalSpawnRate);
             jackalCanCreateSidekick = CustomOption.Create(224, Types.Neutral, "Jackal Can Create A Sidekick", false, jackalSpawnRate);
             sidekickPromotesToJackal = CustomOption.Create(225, Types.Neutral, "Sidekick Gets Promoted To Jackal On Jackal Death", false, jackalCanCreateSidekick);
             sidekickCanKill = CustomOption.Create(226, Types.Neutral, "Sidekick Can Kill", false, jackalCanCreateSidekick);
@@ -629,7 +632,7 @@ namespace TheOtherRoles {
             modifierMini = CustomOption.Create(1061, Types.Modifier, cs(Color.yellow, "Mini"), rates, null, true);
             modifierMiniGrowingUpDuration = CustomOption.Create(1062, Types.Modifier, "Mini Growing Up Duration", 400f, 100f, 1500f, 100f, modifierMini);
             
-            modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Indomitable.color, "Indomitable"), rates, null, true);
+            modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Color.yellow, "Indomitable"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, Types.Modifier, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
