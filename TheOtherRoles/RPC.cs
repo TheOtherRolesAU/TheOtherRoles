@@ -758,12 +758,12 @@ namespace TheOtherRoles
 
                 case RoleId.Jackal:
                     Jackal.jackal = amnisiac;
-            Jackal.formerJackals.Add(target);
+                    Jackal.formerJackals.Add(target);
                     Amnisiac.clearAndReload();
                     break;
 
                 case RoleId.Sidekick:
-            Jackal.formerJackals.Add(target);
+                    Jackal.formerJackals.Add(target);
                     if (Amnisiac.resetRole) Sidekick.clearAndReload();
                     Sidekick.sidekick = amnisiac;
                     Amnisiac.clearAndReload();
@@ -1517,8 +1517,13 @@ namespace TheOtherRoles
             if (Prosecutor.prosecutor == null) return;
             PlayerControl player = Prosecutor.prosecutor;
             Prosecutor.clearAndReload();
-            Pursuer.pursuer = player;
-            Pursuer.wasProsecutor = true;
+            
+            // Add Option to make Exe Amnesiac if it doesn't exist.
+            if (Amnisiac.amnisiac == null && Prosecutor.preferAmnesiac) Amnisiac.amnisiac = player;
+            else {
+                Pursuer.pursuer = player;
+                Pursuer.wasProsecutor = true;
+            }
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
