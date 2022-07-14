@@ -141,12 +141,14 @@ namespace TheOtherRoles
             public static Color color = new Color32(201, 204, 63, byte.MaxValue);
             public static Color targetColor = new Color32(0, 0, 0, byte.MaxValue);
             public static bool targetWasGuessed = false;
+            public static bool preferAmnesiac = false;
 
             public static bool triggerProsecutorWin = false;
 
             public static void clearAndReload() {
               prosecutor = null;
               triggerProsecutorWin = false;
+              preferAmnesiac = CustomOptionHolder.prosecutorPreferAmnesiac.getBool();
               targetWasGuessed = false;
               target = null;
             }
@@ -1877,7 +1879,6 @@ namespace TheOtherRoles
     
     public static class Indomitable {
         public static PlayerControl indomitable;
-        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
 
 
         public static void clearAndReload() {
