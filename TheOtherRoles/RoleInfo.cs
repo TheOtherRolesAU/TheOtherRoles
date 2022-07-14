@@ -29,7 +29,7 @@ namespace TheOtherRoles
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
         public static RoleInfo crew = new RoleInfo("Crewmate", Crew.color, "Find the Impostors", "Find the Impostors", RoleId.Crew, true);
         public static RoleInfo werewolf = new RoleInfo("Werewolf", Werewolf.color, "Rampage and kill everyone", "Rampage and kill everyone", RoleId.Werewolf, true);
-        public static RoleInfo prosecutor = new RoleInfo("Prosecutor", Prosecutor.color, "Vote out your target", "Vote our your target", RoleId.Prosecutor, true);
+        public static RoleInfo prosecutor = new RoleInfo("Executioner", Prosecutor.color, "Vote out your target", "Vote out your target", RoleId.Prosecutor, true);
 		public static RoleInfo swooper = new RoleInfo("Swooper", Swooper.color, "Turn Invisable and kill everyone", "Turn Invisable", RoleId.Swooper, true);
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);

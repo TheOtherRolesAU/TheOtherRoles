@@ -322,7 +322,7 @@ namespace TheOtherRoles.Patches {
                 textRenderer.color = Jester.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.ProsecutorWin) {
-                textRenderer.text = "Prosecutor Wins";
+                textRenderer.text = "Executioner Wins";
                 textRenderer.color = Prosecutor.color;
             }
             else if (AdditionalTempData.winCondition == WinCondition.SwooperWin) {
