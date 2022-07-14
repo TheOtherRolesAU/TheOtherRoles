@@ -1227,6 +1227,7 @@ namespace TheOtherRoles
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
             if (player == Prosecutor.prosecutor) Prosecutor.clearAndReload();
+            if (player == Werewolf.werewolf) Werewolf.clearAndReload();
             if (player == Swooper.swooper) Swooper.clearAndReload();
             if (player == Miner.miner) Miner.clearAndReload();
             if (player == Arsonist.arsonist) Arsonist.clearAndReload();
