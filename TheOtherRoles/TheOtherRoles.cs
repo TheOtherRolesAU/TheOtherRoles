@@ -343,6 +343,7 @@ namespace TheOtherRoles
                     byte localPlayerId = CachedPlayer.LocalPlayer.PlayerId;
                     handcuffedKnows.Add(localPlayerId, handcuffDuration);
                     handcuffedPlayers.RemoveAll(x => x == localPlayerId);
+                    SoundEffectsManager.play("deputyHandcuff");
                 }
 
                 HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
@@ -735,9 +736,11 @@ namespace TheOtherRoles
             if (Helpers.isCamoComms()) return;
             camoComms = false;
             camouflageTimer = 0f;
-            foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
-                if (Ninja.ninja == p && Ninja.isInvisble) continue;
+            // Commenting instead of removing old code just in case
+            // foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+                // if (Swooper.swoopTimer > 0 && Swooper.swooper == p) continue;
+                // if (Ninja.ninja == p && Ninja.isInvisble) continue;
+            foreach (PlayerControl p in CachedPlayer.AllPlayers)
                 p.setDefaultLook();
             }
         }

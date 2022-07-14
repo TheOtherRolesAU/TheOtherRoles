@@ -319,6 +319,34 @@ public static bool isPlayerLover(PlayerControl player) {
             return null;
         }
 
+        public static AudioClip loadAudioClipFromResources(string path, string clipName = "UNNAMED_TOR_AUDIO_CLIP") {
+            // must be "raw (headerless) 2-channel signed 32 bit pcm (le)" (can e.g. use Audacity® to export)
+            try {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Stream stream = assembly.GetManifestResourceStream(path);
+                var byteAudio = new byte[stream.Length];
+                _ = stream.Read(byteAudio, 0, (int)stream.Length);
+                float[] samples = new float[byteAudio.Length / 4]; // 4 bytes per sample
+                int offset;
+                for (int i = 0; i < samples.Length; i++) {
+                    offset = i * 4;
+                    samples[i] = (float)BitConverter.ToInt32(byteAudio, offset) / Int32.MaxValue;
+                }
+                int channels = 2;
+                int sampleRate = 48000;
+                AudioClip audioClip = AudioClip.Create(clipName, samples.Length, channels, sampleRate, false);
+                audioClip.SetData(samples, 0);
+                return audioClip;
+            } catch {
+                System.Console.WriteLine("Error loading AudioClip from resources: " + path);
+            }
+            return null;
+
+            /* Usage example:
+            AudioClip exampleClip = Helpers.loadAudioClipFromResources("TheOtherRoles.Resources.exampleClip.raw");
+            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);
+            */
+        }
         public static PlayerControl playerById(byte id)
         {
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
@@ -523,8 +551,7 @@ public static bool isPlayerLover(PlayerControl player) {
             else clip = nextSkin.IdleAnim;
             float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             playerPhysics.myPlayer.cosmetics.skin.skin = nextSkin;
-            if (playerPhysics.myPlayer.cosmetics.skin.layer.material == FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial)
-                target.SetPlayerMaterialColors(playerPhysics.myPlayer.cosmetics.skin.layer);
+            playerPhysics.myPlayer.cosmetics.skin.UpdateMaterial();
             spriteAnim.Play(clip, 1f);
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);
@@ -626,7 +653,12 @@ public static bool isPlayerLover(PlayerControl player) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
+<<<<<<< HEAD
                 RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
+=======
+                RPCProcedure.shieldedMurderAttempt();
+                SoundEffectsManager.play("fail");
+>>>>>>> 5829cb380e670f8e3ed0d9bd14eb9544ff6b5b10
                 return MurderAttemptResult.SuppressKill;
             }
 
@@ -688,6 +720,7 @@ public static bool isPlayerLover(PlayerControl player) {
             writer.Write((byte)TheOtherRolesPlugin.Version.Major);
             writer.Write((byte)TheOtherRolesPlugin.Version.Minor);
             writer.Write((byte)TheOtherRolesPlugin.Version.Build);
+            writer.Write(AmongUsClient.Instance.AmHost ? Patches.GameStartManagerPatch.timer : -1f);
             writer.WritePacked(AmongUsClient.Instance.ClientId);
             writer.Write((byte)(TheOtherRolesPlugin.Version.Revision < 0 ? 0xFF : TheOtherRolesPlugin.Version.Revision));
             writer.Write(Assembly.GetExecutingAssembly().ManifestModule.ModuleVersionId.ToByteArray());
@@ -707,19 +740,19 @@ public static bool isPlayerLover(PlayerControl player) {
         }
 
 
+        public static bool zoomOutStatus = false;
         public static void toggleZoom(bool reset=false) {
-            float zoomFactor = 4f;
-            if (HudManagerStartPatch.zoomOutStatus)
-                zoomFactor = 1 / zoomFactor;
-            else if (reset) return; // Dont zoom out if meant to reset.
-            HudManagerStartPatch.zoomOutStatus = !HudManagerStartPatch.zoomOutStatus;
-            Camera.main.orthographicSize *= zoomFactor;
+            TheOtherRolesPlugin.Logger.LogMessage(Camera.main.orthographicSize);
+            float orthographicSize = reset || zoomOutStatus ? 3f : 12f;
+
+            zoomOutStatus = !zoomOutStatus && !reset;
+            Camera.main.orthographicSize = orthographicSize;
             foreach (var cam in Camera.allCameras) {
-                if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize *= zoomFactor;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
+                if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize = orthographicSize;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
             }
 
-            HudManagerStartPatch.zoomOutButton.Sprite = HudManagerStartPatch.zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 150f / zoomFactor * 2) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
-            HudManagerStartPatch.zoomOutButton.PositionOffset = HudManagerStartPatch.zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
+            HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
+            HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
         }
         

@@ -6,6 +6,7 @@ using System.Linq;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.GameHistory;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 using TheOtherRoles.Players;
@@ -627,7 +628,6 @@ namespace TheOtherRoles.Patches {
             int numberOfTasks = playerTotal - playerCompleted;
 
             if (numberOfTasks <= Snitch.taskCountForReveal && (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick || CachedPlayer.LocalPlayer.PlayerControl == Swooper.swooper)))) {
-
                 if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
                 if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
                     Snitch.localArrows[0].arrow.SetActive(true);
@@ -1152,6 +1152,9 @@ namespace TheOtherRoles.Patches {
             if (target.hasFakeTasks())
                 target.clearAllTasks();
 
+            // First kill (set before lover suicide)
+            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
+
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
@@ -1263,9 +1266,6 @@ namespace TheOtherRoles.Patches {
                 }
                 Helpers.showFlash(color, 1.5f);
             }
-
-            // First kill
-            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
         }
     }
 

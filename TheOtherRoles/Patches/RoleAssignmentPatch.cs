@@ -21,6 +21,7 @@ namespace TheOtherRoles.Patches {
         private static int crewValues;
         private static int impValues;
         private static bool isEvilGuesser;
+        private static List<Tuple<byte, byte>> playerRoleMap = new List<Tuple<byte, byte>>();
         public static void Postfix() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -37,8 +38,9 @@ namespace TheOtherRoles.Patches {
             assignEnsuredRoles(data); // Assign roles that should always be in the game next
             assignDependentRoles(data); // Assign roles that may have a dependent role
             assignChanceRoles(data); // Assign roles that may or may not be in the game last
-            assignRoleTargets(data);
             assignModifiers();
+            assignRoleTargets(data);
+            setRolesAgain();
         }
 
         public static RoleAssignmentData getRoleAssignmentData() {
@@ -482,6 +484,7 @@ namespace TheOtherRoles.Patches {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
             if (removePlayer) playerList.RemoveAt(index);
+            playerRoleMap.Add(new Tuple<byte, byte>(playerId, roleId));
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
             writer.Write(roleId);
@@ -583,6 +586,25 @@ namespace TheOtherRoles.Patches {
             }
                  
             return selection;
+        }
+
+        private static void setRolesAgain()
+        {
+
+            while (playerRoleMap.Any())
+            {
+                byte amount = (byte)Math.Min(playerRoleMap.Count, 20);
+                var writer = AmongUsClient.Instance!.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.WorkaroundSetRoles, SendOption.Reliable, -1);
+                writer.Write(amount);
+                for (int i = 0; i < amount; i++)
+                {
+                    var option = playerRoleMap[0];
+                    playerRoleMap.RemoveAt(0);
+                    writer.WritePacked((uint)option.Item1);
+                    writer.WritePacked((uint)option.Item2);
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+            }
         }
 
 
