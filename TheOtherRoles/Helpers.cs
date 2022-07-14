@@ -459,7 +459,7 @@ public static bool isPlayerLover(PlayerControl player) {
         }
 
         public static bool canBeErased(this PlayerControl player) {
-            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player) && player != Swooper.swooper);
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player) && player != Swooper.swooper && player != Werewolf.werewolf);
         }
 
         public static void clearAllTasks(this PlayerControl player) {
