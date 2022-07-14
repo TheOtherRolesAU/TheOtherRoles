@@ -135,6 +135,7 @@ namespace TheOtherRoles.Modules {
                 typeof(Il2CppReferenceArray<Il2CppSystem.Object>)
             })]
             private class ColorStringPatch {
+                [HarmonyPriority(Priority.Last)]
                 public static bool Prefix(ref string __result, [HarmonyArgument(0)] StringNames name) {
                     if ((int)name >= 50000) {
                         string text = CustomColors.ColorStrings[(int)name];

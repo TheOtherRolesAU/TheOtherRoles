@@ -1,6 +1,7 @@
 using System;
 using HarmonyLib;
 using System.Linq;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 
@@ -113,7 +114,6 @@ namespace TheOtherRoles.Modules {
                     localPlayer.Data.IsDead || (int)sourcePlayer.PlayerId == (int)CachedPlayer.LocalPlayer.PlayerId ||
                     (localPlayer.isLover() && Lovers.enableChat && Helpers.getChatPartner(sourcePlayer) == localPlayer) || 
                     (isTeamJackalWithChat && Helpers.getChatPartner(sourcePlayer) == localPlayer));
-
             }
         }
     }

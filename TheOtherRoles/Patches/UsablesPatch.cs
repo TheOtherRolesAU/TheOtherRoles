@@ -116,6 +116,7 @@ namespace TheOtherRoles.Patches {
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 writer.EndMessage();
                 RPCProcedure.useUncheckedVent(__instance.Id, CachedPlayer.LocalPlayer.PlayerId, isEnter ? byte.MaxValue : (byte)0);
+                SoundEffectsManager.play("tricksterUseBoxVent");
                 return false;
             }
 

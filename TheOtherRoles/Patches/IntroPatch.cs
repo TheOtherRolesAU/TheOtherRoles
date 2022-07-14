@@ -59,7 +59,10 @@ namespace TheOtherRoles.Patches {
                     BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
                     BountyHunter.cooldownText.gameObject.SetActive(true);
                 }
-            } 
+            }
+
+            // Force Reload of SoundEffectHolder
+            SoundEffectsManager.Load();
 
             if (CustomOptionHolder.randomGameStartPosition.getBool()) { //Random spawn on game start
 
@@ -248,7 +251,8 @@ namespace TheOtherRoles.Patches {
     class IntroPatch {
         public static void setupIntroTeamIcons(IntroCutscene __instance, ref  Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam) {
             // Intro solo teams
-            if (CachedPlayer.LocalPlayer.PlayerControl == Jester.jester || CachedPlayer.LocalPlayer.PlayerControl == Swooper.swooper || CachedPlayer.LocalPlayer.PlayerControl == Werewolf.werewolf || CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist || CachedPlayer.LocalPlayer.PlayerControl == Vulture.vulture) {                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+            if (CachedPlayer.LocalPlayer.PlayerControl == Jester.jester || CachedPlayer.LocalPlayer.PlayerControl == Swooper.swooper || CachedPlayer.LocalPlayer.PlayerControl == Werewolf.werewolf || CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist || CachedPlayer.LocalPlayer.PlayerControl == Vulture.vulture) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
                 yourTeam = soloTeam;
             }
@@ -314,6 +318,14 @@ namespace TheOtherRoles.Patches {
             __instance.ourCrewmate.gameObject.SetActive(false);
            
         }
+
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CreatePlayer))]
+        class CreatePlayerPatch {
+            public static void Postfix(IntroCutscene __instance, bool impostorPositioning, ref PoolablePlayer __result) {
+                if (impostorPositioning) __result.SetNameColor(Palette.ImpostorRed);
+            }
+        }
+
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {

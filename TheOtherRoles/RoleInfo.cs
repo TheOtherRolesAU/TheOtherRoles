@@ -1,6 +1,7 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using TheOtherRoles.Players;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
 using TheOtherRoles.Players;
@@ -163,15 +164,19 @@ namespace TheOtherRoles
 
             // Modifier
             if (showModifier) {
+                // after dead modifier
+                if (!CustomOptionHolder.modifiersAreHidden.getBool() || PlayerControl.LocalPlayer.Data.IsDead)
+                {
+                    if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
+                    if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
+                    if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
+                    if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
+                    if (p == Indomitable.indomitable) infos.Add(indomitable);
+                }
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
-                if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
-                if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
-                if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
-                if (p == Indomitable.indomitable) infos.Add(indomitable);
-                if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
             }
             if (onlyMods) return infos;

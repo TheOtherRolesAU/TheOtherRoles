@@ -27,7 +27,7 @@ namespace TheOtherRoles{
         public static float restrictCamerasTimeMax = 600f;
         public static float restrictVitalsTime = 600f;
         public static float restrictVitalsTimeMax = 600f;
-
+        public static bool enableSoundEffects = true;
 
         public static bool enableHorseMode = false;
         public static bool shieldFirstKill = false;
@@ -71,6 +71,7 @@ namespace TheOtherRoles{
             toggleCursor = TheOtherRolesPlugin.ToggleCursor.Value;
             showKillAnimation = TheOtherRolesPlugin.showKillAnimation.Value;
 
+            enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value;
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
             Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }

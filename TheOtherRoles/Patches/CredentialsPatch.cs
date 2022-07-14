@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 using UnityEngine;
@@ -16,8 +17,7 @@ Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <co
 $@"Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";
 
         public static string contributorsCredentials =
-$@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color> 
-GitHub Contributors: Gendelo, Alex2911, amsyarasyiq, MaximeGillot, Psynomit, probablyadnf, JustASysAdmin</size>";
+$@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
 
         [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
         private static class VersionShowerPatch

@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
+using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.Players;
 
@@ -260,6 +261,7 @@ namespace TheOtherRoles.Modules {
                 static bool Prefix(HatParent __instance, HatData hat, HatViewData hatViewData, int color)
                 {
                     if (!DestroyableSingleton<TutorialManager>.InstanceExists) return true;
+
                     try 
                     {
                         __instance.Hat = hat;
