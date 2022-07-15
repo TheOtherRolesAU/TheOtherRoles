@@ -86,6 +86,22 @@ namespace TheOtherRoles {
         }
 
 
+        public static bool isNeutral(PlayerControl p) {
+            if (p == Jester.jester) return true;
+            if (p == Werewolf.werewolf) return true;
+            if (p == Prosecutor.prosecutor) return true;
+            if (p == Swooper.swooper) return true;
+            if (p == Jackal.jackal) return true;
+            if (p == Sidekick.sidekick) return true;
+            if (p == Arsonist.arsonist) return true;
+            if (p == Amnisiac.amnisiac) return true;
+            if (p == Vulture.vulture) return true;
+            if (p == Lawyer.lawyer) return true;
+            if (p == Pursuer.pursuer) return true;
+            return false;
+        }
+ 
+
 		public static SabatageTypes getActiveSabo() {
 			foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator()) {
 				if (task.TaskType == TaskTypes.FixLights) {

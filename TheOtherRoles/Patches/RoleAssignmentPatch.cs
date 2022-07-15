@@ -389,9 +389,10 @@ namespace TheOtherRoles.Patches {
                     if (p == Lovers.lover1 || p == Lovers.lover2) continue; // Don't allow a lover target
                     if (p.Data.Role.IsImpostor ||  p == Jackal.jackal || p == Swooper.swooper) continue; // Dont allow imp / jackal target
 					if (p == Spy.spy) continue; // Dont allow Spy to be target
+					if (p == Prosecutor.prosecutor) continue; // Dont allow self target
 					// I simply don't want these targets, as they can hard counter Prosecutor
 					if (p == Mayor.mayor || p == Sheriff.sheriff || p == Swapper.swapper || p == Shifter.shifter) continue;
-                    if (RoleInfo.getRoleInfoForPlayer(p).FirstOrDefault().isNeutral) continue; // Don't allow neutral target
+                    if (Helpers.isNeutral(p)) continue; // Don't allow neutral target
                     possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {
