@@ -148,7 +148,7 @@ namespace TheOtherRoles
             public static void clearAndReload() {
               prosecutor = null;
               triggerProsecutorWin = false;
-              preferAmnesiac = CustomOptionHolder.prosecutorPreferAmnesiac.getBool();
+              preferAmnesiac = false; //CustomOptionHolder.prosecutorPreferAmnesiac.getBool();
               targetWasGuessed = false;
               target = null;
             }

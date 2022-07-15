@@ -79,7 +79,8 @@ namespace TheOtherRoles {
                 if (player == Jackal.jackal || player == Sidekick.sidekick || Jackal.formerJackals.Contains(player)) {
                     roleCouldUse = true;
                 }
-            } else if (player.Data?.Role != null && player.Data.Role.IsImpostor)
+            }
+            if (player.Data?.Role != null && player.Data.Role.IsImpostor)
                 roleCouldUse = true;
             return roleCouldUse;
         }

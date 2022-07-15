@@ -437,7 +437,7 @@ namespace TheOtherRoles {
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Executioner"),   rates, null, true);
-            prosecutorPreferAmnesiac = CustomOption.Create(8701, Types.Neutral, "Prefer Amnesiac over Pursuer", false, prosecutorSpawnRate);
+//            prosecutorPreferAmnesiac = CustomOption.Create(8701, Types.Neutral, "Prefer Amnesiac over Pursuer", false, prosecutorSpawnRate);
 
 
             amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnesiac"), rates, null, true);
