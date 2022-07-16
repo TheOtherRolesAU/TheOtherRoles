@@ -57,9 +57,9 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(148, 190, 224, byte.MaxValue), 
                                         shadow = new Color32(100, 135, 163, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Wasabi", // 26
-                                        color = new Color32(112, 143, 46, byte.MaxValue), 
-                                        shadow = new Color32(72, 92, 29, byte.MaxValue),
+            colors.Add(new CustomColor { longname = "IrishPat", // 26
+                                        color = new Color32(0, 158, 96, byte.MaxValue), 
+                                        shadow = new Color32(255, 121, 0, byte.MaxValue),
                                         isLighterColor = false });
             colors.Add(new CustomColor { longname = "LilyBan", //27
                                         color = new Color32(196, 235, 241, byte.MaxValue),
