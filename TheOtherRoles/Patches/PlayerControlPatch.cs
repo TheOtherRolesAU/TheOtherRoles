@@ -132,6 +132,12 @@ namespace TheOtherRoles.Patches {
             if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
         
+        static void bodyGuardSetTarget() {
+            if (BodyGuard.bodyguard == null || BodyGuard.bodyguard != CachedPlayer.LocalPlayer.PlayerControl) return;
+            BodyGuard.currentTarget = setTarget();
+            if (!BodyGuard.usedGuard) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
+        }
+        
         static void werewolfSetTarget() {
             if (Werewolf.werewolf == null || Werewolf.werewolf != CachedPlayer.LocalPlayer.PlayerControl) return;
             Werewolf.currentTarget = setTarget();
@@ -1008,6 +1014,8 @@ namespace TheOtherRoles.Patches {
                 arsonistSetTarget();
                 // Snitch
                 snitchUpdate();
+                // BodyGuard
+                bodyGuardSetTarget();
                 // undertaker
                 undertakerDragBodyUpdate();
                 // BountyHunter

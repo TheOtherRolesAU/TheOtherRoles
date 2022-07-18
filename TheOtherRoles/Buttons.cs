@@ -33,6 +33,7 @@ namespace TheOtherRoles
         public static CustomButton hackerVitalsButton;
         public static CustomButton hackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
+        private static CustomButton bodyGuardGuardButton;
         private static CustomButton trackerTrackCorpsesButton;
         public static CustomButton vampireKillButton;
         private static CustomButton garlicButton;
@@ -349,6 +350,9 @@ namespace TheOtherRoles
                         killWriter.Write(byte.MaxValue);
                         AmongUsClient.Instance.FinishRpcImmediately(killWriter);
                         RPCProcedure.uncheckedMurderPlayer(Sheriff.sheriff.Data.PlayerId, targetId, Byte.MaxValue);
+                    }
+                    if (murderAttemptResult == MurderAttemptResult.BodyGuardKill) {
+                        Helpers.checkMuderAttemptAndKill(Sheriff.sheriff, Sheriff.currentTarget);
                     }
 
                     sheriffKillButton.Timer = sheriffKillButton.MaxTimer;
@@ -775,6 +779,29 @@ namespace TheOtherRoles
                     trackerTrackCorpsesButton.Timer = trackerTrackCorpsesButton.MaxTimer;
                 }
             );
+            
+            // Tracker button
+            bodyGuardGuardButton = new CustomButton(
+                () => {
+                    if (Helpers.checkAndDoVetKill(BodyGuard.currentTarget)) return;
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.BodyGuardGuardPlayer, Hazel.SendOption.Reliable, -1);
+                    writer.Write(BodyGuard.currentTarget.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.bodyGuardGuardPlayer(BodyGuard.currentTarget.PlayerId);
+                    // SoundEffectsManager.play("trackerTrackPlayer");
+                },
+                () => { return BodyGuard.bodyguard != null && BodyGuard.bodyguard == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { 
+                    if (!BodyGuard.usedGuard)
+                        showTargetNameOnButton(BodyGuard.currentTarget, bodyGuardGuardButton, "Guard");
+                    return CachedPlayer.LocalPlayer.PlayerControl.CanMove && BodyGuard.currentTarget != null && !BodyGuard.usedGuard;
+                },
+                () => { if(BodyGuard.reset) BodyGuard.resetGuarded(); },
+                BodyGuard.getGuardButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
     
             vampireKillButton = new CustomButton(
                 () => {
@@ -818,6 +845,8 @@ namespace TheOtherRoles
                     } else if (murder == MurderAttemptResult.BlankKill) {
                         vampireKillButton.Timer = vampireKillButton.MaxTimer;
                         vampireKillButton.HasEffect = false;
+                    } else if (murder == MurderAttemptResult.BodyGuardKill) {
+                        Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.currentTarget);
                     } else {
                         vampireKillButton.HasEffect = false;
                     }
@@ -1806,6 +1835,10 @@ namespace TheOtherRoles
                     if (Ninja.ninjaMarked != null) {
                         // Murder attempt with teleport
                         MurderAttemptResult attempt = Helpers.checkMuderAttempt(Ninja.ninja, Ninja.ninjaMarked);
+                        if (attempt == MurderAttemptResult.BodyGuardKill) {
+                            Helpers.checkMuderAttemptAndKill(Ninja.ninja, Ninja.ninjaMarked);
+                            return;
+                        }
                         if (attempt == MurderAttemptResult.PerformKill || attempt == MurderAttemptResult.ReverseKill) {
                             // Create first trace before killing
                             var pos = CachedPlayer.LocalPlayer.transform.position;

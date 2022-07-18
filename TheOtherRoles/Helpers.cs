@@ -20,7 +20,8 @@ namespace TheOtherRoles {
 	BothKill,
         PerformKill,
         SuppressKill,
-        BlankKill
+        BlankKill,
+        BodyGuardKill
     }
 
 	public enum SabatageTypes {
@@ -683,7 +684,18 @@ public static bool isPlayerLover(PlayerControl player) {
                    RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
               }
               return MurderAttemptResult.ReverseKill;
-	    }
+            }            // Kill the killer if the Veteren is on alert
+            
+            // Kill the Body Guard and the killer if the target is guarded
+            else if (BodyGuard.bodyguard != null && target == BodyGuard.guarded) {
+              if (Medic.shielded != null && Medic.shielded == target) {
+                   MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
+                   writer.Write(target.PlayerId);
+                   AmongUsClient.Instance.FinishRpcImmediately(writer);
+                   RPCProcedure.shieldedMurderAttempt(killer.PlayerId);
+              }
+              return MurderAttemptResult.BodyGuardKill;
+            }
 
 
             // Block impostor shielded kill
@@ -729,9 +741,27 @@ public static bool isPlayerLover(PlayerControl player) {
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, target.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
             }
+            
+            if (murder == MurderAttemptResult.BodyGuardKill) {
+                // Kill the Killer
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                writer.Write(killer.PlayerId);
+                writer.Write(showAnimation ? Byte.MaxValue : 0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+                
+                // Kill the BodyGuard
+                MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
+                writer2.Write(BodyGuard.bodyguard.PlayerId);
+                writer2.Write(BodyGuard.bodyguard.PlayerId);
+                writer2.Write(showAnimation ? Byte.MaxValue : 0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer2);
+                RPCProcedure.uncheckedMurderPlayer(BodyGuard.bodyguard.PlayerId, BodyGuard.bodyguard.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+            }
 
             if (murder == MurderAttemptResult.ReverseKill) {
-		checkMuderAttemptAndKill(target, killer, isMeetingStart);
+                checkMuderAttemptAndKill(target, killer, isMeetingStart);
             }
 
             return murder;            

@@ -35,6 +35,7 @@ namespace TheOtherRoles
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);
         public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
         public static RoleInfo sheriff = new RoleInfo("Sheriff", Sheriff.color, "Shoot the <color=#FF1919FF>Impostors</color>", "Shoot the Impostors", RoleId.Sheriff);
+        public static RoleInfo bodyguard  = new RoleInfo("Body Guard", BodyGuard.color, "Protect someone with your own life", "You are the shield that guards the realms of men!", RoleId.BodyGuard, false);
         public static RoleInfo deputy = new RoleInfo("Deputy", Sheriff.color, "Handcuff the <color=#FF1919FF>Impostors</color>", "Handcuff the Impostors", RoleId.Deputy);
         public static RoleInfo lighter = new RoleInfo("Lighter", Lighter.color, "Your light never goes out", "Your light never goes out", RoleId.Lighter);
         public static RoleInfo godfather = new RoleInfo("Godfather", Godfather.color, "Kill all Crewmates", "Kill all Crewmates", RoleId.Godfather);
@@ -112,6 +113,7 @@ namespace TheOtherRoles
             bountyHunter,
             witch,
             ninja,
+            bodyguard,
             blackmailer,
             miner,
 			swooper,
@@ -219,6 +221,7 @@ namespace TheOtherRoles
             if (p == Medic.medic) infos.Add(medic);
             if (p == Shifter.shifter) infos.Add(shifter);
             if (p == Swapper.swapper) infos.Add(swapper);
+            if (p == BodyGuard.bodyguard) infos.Add(bodyguard);
             if (p == Seer.seer) infos.Add(seer);
             if (p == Hacker.hacker) infos.Add(hacker);
             if (p == Tracker.tracker) infos.Add(tracker);

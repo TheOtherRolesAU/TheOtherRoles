@@ -48,6 +48,7 @@ namespace TheOtherRoles
         Jackal,
         Sidekick,
         Eraser,
+        BodyGuard,
         Spy,
         Trickster,
         Cleaner,
@@ -114,6 +115,7 @@ namespace TheOtherRoles
         ShieldedMurderAttempt,
         TimeMasterShield,
         TimeMasterRewindTime,
+        BodyGuardGuardPlayer,
         VeterenAlert,
         VeterenKill,
     ShifterShift,
@@ -257,6 +259,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Sheriff:
                         Sheriff.sheriff = player;
+                        break;
+                    case RoleId.BodyGuard:
+                        BodyGuard.bodyguard = player;
                         break;
                     case RoleId.Deputy:
                         Deputy.deputy = player;
@@ -601,6 +606,13 @@ namespace TheOtherRoles
                 case RoleId.Jester:
                     if (Amnisiac.resetRole) Jester.clearAndReload();
                     Jester.jester = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
+                    break;
+                    
+                case RoleId.BodyGuard:
+                    if (Amnisiac.resetRole) BodyGuard.clearAndReload();
+                    BodyGuard.bodyguard = amnisiac;
                     Amnisiac.clearAndReload();
                     Amnisiac.amnisiac = target;
                     break;
@@ -1204,6 +1216,7 @@ namespace TheOtherRoles
             if (player == Shifter.shifter) Shifter.clearAndReload();
             if (player == Seer.seer) Seer.clearAndReload();
             if (player == Hacker.hacker) Hacker.clearAndReload();
+            if (player == BodyGuard.bodyguard) BodyGuard.clearAndReload();
             if (player == Tracker.tracker) Tracker.clearAndReload();
             if (player == Snitch.snitch) Snitch.clearAndReload();
             if (player == Swapper.swapper) Swapper.clearAndReload();
@@ -1604,6 +1617,12 @@ namespace TheOtherRoles
       Blackmailer.blackmailed = target;
       
     }
+    
+    public static void bodyGuardGuardPlayer(byte targetId) {
+        PlayerControl target = Helpers.playerById(targetId);
+        BodyGuard.usedGuard = true;
+        BodyGuard.guarded = target;
+    }
 
     public static void unblackmailPlayer() {
       Blackmailer.blackmailed = null;
@@ -1800,7 +1819,10 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.TrackerUsedTracker:
                     RPCProcedure.trackerUsedTracker(reader.ReadByte());
-                    break;               
+                    break;  
+                case (byte)CustomRPC.BodyGuardGuardPlayer:
+                    RPCProcedure.bodyGuardGuardPlayer(reader.ReadByte());
+                    break;  
                 case (byte)CustomRPC.DeputyUsedHandcuffs:
                     RPCProcedure.deputyUsedHandcuffs(reader.ReadByte());
                     break;

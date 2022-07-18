@@ -241,6 +241,9 @@ namespace TheOtherRoles {
         public static CustomOption securityGuardCamRechargeTasksNumber;
         public static CustomOption securityGuardNoMove;
 
+        public static CustomOption bodyGuardSpawnRate;
+        public static CustomOption bodyGuardResetTargetAfterMeeting;
+
         public static CustomOption vultureSpawnRate;
         public static CustomOption vultureCooldown;
         public static CustomOption vultureNumberToWin;
@@ -602,6 +605,11 @@ namespace TheOtherRoles {
             mediumCooldown = CustomOption.Create(361, Types.Crewmate, "Medium Questioning Cooldown", 30f, 5f, 120f, 5f, mediumSpawnRate);
             mediumDuration = CustomOption.Create(362, Types.Crewmate, "Medium Questioning Duration", 3f, 0f, 15f, 1f, mediumSpawnRate);
             mediumOneTimeUse = CustomOption.Create(363, Types.Crewmate, "Each Soul Can Only Be Questioned Once", false, mediumSpawnRate);
+            
+            bodyGuardSpawnRate = CustomOption.Create(8820, Types.Crewmate, cs(BodyGuard.color, "Bodyguard"), rates, null, true);
+            bodyGuardResetTargetAfterMeeting = CustomOption.Create(8821, Types.Crewmate, "Reset Target After Meeting", true, bodyGuardSpawnRate);
+
+
 
             // Modifier
             modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "Hide After Death Modifiers"), true, null, true);
