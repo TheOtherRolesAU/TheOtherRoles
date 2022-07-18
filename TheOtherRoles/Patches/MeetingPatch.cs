@@ -583,6 +583,7 @@ namespace TheOtherRoles.Patches {
                 // Save the meeting target
                 target = meetingTarget;
 
+                
                 if (Blackmailer.blackmailed == CachedPlayer.LocalPlayer.PlayerControl) { Helpers.BlackmailShhh(); }
 
                 // Add Portal info into Portalmaker Chat:
