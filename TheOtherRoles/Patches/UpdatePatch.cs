@@ -158,7 +158,7 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Spy.spy, Spy.color);
             }
 
-            if (CachedPlayer.LocalPlayer.Data.IsDead && Prosecutor.prosecutor != null) {
+            if (CachedPlayer.LocalPlayer.Data.IsDead && Prosecutor.prosecutor != null && !Prosecutor.prosecutor.Data.IsDead) {
                 setPlayerNameColor(Prosecutor.target, Prosecutor.targetColor);
             }
 
