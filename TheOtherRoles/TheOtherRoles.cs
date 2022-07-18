@@ -75,6 +75,7 @@ namespace TheOtherRoles
             Mini.clearAndReload();
             Indomitable.clearAndReload();
             Blind.clearAndReload();
+            Slueth.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
         }
@@ -1918,6 +1919,17 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             indomitable = null;
+        }
+    }
+    
+    public static class Slueth {
+        public static PlayerControl slueth;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+        public static List<PlayerControl> reported = new List<PlayerControl>();
+
+        public static void clearAndReload() {
+            slueth = null;
+            reported = new List<PlayerControl>();
         }
     }
     

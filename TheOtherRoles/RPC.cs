@@ -76,6 +76,7 @@ namespace TheOtherRoles
         AntiTeleport,
         Tiebreaker,
         Indomitable,
+        Slueth,
         Sunglasses,
         Mini,
         Vip,
@@ -422,6 +423,9 @@ namespace TheOtherRoles
                 case RoleId.Indomitable:
                     TheOtherRolesPlugin.Logger.LogError("Assigning "+ player.Data.PlayerName +" the Indomitable modifier...does it fail somewhere?");
                     Indomitable.indomitable = player;
+                    break;
+                case RoleId.Slueth:
+                    Slueth.slueth = player;
                     break;
                 case RoleId.Blind:
                     Blind.blind = player;

@@ -512,7 +512,7 @@ namespace TheOtherRoles.Patches {
 
         public static void updatePlayerInfo() {
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {         
-                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
+                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead || ((CachedPlayer.LocalPlayer.PlayerControl == Slueth.slueth && Slueth.reported.Any(x => x.PlayerId == p.PlayerId)))) {
                     Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo == null) {
@@ -1093,6 +1093,7 @@ namespace TheOtherRoles.Patches {
             // Medic or Detective report
             bool isMedicReport = Medic.medic != null && Medic.medic == CachedPlayer.LocalPlayer.PlayerControl && __instance.PlayerId == Medic.medic.PlayerId;
             bool isDetectiveReport = Detective.detective != null && Detective.detective == CachedPlayer.LocalPlayer.PlayerControl && __instance.PlayerId == Detective.detective.PlayerId;
+            bool isSluethReport = Slueth.slueth != null && Slueth.slueth == CachedPlayer.LocalPlayer.PlayerControl && __instance.PlayerId == Slueth.slueth.PlayerId;
             if (isMedicReport || isDetectiveReport)
             {
                 DeadPlayer deadPlayer = deadPlayers?.Where(x => x.player?.PlayerId == target?.PlayerId)?.FirstOrDefault();
@@ -1126,7 +1127,13 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
-            }  
+            }
+            Helpers.Log("I think this is the reporter: "+ __instance.Data.PlayerName);
+            Helpers.Log("I think this is the Body: "+ target.PlayerName);
+            if (isSluethReport) {
+                PlayerControl reported = Helpers.playerById(target.PlayerId);
+                Slueth.reported.Add(reported);
+            }            
         }
     }
 
