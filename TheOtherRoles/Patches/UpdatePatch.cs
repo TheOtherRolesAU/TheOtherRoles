@@ -65,6 +65,13 @@ namespace TheOtherRoles.Patches {
                     if (player.NameText != null && p.PlayerId == player.TargetPlayerId)
                         player.NameText.color = color;
         }
+        
+        static void updateBlindReport() {
+            if (Blind.blind != null && CachedPlayer.LocalPlayer.PlayerControl == Blind.blind) {
+                DestroyableSingleton<HudManager>.Instance.ReportButton.SetActive(false);
+                // Sadly the report button cannot be hidden due to preventing R to report
+            }
+        }
 
         static void setNameColors()
         {
@@ -328,6 +335,7 @@ namespace TheOtherRoles.Patches {
             // Meeting hide buttons if needed (used for the map usage, because closing the map would show buttons)
             updateSabotageButton(__instance);
             updateUseButton(__instance);
+            updateBlindReport();
 
         }
     }

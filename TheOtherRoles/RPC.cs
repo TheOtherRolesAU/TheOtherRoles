@@ -78,7 +78,8 @@ namespace TheOtherRoles
         Sunglasses,
         Mini,
         Vip,
-        Invert
+        Invert,
+        Blind
     }
 
     enum CustomRPC
@@ -416,6 +417,9 @@ namespace TheOtherRoles
                 case RoleId.Indomitable:
                     TheOtherRolesPlugin.Logger.LogError("Assigning "+ player.Data.PlayerName +" the Indomitable modifier...does it fail somewhere?");
                     Indomitable.indomitable = player;
+                    break;
+                case RoleId.Blind:
+                    Blind.blind = player;
                     break;
                 case RoleId.Invert:
                     Invert.invert.Add(player);
