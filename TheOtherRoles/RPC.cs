@@ -126,6 +126,7 @@ namespace TheOtherRoles
         TrackerUsedTracker,
         VampireSetBitten,
         PlaceGarlic,
+        DousePlayer,
         DeputyUsedHandcuffs,
         DeputyPromotes,
         JackalCreatesSidekick,
@@ -1622,6 +1623,13 @@ namespace TheOtherRoles
       
     }
     
+    public static void dousePlayer(byte playerId) {
+      PlayerControl target = Helpers.playerById(playerId);
+      Arsonist.dousedPlayers.Add(target);
+      
+    }
+
+    
     public static void bodyGuardGuardPlayer(byte targetId) {
         PlayerControl target = Helpers.playerById(targetId);
         BodyGuard.usedGuard = true;
@@ -1761,6 +1769,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.BlackmailPlayer:
                     RPCProcedure.blackmailPlayer(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DousePlayer:
+                    RPCProcedure.dousePlayer(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.UnblackmailPlayer:
                     RPCProcedure.unblackmailPlayer();

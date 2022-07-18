@@ -1565,7 +1565,12 @@ namespace TheOtherRoles
                 true,
                 Arsonist.duration,
                 () => {
-                    if (Arsonist.douseTarget != null) Arsonist.dousedPlayers.Add(Arsonist.douseTarget);
+                    if (Arsonist.douseTarget != null) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DousePlayer, Hazel.SendOption.Reliable, -1);
+                        writer.Write(Arsonist.douseTarget.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.dousePlayer(Arsonist.douseTarget.PlayerId);
+                    }
                     Arsonist.douseTarget = null;
                     arsonistButton.Timer = Arsonist.dousedEveryoneAlive() ? 0 : arsonistButton.MaxTimer;
 

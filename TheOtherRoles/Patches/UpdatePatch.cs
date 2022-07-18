@@ -72,7 +72,7 @@ namespace TheOtherRoles.Patches {
                 // Sadly the report button cannot be hidden due to preventing R to report
             }
         }
-
+        
         static void setNameColors()
         {
             var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
@@ -167,6 +167,13 @@ namespace TheOtherRoles.Patches {
 
             if (CachedPlayer.LocalPlayer.Data.IsDead && Prosecutor.prosecutor != null && !Prosecutor.prosecutor.Data.IsDead) {
                 setPlayerNameColor(Prosecutor.target, Prosecutor.targetColor);
+            }
+            
+            if (CachedPlayer.LocalPlayer.Data.IsDead && Arsonist.arsonist != null && !Arsonist.arsonist.Data.IsDead) {
+                foreach (PlayerControl p in Arsonist.dousedPlayers) {
+                    if (p.Data.IsDead) continue;
+                    setPlayerNameColor(p, Arsonist.color);
+                }
             }
 
             if (Sidekick.sidekick != null && Sidekick.wasTeamRed && localPlayer.Data.Role.IsImpostor) {
