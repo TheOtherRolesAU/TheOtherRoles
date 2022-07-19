@@ -26,8 +26,8 @@ namespace TheOtherRoles.Modules {
 
             /* Custom Colors */
             colors.Add(new CustomColor { longname = "PuThorple",
-                                        color = new Color32(17, 6, 38, byte.MaxValue), // color = new Color32(0xD8, 0x82, 0x83, byte.MaxValue),
-                                        shadow = new Color32(150, 2, 242, byte.MaxValue), // shadow = new Color32(0xA5, 0x63, 0x65, byte.MaxValue),
+                                        color = new Color32(150, 2, 242, byte.MaxValue), // shadow = new Color32(0xA5, 0x63, 0x65, byte.MaxValue),
+                                        shadow = new Color32(17, 6, 38, byte.MaxValue), // color = new Color32(0xD8, 0x82, 0x83, byte.MaxValue),
                                         isLighterColor = true });
             colors.Add(new CustomColor { longname = "Bordeaux",
                                         color = new Color32(109, 7, 26, byte.MaxValue), 
