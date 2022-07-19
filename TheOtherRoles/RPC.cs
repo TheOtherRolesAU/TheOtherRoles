@@ -1048,6 +1048,8 @@ namespace TheOtherRoles
                 Portalmaker.portalmaker = oldShifter;
             if (Engineer.engineer != null && Engineer.engineer == player)
                 Engineer.engineer = oldShifter;
+            if (BodyGuard.bodyguard != null && BodyGuard.bodyguard == player)
+                BodyGuard.bodyguard = oldShifter;
             if (Sheriff.sheriff != null && Sheriff.sheriff == player) {
                 if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = oldShifter;  // Shifter also shifts info on promoted deputy (to get handcuffs)
                 Sheriff.sheriff = oldShifter;
