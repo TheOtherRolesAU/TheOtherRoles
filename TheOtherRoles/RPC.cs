@@ -1536,30 +1536,23 @@ namespace TheOtherRoles
             Lawyer.target = target;
         }
 
-        public static void prosecutorToPursuer() {
+        public static void prosecutorToPursuer(byte playerId) {
             if (Prosecutor.triggerProsecutorWin) return;
-            if (Prosecutor.prosecutor == null) return;
-            PlayerControl player = Prosecutor.prosecutor;
+            PlayerControl player = Helpers.playerById(playerId);
+            erasePlayerRoles(playerId, true);
             Prosecutor.clearAndReload();
-            
-            // Add Option to make Exe Amnesiac if it doesn't exist.
-            if (Amnisiac.amnisiac == null && Prosecutor.preferAmnesiac) Amnisiac.amnisiac = player;
-            else {
-                Pursuer.pursuer = player;
-                Pursuer.wasProsecutor = true;
-            }
+            Pursuer.pursuer = player;
+            Pursuer.wasProsecutor = true;
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
+
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
-            if (dyingTarget == null ) return;
-            if (Lawyer.target != null && dyingTarget == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
-            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) prosecutorToPursuer();  // Prosecutor needs to turn into Pursuer if client is guessed
+       	    if (dyingTarget == null ) return;
+            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) prosecutorToPursuer(Prosecutor.prosecutor.Data.PlayerId);  // Prosecutor needs to turn into Pursuer if client is guessed
 
             dyingTarget.Exiled();
-            PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
-            if (Lawyer.target != null && dyingLoverPartner == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
-            dyingTarget.Exiled();
+       	    PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
 
             Guesser.remainingShots(killerId, true);
@@ -1914,7 +1907,7 @@ namespace TheOtherRoles
                     RPCProcedure.prosecutorChangesRole();
                     break;
                 case (byte)CustomRPC.ProsecutorToPursuer:
-                    RPCProcedure.prosecutorToPursuer();
+                    RPCProcedure.prosecutorToPursuer(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetBlanked:
                     var pid = reader.ReadByte();
