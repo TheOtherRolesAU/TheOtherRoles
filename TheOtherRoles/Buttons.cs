@@ -95,6 +95,7 @@ namespace TheOtherRoles
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerTrackPlayerButton.MaxTimer = 0f;
+            bodyGuardGuardButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
             jackalKillButton.MaxTimer = Jackal.cooldown;
             swooperKillButton.MaxTimer = Jackal.cooldown;
