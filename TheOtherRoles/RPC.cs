@@ -115,6 +115,7 @@ namespace TheOtherRoles
         MedicSetShielded,
         ShowBodyGuardFlash,
         ShieldedMurderAttempt,
+        BHSetBounty,
         TimeMasterShield,
         TimeMasterRewindTime,
         BodyGuardGuardPlayer,
@@ -1613,6 +1614,11 @@ namespace TheOtherRoles
             MapOptions.restrictVitalsTime -= time;
         }
 
+    public static void BHSetBounty(byte playerId) {
+        PlayerControl target = Helpers.playerById(playerId);
+        BountyHunter.bounty = target;
+    }
+
 
     public static void blackmailPlayer(byte playerId) {
       PlayerControl target = Helpers.playerById(playerId);
@@ -1911,6 +1917,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.ProsecutorToPursuer:
                     RPCProcedure.prosecutorToPursuer(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.BHSetBounty:
+                    RPCProcedure.BHSetBounty(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.SetBlanked:
                     var pid = reader.ReadByte();
