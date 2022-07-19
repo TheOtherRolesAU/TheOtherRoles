@@ -67,7 +67,16 @@ namespace TheOtherRoles.Patches {
                     // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
                     hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic);
                 }
-
+                
+                if (CachedPlayer.LocalPlayer.Data.IsDead && Medic.shielded != null && target == Medic.shielded) {
+                    hasVisibleShield = true;
+                }
+                
+                if (CachedPlayer.LocalPlayer.Data.IsDead && BountyHunter.bounty != null && target == BountyHunter.bounty) {
+                    hasVisibleShield = true;
+                    color = Palette.ImpostorRed;
+                }
+                
                 if (!Helpers.isCamoComms() && Camouflager.camouflageTimer <= 0f && MapOptions.firstKillPlayer != null && MapOptions.shieldFirstKill && ((target == MapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == MapOptions.firstKillPlayer))) {
                     hasVisibleShield = true;
                     color = Color.blue;
@@ -705,6 +714,10 @@ namespace TheOtherRoles.Patches {
                 }
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.BHSetBounty, Hazel.SendOption.Reliable, -1);
+                writer.Write(BountyHunter.bounty.Data.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.BHSetBounty(BountyHunter.bounty.Data.PlayerId);
 
                 // Show poolable player
                 if (FastDestroyableSingleton<HudManager>.Instance != null && FastDestroyableSingleton<HudManager>.Instance.UseButton != null) {
