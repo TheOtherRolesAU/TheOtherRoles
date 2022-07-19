@@ -27,7 +27,6 @@ namespace TheOtherRoles
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
-        public static RoleInfo crew = new RoleInfo("Crewmate", Crew.color, "Find the Impostors", "Find the Impostors", RoleId.Crew, true);
         public static RoleInfo werewolf = new RoleInfo("Werewolf", Werewolf.color, "Rampage and kill everyone", "Rampage and kill everyone", RoleId.Werewolf, true);
         public static RoleInfo prosecutor = new RoleInfo("Executioner", Prosecutor.color, "Vote out your target", "Vote out your target", RoleId.Prosecutor, true);
 		public static RoleInfo swooper = new RoleInfo("Swooper", Swooper.color, "Turn Invisable and kill everyone", "Turn Invisable", RoleId.Swooper, true);
@@ -134,7 +133,6 @@ namespace TheOtherRoles
             mayor,
             portalmaker,
             engineer,
-            crew,
             sheriff,
             deputy,
             lighter,
@@ -216,7 +214,6 @@ namespace TheOtherRoles
             if (p == Ninja.ninja) infos.Add(ninja);
             if (p == Blackmailer.blackmailer) infos.Add(blackmailer);
             if (p == Detective.detective) infos.Add(detective);
-            if (p == Crew.crew) infos.Add(crew);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
             if (p == Cultist.cultist) infos.Add(cultist);
             if (p == Amnisiac.amnisiac) infos.Add(amnisiac);
