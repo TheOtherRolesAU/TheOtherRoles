@@ -397,9 +397,9 @@ namespace TheOtherRoles.Patches {
                     possibleTargets.Add(p);
                 }
                 if (possibleTargets.Count == 0) {
-                    MessageWriter w = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ProsecutorChangesRole, Hazel.SendOption.Reliable, -1);
+                    MessageWriter w = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ProsecutorToPursuer, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(w);
-                    RPCProcedure.prosecutorChangesRole();
+                    RPCProcedure.prosecutorToPursuer();
                 } else {
                     var target = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ProsecutorSetTarget, Hazel.SendOption.Reliable, -1);
