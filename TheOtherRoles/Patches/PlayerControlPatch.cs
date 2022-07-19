@@ -77,6 +77,11 @@ namespace TheOtherRoles.Patches {
                     color = Palette.ImpostorRed;
                 }
                 
+                if (CachedPlayer.LocalPlayer.Data.IsDead && BodyGuard.guarded != null && target == BodyGuard.guarded) {
+                    hasVisibleShield = true;
+                    color = BodyGuard.color;
+                }
+                
                 if (!Helpers.isCamoComms() && Camouflager.camouflageTimer <= 0f && MapOptions.firstKillPlayer != null && MapOptions.shieldFirstKill && ((target == MapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == MapOptions.firstKillPlayer))) {
                     hasVisibleShield = true;
                     color = Color.blue;
@@ -1144,6 +1149,8 @@ namespace TheOtherRoles.Patches {
                     }
                 }
             }
+            Helpers.Log("I think this is the reporter: "+ __instance.Data.PlayerName);
+            Helpers.Log("I think this is the Body: "+ target.PlayerName);
             if (isSluethReport) {
                 PlayerControl reported = Helpers.playerById(target.PlayerId);
                 Slueth.reported.Add(reported);
