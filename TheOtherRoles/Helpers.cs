@@ -758,6 +758,11 @@ public static bool isPlayerLover(PlayerControl player) {
                 writer2.Write(showAnimation ? Byte.MaxValue : 0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer2);
                 RPCProcedure.uncheckedMurderPlayer(BodyGuard.bodyguard.PlayerId, BodyGuard.bodyguard.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+
+
+                MessageWriter writer3 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShowBodyGuardFlash, Hazel.SendOption.Reliable, -1);
+                AmongUsClient.Instance.FinishRpcImmediately(writer3);
+                RPCProcedure.showBodyGuardFlash();
             }
 
             if (murder == MurderAttemptResult.ReverseKill) {

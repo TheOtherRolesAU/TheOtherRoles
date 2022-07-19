@@ -113,13 +113,14 @@ namespace TheOtherRoles
         DropBody,
         SheriffKill,
         MedicSetShielded,
+        ShowBodyGuardFlash,
         ShieldedMurderAttempt,
         TimeMasterShield,
         TimeMasterRewindTime,
         BodyGuardGuardPlayer,
         VeterenAlert,
         VeterenKill,
-    ShifterShift,
+        ShifterShift,
         SwapperSwap,
         MorphlingMorph,
         CamouflagerCamouflage,
@@ -139,7 +140,7 @@ namespace TheOtherRoles
         SetFutureSpelled,
         PlaceNinjaTrace,
         PlacePortal,
-    AmnisiacTakeRole,
+        AmnisiacTakeRole,
         UsePortal,
         CultistCreateImposter,
         TurnToCrewmate,
@@ -166,8 +167,8 @@ namespace TheOtherRoles
         SetInvisible,
         SetInvisibleGen,
         SetSwoop,
-    ProsecutorChangesRole,
-    ProsecutorSetTarget,
+        ProsecutorChangesRole,
+        ProsecutorSetTarget,
         ProsecutorToPursuer
     }
 
@@ -1619,6 +1620,7 @@ namespace TheOtherRoles
       
     }
     
+    public static void showBodyGuardFlash() { Helpers.showFlash(BodyGuard.color, 1f); }
     public static void dousePlayer(byte playerId) {
       PlayerControl target = Helpers.playerById(playerId);
       Arsonist.dousedPlayers.Add(target);
@@ -1929,6 +1931,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetTiebreak:
                     RPCProcedure.setTiebreak();
+                    break;
+                case (byte)CustomRPC.ShowBodyGuardFlash:
+                    RPCProcedure.showBodyGuardFlash();
                     break;
                 case (byte)CustomRPC.SetInvisible:
                     byte invisiblePlayer = reader.ReadByte();

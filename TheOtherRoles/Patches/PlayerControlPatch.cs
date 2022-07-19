@@ -1284,6 +1284,7 @@ namespace TheOtherRoles.Patches {
                 }
                 Helpers.showFlash(color, 1.5f);
             }
+
         }
     }
 
