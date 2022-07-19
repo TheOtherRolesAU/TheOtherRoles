@@ -1546,13 +1546,14 @@ namespace TheOtherRoles
         }
 
         public static void guesserShoot(byte killerId, byte dyingTargetId, byte guessedTargetId, byte guessedRoleId) {
-
             PlayerControl dyingTarget = Helpers.playerById(dyingTargetId);
-       	    if (dyingTarget == null ) return;
-            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) prosecutorToPursuer(Prosecutor.prosecutor.Data.PlayerId);  // Prosecutor needs to turn into Pursuer if client is guessed
+            if (dyingTarget == null ) return;
+            if (Lawyer.target != null && dyingTarget == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
+            if (Prosecutor.target != null && dyingTarget == Prosecutor.target) prosecutorToPursuer();  // Prosecutor needs to turn into Pursuer if client is guessed
 
+            PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
+            if (Lawyer.target != null && dyingLoverPartner == Lawyer.target) Lawyer.targetWasGuessed = true;  // Lawyer shouldn't be exiled with the client for guesses
             dyingTarget.Exiled();
-       	    PlayerControl dyingLoverPartner = Lovers.bothDie ? dyingTarget.getPartner() : null; // Lover check
             byte partnerId = dyingLoverPartner != null ? dyingLoverPartner.PlayerId : dyingTargetId;
 
             Guesser.remainingShots(killerId, true);

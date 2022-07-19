@@ -264,6 +264,14 @@ namespace TheOtherRoles.Patches {
 				soloTeam.Add(Prosecutor.target);
                 yourTeam = soloTeam;
             }
+
+            // Intro Pursuer
+            if (CachedPlayer.LocalPlayer.PlayerControl == Pursuer.pursuer) {
+                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+                soloTeam.Add(CachedPlayer.LocalPlayer.PlayerControl);
+                yourTeam = soloTeam;
+            }
+
             
             // Intro Lawyer and Client
             if (CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer) {
