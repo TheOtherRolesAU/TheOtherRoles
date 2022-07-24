@@ -171,7 +171,7 @@ namespace TheOtherRoles.Patches {
             
             if (CachedPlayer.LocalPlayer.Data.IsDead && Arsonist.arsonist != null && !Arsonist.arsonist.Data.IsDead) {
                 foreach (PlayerControl p in Arsonist.dousedPlayers) {
-                    if (p.Data.IsDead) continue;
+                    if (p.Data.IsDead || p.Data.Disconnected) continue;
                     setPlayerNameColor(p, Arsonist.color);
                 }
             }
