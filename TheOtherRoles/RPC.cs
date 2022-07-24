@@ -797,6 +797,18 @@ namespace TheOtherRoles
                     Amnisiac.clearAndReload();
                     break;
 
+                case RoleId.Swooper:
+                    PlayerControl old = Swooper.swooper;
+                    if (Swooper.swooper == Jackal.jackal) {
+                        Jackal.formerJackals.Add(old); 
+                        Jackal.jackal = amnisiac;
+                    } else {
+                        Amnisiac.amnisiac = target;
+                    }
+                    Swooper.swooper = amnisiac;
+                    break;
+
+
                 case RoleId.Sidekick:
                     Jackal.formerJackals.Add(target);
                     if (Amnisiac.resetRole) Sidekick.clearAndReload();
