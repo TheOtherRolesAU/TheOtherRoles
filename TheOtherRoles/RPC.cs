@@ -798,10 +798,10 @@ namespace TheOtherRoles
                     break;
 
                 case RoleId.Swooper:
-                    PlayerControl old = Swooper.swooper;
                     if (Swooper.swooper == Jackal.jackal) {
-                        Jackal.formerJackals.Add(old); 
+                        Jackal.formerJackals.Add(target); 
                         Jackal.jackal = amnisiac;
+                        Amnisiac.clearAndReload();
                     } else {
                         Amnisiac.amnisiac = target;
                     }
