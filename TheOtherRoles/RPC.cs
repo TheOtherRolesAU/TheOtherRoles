@@ -52,6 +52,7 @@ namespace TheOtherRoles
         Spy,
         Trickster,
         Cleaner,
+        Bomber,
         Undertaker,
         Warlock,
         SecurityGuard,
@@ -129,6 +130,7 @@ namespace TheOtherRoles
         VampireSetBitten,
         PlaceGarlic,
         DousePlayer,
+        GiveBomb,
         DeputyUsedHandcuffs,
         DeputyPromotes,
         JackalCreatesSidekick,
@@ -347,6 +349,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Undertaker:
                         Undertaker.undertaker= player;
+                        break;
+                    case RoleId.Bomber:
+                        Bomber.bomber = player;
                         break;
                     case RoleId.Warlock:
                         Warlock.warlock = player;
@@ -744,6 +749,13 @@ namespace TheOtherRoles
                     Helpers.turnToImpostor(Amnisiac.amnisiac);
                     if (Amnisiac.resetRole) Morphling.clearAndReload();
                     Morphling.morphling = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
+                    
+                case RoleId.Bomber:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (Amnisiac.resetRole) Bomber.clearAndReload();
+                    Bomber.bomber = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
 
@@ -1245,6 +1257,7 @@ namespace TheOtherRoles
             if (player == Trickster.trickster) Trickster.clearAndReload();
             if (player == Cleaner.cleaner) Cleaner.clearAndReload();
             if (player == Undertaker.undertaker) Undertaker.clearAndReload();
+            if (player == Bomber.bomber) Bomber.clearAndReload();
             if (player == Warlock.warlock) Warlock.clearAndReload();
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
@@ -1302,6 +1315,49 @@ namespace TheOtherRoles
         public static void setFutureShielded(byte playerId) {
             Medic.futureShielded = Helpers.playerById(playerId);
             Medic.usedShield = true;
+        }
+        
+        public static void giveBomb(byte playerId) {
+            if (playerId == Byte.MaxValue) {
+                Bomber.hasBomb = null;
+                Bomber.bombActive = false;
+                Bomber.hasAlerted = false;
+                Bomber.timeLeft = 0;
+
+                return;
+            }
+            Bomber.hasBomb = Helpers.playerById(playerId);
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Bomber.bombDelay, new Action<float>((p) => {
+                if (p == 1f) Bomber.bombActive = true;
+            })));
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(Bomber.bombDelay + Bomber.bombTimer, new Action<float>((p) => { // Delayed action
+                if (p == 1f && Bomber.bombActive) {
+                    // Perform kill if possible and reset bitten (regardless whether the kill was successful or not)
+                    Helpers.checkMuderAttemptAndKill(Bomber.hasBomb, Bomber.hasBomb);
+                    Bomber.hasBomb = null;
+                    Bomber.bombActive = false;
+                    Bomber.hasAlerted = false;
+                    Bomber.timeLeft = 0;
+                }
+                if (CachedPlayer.LocalPlayer.PlayerControl == Bomber.hasBomb) {
+                    int totalTime = (int)(Bomber.bombDelay + Bomber.bombTimer);
+                    int timeLeft = (int)(totalTime - (totalTime * p));
+                    if (timeLeft <= Bomber.bombTimer) {
+                        if (Bomber.timeLeft != timeLeft) {
+                            new CustomMessage("Your Bomb will explode in " + timeLeft + " seconds!", 1f);
+                            Bomber.timeLeft = timeLeft;
+                        }
+                        if (timeLeft % 5 == 0) {
+                            if (!Bomber.hasAlerted) {
+                                Helpers.showFlash(Bomber.alertColor, 1f);
+                                Bomber.hasAlerted = true;
+                            }
+                        } else Bomber.hasAlerted = false;
+                    }
+
+                }
+
+            })));
         }
 
         public static void setFutureSpelled(byte playerId) {
@@ -1928,6 +1984,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.SetFutureSpelled:
                     RPCProcedure.setFutureSpelled(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.GiveBomb:
+                    RPCProcedure.giveBomb(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.Bloody:
                     byte bloodyKiller = reader.ReadByte();

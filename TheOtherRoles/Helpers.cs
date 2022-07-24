@@ -411,6 +411,15 @@ public static bool isPlayerLover(PlayerControl player) {
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.vampireSetBitten(byte.MaxValue, byte.MaxValue);
         }
+        
+        public static void handleBomberExplodeOnBodyReport() {
+            // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
+            Helpers.checkMuderAttemptAndKill(Bomber.bomber, Bomber.hasBomb, true, false);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.GiveBomb, Hazel.SendOption.Reliable, -1);
+            writer.Write(byte.MaxValue);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.giveBomb(byte.MaxValue);
+        }
 
         public static void refreshRoleDescription(PlayerControl player) {
             List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(player); 

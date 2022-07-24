@@ -146,6 +146,20 @@ namespace TheOtherRoles.Patches {
             if (!Medic.usedShield) setPlayerOutline(Medic.currentTarget, Medic.shieldedColor);
         }
         
+        static void bomberSetTarget() {
+            setBomberBombTarget();
+            if (Bomber.bomber == null || Bomber.bomber != CachedPlayer.LocalPlayer.PlayerControl) return;
+            Bomber.currentTarget = setTarget();
+            if (Bomber.hasBomb == null) setPlayerOutline(Bomber.currentTarget, Bomber.color);
+        }
+        
+        static void setBomberBombTarget() {
+            if (Bomber.bomber == null || Bomber.hasBomb != CachedPlayer.LocalPlayer.PlayerControl) return;
+            Bomber.currentBombTarget = setTarget();
+            if (Bomber.hasBomb != null) setPlayerOutline(Bomber.currentBombTarget, Bomber.color);
+        }
+        
+        
         static void bodyGuardSetTarget() {
             if (BodyGuard.bodyguard == null || BodyGuard.bodyguard != CachedPlayer.LocalPlayer.PlayerControl) return;
             BodyGuard.currentTarget = setTarget();
@@ -929,7 +943,9 @@ namespace TheOtherRoles.Patches {
                     Bait.active.Remove(entry.Key);
                     if (entry.Key.killerIfExisting != null && entry.Key.killerIfExisting.PlayerId == CachedPlayer.LocalPlayer.PlayerId) {
                         Helpers.handleVampireBiteOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
+                        Helpers.handleBomberExplodeOnBodyReport(); // Manually call Vampire handling, since the CmdReportDeadBody Prefix won't be called
                         RPCProcedure.uncheckedCmdReportDeadBody(entry.Key.killerIfExisting.PlayerId, entry.Key.player.PlayerId);
+                        
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedCmdReportDeadBody, Hazel.SendOption.Reliable, -1);
                         writer.Write(entry.Key.killerIfExisting.PlayerId);
@@ -991,6 +1007,9 @@ namespace TheOtherRoles.Patches {
                 morphlingSetTarget();
                 // Medic
                 medicSetTarget();
+                
+                // Bomber
+                bomberSetTarget();
                 
                 // Set Werewolf Target
                 werewolfSetTarget();
@@ -1103,6 +1122,7 @@ namespace TheOtherRoles.Patches {
     class PlayerControlCmdReportDeadBodyPatch {
         public static void Prefix(PlayerControl __instance) {
             Helpers.handleVampireBiteOnBodyReport();
+            Helpers.handleBomberExplodeOnBodyReport();
         }
     }
 
