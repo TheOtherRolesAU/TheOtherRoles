@@ -1524,7 +1524,7 @@ namespace TheOtherRoles
     public static class Guesser {
         public static PlayerControl niceGuesser;
         public static PlayerControl evilGuesser;
-        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+        public static Color color = Color.yellow;
         private static Sprite targetSprite;
 
         public static int remainingShotsEvilGuesser = 2;
