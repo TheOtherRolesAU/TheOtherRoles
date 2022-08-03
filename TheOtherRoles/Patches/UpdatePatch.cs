@@ -134,10 +134,6 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
             } else if (Arsonist.arsonist != null && Arsonist.arsonist == localPlayer) {
                 setPlayerNameColor(Arsonist.arsonist, Arsonist.color);
-            } else if (Guesser.niceGuesser != null && Guesser.niceGuesser == localPlayer) {
-                setPlayerNameColor(Guesser.niceGuesser, Guesser.color);
-            } else if (Guesser.evilGuesser != null && Guesser.evilGuesser == localPlayer) {
-                setPlayerNameColor(Guesser.evilGuesser, Palette.ImpostorRed);
             } else if (Vulture.vulture != null && Vulture.vulture == localPlayer) {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == localPlayer) {

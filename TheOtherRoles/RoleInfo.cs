@@ -67,8 +67,6 @@ namespace TheOtherRoles
         public static RoleInfo securityGuard = new RoleInfo("Security Guard", SecurityGuard.color, "Seal vents and place cameras", "Seal vents and place cameras", RoleId.SecurityGuard);
         public static RoleInfo arsonist = new RoleInfo("Arsonist", Arsonist.color, "Let them burn", "Let them burn", RoleId.Arsonist, true);
         public static RoleInfo amnisiac = new RoleInfo("Amnesiac", Amnisiac.color, "Steal roles from the dead", "You forgor", RoleId.Amnisiac, true);
-        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser);
-        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser);
         public static RoleInfo vulture = new RoleInfo("Vulture", Vulture.color, "Eat corpses to win", "Eat dead bodies", RoleId.Vulture, true);
         public static RoleInfo medium = new RoleInfo("Medium", Medium.color, "Question the souls of the dead to gain informations", "Question the souls", RoleId.Medium);
         public static RoleInfo lawyer = new RoleInfo("Lawyer", Lawyer.color, "Defend your client", "Defend your client", RoleId.Lawyer, true);
@@ -94,6 +92,8 @@ namespace TheOtherRoles
         public static RoleInfo slueth  = new RoleInfo("Slueth", Color.yellow, "Learn the roles of bodies you report", "Who dat?", RoleId.Indomitable, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
+        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
+        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
 
 
 
@@ -186,6 +186,9 @@ namespace TheOtherRoles
                 if (p == Blind.blind) infos.Add(blind);
                 if (p == Slueth.slueth) infos.Add(slueth);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
+                if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
+                if (p == Guesser.evilGuesser) infos.Add(badGuesser);
+
             }
             if (onlyMods) return infos;
 
@@ -237,8 +240,6 @@ namespace TheOtherRoles
             if (p == Spy.spy) infos.Add(spy);
             if (p == SecurityGuard.securityGuard) infos.Add(securityGuard);
             if (p == Arsonist.arsonist) infos.Add(arsonist);
-            if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
-            if (p == Guesser.evilGuesser) infos.Add(badGuesser);
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Vulture.vulture) infos.Add(vulture);
             if (p == Medium.medium) infos.Add(medium);
