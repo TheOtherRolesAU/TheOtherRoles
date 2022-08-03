@@ -325,6 +325,8 @@ namespace TheOtherRoles.Patches {
                     if (roleInfo.roleId != RoleId.Bait &&
                         roleInfo.roleId != RoleId.Tiebreaker &&
                         roleInfo.roleId != RoleId.Bloody &&
+                        roleInfo.roleId != RoleId.EvilGuesser &&
+                        roleInfo.roleId != RoleId.NiceGuesser &&
                         roleInfo.roleId != RoleId.Vip) continue;
                 } else
                     if (roleInfo.isModifier) continue;
