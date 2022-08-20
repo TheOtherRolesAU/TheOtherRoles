@@ -378,13 +378,13 @@ namespace TheOtherRoles {
         // public static CustomOption bomberBombCooldown;
         // public static CustomOption bomberDelay;
         // public static CustomOption bomberTimer;
-        
+        /* *
             bomberSpawnRate = CustomOption.Create(8840, Types.Impostor, cs(Bomber.color, "Bomber"), rates, null, true);
             bomberBombCooldown = CustomOption.Create(8841, Types.Impostor, "Bomber Cooldown", 30f, 25f, 60f, 2.5f, bomberSpawnRate);
             bomberDelay = CustomOption.Create(8842, Types.Impostor, "Bomb Delay", 10f, 1f, 20f, 0.5f, bomberSpawnRate);
             bomberTimer = CustomOption.Create(8843, Types.Impostor, "Bomb Timer", 10f, 5f, 30f, 5f, bomberSpawnRate);
 
-
+        /* */
 
             undertakerSpawnRate = CustomOption.Create(1201, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
             undertakerDragingDelaiAfterKill = CustomOption.Create(1202, Types.Impostor, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
