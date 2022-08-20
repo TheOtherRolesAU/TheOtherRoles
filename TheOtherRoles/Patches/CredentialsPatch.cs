@@ -10,7 +10,7 @@ namespace TheOtherRoles.Patches {
         public static string fullCredentials = 
 $@"<size=130%><color=#ff351f>TheOtherRoles Community Edition</color></size> v{TheOtherRolesPlugin.Version.ToString()}
 <size=60%>
-Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";
+Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles by <color=#FCCE03FF>Eisbison</color>. Additional artwork by SvettyScribbles and JustASysAdmin.</size>";
 
     public static string mainMenuCredentials = 
 $@"Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";

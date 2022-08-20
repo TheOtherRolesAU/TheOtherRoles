@@ -1112,6 +1112,8 @@ namespace TheOtherRoles
                 () => {  /* On Click */ return (CachedPlayer.LocalPlayer.PlayerControl.CanMove); },
                 () => {  /* On Meeting End */
                     swooperSwoopButton.Timer = swooperSwoopButton.MaxTimer;
+                    swooperSwoopButton.isEffectActive = false;
+                    swooperSwoopButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Swooper.isInvisable = false;
                 },
                 Swooper.getSwoopButtonSprite(),
@@ -1136,6 +1138,8 @@ namespace TheOtherRoles
                 () => {  /* On Click */ return (Bomber.currentTarget && CachedPlayer.LocalPlayer.PlayerControl.CanMove); },
                 () => {  /* On Meeting End */
                     bomberBombButton.Timer = bomberBombButton.MaxTimer;
+                    bomberBombButton.isEffectActive = false;
+                    bomberBombButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Bomber.hasBomb = null;
                 },
                 Bomber.getButtonSprite(),
@@ -1179,7 +1183,7 @@ namespace TheOtherRoles
             );
             
             
-            // Swooper Kill
+            // Werewolf Kill
             werewolfKillButton = new CustomButton(
                 () => {
                     if (Helpers.checkAndDoVetKill(Werewolf.currentTarget)) return;
@@ -1203,6 +1207,8 @@ namespace TheOtherRoles
                 () => {  /* On Click */ return (CachedPlayer.LocalPlayer.PlayerControl.CanMove); },
                 () => {  /* On Meeting End */
                     werewolfRampageButton.Timer = werewolfRampageButton.MaxTimer;
+                    werewolfRampageButton.isEffectActive = false;
+                    werewolfRampageButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Werewolf.canKill = false;
                 },
                 Werewolf.getRampageButtonSprite(),

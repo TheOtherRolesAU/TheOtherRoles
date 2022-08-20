@@ -362,12 +362,6 @@ namespace TheOtherRoles
                     case RoleId.Arsonist:
                         Arsonist.arsonist = player;
                         break;
-                    case RoleId.EvilGuesser:
-                        Guesser.evilGuesser = player;
-                        break;
-                    case RoleId.NiceGuesser:
-                        Guesser.niceGuesser = player;
-                        break;
                     case RoleId.BountyHunter:
                         BountyHunter.bountyHunter = player;
                         break;
@@ -403,6 +397,12 @@ namespace TheOtherRoles
         public static void setModifier(byte modifierId, byte playerId, byte flag) {
             PlayerControl player = Helpers.playerById(playerId); 
             switch ((RoleId)modifierId) {
+                case RoleId.EvilGuesser:
+                    Guesser.evilGuesser = player;
+                    break;
+                case RoleId.NiceGuesser:
+                    Guesser.niceGuesser = player;
+                    break;
                 case RoleId.Bait:
                     Bait.bait.Add(player);
                     break;
