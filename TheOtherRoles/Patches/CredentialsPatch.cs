@@ -13,7 +13,7 @@ $@"<size=130%><color=#ff351f>TheOtherRoles Community Edition</color></size> v{Th
 Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles by <color=#FCCE03FF>Eisbison</color>. Additional artwork by SvettyScribbles and JustASysAdmin.</size>";
 
     public static string mainMenuCredentials = 
-$@"Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles  by <color=#FCCE03FF>Eisbison</color></size>";
+$@"Modded by <color=#FCCE03FF>JustASysAdmin</color>, based on TheOtherRoles by <color=#FCCE03FF>Eisbison</color>.<br>Additional artwork by <color=#FCCE03FF>SvettyScribbles</color> and <color=#FCCE03FF>JustASysAdmin</color>.</size>";
 
         public static string contributorsCredentials =
 $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
