@@ -93,7 +93,7 @@ namespace TheOtherRoles
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
-                canVent == CustomOptionHolder.jesterCanVent.getBool();
+                canVent = CustomOptionHolder.jesterCanVent.getBool();
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
