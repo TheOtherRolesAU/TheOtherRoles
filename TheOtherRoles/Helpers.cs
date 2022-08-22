@@ -659,7 +659,9 @@ public static bool isPlayerLover(PlayerControl player) {
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
-            }
+            } else if (Jester.jester != null && Jester.jester == player && Jester.canVent)
+                roleCouldUse = true;
+
             return roleCouldUse;
         }
 

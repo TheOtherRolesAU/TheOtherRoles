@@ -82,6 +82,8 @@ namespace TheOtherRoles.Patches {
         }
     }
 
+
+
     [HarmonyPatch(typeof(VentButton), nameof(VentButton.DoClick))]
     class VentButtonDoClickPatch {
         static  bool Prefix(VentButton __instance) {
@@ -90,6 +92,18 @@ namespace TheOtherRoles.Patches {
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(Vent), nameof(Vent.SetButtons))]
+    public static class JesterEnterVent
+    {
+        public static bool Prefix(Vent __instance)
+        {
+            if (Jester.jester == CachedPlayer.LocalPlayer.PlayerControl && Jester.canVent)
+                return false;
+            return true;
+        }
+    }
+
 
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {

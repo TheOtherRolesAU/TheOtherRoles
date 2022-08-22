@@ -86,12 +86,14 @@ namespace TheOtherRoles
             public static Color color = new Color32(236, 98, 165, byte.MaxValue);
 
             public static bool triggerJesterWin = false;
+            public static bool canVent = false;
             public static bool canCallEmergency = true;
             public static bool hasImpostorVision = false;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
+                canVent == CustomOptionHolder.jesterCanVent.getBool();
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
