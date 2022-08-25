@@ -40,8 +40,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2022.6.21, 2022.7.12| v4.1.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.6/TheOtherRoles.zip)
-| 2022.6.21, 2022.7.12| v4.1.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.5/TheOtherRoles.zip)
+| 2022.8.24| v4.1.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.7/TheOtherRoles.zip)
+| 2022.6.21| v4.1.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.6/TheOtherRoles.zip)
+| 2022.6.21| v4.1.5| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.5/TheOtherRoles.zip)
 | 2022.3.29| v4.1.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.4/TheOtherRoles.zip)
 | 2022.3.29| v4.1.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.3/TheOtherRoles.zip)
 | 2022.3.29| v4.1.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.2/TheOtherRoles.zip)
@@ -107,7 +108,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
-  
+
+**Version 4.1.7**
+- Updated to Among Us version 2022.8.24
+
 **Version 4.1.6**  
 - Added Sound Effects: Most buttons / role funcionalities now have a sound!
 - Added a mod option: Enable Sound Effects  

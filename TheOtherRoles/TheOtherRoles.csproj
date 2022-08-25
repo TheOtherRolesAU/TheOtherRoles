@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>4.1.6</Version>
+        <Version>4.1.7</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.6.21" />
+        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.8.23" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
     </ItemGroup>
