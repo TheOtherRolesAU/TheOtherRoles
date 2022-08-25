@@ -319,6 +319,7 @@ namespace TheOtherRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption showButtonTarget;
+        public static CustomOption blockGameEnd;
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
@@ -698,6 +699,7 @@ namespace TheOtherRoles {
 
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+            blockGameEnd = CustomOption.Create(9995, Types.General, "Block Game End if Power Crew is Alive", false);
 
 
             randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);

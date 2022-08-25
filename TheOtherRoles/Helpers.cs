@@ -86,6 +86,22 @@ namespace TheOtherRoles {
             return roleCouldUse;
         }
 
+        public static bool isRoleAlive(PlayerControl role) {
+            return (role != null && isAlive(role));
+        }
+
+        public static bool killingCrewAlive() {
+            // This functions blocks the game from ending if specified crewmate roles are alive
+            if (!CustomOptionHolder.blockGameEnd.getBool()) return false;
+            bool powerCrewAlive = false;
+
+            if (isRoleAlive(Sheriff.sheriff)) powerCrewAlive = true;
+            if (isRoleAlive(Veteren.veteren)) powerCrewAlive = true;
+            if (isRoleAlive(Mayor.mayor)) powerCrewAlive = true;
+            if (isRoleAlive(Swapper.swapper)) powerCrewAlive = true;
+
+            return powerCrewAlive;
+        }
 
         public static bool isNeutral(PlayerControl p) {
             if (p == Jester.jester) return true;
