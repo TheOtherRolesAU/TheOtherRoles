@@ -263,6 +263,12 @@ public static bool isPlayerLover(PlayerControl player) {
 			}
 		}
 
+        public static bool canAlwaysBeGuessed(RoleId roleId) {
+            bool guessable = false;
+            if (roleId == RoleId.Cursed) guessable = true;
+            return guessable;
+        }
+
         public static void turnToCrewmate(PlayerControl player) {
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TurnToCrewmate, Hazel.SendOption.Reliable, -1);

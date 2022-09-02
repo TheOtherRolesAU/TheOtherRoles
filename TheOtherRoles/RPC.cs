@@ -15,7 +15,7 @@ using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
 {
-    enum RoleId {
+    public enum RoleId {
         Jester,
         Prosecutor,
         Mayor,
