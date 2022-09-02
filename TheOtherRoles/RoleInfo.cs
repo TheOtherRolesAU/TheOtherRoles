@@ -14,9 +14,10 @@ namespace TheOtherRoles
         public string shortDescription;
         public RoleId roleId;
         public bool isNeutral;
+		public bool isGuessable;
         public bool isModifier;
 
-        RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false) {
+        RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false, bool isGuessable = false) {
             this.color = color;
             this.name = name;
             this.introDescription = introDescription;
@@ -24,6 +25,7 @@ namespace TheOtherRoles
             this.roleId = roleId;
             this.isNeutral = isNeutral;
             this.isModifier = isModifier;
+			this.isGuessable = isGuessable;
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
@@ -90,7 +92,7 @@ namespace TheOtherRoles
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
         public static RoleInfo indomitable  = new RoleInfo("Indomitable", Color.yellow, "Your role cannot be guessed", "You are Indomitable!", RoleId.Indomitable, false, true);
         public static RoleInfo slueth  = new RoleInfo("Slueth", Color.yellow, "Learn the roles of bodies you report", "Who dat?", RoleId.Indomitable, false, true);
-        public static RoleInfo cursed  = new RoleInfo("Fanatic", Color.yellow, "You are crewmate....for now", "Discover your true potential", RoleId.Cursed, false, true);
+        public static RoleInfo cursed  = new RoleInfo("Fanatic", Color.yellow, "You are crewmate....for now", "Discover your true potential", RoleId.Cursed, false, true, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
         public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
