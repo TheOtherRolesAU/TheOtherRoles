@@ -524,7 +524,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForJackalWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && (statistics.TeamSwooperAlive == 0 || Swooper.swooper == Jackal.jackal) && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamJackalAlive >= statistics.TotalAlive - statistics.TeamJackalAlive && statistics.TeamImpostorsAlive == 0 && (statistics.TeamSwooperAlive == 0 || Swooper.swooper == Jackal.jackal) && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamJackalHasAliveLover && statistics.TeamLoversAlive == 2) && !Helpers.killingCrewAlive()) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.TeamJackalWin, false);
                 return true;
@@ -534,7 +534,7 @@ namespace TheOtherRoles.Patches {
 
         private static bool CheckAndEndGameForSwooperWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (Swooper.swooper == Jackal.jackal) return false;
-            if (statistics.TeamSwooperAlive >= statistics.TotalAlive - statistics.TeamSwooperAlive && statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamSwooperHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamSwooperAlive >= statistics.TotalAlive - statistics.TeamSwooperAlive && statistics.TeamImpostorsAlive == 0 && statistics.TeamJackalAlive == 0 && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamSwooperHasAliveLover && statistics.TeamLoversAlive == 2) && !Helpers.killingCrewAlive()) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.SwooperWin, false);
                 return true;
@@ -548,7 +548,8 @@ namespace TheOtherRoles.Patches {
                 statistics.TeamImpostorsAlive == 0 &&  
                 statistics.TeamJackalAlive == 0 && 
                 statistics.TeamSwooperAlive == 0 &&
-                !(statistics.TeamWerewolfHasAliveLover && statistics.TeamLoversAlive == 2)
+                !(statistics.TeamWerewolfHasAliveLover && statistics.TeamLoversAlive == 2) &&
+                !Helpers.killingCrewAlive()
             ) {
                 __instance.enabled = false;
                 ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.WerewolfWin, false);
@@ -558,7 +559,7 @@ namespace TheOtherRoles.Patches {
         }
 
         private static bool CheckAndEndGameForImpostorWin(ShipStatus __instance, PlayerStatistics statistics) {
-            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && statistics.TeamSwooperAlive == 0 && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2)) {
+            if (statistics.TeamImpostorsAlive >= statistics.TotalAlive - statistics.TeamImpostorsAlive && statistics.TeamJackalAlive == 0 && statistics.TeamSwooperAlive == 0 && statistics.TeamWerewolfAlive == 0 && !(statistics.TeamImpostorHasAliveLover && statistics.TeamLoversAlive == 2) && !Helpers.killingCrewAlive()) {
                 __instance.enabled = false;
                 GameOverReason endReason;
                 switch (TempData.LastDeathReason) {

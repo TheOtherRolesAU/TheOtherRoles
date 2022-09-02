@@ -86,6 +86,22 @@ namespace TheOtherRoles {
             return roleCouldUse;
         }
 
+        public static bool isRoleAlive(PlayerControl role) {
+            return (role != null && isAlive(role));
+        }
+
+        public static bool killingCrewAlive() {
+            // This functions blocks the game from ending if specified crewmate roles are alive
+            if (!CustomOptionHolder.blockGameEnd.getBool()) return false;
+            bool powerCrewAlive = false;
+
+            if (isRoleAlive(Sheriff.sheriff)) powerCrewAlive = true;
+            if (isRoleAlive(Veteren.veteren)) powerCrewAlive = true;
+            if (isRoleAlive(Mayor.mayor)) powerCrewAlive = true;
+            if (isRoleAlive(Swapper.swapper)) powerCrewAlive = true;
+
+            return powerCrewAlive;
+        }
 
         public static bool isNeutral(PlayerControl p) {
             if (p == Jester.jester) return true;
@@ -582,7 +598,7 @@ public static bool isPlayerLover(PlayerControl player) {
 
         public static void setLook(this PlayerControl target, String playerName, int colorId, string hatId, string visorId, string skinId, string petId) {
             target.RawSetColor(colorId);
-            target.RawSetVisor(visorId);
+            target.RawSetVisor(visorId,colorId);
             target.RawSetHat(hatId, colorId);
             target.RawSetName(hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target) ? "" : playerName);
 
@@ -659,7 +675,9 @@ public static bool isPlayerLover(PlayerControl player) {
                     roleCouldUse = false;
                 else
                     roleCouldUse = true;
-            }
+            } else if (Jester.jester != null && Jester.jester == player && Jester.canVent)
+                roleCouldUse = true;
+
             return roleCouldUse;
         }
 
@@ -696,7 +714,7 @@ public static bool isPlayerLover(PlayerControl player) {
             }            // Kill the killer if the Veteren is on alert
             
             // Kill the Body Guard and the killer if the target is guarded
-            else if (BodyGuard.bodyguard != null && target == BodyGuard.guarded) {
+            else if (BodyGuard.bodyguard != null && target == BodyGuard.guarded && isAlive(BodyGuard.bodyguard)) {
               if (Medic.shielded != null && Medic.shielded == target) {
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                    writer.Write(target.PlayerId);

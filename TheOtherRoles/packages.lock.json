@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "AmongUs.GameLibs.Steam": {
         "type": "Direct",
-        "requested": "[2022.6.21, )",
-        "resolved": "2022.6.21",
-        "contentHash": "l5lB5cTEBRWW+WNOso11mT8csmoZK7CUEqTkACSTwQbxtMQyZN9YORNxkJmtOD7pZnNkbWJ3dLAvQ6pMUsFDsQ=="
+        "requested": "[2022.8.23, )",
+        "resolved": "2022.8.23",
+        "contentHash": "baY5JO6dbdOAZ0VTtGX0xre6/BlDdreJDAH8boCKZt3JTAcn+eeH+l8mUZRC9eCJOODUik2C0TTAt5AqBmYtZg=="
       },
       "BepInEx.IL2CPP": {
         "type": "Direct",

@@ -73,6 +73,7 @@ namespace TheOtherRoles {
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
+        public static CustomOption jesterCanVent;
         public static CustomOption jesterHasImpostorVision;
 		
         public static CustomOption prosecutorSpawnRate;
@@ -318,6 +319,7 @@ namespace TheOtherRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption showButtonTarget;
+        public static CustomOption blockGameEnd;
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
@@ -446,6 +448,7 @@ namespace TheOtherRoles {
 
             jesterSpawnRate = CustomOption.Create(60, Types.Neutral, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, Types.Neutral, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
+            jesterCanVent = CustomOption.Create(1901, Types.Neutral, "Jester Can Hide in Vent", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Executioner"),   rates, null, true);
@@ -696,6 +699,7 @@ namespace TheOtherRoles {
 
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+            blockGameEnd = CustomOption.Create(9995, Types.General, "Block Game End if Power Crew is Alive", false);
 
 
             randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);

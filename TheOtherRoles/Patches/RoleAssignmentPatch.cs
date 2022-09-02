@@ -20,7 +20,6 @@ namespace TheOtherRoles.Patches {
     class RoleManagerSelectRolesPatch {
         private static int crewValues;
         private static int impValues;
-        private static bool isEvilGuesser;
         private static List<Tuple<byte, byte>> playerRoleMap = new List<Tuple<byte, byte>>();
         public static void Postfix() {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);

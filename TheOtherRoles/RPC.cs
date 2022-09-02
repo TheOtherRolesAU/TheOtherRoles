@@ -1108,8 +1108,6 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Guesser.niceGuesser != null && Guesser.niceGuesser == player)
-                Guesser.niceGuesser = oldShifter;
                 
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
