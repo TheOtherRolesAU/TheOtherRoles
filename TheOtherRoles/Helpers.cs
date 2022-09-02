@@ -714,7 +714,7 @@ public static bool isPlayerLover(PlayerControl player) {
             }            // Kill the killer if the Veteren is on alert
             
             // Kill the Body Guard and the killer if the target is guarded
-            else if (BodyGuard.bodyguard != null && target == BodyGuard.guarded) {
+            else if (BodyGuard.bodyguard != null && target == BodyGuard.guarded && isAlive(BodyGuard.bodyguard)) {
               if (Medic.shielded != null && Medic.shielded == target) {
                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                    writer.Write(target.PlayerId);
