@@ -283,6 +283,12 @@ public static bool isPlayerLover(PlayerControl player) {
                 turnToCrewmate(p);
             }
         }
+        public static void turnToImpostorRPC(PlayerControl player) {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.TurnToImpostor, Hazel.SendOption.Reliable, -1);
+            writer.Write(player.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCProcedure.turnToImpostor(player.PlayerId);
+		}
 
         public static void turnToImpostor(PlayerControl player) {
             player.Data.Role.TeamType = RoleTeamTypes.Impostor;
@@ -751,6 +757,21 @@ public static bool isPlayerLover(PlayerControl player) {
                 }
                 return MurderAttemptResult.SuppressKill;
             }
+			
+			else if (Cursed.cursed != null && Cursed.cursed == target && killer.Data.Role.IsImpostor) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                writer.Write(killer.PlayerId);
+                writer.Write((byte)0);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.setBlanked(killer.PlayerId, 0);
+
+				turnToImpostorRPC(target);
+
+				return MurderAttemptResult.BlankKill;
+			}
+				
+				
+			
             return MurderAttemptResult.PerformKill;
         }
 
@@ -776,7 +797,7 @@ public static bool isPlayerLover(PlayerControl player) {
                 writer.Write(killer.PlayerId);
                 writer.Write(showAnimation ? Byte.MaxValue : 0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.uncheckedMurderPlayer(killer.PlayerId, killer.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+                RPCProcedure.uncheckedMurderPlayer(BodyGuard.bodyguard.PlayerId, killer.PlayerId, (byte)0);
                 
                 // Kill the BodyGuard
                 MessageWriter writer2 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
@@ -784,7 +805,7 @@ public static bool isPlayerLover(PlayerControl player) {
                 writer2.Write(BodyGuard.bodyguard.PlayerId);
                 writer2.Write(showAnimation ? Byte.MaxValue : 0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer2);
-                RPCProcedure.uncheckedMurderPlayer(BodyGuard.bodyguard.PlayerId, BodyGuard.bodyguard.PlayerId, showAnimation ? Byte.MaxValue : (byte)0);
+                RPCProcedure.uncheckedMurderPlayer(BodyGuard.bodyguard.PlayerId, BodyGuard.bodyguard.PlayerId, (byte)0);
 
 
                 MessageWriter writer3 = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShowBodyGuardFlash, Hazel.SendOption.Reliable, -1);

@@ -438,7 +438,8 @@ namespace TheOtherRoles.Patches {
                 RoleId.Slueth,
                 RoleId.Blind,
                 RoleId.EvilGuesser,
-                RoleId.NiceGuesser
+                RoleId.NiceGuesser,
+				RoleId.Cursed
             });
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
@@ -543,6 +544,7 @@ namespace TheOtherRoles.Patches {
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 modifiers.RemoveAll(x => x == RoleId.EvilGuesser);
             }
+
             
             if (modifiers.Contains(RoleId.NiceGuesser)) {
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
@@ -551,8 +553,21 @@ namespace TheOtherRoles.Patches {
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 modifiers.RemoveAll(x => x == RoleId.NiceGuesser);
             }
+
+
+            if (modifiers.Contains(RoleId.Cursed)) {
+                List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
+                crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
+                playerId = setModifierToRandomPlayer((byte)RoleId.Cursed, crewPlayer);
+                playerList.RemoveAll(x => x.PlayerId == playerId);
+                modifiers.RemoveAll(x => x == RoleId.Cursed);
+            }
+
+
             modifiers.RemoveAll(x => x == RoleId.NiceGuesser);
             modifiers.RemoveAll(x => x == RoleId.EvilGuesser);
+			modifiers.RemoveAll(x => x == RoleId.Cursed);
+
 
             
             if (modifiers.Contains(RoleId.Sunglasses)) {
@@ -587,6 +602,8 @@ namespace TheOtherRoles.Patches {
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
                 case RoleId.Indomitable:
                     selection = CustomOptionHolder.modifierIndomitable.getSelection(); break;
+                case RoleId.Cursed:
+                    selection = CustomOptionHolder.modifierCursed.getSelection(); break;
                 case RoleId.Slueth:
                     selection = CustomOptionHolder.modifierSlueth.getSelection(); break;
                 case RoleId.Blind:

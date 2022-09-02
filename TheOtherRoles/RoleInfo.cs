@@ -90,6 +90,7 @@ namespace TheOtherRoles
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
         public static RoleInfo indomitable  = new RoleInfo("Indomitable", Color.yellow, "Your role cannot be guessed", "You are Indomitable!", RoleId.Indomitable, false, true);
         public static RoleInfo slueth  = new RoleInfo("Slueth", Color.yellow, "Learn the roles of bodies you report", "Who dat?", RoleId.Indomitable, false, true);
+        public static RoleInfo cursed  = new RoleInfo("Fanatic", Color.yellow, "You are crewmate....for now", "Discover your true potential", RoleId.Cursed, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
         public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
@@ -111,6 +112,7 @@ namespace TheOtherRoles
             cleaner,
             warlock,
             werewolf,
+			cursed,
             cultist,
             bountyHunter,
             witch,
@@ -185,6 +187,7 @@ namespace TheOtherRoles
                 if (p == Mini.mini) infos.Add(mini);
                 if (p == Blind.blind) infos.Add(blind);
                 if (p == Slueth.slueth) infos.Add(slueth);
+                if (p == Cursed.cursed) infos.Add(cursed);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
                 if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
                 if (p == Guesser.evilGuesser) infos.Add(badGuesser);

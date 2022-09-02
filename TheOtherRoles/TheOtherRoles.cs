@@ -23,6 +23,7 @@ namespace TheOtherRoles
             Bomber.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+			Cursed.clearAndReload();
             Deputy.clearAndReload();
             Amnisiac.clearAndReload();
             Lighter.clearAndReload();
@@ -1953,6 +1954,16 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             indomitable = null;
+        }
+    }
+
+    public static class Cursed {
+        public static PlayerControl cursed;
+        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            cursed = null;
         }
     }
     
