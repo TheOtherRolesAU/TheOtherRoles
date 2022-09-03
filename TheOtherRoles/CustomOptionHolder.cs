@@ -667,7 +667,7 @@ namespace TheOtherRoles {
             modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Color.yellow, "Indomitable"), rates, null, true);
             modifierBlind = CustomOption.Create(8810, Types.Modifier, cs(Color.yellow, "Blind"), rates, null, true);
             modifierSlueth = CustomOption.Create(8830, Types.Modifier, cs(Color.yellow, "Slueth"), rates, null, true);
-            modifierCursed = CustomOption.Create(1276, Types.Modifier, cs(Color.yellow, "Fanatic"), rates, null, true);
+            modifierCursed = CustomOption.Create(1277, Types.Modifier, cs(Color.yellow, "Fanatic"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, Types.Modifier, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
