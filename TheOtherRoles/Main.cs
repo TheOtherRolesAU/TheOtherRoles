@@ -174,11 +174,11 @@ namespace TheOtherRoles
             }
 
             // Terminate round
-            if(Input.GetKeyDown(KeyCode.L)) {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCProcedure.forceEnd();
-            }
+            //if(Input.GetKeyDown(KeyCode.L)) {
+            //    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+            //    AmongUsClient.Instance.FinishRpcImmediately(writer);
+            //    RPCProcedure.forceEnd();
+            //}
         }
 
         public static string RandomString(int length)
