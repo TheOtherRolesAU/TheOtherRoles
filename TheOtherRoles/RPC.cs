@@ -165,15 +165,16 @@ namespace TheOtherRoles
         }
 
         public static void forceEnd() {
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
-            {
-                if (!player.Data.Role.IsImpostor)
-                {
-                    player.RemoveInfected();
-                    player.MurderPlayer(player);
-                    player.Data.IsDead = true;
-                }
-            }
+            return;
+            //foreach (PlayerControl player in CachedPlayer.AllPlayers)
+            //{
+            //    if (!player.Data.Role.IsImpostor)
+            //    {
+            //        player.RemoveInfected();
+            //        player.MurderPlayer(player);
+            //        player.Data.IsDead = true;
+            //    }
+            //}
         }
 
         public static void workaroundSetRoles(byte numberOfRoles, MessageReader reader)
