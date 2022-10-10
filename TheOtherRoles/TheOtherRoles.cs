@@ -1959,8 +1959,15 @@ namespace TheOtherRoles
 
     public static class Cursed {
         public static PlayerControl cursed;
-        public static Color color = new Color32(0, 247, 255, byte.MaxValue);
-
+        public static Color crewColor = new Color32(0, 247, 255, byte.MaxValue);
+        public static Color impColor = Palette.ImpostorRed;
+        public Color color {
+            get {
+                if (cursed == null || !cursed.Data.Role.IsImpostor) {
+                    return crewColor;
+                else return impColor;
+             }
+        }
 
         public static void clearAndReload() {
             cursed = null;
