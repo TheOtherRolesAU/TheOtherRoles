@@ -548,7 +548,7 @@ namespace TheOtherRoles.Patches {
             
             if (modifiers.Contains(RoleId.NiceGuesser)) {
                 List<PlayerControl> crewPlayer = new List<PlayerControl>(playerList);
-                crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
+                crewPlayer.RemoveAll(x => x.Data.Role.IsImpostor);
                 playerId = setModifierToRandomPlayer((byte)RoleId.NiceGuesser, crewPlayer);
                 playerList.RemoveAll(x => x.PlayerId == playerId);
                 modifiers.RemoveAll(x => x == RoleId.NiceGuesser);

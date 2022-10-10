@@ -1961,14 +1961,7 @@ namespace TheOtherRoles
         public static PlayerControl cursed;
         public static Color crewColor = new Color32(0, 247, 255, byte.MaxValue);
         public static Color impColor = Palette.ImpostorRed;
-        public Color color {
-            get {
-                if (cursed == null || !cursed.Data.Role.IsImpostor) {
-                    return crewColor;
-                else return impColor;
-             }
-        }
-
+        public static Color color = crewColor;
         public static void clearAndReload() {
             cursed = null;
         }

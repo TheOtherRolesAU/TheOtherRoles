@@ -95,8 +95,8 @@ namespace TheOtherRoles
         public static RoleInfo cursed  = new RoleInfo("Fanatic", Color.yellow, "You are crewmate....for now", "Discover your true potential", RoleId.Cursed, false, true, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
-        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
-        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
+        public static RoleInfo goodGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
+        public static RoleInfo badGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
 
 
 

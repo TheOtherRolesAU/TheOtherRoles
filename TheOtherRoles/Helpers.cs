@@ -761,7 +761,13 @@ public static bool isPlayerLover(PlayerControl player) {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.timeMasterRewindTime();
                 }
-                return MurderAttemptResult.SuppressKill;
+                MessageWriter write = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetBlanked, Hazel.SendOption.Reliable, -1);
+                write.Write(killer.PlayerId);
+                write.Write((byte)0);
+                AmongUsClient.Instance.FinishRpcImmediately(write);
+                RPCProcedure.setBlanked(killer.PlayerId, 0);
+
+                return MurderAttemptResult.BlankKill;
             }
 			
 			else if (Cursed.cursed != null && Cursed.cursed == target && killer.Data.Role.IsImpostor) {
