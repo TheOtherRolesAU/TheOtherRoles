@@ -49,10 +49,10 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(173, 126, 201, byte.MaxValue), 
                                         shadow = new Color32(131, 58, 203, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "Zougat",
-                                        color = new Color32(160, 101, 56, byte.MaxValue), 
-                                        shadow = new Color32(115, 15, 78, byte.MaxValue),
-                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "Stitch",
+                                        color = new Color32(51, 136, 255, byte.MaxValue), 
+                                        shadow = new Color32(253, 93, 168, byte.MaxValue),
+                                        isLighterColor = true });
             colors.Add(new CustomColor { longname = "LuLuBlue", // 25
                                         color = new Color32(148, 190, 224, byte.MaxValue), 
                                         shadow = new Color32(100, 135, 163, byte.MaxValue),
