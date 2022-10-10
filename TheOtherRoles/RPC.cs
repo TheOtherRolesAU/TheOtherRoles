@@ -82,6 +82,7 @@ namespace TheOtherRoles
         Sunglasses,
         Mini,
         Vip,
+        Tunneler,
         Invert,
         Blind
     }
@@ -441,6 +442,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Blind:
                     Blind.blind = player;
+                    break;
+                case RoleId.Tunneler:
+                    Tunneler.tunneler = player;
                     break;
                 case RoleId.Invert:
                     Invert.invert.Add(player);
