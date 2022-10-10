@@ -183,13 +183,15 @@ namespace TheOtherRoles
                     if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
                     if (p == Indomitable.indomitable) infos.Add(indomitable);
                 }
+                if (PlayerControl.LocalPlayer.Data.IsDead) {
+                    if (p == Cursed.cursed) infos.Add(cursed);
+                }
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
                 if (p == Blind.blind) infos.Add(blind);
                 if (p == Slueth.slueth) infos.Add(slueth);
-                if (p == Cursed.cursed) infos.Add(cursed);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
                 if (p == Guesser.niceGuesser) infos.Add(goodGuesser);
                 if (p == Guesser.evilGuesser) infos.Add(badGuesser);
