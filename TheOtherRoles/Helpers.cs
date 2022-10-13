@@ -690,6 +690,13 @@ public static bool isPlayerLover(PlayerControl player) {
             } else if (Jester.jester != null && Jester.jester == player && Jester.canVent)
                 roleCouldUse = true;
 
+            if (Tunneler.tunneler != null && Tunneler.tunneler == player) {
+                var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Tunneler.tunneler.Data);
+                int numberOfTasks = playerTotal - playerCompleted;
+                if (numberOfTasks == 0) roleCouldUse = true;
+            }
+
+
             return roleCouldUse;
         }
 

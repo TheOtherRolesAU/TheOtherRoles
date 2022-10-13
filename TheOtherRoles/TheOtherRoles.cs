@@ -77,6 +77,7 @@ namespace TheOtherRoles
             Mini.clearAndReload();
             Indomitable.clearAndReload();
             Blind.clearAndReload();
+            Tunneler.clearAndReload();
             Slueth.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
@@ -1985,6 +1986,16 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             blind = null;
+        }
+    }
+
+    public static class Tunneler {
+        public static PlayerControl tunneler;
+        public static Color color = new Color32(48, 21, 89, byte.MaxValue);
+
+
+        public static void clearAndReload() {
+            tunneler = null;
         }
     }
 
