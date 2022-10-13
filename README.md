@@ -40,6 +40,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2022.9.20| v5.6.8| [Download](https://github.com/JustASysAdmin/TheOtherRoles2/releases/tag/v5.6.8)
 | 2022.9.20| v5.6.7| [Download](https://github.com/JustASysAdmin/TheOtherRoles2/releases/tag/v5.6.7)
 
 
