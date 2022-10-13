@@ -113,6 +113,7 @@ namespace TheOtherRoles
             eraser,
             trickster,
             cleaner,
+            undertaker,
             warlock,
             werewolf,
 			cursed,
