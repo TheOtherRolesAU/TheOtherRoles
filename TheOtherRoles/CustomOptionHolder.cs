@@ -73,6 +73,7 @@ namespace TheOtherRoles {
 
         public static CustomOption jesterSpawnRate;
         public static CustomOption jesterCanCallEmergency;
+        public static CustomOption jesterCanVent;
         public static CustomOption jesterHasImpostorVision;
 		
         public static CustomOption prosecutorSpawnRate;
@@ -304,6 +305,7 @@ namespace TheOtherRoles {
         public static CustomOption modifierIndomitable;
         public static CustomOption modifierBlind;
         public static CustomOption modifierSlueth;
+		public static CustomOption modifierCursed;
 
         public static CustomOption modifierVip;
         public static CustomOption modifierVipQuantity;
@@ -318,6 +320,7 @@ namespace TheOtherRoles {
         public static CustomOption noVoteIsSelfVote;
         public static CustomOption hidePlayerNames;
         public static CustomOption showButtonTarget;
+        public static CustomOption blockGameEnd;
         public static CustomOption allowParallelMedBayScans;
         public static CustomOption shieldFirstKill;
 
@@ -378,13 +381,13 @@ namespace TheOtherRoles {
         // public static CustomOption bomberBombCooldown;
         // public static CustomOption bomberDelay;
         // public static CustomOption bomberTimer;
-        /* *
+        
             bomberSpawnRate = CustomOption.Create(8840, Types.Impostor, cs(Bomber.color, "Bomber"), rates, null, true);
             bomberBombCooldown = CustomOption.Create(8841, Types.Impostor, "Bomber Cooldown", 30f, 25f, 60f, 2.5f, bomberSpawnRate);
             bomberDelay = CustomOption.Create(8842, Types.Impostor, "Bomb Delay", 10f, 1f, 20f, 0.5f, bomberSpawnRate);
             bomberTimer = CustomOption.Create(8843, Types.Impostor, "Bomb Timer", 10f, 5f, 30f, 5f, bomberSpawnRate);
 
-        /* */
+
 
             undertakerSpawnRate = CustomOption.Create(1201, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
             undertakerDragingDelaiAfterKill = CustomOption.Create(1202, Types.Impostor, "Draging delay after kill", 0f, 0f, 15, 1f, undertakerSpawnRate);                     
@@ -446,6 +449,7 @@ namespace TheOtherRoles {
 
             jesterSpawnRate = CustomOption.Create(60, Types.Neutral, cs(Jester.color, "Jester"), rates, null, true);
             jesterCanCallEmergency = CustomOption.Create(61, Types.Neutral, "Jester Can Call Emergency Meeting", true, jesterSpawnRate);
+            jesterCanVent = CustomOption.Create(1901, Types.Neutral, "Jester Can Hide in Vent", true, jesterSpawnRate);
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Executioner"),   rates, null, true);
@@ -663,6 +667,7 @@ namespace TheOtherRoles {
             modifierIndomitable = CustomOption.Create(1276, Types.Modifier, cs(Color.yellow, "Indomitable"), rates, null, true);
             modifierBlind = CustomOption.Create(8810, Types.Modifier, cs(Color.yellow, "Blind"), rates, null, true);
             modifierSlueth = CustomOption.Create(8830, Types.Modifier, cs(Color.yellow, "Slueth"), rates, null, true);
+            modifierCursed = CustomOption.Create(1277, Types.Modifier, cs(Color.yellow, "Fanatic"), rates, null, true);
 
             modifierVip = CustomOption.Create(1070, Types.Modifier, cs(Color.yellow, "VIP"), rates, null, true);
             modifierVipQuantity = CustomOption.Create(1071, Types.Modifier, cs(Color.yellow, "VIP Quantity"), ratesModifier, modifierVip);
@@ -696,6 +701,7 @@ namespace TheOtherRoles {
 
 
             showButtonTarget = CustomOption.Create(9994, Types.General, "Show Button Target", true);
+            blockGameEnd = CustomOption.Create(9995, Types.General, "Block Game End if Power Crew is Alive", false);
 
 
             randomGameStartPosition = CustomOption.Create(9041, Types.General, "Random Spawn Location", false);

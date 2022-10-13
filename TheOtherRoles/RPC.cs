@@ -15,7 +15,7 @@ using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles
 {
-    enum RoleId {
+    public enum RoleId {
         Jester,
         Prosecutor,
         Mayor,
@@ -35,6 +35,7 @@ namespace TheOtherRoles
         Swooper,
         Veteren,
         Amnisiac,
+		Cursed,
         Medic,
         Shifter,
         Swapper,
@@ -119,6 +120,7 @@ namespace TheOtherRoles
         BHSetBounty,
         TimeMasterShield,
         TimeMasterRewindTime,
+		TurnToImpostor,
         BodyGuardGuardPlayer,
         VeterenAlert,
         VeterenKill,
@@ -429,11 +431,13 @@ namespace TheOtherRoles
                     Vip.vip.Add(player);
                     break;
                 case RoleId.Indomitable:
-                    TheOtherRolesPlugin.Logger.LogError("Assigning "+ player.Data.PlayerName +" the Indomitable modifier...does it fail somewhere?");
                     Indomitable.indomitable = player;
                     break;
                 case RoleId.Slueth:
                     Slueth.slueth = player;
+                    break;
+                case RoleId.Cursed:
+                    Cursed.cursed = player;
                     break;
                 case RoleId.Blind:
                     Blind.blind = player;
@@ -987,6 +991,12 @@ namespace TheOtherRoles
             Helpers.turnToImpostor(player);
             Cultist.needsFollower = false;
         }
+		
+        public static void turnToImpostor(byte targetId) {
+            PlayerControl player = Helpers.playerById(targetId);
+            erasePlayerRoles(player.PlayerId, true);
+            Helpers.turnToImpostor(player);
+        }
         
         public static void veterenAlert() {
             Veteren.alertActive = true;
@@ -1108,8 +1118,6 @@ namespace TheOtherRoles
                 Spy.spy = oldShifter;
             if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player)
                 SecurityGuard.securityGuard = oldShifter;
-            if (Guesser.niceGuesser != null && Guesser.niceGuesser == player)
-                Guesser.niceGuesser = oldShifter;
                 
             if (Medium.medium != null && Medium.medium == player)
                 Medium.medium = oldShifter;
@@ -1295,6 +1303,7 @@ namespace TheOtherRoles
             if (player == Vulture.vulture) Vulture.clearAndReload();
             if (player == Lawyer.lawyer) Lawyer.clearAndReload();
             if (player == Pursuer.pursuer) Pursuer.clearAndReload();
+            if (player == Werewolf.werewolf) Werewolf.clearAndReload();
 
             // Modifier
             if (!ignoreModifier)
@@ -1306,6 +1315,7 @@ namespace TheOtherRoles
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
                 if (player == Mini.mini) Mini.clearAndReload();
+                if (player == Cursed.cursed) Cursed.clearAndReload();
                 if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
             }
@@ -2039,6 +2049,10 @@ namespace TheOtherRoles
                     break;  
                 case (byte)CustomRPC.CultistCreateImposter:
                     RPCProcedure.cultistCreateImposter(reader.ReadByte());
+                    break;
+					
+                case (byte)CustomRPC.TurnToImpostor:
+                    RPCProcedure.turnToImpostor(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.TurnToCrewmate:
                     RPCProcedure.turnToCrewmate(reader.ReadByte());

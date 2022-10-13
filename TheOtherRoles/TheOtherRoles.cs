@@ -23,6 +23,7 @@ namespace TheOtherRoles
             Bomber.clearAndReload();
             Engineer.clearAndReload();
             Sheriff.clearAndReload();
+			Cursed.clearAndReload();
             Deputy.clearAndReload();
             Amnisiac.clearAndReload();
             Lighter.clearAndReload();
@@ -86,12 +87,14 @@ namespace TheOtherRoles
             public static Color color = new Color32(236, 98, 165, byte.MaxValue);
 
             public static bool triggerJesterWin = false;
+            public static bool canVent = false;
             public static bool canCallEmergency = true;
             public static bool hasImpostorVision = false;
 
             public static void clearAndReload() {
                 jester = null;
                 triggerJesterWin = false;
+                canVent = CustomOptionHolder.jesterCanVent.getBool();
                 canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
                 hasImpostorVision = CustomOptionHolder.jesterHasImpostorVision.getBool();
             }
@@ -1951,6 +1954,16 @@ namespace TheOtherRoles
 
         public static void clearAndReload() {
             indomitable = null;
+        }
+    }
+
+    public static class Cursed {
+        public static PlayerControl cursed;
+        public static Color crewColor = new Color32(0, 247, 255, byte.MaxValue);
+        public static Color impColor = Palette.ImpostorRed;
+        public static Color color = crewColor;
+        public static void clearAndReload() {
+            cursed = null;
         }
     }
     

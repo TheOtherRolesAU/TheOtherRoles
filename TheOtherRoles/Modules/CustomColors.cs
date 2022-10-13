@@ -49,10 +49,10 @@ namespace TheOtherRoles.Modules {
                                         color = new Color32(173, 126, 201, byte.MaxValue), 
                                         shadow = new Color32(131, 58, 203, byte.MaxValue),
                                         isLighterColor = true });
-            colors.Add(new CustomColor { longname = "ZoNougat",
-                                        color = new Color32(160, 101, 56, byte.MaxValue), 
-                                        shadow = new Color32(115, 15, 78, byte.MaxValue),
-                                        isLighterColor = false });
+            colors.Add(new CustomColor { longname = "Stitch",
+                                        color = new Color32(51, 136, 255, byte.MaxValue), 
+                                        shadow = new Color32(253, 93, 168, byte.MaxValue),
+                                        isLighterColor = true });
             colors.Add(new CustomColor { longname = "LuLuBlue", // 25
                                         color = new Color32(148, 190, 224, byte.MaxValue), 
                                         shadow = new Color32(100, 135, 163, byte.MaxValue),
@@ -62,8 +62,8 @@ namespace TheOtherRoles.Modules {
                                         shadow = new Color32(1, 120, 72, byte.MaxValue),
                                         isLighterColor = false });
             colors.Add(new CustomColor { longname = "LilyBan", //27
-                                        color = new Color32(196, 235, 241, byte.MaxValue),
-                                        shadow = new Color32(255, 255, 194, byte.MaxValue),
+                                        color = new Color32(94, 203, 200, byte.MaxValue),
+                                        shadow = new Color32(182, 109, 255, byte.MaxValue),
                                         isLighterColor = true });
             colors.Add(new CustomColor { longname = "DuckGreen",  // 28
                                         color = new Color32(35, 107, 56, byte.MaxValue), 

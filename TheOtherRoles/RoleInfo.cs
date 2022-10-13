@@ -14,9 +14,10 @@ namespace TheOtherRoles
         public string shortDescription;
         public RoleId roleId;
         public bool isNeutral;
+		public bool isGuessable;
         public bool isModifier;
 
-        RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false) {
+        RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false, bool isGuessable = false) {
             this.color = color;
             this.name = name;
             this.introDescription = introDescription;
@@ -24,6 +25,7 @@ namespace TheOtherRoles
             this.roleId = roleId;
             this.isNeutral = isNeutral;
             this.isModifier = isModifier;
+			this.isGuessable = isGuessable;
         }
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
@@ -81,7 +83,7 @@ namespace TheOtherRoles
 
         // Modifier
         public static RoleInfo bloody = new RoleInfo("Bloody", Color.yellow, "Your killer leaves a bloody trail", "Your killer leaves a bloody trail", RoleId.Bloody, false, true);
-        public static RoleInfo antiTeleport = new RoleInfo("Anti tp", Color.yellow, "You will not get teleported", "You will not get teleported", RoleId.AntiTeleport, false, true);
+        public static RoleInfo antiTeleport = new RoleInfo("Anti tp", Color.yellow, "You will not get teleported", "You will not get teleported", RoleId.AntiTeleport, false, true, true);
         public static RoleInfo tiebreaker = new RoleInfo("Tiebreaker", Color.yellow, "Your vote break the tie", "Break the tie", RoleId.Tiebreaker, false, true);
         public static RoleInfo bait = new RoleInfo("Bait", Color.yellow, "Bait your enemies", "Bait your enemies", RoleId.Bait, false, true);
         public static RoleInfo sunglasses = new RoleInfo("Sunglasses", Color.yellow, "You got the sunglasses", "Your vision is reduced", RoleId.Sunglasses, false, true);
@@ -90,10 +92,11 @@ namespace TheOtherRoles
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
         public static RoleInfo indomitable  = new RoleInfo("Indomitable", Color.yellow, "Your role cannot be guessed", "You are Indomitable!", RoleId.Indomitable, false, true);
         public static RoleInfo slueth  = new RoleInfo("Slueth", Color.yellow, "Learn the roles of bodies you report", "Who dat?", RoleId.Indomitable, false, true);
+        public static RoleInfo cursed  = new RoleInfo("Fanatic", Color.yellow, "You are crewmate....for now", "Discover your true potential", RoleId.Cursed, false, true, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
         public static RoleInfo blind  = new RoleInfo("Blind", Color.yellow, "You cannot see your report button!", "Was that a dead body?", RoleId.Blind, false, true);
-        public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
-        public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
+        public static RoleInfo goodGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser, false, true);
+        public static RoleInfo badGuesser = new RoleInfo("Guesser", Color.yellow, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser, false, true);
 
 
 
@@ -111,6 +114,7 @@ namespace TheOtherRoles
             cleaner,
             warlock,
             werewolf,
+			cursed,
             cultist,
             bountyHunter,
             witch,
@@ -178,6 +182,9 @@ namespace TheOtherRoles
                     if (Vip.vip.Any(x => x.PlayerId == p.PlayerId)) infos.Add(vip);
                     if (p == Tiebreaker.tiebreaker) infos.Add(tiebreaker);
                     if (p == Indomitable.indomitable) infos.Add(indomitable);
+                }
+                if (PlayerControl.LocalPlayer.Data.IsDead) {
+                    if (p == Cursed.cursed) infos.Add(cursed);
                 }
                 if (p == Lovers.lover1 || p == Lovers.lover2) infos.Add(lover);
                 if (AntiTeleport.antiTeleport.Any(x => x.PlayerId == p.PlayerId)) infos.Add(antiTeleport);
