@@ -72,7 +72,7 @@ namespace TheOtherRoles.Patches {
                     hasVisibleShield = true;
                 }
                 
-                if (CachedPlayer.LocalPlayer.Data.IsDead && BountyHunter.bounty != null && target == BountyHunter.bounty) {
+                if (CachedPlayer.LocalPlayer.Data.IsDead && BountyHunter.bounty != null && Helpers.isAlive(BountyHunter.bountyHunter) && target == BountyHunter.bounty) {
                     hasVisibleShield = true;
                     color = Palette.ImpostorRed;
                 }
