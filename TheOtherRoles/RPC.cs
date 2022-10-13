@@ -984,6 +984,13 @@ namespace TheOtherRoles
                     Blackmailer.blackmailer = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
+
+                case RoleId.Miner:
+                    Helpers.turnToImpostor(Amnisiac.amnisiac);
+                    if (Amnisiac.resetRole) Miner.clearAndReload();
+                    Miner.miner = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
         }
     }
 
