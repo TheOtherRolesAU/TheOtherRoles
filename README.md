@@ -1,7 +1,7 @@
 
 
 ![eisbison banner](./Images/TOR_Logo.jpg)
-<p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
+<p align="center"><a href="https://github.com/JustASysAdmin/TheOtherRoles2/releases/"><img src="https://badgen.net/github/release/justasysadmin/theotherroles2"></a></p>
 
 <p align="center">
 This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
