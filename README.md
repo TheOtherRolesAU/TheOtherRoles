@@ -1,6 +1,6 @@
 
 
-![eisbison banner](./Images/TOR_logo.png)
+![eisbison banner](./Images/TOR_logo.jpg)
 <p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
 
 <p align="center">
