@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TheOtherRoles.Players;
 using static TheOtherRoles.TheOtherRoles;
 using UnityEngine;
+using TheOtherRoles.Utilities;
+using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles
 {
@@ -47,7 +49,6 @@ namespace TheOtherRoles
         public static RoleInfo detective = new RoleInfo("Detective", Detective.color, "Find the <color=#FF1919FF>Impostors</color> by examining footprints", "Examine footprints", RoleId.Detective);
         public static RoleInfo timeMaster = new RoleInfo("Time Master", TimeMaster.color, "Save yourself with your time shield", "Use your time shield", RoleId.TimeMaster);
         public static RoleInfo medic = new RoleInfo("Medic", Medic.color, "Protect someone with your shield", "Protect other players", RoleId.Medic);
-        public static RoleInfo shifter = new RoleInfo("Shifter", Shifter.color, "Shift your role", "Shift your role", RoleId.Shifter);
         public static RoleInfo swapper = new RoleInfo("Swapper", Swapper.color, "Swap votes to exile the <color=#FF1919FF>Impostors</color>", "Swap votes", RoleId.Swapper);
         public static RoleInfo seer = new RoleInfo("Seer", Seer.color, "You will see players die", "You will see players die", RoleId.Seer);
         public static RoleInfo hacker = new RoleInfo("Hacker", Hacker.color, "Hack systems to find the <color=#FF1919FF>Impostors</color>", "Hack to find the Impostors", RoleId.Hacker);
@@ -62,12 +63,18 @@ namespace TheOtherRoles
         public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser);
         public static RoleInfo vulture = new RoleInfo("Vulture", Vulture.color, "Eat corpses to win", "Eat dead bodies", RoleId.Vulture, true);
         public static RoleInfo medium = new RoleInfo("Medium", Medium.color, "Question the souls of the dead to gain informations", "Question the souls", RoleId.Medium);
+        public static RoleInfo trapper = new RoleInfo("Trapper", Trapper.color, "Place traps to find the Impostors", "Place traps", RoleId.Trapper);
         public static RoleInfo lawyer = new RoleInfo("Lawyer", Lawyer.color, "Defend your client", "Defend your client", RoleId.Lawyer, true);
+        public static RoleInfo prosecutor = new RoleInfo("Prosecutor", Lawyer.color, "Vote out your target", "Vote our your target", RoleId.Prosecutor, true);
         public static RoleInfo pursuer = new RoleInfo("Pursuer", Pursuer.color, "Blank the Impostors", "Blank the Impostors", RoleId.Pursuer);
         public static RoleInfo impostor = new RoleInfo("Impostor", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Sabotage and kill everyone"), "Sabotage and kill everyone", RoleId.Impostor);
         public static RoleInfo crewmate = new RoleInfo("Crewmate", Color.white, "Find the Impostors", "Find the Impostors", RoleId.Crewmate);
         public static RoleInfo witch = new RoleInfo("Witch", Witch.color, "Cast a spell upon your foes", "Cast a spell upon your foes", RoleId.Witch);
         public static RoleInfo ninja = new RoleInfo("Ninja", Ninja.color, "Surprise and assassinate your foes", "Surprise and assassinate your foes", RoleId.Ninja);
+        public static RoleInfo thief = new RoleInfo("Thief", Thief.color, "Steal a killers role by killing them", "Steal a killers role", RoleId.Thief, true);
+
+        public static RoleInfo hunter = new RoleInfo("Hunter", Palette.ImpostorRed, Helpers.cs(Palette.ImpostorRed, "Seek and kill everyone"), "Seek and kill everyone", RoleId.Impostor);
+        public static RoleInfo hunted = new RoleInfo("Hunted", Color.white, "Hide", "Hide", RoleId.Crewmate);
 
 
 
@@ -81,6 +88,8 @@ namespace TheOtherRoles
         public static RoleInfo mini = new RoleInfo("Mini", Color.yellow, "No one will harm you until you grow up", "No one will harm you", RoleId.Mini, false, true);
         public static RoleInfo vip = new RoleInfo("VIP", Color.yellow, "You are the VIP", "Everyone is notified when you die", RoleId.Vip, false, true);
         public static RoleInfo invert = new RoleInfo("Invert", Color.yellow, "Your movement is inverted", "Your movement is inverted", RoleId.Invert, false, true);
+        public static RoleInfo chameleon = new RoleInfo("Chameleon", Color.yellow, "You're hard to see when not moving", "You're hard to see when not moving", RoleId.Chameleon, false, true);
+        public static RoleInfo shifter = new RoleInfo("Shifter", Color.yellow, "Shift your role", "Shift your role", RoleId.Shifter, false, true);
 
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
@@ -108,8 +117,9 @@ namespace TheOtherRoles
             vulture,
             pursuer,
             lawyer,
+            thief,
+            prosecutor,
             crewmate,
-            shifter,
             mayor,
             portalmaker,
             engineer,
@@ -128,13 +138,16 @@ namespace TheOtherRoles
             securityGuard,
             bait,
             medium,
+            trapper,
             bloody,
             antiTeleport,
             tiebreaker,
             sunglasses,
             mini,
             vip,
-            invert
+            invert,
+            chameleon,
+            shifter
         };
 
         public static List<RoleInfo> getRoleInfoForPlayer(PlayerControl p, bool showModifier = true) {
@@ -144,7 +157,7 @@ namespace TheOtherRoles
             // Modifier
             if (showModifier) {
                 // after dead modifier
-                if (!CustomOptionHolder.modifiersAreHidden.getBool() || PlayerControl.LocalPlayer.Data.IsDead)
+                if (!CustomOptionHolder.modifiersAreHidden.getBool() || PlayerControl.LocalPlayer.Data.IsDead || AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Ended)
                 {
                     if (Bait.bait.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bait);
                     if (Bloody.bloody.Any(x => x.PlayerId == p.PlayerId)) infos.Add(bloody);
@@ -156,7 +169,11 @@ namespace TheOtherRoles
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == p.PlayerId)) infos.Add(sunglasses);
                 if (p == Mini.mini) infos.Add(mini);
                 if (Invert.invert.Any(x => x.PlayerId == p.PlayerId)) infos.Add(invert);
+                if (Chameleon.chameleon.Any(x => x.PlayerId == p.PlayerId)) infos.Add(chameleon);
+                if (p == Shifter.shifter) infos.Add(shifter);
             }
+
+            int count = infos.Count;  // Save count after modifiers are added so that the role count can be checked
 
             // Special roles
             if (p == Jester.jester) infos.Add(jester);
@@ -181,7 +198,6 @@ namespace TheOtherRoles
             if (p == Detective.detective) infos.Add(detective);
             if (p == TimeMaster.timeMaster) infos.Add(timeMaster);
             if (p == Medic.medic) infos.Add(medic);
-            if (p == Shifter.shifter) infos.Add(shifter);
             if (p == Swapper.swapper) infos.Add(swapper);
             if (p == Seer.seer) infos.Add(seer);
             if (p == Hacker.hacker) infos.Add(hacker);
@@ -197,12 +213,19 @@ namespace TheOtherRoles
             if (p == BountyHunter.bountyHunter) infos.Add(bountyHunter);
             if (p == Vulture.vulture) infos.Add(vulture);
             if (p == Medium.medium) infos.Add(medium);
-            if (p == Lawyer.lawyer) infos.Add(lawyer);
+            if (p == Lawyer.lawyer && !Lawyer.isProsecutor) infos.Add(lawyer);
+            if (p == Lawyer.lawyer && Lawyer.isProsecutor) infos.Add(prosecutor);
+            if (p == Trapper.trapper) infos.Add(trapper);
             if (p == Pursuer.pursuer) infos.Add(pursuer);
+            if (p == Thief.thief) infos.Add(thief);
 
-            // Default roles
-            if (infos.Count == 0 && p.Data.Role.IsImpostor) infos.Add(impostor); // Just Impostor
-            if (infos.Count == 0 && !p.Data.Role.IsImpostor) infos.Add(crewmate); // Just Crewmate
+            // Default roles (just impostor, just crewmate, or hunter / hunted for hide n seek
+            if (infos.Count == count) {
+                if (p.Data.Role.IsImpostor)
+                    infos.Add(MapOptions.gameMode == CustomGamemodes.HideNSeek ? RoleInfo.hunter : RoleInfo.impostor);
+                else
+                    infos.Add(MapOptions.gameMode == CustomGamemodes.HideNSeek ? RoleInfo.hunted : RoleInfo.crewmate);
+            }
 
             return infos;
         }
@@ -210,7 +233,9 @@ namespace TheOtherRoles
         public static String GetRolesString(PlayerControl p, bool useColors, bool showModifier = true) {
             string roleName;
             roleName = String.Join(" ", getRoleInfoForPlayer(p, showModifier).Select(x => useColors ? Helpers.cs(x.color, x.name) : x.name).ToArray());
-            if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId && CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) roleName += (useColors ? Helpers.cs(Pursuer.color, " §") : " §");
+            if (Lawyer.target != null && p.PlayerId == Lawyer.target.PlayerId && CachedPlayer.LocalPlayer.PlayerControl != Lawyer.target) 
+                roleName += (useColors ? Helpers.cs(Pursuer.color, " §") : " §");
+            if (HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(p.PlayerId)) roleName += " (Guesser)";
             return roleName;
         }
     }

@@ -38,7 +38,7 @@ namespace TheOtherRoles.Objects {
             spriteRenderer = blood.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = sp[index];
             spriteRenderer.material = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-            player.SetPlayerMaterialColors(spriteRenderer);
+            bloodyPlayer.SetPlayerMaterialColors(spriteRenderer);
             // spriteRenderer.color = color;
 
             blood.SetActive(true);

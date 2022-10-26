@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>4.1.7</Version>
+        <TargetFramework>net6.0</TargetFramework>
+        <Version>4.2.0</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <PlatformTarget>x86</PlatformTarget>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,13 +15,30 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.8.23" />
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.559" />
-        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" />
+      <None Remove="Resources\TabIconClassicMode.png" />
+      <None Remove="Resources\TabIconGuesserMode.png" />
+      <None Remove="Resources\TabIconGuesserSettings.png" />
+      <None Remove="Resources\TabIconHideNSeekMode.png" />
+      <None Remove="Resources\TabIconHideNSeekRoles.png" />
+      <None Remove="Resources\TabIconHideNSeekSettings.png" />
     </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2022.10.25" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.662" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.0.1" />
+        <PackageReference Include="Reactor" Version="2.0.0" />
+    </ItemGroup>	
+
+    <Target Name="Date" BeforeTargets="BeforeBuild">  <!--Will make the compile time available s.t. we can let betas expire-->
+    <WriteLinesToFile File="$(IntermediateOutputPath)gen.cs" Lines="static partial class Builtin { public static long CompileTime = $([System.DateTime]::UtcNow.Ticks) %3B }" Overwrite="true" />
+    <ItemGroup>
+        <Compile Include="$(IntermediateOutputPath)gen.cs" />
+    </ItemGroup>
+    </Target>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
         <Message Text="Second occurrence" />
-        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\netstandard2.1\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
+        <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\net6.0\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
     </Target>
 </Project>

@@ -6,6 +6,9 @@ using UnityEngine;
 using TheOtherRoles.Objects;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using TheOtherRoles.CustomGameModes;
+using static TheOtherRoles.TheOtherRoles;
+using AmongUs.Data;
 
 namespace TheOtherRoles
 {
@@ -47,7 +50,6 @@ namespace TheOtherRoles
             Warlock.clearAndReload();
             SecurityGuard.clearAndReload();
             Arsonist.clearAndReload();
-            Guesser.clearAndReload();
             BountyHunter.clearAndReload();
             Vulture.clearAndReload();
             Medium.clearAndReload();
@@ -55,6 +57,8 @@ namespace TheOtherRoles
             Pursuer.clearAndReload();
             Witch.clearAndReload();
             Ninja.clearAndReload();
+            Thief.clearAndReload();
+            Trapper.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -65,6 +69,11 @@ namespace TheOtherRoles
             Mini.clearAndReload();
             Vip.clearAndReload();
             Invert.clearAndReload();
+            Chameleon.clearAndReload();
+
+            // Gamemodes
+            HandleGuesser.clearAndReload();
+            HideNSeek.clearAndReload();
         }
 
         public static class Jester {
@@ -426,29 +435,6 @@ namespace TheOtherRoles
             setShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 2;
             showShieldAfterMeeting = CustomOptionHolder.medicSetOrShowShieldAfterMeeting.getSelection() == 1;
             meetingAfterShielding = false;
-        }
-    }
-
-    public static class Shifter {
-        public static PlayerControl shifter;
-        public static Color color = new Color32(102, 102, 102, byte.MaxValue);
-
-        public static PlayerControl futureShift;
-        public static PlayerControl currentTarget;
-        public static bool shiftModifiers = false;
-
-        private static Sprite buttonSprite;
-        public static Sprite getButtonSprite() {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShiftButton.png", 115f);
-            return buttonSprite;
-        }
-
-        public static void clearAndReload() {
-            shifter = null;
-            currentTarget = null;
-            futureShift = null;
-            shiftModifiers = CustomOptionHolder.shifterShiftsModifiers.getBool();
         }
     }
 
@@ -909,6 +895,8 @@ namespace TheOtherRoles
         public static PlayerControl eraser;
         public static Color color = Palette.ImpostorRed;
 
+        public static List<byte> alreadyErased = new List<byte>();
+
         public static List<PlayerControl> futureErased = new List<PlayerControl>();
         public static PlayerControl currentTarget;
         public static float cooldown = 30f;
@@ -927,6 +915,7 @@ namespace TheOtherRoles
             currentTarget = null;
             cooldown = CustomOptionHolder.eraserCooldown.getFloat();
             canEraseAnyone = CustomOptionHolder.eraserCanEraseAnyone.getBool();
+            alreadyErased = new List<byte>();
         }
     }
     
@@ -1200,20 +1189,9 @@ namespace TheOtherRoles
         public static PlayerControl niceGuesser;
         public static PlayerControl evilGuesser;
         public static Color color = new Color32(255, 255, 0, byte.MaxValue);
-        private static Sprite targetSprite;
 
         public static int remainingShotsEvilGuesser = 2;
         public static int remainingShotsNiceGuesser = 2;
-        public static bool hasMultipleShotsPerMeeting = false;
-        public static bool showInfoInGhostChat = true;
-        public static bool killsThroughShield = true;
-        public static bool evilGuesserCanGuessSpy = true;
-        public static bool guesserCantGuessSnitch = false;
-        public static Sprite getTargetSprite() {
-            if (targetSprite) return targetSprite;
-            targetSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.TargetIcon.png", 150f);
-            return targetSprite;
-        }
 
         public static bool isGuesser (byte playerId) {
             if ((niceGuesser != null && niceGuesser.PlayerId == playerId) || (evilGuesser != null && evilGuesser.PlayerId == playerId)) return true;
@@ -1239,13 +1217,8 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             niceGuesser = null;
             evilGuesser = null;
-            guesserCantGuessSnitch = CustomOptionHolder.guesserCantGuessSnitchIfTaksDone.getBool();
             remainingShotsEvilGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
             remainingShotsNiceGuesser = Mathf.RoundToInt(CustomOptionHolder.guesserNumberOfShots.getFloat());
-            hasMultipleShotsPerMeeting = CustomOptionHolder.guesserHasMultipleShotsPerMeeting.getBool();
-            showInfoInGhostChat = CustomOptionHolder.guesserShowInfoInGhostChat.getBool();
-            killsThroughShield = CustomOptionHolder.guesserKillsThroughShield.getBool();
-            evilGuesserCanGuessSpy = CustomOptionHolder.guesserEvilCanKillSpy.getBool();
         }
     }
 
@@ -1370,7 +1343,9 @@ namespace TheOtherRoles
         public static PlayerControl target;
         public static Color color = new Color32(134, 153, 25, byte.MaxValue);
         public static Sprite targetSprite;
-        public static bool triggerLawyerWin = false;
+        public static bool triggerProsecutorWin = false;
+        public static bool isProsecutor = false;
+        public static bool canCallEmergency = true;
 
         public static float vision = 1f;
         public static bool lawyerKnowsRole = false;
@@ -1389,11 +1364,12 @@ namespace TheOtherRoles
                 target = null;
                 targetWasGuessed = false;
             }
-            triggerLawyerWin = false;
-
+            isProsecutor = false;
+            triggerProsecutorWin = false;
             vision = CustomOptionHolder.lawyerVision.getFloat();
             lawyerKnowsRole = CustomOptionHolder.lawyerKnowsRole.getBool();
             targetCanBeJester = CustomOptionHolder.lawyerTargetCanBeJester.getBool();
+            canCallEmergency = CustomOptionHolder.jesterCanCallEmergency.getBool();
         }
     }
 
@@ -1514,6 +1490,70 @@ namespace TheOtherRoles
         }
     }
 
+    public static class Thief {
+        public static PlayerControl thief;
+        public static Color color = new Color32(71, 99, 45, Byte.MaxValue);
+        public static PlayerControl currentTarget;
+        public static PlayerControl formerThief;
+
+        public static float cooldown = 30f;
+
+        public static bool suicideFlag = false;  // Used as a flag for suicide
+
+        public static bool hasImpostorVision;
+        public static bool canUseVents;
+        public static bool canKillSheriff;
+
+        public static void clearAndReload() {
+            thief = null;
+            suicideFlag = false;
+            currentTarget = null;
+            formerThief = null;
+            hasImpostorVision = CustomOptionHolder.thiefHasImpVision.getBool();  // todo option and implementation
+            cooldown = CustomOptionHolder.thiefCooldown.getFloat();
+            canUseVents = CustomOptionHolder.thiefCanUseVents.getBool();
+            canKillSheriff = CustomOptionHolder.thiefCanKillSheriff.getBool();
+        }
+    }
+
+    public static class Trapper {
+        public static PlayerControl trapper;
+        public static Color color = new Color32(110, 57, 105, byte.MaxValue);
+
+        public static float cooldown = 30f;
+        public static int maxCharges = 5;
+        public static int rechargeTasksNumber = 3;
+        public static int rechargedTasks = 3;
+        public static int charges = 1;
+        public static int trapCountToReveal = 2;
+        public static List<PlayerControl> playersOnMap = new List<PlayerControl>();
+        public static bool anonymousMap = false;
+        public static int infoType = 0; // 0 = Role, 1 = Good/Evil, 2 = Name
+        public static float trapDuration = 5f; 
+
+        private static Sprite trapButtonSprite;
+
+        public static Sprite getButtonSprite() {
+            if (trapButtonSprite) return trapButtonSprite;
+            trapButtonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Trapper_Place_Button.png", 115f);
+            return trapButtonSprite;
+        }
+
+        public static void clearAndReload() {
+            trapper = null;
+            cooldown = CustomOptionHolder.trapperCooldown.getFloat();
+            maxCharges = Mathf.RoundToInt(CustomOptionHolder.trapperMaxCharges.getFloat());
+            rechargeTasksNumber = Mathf.RoundToInt(CustomOptionHolder.trapperRechargeTasksNumber.getFloat());
+            rechargedTasks = Mathf.RoundToInt(CustomOptionHolder.trapperRechargeTasksNumber.getFloat());
+            charges = Mathf.RoundToInt(CustomOptionHolder.trapperMaxCharges.getFloat()) / 2;
+            trapCountToReveal = Mathf.RoundToInt(CustomOptionHolder.trapperTrapNeededTriggerToReveal.getFloat());
+            playersOnMap = new List<PlayerControl>();
+            anonymousMap = CustomOptionHolder.trapperAnonymousMap.getBool();
+            infoType = CustomOptionHolder.trapperInfoType.getSelection();
+            trapDuration = CustomOptionHolder.trapperTrapDuration.getFloat();
+        }
+    }
+
     // Modifier
     public static class Bait {
         public static List<PlayerControl> bait = new List<PlayerControl>();
@@ -1596,13 +1636,17 @@ namespace TheOtherRoles
         public const float defaultColliderOffset = 0.3636057f;
 
         public static float growingUpDuration = 400f;
+        public static bool isGrowingUpInMeeting = true;
         public static DateTime timeOfGrowthStart = DateTime.UtcNow;
+        public static DateTime timeOfMeetingStart = DateTime.UtcNow;
+        public static float ageOnMeetingStart = 0f;
         public static bool triggerMiniLose = false;
 
         public static void clearAndReload() {
             mini = null;
             triggerMiniLose = false;
             growingUpDuration = CustomOptionHolder.modifierMiniGrowingUpDuration.getFloat();
+            isGrowingUpInMeeting = CustomOptionHolder.modifierMiniGrowingUpInMeeting.getBool();
             timeOfGrowthStart = DateTime.UtcNow;
         }
 
@@ -1635,6 +1679,152 @@ namespace TheOtherRoles
         public static void clearAndReload() {
             invert = new List<PlayerControl>();
             meetings = (int) CustomOptionHolder.modifierInvertDuration.getFloat();
+        }
+    }
+
+    public static class Chameleon {
+        public static List<PlayerControl> chameleon = new List<PlayerControl>();
+        public static float minVisibility = 0.2f;
+        public static float holdDuration = 1f;
+        public static float fadeDuration = 0.5f;
+        public static Dictionary<byte, float> lastMoved;
+
+        public static void clearAndReload() {
+            chameleon = new List<PlayerControl>();
+            lastMoved = new Dictionary<byte, float>();
+            holdDuration = CustomOptionHolder.modifierChameleonHoldDuration.getFloat();
+            fadeDuration = CustomOptionHolder.modifierChameleonFadeDuration.getFloat();
+            minVisibility = CustomOptionHolder.modifierChameleonMinVisibility.getSelection() / 10f;
+        }
+
+        public static float visibility(byte playerId) {
+            float visibility = 1f;
+            if (lastMoved != null && lastMoved.ContainsKey(playerId)) {
+                var tStill = Time.time - lastMoved[playerId];
+                if (tStill > holdDuration) {
+                    if (tStill - holdDuration > fadeDuration) visibility = minVisibility;
+                    else visibility = (1 - (tStill - holdDuration) / fadeDuration) * (1 - minVisibility) + minVisibility;
+                }
+            }
+            if (PlayerControl.LocalPlayer.Data.IsDead && visibility < 0.1f) {  // Ghosts can always see!
+                visibility = 0.1f;
+            }
+            return visibility;
+        }
+
+        public static void update() {
+            foreach (var chameleonPlayer in chameleon) {
+                if (chameleonPlayer == Ninja.ninja && Ninja.isInvisble) continue;  // Dont make Ninja visible...
+                // check movement by animation
+                PlayerPhysics playerPhysics = chameleonPlayer.MyPhysics;
+                var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
+                if (currentPhysicsAnim != playerPhysics.CurrentAnimationGroup.IdleAnim) {
+                    lastMoved[chameleonPlayer.PlayerId] = Time.time;
+                }
+                // calculate and set visibility
+                float visibility = Chameleon.visibility(chameleonPlayer.PlayerId);
+                float petVisibility = visibility;
+                if (chameleonPlayer.Data.IsDead) {
+                    visibility = 0.5f;
+                    petVisibility = 1f;
+                }
+
+                try {  // Sometimes renderers are missing for weird reasons. Try catch to avoid exceptions
+                    chameleonPlayer.cosmetics.currentBodySprite.BodySprite.color = chameleonPlayer.cosmetics.currentBodySprite.BodySprite.color.SetAlpha(visibility);
+                    if (DataManager.Settings.Accessibility.ColorBlindMode) chameleonPlayer.cosmetics.colorBlindText.color = chameleonPlayer.cosmetics.colorBlindText.color.SetAlpha(visibility);
+                    chameleonPlayer.SetHatAndVisorAlpha(visibility);
+                    chameleonPlayer.cosmetics.skin.layer.color = chameleonPlayer.cosmetics.skin.layer.color.SetAlpha(visibility);
+                    chameleonPlayer.cosmetics.nameText.color = chameleonPlayer.cosmetics.nameText.color.SetAlpha(visibility);
+                    chameleonPlayer.cosmetics.currentPet.rend.color = chameleonPlayer.cosmetics.currentPet.rend.color.SetAlpha(petVisibility);
+                    chameleonPlayer.cosmetics.currentPet.shadowRend.color = chameleonPlayer.cosmetics.currentPet.shadowRend.color.SetAlpha(petVisibility);
+                } catch { }
+            }
+                
+        }
+    }
+
+    public static class Shifter {
+        public static PlayerControl shifter;
+
+        public static PlayerControl futureShift;
+        public static PlayerControl currentTarget;
+
+        private static Sprite buttonSprite;
+        public static Sprite getButtonSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShiftButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static void shiftRole (PlayerControl player1, PlayerControl player2, bool repeat = true) {
+            if (Mayor.mayor != null && Mayor.mayor == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Mayor.mayor = player1;
+            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Portalmaker.portalmaker = player1;
+            } else if (Engineer.engineer != null && Engineer.engineer == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Engineer.engineer = player1;
+            } else if (Sheriff.sheriff != null && Sheriff.sheriff == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                if (Sheriff.formerDeputy != null && Sheriff.formerDeputy == Sheriff.sheriff) Sheriff.formerDeputy = player1;  // Shifter also shifts info on promoted deputy (to get handcuffs)
+                Sheriff.sheriff = player1;
+            } else if (Deputy.deputy != null && Deputy.deputy == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Deputy.deputy = player1;
+            } else if (Lighter.lighter != null && Lighter.lighter == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Lighter.lighter = player1;
+            } else if (Detective.detective != null && Detective.detective == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Detective.detective = player1;
+            } else if (TimeMaster.timeMaster != null && TimeMaster.timeMaster == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                TimeMaster.timeMaster = player1;
+            }  else if (Medic.medic != null && Medic.medic == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Medic.medic = player1;
+            } else if (Swapper.swapper != null && Swapper.swapper == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Swapper.swapper = player1;
+            } else if (Seer.seer != null && Seer.seer == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Seer.seer = player1;
+            } else if (Hacker.hacker != null && Hacker.hacker == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Hacker.hacker = player1;
+            } else if (Tracker.tracker != null && Tracker.tracker == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Tracker.tracker = player1;
+            } else if (Snitch.snitch != null && Snitch.snitch == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Snitch.snitch = player1;
+            } else if (Spy.spy != null && Spy.spy == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Spy.spy = player1;
+            } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                SecurityGuard.securityGuard = player1;
+            } else if (Guesser.niceGuesser != null && Guesser.niceGuesser == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Guesser.niceGuesser = player1;
+            } else if (Medium.medium != null && Medium.medium == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Medium.medium = player1;
+            } else if (Pursuer.pursuer != null && Pursuer.pursuer == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Pursuer.pursuer = player1;
+            } else if (Trapper.trapper != null && Trapper.trapper == player2) {
+                if (repeat) shiftRole(player2, player1, false);
+                Trapper.trapper = player1;
+            }
+        }
+
+        public static void clearAndReload() {
+            shifter = null;
+            currentTarget = null;
+            futureShift = null;
         }
     }
 }

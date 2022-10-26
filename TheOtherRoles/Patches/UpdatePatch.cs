@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
@@ -36,6 +37,7 @@ namespace TheOtherRoles.Patches {
                 
                     nameText.text = Helpers.hidePlayerName(localPlayer, player) ? "" : playerName;
                     nameText.color = color = amImpostor && data.Role.IsImpostor ? Palette.ImpostorRed : Color.white;
+                    nameText.color = nameText.color.SetAlpha(Chameleon.visibility(player.PlayerId));
                 }
                 else
                 {
@@ -59,17 +61,19 @@ namespace TheOtherRoles.Patches {
         }
 
         static void setPlayerNameColor(PlayerControl p, Color color) {
-            p.cosmetics.nameText.color = color;
+            p.cosmetics.nameText.color = color.SetAlpha(Chameleon.visibility(p.PlayerId));
             if (MeetingHud.Instance != null)
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
                     if (player.NameText != null && p.PlayerId == player.TargetPlayerId)
                         player.NameText.color = color;
         }
 
-        static void setNameColors()
-        {
+        static void setNameColors() {
             var localPlayer = CachedPlayer.LocalPlayer.PlayerControl;
-            if (Jester.jester != null && Jester.jester == localPlayer)
+            var localRole = RoleInfo.getRoleInfoForPlayer(localPlayer, false).FirstOrDefault();
+            setPlayerNameColor(localPlayer, localRole.color);
+
+            /*if (Jester.jester != null && Jester.jester == localPlayer)
                 setPlayerNameColor(Jester.jester, Jester.color);
             else if (Mayor.mayor != null && Mayor.mayor == localPlayer)
                 setPlayerNameColor(Mayor.mayor, Mayor.color);
@@ -80,12 +84,13 @@ namespace TheOtherRoles.Patches {
                 if (Deputy.deputy != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Deputy.deputy, Deputy.color);
                 }
-            } else if (Deputy.deputy != null && Deputy.deputy == localPlayer) {
+            } else*/
+            if (Deputy.deputy != null && Deputy.deputy == localPlayer) {
                 setPlayerNameColor(Deputy.deputy, Deputy.color);
                 if (Sheriff.sheriff != null && Deputy.knowsSheriff) {
                     setPlayerNameColor(Sheriff.sheriff, Sheriff.color);
                 }
-            } else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == localPlayer)
+            } /*else if (Portalmaker.portalmaker != null && Portalmaker.portalmaker == localPlayer)
                 setPlayerNameColor(Portalmaker.portalmaker, Portalmaker.color);
             else if (Lighter.lighter != null && Lighter.lighter == localPlayer)
                 setPlayerNameColor(Lighter.lighter, Lighter.color);
@@ -106,7 +111,7 @@ namespace TheOtherRoles.Patches {
             else if (Tracker.tracker != null && Tracker.tracker == localPlayer)
                 setPlayerNameColor(Tracker.tracker, Tracker.color);
             else if (Snitch.snitch != null && Snitch.snitch == localPlayer)
-                setPlayerNameColor(Snitch.snitch, Snitch.color);
+                setPlayerNameColor(Snitch.snitch, Snitch.color);*/
             else if (Jackal.jackal != null && Jackal.jackal == localPlayer) {
                 // Jackal can see his sidekick
                 setPlayerNameColor(Jackal.jackal, Jackal.color);
@@ -117,7 +122,7 @@ namespace TheOtherRoles.Patches {
                     setPlayerNameColor(Jackal.fakeSidekick, Jackal.color);
                 }
             }
-            else if (Spy.spy != null && Spy.spy == localPlayer) {
+            /*else if (Spy.spy != null && Spy.spy == localPlayer) {
                 setPlayerNameColor(Spy.spy, Spy.color);
             } else if (SecurityGuard.securityGuard != null && SecurityGuard.securityGuard == localPlayer) {
                 setPlayerNameColor(SecurityGuard.securityGuard, SecurityGuard.color);
@@ -131,11 +136,13 @@ namespace TheOtherRoles.Patches {
                 setPlayerNameColor(Vulture.vulture, Vulture.color);
             } else if (Medium.medium != null && Medium.medium == localPlayer) {
                 setPlayerNameColor(Medium.medium, Medium.color);
+            } else if (Trapper.trapper != null && Trapper.trapper == localPlayer) {
+                setPlayerNameColor(Trapper.trapper, Trapper.color);
             } else if (Lawyer.lawyer != null && Lawyer.lawyer == localPlayer) {
                 setPlayerNameColor(Lawyer.lawyer, Lawyer.color);
             } else if (Pursuer.pursuer != null && Pursuer.pursuer == localPlayer) {
                 setPlayerNameColor(Pursuer.pursuer, Pursuer.color);
-            }
+            }*/
 
             // No else if here, as a Lover of team Jackal needs the colors
             if (Sidekick.sidekick != null && Sidekick.sidekick == localPlayer) {
@@ -193,14 +200,26 @@ namespace TheOtherRoles.Patches {
                             player.NameText.text += suffix;
             }
 
-            // Lawyer
-            if (Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl) {
-                string suffix = Helpers.cs(Lawyer.color, " §");
-                Lawyer.target.cosmetics.nameText.text += suffix;
+            // Lawyer or Prosecutor
+            if ((Lawyer.lawyer != null && Lawyer.target != null && Lawyer.lawyer == CachedPlayer.LocalPlayer.PlayerControl)) {
+                Color color = Lawyer.color;
+                PlayerControl target = Lawyer.target;
+                string suffix = Helpers.cs(color, " §");
+                target.cosmetics.nameText.text += suffix;
 
                 if (MeetingHud.Instance != null)
                     foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
-                        if (player.TargetPlayerId == Lawyer.target.PlayerId)
+                        if (player.TargetPlayerId == target.PlayerId)
+                            player.NameText.text += suffix;
+            }
+
+            // Former Thief
+            if (Thief.formerThief != null && (Thief.formerThief == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.PlayerControl.Data.IsDead)) {
+                string suffix = Helpers.cs(Thief.color, " $");
+                Thief.formerThief.cosmetics.nameText.text += suffix;
+                if (MeetingHud.Instance != null)
+                    foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates)
+                        if (player.TargetPlayerId == Thief.formerThief.PlayerId)
                             player.NameText.text += suffix;
             }
 
@@ -228,6 +247,7 @@ namespace TheOtherRoles.Patches {
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
             Ninja.invisibleTimer -= dt;
+            HideNSeek.timer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)
                 Deputy.handcuffedKnows[key] -= dt;
         }
@@ -240,6 +260,8 @@ namespace TheOtherRoles.Patches {
             string suffix = "";
             if (growingProgress != 1f)
                 suffix = " <color=#FAD934FF>(" + Mathf.FloorToInt(growingProgress * 18) + ")</color>"; 
+            if (!Mini.isGrowingUpInMeeting && MeetingHud.Instance != null && Mini.ageOnMeetingStart != 0 && !(Mini.ageOnMeetingStart >= 18))
+                suffix = " <color=#FAD934FF>(" + Mini.ageOnMeetingStart + ")</color>";
 
             Mini.mini.cosmetics.nameText.text += suffix;
             if (MeetingHud.Instance != null) {
@@ -292,6 +314,11 @@ namespace TheOtherRoles.Patches {
             if (MeetingHud.Instance) __instance.SabotageButton.Hide();
         }
 
+        static void updateMapButton(HudManager __instance) {
+            if (Trapper.trapper == null || !(CachedPlayer.LocalPlayer.PlayerId == Trapper.trapper.PlayerId) || __instance == null || __instance.MapButton == null) return;
+            __instance.MapButton.color = Trapper.playersOnMap.Any() ? Trapper.color : Color.white;
+        }
+
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
@@ -315,6 +342,7 @@ namespace TheOtherRoles.Patches {
             // Meeting hide buttons if needed (used for the map usage, because closing the map would show buttons)
             updateSabotageButton(__instance);
             updateUseButton(__instance);
+            updateMapButton(__instance);
 
         }
     }

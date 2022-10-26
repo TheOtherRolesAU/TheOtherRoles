@@ -7,6 +7,7 @@ using Hazel;
 using System;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using System.Linq;
 
 namespace TheOtherRoles.Patches {
     public class GameStartManagerPatch  {
@@ -43,6 +44,7 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
         public class GameStartManagerUpdatePatch {
+            public static float startingTimer = 0;
             private static bool update = false;
             private static string currentText = "";
         
@@ -59,7 +61,7 @@ namespace TheOtherRoles.Patches {
                 }
 
                 // Check version handshake infos
-                
+
                 bool versionMismatch = false;
                 string message = "";
                 foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray()) {
@@ -96,6 +98,13 @@ namespace TheOtherRoles.Patches {
                         __instance.StartButton.color = __instance.startLabelText.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
                     }
+
+                    // Make starting info available to clients:
+                    if (startingTimer <= 0 && __instance.startState == GameStartManager.StartingStates.Countdown) {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetGameStarting, Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.setGameStarting();
+                    }
                 }
 
                 // Client update with handshake infos
@@ -115,12 +124,22 @@ namespace TheOtherRoles.Patches {
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                     } else {
                         __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
-                        if (__instance.startState != GameStartManager.StartingStates.Countdown) {
+                        if (__instance.startState != GameStartManager.StartingStates.Countdown && startingTimer <= 0) {
                             __instance.GameStartText.text = String.Empty;
+                        }
+                        else {
+                            __instance.GameStartText.text = $"Starting in {(int)startingTimer + 1}";
+                            if (startingTimer <= 0) {
+                                __instance.GameStartText.text = String.Empty;
+                            }
                         }
                     }
                 }
 
+                // Start Timer
+                if (startingTimer > 0) {
+                    startingTimer -= Time.deltaTime;
+                }
                 // Lobby timer
                 if (!GameData.Instance) return; // No instance
 
@@ -134,6 +153,12 @@ namespace TheOtherRoles.Patches {
                 __instance.PlayerCounter.text = currentText + suffix;
                 __instance.PlayerCounter.autoSizeTextContainer = true;
 
+                if (AmongUsClient.Instance.AmHost) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGamemode, Hazel.SendOption.Reliable, -1);
+                    writer.Write((byte) MapOptions.gameMode);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.shareGamemode((byte) MapOptions.gameMode);
+                }
             }
         }
 
@@ -162,25 +187,52 @@ namespace TheOtherRoles.Patches {
                             break;
                         }
                     }
-
-                    if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
+                    if (continueStart && MapOptions.gameMode == CustomGamemodes.HideNSeek) {
+                        byte mapId = (byte) CustomOptionHolder.hideNSeekMap.getSelection();
+                        if (mapId >= 3) mapId++;
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        writer.Write(mapId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.dynamicMapOption(mapId);
+                    }            
+                    else if (CustomOptionHolder.dynamicMap.getBool() && continueStart) {
                         // 0 = Skeld
                         // 1 = Mira HQ
                         // 2 = Polus
                         // 3 = Dleks - deactivated
                         // 4 = Airship
-                        List<byte> possibleMaps = new List<byte>();
-                        if (CustomOptionHolder.dynamicMapEnableSkeld.getBool())
-                            possibleMaps.Add(0);
-                        if (CustomOptionHolder.dynamicMapEnableMira.getBool())
-                            possibleMaps.Add(1);
-                        if (CustomOptionHolder.dynamicMapEnablePolus.getBool())
-                            possibleMaps.Add(2);
-                        if (CustomOptionHolder.dynamicMapEnableAirShip.getBool())
-                            possibleMaps.Add(4);
-                        if (CustomOptionHolder.dynamicMapEnableSubmerged.getBool())
-                            possibleMaps.Add(5);
-                        byte chosenMapId  = possibleMaps[TheOtherRoles.rnd.Next(possibleMaps.Count)];
+                        // 5 = Submerged
+                        byte chosenMapId = 0;
+                        List<float> probabilities = new List<float>();
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnableSkeld.getSelection() / 10f);
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnableMira.getSelection() / 10f);
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnablePolus.getSelection() / 10f);
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnableAirShip.getSelection() / 10f);
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnableSubmerged.getSelection() / 10f);
+
+                        // if any map is at 100%, remove all maps that are not!
+                        if (probabilities.Contains(1.0f)) {
+                            for (int i=0; i < probabilities.Count; i++) {
+                                if (probabilities[i] != 1.0) probabilities[i] = 0;
+                            }
+                        }
+
+                        float sum = probabilities.Sum();
+                        if (sum == 0) return continueStart;  // All maps set to 0, why are you doing this???
+                        for (int i = 0; i < probabilities.Count; i++) {  // Normalize to [0,1]
+                            probabilities[i] /= sum;
+                        }
+                        float selection = (float)TheOtherRoles.rnd.NextDouble();
+                        float cumsum = 0;
+                        for (byte i = 0; i < probabilities.Count; i++) {
+                            cumsum += probabilities[i];
+                            if (cumsum > selection) {
+                                chosenMapId = i;
+                                break;
+                            }
+                        }
+
+                        if (chosenMapId >= 3) chosenMapId++;  // Skip dlekS
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(chosenMapId);

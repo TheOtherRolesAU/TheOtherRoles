@@ -1,10 +1,12 @@
-﻿global using UnhollowerBaseLib;
-global using UnhollowerBaseLib.Attributes;
-global using UnhollowerRuntimeLib;
+﻿global using Il2CppInterop.Runtime;
+global using Il2CppInterop.Runtime.Attributes;
+global using Il2CppInterop.Runtime.InteropTypes;
+global using Il2CppInterop.Runtime.InteropTypes.Arrays;
+global using Il2CppInterop.Runtime.Injection;
 
 using BepInEx;
 using BepInEx.Configuration;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Hazel;
 using System.Collections.Generic;
@@ -14,16 +16,23 @@ using UnityEngine;
 using TheOtherRoles.Modules;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using Reactor;
+using Il2CppSystem.Security.Cryptography;
+using Il2CppSystem.Text;
+using Reactor.Networking.Attributes;
+using AmongUs.Data;
 
 namespace TheOtherRoles
 {
     [BepInPlugin(Id, "The Other Roles", VersionString)]
     [BepInDependency(SubmergedCompatibility.SUBMERGED_GUID, BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
+    [ReactorModFlags(Reactor.Networking.ModFlags.RequireOnAllClients)]
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.1.7";
+        public const string VersionString = "4.2.0";
+        public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
@@ -33,7 +42,7 @@ namespace TheOtherRoles
 
         public static int optionsPage = 2;
 
-        public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<string> DebugMode { get; private set; }
         public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
         public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
@@ -55,8 +64,6 @@ namespace TheOtherRoles
         public static void UpdateRegions() {
             ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
             var regions = new IRegionInfo[] {
-                new DnsRegionInfo("mods.hopto.org", "Modded NA (MNA)", StringNames.NoTranslation, "mods.hopto.org", 443, false).CastFast<IRegionInfo>(),
-                new DnsRegionInfo("au-eu.duikbo.at", "Modded EU (MEU)", StringNames.NoTranslation, "au-eu.duikbo.at", 22023, false).CastFast<IRegionInfo>(),
                 new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>()
             };
             
@@ -83,7 +90,9 @@ namespace TheOtherRoles
             Logger = Log;
             Instance = this;
 
-            DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
+            Helpers.checkBeta(); // Exit if running an expired beta
+
+            DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
@@ -101,15 +110,11 @@ namespace TheOtherRoles
 
             UpdateRegions();
 
-            GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(3, 16).ToArray(); // Max Imp = Recommended Imp = 3
-            GameOptionsData.MinPlayers = Enumerable.Repeat(4, 15).ToArray(); // Min Players = 4
-
-            DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
+            DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             Harmony.PatchAll();
 
             CustomOptionHolder.Load();
             CustomColors.Load();
-            Patches.FreeNamePatch.Initialize();
 
             if (BepInExUpdater.UpdateRequired)
             {
@@ -139,8 +144,7 @@ namespace TheOtherRoles
     public static class ChatControllerAwakePatch {
         private static void Prefix() {
             if (!EOSManager.Instance.isKWSMinor) {
-                SaveManager.chatModeType = 1;
-                SaveManager.isGuest = false;
+                DataManager.Settings.Multiplayer.ChatMode = InnerNet.QuickChatModes.FreeChatOrQuickChat;
             }
         }
     }
@@ -149,12 +153,22 @@ namespace TheOtherRoles
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class DebugManager
     {
+        private static readonly string passwordHash = "d1f51dfdfd8d38027fd2ca9dfeb299399b5bdee58e6c0b3b5e9a45cd4e502848";
         private static readonly System.Random random = new System.Random((int)DateTime.Now.Ticks);
         private static List<PlayerControl> bots = new List<PlayerControl>();
 
         public static void Postfix(KeyboardJoystick __instance)
         {
-            if (!TheOtherRolesPlugin.DebugMode.Value) return;
+            // Check if debug mode is active.
+            StringBuilder builder = new StringBuilder();
+            SHA256 sha = SHA256Managed.Create();
+            Byte[] hashed = sha.ComputeHash(Encoding.UTF8.GetBytes(TheOtherRolesPlugin.DebugMode.Value));
+            foreach (var b in hashed) {
+                builder.Append(b.ToString("x2"));
+            }
+            string enteredHash = builder.ToString();
+            if (enteredHash != passwordHash) return;
+
 
             // Spawn dummys
             if (Input.GetKeyDown(KeyCode.F)) {
