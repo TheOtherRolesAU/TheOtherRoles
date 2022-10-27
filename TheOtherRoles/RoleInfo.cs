@@ -127,7 +127,6 @@ namespace TheOtherRoles
             warlock,
             werewolf,
 			cursed,
-            cultist,
             bountyHunter,
             witch,
             ninja,
