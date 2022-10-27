@@ -90,6 +90,7 @@ namespace TheOtherRoles {
         public static CustomOption jackalSpawnRate;
         public static CustomOption jackalKillCooldown;
         public static CustomOption jackalCreateSidekickCooldown;
+        public static CustomOption jackalKillFakeImpostor;
         public static CustomOption jackalCanUseVents;
         public static CustomOption jackalCanUseSabo;
         public static CustomOption jackalhasChat;
@@ -573,6 +574,7 @@ namespace TheOtherRoles {
             sidekickCanUseVents = CustomOption.Create(227, Types.Neutral, "Sidekick Can Use Vents", true, jackalCanCreateSidekick);
             jackalPromotedFromSidekickCanCreateSidekick = CustomOption.Create(228, Types.Neutral, "Jackals Promoted From Sidekick Can Create A Sidekick", true, sidekickPromotesToJackal);
             jackalCanCreateSidekickFromImpostor = CustomOption.Create(229, Types.Neutral, "Jackals Can Make An Impostor To His Sidekick", true, jackalCanCreateSidekick);
+			jackalKillFakeImpostor = CustomOption.Create(7885, Types.Neutral, "Kill a failed sidekick attempt", true, jackalCanCreateSidekick);
             jackalAndSidekickHaveImpostorVision = CustomOption.Create(430, Types.Neutral, "Jackal And Sidekick Have Impostor Vision", false, jackalSpawnRate);
 
             swooperSpawnRate = CustomOption.Create(1110, Types.Neutral, cs(Swooper.color, "Swooper"), rates, null, true); //jackalSpawnRate);
@@ -591,7 +593,6 @@ namespace TheOtherRoles {
             vultureShowArrows = CustomOption.Create(344, Types.Neutral, "Show Arrows Pointing Towards The Corpses", true, vultureSpawnRate);
 
             lawyerSpawnRate = CustomOption.Create(350, Types.Neutral, cs(Lawyer.color, "Lawyer"), rates, null, true);
-            lawyerIsProsecutorChance = CustomOption.Create(358, Types.Neutral, "Chance That The Lawyer Is Prosecutor", rates, lawyerSpawnRate);
             lawyerVision = CustomOption.Create(354, Types.Neutral, "Vision", 1f, 0.25f, 3f, 0.25f, lawyerSpawnRate);
             lawyerKnowsRole = CustomOption.Create(355, Types.Neutral, "Lawyer/Prosecutor Knows Target Role", false, lawyerSpawnRate);
             lawyerCanCallEmergency = CustomOption.Create(352, Types.Neutral, "Lawyer/Prosecutor Can Call Emergency Meeting", true, lawyerSpawnRate);

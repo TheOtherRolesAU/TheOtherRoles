@@ -1253,7 +1253,10 @@ namespace TheOtherRoles
             if (Lawyer.target == player && Lawyer.isProsecutor && Lawyer.lawyer != null && !Lawyer.lawyer.Data.IsDead) Lawyer.isProsecutor = false;
 
             if (!Jackal.canCreateSidekickFromImpostor && player.Data.Role.IsImpostor) {
-                Jackal.fakeSidekick = player;
+				if (Jackal.killFakeImpostor) {
+					uncheckedMurderPlayer(Jackal.jackal.PlayerId, player.PlayerId, 1);
+				} else
+					Jackal.fakeSidekick = player;
             } else {
                 bool wasSpy = Spy.spy != null && player == Spy.spy;
                 bool wasImpostor = player.Data.Role.IsImpostor;  // This can only be reached if impostors can be sidekicked.

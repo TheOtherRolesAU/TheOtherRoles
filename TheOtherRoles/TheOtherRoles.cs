@@ -1082,6 +1082,7 @@ namespace TheOtherRoles
         public static bool canUseVents = true;
         public static bool canSabotage = false;
         public static bool canCreateSidekick = true;
+		public static bool killFakeImpostor = false;
         public static Sprite buttonSprite;
         public static bool jackalPromotedFromSidekickCanCreateSidekick = true;
         public static bool canCreateSidekickFromImpostor = true;
@@ -1116,6 +1117,7 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.jackalKillCooldown.getFloat();
             createSidekickCooldown = CustomOptionHolder.jackalCreateSidekickCooldown.getFloat();
             canUseVents = CustomOptionHolder.jackalCanUseVents.getBool();
+            killFakeImpostor = CustomOptionHolder.jackalKillFakeImpostor.getBool();
             canCreateSidekick = CustomOptionHolder.jackalCanCreateSidekick.getBool();
             jackalPromotedFromSidekickCanCreateSidekick = CustomOptionHolder.jackalPromotedFromSidekickCanCreateSidekick.getBool();
             canCreateSidekickFromImpostor = CustomOptionHolder.jackalCanCreateSidekickFromImpostor.getBool();
