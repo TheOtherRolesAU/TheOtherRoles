@@ -361,6 +361,14 @@ namespace TheOtherRoles {
         public static CustomOption dynamicMapEnablePolus;
         public static CustomOption dynamicMapEnableAirShip;
         public static CustomOption dynamicMapEnableSubmerged;
+		
+		public static CustomOption movePolusVents;
+		public static CustomOption swapNavWifi;
+		public static CustomOption movePolusVitals;
+		public static CustomOption enableBetterPolus;
+		public static CustomOption moveColdTemp;
+		
+		
 		public static CustomOption enableCamoComms;
 		
         public static CustomOption restrictDevices;
@@ -838,6 +846,13 @@ namespace TheOtherRoles {
             dynamicMapEnablePolus = CustomOption.Create(503, Types.General, "Polus", rates, dynamicMap, false);
             dynamicMapEnableAirShip = CustomOption.Create(504, Types.General, "Airship", rates, dynamicMap, false);
             dynamicMapEnableSubmerged = CustomOption.Create(505, Types.General, "Submerged", rates, dynamicMap, false);
+			enableBetterPolus = CustomOption.Create(7878, Types.General, "Enable Better Polus", false, null, false);
+            movePolusVents = CustomOption.Create(7879, Types.General, "Adjust Vents", false, enableBetterPolus, false);
+            movePolusVitals = CustomOption.Create(7880, Types.General, "Move Vitals to Labs", false, enableBetterPolus, false);
+			swapNavWifi = CustomOption.Create(7881, Types.General, "Swap Reboot and Chart Course", false, enableBetterPolus, false);
+			moveColdTemp = CustomOption.Create(7881, Types.General, "Move Cold temp to Death Vally", false, enableBetterPolus, false);
+
+
 
 	enableCamoComms = CustomOption.Create(1105, Types.General, "Enable Camouflage Comms", false,  null, false);
 
