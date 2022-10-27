@@ -52,6 +52,7 @@ namespace TheOtherRoles
         }
 
         public static void stopAll() {
+            if (soundEffects == null) return;
             foreach (var path in soundEffects.Keys) stop(path);
         }
     }

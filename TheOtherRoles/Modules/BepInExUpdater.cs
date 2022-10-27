@@ -9,8 +9,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BepInEx;
-using BepInEx.IL2CPP;
-using BepInEx.IL2CPP.Utils;
+using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,14 +19,16 @@ namespace TheOtherRoles.Modules;
 
 public class BepInExUpdater : MonoBehaviour
 {
-    public const string MinimumBepInExVersion = "6.0.0.559";
-    public const string BepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/559/BepInEx_UnityIL2CPP_x86_fba4461_6.0.0-be.559.zip";
-    public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(MinimumBepInExVersion);
+    public const string RequiredBepInExVersion = "6.0.0-be.662+3ad398a160d0d138a2d012978e6709e20589cf82";
+    public const string BepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/662/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.662%2B3ad398a.zip";
+    public static bool UpdateRequired => Paths.BepInExVersion.ToString() != RequiredBepInExVersion;
 
     public void Awake()
     {
         TheOtherRolesPlugin.Logger.LogMessage("BepInEx Update Required...");
+        TheOtherRolesPlugin.Logger.LogMessage($"{Paths.BepInExVersion}, {RequiredBepInExVersion} ");
         this.StartCoroutine(CoUpdate());
+
     }
 
     [HideFromIl2Cpp]

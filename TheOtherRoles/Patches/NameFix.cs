@@ -1,4 +1,6 @@
 using HarmonyLib;
+using AmongUs.Data;
+using AmongUs.Data.Legacy;
 
 namespace TheOtherRoles.Patches {
     [Harmony]
@@ -6,9 +8,9 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(AccountManager), nameof(AccountManager.RandomizeName))]
         public static class RandomizeNamePatch {
             static bool Prefix(AccountManager __instance) {  
-                if (SaveManager.lastPlayerName == null)
+                if (LegacySaveManager.lastPlayerName == null)
                     return true;
-                SaveManager.PlayerName = SaveManager.lastPlayerName;
+                DataManager.Player.Customization.Name = LegacySaveManager.lastPlayerName;
 		        __instance.accountTab.UpdateNameDisplay();
                 return false; // Don't execute original
             }

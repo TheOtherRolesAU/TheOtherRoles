@@ -16,14 +16,13 @@ monetize them.
 
 This is a human-readable summary of (and not a substitute for) the license.
 
-- You may share, distribute, or include Submerged inon-commerciallyi in your own modpack 
-or mod downloads, under the condition that you do not modify Submerged in any capacity, 
-(including physically modifying the assembly or patching the mod) with the exception of 
-ensuring compatibility between Submerged and your mod.
-  - For clarification, you are still allowed to request payments, donations, etc. or have
-    premium-only features in your mod, but you may not sell users the access to play on
-    Submerged with your modmodpack.
-- If Submerged stops being distributed, you must remove it from your modmodpack as well. 
+You may share, distribute, or include Submerged in your own modpack or mod downloads, under
+the following conditions:
+- You may not modify the Submerged assembly in any capacity.
+    - You may, however, use Harmony to patch the Submerged assembly, as long as your
+    modifications are for ensuring compatibility with other mods.
+- You may not sell users the access to play on Submerged with your mod/modpack. Any
+features your mod/modpack offers on the base-game maps cannot be paywalled for Submerged.
 
 ---
 
@@ -31,7 +30,7 @@ ensuring compatibility between Submerged and your mod.
                     Copyright © 2020-2022 5UP AND ASSOCIATES
 
 By exercising the Licensed Rights (defined below), You accept and agree to be bound by the
-terms and conditions of this license (License). To the extent this License may be 
+terms and conditions of this license ("License"). To the extent this License may be 
 interpreted as a contract, You are granted the Licensed Rights in consideration of Your
 acceptance of these terms and conditions, and the Licensor grants You such rights in
 consideration of benefits the Licensor receives from making the Licensed Material available
@@ -46,7 +45,8 @@ b. You means the individual or entity exercising the Licensed Rights under this 
 License. Your has a corresponding meaning.
 
 c. Licensed Material means the technological or artistic work, or other material to which
-the Licensor applied this License.
+the Licensor applied this License. Screenshots and recordings of the Licensed Material are
+not considered part of the Licensed Material.
 
 d. Licensed Rights means the rights granted to You subject to the terms and conditions of
 this License and that the Licensor has authority to license.
@@ -74,7 +74,7 @@ a. License grant
     Limitations apply to Your use, this Public License does not apply, and You do not
     need to comply with its terms and conditions.
 
-    3. Term. The term of this Public License is specified in Section 5(a).
+    3. Term. The term of this Public License is specified in Section 5.
 
     4. Downstream recipients.
         A. Offer from the Licensor – Licensed Material. Every recipient of the Licensed
@@ -96,8 +96,8 @@ Your exercise of the Licensed Rights is expressly made subject to the following 
 
 a. Attribution;
 
-    1. If You Share the Licensed Material, You must
-        A. retain the following if it is supplied by the Licensor with the Licensed Material
+    1. If You Share the Licensed Material, You must:
+        A. retain the following if it is supplied by the Licensor with the Licensed Material:
             i. identification of the creator(s) of the Licensed Material and any others
             designated to receive attribution, in any reasonable manner requested by the
             Licensor (including by pseudonym if designated);
@@ -109,15 +109,18 @@ a. Attribution;
     it may be reasonable to satisfy the conditions by providing a URI or hyperlink to a
     resource that includes the required information.
 
-    3. If requested by the Licensor, You must remove any of the information required by 
-    Section 3(a)(1)(A) to the extent reasonably practicable.
-
 b. No Modification.
 
-    1. If You Share the Licensed Material, You must
-        A. not modify the Licensed Material in any capacity, including digital modifications
-        of the Licensed Material, and extensions or attachments to the Licensed Material
-        which modify how the Licensed Material operates.
+    1. If You Share the Licensed Material, You must:
+        A. not modify the files contained within the Licensed Material in any capacity,
+        such as digital modifications of the Licensed Material.
+        B. not modify the operation of the files contained within the Licensed Material by
+        any means, such as runtime DLL injection or patching, unless the modifications were
+        made with the intention of facilitating compatibility between the Licensed Material
+        and other software.
+        C. ensure that other software shared alongside the Licensed Material, if present,
+        does not include any features that are generally available, but require payment to
+        be used in conjunction with the Licensed Material.
 
 
     SECTION 4 – Disclaimer of Warranties and Limitation of Liability.
@@ -147,24 +150,23 @@ disclaimer and waiver of all liability.
     SECTION 5 – Term and Termination.
 
 a. If You fail to comply with this License, then Your rights under this License terminate
-automatically. The Licensor may also choose to terminate Your rights under License at any
-time, without specifying a reason.
-
-b. Where Your right to use the Licensed Material has terminated under Section 5(a), it 
-reinstates
-    1. automatically as of the date the violation is cured, provided it is cured within 
-    15 days of Your discovery of the violation; or
+automatically.
+    • Where Your right to use the Licensed Material has terminated under Section 5(a), it 
+reinstates:
+    1. automatically as of the date the violation is cured, provided it is cured within 7 
+    days of Your discovery of the violation; or
     2. upon express reinstatement by the Licensor.
 
-For the avoidance of doubt, this Section 5(b) does not affect any right the Licensor may have
-to seek remedies for Your violations of this License.
+b. The Licensor may choose to terminate Your rights under License at any time, without
+specifying a reason.
+    • Where Your right to use the Licensed Material has terminated under Section 5(a), it 
+reinstates only upon express reinstatement by the Licensor.
 
-c. The Licensor may offer the Licensed Material under separate terms or conditions; however,
+c. For the avoidance of doubt, the Sections 5(a) and 5(b) do not affect any right the
+Licensor may have to seek remedies for Your violations of this License.
+
+d. The Licensor may offer the Licensed Material under separate terms or conditions; however,
 doing so will not terminate this License.
-
-d. The Licensor may choose to stop distributing the Licensed Material at any time. In doing
-so, Your rights under License will be terminated unless they are expressly reinstated by the
-Licensor.
 
 e. Sections 1, 4, 5, and 6 survive termination of this License.
 
@@ -176,4 +178,4 @@ communicated by You unless expressly agreed.
 b. Any arrangements, understandings, or agreements regarding the Licensed Material not stated
 herein are separate from and independent of the terms and conditions of this License.
 
-c. Exemptions from this License may be negotiated with the Licensor.
+c. Exemptions from this License or alternative licenses may be negotiated with the Licensor.

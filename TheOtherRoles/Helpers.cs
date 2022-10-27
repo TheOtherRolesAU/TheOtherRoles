@@ -12,6 +12,10 @@ using HarmonyLib;
 using Hazel;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using System.Threading.Tasks;
+using System.Net;
+using System.Globalization;
+using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles {
 
@@ -22,6 +26,12 @@ namespace TheOtherRoles {
         SuppressKill,
         BlankKill,
         BodyGuardKill
+    }
+
+    public enum CustomGamemodes {
+        Classic,
+        Guesser,
+        HideNSeek
     }
 
 	public enum SabatageTypes {
@@ -102,7 +112,14 @@ namespace TheOtherRoles {
 
             return powerCrewAlive;
         }
-
+        public static bool isNeutral(PlayerControl player) {
+            RoleInfo roleInfo = RoleInfo.getRoleInfoForPlayer(player, false).FirstOrDefault();
+            if (roleInfo != null)
+                return roleInfo.isNeutral;
+            return false;
+        }
+		/* The above func is probably better?
+		
         public static bool isNeutral(PlayerControl p) {
             if (p == Jester.jester) return true;
             if (p == Werewolf.werewolf) return true;
@@ -117,7 +134,7 @@ namespace TheOtherRoles {
             if (p == Pursuer.pursuer) return true;
             return false;
         }
- 
+		*/
 
 		public static SabatageTypes getActiveSabo() {
 			foreach (PlayerTask task in CachedPlayer.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator()) {
@@ -432,7 +449,7 @@ public static bool isPlayerLover(PlayerControl player) {
 
         public static void handleVampireBiteOnBodyReport() {
             // Murder the bitten player and reset bitten (regardless whether the kill was successful or not)
-            Helpers.checkMuderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
+            Helpers.checkMurderAttemptAndKill(Vampire.vampire, Vampire.bitten, true, false);
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.VampireSetBitten, Hazel.SendOption.Reliable, -1);
             writer.Write(byte.MaxValue);
             writer.Write(byte.MaxValue);
@@ -531,11 +548,11 @@ public static bool isPlayerLover(PlayerControl player) {
 
 
         public static bool hasFakeTasks(this PlayerControl player) {
-            return (player == Prosecutor.prosecutor || player == Werewolf.werewolf || player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Contains(player));
+            return (player == Prosecutor.prosecutor || player == Werewolf.werewolf || player == Jester.jester || player == Amnisiac.amnisiac || player == Swooper.swooper|| player == Jackal.jackal || player == Sidekick.sidekick || player == Arsonist.arsonist || player == Vulture.vulture || Jackal.formerJackals.Any(x => x == player));
         }
 
         public static bool canBeErased(this PlayerControl player) {
-            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Contains(player) && player != Swooper.swooper && player != Werewolf.werewolf);
+            return (player != Jackal.jackal && player != Sidekick.sidekick && !Jackal.formerJackals.Any(x => x == player) && player != Swooper.swooper && player != Werewolf.werewolf);
         }
 
         public static void clearAllTasks(this PlayerControl player) {
@@ -591,6 +608,7 @@ public static bool isPlayerLover(PlayerControl player) {
 
         public static bool hidePlayerName(PlayerControl source, PlayerControl target) {
             if (Camouflager.camouflageTimer > 0f) return true; // No names are visible
+			else if (isActiveCamoComms()) return true;
             else if (Ninja.isInvisble && Ninja.ninja == target) return true; 
             else if (Swooper.isInvisable && Swooper.swooper == target) return true; 
             else if (!MapOptions.hidePlayerNames || source.Data.IsDead) return false; // All names are visible
@@ -638,6 +656,8 @@ public static bool isPlayerLover(PlayerControl player) {
             target.cosmetics.currentPet.Source = target;
             target.cosmetics.currentPet.Visible = target.Visible;
             target.SetPlayerMaterialColors(target.cosmetics.currentPet.rend);
+
+            Chameleon.update();  // so that morphling and camo wont make the chameleons visible
         }
 
         public static void showFlash(Color color, float duration=1f, bool fade = true, float opacity = 100f) {
@@ -680,6 +700,8 @@ public static bool isPlayerLover(PlayerControl player) {
                 roleCouldUse = true;
             else if (Undertaker.deadBodyDraged != null && !Undertaker.canDragAndVent && Undertaker.undertaker== player)
                 roleCouldUse = false;
+            else if (Thief.canUseVents &&  Thief.thief != null && Thief.thief == player)
+                roleCouldUse = true;
             else if (player.Data?.Role != null && player.Data.Role.CanVent)  {
                 if (Janitor.janitor != null && Janitor.janitor == CachedPlayer.LocalPlayer.PlayerControl)
                     roleCouldUse = false;
@@ -701,6 +723,8 @@ public static bool isPlayerLover(PlayerControl player) {
         }
 
         public static MurderAttemptResult checkMuderAttempt(PlayerControl killer, PlayerControl target, bool blockRewind = false) {
+            var targetRole = RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault();
+
             // Modified vanilla checks
             if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
             if (killer == null || killer.Data == null || killer.Data.IsDead || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
@@ -791,10 +815,31 @@ public static bool isPlayerLover(PlayerControl player) {
 				
 				
 			
+
+            // Thief if hit crew only kill if setting says so, but also kill the thief.
+            else if (killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> {RoleInfo.jackal, Thief.canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick }.Contains(targetRole)) {
+                Thief.suicideFlag = true;
+                return MurderAttemptResult.SuppressKill;
+            }
+
+            // Block hunted with time shield kill
+            else if (Hunted.timeshieldActive.Contains(target.PlayerId)) {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.HuntedRewindTime, Hazel.SendOption.Reliable, -1);
+                writer.Write(target.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCProcedure.huntedRewindTime(target.PlayerId);
+
+                return MurderAttemptResult.SuppressKill;
+            }
+
             return MurderAttemptResult.PerformKill;
         }
 
-        public static MurderAttemptResult checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false, bool showAnimation = true)  {
+		public static MurderAttemptResult checkMuderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false, bool showAnimation = true)  {
+			return checkMurderAttemptAndKill(killer, target, isMeetingStart, showAnimation);
+		}
+	
+        public static MurderAttemptResult checkMurderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false, bool showAnimation = true)  {
             // The local player checks for the validity of the kill and performs it afterwards (different to vanilla, where the host performs all the checks)
             // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
 
@@ -876,9 +921,10 @@ public static bool isPlayerLover(PlayerControl player) {
         }
 
 
+
+
         public static bool zoomOutStatus = false;
         public static void toggleZoom(bool reset=false) {
-            TheOtherRolesPlugin.Logger.LogMessage(Camera.main.orthographicSize);
             float orthographicSize = reset || zoomOutStatus ? 3f : 12f;
 
             zoomOutStatus = !zoomOutStatus && !reset;
@@ -890,6 +936,37 @@ public static bool isPlayerLover(PlayerControl player) {
             HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
             HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
+        }
+
+        public static void checkBeta() {
+            if (TheOtherRolesPlugin.betaDays > 0) {
+                var compileTime = new DateTime(Builtin.CompileTime, DateTimeKind.Utc);  // This may show as an error, but it is not, compilation will work!
+                DateTime now;
+                // Get time from the internet, so no-one can cheat it.
+                try {
+                    using (var response =
+                      WebRequest.Create("http://www.google.com").GetResponse())
+                        now = DateTime.ParseExact(response.Headers["date"], "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AssumeUniversal);
+                } catch (WebException e) {
+                    TheOtherRolesPlugin.Logger.LogMessage($"{e}");
+                    now = DateTime.Now; //In case something goes wrong. 
+                }
+                if ((now - compileTime).TotalDays > TheOtherRolesPlugin.betaDays) {
+                    TheOtherRolesPlugin.Logger.LogMessage($"Beta expired!");
+                    BepInExUpdater.MessageBox(IntPtr.Zero, "BETA is expired. You cannot play this version anymore.", "The Other Roles Beta", 1);
+                    Application.Quit();
+
+                } else TheOtherRolesPlugin.Logger.LogMessage($"Beta will remain runnable for {(DateTime.Now - compileTime).TotalDays - TheOtherRolesPlugin.betaDays} days!");
+            }
+        }
+
+        public static bool hasImpVision(GameData.PlayerInfo player) {
+            return player.Role.IsImpostor
+                || ((Jackal.jackal != null && Jackal.jackal.PlayerId == player.PlayerId || Jackal.formerJackals.Any(x => x.PlayerId == player.PlayerId)) && Jackal.hasImpostorVision)
+                || (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == player.PlayerId && Sidekick.hasImpostorVision)
+                || (Spy.spy != null && Spy.spy.PlayerId == player.PlayerId && Spy.hasImpostorVision)
+                || (Jester.jester != null && Jester.jester.PlayerId == player.PlayerId && Jester.hasImpostorVision)
+                || (Thief.thief != null && Thief.thief.PlayerId == player.PlayerId && Thief.hasImpostorVision);
         }
         
         public static object TryCast(this Il2CppObjectBase self, Type type)
