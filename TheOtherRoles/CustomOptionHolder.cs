@@ -527,7 +527,7 @@ namespace TheOtherRoles {
 
             guesserSpawnRate = CustomOption.Create(310, Types.Modifier, cs(Guesser.color, "Guesser"), false, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Modifier, "Evil Spawn Rate", rates, guesserSpawnRate);
-            guesserSpawnBothRate = CustomOption.Create(317, Types.Modifier, "Good Spawn Rate", rates, guesserSpawnRate);
+            guesserSpawnBothRate = CustomOption.Create(317, Types.Modifier, "Other Spawn Rate", rates, guesserSpawnRate);
             guesserNumberOfShots = CustomOption.Create(312, Types.Modifier, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
             guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, Types.Modifier, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
             guesserShowInfoInGhostChat = CustomOption.Create(314, Types.Modifier, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
@@ -729,15 +729,6 @@ namespace TheOtherRoles {
             modifiersAreHidden = CustomOption.Create(1009, Types.Modifier, cs(Color.yellow, "Hide After Death Modifiers"), true, null, true);
 
 
-            guesserSpawnRate = CustomOption.Create(310, Types.Modifier, cs(Guesser.color, "Guesser"), false, null, true);
-            guesserIsImpGuesserRate = CustomOption.Create(311, Types.Modifier, "Evil Spawn Rate", rates, guesserSpawnRate);
-            guesserSpawnBothRate = CustomOption.Create(317, Types.Modifier, "Good Spawn Rate", rates, guesserSpawnRate);
-            guesserNumberOfShots = CustomOption.Create(312, Types.Modifier, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
-            guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, Types.Modifier, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
-            guesserShowInfoInGhostChat = CustomOption.Create(314, Types.Modifier, "Guesses Visible In Ghost Chat", true, guesserSpawnRate);
-            guesserKillsThroughShield  = CustomOption.Create(315, Types.Modifier, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
-            guesserEvilCanKillSpy  = CustomOption.Create(316, Types.Modifier, "Evil Guesser Can Guess The Spy", true, guesserSpawnRate);
-            guesserCantGuessSnitchIfTaksDone = CustomOption.Create(318, Types.Modifier, "Guesser Can't Guess Snitch When Tasks Completed", true, guesserSpawnRate);
 
             modifierBloody = CustomOption.Create(1000, Types.Modifier, cs(Color.yellow, "Bloody"), rates, null, true);
             modifierBloodyQuantity = CustomOption.Create(1001, Types.Modifier, cs(Color.yellow, "Bloody Quantity"), ratesModifier, modifierBloody);
