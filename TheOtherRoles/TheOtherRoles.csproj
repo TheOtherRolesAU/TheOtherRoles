@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Version>5.7.0</Version>
+        <Version>5.7.1</Version>
         <Description>TheOtherRolesCE</Description>
         <Authors>JustASysAdmin</Authors>
 		<LangVersion>latest</LangVersion>
