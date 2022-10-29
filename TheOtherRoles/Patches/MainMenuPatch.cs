@@ -99,6 +99,7 @@ namespace TheOtherRoles.Modules {
                 string creditsString = @$"<align=""center"">Github Contributors:
 Alex2911    amsyarasyiq    MaximeGillot
 Psynomit    probablyadnf    JustASysAdmin
+Dadoum
 
 Discord Moderators:
 Streamblox    Draco Cordraconis

@@ -468,7 +468,12 @@ namespace TheOtherRoles
                 Shifter.getButtonSprite(),
                 new Vector3(0, 1f, 0),
                 __instance,
+<<<<<<< HEAD
                 null
+=======
+                hotkey: null,
+                true
+>>>>>>> dc0aff4 (Build fixes)
             );
 
             // Morphling morph
@@ -1808,7 +1813,11 @@ namespace TheOtherRoles
                 Hunter.getArrowSprite(),
                 CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
+<<<<<<< HEAD
                 "HunterArrow",
+=======
+                "ActionTertiary",
+>>>>>>> dc0aff4 (Build fixes)
                 true,
                 Hunter.ArrowDuration,
                 () => {
