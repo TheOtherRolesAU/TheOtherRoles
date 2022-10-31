@@ -36,12 +36,6 @@ namespace TheOtherRoles.Patches {
 					herePoints.Remove(s.Key);
 				}
 			}
-			Vector3 vector = AntiTeleport.position != null ? AntiTeleport.position : CachedPlayer.LocalPlayer.transform.position;
-			vector /= MapUtilities.CachedShipStatus.MapScale;
-			vector.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
-			vector.z = -1f;
-			__instance.HerePoint.transform.localPosition = vector;
-			CachedPlayer.LocalPlayer.PlayerControl.SetPlayerMaterialColors(__instance.HerePoint);
 		}
 	}
 }
