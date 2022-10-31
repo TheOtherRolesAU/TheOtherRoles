@@ -701,6 +701,12 @@ namespace TheOtherRoles
                     Mayor.mayor = amnisiac;
                     Amnisiac.clearAndReload();
                     break;
+					
+                case RoleId.Trapper:
+                    if (Amnisiac.resetRole) Trapper.clearAndReload();
+                    Trapper.trapper = amnisiac;
+                    Amnisiac.clearAndReload();
+                    break;
 
                 case RoleId.Portalmaker:
                     if (Amnisiac.resetRole) Portalmaker.clearAndReload();
