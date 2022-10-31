@@ -525,15 +525,6 @@ namespace TheOtherRoles {
             blackmailerSpawnRate = CustomOption.Create(710, Types.Impostor, cs(Blackmailer.color, "Blackmailer"), rates, null, true);
             blackmailerCooldown = CustomOption.Create(711, Types.Impostor, "Blackmail Cooldown", 30f, 5f, 120f, 5f, blackmailerSpawnRate);
         
-			// guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
-            // guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);
-            // guesserNumberOfShots = CustomOption.Create(312, Types.Neutral, "Guesser Number Of Shots", 2f, 1f, 15f, 1f, guesserSpawnRate);
-            // guesserHasMultipleShotsPerMeeting = CustomOption.Create(313, Types.Neutral, "Guesser Can Shoot Multiple Times Per Meeting", false, guesserSpawnRate);
-            // guesserKillsThroughShield  = CustomOption.Create(315, Types.Neutral, "Guesses Ignore The Medic Shield", true, guesserSpawnRate);
-            // guesserEvilCanKillSpy  = CustomOption.Create(316, Types.Neutral, "Evil Guesser Can Guess The Spy", true, guesserSpawnRate);
-            // guesserSpawnBothRate = CustomOption.Create(317, Types.Neutral, "Both Guesser Spawn Rate", rates, guesserSpawnRate);
-            // guesserCantGuessSnitchIfTaksDone = CustomOption.Create(318, Types.Neutral, "Guesser Can't Guess Snitch When Tasks Completed", true, guesserSpawnRate);
-
             guesserSpawnRate = CustomOption.Create(310, Types.Modifier, cs(Guesser.color, "Guesser"), false, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Modifier, "Evil Spawn Rate", rates, guesserSpawnRate);
             guesserSpawnBothRate = CustomOption.Create(317, Types.Modifier, "Other Spawn Rate", rates, guesserSpawnRate);
@@ -550,7 +541,6 @@ namespace TheOtherRoles {
             jesterHasImpostorVision = CustomOption.Create(62, Types.Neutral, "Jester Has Impostor Vision", false, jesterSpawnRate);
 			
             prosecutorSpawnRate = CustomOption.Create(615, Types.Neutral, cs(Prosecutor.color, "Executioner"),   rates, null, true);
-//            prosecutorPreferAmnesiac = CustomOption.Create(8701, Types.Neutral, "Prefer Amnesiac over Pursuer", false, prosecutorSpawnRate);
 
 
             amnisiacSpawnRate = CustomOption.Create(616, Types.Neutral, cs(Amnisiac.color, "Amnesiac"), rates, null, true);
@@ -645,9 +635,9 @@ namespace TheOtherRoles {
             timeMasterRewindTime = CustomOption.Create(132, Types.Crewmate, "Rewind Time", 3f, 1f, 10f, 1f, timeMasterSpawnRate);
             timeMasterShieldDuration = CustomOption.Create(133, Types.Crewmate, "Time Master Shield Duration", 3f, 1f, 20f, 1f, timeMasterSpawnRate);
 
-            veterenSpawnRate = CustomOption.Create(450, Types.Crewmate, cs(Veteren.color, "Veteran"), rates, null, true);
-            veterenCooldown = CustomOption.Create(451, Types.Crewmate, "Alert Cooldown", 30f, 10f, 120f, 2.5f, veterenSpawnRate);
-	    veterenAlertDuration = CustomOption.Create(452, Types.Crewmate, "Alert Duration", 3f, 1f, 20f, 1f, veterenSpawnRate);
+            veterenSpawnRate = CustomOption.Create(4450, Types.Crewmate, cs(Veteren.color, "Veteran"), rates, null, true);
+            veterenCooldown = CustomOption.Create(4451, Types.Crewmate, "Alert Cooldown", 30f, 10f, 120f, 2.5f, veterenSpawnRate);
+	    veterenAlertDuration = CustomOption.Create(4452, Types.Crewmate, "Alert Duration", 3f, 1f, 20f, 1f, veterenSpawnRate);
 
             medicSpawnRate = CustomOption.Create(140, Types.Crewmate, cs(Medic.color, "Medic"), rates, null, true);
             medicShowShielded = CustomOption.Create(143, Types.Crewmate, "Show Shielded Player", new string[] {"Everyone", "Shielded + Medic", "Medic"}, medicSpawnRate);
@@ -851,7 +841,7 @@ namespace TheOtherRoles {
             movePolusVents = CustomOption.Create(7879, Types.General, "Adjust Vents", false, enableBetterPolus, false);
             movePolusVitals = CustomOption.Create(7880, Types.General, "Move Vitals to Labs", false, enableBetterPolus, false);
 			swapNavWifi = CustomOption.Create(7881, Types.General, "Swap Reboot and Chart Course", false, enableBetterPolus, false);
-			moveColdTemp = CustomOption.Create(7881, Types.General, "Move Cold temp to Death Vally", false, enableBetterPolus, false);
+			moveColdTemp = CustomOption.Create(7882, Types.General, "Move Cold temp to Death Vally", false, enableBetterPolus, false);
 
 
 
