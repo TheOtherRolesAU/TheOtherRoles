@@ -680,7 +680,6 @@ namespace TheOtherRoles
                     if (Amnisiac.resetRole) BodyGuard.clearAndReload();
                     BodyGuard.bodyguard = amnisiac;
                     Amnisiac.clearAndReload();
-                    Amnisiac.amnisiac = target;
                     break;
                     
                 case RoleId.Werewolf:
