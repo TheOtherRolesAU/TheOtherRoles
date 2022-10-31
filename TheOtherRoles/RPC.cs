@@ -668,6 +668,13 @@ namespace TheOtherRoles
                     Amnisiac.clearAndReload();
                     Amnisiac.amnisiac = target;
                     break;
+					
+                case RoleId.Thief:
+                    if (Amnisiac.resetRole) Thief.clearAndReload();
+                    Thief.thief = amnisiac;
+                    Amnisiac.clearAndReload();
+                    Amnisiac.amnisiac = target;
+                    break;
                     
                 case RoleId.BodyGuard:
                     if (Amnisiac.resetRole) BodyGuard.clearAndReload();
