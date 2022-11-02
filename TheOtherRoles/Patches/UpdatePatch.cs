@@ -246,10 +246,40 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= dt;
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
-            Ninja.invisibleTimer -= dt;
-            HideNSeek.timer -= dt;
+            Ninja.invisibleTimer -= dt;            
+            HideNSeek.timer -= dt;            
+            MrFreeze.mrFreezeTimer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)
                 Deputy.handcuffedKnows[key] -= dt;
+        }
+
+        static void mrFreezeFreezeAndUnfreeze()
+        {
+            if (MrFreeze.mrFreeze != null)
+            {
+                if (MrFreeze.originalSpeed == null)
+                {
+                    MrFreeze.originalSpeed = MrFreeze.mrFreeze.MyPhysics.Speed;
+                }
+
+                if (MrFreeze.mrFreezeTimer > 0)
+                {
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    {
+                        if (p != MrFreeze.mrFreeze)
+                        {
+                            p.MyPhysics.Speed = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls)
+                    {
+                        p.MyPhysics.Speed = MrFreeze.originalSpeed.Value;
+                    }
+                }
+            }
         }
 
         public static void miniUpdate() {
@@ -335,6 +365,9 @@ namespace TheOtherRoles.Patches {
             timerUpdate();
             // Mini
             miniUpdate();
+
+            // mrFreeze
+            mrFreezeFreezeAndUnfreeze();
 
             // Deputy Sabotage, Use and Vent Button Disabling
             updateReportButton(__instance);

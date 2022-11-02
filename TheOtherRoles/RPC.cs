@@ -60,6 +60,11 @@ namespace TheOtherRoles
         Witch,
         Ninja,
         Thief,
+        GhostLord,
+        Undertaker,
+        MrFreeze,
+        Transporter,
+        Invisible,
         Crewmate,
         Impostor,
         // Modifier ---
@@ -142,6 +147,12 @@ namespace TheOtherRoles
         ThiefStealsRole,
         SetTrap,
         TriggerTrap,
+        DragBody,
+        DropBody,
+        InvisibleInvis,
+        MrFreezeFreeze,
+        GhostLordTurnIntoGhost,
+        TransporterSwap,
 
         // Gamemode
         SetGuesserGm,
@@ -347,8 +358,23 @@ namespace TheOtherRoles
                         break;
                     case RoleId.Thief:
                         Thief.thief = player;
-                    break;
-                }
+                        break;
+                    case RoleId.Invisible:
+                        Invisible.invisible = player;
+                        break;
+                    case RoleId.MrFreeze:
+                        MrFreeze.mrFreeze = player;
+                        break;
+                    case RoleId.Undertaker:
+                        Undertaker.undertaker = player;
+                        break;
+                    case RoleId.GhostLord:
+                        GhostLord.ghostLord = player;
+                        break;
+                    case RoleId.Transporter:
+                        Transporter.transporter = player;
+                        break;
+                    }
         }
         }
 
@@ -761,7 +787,14 @@ namespace TheOtherRoles
                 target.cosmetics.currentBodySprite.BodySprite.color = Color.white;
                 target.cosmetics.colorBlindText.gameObject.SetActive(DataManager.Settings.Accessibility.ColorBlindMode);
                 if (Camouflager.camouflageTimer <= 0) target.setDefaultLook();
-                Ninja.isInvisble = false;
+                if(target == Ninja.ninja)
+                {
+                    Ninja.isInvisble = false;
+                }
+                else if(target == Invisible.invisible)
+                {
+                    Invisible.isInvis = false;
+                }
                 return;
             }
 
@@ -770,9 +803,19 @@ namespace TheOtherRoles
             if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.Data.IsDead) color.a = 0.1f;
             target.cosmetics.currentBodySprite.BodySprite.color = color;
             target.cosmetics.colorBlindText.gameObject.SetActive(false);
-            Ninja.invisibleTimer = Ninja.invisibleDuration;
-            Ninja.isInvisble = true;
+            if (target == Ninja.ninja)
+            {
+                Ninja.invisibleTimer = Ninja.invisibleDuration;
+                Ninja.isInvisble = true;
+            }
+            else if (target == Invisible.invisible)
+            {
+                Invisible.invisibleTimer = Invisible.duration;
+                Invisible.isInvis = true;
+            }
+
         }
+
 
         public static void placePortal(byte[] buff) {
             Vector3 position = Vector2.zero;
@@ -1063,6 +1106,49 @@ namespace TheOtherRoles
                 Minigame.Instance.ForceClose();
             CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
         }
+
+
+        public static void dragBody(byte playerId)
+        {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == playerId)
+                {
+                    Undertaker.deadBodyDraged = array[i];
+                }
+            }
+        }
+
+        public static void dropBody(byte playerId)
+        {
+            if (Undertaker.undertaker == null || Undertaker.deadBodyDraged == null) return;
+            var deadBody = Undertaker.deadBodyDraged;
+            Undertaker.deadBodyDraged = null;
+            deadBody.transform.position = new Vector3(Undertaker.undertaker.transform.position.x, Undertaker.undertaker.transform.position.y, Undertaker.undertaker.transform.position.z);
+        }
+
+        public static void TransporterSwap(byte playerId)
+        {
+            PlayerControl target = Helpers.playerById(playerId);
+            if (Transporter.transporter == null || target == null) return;
+            Transporter.sampledTarget = target;
+            Transporter.TransportPlayers(target);
+        }
+
+        public static void mrFreezeFreeze()
+        {
+            if (MrFreeze.mrFreeze == null) return;
+
+            MrFreeze.mrFreezeTimer = MrFreeze.duration;
+        }
+
+        public static void ghostLordTurnIntoGhost()
+        {
+            if (GhostLord.ghostLord == null) return;
+            GhostLord.ghostTimer = GhostLord.duration;
+        }
+
     }   
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
@@ -1303,6 +1389,21 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.ShareGamemode:
                     byte gm = reader.ReadByte();
                     RPCProcedure.shareGamemode(gm);
+                    break;
+                case (byte)CustomRPC.DragBody:
+                    RPCProcedure.dragBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.DropBody:
+                    RPCProcedure.dropBody(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.TransporterSwap:
+                    RPCProcedure.TransporterSwap(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.GhostLordTurnIntoGhost:
+                    RPCProcedure.ghostLordTurnIntoGhost();
+                    break;
+                case (byte)CustomRPC.MrFreezeFreeze:
+                    RPCProcedure.mrFreezeFreeze();
                     break;
 
                 // Game mode

@@ -10,6 +10,7 @@ using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.CustomGameModes;
 
+
 namespace TheOtherRoles
 {
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
@@ -58,6 +59,11 @@ namespace TheOtherRoles
         private static CustomButton hunterAdminTableButton;
         private static CustomButton hunterArrowButton;
         private static CustomButton huntedShieldButton;
+        public static CustomButton ghostLordButton;
+        public static CustomButton mrFreezeButton;
+        public static CustomButton invisibleButton;
+        public static CustomButton transporterButton;
+        public static CustomButton undertakerDragButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
         public static PoolablePlayer morphTargetDisplay;
@@ -114,6 +120,11 @@ namespace TheOtherRoles
             hunterAdminTableButton.MaxTimer = Hunter.AdminCooldown;
             hunterArrowButton.MaxTimer = Hunter.ArrowCooldown;
             huntedShieldButton.MaxTimer = Hunted.shieldCooldown;
+            transporterButton.MaxTimer = Transporter.cooldown;
+            invisibleButton.MaxTimer = Invisible.cooldown;
+            mrFreezeButton.MaxTimer = MrFreeze.cooldown;
+            undertakerDragButton.MaxTimer = 0f;
+            ghostLordButton.MaxTimer = GhostLord.cooldown;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -132,9 +143,12 @@ namespace TheOtherRoles
             hunterLighterButton.EffectDuration = Hunter.lightDuration;
             hunterArrowButton.EffectDuration = Hunter.ArrowDuration;
             huntedShieldButton.EffectDuration = Hunted.shieldDuration;
+            invisibleButton.EffectDuration = Invisible.duration;
+            ghostLordButton.EffectDuration = GhostLord.duration;
+            mrFreezeButton.EffectDuration = MrFreeze.duration;
             // Already set the timer to the max, as the button is enabled during the game and not available at the start
             lightsOutButton.Timer = lightsOutButton.MaxTimer;
-            zoomOutButton.MaxTimer = 0f;
+            zoomOutButton.MaxTimer = 0f;            
         }
 
         public static void resetTimeMasterButton() {
@@ -149,6 +163,13 @@ namespace TheOtherRoles
             huntedShieldButton.isEffectActive = false;
             huntedShieldButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
             SoundEffectsManager.stop("timemasterShield");
+        }
+
+        public static void resetInvisibleButton()
+        {
+            invisibleButton.Timer = invisibleButton.MaxTimer;
+            invisibleButton.isEffectActive = false;
+            invisibleButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
         }
 
         private static void addReplacementHandcuffedButton(CustomButton button, Vector3? positionOffset = null, Func<bool> couldUse = null)
@@ -1674,6 +1695,214 @@ namespace TheOtherRoles
                __instance,
                KeyCode.Q
                );
+
+            // Transporter button
+            transporterButton = new CustomButton(
+                () => {
+
+                    if (Transporter.sampledTarget != null)
+                    {
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.TransporterSwap, Hazel.SendOption.Reliable, -1);
+                        writer.Write(Transporter.sampledTarget.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCProcedure.TransporterSwap(Transporter.sampledTarget.PlayerId);
+                        Transporter.sampledTarget = null;
+                        transporterButton.Timer = Transporter.cooldown;
+                        SoundEffectsManager.play("morphlingMorph");
+                        if (Transporter.localArrow?.arrow != null) UnityEngine.Object.Destroy(Transporter.localArrow.arrow);
+                        Transporter.localArrow = new Arrow(Color.blue);
+                        if (Transporter.localArrow.arrow != null) Transporter.localArrow.arrow.SetActive(false);
+                        transporterButton.Sprite = Transporter.getTransporterSampleSprite();
+                    }
+                    else if (Transporter.currentTarget != null)
+                    {
+                        Transporter.sampledTarget = Transporter.currentTarget;
+                        transporterButton.Sprite = Transporter.getTransporterMorphSprite();
+                        transporterButton.Timer = Transporter.delaiAfterScan;
+                        SoundEffectsManager.play("morphlingSample");
+                    }
+
+
+                },
+                () => { return Transporter.transporter != null && Transporter.transporter == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return (Transporter.currentTarget || Transporter.sampledTarget) && PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    transporterButton.Timer = transporterButton.MaxTimer;
+                    transporterButton.Sprite = Transporter.getTransporterSampleSprite();
+                    transporterButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                    
+                    Transporter.sampledTarget = null;
+                    if (Transporter.localArrow?.arrow != null) UnityEngine.Object.Destroy(Transporter.localArrow.arrow);
+                    Transporter.localArrow = new Arrow(Color.blue);
+                    if (Transporter.localArrow.arrow != null) Transporter.localArrow.arrow.SetActive(false);
+                },
+                Transporter.getTransporterSampleSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F
+            );
+
+
+            // Invisible invis
+            invisibleButton = new CustomButton(
+                () => {
+                    if (!Invisible.isInvis)
+                    {
+ 
+                        MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisible, Hazel.SendOption.Reliable, -1);
+                        invisibleWriter.Write(Invisible.invisible.PlayerId);
+                        invisibleWriter.Write(byte.MinValue);
+                        AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+                        RPCProcedure.setInvisible(Invisible.invisible.PlayerId, byte.MinValue);
+                        invisibleButton.EffectDuration = Invisible.duration;
+
+                    }
+                },
+                () => { return Invisible.invisible != null && Invisible.invisible == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    invisibleButton.Timer = invisibleButton.MaxTimer;
+                    invisibleButton.Sprite = Invisible.getButtonSprite();
+                    invisibleButton.isEffectActive = false;
+                    invisibleButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                Invisible.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                Invisible.duration,
+                () => {
+                    if (!Invisible.isInvis)
+                    {
+                        invisibleButton.Timer = invisibleButton.MaxTimer;
+                        invisibleButton.Sprite = Invisible.getButtonSprite();
+                    }
+                }
+            );
+
+            // MrFreeze freeze
+            mrFreezeButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.MrFreezeFreeze, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.mrFreezeFreeze();
+                },
+                () => { return MrFreeze.mrFreeze != null && MrFreeze.mrFreeze == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    mrFreezeButton.Timer = mrFreezeButton.MaxTimer;
+                    mrFreezeButton.isEffectActive = false;
+                    mrFreezeButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                MrFreeze.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                MrFreeze.duration,
+                () => { mrFreezeButton.Timer = mrFreezeButton.MaxTimer; }
+            );
+
+            // Undertaker move
+            undertakerDragButton = new CustomButton(
+                () => {
+                    if (Undertaker.deadBodyDraged == null)
+                    {
+                        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+                        {
+                            if (collider2D.tag == "DeadBody")
+                            {
+                                DeadBody deadBody = collider2D.GetComponent<DeadBody>();
+                                if (deadBody && !deadBody.Reported)
+                                {
+                                    Vector2 playerPosition = PlayerControl.LocalPlayer.GetTruePosition();
+                                    Vector2 deadBodyPosition = deadBody.TruePosition;
+                                    if (Vector2.Distance(deadBodyPosition, playerPosition) <= PlayerControl.LocalPlayer.MaxReportDistance && PlayerControl.LocalPlayer.CanMove && !PhysicsHelpers.AnythingBetween(playerPosition, deadBodyPosition, Constants.ShipAndObjectsMask, false) && !Undertaker.isDraging)
+                                    {
+                                        GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(deadBody.ParentId);
+                                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DragBody, Hazel.SendOption.Reliable, -1);
+                                        writer.Write(playerInfo.PlayerId);
+                                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                                        RPCProcedure.dragBody(playerInfo.PlayerId);
+                                        Undertaker.deadBodyDraged = deadBody;
+                                        Undertaker.isDraging = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DropBody, SendOption.Reliable, -1);
+                        writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        Undertaker.deadBodyDraged = null;
+                        Undertaker.isDraging = false;
+                    }
+
+                },
+                () => { return Undertaker.undertaker != null && Undertaker.undertaker == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (Undertaker.deadBodyDraged != null) return true;
+                    else
+                    {
+                        foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(PlayerControl.LocalPlayer.GetTruePosition(), PlayerControl.LocalPlayer.MaxReportDistance, Constants.PlayersOnlyMask))
+                        {
+                            if (collider2D.tag == "DeadBody")
+                            {
+                                DeadBody deadBody = collider2D.GetComponent<DeadBody>();
+                                Vector2 deadBodyPosition = deadBody.TruePosition;
+                                deadBodyPosition.x -= 0.2f;
+                                deadBodyPosition.y -= 0.2f;
+                                return (PlayerControl.LocalPlayer.CanMove && Vector2.Distance(PlayerControl.LocalPlayer.GetTruePosition(), deadBodyPosition) < 0.80f);
+                            }
+                        }
+                        return false;
+                    }
+
+                },
+             //   () => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove) || Undertaker.deadBodyDraged != null); },
+                () => {
+                    Undertaker.deadBodyDraged = null;
+                    Undertaker.isDraging = false;
+                },
+                Undertaker.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                0f,
+                () => { }
+            );
+
+            mrFreezeButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+
+            // Ghost lord ghosting
+            ghostLordButton = new CustomButton(
+                () => {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GhostLordTurnIntoGhost, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.ghostLordTurnIntoGhost();
+                },
+                () => { return GhostLord.ghostLord != null && GhostLord.ghostLord == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
+                () => { return PlayerControl.LocalPlayer.CanMove; },
+                () => {
+                    ghostLordButton.Timer = ghostLordButton.MaxTimer;
+                    ghostLordButton.isEffectActive = false;
+                    ghostLordButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                },
+                GhostLord.getButtonSprite(),
+                new Vector3(-1.8f, -0.06f, 0),
+                __instance,
+                KeyCode.F,
+                true,
+                GhostLord.duration,
+                () => { ghostLordButton.Timer = ghostLordButton.MaxTimer; }
+            );
+
+
 
             // Trapper Charges
             trapperChargesText = GameObject.Instantiate(trapperButton.actionButton.cooldownTimerText, trapperButton.actionButton.cooldownTimerText.transform.parent);

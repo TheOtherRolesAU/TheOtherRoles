@@ -258,6 +258,13 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void transporterSetTarget()
+        {
+            if (Transporter.transporter == null || Transporter.transporter != PlayerControl.LocalPlayer) return;
+            Transporter.currentTarget = setTarget();
+            setPlayerOutline(Transporter.currentTarget, Transporter.color);
+        }
+
         static void eraserSetTarget() {
             if (Eraser.eraser == null || Eraser.eraser != CachedPlayer.LocalPlayer.PlayerControl) return;
 
@@ -377,6 +384,18 @@ namespace TheOtherRoles.Patches {
                     Ninja.arrow.arrow.SetActive(false);
                 }
             }
+        }
+
+        static void invisibleUpdate()
+        {
+            if (Invisible.isInvis && Invisible.invisibleTimer <= 0 && Invisible.invisible == CachedPlayer.LocalPlayer.PlayerControl)
+            {
+                MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisible, Hazel.SendOption.Reliable, -1);
+                invisibleWriter.Write(Invisible.invisible.PlayerId);
+                invisibleWriter.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+                RPCProcedure.setInvisible(Invisible.invisible.PlayerId, byte.MaxValue);                
+            }            
         }
 
         static void trackerUpdate() {
@@ -609,6 +628,57 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void transporterArrowUpdate()
+        {
+
+            if (Transporter.localArrow?.arrow == null || !Transporter.haveArrow) return;
+
+            if (Transporter.transporter == null || PlayerControl.LocalPlayer != Transporter.transporter)
+            {
+                Transporter.localArrow.arrow.SetActive(false);
+                return;
+            }
+
+            if (Transporter.transporter != null && Transporter.sampledTarget != null && PlayerControl.LocalPlayer == Transporter.transporter && !Transporter.transporter.Data.IsDead)
+            {
+                Transporter.timeUntilUpdate -= Time.fixedDeltaTime;
+
+                if (Transporter.timeUntilUpdate <= 0f)
+                {
+                    bool trackedOnMap = !Transporter.sampledTarget.Data.IsDead;
+                    Vector3 position = Transporter.sampledTarget.transform.position;
+                    if (!trackedOnMap)
+                    { // Check for dead body
+                        DeadBody body = UnityEngine.Object.FindObjectsOfType<DeadBody>().FirstOrDefault(b => b.ParentId == Transporter.sampledTarget.PlayerId);
+                        if (body != null)
+                        {
+                            trackedOnMap = true;
+                            position = body.transform.position;
+                        }
+                    }
+
+                    Transporter.localArrow.Update(position);
+                    Transporter.localArrow.arrow.SetActive(trackedOnMap);
+                    Transporter.timeUntilUpdate = Transporter.arrowUpdateInterval;
+                }
+                else
+                {
+                    Transporter.localArrow.Update();
+                }
+            }
+        }
+
+        static void undertakerDragBodyUpdate()
+        {
+            if (Undertaker.undertaker == null || Undertaker.undertaker.Data.IsDead) return;
+            if (Undertaker.deadBodyDraged != null)
+            {
+                Vector3 currentPosition = Undertaker.undertaker.transform.position;
+                Undertaker.deadBodyDraged.transform.position = currentPosition;
+            }
+
+        }
+
         static void bountyHunterUpdate() {
             if (BountyHunter.bountyHunter == null || CachedPlayer.LocalPlayer.PlayerControl != BountyHunter.bountyHunter) return;
 
@@ -707,11 +777,15 @@ namespace TheOtherRoles.Patches {
             Medium.target = target;
         }
 
-        static void morphlingAndCamouflagerUpdate() {
+        static void morphlingAndCamouflagerAndInvisibleAndGhostLordUpdate() {
             float oldCamouflageTimer = Camouflager.camouflageTimer;
             float oldMorphTimer = Morphling.morphTimer;
+            float oldInvisTimer = Invisible.invisibleTimer;
+
             Camouflager.camouflageTimer = Mathf.Max(0f, Camouflager.camouflageTimer - Time.fixedDeltaTime);
             Morphling.morphTimer = Mathf.Max(0f, Morphling.morphTimer - Time.fixedDeltaTime);
+            Invisible.invisibleTimer = Mathf.Max(0f, Invisible.invisibleTimer - Time.fixedDeltaTime);            
+            GhostLord.ghostTimer = Mathf.Max(0f, GhostLord.ghostTimer - Time.fixedDeltaTime);
 
 
             // Camouflage reset and set Morphling look if necessary
@@ -726,6 +800,24 @@ namespace TheOtherRoles.Patches {
             // Morphling reset (only if camouflage is inactive)
             if (Camouflager.camouflageTimer <= 0f && oldMorphTimer > 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null)
                 Morphling.resetMorph();
+
+            //set GhostLord look, override by everything else
+            if (GhostLord.ghostLord != null && GhostLord.ghostTimer > 0f)
+            {
+                GhostLord.turnSkinIntoGhost();
+            }
+            else
+            {
+                GhostLord.resetSkinIntoCrewmate();
+            }
+
+            // Invis reset
+            if (oldInvisTimer > 0f && Invisible.invisibleTimer <= 0f)
+            {
+                Invisible.resetInvisible();
+                HudManagerStartPatch.resetInvisibleButton();
+            }
+
         }
 
         public static void lawyerUpdate() {
@@ -1001,7 +1093,7 @@ namespace TheOtherRoles.Patches {
                 // Medium
                 mediumSetTarget();
                 // Morphling and Camouflager
-                morphlingAndCamouflagerUpdate();
+                morphlingAndCamouflagerAndInvisibleAndGhostLordUpdate();
                 // Lawyer
                 lawyerUpdate();
                 // Pursuer
@@ -1012,6 +1104,7 @@ namespace TheOtherRoles.Patches {
                 ninjaSetTarget();
                 NinjaTrace.UpdateAll();
                 ninjaUpdate();
+                invisibleUpdate();
                 // Thief
                 thiefSetTarget();
 
@@ -1021,6 +1114,13 @@ namespace TheOtherRoles.Patches {
                 hackerUpdate();
                 // Trapper
                 trapperUpdate();
+
+                // Transporter
+                transporterSetTarget();
+                transporterArrowUpdate();
+
+                // undertaker
+                undertakerDragBodyUpdate();
 
                 // -- MODIFIER--
                 // Bait

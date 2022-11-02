@@ -8,6 +8,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <PlatformTarget>x86</PlatformTarget>
+        <ApplicationIcon />
+        <OutputType>Library</OutputType>
+        <StartupObject />
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,12 +18,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Resources\GhostLordButton.png" />
+      <None Remove="Resources\InvisibleButton.png" />
+      <None Remove="Resources\MrFreezeButton.png" />
       <None Remove="Resources\TabIconClassicMode.png" />
       <None Remove="Resources\TabIconGuesserMode.png" />
       <None Remove="Resources\TabIconGuesserSettings.png" />
       <None Remove="Resources\TabIconHideNSeekMode.png" />
       <None Remove="Resources\TabIconHideNSeekRoles.png" />
       <None Remove="Resources\TabIconHideNSeekSettings.png" />
+      <None Remove="Resources\TransporterButton.png" />
+      <None Remove="Resources\UndertakerDragButton.png" />
     </ItemGroup>
 
 	<ItemGroup>

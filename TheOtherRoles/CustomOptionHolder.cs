@@ -90,6 +90,27 @@ namespace TheOtherRoles {
         public static CustomOption ninjaTraceColorTime;
         public static CustomOption ninjaInvisibleDuration;
 
+        public static CustomOption transporterSpawnRate;
+        public static CustomOption transporterScanCooldown;
+        public static CustomOption transporterDelaiAfterScan;
+        public static CustomOption transporterAddArrow;
+        public static CustomOption transporterUpdateIntervall;
+
+        public static CustomOption invisibleSpawnRate;
+        public static CustomOption invisibleCooldown;
+        public static CustomOption invisibleDuration;
+
+        public static CustomOption mrFreezeSpawnRate;
+        public static CustomOption mrFreezeCooldown;
+        public static CustomOption mrFreezeDuration;
+
+        public static CustomOption undertakerSpawnRate;
+        public static CustomOption undertakerDragingDelaiAfterKill;
+
+        public static CustomOption ghostLordSpawnRate;
+        public static CustomOption ghostLordCooldown;
+        public static CustomOption ghostLordDuration;
+
         public static CustomOption mayorSpawnRate;
         public static CustomOption mayorCanSeeVoteColors;
         public static CustomOption mayorTasksNeededToSeeVoteColors;
@@ -423,6 +444,27 @@ namespace TheOtherRoles {
             ninjaTraceTime = CustomOption.Create(383, Types.Impostor, "Trace Duration", 5f, 1f, 20f, 0.5f, ninjaSpawnRate);
             ninjaTraceColorTime = CustomOption.Create(384, Types.Impostor, "Time Till Trace Color Has Faded", 2f, 0f, 20f, 0.5f, ninjaSpawnRate);
             ninjaInvisibleDuration = CustomOption.Create(385, Types.Impostor, "Time The Ninja Is Invisible", 3f, 0f, 20f, 1f, ninjaSpawnRate);
+
+            invisibleSpawnRate = CustomOption.Create(510, Types.Impostor, cs(Invisible.color, "Invisible"), rates, null, true);
+            invisibleCooldown = CustomOption.Create(511, Types.Impostor, "Invisibility Cooldown", 27.5f, 10f, 60f, 2.5f, invisibleSpawnRate);
+            invisibleDuration = CustomOption.Create(512, Types.Impostor, "Invisibility Duration", 6f, 1f, 20f, 0.5f, invisibleSpawnRate);
+
+            mrFreezeSpawnRate = CustomOption.Create(520, Types.Impostor, cs(MrFreeze.color, "Mr Freeze"), rates, null, true);
+            mrFreezeCooldown = CustomOption.Create(521, Types.Impostor, "Mr Freeze Cooldown", 27.5f, 10f, 60f, 2.5f, mrFreezeSpawnRate);
+            mrFreezeDuration = CustomOption.Create(522, Types.Impostor, "Freeze Duration", 5f, 1f, 20f, 0.5f, mrFreezeSpawnRate);
+
+            undertakerSpawnRate = CustomOption.Create(530, Types.Impostor, cs(Undertaker.color, "Undertaker"), rates, null, true);
+            undertakerDragingDelaiAfterKill = CustomOption.Create(531, Types.Impostor, "Draging delai after kill", 2f, 0f, 15, 1f, undertakerSpawnRate);
+
+            ghostLordSpawnRate = CustomOption.Create(540, Types.Impostor, cs(GhostLord.color, "Ghost Lord"), rates, null, true);
+            ghostLordCooldown = CustomOption.Create(541, Types.Impostor, "Ghost Lord Cooldown", 27.5f, 10f, 60f, 2.5f, ghostLordSpawnRate);
+            ghostLordDuration = CustomOption.Create(542, Types.Impostor, "Ghost Lord Duration", 6f, 1f, 20f, 0.5f, ghostLordSpawnRate);
+
+            transporterSpawnRate = CustomOption.Create(550, Types.Impostor, cs(Transporter.color, "Transporter"), rates, null, true);
+            transporterScanCooldown = CustomOption.Create(551, Types.Impostor, "Transporter Scan Cooldown", 10f, 1f, 30f, 1f, transporterSpawnRate);
+            transporterDelaiAfterScan = CustomOption.Create(552, Types.Impostor, "Transporter Transport Delai After Scan", 1f, 1f, 30f, 1f, transporterSpawnRate);
+            transporterAddArrow = CustomOption.Create(553, Types.Impostor, "Add Arrow To Sampled Target", true, transporterSpawnRate);
+            transporterUpdateIntervall = CustomOption.Create(554, Types.Impostor, "Transporter Update Intervall", 0.5f, 0.2f, 5f, 0.2f, transporterSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);

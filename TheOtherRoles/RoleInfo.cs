@@ -46,6 +46,13 @@ namespace TheOtherRoles
         public static RoleInfo cleaner = new RoleInfo("Cleaner", Cleaner.color, "Kill everyone and leave no traces", "Clean up dead bodies", RoleId.Cleaner);
         public static RoleInfo warlock = new RoleInfo("Warlock", Warlock.color, "Curse other players and kill everyone", "Curse and kill everyone", RoleId.Warlock);
         public static RoleInfo bountyHunter = new RoleInfo("Bounty Hunter", BountyHunter.color, "Hunt your bounty down", "Hunt your bounty down", RoleId.BountyHunter);
+        public static RoleInfo invisible = new RoleInfo("Invisible", Invisible.color, "I'm here, in the shadow...", "I'm here, in the shadow...", RoleId.Invisible);
+        public static RoleInfo mrFreeze = new RoleInfo("Mr Freeze", MrFreeze.color, "Freeze everyone and kill the Crewmates", "Freeze everyone", RoleId.MrFreeze);
+        public static RoleInfo transporter = new RoleInfo("Transporter", Transporter.color, "swap position to surprise others", "Teleport into a safe zone", RoleId.Transporter);
+        public static RoleInfo undertaker = new RoleInfo("Undertaker", Undertaker.color, "Kill everyone and leave no traces", "Drag up dead bodies to hide them", RoleId.Undertaker);
+        public static RoleInfo ghostLord = new RoleInfo("Ghost Lord", GhostLord.color, "Kill everyone and turn into ghost", "Suprise Crewmates", RoleId.GhostLord);
+
+
         public static RoleInfo detective = new RoleInfo("Detective", Detective.color, "Find the <color=#FF1919FF>Impostors</color> by examining footprints", "Examine footprints", RoleId.Detective);
         public static RoleInfo timeMaster = new RoleInfo("Time Master", TimeMaster.color, "Save yourself with your time shield", "Use your time shield", RoleId.TimeMaster);
         public static RoleInfo medic = new RoleInfo("Medic", Medic.color, "Protect someone with your shield", "Protect other players", RoleId.Medic);
@@ -107,6 +114,11 @@ namespace TheOtherRoles
             bountyHunter,
             witch,
             ninja,
+            invisible,
+            transporter,
+            ghostLord,
+            undertaker,
+            mrFreeze,
             goodGuesser,
             badGuesser,
             lover,
@@ -218,6 +230,12 @@ namespace TheOtherRoles
             if (p == Trapper.trapper) infos.Add(trapper);
             if (p == Pursuer.pursuer) infos.Add(pursuer);
             if (p == Thief.thief) infos.Add(thief);
+            if (p == Invisible.invisible) infos.Add(invisible);
+            if (p == MrFreeze.mrFreeze) infos.Add(mrFreeze);
+            if (p == Undertaker.undertaker) infos.Add(undertaker);
+            if (p == GhostLord.ghostLord) infos.Add(ghostLord);
+            if (p == Transporter.transporter) infos.Add(transporter);
+
 
             // Default roles (just impostor, just crewmate, or hunter / hunted for hide n seek
             if (infos.Count == count) {
