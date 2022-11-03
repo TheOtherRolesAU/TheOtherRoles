@@ -246,7 +246,9 @@ namespace TheOtherRoles.Patches {
             Lighter.lighterTimer -= dt;
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
-            Ninja.invisibleTimer -= dt;            
+            Ninja.invisibleTimer -= dt;  
+            Invisible.invisibleTimer -= dt;
+            GhostLord.ghostTimer -= dt;
             HideNSeek.timer -= dt;            
             MrFreeze.mrFreezeTimer -= dt;
             foreach (byte key in Deputy.handcuffedKnows.Keys)

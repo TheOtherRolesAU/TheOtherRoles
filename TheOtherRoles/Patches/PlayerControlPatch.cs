@@ -348,6 +348,31 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void invisibleUpdate()
+        {
+            if (Invisible.isInvis && Invisible.invisibleTimer <= 0 && Invisible.invisible == CachedPlayer.LocalPlayer.PlayerControl)
+            {
+                MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisible, Hazel.SendOption.Reliable, -1);
+                invisibleWriter.Write(Invisible.invisible.PlayerId);
+                invisibleWriter.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+                RPCProcedure.setInvisible(Invisible.invisible.PlayerId, byte.MaxValue);
+            }
+        }
+
+        static void ghostLordUpdate()
+        {
+            if (GhostLord.ghostLord && GhostLord.ghostTimer <= 0 && GhostLord.ghostLord == CachedPlayer.LocalPlayer.PlayerControl)
+            {
+                MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisible, Hazel.SendOption.Reliable, -1);
+                invisibleWriter.Write(GhostLord.ghostLord.PlayerId);
+                invisibleWriter.Write(byte.MaxValue);
+                AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
+                RPCProcedure.ghostLordTurnIntoGhost(byte.MaxValue);
+            }
+
+        }
+
         static void ninjaUpdate()
         {
             if (Ninja.isInvisble && Ninja.invisibleTimer <= 0 && Ninja.ninja == CachedPlayer.LocalPlayer.PlayerControl)
@@ -384,18 +409,6 @@ namespace TheOtherRoles.Patches {
                     Ninja.arrow.arrow.SetActive(false);
                 }
             }
-        }
-
-        static void invisibleUpdate()
-        {
-            if (Invisible.isInvis && Invisible.invisibleTimer <= 0 && Invisible.invisible == CachedPlayer.LocalPlayer.PlayerControl)
-            {
-                MessageWriter invisibleWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetInvisible, Hazel.SendOption.Reliable, -1);
-                invisibleWriter.Write(Invisible.invisible.PlayerId);
-                invisibleWriter.Write(byte.MaxValue);
-                AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
-                RPCProcedure.setInvisible(Invisible.invisible.PlayerId, byte.MaxValue);                
-            }            
         }
 
         static void trackerUpdate() {
@@ -779,12 +792,11 @@ namespace TheOtherRoles.Patches {
 
         static void morphlingAndCamouflagerAndInvisibleAndGhostLordUpdate() {
             float oldCamouflageTimer = Camouflager.camouflageTimer;
-            float oldMorphTimer = Morphling.morphTimer;
-            float oldInvisTimer = Invisible.invisibleTimer;
+            float oldMorphTimer = Morphling.morphTimer;            
+            float oldGhostLordTimer = GhostLord.ghostTimer;
 
             Camouflager.camouflageTimer = Mathf.Max(0f, Camouflager.camouflageTimer - Time.fixedDeltaTime);
-            Morphling.morphTimer = Mathf.Max(0f, Morphling.morphTimer - Time.fixedDeltaTime);
-            Invisible.invisibleTimer = Mathf.Max(0f, Invisible.invisibleTimer - Time.fixedDeltaTime);            
+            Morphling.morphTimer = Mathf.Max(0f, Morphling.morphTimer - Time.fixedDeltaTime);            
             GhostLord.ghostTimer = Mathf.Max(0f, GhostLord.ghostTimer - Time.fixedDeltaTime);
 
 
@@ -800,24 +812,6 @@ namespace TheOtherRoles.Patches {
             // Morphling reset (only if camouflage is inactive)
             if (Camouflager.camouflageTimer <= 0f && oldMorphTimer > 0f && Morphling.morphTimer <= 0f && Morphling.morphling != null)
                 Morphling.resetMorph();
-
-            //set GhostLord look, override by everything else
-            if (GhostLord.ghostLord != null && GhostLord.ghostTimer > 0f)
-            {
-                GhostLord.turnSkinIntoGhost();
-            }
-            else
-            {
-                GhostLord.resetSkinIntoCrewmate();
-            }
-
-            // Invis reset
-            if (oldInvisTimer > 0f && Invisible.invisibleTimer <= 0f)
-            {
-                Invisible.resetInvisible();
-                HudManagerStartPatch.resetInvisibleButton();
-            }
-
         }
 
         public static void lawyerUpdate() {
@@ -1105,6 +1099,7 @@ namespace TheOtherRoles.Patches {
                 NinjaTrace.UpdateAll();
                 ninjaUpdate();
                 invisibleUpdate();
+                ghostLordUpdate();
                 // Thief
                 thiefSetTarget();
 

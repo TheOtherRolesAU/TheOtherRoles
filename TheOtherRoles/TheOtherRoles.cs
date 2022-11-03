@@ -1774,37 +1774,10 @@ namespace TheOtherRoles
 
         public static void clearAndReload()
         {
-
             ghostLord = null;
             ghostTimer = 0f;
             cooldown = CustomOptionHolder.ghostLordCooldown.getFloat();
             duration = CustomOptionHolder.ghostLordDuration.getFloat();
-
-        }
-
-        public static void turnSkinIntoGhost()
-        {
-
-            Color bodySprite =  GhostLord.ghostLord.cosmetics.currentBodySprite.BodySprite.color;
-            Color hatBackLayer = GhostLord.ghostLord.cosmetics.hat.BackLayer.color;
-            Color hatFrontLayer = GhostLord.ghostLord.cosmetics.hat.FrontLayer.color;            
-
-            bodySprite.a = 0.6f;
-            hatBackLayer.a = 0.6f;
-            hatFrontLayer.a = 0.6f;
-            ghostLord.cosmetics.currentBodySprite.BodySprite.color = color;
-            ghostLord.cosmetics.hat.BackLayer.color = hatBackLayer;
-            ghostLord.cosmetics.hat.FrontLayer.color = hatFrontLayer;
-
-
-
-            ghostLord.cosmetics.colorBlindText.gameObject.SetActive(false);
-
-        }
-
-        public static void resetSkinIntoCrewmate()
-        {
-            ghostLord.setDefaultLook();
         }
 
     }

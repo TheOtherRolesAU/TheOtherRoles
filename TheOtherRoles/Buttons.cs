@@ -1754,31 +1754,20 @@ namespace TheOtherRoles
                         invisibleWriter.Write(byte.MinValue);
                         AmongUsClient.Instance.FinishRpcImmediately(invisibleWriter);
                         RPCProcedure.setInvisible(Invisible.invisible.PlayerId, byte.MinValue);
-                        invisibleButton.EffectDuration = Invisible.duration;
 
+                        invisibleButton.Timer = invisibleButton.MaxTimer;
+                        invisibleButton.EffectDuration = Invisible.duration;
                     }
                 },
                 () => { return Invisible.invisible != null && Invisible.invisible == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
-                    invisibleButton.Timer = invisibleButton.MaxTimer;
-                    invisibleButton.Sprite = Invisible.getButtonSprite();
-                    invisibleButton.isEffectActive = false;
-                    invisibleButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+                    invisibleButton.Timer = invisibleButton.MaxTimer;                    
                 },
                 Invisible.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.F,
-                true,
-                Invisible.duration,
-                () => {
-                    if (!Invisible.isInvis)
-                    {
-                        invisibleButton.Timer = invisibleButton.MaxTimer;
-                        invisibleButton.Sprite = Invisible.getButtonSprite();
-                    }
-                }
+                KeyCode.F               
             );
 
             // MrFreeze freeze
@@ -1883,23 +1872,22 @@ namespace TheOtherRoles
             ghostLordButton = new CustomButton(
                 () => {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.GhostLordTurnIntoGhost, Hazel.SendOption.Reliable, -1);
+                    writer.Write(byte.MinValue);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCProcedure.ghostLordTurnIntoGhost();
+                    RPCProcedure.ghostLordTurnIntoGhost(byte.MinValue);
+
+                    ghostLordButton.Timer = ghostLordButton.MaxTimer;
+                    ghostLordButton.EffectDuration = GhostLord.duration;
                 },
                 () => { return GhostLord.ghostLord != null && GhostLord.ghostLord == PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead; },
                 () => { return PlayerControl.LocalPlayer.CanMove; },
                 () => {
                     ghostLordButton.Timer = ghostLordButton.MaxTimer;
-                    ghostLordButton.isEffectActive = false;
-                    ghostLordButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 GhostLord.getButtonSprite(),
                 new Vector3(-1.8f, -0.06f, 0),
                 __instance,
-                KeyCode.F,
-                true,
-                GhostLord.duration,
-                () => { ghostLordButton.Timer = ghostLordButton.MaxTimer; }
+                KeyCode.F
             );
 
 
