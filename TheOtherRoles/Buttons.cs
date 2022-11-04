@@ -895,7 +895,7 @@ namespace TheOtherRoles
                 Portalmaker.getUsePortalButtonSprite(),
                 new Vector3(0.9f, -0.06f, 0),
                 __instance,
-                KeyCode.H,
+                "UsePortal",
                 mirror: true
             );
 
@@ -1782,7 +1782,11 @@ namespace TheOtherRoles
                Hacker.getAdminSprite(),
                CustomButton.ButtonPositions.lowerRowCenter,
                __instance,
+<<<<<<< HEAD
                "HunterKill",
+=======
+               "HunterAdmin",
+>>>>>>> 542db91 (Add new binds for Portal Maker and hunter admin)
                true,
                Hunter.AdminDuration,
                () => {
