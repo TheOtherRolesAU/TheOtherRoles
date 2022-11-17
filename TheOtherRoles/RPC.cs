@@ -443,8 +443,7 @@ namespace TheOtherRoles
                 Array.Reverse(bytes);
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
-
-            JackInTheBox.startAnimation(ventId);
+           
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
