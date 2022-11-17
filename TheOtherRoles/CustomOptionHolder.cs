@@ -111,6 +111,11 @@ namespace TheOtherRoles {
         public static CustomOption ghostLordCooldown;
         public static CustomOption ghostLordDuration;
 
+        public static CustomOption evilHackerSpawnRate;
+        public static CustomOption evilHackerCooldown;
+        public static CustomOption evilHackerDuration;
+        public static CustomOption evilHackerNoMove;
+
         public static CustomOption mayorSpawnRate;
         public static CustomOption mayorCanSeeVoteColors;
         public static CustomOption mayorTasksNeededToSeeVoteColors;
@@ -465,6 +470,11 @@ namespace TheOtherRoles {
             transporterDelaiAfterScan = CustomOption.Create(552, Types.Impostor, "Transporter Transport Delai After Scan", 1f, 1f, 30f, 1f, transporterSpawnRate);
             transporterAddArrow = CustomOption.Create(553, Types.Impostor, "Add Arrow To Sampled Target", true, transporterSpawnRate);
             transporterUpdateIntervall = CustomOption.Create(554, Types.Impostor, "Transporter Update Intervall", 0.5f, 0.2f, 5f, 0.2f, transporterSpawnRate);
+
+            evilHackerSpawnRate = CustomOption.Create(560, Types.Impostor, cs(EvilHacker.color, "Evil Hacker"), rates, null, true);
+            evilHackerCooldown = CustomOption.Create(561, Types.Impostor, "Evil Hacker Cooldown", 27.5f, 10f, 60f, 2.5f, evilHackerSpawnRate);
+            evilHackerDuration = CustomOption.Create(562, Types.Impostor, "Evil Hacker Duration", 6f, 1f, 20f, 0.5f, evilHackerSpawnRate);
+            evilHackerNoMove = CustomOption.Create(563, Types.Impostor, "Cant Move During Mobile Gadget Duration", true, evilHackerSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);

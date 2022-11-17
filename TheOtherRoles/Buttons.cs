@@ -30,6 +30,7 @@ namespace TheOtherRoles
         private static CustomButton hackerButton;
         public static CustomButton hackerVitalsButton;
         public static CustomButton hackerAdminTableButton;
+        public static CustomButton evilHackerAdminTableButton;
         private static CustomButton trackerTrackPlayerButton;
         private static CustomButton trackerTrackCorpsesButton;
         public static CustomButton vampireKillButton;
@@ -92,6 +93,7 @@ namespace TheOtherRoles
             hackerButton.MaxTimer = Hacker.cooldown;
             hackerVitalsButton.MaxTimer = Hacker.cooldown;
             hackerAdminTableButton.MaxTimer = Hacker.cooldown;
+            evilHackerAdminTableButton.MaxTimer = EvilHacker.cooldown;
             vampireKillButton.MaxTimer = Vampire.cooldown;
             trackerTrackPlayerButton.MaxTimer = 0f;
             garlicButton.MaxTimer = 0f;
@@ -130,6 +132,7 @@ namespace TheOtherRoles
             hackerButton.EffectDuration = Hacker.duration;
             hackerVitalsButton.EffectDuration = Hacker.duration;
             hackerAdminTableButton.EffectDuration = Hacker.duration;
+            evilHackerAdminTableButton.EffectDuration = EvilHacker.duration;
             vampireKillButton.EffectDuration = Vampire.delay;
             lighterButton.EffectDuration = Lighter.duration; 
             camouflagerButton.EffectDuration = Camouflager.duration;
@@ -628,6 +631,36 @@ namespace TheOtherRoles
             hackerAdminTableChargesText.enableWordWrapping = false;
             hackerAdminTableChargesText.transform.localScale = Vector3.one * 0.5f;
             hackerAdminTableChargesText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+
+            evilHackerAdminTableButton = new CustomButton(
+               () => {
+                   if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
+                       FastDestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+
+                   if (EvilHacker.cantMove) CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
+                   CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
+               },
+               () => { return EvilHacker.evilHacker != null && EvilHacker.evilHacker == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+               () => { return PlayerControl.LocalPlayer.CanMove; },
+               () => {
+                   evilHackerAdminTableButton.Timer = evilHackerAdminTableButton.MaxTimer;
+                   evilHackerAdminTableButton.isEffectActive = false;
+                   evilHackerAdminTableButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
+               },
+               Hacker.getAdminSprite(),
+               new Vector3(-1.8f, -0.06f, 0),
+               __instance,
+               KeyCode.Q,
+               true,
+               0f,
+               () => {
+                   evilHackerAdminTableButton.Timer = evilHackerAdminTableButton.MaxTimer;                   
+                   if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
+                   CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
+               },
+               PlayerControl.GameOptions.MapId == 3,
+               "EVIL ADMIN"
+           );
 
             hackerVitalsButton = new CustomButton(
                () => {
