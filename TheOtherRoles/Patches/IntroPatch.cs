@@ -212,6 +212,24 @@ namespace TheOtherRoles.Patches {
                     else if (infos.Any(info => info.roleId == RoleId.Deputy))
                         __instance.RoleBlurbText.text += Helpers.cs(Sheriff.color, $"\nYour Sheriff is {Sheriff.sheriff?.Data?.PlayerName ?? ""}");
                 }
+                if(CachedPlayer.LocalPlayer.Data.Role.IsImpostor)
+                {
+                    List<PlayerControl> players = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
+                    string imposterRoles = $"\nOthers imposters: ";
+                    foreach (PlayerControl p in players)
+                    {
+                        if (CachedPlayer.LocalPlayer.PlayerControl != p && p.Data.Role.IsImpostor)
+                        {
+                            RoleInfo ImposterInfo = RoleInfo.getRoleInfoForPlayer(p, false).FirstOrDefault();
+                            imposterRoles += ImposterInfo.name;
+                            imposterRoles += " ";
+                        }
+     
+                     
+                            
+                    }
+                    __instance.RoleBlurbText.text += Helpers.cs(roleInfo.color, imposterRoles);
+                }
             }
             public static bool Prefix(IntroCutscene __instance) {
                 if (!CustomOptionHolder.activateRoles.getBool()) return true;
