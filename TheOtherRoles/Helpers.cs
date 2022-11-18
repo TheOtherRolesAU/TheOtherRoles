@@ -447,7 +447,7 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.snitch)
                 {
-                    // show number of task remainnig = à faire
+                    // show number of task remainnig 
                     EvilMimic.haveKilledSnitch = true;
                     new CustomMessage("You have killed the snitch", 5f);
                 }
@@ -500,7 +500,7 @@ namespace TheOtherRoles {
                     new CustomMessage("You have killed the engineer", 5f);
                 }
                 else if (targetRole == RoleInfo.mayor)
-                {   // have tie breaker modifier and can see color vote
+                {   // have tie breaker modifier and can see color vote during meeting
                     EvilMimic.haveKilledMayor = true;
                     new CustomMessage("You have killed the mayor, you earn tiebreaker", 5f);
                     List<PlayerControl> evilMimicList = new List<PlayerControl>();

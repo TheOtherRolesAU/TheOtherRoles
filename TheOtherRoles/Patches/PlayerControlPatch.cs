@@ -492,7 +492,7 @@ namespace TheOtherRoles.Patches {
 
         public static void updatePlayerInfo() {
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {         
-                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
+                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || (EvilMimic.evilMimic != null && EvilMimic.evilMimic == CachedPlayer.LocalPlayer.PlayerControl && EvilMimic.haveKilledSnitch) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo == null) {
@@ -537,8 +537,16 @@ namespace TheOtherRoles.Patches {
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                     }
                     else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
-                        playerInfoText = $"{roleText} {taskInfo}".Trim();
-                        meetingInfoText = playerInfoText;
+                        if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic)
+                        {
+                            playerInfoText = $"{taskInfo}".Trim();
+                            meetingInfoText = playerInfoText;
+                        } else
+                        {
+                            playerInfoText = $"{roleText} {taskInfo}".Trim();
+                            meetingInfoText = playerInfoText;
+                        }
+                        
                     }
                     else if (MapOptions.ghostsSeeTasks) {
                         playerInfoText = $"{taskInfo}".Trim();
@@ -636,6 +644,37 @@ namespace TheOtherRoles.Patches {
                             Snitch.localArrows[arrowIndex].Update(p.transform.position, (arrowForTeamJackal && Snitch.teamJackalUseDifferentArrowColor ? Jackal.color : Palette.ImpostorRed));
                         }
                         arrowIndex++;
+                    }
+                }
+            }
+        }
+
+        static void  EvilMimicUpdate()
+        {
+            // update evil mimic if he have killed tracker
+            if(EvilMimic.evilMimic != null && EvilMimic.evilMimic == CachedPlayer.LocalPlayer.PlayerControl && !EvilMimic.evilMimic.Data.IsDead)
+            {
+                // add arrows targeting crewamtes for evil mimic after killing tracker
+                if(EvilMimic.haveKilledTracker)
+                {
+                    foreach (Arrow arrow in EvilMimic.localTrackerArrows) arrow.arrow.SetActive(false);
+                    int arrowIndex = 0;
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                    {
+                        bool arrowForCrewmate = !p.Data.Role.IsImpostor;
+                        if (!p.Data.IsDead && arrowForCrewmate)
+                        {
+                            if (arrowIndex >= EvilMimic.localTrackerArrows.Count)
+                            {
+                                EvilMimic.localTrackerArrows.Add(new Arrow(Palette.CrewmateBlue));
+                            }
+                            if (arrowIndex < EvilMimic.localTrackerArrows.Count && EvilMimic.localTrackerArrows[arrowIndex] != null)
+                            {
+                                EvilMimic.localTrackerArrows[arrowIndex].arrow.SetActive(true);
+                                EvilMimic.localTrackerArrows[arrowIndex].Update(p.transform.position, Palette.CrewmateBlue);
+                            }
+                            arrowIndex++;
+                        }
                     }
                 }
             }
@@ -1080,6 +1119,8 @@ namespace TheOtherRoles.Patches {
                 arsonistSetTarget();
                 // Snitch
                 snitchUpdate();
+                // EvilMimic
+                EvilMimicUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
                 // Vulture

@@ -1704,26 +1704,36 @@ namespace TheOtherRoles
         public static bool haveKilledSheriff = false;
         public static bool haveKilledEngineer = false;
         public static bool haveKilledMayor = false;
+        public static List<Arrow> localTrackerArrows = new List<Arrow>();
 
-        public static void clearAndReload()
-        {
-            evilMimic = null;
-            haveKilledLighter = false;
-            haveKilledHacker = false;
-            haveKilledSecurityGuard = false;
-            haveKilledSpy = false;
-            haveKilledSnitch = false;
-            haveKilledTracker = false;
-            haveKilledSeer = false;
-            haveKilledSwapper = false;
-            haveKilledMedic = false;
-            haveKilledTimeMaster = false;
-            haveKilledDetective = false;
-            haveKilledSheriff = false;
-            haveKilledEngineer = false;
-            haveKilledMayor = false;
 
-        }
+
+            public static void clearAndReload()
+            {
+                evilMimic = null;
+                haveKilledLighter = false;
+                haveKilledHacker = false;
+                haveKilledSecurityGuard = false;
+                haveKilledSpy = false;
+                haveKilledSnitch = false;
+                haveKilledTracker = false;
+                haveKilledSeer = false;
+                haveKilledSwapper = false;
+                haveKilledMedic = false;
+                haveKilledTimeMaster = false;
+                haveKilledDetective = false;
+                haveKilledSheriff = false;
+                haveKilledEngineer = false;
+                haveKilledMayor = false;
+                if (localTrackerArrows != null)
+                {
+                    foreach (Arrow arrow in localTrackerArrows)
+                        if (arrow?.arrow != null)
+                            UnityEngine.Object.Destroy(arrow.arrow);
+                }
+            localTrackerArrows = new List<Arrow>();
+
+            }
     }
 
 
