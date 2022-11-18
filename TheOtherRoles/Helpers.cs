@@ -500,9 +500,12 @@ namespace TheOtherRoles {
                     new CustomMessage("You have killed the engineer", 5f);
                 }
                 else if (targetRole == RoleInfo.mayor)
-                {
+                {   // have tie breaker modifier and can see color vote
                     EvilMimic.haveKilledMayor = true;
-                    new CustomMessage("You have killed the mayor", 5f);
+                    new CustomMessage("You have killed the mayor, you earn tiebreaker", 5f);
+                    List<PlayerControl> evilMimicList = new List<PlayerControl>();
+                    evilMimicList.Add(EvilMimic.evilMimic);
+                    Patches.RoleManagerSelectRolesPatch.setModifierToRandomPlayer((byte)RoleId.Tiebreaker, evilMimicList);
                 }
 
             }
