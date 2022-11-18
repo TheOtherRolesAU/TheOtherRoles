@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Globalization;
 using TheOtherRoles.CustomGameModes;
+using System.Diagnostics.Metrics;
+using TheOtherRoles.Objects;
 
 namespace TheOtherRoles {
 
@@ -378,6 +380,13 @@ namespace TheOtherRoles {
                 return MurderAttemptResult.SuppressKill;
             }
 
+            // Block sheriff kill if evil mimic have killed medic
+            else if (EvilMimic.evilMimic != null && EvilMimic.evilMimic == target && EvilMimic.haveKilledMedic)
+            {
+                SoundEffectsManager.play("fail");
+                return MurderAttemptResult.SuppressKill;
+            }
+
             // Block impostor not fully grown mini kill
             else if (Mini.mini != null && target == Mini.mini && !Mini.isGrownUp()) {
                 return MurderAttemptResult.SuppressKill;
@@ -408,6 +417,97 @@ namespace TheOtherRoles {
 
                 return MurderAttemptResult.SuppressKill;
             }
+
+            // give evil mimic abilities
+            if(EvilMimic.evilMimic != null && killer == EvilMimic.evilMimic)
+            {
+                if(targetRole == RoleInfo.lighter)
+                {
+                    // increase vision 
+                    EvilMimic.haveKilledLighter = true;
+                    new CustomMessage("lighter is dead, you have increased vision", 5f);
+                }
+                else if (targetRole == RoleInfo.hacker)
+                {
+                    // get hacker admin ability (color) = a faire
+                    EvilMimic.haveKilledHacker = true;
+                    new CustomMessage("Rest in peace hacker", 5f);
+                }
+                else if (targetRole == RoleInfo.securityGuard)
+                {
+                    // pouvoir détruire les cams ? = à faire
+                    EvilMimic.haveKilledSecurityGuard = true;
+                    new CustomMessage("You have killed the security guard", 5f);
+
+                }
+                else if (targetRole == RoleInfo.spy)
+                {
+                    EvilMimic.haveKilledSpy = true;
+                    new CustomMessage("You have killed the spy", 5f);
+                }
+                else if (targetRole == RoleInfo.snitch)
+                {
+                    // show number of task remainnig = à faire
+                    EvilMimic.haveKilledSnitch = true;
+                    new CustomMessage("You have killed the snitch", 5f);
+                }
+                else if (targetRole == RoleInfo.tracker)
+                {
+                    EvilMimic.haveKilledTracker = true;
+                    new CustomMessage("You have killed the tracker", 5f);
+                }
+                else if (targetRole == RoleInfo.seer)
+                {
+                    // get flash when other impo kill crewmate ( à tester)
+                    EvilMimic.haveKilledSeer = true;
+                    new CustomMessage("You have killed the seer, you earn his flash skill", 5f);
+                }
+                else if (targetRole == RoleInfo.swapper)
+                {
+                    EvilMimic.haveKilledSwapper = true;
+                    new CustomMessage("You have killed the swapper", 5f);
+                }
+                else if (targetRole == RoleInfo.medic)
+                {
+                    // can't be killed by sherrif 
+                    EvilMimic.haveKilledMedic = true;
+                    new CustomMessage("You have killed the Medic", 5f);
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.EvilMimicKillMedic , Hazel.SendOption.Reliable, -1);                    
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);                    
+                    RPCProcedure.EvilMimicKillMedic();
+
+                }
+                else if (targetRole == RoleInfo.timeMaster)
+                {
+                    EvilMimic.haveKilledTimeMaster = true;
+                    new CustomMessage("You have killed the time master", 5f);
+                }
+                else if (targetRole == RoleInfo.detective)
+                {
+                    // get footprint like detective
+                    EvilMimic.haveKilledDetective = true;
+                    new CustomMessage("You have killed the detective", 5f);
+                }
+                else if (targetRole == RoleInfo.sheriff)
+                {
+                    EvilMimic.haveKilledSheriff = true;
+                    new CustomMessage("You have killed the sheriff", 5f);
+                }
+                else if (targetRole == RoleInfo.engineer)
+                {
+                    EvilMimic.haveKilledEngineer = true;
+                    new CustomMessage("You have killed the engineer", 5f);
+                }
+                else if (targetRole == RoleInfo.mayor)
+                {
+                    EvilMimic.haveKilledMayor = true;
+                    new CustomMessage("You have killed the mayor", 5f);
+                }
+
+            }
+
+
 
             return MurderAttemptResult.PerformKill;
         }

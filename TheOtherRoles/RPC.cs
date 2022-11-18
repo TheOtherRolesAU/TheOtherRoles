@@ -68,6 +68,7 @@ namespace TheOtherRoles
         Transporter,
         Invisible,
         EvilHacker,
+        EvilMimic,
         Crewmate,
         Impostor,
         // Modifier ---
@@ -156,6 +157,7 @@ namespace TheOtherRoles
         MrFreezeFreeze,
         GhostLordTurnIntoGhost,
         TransporterSwap,
+        EvilMimicKillMedic,
 
         // Gamemode
         SetGuesserGm,
@@ -379,6 +381,9 @@ namespace TheOtherRoles
                         break;
                     case RoleId.EvilHacker:
                         EvilHacker.evilHacker = player;
+                        break;
+                    case RoleId.EvilMimic:
+                        EvilMimic.evilMimic = player;
                         break;
                     }
         }
@@ -715,6 +720,7 @@ namespace TheOtherRoles
             if (player == Witch.witch) Witch.clearAndReload();
             if (player == Ninja.ninja) Ninja.clearAndReload();
             if (player == EvilHacker.evilHacker) EvilHacker.clearAndReload();
+            if (player == EvilMimic.evilMimic) EvilMimic.clearAndReload();
 
             // Other roles
             if (player == Jester.jester) Jester.clearAndReload();
@@ -1168,7 +1174,12 @@ namespace TheOtherRoles
             GhostLord.ghostLord.cosmetics.currentBodySprite.BodySprite.color = color;
 
         }
-        
+
+        public static void EvilMimicKillMedic()
+        {
+            EvilMimic.haveKilledMedic = true;            
+        }
+
 
     }   
 
@@ -1363,6 +1374,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.VultureWin:
                     RPCProcedure.vultureWin();
+                    break;
+                case (byte)CustomRPC.EvilMimicKillMedic:
+                    RPCProcedure.EvilMimicKillMedic();
                     break;
                 case (byte)CustomRPC.LawyerSetTarget:
                     RPCProcedure.lawyerSetTarget(reader.ReadByte()); 

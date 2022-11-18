@@ -183,7 +183,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void detectiveUpdateFootPrints() {
-            if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) return;
+            if ((Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) && (EvilMimic.evilMimic == null || EvilMimic.evilMimic != CachedPlayer.LocalPlayer.PlayerControl || EvilMimic.haveKilledDetective == false )) return;
 
             Detective.timer -= Time.fixedDeltaTime;
             if (Detective.timer <= 0f) {
@@ -1259,6 +1259,11 @@ namespace TheOtherRoles.Patches {
                 Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && EvilMimic.haveKilledSeer && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.evilMimic != target && Seer.mode <= 1)
+            {
+                Helpers.showFlash(new Color(255f / 255f, 20f / 255f, 60f / 255f));
+            }
 
             // Tracker store body positions
             if (Tracker.deadBodyPositions != null) Tracker.deadBodyPositions.Add(target.transform.position);
