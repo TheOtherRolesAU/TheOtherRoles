@@ -1705,10 +1705,11 @@ namespace TheOtherRoles
         public static bool haveKilledEngineer = false;
         public static bool haveKilledMayor = false;
         public static List<Arrow> localTrackerArrows = new List<Arrow>();
+        public static List<Arrow> localSnitchArrows = new List<Arrow>();
+        public static float sheriffKillingBonus = 5f;
 
 
-
-            public static void clearAndReload()
+        public static void clearAndReload()
             {
                 evilMimic = null;
                 haveKilledLighter = false;
@@ -1732,8 +1733,16 @@ namespace TheOtherRoles
                             UnityEngine.Object.Destroy(arrow.arrow);
                 }
             localTrackerArrows = new List<Arrow>();
-
+            if (localSnitchArrows != null)
+            {
+                foreach (Arrow arrow in localSnitchArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
             }
+            localSnitchArrows = new List<Arrow>();
+            sheriffKillingBonus = CustomOptionHolder.evilMimicReducedCooldownKillingSheriff.getFloat();
+
+        }
     }
 
 

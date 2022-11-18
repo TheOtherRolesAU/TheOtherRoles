@@ -677,6 +677,28 @@ namespace TheOtherRoles.Patches {
                         }
                     }
                 }
+                // add arrows targeting others imposter for evil mimic after killing snitch
+                if (EvilMimic.haveKilledSnitch)
+                {
+                    foreach (Arrow arrow in EvilMimic.localSnitchArrows) arrow.arrow.SetActive(false);
+                    int arrowIndex = 0;
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                    {
+                        if (!p.Data.IsDead && p.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl != p)
+                        {
+                            if (arrowIndex >= EvilMimic.localSnitchArrows.Count)
+                            {
+                                EvilMimic.localSnitchArrows.Add(new Arrow(Palette.ImpostorRed));
+                            }
+                            if (arrowIndex < EvilMimic.localSnitchArrows.Count && EvilMimic.localSnitchArrows[arrowIndex] != null)
+                            {
+                                EvilMimic.localSnitchArrows[arrowIndex].arrow.SetActive(true);
+                                EvilMimic.localSnitchArrows[arrowIndex].Update(p.transform.position, Palette.ImpostorRed);
+                            }
+                            arrowIndex++;
+                        }
+                    }
+                }
             }
         }
 
@@ -1301,9 +1323,17 @@ namespace TheOtherRoles.Patches {
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
 
-            if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && EvilMimic.haveKilledSeer && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.evilMimic != target && Seer.mode <= 1)
+            if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.evilMimic != target )
             {
-                Helpers.showFlash(new Color(255f / 255f, 20f / 255f, 60f / 255f));
+                if(EvilMimic.haveKilledSeer && Seer.mode <= 1 )
+                {
+                    Helpers.showFlash(new Color(255f / 255f, 20f / 255f, 60f / 255f));
+                }
+                if(EvilMimic.haveKilledSheriff)
+                {
+                    EvilMimic.evilMimic.SetKillTimer(PlayerControl.GameOptions.KillCooldown - EvilMimic.sheriffKillingBonus);
+                }
+                
             }
 
             // Tracker store body positions

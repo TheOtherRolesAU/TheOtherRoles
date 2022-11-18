@@ -447,18 +447,19 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.snitch)
                 {
-                    // show number of task remainnig 
+                    // show number of task remainnig and arrow targeting your mates
                     EvilMimic.haveKilledSnitch = true;
                     new CustomMessage("You have killed the snitch", 5f);
                 }
                 else if (targetRole == RoleInfo.tracker)
                 {
+                    // Add arrow targeting all crewmates
                     EvilMimic.haveKilledTracker = true;
                     new CustomMessage("You have killed the tracker", 5f);
                 }
                 else if (targetRole == RoleInfo.seer)
                 {
-                    // get flash when other impo kill crewmate ( à tester)
+                    // get flash when other impo kill crewmate (à tester)
                     EvilMimic.haveKilledSeer = true;
                     new CustomMessage("You have killed the seer, you earn his flash skill", 5f);
                 }
@@ -491,6 +492,7 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.sheriff)
                 {
+                    // Reduce kill CD
                     EvilMimic.haveKilledSheriff = true;
                     new CustomMessage("You have killed the sheriff", 5f);
                 }
