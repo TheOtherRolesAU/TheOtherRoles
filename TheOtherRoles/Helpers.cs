@@ -478,7 +478,7 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.medic)
                 {
-                    // can't be killed by sherrif 
+                    // can't be killed by sherrif andd see kill taming on vitals
                     EvilMimic.haveKilledMedic = true;
                     new CustomMessage("You have killed the Medic", 5f);
 

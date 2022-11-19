@@ -1747,8 +1747,10 @@ namespace TheOtherRoles
             }
             localSnitchArrows = new List<Arrow>();
             sheriffKillingBonus = CustomOptionHolder.evilMimicReducedCooldownKillingSheriff.getFloat();
+            playerId1 = Byte.MaxValue;
+            playerId2 = Byte.MaxValue;
 
-        }
+    }
     }
 
 
