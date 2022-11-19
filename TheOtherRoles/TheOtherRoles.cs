@@ -1704,9 +1704,15 @@ namespace TheOtherRoles
         public static bool haveKilledSheriff = false;
         public static bool haveKilledEngineer = false;
         public static bool haveKilledMayor = false;
+        // tracker
         public static List<Arrow> localTrackerArrows = new List<Arrow>();
+        // snitch
         public static List<Arrow> localSnitchArrows = new List<Arrow>();
+        // sheriff
         public static float sheriffKillingBonus = 5f;
+        // swapper
+        public static byte playerId1 = Byte.MaxValue;
+        public static byte playerId2 = Byte.MaxValue;
 
 
         public static void clearAndReload()

@@ -577,6 +577,8 @@ namespace TheOtherRoles
             if (MeetingHud.Instance) {
                 Swapper.playerId1 = playerId1;
                 Swapper.playerId2 = playerId2;
+                EvilMimic.playerId1 = playerId1;
+                EvilMimic.playerId2 = playerId2;                
             }
         }
 

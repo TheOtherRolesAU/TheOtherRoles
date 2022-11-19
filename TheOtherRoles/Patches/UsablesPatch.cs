@@ -453,7 +453,7 @@ namespace TheOtherRoles.Patches {
             private static Material newMat;
             static void Postfix(CounterArea __instance) {
                 // Hacker display saved colors on the admin panel
-                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0;
+                bool showHackerInfo = ((Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0) || (EvilMimic.evilMimic != null && EvilMimic.evilMimic  == CachedPlayer.LocalPlayer.PlayerControl && EvilMimic.haveKilledHacker));
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
                     int i = -1;

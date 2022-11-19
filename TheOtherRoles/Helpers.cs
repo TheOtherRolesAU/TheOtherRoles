@@ -429,9 +429,16 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.hacker)
                 {
-                    // get hacker admin ability (color) = a faire
+                    // get hacker admin ability (color) and open admin table on kill
                     EvilMimic.haveKilledHacker = true;
                     new CustomMessage("Rest in peace hacker", 5f);
+
+                    //open admin map on kill
+                    if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
+                        FastDestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+
+                    //CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
+                    //CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                 }
                 else if (targetRole == RoleInfo.securityGuard)
                 {
@@ -465,6 +472,7 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.swapper)
                 {
+                    // can swap crewamte only 
                     EvilMimic.haveKilledSwapper = true;
                     new CustomMessage("You have killed the swapper", 5f);
                 }
