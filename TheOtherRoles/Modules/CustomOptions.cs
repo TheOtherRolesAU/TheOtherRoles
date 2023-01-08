@@ -27,6 +27,7 @@ namespace TheOtherRoles {
 
         public static List<CustomOption> options = new List<CustomOption>();
         public static int preset = 0;
+        public static ConfigEntry<string> vanillaSettings;
 
         public int id;
         public string name;
@@ -76,8 +77,11 @@ namespace TheOtherRoles {
 
         // Static behaviour
 
-            public static void switchPreset(int newPreset) {
+        public static void switchPreset(int newPreset) {
+            saveVanillaOptions();
             CustomOption.preset = newPreset;
+            vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind($"Preset{preset}", "GameOptions", "");
+            loadVanillaOptions();
             foreach (CustomOption option in CustomOption.options) {
                 if (option.id == 0) continue;
 
@@ -90,13 +94,35 @@ namespace TheOtherRoles {
             }
         }
 
+        public static void saveVanillaOptions() {
+            vanillaSettings.Value = Convert.ToBase64String(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameManager.Instance.LogicOptions.currentGameOptions));
+        }
+
+        public static void loadVanillaOptions() {
+            string optionsString = vanillaSettings.Value;
+            if (optionsString == "") return;
+            GameOptionsManager.Instance.GameHostOptions = GameOptionsManager.Instance.gameOptionsFactory.FromBytes(Convert.FromBase64String(optionsString));
+            GameOptionsManager.Instance.CurrentGameOptions = GameOptionsManager.Instance.GameHostOptions;
+            GameManager.Instance.LogicOptions.SetGameOptions(GameOptionsManager.Instance.CurrentGameOptions);
+            GameManager.Instance.LogicOptions.SyncOptions();
+        }
+
+        public static void ShareOptionChange(uint optionId) {
+            var option = options.FirstOrDefault(x => x.id == optionId);
+            if (option == null) return;
+            var writer = AmongUsClient.Instance!.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, SendOption.Reliable, -1);
+            writer.Write((byte)1);
+            writer.WritePacked((uint)option.id);
+            writer.WritePacked(Convert.ToUInt32(option.selection));
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
         public static void ShareOptionSelections() {
             if (CachedPlayer.AllPlayers.Count <= 1 || AmongUsClient.Instance!.AmHost == false && CachedPlayer.LocalPlayer.PlayerControl == null) return;
-
             var optionsList = new List<CustomOption>(CustomOption.options);
             while (optionsList.Any())
             {
-                byte amount = (byte) Math.Min(optionsList.Count, 20);
+                byte amount = (byte) Math.Min(optionsList.Count, 200); // takes less than 3 bytes per option on average
                 var writer = AmongUsClient.Instance!.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareOptions, SendOption.Reliable, -1);
                 writer.Write(amount);
                 for (int i = 0; i < amount; i++)
@@ -137,12 +163,18 @@ namespace TheOtherRoles {
                 stringOption.ValueText.text = selections[selection].ToString();
 
                 if (AmongUsClient.Instance?.AmHost == true && CachedPlayer.LocalPlayer.PlayerControl) {
-                    if (id == 0) switchPreset(selection); // Switch presets
-                    else if (entry != null) entry.Value = selection; // Save selection to config
-
-                    ShareOptionSelections();// Share all selections
+                    if (id == 0 && selection != preset) {
+                        switchPreset(selection); // Switch presets
+                        ShareOptionSelections();
+                    } else if (entry != null) {
+                        entry.Value = selection; // Save selection to config
+                        ShareOptionChange((uint)id);// Share single selection
+                    }
                 }
-           }
+            } else if (id == 0 && AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer) {  // Share the preset switch for random maps, even if the menu isnt open!
+                switchPreset(selection);
+                ShareOptionSelections();// Share all selections
+            }
         }
     }
 
@@ -625,6 +657,16 @@ namespace TheOtherRoles {
         public static void Postfix()
         {
             CustomOption.ShareOptionSelections();
+            CustomOption.saveVanillaOptions();
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.CoSpawnPlayer))]
+    public class AmongUsClientOnPlayerJoinedPatch {
+        public static void Postfix() {
+            if (PlayerControl.LocalPlayer != null) {
+                CustomOption.ShareOptionSelections();
+            }
         }
     }
 
@@ -680,9 +722,9 @@ namespace TheOtherRoles {
     [HarmonyPatch] 
     class GameOptionsDataPatch
     {
-        private static IEnumerable<MethodBase> TargetMethods() {
-            return typeof(GameOptionsData).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
-        }
+        /*private static IEnumerable<MethodBase> TargetMethods() {
+            return typeof(IGameOptionsExtensions.).GetMethods().Where(x => x.ReturnType == typeof(string) && x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType == typeof(int));
+        }*/
 
         private static string buildRoleOptions() {
             var impRoles = buildOptionsOfType(CustomOption.CustomOptionType.Impostor, true) + "\n";
@@ -781,8 +823,10 @@ namespace TheOtherRoles {
             return sb.ToString();
         }
 
+        [HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.ToHudString))]
         private static void Postfix(ref string __result)
         {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == AmongUs.GameOptions.GameModes.HideNSeek) return; // Allow Vanilla Hide N Seek
             int counter = TheOtherRolesPlugin.optionsPage;
             string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
             int maxPage = 7;
@@ -860,9 +904,7 @@ namespace TheOtherRoles {
             }
             if (page != TheOtherRolesPlugin.optionsPage) {
                 Vector3 position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
-                if (position != null) {
-                    FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
-                }
+                FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
             }
         }
     }

@@ -12,7 +12,6 @@ using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using System.Threading.Tasks;
 using System.Net;
-using System.Globalization;
 using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles {
@@ -279,14 +278,16 @@ namespace TheOtherRoles {
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.myPlayer.cosmetics.skin.animator;
-            var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
-            if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.RunAnim) clip = nextSkin.RunAnim;
-            else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.SpawnAnim) clip = nextSkin.SpawnAnim;
-            else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.EnterVentAnim) clip = nextSkin.EnterVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.ExitVentAnim) clip = nextSkin.ExitVentAnim;
-            else if (currentPhysicsAnim == playerPhysics.CurrentAnimationGroup.IdleAnim) clip = nextSkin.IdleAnim;
+            var currentPhysicsAnim = playerPhysics.Animations.Animator.GetCurrentAnimation();
+
+
+            if (currentPhysicsAnim == playerPhysics.Animations.group.RunAnim) clip = nextSkin.RunAnim;
+            else if (currentPhysicsAnim == playerPhysics.Animations.group.SpawnAnim) clip = nextSkin.SpawnAnim;
+            else if (currentPhysicsAnim == playerPhysics.Animations.group.EnterVentAnim) clip = nextSkin.EnterVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.Animations.group.ExitVentAnim) clip = nextSkin.ExitVentAnim;
+            else if (currentPhysicsAnim == playerPhysics.Animations.group.IdleAnim) clip = nextSkin.IdleAnim;
             else clip = nextSkin.IdleAnim;
-            float progress = playerPhysics.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            float progress = playerPhysics.Animations.Animator.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
             playerPhysics.myPlayer.cosmetics.skin.skin = nextSkin;
             playerPhysics.myPlayer.cosmetics.skin.UpdateMaterial();
 
@@ -475,25 +476,30 @@ namespace TheOtherRoles {
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
         }
 
-        public static void checkBeta() {
+        public static async Task checkBeta() {
             if (TheOtherRolesPlugin.betaDays > 0) {
+                TheOtherRolesPlugin.Logger.LogMessage($"Beta check");
                 var compileTime = new DateTime(Builtin.CompileTime, DateTimeKind.Utc);  // This may show as an error, but it is not, compilation will work!
-                DateTime now;
-                // Get time from the internet, so no-one can cheat it.
+                DateTime? now;
+                // Get time from the internet, so no-one can cheat it (so easily).
                 try {
-                    using (var response =
-                      WebRequest.Create("http://www.google.com").GetResponse())
-                        now = DateTime.ParseExact(response.Headers["date"], "ddd, dd MMM yyyy HH:mm:ss 'GMT'", CultureInfo.InvariantCulture.DateTimeFormat, DateTimeStyles.AssumeUniversal);
-                } catch (WebException e) {
-                    TheOtherRolesPlugin.Logger.LogMessage($"{e}");
-                    now = DateTime.Now; //In case something goes wrong. 
+                    var client = new System.Net.Http.HttpClient();
+                    using var response = await client.GetAsync("http://www.google.com/");
+                    if (response.IsSuccessStatusCode)
+                        now = response.Headers.Date?.UtcDateTime;
+                    else {
+                        TheOtherRolesPlugin.Logger.LogMessage($"Could not get time from server: {response.StatusCode}");
+                        now = DateTime.UtcNow; //In case something goes wrong. 
+                    }
+                } catch (System.Net.Http.HttpRequestException) {
+                    now = DateTime.UtcNow;
                 }
-                if ((now - compileTime).TotalDays > TheOtherRolesPlugin.betaDays) {
+                if ((now - compileTime)?.TotalDays > TheOtherRolesPlugin.betaDays) {
                     TheOtherRolesPlugin.Logger.LogMessage($"Beta expired!");
-                    BepInExUpdater.MessageBox(IntPtr.Zero, "BETA is expired. You cannot play this version anymore.", "The Other Roles Beta", 1);
+                    BepInExUpdater.MessageBoxTimeout(BepInExUpdater.GetForegroundWindow(), "BETA is expired. You cannot play this version anymore.", "The Other Roles Beta", 0,0, 10000);
                     Application.Quit();
 
-                } else TheOtherRolesPlugin.Logger.LogMessage($"Beta will remain runnable for {(DateTime.Now - compileTime).TotalDays - TheOtherRolesPlugin.betaDays} days!");
+                } else TheOtherRolesPlugin.Logger.LogMessage($"Beta will remain runnable for {TheOtherRolesPlugin.betaDays - (now - compileTime)?.TotalDays} days!");
             }
         }
 

@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
         public class AmongUsClientOnPlayerJoinedPatch {
-            public static void Postfix() {
+            public static void Postfix(AmongUsClient __instance) {
                 if (CachedPlayer.LocalPlayer != null) {
                     Helpers.shareGameVersion();
                 }
@@ -232,8 +232,12 @@ namespace TheOtherRoles.Patches {
                             }
                         }
 
+                        // Translate chosen map to presets page and use that maps random map preset page
+                        if (CustomOptionHolder.dynamicMapSeparateSettings.getBool()) {
+                            CustomOptionHolder.presetSelection.updateSelection(chosenMapId + 2);
+                        }
                         if (chosenMapId >= 3) chosenMapId++;  // Skip dlekS
-
+                                                              
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(chosenMapId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);

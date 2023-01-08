@@ -12,7 +12,7 @@ namespace TheOtherRoles {
             if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
                 playerInfo.Object &&
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
-                !playerInfo.Object.hasFakeTasks()
+                !playerInfo.Object.hasFakeTasks() && !playerInfo.Role.IsImpostor
                 ) {
                 foreach (var playerInfoTask in playerInfo.Tasks.GetFastEnumerator())
                 {

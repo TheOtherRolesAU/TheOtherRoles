@@ -31,7 +31,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.2.0";
+        public const string VersionString = "4.2.1";
         public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
@@ -67,7 +67,7 @@ namespace TheOtherRoles
                 new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>()
             };
             
-            IRegionInfo ? currentRegion = serverManager.CurrentRegion;
+            IRegionInfo currentRegion = serverManager.CurrentRegion;
             Logger.LogInfo($"Adding {regions.Length} regions");
             foreach (IRegionInfo region in regions) {
                 if (region == null) 
@@ -90,7 +90,7 @@ namespace TheOtherRoles
             Logger = Log;
             Instance = this;
 
-            Helpers.checkBeta(); // Exit if running an expired beta
+            _ = Helpers.checkBeta(); // Exit if running an expired beta
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
@@ -124,6 +124,7 @@ namespace TheOtherRoles
             
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
+            Modules.MainMenuPatch.addSceneChangeCallbacks();
         }
         public static Sprite GetModStamp() {
             if (ModStamp) return ModStamp;

@@ -659,7 +659,7 @@ namespace TheOtherRoles
         }
 
         public static Sprite getAdminSprite() {
-            byte mapId = PlayerControl.GameOptions.MapId;
+            byte mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
             UseButtonSettings button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton]; // Polus
             if (mapId == 0 || mapId == 3) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton]; // Skeld || Dleks
             else if (mapId == 1) button = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton]; // Mira HQ
@@ -1651,8 +1651,6 @@ namespace TheOtherRoles
         }
 
         public static float growingProgress() {
-            if (timeOfGrowthStart == null) return 0f;
-
             float timeSinceStart = (float)(DateTime.UtcNow - timeOfGrowthStart).TotalMilliseconds;
             return Mathf.Clamp(timeSinceStart / (growingUpDuration * 1000), 0f, 1f);
         }
@@ -1717,8 +1715,8 @@ namespace TheOtherRoles
                 if (chameleonPlayer == Ninja.ninja && Ninja.isInvisble) continue;  // Dont make Ninja visible...
                 // check movement by animation
                 PlayerPhysics playerPhysics = chameleonPlayer.MyPhysics;
-                var currentPhysicsAnim = playerPhysics.Animator.GetCurrentAnimation();
-                if (currentPhysicsAnim != playerPhysics.CurrentAnimationGroup.IdleAnim) {
+                var currentPhysicsAnim = playerPhysics.Animations.Animator.GetCurrentAnimation();
+                if (currentPhysicsAnim != playerPhysics.Animations.group.IdleAnim) {
                     lastMoved[chameleonPlayer.PlayerId] = Time.time;
                 }
                 // calculate and set visibility

@@ -187,6 +187,7 @@ namespace TheOtherRoles.Modules
                 if (submergedUpdateCheck.Result != null && (!SubmergedCompatibility.Loaded || submergedUpdateCheck.Result.IsNewer(SubmergedCompatibility.Version)))
                 {
                     Instance.SubmergedUpdate = submergedUpdateCheck.Result;
+                    if (Instance.SubmergedUpdate.Tag.Equals("2022.10.26")) Instance.SubmergedUpdate = null;
                 }
             }
             
@@ -199,12 +200,17 @@ namespace TheOtherRoles.Modules
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
 
-            var req = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest", HttpCompletionOption.ResponseContentRead);
-            if (!req.IsSuccessStatusCode) return null;
+            try {
+                var req = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest", HttpCompletionOption.ResponseContentRead);
 
-            var dataString = await req.Content.ReadAsStringAsync();
-            JObject data = JObject.Parse(dataString);
-            return new UpdateData(data);
+                if (!req.IsSuccessStatusCode) return null;
+
+                var dataString = await req.Content.ReadAsStringAsync();
+                JObject data = JObject.Parse(dataString);
+                return new UpdateData(data);
+            } catch (HttpRequestException) {
+                return null;
+            }
         }
 
         private bool TryUpdateSubmergedInternally()

@@ -311,7 +311,12 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateSabotageButton(HudManager __instance) {
-            if (MeetingHud.Instance) __instance.SabotageButton.Hide();
+            if (MeetingHud.Instance || MapOptions.gameMode == CustomGamemodes.HideNSeek) __instance.SabotageButton.Hide();
+        }
+
+        static void updateMapButton(HudManager __instance) {
+            if (Trapper.trapper == null || !(CachedPlayer.LocalPlayer.PlayerId == Trapper.trapper.PlayerId) || __instance == null || __instance.MapButton.HeldButtonSprite == null) return;
+            __instance.MapButton.HeldButtonSprite.color = Trapper.playersOnMap.Any() ? Trapper.color : Color.white;
         }
 
         static void updateMapButton(HudManager __instance) {

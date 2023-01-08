@@ -28,7 +28,6 @@ namespace TheOtherRoles.Objects {
 
         public void Update() {
             Vector3 target = oldTarget;
-            if (target == null) target = Vector3.zero;
             Update(target);
         }
 
