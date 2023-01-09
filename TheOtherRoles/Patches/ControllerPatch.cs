@@ -12,9 +12,11 @@ static class ControllerPatch
 {
     private static void Prefix(InputManager_Base __instance)
     {
-        __instance.userData.RegisterBind("HunterAdmin", "Hunter admin button", KeyboardKeyCode.G);
+        __instance.userData.RegisterBind("HunterAdmin", "Admin table button (hunter)", KeyboardKeyCode.G);
         __instance.userData.RegisterBind("UsePortal", "Use a portal", KeyboardKeyCode.H);
+        __instance.userData.RegisterBind("ZoomOut", "Zoom Out", KeyboardKeyCode.KeypadPlus);
     }
+    
     private static int RegisterBind(this UserData self, string name, string description, KeyboardKeyCode keycode, int elementIdentifierId = -1, int category = 0, InputActionType type = InputActionType.Button)
     {
         self.AddAction(category);

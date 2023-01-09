@@ -167,7 +167,7 @@ namespace TheOtherRoles
             Vector3 positionOffsetValue = positionOffset ?? button.PositionOffset;  // For non custom buttons, we can set these manually.
             positionOffsetValue.z = -0.1f;
             couldUse = couldUse ?? button.CouldUse;
-            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.hotkey,
+            CustomButton replacementHandcuffedButton = new CustomButton(() => { }, () => { return true; }, couldUse, () => { }, Deputy.getHandcuffedButtonSprite(), positionOffsetValue, button.hudManager, button.actionName,
                 true, Deputy.handcuffDuration, () => { }, button.mirror);
             replacementHandcuffedButton.actionName = button.actionName;
             replacementHandcuffedButton.Timer = replacementHandcuffedButton.EffectDuration;
@@ -468,12 +468,8 @@ namespace TheOtherRoles
                 Shifter.getButtonSprite(),
                 new Vector3(0, 1f, 0),
                 __instance,
-<<<<<<< HEAD
-                null
-=======
-                hotkey: null,
+                null,
                 true
->>>>>>> dc0aff4 (Build fixes)
             );
 
             // Morphling morph
@@ -831,7 +827,7 @@ namespace TheOtherRoles
                 Vampire.getGarlicButtonSprite(),
                 new Vector3(0, -0.06f, 0),
                 __instance,
-                (KeyCode?) null,
+                null,
                 true
             );
 
@@ -1600,7 +1596,7 @@ namespace TheOtherRoles
                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                    mayorMeetingButton.Timer = 1f;
                },
-               () => { return Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+               () => { return Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl && Mayor.meetingButton && !CachedPlayer.LocalPlayer.Data.IsDead; },
                () => {
                    mayorMeetingButton.actionButton.OverrideText("Emergency ("+ Mayor.remoteMeetingsLeft + ")");
                    bool sabotageActive = false;
@@ -1722,7 +1718,7 @@ namespace TheOtherRoles
                 Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f),  // Invisible button!
                 new Vector3(0.4f, 2.8f, 0),
                 __instance,
-                "ZoomIn"
+                "ZoomOut"
                 );
             zoomOutButton.Timer = 0f;
 
@@ -1782,11 +1778,7 @@ namespace TheOtherRoles
                Hacker.getAdminSprite(),
                CustomButton.ButtonPositions.lowerRowCenter,
                __instance,
-<<<<<<< HEAD
-               "HunterKill",
-=======
                "HunterAdmin",
->>>>>>> 542db91 (Add new binds for Portal Maker and hunter admin)
                true,
                Hunter.AdminDuration,
                () => {
@@ -1817,11 +1809,7 @@ namespace TheOtherRoles
                 Hunter.getArrowSprite(),
                 CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
-<<<<<<< HEAD
-                "HunterArrow",
-=======
                 "ActionTertiary",
->>>>>>> dc0aff4 (Build fixes)
                 true,
                 Hunter.ArrowDuration,
                 () => {
