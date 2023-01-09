@@ -319,11 +319,6 @@ namespace TheOtherRoles.Patches {
             __instance.MapButton.HeldButtonSprite.color = Trapper.playersOnMap.Any() ? Trapper.color : Color.white;
         }
 
-        static void updateMapButton(HudManager __instance) {
-            if (Trapper.trapper == null || !(CachedPlayer.LocalPlayer.PlayerId == Trapper.trapper.PlayerId) || __instance == null || __instance.MapButton == null) return;
-            __instance.MapButton.color = Trapper.playersOnMap.Any() ? Trapper.color : Color.white;
-        }
-
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;

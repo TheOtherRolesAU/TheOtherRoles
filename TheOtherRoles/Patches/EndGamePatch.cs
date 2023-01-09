@@ -465,15 +465,6 @@ namespace TheOtherRoles.Patches {
             return false;
         }
 
-        private static bool CheckAndEndGameForProsecutorWin(ShipStatus __instance) {
-            if (Lawyer.triggerProsecutorWin) {
-                __instance.enabled = false;
-                ShipStatus.RpcEndGame((GameOverReason)CustomGameOverReason.ProsecutorWin, false);
-                return true;
-            }
-            return false;
-        }
-
         private static bool CheckAndEndGameForLoverWin(ShipStatus __instance, PlayerStatistics statistics) {
             if (statistics.TeamLoversAlive == 2 && statistics.TotalAlive <= 3) {
                 //__instance.enabled = false;
