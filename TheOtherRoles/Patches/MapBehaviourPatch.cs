@@ -36,6 +36,7 @@ namespace TheOtherRoles.Patches {
 					herePoints.Remove(s.Key);
 				}
 			}
+			HudManagerUpdate.CloseSettings();
 		}
 	}
 }

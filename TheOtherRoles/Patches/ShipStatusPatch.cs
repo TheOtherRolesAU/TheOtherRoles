@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // If player is Lighter with ability active
-            if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId && Lighter.lighterTimer > 0f) {
+            if (Lighter.lighter != null && Lighter.lighter.PlayerId == player.PlayerId) {
                 float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Lighter.lighterModeLightsOffVision, __instance.MaxLightRadius * Lighter.lighterModeLightsOnVision, unlerped);
             }
@@ -103,7 +103,7 @@ namespace TheOtherRoles.Patches {
             originalNumShortTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks;
             originalNumLongTasksOption = GameOptionsManager.Instance.currentNormalGameOptions.NumLongTasks;
 
-            if (MapOptions.gameMode != CustomGamemodes.HideNSeek) {
+            if (TORMapOptions.gameMode != CustomGamemodes.HideNSeek) {
                 var commonTaskCount = __instance.CommonTasks.Count;
                 var normalTaskCount = __instance.NormalTasks.Count;
                 var longTaskCount = __instance.LongTasks.Count;

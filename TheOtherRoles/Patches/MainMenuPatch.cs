@@ -7,11 +7,15 @@ using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 using TheOtherRoles.Patches;
 using UnityEngine.SceneManagement;
+using TheOtherRoles.Utilities;
+using AmongUs.Data;
+using Assets.InnerNet;
+using System.Linq;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public class MainMenuPatch {
-        private static bool horseButtonState = MapOptions.enableHorseMode;
+        private static bool horseButtonState = TORMapOptions.enableHorseMode;
         //private static Sprite horseModeOffSprite = null;
         //private static Sprite horseModeOnSprite = null;
         private static GameObject bottomTemplate;
@@ -46,7 +50,7 @@ namespace TheOtherRoles.Modules {
             bottomTemplate = GameObject.Find("InventoryButton");
             /*
             // Horse mode stuff
-            var horseModeSelectionBehavior = new ClientOptionsPatch.SelectionBehaviour("Enable Horse Mode", () => MapOptions.enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value = !TheOtherRolesPlugin.EnableHorseMode.Value, TheOtherRolesPlugin.EnableHorseMode.Value);
+            var horseModeSelectionBehavior = new ClientOptionsPatch.SelectionBehaviour("Enable Horse Mode", () => TORMapOptions.enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value = !TheOtherRolesPlugin.EnableHorseMode.Value, TheOtherRolesPlugin.EnableHorseMode.Value);
 
             
             if (bottomTemplate == null) return;
@@ -94,8 +98,16 @@ namespace TheOtherRoles.Modules {
                 if (popUp != null) Object.Destroy(popUp);
                 popUp = Object.Instantiate(Object.FindObjectOfType<AnnouncementPopUp>(true));
                 popUp.gameObject.SetActive(true);
-                popUp.Init();
-                //SelectableHyperLinkHelper.DestroyGOs(popUp.selectableHyperLinks, "test");
+
+                Assets.InnerNet.Announcement creditsAnnouncement = new Assets.InnerNet.Announcement();
+                creditsAnnouncement.Id = "torCredits";
+                creditsAnnouncement.Language = 0;
+                creditsAnnouncement.Number = 500;
+                creditsAnnouncement.Title = "The Other Roles Credits & Resources";
+                creditsAnnouncement.ShortTitle = "TOR Credits";
+                creditsAnnouncement.SubTitle = "";
+                creditsAnnouncement.PinState = false;
+                creditsAnnouncement.Date = "03.07.2020";
                 string creditsString = @$"<align=""center"">Github Contributors:
 Alex2911    amsyarasyiq    MaximeGillot
 Psynomit    probablyadnf    JustASysAdmin
@@ -126,11 +138,22 @@ Ottomated - Idea for the Morphling, Snitch and Camouflager role came from Ottoma
 Crowded-Mod - Our implementation for 10+ player lobbies was inspired by the one from the Crowded Mod Team
 Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
                 creditsString += "</align>";
-                popUp.AnnounceTextMeshPro.text = creditsString;
+                creditsAnnouncement.Text = creditsString;
                 __instance.StartCoroutine(Effects.Lerp(0.01f, new Action<float>((p) => {
                     if (p == 1) {
+                        var backup = DataManager.Player.Announcements.allAnnouncements;
+                        popUp.Init(false);
+                        DataManager.Player.Announcements.allAnnouncements = new();
+                        DataManager.Player.Announcements.allAnnouncements.Insert(0, creditsAnnouncement);
+                        foreach (var item in popUp.visibleAnnouncements) Object.Destroy(item);
+                        foreach (var item in Object.FindObjectsOfType<AnnouncementPanel>()) {
+                            if (item != popUp.ErrorPanel) Object.Destroy(item.gameObject);
+                        }
+                        popUp.CreateAnnouncementList();
+                        popUp.visibleAnnouncements[0].PassiveButton.OnClick.RemoveAllListeners();
+                        DataManager.Player.Announcements.allAnnouncements = backup;
                         var titleText = GameObject.Find("Title_Text").GetComponent<TMPro.TextMeshPro>();
-                        if (titleText != null) titleText.text = "Credits and Contributors";
+                        if (titleText != null) titleText.text = "";
                     }
                 })));
             });
@@ -152,7 +175,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
         public static void addSceneChangeCallbacks() {
             SceneManager.add_sceneLoaded((Action<Scene, LoadSceneMode>)((scene, _) => {
                 if (!scene.name.Equals("MatchMaking", StringComparison.Ordinal)) return;
-                MapOptions.gameMode = CustomGamemodes.Classic;
+                TORMapOptions.gameMode = CustomGamemodes.Classic;
                 // Add buttons For Guesser Mode, Hide N Seek in this scene.
                 // find "HostLocalGameButton"
                 var template = GameObject.FindObjectOfType<HostLocalGameButton>();
@@ -166,7 +189,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
                 
                 guesserButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 guesserButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
-                    MapOptions.gameMode = CustomGamemodes.Guesser;
+                    TORMapOptions.gameMode = CustomGamemodes.Guesser;
                     template.OnClick();
                 }));
 
@@ -177,7 +200,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
                 
                 HideNSeekButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
                 HideNSeekButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
-                    MapOptions.gameMode = CustomGamemodes.HideNSeek;
+                    TORMapOptions.gameMode = CustomGamemodes.HideNSeek;
                     template.OnClick();
                 }));
 
@@ -189,7 +212,7 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
         }
     }
 
-    [HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.UpdateAnnounceText))]
+    /*[HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.UpdateAnnounceText))]
     public static class Announcement
     {
         public static ModUpdateBehaviour.UpdateData updateData = null;
@@ -202,5 +225,5 @@ Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose</size>";
 
             return false;
         }
-    }
+    }*/
 }

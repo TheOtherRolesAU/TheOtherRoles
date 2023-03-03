@@ -14,7 +14,8 @@ namespace TheOtherRoles.Objects {
         public static Sprite[] portalFgAnimationSprites = new Sprite[205];
         public static Sprite portalSprite;
         public static bool isTeleporting = false;
-        public static float teleportDuration = 3.4166666667f; 
+        public static float teleportDuration = 3.4166666667f;
+        public string room;
 
         public struct tpLogEntry {
             public byte playerId;
@@ -37,7 +38,7 @@ namespace TheOtherRoles.Objects {
             return portalFgAnimationSprites[index];
         }
 
-        public static void startTeleport(byte playerId) {
+        public static void startTeleport(byte playerId, byte exit) {
             if (firstPortal == null || secondPortal == null) return;
             isTeleporting = true;
             
@@ -55,12 +56,14 @@ namespace TheOtherRoles.Objects {
                 playerNameDisplay = "A camouflaged player";
                 colorId = 6;
             }
-            teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
+            
+            if (!playerControl.Data.IsDead)
+                teleportedPlayers.Add(new tpLogEntry(playerId, playerNameDisplay, DateTime.UtcNow));
             
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(teleportDuration, new Action<float>((p) => {
                 if (firstPortal != null && firstPortal.animationFgRenderer != null && secondPortal != null && secondPortal.animationFgRenderer != null) {
-                    firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
-                    secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    if (exit == 0 || exit == 1) firstPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
+                    if (exit == 0 || exit == 2) secondPortal.animationFgRenderer.sprite = getFgAnimationSprite((int)(p * portalFgAnimationSprites.Length));
                     playerControl.SetPlayerMaterialColors(firstPortal.animationFgRenderer);
                     playerControl.SetPlayerMaterialColors(secondPortal.animationFgRenderer);
                     if (p == 1f) {
@@ -105,6 +108,8 @@ namespace TheOtherRoles.Objects {
             else if (secondPortal == null) {
                 secondPortal = this;
             }
+            var lastRoom = FastDestroyableSingleton<HudManager>.Instance?.roomTracker.LastRoom.RoomId;
+            this.room = lastRoom != null ? DestroyableSingleton<TranslationController>.Instance.GetString((SystemTypes)lastRoom) : "Open Field";
         }
 
         public static bool locationNearEntry(Vector2 p) {
@@ -135,6 +140,7 @@ namespace TheOtherRoles.Objects {
                 firstPortal.portalGameObject.SetActive(true);
                 secondPortal.portalGameObject.SetActive(true);
                 bothPlacedAndEnabled = true;
+                HudManagerStartPatch.portalmakerButtonText2.text = "2. " + secondPortal.room;
             }
 
             // reset teleported players

@@ -36,7 +36,7 @@ namespace TheOtherRoles.CustomGameModes {
         }
 
         public static void clearAndReload() {
-            isHideNSeekGM = MapOptions.gameMode == CustomGamemodes.HideNSeek;
+            isHideNSeekGM = TORMapOptions.gameMode == CustomGamemodes.HideNSeek;
             if (timerText != null) UnityEngine.Object.Destroy(timerText);
             timerText = null;
             if (polusVent != null) UnityEngine.Object.Destroy(polusVent);
@@ -84,6 +84,12 @@ namespace TheOtherRoles.CustomGameModes {
         public static Sprite getArrowSprite() {
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HideNSeekArrowButton.png", 115f);
+            return buttonSprite;
+        }
+
+        public static Sprite getLightSprite() {
+            if (buttonSprite) return buttonSprite;
+            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LighterButton.png", 115f);
             return buttonSprite;
         }
 

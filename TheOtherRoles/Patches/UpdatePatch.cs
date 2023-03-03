@@ -224,7 +224,7 @@ namespace TheOtherRoles.Patches {
             }
 
             // Display lighter / darker color for all alive players
-            if (CachedPlayer.LocalPlayer != null && MeetingHud.Instance != null && MapOptions.showLighterDarker) {
+            if (CachedPlayer.LocalPlayer != null && MeetingHud.Instance != null && TORMapOptions.showLighterDarker) {
                 foreach (PlayerVoteArea player in MeetingHud.Instance.playerStates) {
                     var target = Helpers.playerById(player.TargetPlayerId);
                     if (target != null)  player.NameText.text += $" ({(Helpers.isLighterColor(target.Data.DefaultOutfit.ColorId) ? "L" : "D")})";
@@ -243,7 +243,6 @@ namespace TheOtherRoles.Patches {
         static void timerUpdate() {
             var dt = Time.deltaTime;
             Hacker.hackerTimer -= dt;
-            Lighter.lighterTimer -= dt;
             Trickster.lightsOutTimer -= dt;
             Tracker.corpsesTrackingTimer -= dt;
             Ninja.invisibleTimer -= dt;
@@ -311,7 +310,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateSabotageButton(HudManager __instance) {
-            if (MeetingHud.Instance || MapOptions.gameMode == CustomGamemodes.HideNSeek) __instance.SabotageButton.Hide();
+            if (MeetingHud.Instance || TORMapOptions.gameMode == CustomGamemodes.HideNSeek) __instance.SabotageButton.Hide();
         }
 
         static void updateMapButton(HudManager __instance) {
@@ -322,6 +321,8 @@ namespace TheOtherRoles.Patches {
         static void Postfix(HudManager __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
+            
+            EventUtility.Update();
 
             CustomButton.HudUpdate();
             resetNameTagsAndColors();
@@ -343,7 +344,7 @@ namespace TheOtherRoles.Patches {
             updateSabotageButton(__instance);
             updateUseButton(__instance);
             updateMapButton(__instance);
-
+            if (!MeetingHud.Instance) __instance.AbilityButton?.Update();
         }
     }
 }

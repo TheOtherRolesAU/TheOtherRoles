@@ -31,19 +31,19 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.2.1";
+        public const string VersionString = "4.3.0";
         public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
         internal static BepInEx.Logging.ManualLogSource Logger;
-
+         
         public Harmony Harmony { get; } = new Harmony(Id);
         public static TheOtherRolesPlugin Instance;
 
         public static int optionsPage = 2;
 
         public static ConfigEntry<string> DebugMode { get; private set; }
-        public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
+        public static ConfigEntry<bool> GhostsSeeInformation { get; set; }
         public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
         public static ConfigEntry<bool> GhostsSeeModifier { get; set; }
         public static ConfigEntry<bool> GhostsSeeVotes{ get; set; }
@@ -59,12 +59,13 @@ namespace TheOtherRoles
 
         public static IRegionInfo[] defaultRegions;
 
+
         // This is part of the Mini.RegionInstaller, Licensed under GPLv3
         // file="RegionInstallPlugin.cs" company="miniduikboot">
         public static void UpdateRegions() {
             ServerManager serverManager = FastDestroyableSingleton<ServerManager>.Instance;
             var regions = new IRegionInfo[] {
-                new DnsRegionInfo(Ip.Value, "Custom", StringNames.NoTranslation, Ip.Value, Port.Value, false).CastFast<IRegionInfo>()
+                new StaticHttpRegionInfo("Custom", StringNames.NoTranslation, Ip.Value, new Il2CppReferenceArray<ServerInfo>(new ServerInfo[1] { new ServerInfo("Custom", Ip.Value, Port.Value, false) })).CastFast<IRegionInfo>()
             };
             
             IRegionInfo currentRegion = serverManager.CurrentRegion;
@@ -89,11 +90,11 @@ namespace TheOtherRoles
         public override void Load() {
             Logger = Log;
             Instance = this;
-
+  
             _ = Helpers.checkBeta(); // Exit if running an expired beta
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
-            GhostsSeeTasks = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
+            GhostsSeeInformation = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
             GhostsSeeRoles = Config.Bind("Custom", "Ghosts See Roles", true);
             GhostsSeeModifier = Config.Bind("Custom", "Ghosts See Modifier", true);
             GhostsSeeVotes = Config.Bind("Custom", "Ghosts See Votes", true);
@@ -103,7 +104,6 @@ namespace TheOtherRoles
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             
-
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
             defaultRegions = ServerManager.DefaultRegions;
@@ -121,7 +121,9 @@ namespace TheOtherRoles
                 AddComponent<BepInExUpdater>();
                 return;
             }
-            
+
+            EventUtility.Load();
+
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
             Modules.MainMenuPatch.addSceneChangeCallbacks();

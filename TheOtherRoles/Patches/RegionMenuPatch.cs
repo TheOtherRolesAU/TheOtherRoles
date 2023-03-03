@@ -78,7 +78,7 @@ namespace TheOtherRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) return;
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(0.225f, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(3.225f, -0.8f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
@@ -101,7 +101,6 @@ namespace TheOtherRoles.Patches {
 
                 void onFocusLost() {
                     TheOtherRolesPlugin.UpdateRegions();
-                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
                 }
             }
 
@@ -112,7 +111,7 @@ namespace TheOtherRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) return;
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0.225f, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(3.225f, -1.55f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(TheOtherRolesPlugin.Port.Value.ToString());
                 __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
@@ -140,9 +139,23 @@ namespace TheOtherRoles.Patches {
                 
                 void onFocusLost() {
                     TheOtherRolesPlugin.UpdateRegions();
-                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
                 }
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.ChooseOption))]
+    public static class RegionMenuChooseOptionPatch {
+        public static bool Prefix(RegionMenu __instance, IRegionInfo region) {
+            if (region.Name != "Custom" || FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "Custom") return true;
+            DestroyableSingleton<ServerManager>.Instance.SetRegion(region);
+            __instance.RegionText.text = "Custom";
+            foreach (var Button in __instance.ButtonPool.activeChildren) {
+                ServerListButton serverListButton = Button.TryCast<ServerListButton>();
+                if (serverListButton != null) serverListButton.SetSelected(serverListButton.Text.text == "Custom");
+            }
+            __instance.Open();
+            return false;
         }
     }
 }

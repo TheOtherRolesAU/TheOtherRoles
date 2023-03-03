@@ -65,6 +65,8 @@ namespace TheOtherRoles.Patches {
                 foreach (PlayerControl target in Witch.futureSpelled) {
                     if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill)
                     {
+                        if (exiled != null && Lawyer.lawyer != null && (target == Lawyer.lawyer || target == Lovers.otherLover(Lawyer.lawyer)) && Lawyer.target != null && Lawyer.isProsecutor && Lawyer.target.PlayerId == exiled.PlayerId)
+                            continue;
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedExilePlayer, Hazel.SendOption.Reliable, -1);
                         writer.Write(target.PlayerId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -81,15 +83,15 @@ namespace TheOtherRoles.Patches {
 
             // SecurityGuard vents and cameras
             var allCameras = MapUtilities.CachedShipStatus.AllCameras.ToList();
-            MapOptions.camerasToAdd.ForEach(camera => {
+            TORMapOptions.camerasToAdd.ForEach(camera => {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 allCameras.Add(camera);
             });
             MapUtilities.CachedShipStatus.AllCameras = allCameras.ToArray();
-            MapOptions.camerasToAdd = new List<SurvCamera>();
+            TORMapOptions.camerasToAdd = new List<SurvCamera>();
 
-            foreach (Vent vent in MapOptions.ventsToSeal) {
+            foreach (Vent vent in TORMapOptions.ventsToSeal) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 animator?.Stop();
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
@@ -99,7 +101,9 @@ namespace TheOtherRoles.Patches {
                 vent.myRend.color = Color.white;
                 vent.name = "SealedVent_" + vent.name;
             }
-            MapOptions.ventsToSeal = new List<Vent>();
+            TORMapOptions.ventsToSeal = new List<Vent>();
+
+            EventUtility.meetingEndsUpdate();
         }
     }
 
@@ -188,11 +192,11 @@ namespace TheOtherRoles.Patches {
                 Vector3 newBottomLeft = IntroCutsceneOnDestroyPatch.bottomLeft;
                 var BottomLeft = newBottomLeft + new Vector3(-0.25f, -0.25f, 0);
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                    if (!MapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
+                    if (!TORMapOptions.playerIcons.ContainsKey(p.PlayerId)) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
-                        MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
+                        TORMapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
                     } else {
-                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = newBottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        TORMapOptions.playerIcons[p.PlayerId].transform.localPosition = newBottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
                     }
                 }

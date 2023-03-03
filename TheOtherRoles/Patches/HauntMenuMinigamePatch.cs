@@ -2,6 +2,8 @@
 using AmongUs.GameOptions;
 using System.Collections.Generic;
 using System.Linq;
+using TheOtherRoles.Players;
+using System;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -14,13 +16,12 @@ namespace TheOtherRoles.Patches {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
             var target = __instance.HauntTarget;
             var roleInfo = RoleInfo.getRoleInfoForPlayer(target, false);
-            string roleString = (roleInfo.Count > 0 && MapOptions.ghostsSeeRoles) ? roleInfo[0].name : "";
+            string roleString = (roleInfo.Count > 0 && TORMapOptions.ghostsSeeRoles) ? roleInfo[0].name : "";
             if (__instance.HauntTarget.Data.IsDead) {
                 __instance.FilterText.text = roleString + " Ghost";
                 return;
             }
             __instance.FilterText.text = roleString;
-            TheOtherRolesPlugin.Logger.LogMessage(roleString);
             return;
         }
 
@@ -40,7 +41,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.Start))]
         public static bool StartPrefix(HauntMenuMinigame __instance) {
-            if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal || !MapOptions.ghostsSeeRoles) return true;
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal || !TORMapOptions.ghostsSeeRoles) return true;
             __instance.FilterButtons[0].gameObject.SetActive(true);
             int numActive = 0;
             int numButtons = __instance.FilterButtons.Count((PassiveButton s) => s.isActiveAndEnabled);
@@ -55,6 +56,30 @@ namespace TheOtherRoles.Patches {
 			    }
             }
             return false;
+        }
+
+        // Moves the haunt menu a bit further down
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.FixedUpdate))]
+        public static void UpdatePostfix(HauntMenuMinigame __instance) {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.Normal) return;
+            if (CachedPlayer.LocalPlayer.Data.Role.IsImpostor && Vampire.vampire != CachedPlayer.LocalPlayer.PlayerControl)
+                __instance.gameObject.transform.localPosition = new UnityEngine.Vector3(-6f, -1.1f, __instance.gameObject.transform.localPosition.z);
+            return;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(AbilityButton), nameof(AbilityButton.Update))]
+        public static void showOrHideAbilityButtonPostfix(AbilityButton __instance) {
+            if (CachedPlayer.LocalPlayer.Data.IsDead && CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool()) {
+                // player has haunt button.
+                var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
+                int numberOfLeftTasks = playerTotal - playerCompleted;
+                if (numberOfLeftTasks <= 0)
+                    __instance.Show();
+                else
+                    __instance.Hide();
+            }
         }
     }
 }

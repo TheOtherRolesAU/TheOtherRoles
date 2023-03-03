@@ -9,12 +9,14 @@ namespace TheOtherRoles {
         public DateTime timeOfDeath;
         public DeathReason deathReason;
         public PlayerControl killerIfExisting;
+        public bool wasCleaned;
 
         public DeadPlayer(PlayerControl player, DateTime timeOfDeath, DeathReason deathReason, PlayerControl killerIfExisting) {
             this.player = player;
             this.timeOfDeath = timeOfDeath;
             this.deathReason = deathReason;
             this.killerIfExisting = killerIfExisting;
+            this.wasCleaned = false;
         }
     }
 

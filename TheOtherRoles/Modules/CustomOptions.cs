@@ -11,6 +11,7 @@ using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.CustomOption;
+using Reactor.Utilities.Extensions;
 
 namespace TheOtherRoles {
     public class CustomOption {
@@ -182,7 +183,7 @@ namespace TheOtherRoles {
     class GameOptionsMenuStartPatch {
         public static void Postfix(GameOptionsMenu __instance) {
 
-            switch (MapOptions.gameMode) {
+            switch (TORMapOptions.gameMode) {
                 case CustomGamemodes.Classic:
                     createClassicTabs(__instance);
                     break;
@@ -570,6 +571,43 @@ namespace TheOtherRoles {
                 }
             }
 
+            setOptions(
+                new List<GameOptionsMenu>{torMenu, hideNSeekMenu},
+                new List<List<OptionBehaviour>> {torOptions, hideNSeekOptions}, 
+                new List<GameObject> {torSettings, hideNSeekSettings}
+            );
+
+            torSettings.gameObject.SetActive(true);
+            torTabHighlight.enabled = true;
+            gameSettingMenu.RegularGameSettings.SetActive(false);
+            gameSettingMenu.GameSettingsHightlight.enabled = false;
+        }
+
+        
+        private static void setListener(Dictionary<GameObject, SpriteRenderer> settingsHighlightMap, int index) {
+            foreach (KeyValuePair<GameObject, SpriteRenderer> entry in settingsHighlightMap) {
+                entry.Key.SetActive(false);
+                entry.Value.enabled = false;
+            }
+            settingsHighlightMap.ElementAt(index).Key.SetActive(true);
+            settingsHighlightMap.ElementAt(index).Value.enabled = true;
+        }
+
+        private static void destroyOptions (List<List<OptionBehaviour>> optionBehavioursList) {
+           foreach (List<OptionBehaviour> optionBehaviours in optionBehavioursList) {
+                foreach (OptionBehaviour option in optionBehaviours)
+                    UnityEngine.Object.Destroy(option.gameObject);
+            }
+        }
+
+        private static bool setNames (Dictionary<string, string> gameObjectNameDisplayNameMap) {
+            foreach (KeyValuePair <string, string> entry in gameObjectNameDisplayNameMap) {
+                if (GameObject.Find(entry.Key) != null) { // Settings setup has already been performed, fixing the title of the tab and returning
+                    GameObject.Find(entry.Key).transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText(entry.Value);
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -748,14 +786,14 @@ namespace TheOtherRoles {
         private static string buildOptionsOfType(CustomOption.CustomOptionType type, bool headerOnly) {
             StringBuilder sb = new StringBuilder("\n");
             var options = CustomOption.options.Where(o => o.type == type);
-            if (MapOptions.gameMode == CustomGamemodes.Guesser) {
+            if (TORMapOptions.gameMode == CustomGamemodes.Guesser) {
                 if (type == CustomOption.CustomOptionType.General)
                     options = CustomOption.options.Where(o => o.type == type || o.type == CustomOption.CustomOptionType.Guesser);
-                List<int> remove = new List<int>{ 310, 311, 312, 313, 314, 315, 316, 317, 318 };
+                List<int> remove = new List<int>{ 308, 310, 311, 312, 313, 314, 315, 316, 317, 318 };
                 options = options.Where(x => !remove.Contains(x.id));
-            } else if (MapOptions.gameMode == CustomGamemodes.Classic) 
-                options = options.Where(x => !(x.type == CustomOption.CustomOptionType.Guesser));
-            else if (MapOptions.gameMode == CustomGamemodes.HideNSeek)
+            } else if (TORMapOptions.gameMode == CustomGamemodes.Classic) 
+                options = options.Where(x => !(x.type == CustomOption.CustomOptionType.Guesser || x == CustomOptionHolder.crewmateRolesFill));
+            else if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek)
                 options = options.Where(x => (x.type == CustomOption.CustomOptionType.HideNSeekMain || x.type == CustomOption.CustomOptionType.HideNSeekRoles));
 
             foreach (var option in options) {
@@ -777,7 +815,7 @@ namespace TheOtherRoles {
             else sb = new StringBuilder();
 
             foreach (CustomOption option in options) {
-                if (MapOptions.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain && option.type != CustomOptionType.HideNSeekRoles) continue;
+                if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek && option.type != CustomOptionType.HideNSeekMain && option.type != CustomOptionType.HideNSeekRoles) continue;
                 if (option.parent != null) {
                     bool isIrrelevant = option.parent.getSelection() == 0 || (option.parent.parent != null && option.parent.parent.getSelection() == 0);
 
@@ -789,8 +827,17 @@ namespace TheOtherRoles {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Crewmate Roles");
                         var min = CustomOptionHolder.crewmateRolesCountMin.getSelection();
                         var max = CustomOptionHolder.crewmateRolesCountMax.getSelection();
+                        string optionValue = "";
+                        if (CustomOptionHolder.crewmateRolesFill.getBool()) {
+                            var crewCount = PlayerControl.AllPlayerControls.Count - GameOptionsManager.Instance.currentGameOptions.NumImpostors;
+                            min = crewCount - CustomOptionHolder.neutralRolesCountMax.getSelection();
+                            max = crewCount - CustomOptionHolder.neutralRolesCountMin.getSelection();
+                            if (min < 0) min = 0;
+                            if (max < 0) max = 0;
+                            optionValue = "Fill: ";
+                        }
                         if (min > max) min = max;
-                        var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+                        optionValue += (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");
                     } else if (option == CustomOptionHolder.neutralRolesCountMin) {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Neutral Roles");
@@ -823,14 +870,13 @@ namespace TheOtherRoles {
             return sb.ToString();
         }
 
-        [HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.ToHudString))]
-        private static void Postfix(ref string __result)
-        {
-            if (GameOptionsManager.Instance.currentGameOptions.GameMode == AmongUs.GameOptions.GameModes.HideNSeek) return; // Allow Vanilla Hide N Seek
+        public static string buildAllOptions(string vanillaSettings = "", bool hideExtras = false) {
+            if (vanillaSettings == "")
+                vanillaSettings = GameOptionsManager.Instance.CurrentGameOptions.ToHudString(PlayerControl.AllPlayerControls.Count);
             int counter = TheOtherRolesPlugin.optionsPage;
-            string hudString = counter != 0 ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
+            string hudString = counter != 0 && !hideExtras ? Helpers.cs(DateTime.Now.Second % 2 == 0 ? Color.white : Color.red, "(Use scroll wheel if necessary)\n\n") : "";
             int maxPage = 7;
-            if (MapOptions.gameMode == CustomGamemodes.HideNSeek) {
+            if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) {
                 if (TheOtherRolesPlugin.optionsPage > 1) TheOtherRolesPlugin.optionsPage = 0;
                 maxPage = 2;
                 switch (counter) {
@@ -844,7 +890,7 @@ namespace TheOtherRoles {
             } else {
                 switch (counter) {
                     case 0:
-                        hudString += "Page 1: Vanilla Settings \n\n" + __result;
+                        hudString += (!hideExtras ? "" :"Page 1: Vanilla Settings \n\n") + vanillaSettings;
                         break;
                     case 1:
                         hudString += "Page 2: The Other Roles Settings \n" + buildOptionsOfType(CustomOption.CustomOptionType.General, false);
@@ -867,8 +913,16 @@ namespace TheOtherRoles {
                 }
             }
 
-            hudString += $"\n Press TAB or Page Number for more... ({counter+1}/{maxPage})";
-            __result = hudString;
+            if (!hideExtras || counter != 0) hudString += $"\n Press TAB or Page Number for more... ({counter + 1}/{maxPage})";
+            return hudString;
+        }
+
+
+        [HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.ToHudString))]
+        private static void Postfix(ref string __result)
+        {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == AmongUs.GameOptions.GameModes.HideNSeek) return; // Allow Vanilla Hide N Seek
+            __result = buildAllOptions(vanillaSettings:__result);
         }
     }
 
@@ -902,6 +956,9 @@ namespace TheOtherRoles {
             if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Keypad7)) {
                 TheOtherRolesPlugin.optionsPage = 6;
             }
+            if (Input.GetKeyDown(KeyCode.F1))
+                HudManagerUpdate.ToggleSettings(HudManager.Instance);
+
             if (page != TheOtherRolesPlugin.optionsPage) {
                 Vector3 position = (Vector3)FastDestroyableSingleton<HudManager>.Instance?.GameSettings?.transform.localPosition;
                 FastDestroyableSingleton<HudManager>.Instance.GameSettings.transform.localPosition = new Vector3(position.x, 2.9f, position.z);
@@ -918,7 +975,7 @@ namespace TheOtherRoles {
     }
 
 
-    // This class is taken from Town of Us Reactivated, https://github.com/eDonnes124/Town-Of-Us-R/blob/master/source/Patches/CustomOption/Patches.cs, Licensed under GPLv3
+    // This class is taken and adapted from Town of Us Reactivated, https://github.com/eDonnes124/Town-Of-Us-R/blob/master/source/Patches/CustomOption/Patches.cs, Licensed under GPLv3
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdate {
         public static float
@@ -976,6 +1033,8 @@ namespace TheOtherRoles {
         private static void CreateScroller(HudManager __instance) {
             if (Scroller != null) return;
 
+            Transform target = __instance.GameSettings.transform;
+
             Scroller = new GameObject("SettingsScroller").AddComponent<Scroller>();
             Scroller.transform.SetParent(__instance.GameSettings.transform.parent);
             Scroller.gameObject.layer = 5;
@@ -989,8 +1048,81 @@ namespace TheOtherRoles {
             Scroller.ContentXBounds = new FloatRange(MinX, MinX);
             Scroller.enabled = true;
 
-            Scroller.Inner = __instance.GameSettings.transform;
-            __instance.GameSettings.transform.SetParent(Scroller.transform);
+            Scroller.Inner = target;
+            target.SetParent(Scroller.transform);
+        }
+
+        [HarmonyPrefix]
+        public static void Prefix2(HudManager __instance) {
+            if (!settingsTMPs[0]) return;
+            foreach (var tmp in settingsTMPs) tmp.text = "";
+            var settingsString = GameOptionsDataPatch.buildAllOptions(hideExtras: true);
+            var blocks = settingsString.Split("\n\n", StringSplitOptions.RemoveEmptyEntries); ;
+            string curString = "";
+            string curBlock;
+            int j = 0;
+            for (int i = 0; i < blocks.Length; i++) {
+                curBlock = blocks[i];
+                if (Helpers.lineCount(curBlock) + Helpers.lineCount(curString) < 40) {
+                    curString += curBlock + "\n\n";
+                } else {
+                    settingsTMPs[j].text = curString;
+                    j++;
+                    
+                    curString = "\n" + curBlock + "\n\n";
+                    if (curString.Substring(0, 2) != "\n\n") curString = "\n" + curString;
+                }
+            }
+            if (j < 3) settingsTMPs[j].text = curString;        
+        }
+
+        private static TMPro.TextMeshPro[] settingsTMPs = new TMPro.TextMeshPro[3];
+        private static GameObject settingsBackground;
+        public static void OpenSettings(HudManager __instance) {
+            if (__instance.FullScreen == null || MapBehaviour.Instance && MapBehaviour.Instance.IsOpen /*|| AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started*/) return;
+            settingsBackground = GameObject.Instantiate(__instance.FullScreen.gameObject, __instance.transform);
+            settingsBackground.SetActive(true);
+            var renderer = settingsBackground.GetComponent<SpriteRenderer>();
+            renderer.color = new Color(0.2f, 0.2f, 0.2f, 0.9f);
+            renderer.enabled = true;
+            for (int i = 0; i < 3; i++) {
+                settingsTMPs[i] = GameObject.Instantiate(__instance.KillButton.cooldownTimerText, __instance.transform);
+                settingsTMPs[i].alignment = TMPro.TextAlignmentOptions.TopLeft;
+                settingsTMPs[i].enableWordWrapping = false;
+                settingsTMPs[i].transform.localScale = Vector3.one * 0.25f;
+                settingsTMPs[i].transform.localPosition += new Vector3(-4f + 3f * i, 1.8f, -500f);
+                settingsTMPs[i].gameObject.SetActive(true);
+            }
+        }
+
+        public static void CloseSettings() {
+            foreach (var tmp in settingsTMPs)
+                if (tmp) tmp.gameObject.Destroy();
+
+            if (settingsBackground) settingsBackground.Destroy();
+        }
+
+        public static void ToggleSettings(HudManager __instance) {
+            if (settingsTMPs[0]) CloseSettings();
+            else OpenSettings(__instance);
+        }
+
+        static PassiveButton toggleSettingsButton;
+        static GameObject toggleSettingsButtonObject;
+        [HarmonyPostfix]
+        public static void Postfix(HudManager __instance) {
+            if (!toggleSettingsButton || !toggleSettingsButtonObject) {
+                // add a special button for settings viewing:
+                toggleSettingsButtonObject = GameObject.Instantiate(__instance.MapButton.gameObject, __instance.MapButton.transform.parent);
+                toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
+                SpriteRenderer renderer = toggleSettingsButtonObject.GetComponent<SpriteRenderer>();
+                renderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CurrentSettingsButton.png", 180f);
+                toggleSettingsButton = toggleSettingsButtonObject.GetComponent<PassiveButton>();
+                toggleSettingsButton.OnClick.RemoveAllListeners();
+                toggleSettingsButton.OnClick.AddListener((Action)(() => ToggleSettings(__instance)));
+            }
+            toggleSettingsButtonObject.SetActive(__instance.MapButton.gameObject.active && !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen));
+            toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
         }
     }
 }

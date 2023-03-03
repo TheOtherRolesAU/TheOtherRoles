@@ -67,14 +67,14 @@ namespace TheOtherRoles.Patches {
                 bool hasVisibleShield = false;
                 Color color = Medic.shieldedColor;
                 if (Camouflager.camouflageTimer <= 0f && Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
-                    hasVisibleShield = Medic.showShielded == 0 // Everyone
+                    hasVisibleShield = Medic.showShielded == 0 || Helpers.shouldShowGhostInfo() // Everyone or Ghost info
                         || (Medic.showShielded == 1 && (CachedPlayer.LocalPlayer.PlayerControl == Medic.shielded || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic)) // Shielded + Medic
                         || (Medic.showShielded == 2 && CachedPlayer.LocalPlayer.PlayerControl == Medic.medic); // Medic only
                     // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
-                    hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic);
+                    hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic || Helpers.shouldShowGhostInfo());
                 }
 
-                if (Camouflager.camouflageTimer <= 0f && MapOptions.firstKillPlayer != null && MapOptions.shieldFirstKill && ((target == MapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == MapOptions.firstKillPlayer))) {
+                if (Camouflager.camouflageTimer <= 0f && TORMapOptions.firstKillPlayer != null && TORMapOptions.shieldFirstKill && ((target == TORMapOptions.firstKillPlayer && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == TORMapOptions.firstKillPlayer))) {
                     hasVisibleShield = true;
                     color = Color.blue;
                 }
@@ -279,6 +279,12 @@ namespace TheOtherRoles.Patches {
                 Deputy.handcuffedKnows.Remove(CachedPlayer.LocalPlayer.PlayerId);
                 // Resets the buttons
                 Deputy.setHandcuffedKnows(false);
+                
+                // Ghost info
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                writer.Write((byte)RPCProcedure.GhostInfoTypes.HandcuffOver);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
             
         }
@@ -504,7 +510,7 @@ namespace TheOtherRoles.Patches {
 
                     var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(p.Data);
                     string roleNames = RoleInfo.GetRolesString(p, true, false);
-                    string roleText = RoleInfo.GetRolesString(p, true, MapOptions.ghostsSeeModifier);
+                    string roleText = RoleInfo.GetRolesString(p, true, TORMapOptions.ghostsSeeModifier);
                     string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({tasksCompleted}/{tasksTotal})</color>" : "";
 
                     string playerInfoText = "";
@@ -519,15 +525,15 @@ namespace TheOtherRoles.Patches {
                         }
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                     }
-                    else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
+                    else if (TORMapOptions.ghostsSeeRoles && TORMapOptions.ghostsSeeInformation) {
                         playerInfoText = $"{roleText} {taskInfo}".Trim();
                         meetingInfoText = playerInfoText;
                     }
-                    else if (MapOptions.ghostsSeeTasks) {
+                    else if (TORMapOptions.ghostsSeeInformation) {
                         playerInfoText = $"{taskInfo}".Trim();
                         meetingInfoText = playerInfoText;
                     }
-                    else if (MapOptions.ghostsSeeRoles || (Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target)) {
+                    else if (TORMapOptions.ghostsSeeRoles || (Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target)) {
                         playerInfoText = $"{roleText}";
                         meetingInfoText = playerInfoText;
                     }
@@ -587,41 +593,27 @@ namespace TheOtherRoles.Patches {
         }
 
         static void snitchUpdate() {
-            if (Snitch.localArrows == null) return;
-
-            foreach (Arrow arrow in Snitch.localArrows) arrow.arrow.SetActive(false);
-
-            if (Snitch.snitch == null || Snitch.snitch.Data.IsDead) return;
+            if (Snitch.snitch == null) return;
+            bool snitchIsDead = Snitch.snitch.Data.IsDead;
 
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
             int numberOfTasks = playerTotal - playerCompleted;
 
-            if (numberOfTasks <= Snitch.taskCountForReveal && (CachedPlayer.LocalPlayer.Data.Role.IsImpostor || (Snitch.includeTeamJackal && (CachedPlayer.LocalPlayer.PlayerControl == Jackal.jackal || CachedPlayer.LocalPlayer.PlayerControl == Sidekick.sidekick)))) {
-                if (Snitch.localArrows.Count == 0) Snitch.localArrows.Add(new Arrow(Color.blue));
-                if (Snitch.localArrows.Count != 0 && Snitch.localArrows[0] != null) {
-                    Snitch.localArrows[0].arrow.SetActive(true);
-                    Snitch.localArrows[0].Update(Snitch.snitch.transform.position);
+            if (Snitch.isRevealed && (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor || Helpers.isNeutral(CachedPlayer.LocalPlayer.PlayerControl))) {
+                if (Snitch.text == null) {
+                    Snitch.text = GameObject.Instantiate(FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText, FastDestroyableSingleton<HudManager>.Instance.transform);
+                    Snitch.text.enableWordWrapping = false;
+                    Snitch.text.transform.localScale = Vector3.one * 0.75f;
+                    Snitch.text.transform.localPosition += new Vector3(0f, 1.8f, -69f);
+                    Snitch.text.gameObject.SetActive(true);
+                } else {
+                    Snitch.text.text = $"Snitch is alive: " + playerCompleted + "/" + playerTotal;
+                    if (snitchIsDead) Snitch.text.text = $"Snitch is dead!";
                 }
-            }
-            else if (CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch && numberOfTasks == 0) {
-                int arrowIndex = 0;
-                foreach (PlayerControl p in CachedPlayer.AllPlayers)
-                {
-                    bool arrowForImp = p.Data.Role.IsImpostor;
-                    bool arrowForTeamJackal = Snitch.includeTeamJackal && (p == Jackal.jackal || p == Sidekick.sidekick);
 
-                    if (!p.Data.IsDead && (arrowForImp || arrowForTeamJackal)) {
-                        if (arrowIndex >= Snitch.localArrows.Count) {
-                            Snitch.localArrows.Add(new Arrow(Palette.ImpostorRed));
-                        }
-                        if (arrowIndex < Snitch.localArrows.Count && Snitch.localArrows[arrowIndex] != null) {
-                            Snitch.localArrows[arrowIndex].arrow.SetActive(true);
-                            Snitch.localArrows[arrowIndex].Update(p.transform.position, (arrowForTeamJackal && Snitch.teamJackalUseDifferentArrowColor ? Jackal.color : Palette.ImpostorRed));
-                        }
-                        arrowIndex++;
-                    }
-                }
             }
+            if (snitchIsDead) return;
+            if (numberOfTasks <= Snitch.taskCountForReveal) Snitch.isRevealed = true;
         }
 
         static void bountyHunterUpdate() {
@@ -633,7 +625,7 @@ namespace TheOtherRoles.Patches {
                 if (BountyHunter.cooldownText != null && BountyHunter.cooldownText.gameObject != null) UnityEngine.Object.Destroy(BountyHunter.cooldownText.gameObject);
                 BountyHunter.cooldownText = null;
                 BountyHunter.bounty = null;
-                foreach (PoolablePlayer p in MapOptions.playerIcons.Values) {
+                foreach (PoolablePlayer p in TORMapOptions.playerIcons.Values) {
                     if (p != null && p.gameObject != null) p.gameObject.SetActive(false);
                 }
                 return;
@@ -654,17 +646,24 @@ namespace TheOtherRoles.Patches {
                 BountyHunter.bounty = possibleTargets[TheOtherRoles.rnd.Next(0, possibleTargets.Count)];
                 if (BountyHunter.bounty == null) return;
 
+                // Ghost Info
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                writer.Write((byte)RPCProcedure.GhostInfoTypes.BountyTarget);
+                writer.Write(BountyHunter.bounty.PlayerId);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+
                 // Show poolable player
                 if (FastDestroyableSingleton<HudManager>.Instance != null && FastDestroyableSingleton<HudManager>.Instance.UseButton != null) {
-                    foreach (PoolablePlayer pp in MapOptions.playerIcons.Values) pp.gameObject.SetActive(false);
-                    if (MapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)
-                        MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject.SetActive(true);
+                    foreach (PoolablePlayer pp in TORMapOptions.playerIcons.Values) pp.gameObject.SetActive(false);
+                    if (TORMapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && TORMapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)
+                        TORMapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject.SetActive(true);
                 }
             }
 
             // Hide in meeting
-            if (MeetingHud.Instance && MapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)
-                MapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject.SetActive(false);
+            if (MeetingHud.Instance && TORMapOptions.playerIcons.ContainsKey(BountyHunter.bounty.PlayerId) && TORMapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject != null)
+                TORMapOptions.playerIcons[BountyHunter.bounty.PlayerId].gameObject.SetActive(false);
 
             // Update Cooldown Text
             if (BountyHunter.cooldownText != null) {
@@ -1051,6 +1050,7 @@ namespace TheOtherRoles.Patches {
                 miniCooldownUpdate();
                 // Chameleon (invis stuff, timers)
                 Chameleon.update();
+                Bomb.update();
 
                 // -- GAME MODE --
                 hunterUpdate();
@@ -1114,6 +1114,13 @@ namespace TheOtherRoles.Patches {
                         if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                         {
                             FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer.PlayerControl, msg);
+
+                            // Ghost Info
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                            writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                            writer.Write((byte)RPCProcedure.GhostInfoTypes.DetectiveOrMedicInfo);
+                            writer.Write(msg);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
                         }
                         if (msg.IndexOf("who", StringComparison.OrdinalIgnoreCase) >= 0)
                         {
@@ -1155,7 +1162,7 @@ namespace TheOtherRoles.Patches {
                 target.clearAllTasks();
 
             // First kill (set before lover suicide)
-            if (MapOptions.firstKillName == "") MapOptions.firstKillName = target.Data.PlayerName;
+            if (TORMapOptions.firstKillName == "") TORMapOptions.firstKillName = target.Data.PlayerName;
 
             // Lover suicide trigger on murder
             if ((Lovers.lover1 != null && target == Lovers.lover1) || (Lovers.lover2 != null && target == Lovers.lover2)) {
@@ -1180,8 +1187,8 @@ namespace TheOtherRoles.Patches {
             }
 
             // Seer show flash and add dead player position
-            if (Seer.seer != null && CachedPlayer.LocalPlayer.PlayerControl == Seer.seer && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
-                Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));
+            if (Seer.seer != null && (CachedPlayer.LocalPlayer.PlayerControl == Seer.seer || Helpers.shouldShowGhostInfo()) && !Seer.seer.Data.IsDead && Seer.seer != target && Seer.mode <= 1) {
+                Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f), message : "Seer Info: Someone Died");
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
 
@@ -1261,12 +1268,12 @@ namespace TheOtherRoles.Patches {
                 int visibleCounter = 0;
                 Vector3 bottomLeft = IntroCutsceneOnDestroyPatch.bottomLeft + new Vector3(-0.25f, -0.25f, 0);
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                    if (!MapOptions.playerIcons.ContainsKey(p.PlayerId) || p.Data.Role.IsImpostor) continue;
+                    if (!TORMapOptions.playerIcons.ContainsKey(p.PlayerId) || p.Data.Role.IsImpostor) continue;
                     if (p.Data.IsDead || p.Data.Disconnected) {
-                        MapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
+                        TORMapOptions.playerIcons[p.PlayerId].gameObject.SetActive(false);
                     }
                     else {
-                        MapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
+                        TORMapOptions.playerIcons[p.PlayerId].transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.35f;
                         visibleCounter++;
                     }
                 }
@@ -1364,15 +1371,40 @@ namespace TheOtherRoles.Patches {
     public static class PlayerPhysicsFixedUpdate {
         public static void Postfix(PlayerPhysics __instance)
         {
+            bool shouldInvert = (Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 && Invert.meetings > 0) ^ EventUtility.eventInvert;  // xor. if already invert, eventInvert will turn it off for 10s
             if (__instance.AmOwner &&
                 AmongUsClient.Instance &&
                 AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
                 !CachedPlayer.LocalPlayer.Data.IsDead && 
-                Invert.invert.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0 && 
-                Invert.meetings > 0 && 
+                shouldInvert && 
                 GameData.Instance && 
                 __instance.myPlayer.CanMove)  
                 __instance.body.velocity *= -1;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
+    public static class IsFlashlightEnabledPatch {
+        public static bool Prefix(ref bool __result) {
+            __result = false;
+            if (!CachedPlayer.LocalPlayer.Data.IsDead && Lighter.lighter != null && Lighter.lighter.PlayerId == CachedPlayer.LocalPlayer.PlayerId) {
+                __result = true;
+            }
+
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.AdjustLighting))]
+    public static class AdjustLight {
+        public static bool Prefix(PlayerControl __instance) {
+            if (__instance == null || CachedPlayer.LocalPlayer == null || Lighter.lighter == null) return true;
+
+            bool hasFlashlight = !CachedPlayer.LocalPlayer.Data.IsDead && Lighter.lighter.PlayerId == CachedPlayer.LocalPlayer.PlayerId;
+            __instance.SetFlashlightInputMethod();
+            __instance.lightSource.SetupLightingForGameplay(hasFlashlight, Lighter.flashlightWidth, __instance.TargetFlashlight.transform);
+
+            return false;
         }
     }
 }

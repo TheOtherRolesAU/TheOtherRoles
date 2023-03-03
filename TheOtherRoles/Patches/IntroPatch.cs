@@ -36,7 +36,7 @@ namespace TheOtherRoles.Patches {
                    // PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, player.PetSlot);
                     player.cosmetics.nameText.text = data.PlayerName;
                     player.SetFlipX(true);
-                    MapOptions.playerIcons[p.PlayerId] = player;
+                    TORMapOptions.playerIcons[p.PlayerId] = player;
                     player.gameObject.SetActive(false);
 
                     if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist) {
@@ -81,8 +81,8 @@ namespace TheOtherRoles.Patches {
             SoundEffectsManager.Load();
 
             // First kill
-            if (AmongUsClient.Instance.AmHost && MapOptions.shieldFirstKill && MapOptions.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
-                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(MapOptions.firstKillName));
+            if (AmongUsClient.Instance.AmHost && TORMapOptions.shieldFirstKill && TORMapOptions.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
+                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(TORMapOptions.firstKillName));
                 if (target != null) {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetFirstKill, Hazel.SendOption.Reliable, -1);
                     writer.Write(target.PlayerId);
@@ -90,7 +90,9 @@ namespace TheOtherRoles.Patches {
                     RPCProcedure.setFirstKill(target.PlayerId);
                 }
             }
-            MapOptions.firstKillName = "";
+            TORMapOptions.firstKillName = "";
+
+            EventUtility.gameStartsUpdate();
 
             if (HideNSeek.isHideNSeekGM) {
                 foreach (PlayerControl player in HideNSeek.getHunters()) {
@@ -193,11 +195,22 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
+            static int seed = 0;
             static public void SetRoleTexts(IntroCutscene __instance) {
                 // Don't override the intro of the vanilla roles
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
                 RoleInfo roleInfo = infos.Where(info => !info.isModifier).FirstOrDefault();
                 RoleInfo modifierInfo = infos.Where(info => info.isModifier).FirstOrDefault();
+
+                if (EventUtility.isEnabled) {
+                    var roleInfos = RoleInfo.allRoleInfos.Where(x => !x.isModifier).ToList();
+                    if (roleInfo.isNeutral) roleInfos.RemoveAll(x => !x.isNeutral);
+                    if (roleInfo.color == Palette.ImpostorRed) roleInfos.RemoveAll(x => x.color != Palette.ImpostorRed);
+                    if (!roleInfo.isNeutral && roleInfo.color != Palette.ImpostorRed) roleInfos.RemoveAll(x => x.color == Palette.ImpostorRed || x.isNeutral);
+                    var rnd = new System.Random(seed);
+                    roleInfo = roleInfos[rnd.Next(roleInfos.Count)];
+                }
+
                 __instance.RoleBlurbText.text = "";
                 if (roleInfo != null) {
                     __instance.RoleText.text = roleInfo.name;
@@ -222,6 +235,7 @@ namespace TheOtherRoles.Patches {
             }
             public static bool Prefix(IntroCutscene __instance) {
                 if (!CustomOptionHolder.activateRoles.getBool()) return true;
+                seed = rnd.Next(5000);
                 FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     SetRoleTexts(__instance);
                 })));
@@ -252,17 +266,12 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    /*[HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
+    [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
     public static class ShouldAlwaysHorseAround {
-        public static bool isHorseMode;
         public static bool Prefix(ref bool __result) {
-            if (isHorseMode != MapOptions.enableHorseMode && LobbyBehaviour.Instance != null) __result = isHorseMode;
-            else {
-                __result = MapOptions.enableHorseMode;
-                isHorseMode = MapOptions.enableHorseMode;
-            }
+            __result = false;
             return false;
         }
-    }*/
+    }
 }
 
