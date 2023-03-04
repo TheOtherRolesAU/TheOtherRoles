@@ -571,43 +571,6 @@ namespace TheOtherRoles {
                 }
             }
 
-            setOptions(
-                new List<GameOptionsMenu>{torMenu, hideNSeekMenu},
-                new List<List<OptionBehaviour>> {torOptions, hideNSeekOptions}, 
-                new List<GameObject> {torSettings, hideNSeekSettings}
-            );
-
-            torSettings.gameObject.SetActive(true);
-            torTabHighlight.enabled = true;
-            gameSettingMenu.RegularGameSettings.SetActive(false);
-            gameSettingMenu.GameSettingsHightlight.enabled = false;
-        }
-
-        
-        private static void setListener(Dictionary<GameObject, SpriteRenderer> settingsHighlightMap, int index) {
-            foreach (KeyValuePair<GameObject, SpriteRenderer> entry in settingsHighlightMap) {
-                entry.Key.SetActive(false);
-                entry.Value.enabled = false;
-            }
-            settingsHighlightMap.ElementAt(index).Key.SetActive(true);
-            settingsHighlightMap.ElementAt(index).Value.enabled = true;
-        }
-
-        private static void destroyOptions (List<List<OptionBehaviour>> optionBehavioursList) {
-           foreach (List<OptionBehaviour> optionBehaviours in optionBehavioursList) {
-                foreach (OptionBehaviour option in optionBehaviours)
-                    UnityEngine.Object.Destroy(option.gameObject);
-            }
-        }
-
-        private static bool setNames (Dictionary<string, string> gameObjectNameDisplayNameMap) {
-            foreach (KeyValuePair <string, string> entry in gameObjectNameDisplayNameMap) {
-                if (GameObject.Find(entry.Key) != null) { // Settings setup has already been performed, fixing the title of the tab and returning
-                    GameObject.Find(entry.Key).transform.FindChild("GameGroup").FindChild("Text").GetComponent<TMPro.TextMeshPro>().SetText(entry.Value);
-                    return true;
-                }
-            }
-
             return false;
         }
 
