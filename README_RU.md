@@ -1,43 +1,45 @@
+[EN](./README.md) | **RU**
+
+> Перевод сокращенной версии README.md на русский язык. Перевод не является официальным и может содержать ошибки. Для более подробной информации о моде, пожалуйста, обратитесь к оригинальной версии [README.md](./README.md).
+
 ![eisbison banner](./Images/TOR_logo.png)
 
 <p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
 
-This mod is not affiliated with Among Us or Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.</p>
+Этот мод не связан с Among Us или Innersloth LLC, и содержащийся в нем контент не одобрен и не спонсируется Innersloth LLC. Часть материалов, содержащихся в настоящем документе, является собственностью Innersloth LLC. © Innersloth LLC.</p>
 
 <p align="center">
-  To other mod devs: for usage of our code, please read and respect the <a href="#license">license</a></p>
+  Другим разработчикам модов: для использования нашего кода, пожалуйста, прочитайте и уважайте <a href="#license">лицензию</a></p>
 
 [![Discord](./Images/TOR_server.png)](https://discord.gg/77RkMJHWsM)
 ![eisbison infographic](./Images/TOR_Roles.png)
 
 # The Other Roles
 
-The **The Other Roles** is a mod for [Among Us](https://store.steampowered.com/app/945360/Among_Us) which adds many new roles, new [Settings](#settings) and new [Custom Hats](#custom-hats) to the game.
+**The Other Roles** это модификация для [Among Us](https://store.steampowered.com/app/945360/Among_Us) которая добавляет в игру много новых ролей, новые [Настройки](#settings) и новые [Кастомные скины](#custom-hats).
 Even more roles are coming soon. :)
 
-| Impostor                        | Crewmate                          | Neutral                   | Modifier                        | Gamemode                                                                                                    |
-| ------------------------------- | --------------------------------- | ------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| [Godfather (Mafia)](#mafia)     | [Mayor](#mayor)                   | [Jester](#jester)         | [Bloody](#bloody)               | [Classic](#roles)                                                                                           |
-| [Mafioso (Mafia)](#mafia)       | [Engineer](#engineer)             | [Arsonist](#arsonist)     | [Anti Teleport](#anti-teleport) | [Guesser Modifier](#guesser-modifier)                                                                       |
-| [Janitor (Mafia)](#mafia)       | [Sheriff](#sheriff)               | [Jackal](#jackal)         | [Tie Breaker](#tie-breaker)     | [Hide 'n' Seek](#hide-n-seek)                                                                               |
-| [Morphling](#morphling)         | [Deputy](#deputy)                 | [Sidekick](#sidekick)     | [Bait](#bait)                   | [Vanilla Hide 'n' Seek](https://www.innersloth.com/new-game-mode-hide-n-seek-is-here-emergency-meeting-35/) |
-| [Camouflager](#camouflager)     | [Lighter](#lighter)               | [Vulture](#vulture)       | [Lovers](#lovers)               |
-| [Vampire](#vampire)             | [Detective](#detective)           | [Lawyer](#lawyer)         | [Sunglasses](#sunglasses)       |
-| [Eraser](#eraser)               | [Time Master](#time-master)       | [Prosecutor](#prosecutor) | [Mini](#mini)                   |
-| [Trickster](#trickster)         | [Medic](#medic)                   | [Pursuer](#pursuer)       | [VIP](#vip)                     |
-| [Cleaner](#cleaner)             | [Swapper](#swapper)               | [Thief](#thief)           | [Invert](#invert)               |
-| [Warlock](#warlock)             | [Seer](#seer)                     |                           | [Chameleon](#chameleon)         |
-| [Bounty Hunter](#bounty-hunter) | [Hacker](#hacker)                 |                           | [Shifter](#shifter)             |
-| [Witch](#witch)                 | [Tracker](#tracker)               |                           |                                 |
-| [Ninja](#ninja)                 | [Snitch](#snitch)                 |                           |                                 |
-| [Bomber](#bomber)               | [Spy](#spy)                       |                           |                                 |
-| [Evil Guesser](#guesser)        | [Portalmaker](#portalmaker)       |                           |                                 |
-|                                 | [Security Guard](#security-guard) |                           |                                 |
-|                                 | [Medium](#medium)                 |                           |                                 |
-|                                 | [Trapper](#trapper)               |                           |                                 |
-|                                 | [Nice Guesser](#guesser)          |                           |                                 |
-
-The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
+| Импостеры                                            | Мирные                                          | Нейтралы                            | Модификаторы                                   | Режимы игры                                                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------- | ----------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [Godfather (Mafia)](#mafia--мафия)                   | [Mayor](#mayor--мэр)                            | [Jester](#jester--джокер)           | [Bloody](#bloody--кровавый)                    | [Classic](#роли)                                                                                            |
+| [Mafioso (Mafia)](#mafia--мафия)                     | [Engineer](#engineer--инженер)                  | [Arsonist](#arsonist--поджигатель)  | [Anti Teleport](#anti-teleport--антителепорт)  | [Guesser Modifier](#guesser-modifier)                                                                       |
+| [Janitor (Mafia)](#mafia--мафия)                     | [Sheriff](#sheriff--шериф)                      | [Jackal](#jackal--шакал)            | [Tie Breaker](#tie-breaker--тай-брейкер)       | [Hide 'n' Seek](#hide-n-seek)                                                                               |
+| [Morphling](#morphling--морфлинг)                    | [Deputy](#deputy--помошник-шерифа)              | [Sidekick](#sidekick--кореш)        | [Bait](#bait--приманка)                        | [Vanilla Hide 'n' Seek](https://www.innersloth.com/new-game-mode-hide-n-seek-is-here-emergency-meeting-35/) |
+| [Camouflager](#camouflager--камуфляж)                | [Lighter](#lighter--фонарик)                    | [Vulture](#vulture--стервятник)     | [Lovers](#lovers--любовники)                   |
+| [Vampire](#vampire--вампир)                          | [Detective](#detective--детектив)               | [Lawyer](#lawyer--адвокат)          | [Sunglasses](#sunglasses--солнцезащитные-очки) |
+| [Eraser](#eraser--ластик)                            | [Time Master](#time-master--хозяин-времени)     | [Prosecutor](#prosecutor--прокурор) | [Mini](#mini--мини)                            |
+| [Trickster](#trickster--трикстер)                    | [Medic](#medic--медик)                          | [Pursuer](#pursuer--преследователь) | [VIP](#vip)                                    |
+| [Cleaner](#cleaner--чистильщик)                      | [Swapper](#swapper--сваппер)                    | [Thief](#thief--вор)                | [Invert](#invert--инвертирование)              |
+| [Warlock](#warlock--чернокнижник)                    | [Seer](#seer--провидец)                         |                                     | [Chameleon](#chameleon--хамелеон)              |
+| [Bounty Hunter](#bounty-hunter--охотник-за-головами) | [Hacker](#hacker--хакер)                        |                                     | [Shifter](#shifter--шифтер)                    |
+| [Witch](#witch--ведьма)                              | [Tracker](#tracker--трекер)                     |                                     |                                                |
+| [Ninja](#ninja--ниндзя)                              | [Snitch](#snitch--снитч)                        |                                     |                                                |
+| [Bomber](#bomber--бомбардир)                         | [Spy](#spy--шпион)                              |                                     |                                                |
+| [Evil Guesser](#guesser--угадывающий)                | [Portalmaker](#portalmaker--создатель-порталов) |                                     |                                                |
+|                                                      | [Security Guard](#security-guard--охранник)     |                                     |                                                |
+|                                                      | [Medium](#medium--медиум)                       |                                     |                                                |
+|                                                      | [Trapper](#trapper--ловец)                      |                                     |                                                |
+|                                                      | [Nice Guesser](#guesser--угадывающий)           |                                     |                                                |
 
 # Releases
 
@@ -117,9 +119,9 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2020.12.19s | v1.1 | [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v1.1/TheOtherRoles.zip)
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 </details>
-  
-  
+
 # Changelog
+
 <details>
   <summary>Click to show the Changelog</summary>
 
@@ -736,39 +738,41 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 - A bug was removed where the game of the Lovers crashed if they were the last players killed by the host of the lobby.
 </details>
 
-# Installation
+# Установка
 
-## Windows Installation Steam
+## Windows Steam
 
-1. Download the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
-2. Find the folder of your game. You can right click on the game in your library, a menu will appear, click on properties, local data, browse
-3. Go back one folder to common and make a copy of your Among Us game folder and paste it somewhere on the same drive.
-4. Now unzip and drag or extract the files from the .zip into your Among Us game folder that you just copied, at the `.exe` level (just into the folder).
-5. Run the game by starting the .exe from this folder (the first launch might take a while).
+1. Скачать новейший [релиз](https://github.com/Eisbison/TheOtherRoles/releases/latest)
+2. Найдите папку с вашей игрой. Вы можете щелкнуть правой кнопкой мыши игру в своей библиотеке, появится меню, щелкните свойства, локальные данные, просмотреть
+3. Поднимитесь на уровень вверх, сделайте копию папки с игрой Among Us.
+4. Теперь разархивируйте и перетащите или извлеките файлы из .zip в только что **скопированную папку** с игрой Among Us на уровне `.exe` (только в папку).
+5. Запустите игру, запустив .exe из этой папки (первый запуск может занять некоторое время).
 
-Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
+Не работает? Возможно, вам надо установить зависимость [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
-## Windows Installation Epic
+## Windows Epic
 
-1. Download the newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest)
-2. Find the folder of your game. Should be stored in "Epic/AmongUs" (wherever you installed Epic on your PC)
-3. Now unzip and drag or extract the files from the .zip into the original Epic Among Us game folder.
-4. Run the game by starting the game in your Epic Games launcher (the first launch might take a while).
+1. Скачать новейший [релиз](https://github.com/Eisbison/TheOtherRoles/releases/latest)
+2. Найдите папку с вашей игрой. Должна находиться по пути "Epic/AmongUs"
+3. Теперь разархивируйте и перетащите или извлеките файлы из .zip в **оригинальную папку** Epic Among Us.
+4. Запустите игру через Epic Games launcher (первый запуск может занять некоторое время).
 
-Not working? You might want to install the dependency [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
+Не работает? Возможно, вам надо установить зависимость [vc_redist](https://aka.ms/vs/16/release/vc_redist.x86.exe)
 
 ![Install](https://i.imgur.com/pvBAyZN.png)
 
-## Linux Installation
+## Linux
 
-1. Install Among Us via Steam
-2. Download newest [release](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
-3. Enable winhttp.dll via the proton winecfg (https://docs.bepinex.dev/articles/advanced/proton_wine.html)
-4. Launch the game via Steam
+1. Установите игру через Steam
+2. Скачать новейший [релиз](https://github.com/Eisbison/TheOtherRoles/releases/latest) and extract it to ~/.steam/steam/steamapps/common/Among Us
+3. Включите winhttp.dll через proton winecfg (https://docs.bepinex.dev/articles/advanced/proton_wine.html)
+4. Запустите игру через Steam
 
 ## The Other Roles Custom Servers
 
-**A custom server is not necessary and official servers are working just fine with the mod, but in case you want to set up and host your own server, here's a guide for you to follow.**
+**Пользовательский сервер не обязателен, и официальные серверы прекрасно работают с модом, но если вы хотите настроить и разместить свой собственный сервер, вот руководство, которому вы можете следовать.**
+
+Если вам необходим этот сервер, вы справитесь и с английской документацией
 
 **Setup the Server:**
 
@@ -825,47 +829,47 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**\
 [Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris)
 
-# Settings
+# Настройки
 
-The mod adds a few new settings to Among Us (in addition to the role settings):
+Мод добавляет в Among Us несколько новых настроек (в дополнение к настройкам ролей):
 
-- **Number of Crewmates:** The number of Crewmate roles can be set inside a lobby.
-- **Fill Crewmate Roles (Ignores Min/Max):** Everyone will get a role, even if the settings say there would be plain Crewmates (needs enough roles over 0%).
-- **Number of Neutrals:** The number of Neutral roles can be set inside a lobby.
-- **Number of Impostors:** The number of Impostor roles can be set inside a lobby.
-- **Number of Modifiers:** The number of Modifiers can be set inside a lobby.
-- **Map:** The map can be changed inside a lobby.
-- **Maximum Number Of Meetings:** You can set the maximum number of meetings that can be called in total (Every player still has personal maximum of buttons, but if the maximum number of meetings is reached you can't use your meetings even if you have some left. Impostor and Jackal meetings also count).
-- **Allow Skips On Emergency Meetings:** If set to false, there will not be a skip button in emergency meetings. If a player does not vote, they'll vote themself.
-- **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can also see the name of the Spy and everyone can still see the age of the mini.
-- **Allow Parallel MedBay Scans:** Allows players to perform their MedBay scans at the same time.
-- **Shield Last Game First Kill** The first killed player of the previous round will be shielded for all players visible until the first meeting.
-- **Finish Tasks Before Haunting Or Zooming Out ** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
+- **Number of Crewmates:** Количество мирных ролей по команде можно установить в лобби.
+- **Fill Crewmate Roles (Ignores Min/Max):** Каждый игкрок получит роль (нужно других ролей больше 0%).
+- **Number of Neutrals:** Количество Нейтральных ролей можно установить в лобби.
+- **Number of Impostors:** Количество Импостеров ролей можно установить в лобби.
+- **Number of Modifiers:** Количество Модификаторов можно установить в лобби.
+- **Map:** Карту можно настроить в лобби.
+- **Maximum Number Of Meetings:** Вы можете установить максимальное количество встреч, которые можно созвать в общей сложности (У каждого игрока по-прежнему есть личный максимум кнопок, но если максимальное количество встреч достигнуто, вы не можете использовать свои встречи, даже если у вас их осталось. Самозванец и Шакал встречи тоже учитываются).
+- **Allow Skips On Emergency Meetings:** Если установлено значение false, на экстренных собраниях не будет кнопки пропуска. Если игрок не голосует, он будет голосовать сам.
+- **Hide Player Names:** Скрывает имена всех игроков с неизвестной вам ролью. Любители команд/самозванцы/шакалы по-прежнему видят имена своих товарищей по команде. Самозванцы также могут видеть имя шпиона, и все по-прежнему могут видеть возраст мини.
+- **Allow Parallel MedBay Scans:** Позволяет игрокам выполнять сканирование MedBay одновременно (на классическо карте).
+- **Shield Last Game First Kill** Первый убитый игрок предыдущего раунда будет под щитом до первой встречи.
+- **Finish Tasks Before Haunting Or Zooming Out** Функция отделения масштаба и слежедние за игроком будет отключена, пока призрак не выполнит свои задания
 - **Admin Table Shows Dead Bodies**
-- **Cams Switch To Night Vision If Lights Are Off** No colors and cosmetics can be seen on the cameras when the lights are off. Mini can be spottet!
+- **Cams Switch To Night Vision If Lights Are Off** Когда выключен свет, на камерах не видно цветов игроков. Mini can be spottet!
 - **Impostor Vision Ignores Night Vision Cams**
-- **Play On A Random Map** If enabled it allows you to set percentages for each current map, except ehT dlekS.
+- **Play On A Random Map** Карта выбирается рандомно в соответствие с нижекуказанными процентами.
 - **Ghosts Can See Roles.**
 - **Ghosts Can See Votes.**
 - **Ghosts Can Additionally See Modifier.**
-- **Ghosts See Tasks And Other Info** Other Info: Things like who is cursed, cuffed etc. but also the medic shield, flashes, engineer fix etc.
-- **The map is accessable during a meeting and will show your last location when a body gets reported/meeting gets called.**
+- **Ghosts See Tasks And Other Info** Призраки видят всю информацию об игроках, кд, щиты, проклятия.
+- **The map is accessable during a meeting and will show your last location when a body gets reported/meeting gets called.** Карта доступна во время собрания
 - **When you're a ghost and done with tasks, you'll get a zoom out/overview function.**
-- **Task Counts:** You are now able to select more tasks.
-- **Role Summary:** When a game ends there will be a list of all players, their roles, their task progression and how many player a killer killed.
-- **Darker/Lighter:** Displays color type of each player in meetings.
-- **Show The Settings In-Game** You can use the button located under the map button or the F1-key to open or close the display of the lobby settings
+- **Task Counts:** Теперь вы можете выбрать больше задач.
+- **Role Summary:** Когда игра закончится, появится список всех игроков, их роли, прогресс их заданий и сколько игроков убил убийца.
+- **Darker/Lighter:** Показывает цвет скина игрока на голосование.
+- **Show The Settings In-Game** Вы можете использовать кнопку, расположенную под кнопкой карты, или клавишу F1, чтобы открыть или закрыть отображение настроек лобби.
 
-### Task Count Limits per map
+### Лимит заданий для карт
 
-You can configure:
+Можно сконфигурировать:
 
-- Up to 4 common tasks
-- Up to 23 short tasks
-- Up to 15 long tasks
+- До 4 common заданий
+- До 23 short заданий
+- До 15 long заданий
 
-Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
-Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
+Обратите внимание, что если настроенная опция превышает доступное количество задач карты, задачи будут ограничены этим количеством задач.. \
+Пример: если вы настроите 4 Common задачи для дирижабля, члены экипажа получат только 2 Common задачи, так как дирижабль не предлагает более 2 Common задач.
 
 | Map           | Common Tasks | Short Tasks | Long Tasks |
 | ------------- | :----------: | :---------: | :--------: |
@@ -876,20 +880,20 @@ Example: If you configure 4 common tasks on Airship crewmates will only receive 
 
 ---
 
-### Random Maps
+### Случайные карты
 
-**Play On A Random Map** If enabled it allows you to set percentages for each current map.
+**Play On A Random Map** Если он включен, он позволяет вам устанавливать вероятность для каждой карты.
 
-**Finish Tasks Before Haunting Or Zooming Out** You have to finish your tasks before you get the possibility to zoom out.
+**Finish Tasks Before Haunting Or Zooming Out** Вы должны закончить свои задачи, прежде чем вы получите возможность уменьшить масштаб.
 
-**Use Random Map Setting Presets:** When this option is turned on, the game will switch to the `Random Preset <MapName>` when a game is started on a random map. **This includes vanilla options!**. This makes it possible to e.g. play with less tasks on large maps like Airship.
-The game will **remain** in the preset for that random map after the match.
+**Use Random Map Setting Presets:** Когда эта опция включена, игра переключается н `Random Preset <MapName>` когда игра запускается на случайной карте. **This includes vanilla options!**. Это позволяет, например. играйте с меньшим количеством задач на больших картах, таких как дирижабль.
+Игра **остается** в предустановке для этой случайной карты после матча.
 
-The random map presets can still be used like normal presets, if you **turn of** `Play On A Random Map` (make sure you do this in all presets you are using).
+Предустановки случайных карт по-прежнему можно использовать как обычные предустановки, если вы **отключите** `Play On A Random Map` (убедитесь, что вы делаете это во всех используемых предустановках).
 
-# Custom Hats
+# Кастомные шляпы
 
-## Create and submit new hat designs
+## Создание и отправка нового дизайна
 
 We're awaiting your creative hat designs and we'll integrate all the good ones in our mod.
 Here are a few instructions, on how to create a custom hat:
@@ -917,1354 +921,518 @@ Here are a few instructions, on how to create a custom hat:
 
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
-# Colors
+# Цвета
 
 ![TOR Colors](./Images/TOR_colors.jpg)
 
-# Roles
+# Роли
 
-## Role Assignment
+## Mafia / Мафия
 
-First you need to choose how many special roles of each kind (Impostor/Neutral/Crewmate) you want in the game.
-The count you set will only be reached, if there are enough Crewmates/Impostors in the game and if enough roles are set to be in the game (i.e. they are set to > 0%). The roles are then being distributed as follows:
+**Команда: Импостеры**
 
-- First all roles that are set to 100% are being assigned to arbitrary players.
-- After that each role that has 10%-90% selected adds 1-9 tickets to a ticket pool (there exists a ticket pool for Crewmates, Neutrals and Impostors). Then the roles will be selected randomly from the pools as long it's possible (until the selected number is reached, until there are no more Crewmates/Impostors or until there are no more tickets). If a role is selected from the pool, obviously all the tickets of that role are being removed.
-- The Mafia, Lovers and Mini are being selected independently (without using the ticket system) according to the spawn chance you selected. After that the Crewmate, Neutral and Impostor roles are selected and assigned in a random order.
+- Мафия - группа из трёх Импостеров.
+- Крестный Отец/Godfather работает как обычный Импостер.
+- Мафиозо/Mafioso - Импостер, который не может убивать, пока не умрет Крестный Отец.
+- Уборщик/Janitor - Импостер, который не может убивать, но может прятать (убирать) трупы.
+- Для активации Мафии должно быть 3 Импостера.
 
-**Example:**\
-Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
-Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
-Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
+## Morphling / Морфлинг
 
-## Mafia
+**Команда: Импостеры**
 
-### **Team: Impostors**
+- Может сканировать внешний вид игрока. Затем он может принять этот вид на 10 секунд.
+- Он уменьшается до размера Мини, когда копирует его внешний вид.
+- Хакер видит тот цвет на столе администратора, какой цвет у игрока, в которого он перевоплотился. Также меняется цвет следов (включая те, которые уже были на земле).
+- Другой Импостер по-прежнему видит, что Морфлинг Импостер (имя остается красным).
+- Индикатор щита изменяется соответствующим образом (индикатор Морфлинга получает или теряет индикатор щита).
+- Стрелки трекера продолжают работать.
 
-The Mafia are a group of three Impostors.\
-The Godfather works like a normal Impostor.\
-The Mafioso is an Impostor who cannot kill until the Godfather is dead.\
-The Janitor is an Impostor who cannot kill, but they can hide dead bodies instead.\
-\
-**NOTE:**
+## Camouflager / Камуфляж
 
-- There have to be 3 Impostors activated for the mafia to spawn.
+**Команда: Импостеры**
 
-### Game Options
+- Может дополнительно активировать режим камуфляжа. Режим камуфляжа длится 10 секунд, и пока он активен, все имена/животные/головные уборы игроков скрыты, а все игроки имеют одинаковый цвет.
+- Мини будет выглядеть, как все остальные игроки
+- Цвет следов становится серым (в том числе те, которые уже были на земле).
+- Хакер видит серые иконки на столе администратора.
+- Щит не виден.
+- Стрелки трекера продолжают работать.
 
-| Name               | Description |
-| ------------------ | :---------: |
-| Mafia Spawn Chance |      -      |
-| Janitor Cooldown   |      -      |
+## Vampire / Вампир
 
----
+**Команда: Импостеры**
 
-## Morphling
+- Может укусить другого игрока. Укушенные игроки умирают через заданное время.
+- Если шанс появления вампира больше 0 (даже если в игре нет вампира), все игроки могут положить по одному чесноку.
+- Если жертва находится рядом с чесноком, «Кнопка укуса» превращается в «Кнопку убийства» по умолчанию, и вампир может совершить только обычное убийство.
+- Если укушенный игрок ещё жив при вызове собрания, он умирает в начале этого собрания.
 
-### **Team: Impostors**
+## Eraser / Ластик
 
-The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.\
-\
-**NOTE:**
+**Команда: Импостеры**
 
-- They shrink to the size of the Mini when they copy its look.
-- The Hacker sees the new color on the admin table.
-- The color of the footprints changes accordingly (also the ones that were already on the ground).
-- The other Impostor still sees that they are an Impostor (the name remains red).
-- The shield indicator changes accordingly (the Morphling gains or loses the shield indicator).
-- Tracker arrows keep working.
+- Может стереть роль любого игрока.
+- Цель потеряет свою роль не мгновенно, а в самом конце собрания.
+- После каждого стирания КД увеличивается на 10 секунд.
+- По умолчанию Ластик может стереть всех, кроме Шпиона и других Импостеров
+- В зависимости от настроек Ластик также может стереть и их
 
-### Game Options
+## Trickster / Трикстер
 
-| Name                   |           Description            |
-| ---------------------- | :------------------------------: |
-| Morphling Spawn Chance |                -                 |
-| Morphling Cooldown     |                -                 |
-| Morph Duration         | Time the Morphling stays morphed |
+**Команда: Импостеры**
 
----
+- Может разместить 3 ящика, которые поначалу невидимы для других игроков.
+- Если Трикстер разместил все свои ящики, они будут преобразованы в вентиляционную сеть, которую может использовать только сам Трикстер, но ящики будут видны другим.
+- Если ящики превращаются в вентиляционную сеть, Трикстер получает новую способность «Выключение света», ограничивающую видимость неимпостеров, которую не могут исправить другие игроки. Освещение автоматически восстанавливается через некоторое время.
+- Импостеры получат текстовый индикатор в нижней части экрана, если свет выключен из-за способности Трикстера, а не саботажем.
 
-## Camouflager
+## Cleaner / Чистильщик
 
-### **Team: Impostors**
+**Команда: Импостеры**
 
-The Camouflager is an Impostor which can additionally activate a camouflage mode.\
-The camouflage mode lasts for 10s and while it is active, all player names/pets/hats\
-are hidden and all players have the same color.\
-\
-**NOTE:**
+- Может убирать трупы.
+- КД кнопок «Убить» и «Очистить» одно, что не позволяет им и убить, и убрать одновременно.
+- Если в игре есть Уборщик, не может быть Стервятника.
 
-- The Mini will look like all the other players
-- The color of the footprints turns gray (also the ones that were already on the ground).
-- The Hacker sees gray icons on the admin table
-- The shield is not visible anymore
-- Tracker arrows keep working
+## Warlock / Чернокнижник
 
-### Game Options
+**Команда: Импостеры**
 
-| Name                     |          Description          |
-| ------------------------ | :---------------------------: |
-| Camouflager Spawn Chance |               -               |
-| Camouflager Cooldown     |               -               |
-| Camo Duration            | Time players stay camouflaged |
+- Может проклясть другого игрока (проклятый игрок не получает уведомления).
+- Если проклятый игрок стоит рядом с другим игроком, Чернокнижник может убить этого игрока (независимо от того, как далеко от них находится сам Чернокнижник).
+- Выполнение убийства с помощью проклятого игрока снимет проклятие, после этого Чернокнижник не сможет двигаться в течение заданного периода времени.
+- Чернокнижник по-прежнему может совершать обычные убийства, но обе кнопки имеют одинаковое КД.
+- Чернокнижник может убить своих партнеров-импостеров (и даже себя), используя «проклятое убийство»
+- Обычное убийство не снимает проклятия.
 
----
+## Bounty Hunter / Охотник за головами
 
-## Vampire
+**Команда: Импостеры**
 
-### **Team: Impostors**
+- Цель охотника за головами (игрок, которого нужно убить) меняется после каждого собрания и по прошествии настраиваемого периода времени.
+- Если Охотник за головами убьет свою цель, КД его убийства уменьшится.
+- Убийство игрока, который не является его текущей целью, приводит к увеличению КД убийства.
+- В зависимости от настроек будет стрелка, указывающая на текущую цель.
+- Целью не будет Импостер, Шпион или Любовник и Охотника за головами.
+- Если цель умрет без участия Охотника за головами, таймер сбрасывается, и выбирается новая цель.
 
-The Vampire is an Impostor, that can bite other player. Bitten players die after a configurable amount of time.\
-If the Vampire spawn chance is greater 0 (even if there is no Vampire in the game), all players can place one garlic.\
-If a victim is near a garlic, the "Bite Button" turns into the default "Kill Button" and the Vampire can only perform a normal kill.\
-\
-**NOTE:**
+## Witch / Ведьма
 
-- If a bitten player is still alive when a meeting is being called, they die at the start of the meeting.
-- The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
-- If there is a Vampire in the game, there can't be a Warlock.
-- If the Vampire bites a player and the Thief kills the Vampire, the bite will still be performed, but the new Vampire will be displayed in the kill animation.
-- If the Vampire bites a player and gets killed before the bite is performed, the biten player will survive.
+**Команда: Импостеры**
 
-### Game Options
+- Может накладывать заклинания на других игроков.
+- Во время следующего собрания заколдованный игрок будет выделен и сразу после собрания умрет.
 
-| Name                          |                                                                Description                                                                |
-| ----------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------: |
-| Vampire Spawn Chance          |                                                                     -                                                                     |
-| Vampire Kill Delay            |                                                                     -                                                                     |
-| Vampire Cooldown              |                                                        Sets the kill/bite cooldown                                                        |
-| Vampire Can Kill Near Garlics | The Vampire can never bite when their victim is near a garlic. If this option is set to true, they can still perform a normal kill there. |
+Ниже перечислены несколько параметров, которые вы можете настроить по своему вкусу:
 
----
+- Если у игрока щит, то он будет помечен как заколдованный во время собрания, но не умрет.
+- Если ведьма погибнет до начала собрания или если ведьму угадывают во время собрания, заколдованный игрок будет подсвечен, но не умрет.
+- Исключение Ведьмы спасает всех заколдованных игроков.
 
-## Eraser
+## Ninja / Ниндзя
 
-### **Team: Impostors**
+**Команда: Импостеры**
 
-The Eraser is an Impostor that can erase the role of every player.\
-The targeted players will lose their role after the meeting right before a player is exiled.\
-After every erase, the cooldown increases by 10 seconds.\
-The erase will be performed, even if the Eraser or their target die before the next meeting.\
-By default the Eraser can erase everyone but the Spy and other Impostors.\
-Depending on the options they can also erase them (Impostors will lose their special Impostor ability).\
-\
-**NOTE:**
+- Может убивать любого игрока по всей карте.
+- Ниндзя отмечает игрока, затем телепортируется на позицию отмеченного игрока и убивает его.
+- В зависимости от настроек, вы можете знать, где ваш отмеченный игрок.
+- Если Ниндзя использует телепортируется, он оставляет след на небольшой период времени в обоих местах (откуда и куда он перенёсся).
+- При выполнении убийства ниндзя может быть невидимым в течение нескольких секунд (зависит от настроек)
+- След имеет более темный (черный) или более светлый (белый) цвет в зависимости от цвета игроков, который будет выцветать в зеленый
+- Отметка на отмеченном игроке будет сброшена после собрания или после использования возможности убить отмеченного игрока. Выполнение обычного убийства НЕ приведет к сбросу метки
+- Если Ниндзя попытается убить игрока под щитом, убийство не будет выполнено.
+- Если Ниндзя пытается убить Хозяина Времени, пока его щит активен, Ниндзя не будет телепортироваться на позицию игроков, но щит Хозяина Времени все равно будет активирован.
+- Если отмеченный игрок находится на другом этаже, стрелка всегда указывает на лифт.
 
-- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter saves the role of their target, depending on whom the Eraser erased).
-- As the erase is being triggered before the ejection of a player, a Jester win would not happen, as the erase will be triggered before.
-- Modifier will not be erased.
+## Bomber / Бомбардир
 
-### Game Options
+**Команда: Импостеры**
 
-| Name                    |                             Description                              |
-| ----------------------- | :------------------------------------------------------------------: |
-| Eraser Spawn Chance     |                                  -                                   |
-| Eraser Cooldown         | The Eraser's cooldown will increase by 10 seconds after every erase. |
-| Eraser Can Erase Anyone |    If set to false, they can't erase the Spy and other Impostors     |
+- Может заложить бомбы, чтобы убить сразу несколько игроков
+- Также может выполнить обычное убийство, как все Импостеры.
+- Мирные могут обезвредить бомбу в зависимости от настроек.
+- Бомба не убьет игрока под щитом.
+- Бомба не убьет Мини, пока он не вырастет.
+- Бомба может убить бомбардира, а также их партнеров по команде
+- Визуальный индикатор медленно меняется на красный, пока бомба не взорвется.
+- Бомбу можно обезвредить, стоя на ней и зажимая предохранитель.
 
----
+## Guesser / Угадывающий
 
-## Trickster
+**Команда: Мирные или Импостеры**
 
-### **Team: Impostors**
+- Угадывающий может быть как мирным, так и импостером (в зависимости от настроек).
+- Может стрелять в игроков во время собрания, угадывая свою роль. Если догадка неверна, вместо этого умирает Угадывающий.
+- Вы можете выбрать, сколько игроков можно застрелить за игру и можно ли застрелить несколько игроков во время одной собрания.
+- Догадки Импосиер и Мирный будут верны только в том случае, если игрок является частью соответствующей команды и не имеет особой роли.
+- Стрелять можно только во время голосования.
+- В зависимости от настроек, Угадывающий не может угадать защищенного игрока, и в зависимости от настроек Медика может быть уведомлен медик/защищенный игрок игрок (никто не умрет, независимо от того, что угадал Угадывающий).
+- Угадайка может угадать роль Джокера. При этом Джокер погибнет и не выиграет игру.
 
-The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players.\
-If the Trickster has placed all of their boxes they will be converted into a vent network usable only by the Trickster themself, but the boxes are revealed to the others.\
-If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while.\
-\
-**NOTE:**
+## Jester / джокер
 
-- Impostors will get a text indicator at the bottom of the screen to notify them if the lights are out due to the Trickster ability, as there is no sabotage arrows or task to sabotage text to otherwise notify them about it.
+**Команда: Нейтральная**
 
-### Game Options
+- У Джокера нет никаких заданий. Он выигрывает игру как соло, если за него проголосовали во время собрания.
 
-| Name                          |                       Description                        |
-| ----------------------------- | :------------------------------------------------------: |
-| Trickster Spawn Chance        |                            -                             |
-| Trickster Box Cooldown        |          Cooldown for placing jack-in-the-boxes          |
-| Trickster Lights Out Cooldown |         Cooldown for their "lights out" ability          |
-| Trickster Lights Out Duration | Duration after which the light is automatically restored |
+## Arsonist / Поджигатель
 
----
+**Команда: Нейтральная**
 
-## Cleaner
+- У Поджигателя нет никаких заданий, ему нужно победить в игре в одиночку.
+- Поджигатель может облить бензином других игроков, нажав кнопку полива и оставаясь рядом с игроком в течение нескольких секунд.
+- После обливания всех живых Поджигатель может поджечь всех игроков, что приводит к победе Поджигателя.
 
-### **Team: Impostors**
+## Jackal / Шакал
 
-The Cleaner is an Impostor who has the ability to clean up dead bodies.\
-\
-**NOTE:**
+**Команда: Шакалы**
 
-- The Kill and Clean cooldown are shared, preventing them from immediately cleaning their own kills.
-- If there is a Cleaner in the game, there can't be a Vulture.
+- Шакал является частью дополнительной команды, которая пытается устранить всех остальных игроков.
+- Шакал не имеет никаких задач и может убивать Импостеров, Мирных и Нейтралов.
+- Шакал (если разрешено настройками) может выбрать другого игрока, чтобы сделать его своим Корешом. Кореш теряет свою нынешнюю роль (за исключением роли Любовник). Шакал может выбрать Импостера, но (в зависимости от настроек) импостер может только отображаться как Кореш, при этом оставаться импостером.
+- Кроме того, если Шпион или Импостер получает роль Кореша, он все равно будет иметь красное имя для Импостеров.
 
-### Game Options
+## Sidekick / Кореш
 
-| Name                 |            Description            |
-| -------------------- | :-------------------------------: |
-| Cleaner Spawn Chance |                 -                 |
-| Cleaner Cooldown     | Cooldown for cleaning dead bodies |
+**Команда: Шакалы**
 
----
+- Получает роль во время игры с помощью «Create Sidekick Action», и присоединяется к Шакалу в их стремлении устранить всех остальных игроков.
+- После смерти Шакала (в зависимости от настроек) может получить повышение до самого Шакала и назначить своего собственного Кореша.
 
-## Warlock
+## Vulture / Стервятник
 
-### **Team: Impostors**
+**Команда: Нейтральная**
 
-The Warlock is an Impostor, that can curse another player (the cursed player doesn't get notified).\
-If the cursed person stands next to another player, the Warlock is able to kill that player (no matter how far away they are).\
-Performing a kill with the help of a cursed player, will lift the curse and it will result in the Warlock being unable to move for a configurable amount of time.\
-The Warlock can still perform normal kills, but the two buttons share the same cooldown.\
-\
-**NOTE:**
+- У Стервятника нет никаких задач, он должен выиграть игру как одиночка.
+- Стервятник должен съесть заданное количество трупов (в зависимости от настроек), чтобы победить.
+- Когда игрок умирает, Стервятник получает стрелку, указывающую на труп.
+- Если в игре есть Стервятник, то не может быть Чистильщика.
+- Если труп находится на другом этаже, стрелка всегда указывает на лифт.
 
-- The Warlock can always kill their Impostor mates (and even themself) using the "cursed kill"
-- If there is a Warlock in the game, there can't be a Vampire
-- Performing a normal kill, doesn't lift the curse
+## Lawyer / Адвокат
 
-### Game Options
+**Команда: Нейтральная**
 
-| Name                 |                            Description                            |
-| -------------------- | :---------------------------------------------------------------: |
-| Warlock Spawn Chance |                                 -                                 |
-| Warlock Cooldown     |            Cooldown for using the Curse and curse Kill            |
-| Warlock Root Time    | Time the Warlock is rooted in place after killing using the curse |
+- У Адвоката есть клиент.
+- Клиент может быть Импостером или Шакалом, но не любовником.
+- В зависимости от настроек, клиент также может быть Джокером.
+- Адвокату нужно, чтобы его клиент выиграл, чтобы выиграть игру.
+- Их клиент не знает, что он его клиент.
+- Если клиента выгонят на голосовании, адвокат умрет вместе с клиентом.
+- Если клиент умирает, Адвокат меняет свою роль и становится Преследователем, который имеет другую цель для победы в игре.
 
----
+## Prosecutor / Прокурор
 
-## Bounty Hunter
+**Команда: Нейтральная**
 
-### **Team: Impostors**
+- Роль Прокурора напоминает Адвоката. У Прокурора есть клиент, который является Мирным игроком.
+- Прокурор должен добиться исключения своего клиента на голосовании, чтобы выиграть игру.
+- Клиент Прокурора не знает, что он его клиент.
+- Если клиент Прокурора умирает, Прокурор меняет свою роль и становится Преследователем, который имеет другую цель для победы в игре.
 
-The Bounty Hunter is an Impostor, that continuously get bounties (the targeted player doesn't get notified).\
-The target of the Bounty Hunter swaps after every meeting and after a configurable amount of time.\
-If the Bounty Hunter kills their target, their kill cooldown will be a lot less than usual.\
-Killing a player that's not their current target results in an increased kill cooldown.\
-Depending on the options, there'll be an arrow pointing towards the current target.\
-\
-**NOTE:**
+## Pursuer / Преследователь
 
-- The target won't be an Impostor, a Spy or the Bounty Hunter's Lover.
-- Killing the target resets the timer and a new target will be selected.
+**Команда: нейтральная**
 
-### Game Options
+- Чтобы победить, он должен быть жив, когда игра закончится и Экипаж победит.
+- Для того, чтобы достичь этой цели, Преследователь обладает способностью под названием «Blank», где они могут нейтрализовать один выстрел убийцы (сюда также входит Шериф). У убийцы, на котором Преследователь активировал свою способность, просто перезапускается КД (убийства не происходит)
 
-| Name                                     |                                            Description                                            |
-| ---------------------------------------- | :-----------------------------------------------------------------------------------------------: |
-| Bounty Hunter Spawn Chance               |                                                 -                                                 |
-| Duration After Which Bounty Changes      |                                                 -                                                 |
-| Cooldown After Killing Bounty            |                                                 -                                                 |
-| Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player |
-| Show Arrow Pointing Towards The Bounty   |             If set to true an arrow will appear (only visiable for the Bounty Hunter)             |
-| Bounty Hunter Arrow Update Interval      |                           Sets how often the position is being updated                            |
+## Thief / Вор
 
----
+**Команда: Нейтральная**
 
-## Witch
+- Вор должен убить другого убийцу (Импостера, Шакала/Кореша и Шерифа), чтобы победить.
+- Если Вор не убьет другого убийцу, он проиграет.
+- Если Вор убивает одного из других убийц, Вор забирает их роль (например, Ниндзя) и присоединяется к их команде (в данном случае к команде Импостер).
+- Если Вор пытается убить игрока с какой-либо ролью, не связанную с убийством, он умирает подобно осечке Шерифа.
 
-### **Team: Impostors**
+## Mayor / Мэр
 
-The Witch is an Impostor who has the ability to cast a spell on other players.\
-During the next meeting, the spellbound player will be highlighted and they'll die right after the meeting.\
-There are multiple options listed down below with which you can configure to fit your taste.\
-Similar to the Vampire, shields and blanks will be checked twice (at the end of casting the spell on the player and at the end of the meeting, when the spell will be activated).\
-This can result in players being marked as spelled during the meeting, but not dying in the end (when they get a shield or the Witch gets blanked after they were spelled by the Witch).\
-If the Witch dies before the meeting starts or if the Witch is being guessed during the meeting, the spellbound players will be highlighted but they'll survive in any case.\
-Depending on the options you can choose whether voting the Witch out will save all the spellbound players or not.\
-\
-**NOTE:**
+**Команда: Мирные**
 
-- The spellbound players will die before the voted player dies (which might trigger e.g. trigger an Impostor win condition, even if the Witch is the one being voted)
+- Мэр играет с мирными, голосуя дважды.
+- Мэр всегда может начать собрание, даже если достигнуто максимальное количество собраний.
+- Мэр имеет портативную кнопку собрания, в зависимости от вариантов.
+- Мэр может видеть цвета голосования после выполнения настраиваемого количества задач, в зависимости от настроек.
 
-### Game Options
+## Engineer / Инженер
 
-| Name                                   |                                                          Description                                                          |
-| -------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------: |
-| Witch Spawn Chance                     |                                                               -                                                               |
-| Witch Spell Casting Cooldown           |                                                               -                                                               |
-| Witch Additional Cooldown              |                   The spell casting cooldown will be increased by the amount you set here after each spell                    |
-| Witch Can Spell Everyone               |                              If set to false, the witch can't spell the Spy and other Impostors                               |
-| Witch Spell Casting Duration           |                       The time that you need to stay next to the target in order to cast a spell on it                        |
-| Trigger Both Cooldowns                 | If set to true, casting a spell will also trigger cooldown of the kill button and vice versa (but the two cooldowns may vary) |
-| Voting The Witch Saves All The Targets |                         If set to true, all the cursed targets will survive at the end of the meeting                         |
+**Команда: Мирные**
 
----
+- Инженер (если жив) может устранить определенное количество саботажей за игру из любой точки карты.
+- Инженер может использовать вентиляционные отверстия.
+- Если инженер находится внутри вентиляционного отверстия, члены команды Шакал/Импостер увидят синий контур вокруг всех вентиляционных отверстий на карте (может быть изменено в настройках).
+- Из вентиляционных отверстий инженер не может просто так взять и запустить некоторые задачи с помощью кнопки «Использовать», вместо этого нужно использовать двойное нажатие.
+- Кнопка убийства импостера активируется, если он стоит рядом с вентиляционным отверстием, где находится инженер. Он также может убить Инженера там. Никакие другие действия (например, скан Морфлинга...) не могут повлиять на игроков внутри вентиляционных отверстий.
 
-## Ninja
+## Sheriff / шериф
 
-### **Team: Impostors**
+**Команда: Мирные**
 
-The Ninja is an Impostor who has the ability to kill another player all over the map.\
-You can mark a player with your ability and by using the ability again, you jump to the position of the marked player and kill it.\
-Depending on the options you know where your marked player is.\
-If the Ninja uses its ability, it will leave a trace (leaves) for a configurable amount of time where it activated the ability and additionally where it killed the before marked player.\
-When performing a ninja ability kill, the ninja can be invisible for some seconds (depends on options)\
-\
-**NOTE:**
+- Может убивать импостеров.
+- Но если он попытается убить мирного, то и Мирный, и Шериф умрут.
+- Если Шериф стреляет в игрока, защищенного Медиком, Шериф и защищенный остаются невредимыми.
+- Если Шериф застрелит Мини Импостера во время взросления, ничего не случится. Если он полностью вырос, Мини Импостер умрет.
 
-- The Ninja has a 5 second cooldown after marking a player
-- The trace has a darker (black) or lighter (white) color depending on the players color that will fade into green
-- The mark on the marked player will reset after a meeting or after using the ability to kill the marked player. Performing a normal kill will **NOT** reset the mark
-- If the Ninja tries to kill a shielded player (e.g. Medic shield, Shield last game first kill ), the kill will not be performed
-- If the Ninja tries to kill the Time Master while the shield is active, the Ninja won't teleport to the players position, but the Time Master shield will still be activated
-- If the marked target is on a different floor on Submerged, the arrow will always point to the elevator
+## Deputy / Помошник шерифа
 
-### Game Options
+**Команда: Мирные**
 
-| Name                            | Description |
-| ------------------------------- | :---------: |
-| Ninja Spawn Chance              |      -      |
-| Ninja Mark Cooldown             |      -      |
-| Ninja Knows Location Of Target  |      -      |
-| Trace Duration                  |      -      |
-| Time Till Trace Color Has Faded |      -      |
-| Time The Ninja Is Invisible     |      -      |
+- Помошник шерифа имеет возможность надеть на игрока наручники. Наручники будут скрыты до тех пор, пока игрок в наручниках не попытается использовать кнопку/горячую клавишу.
 
----
+Наручники отключают:
 
-## Bomber
+- Убийство
+- Способности
+- Вентиляция
+- Репорт
+- КД начинается после того, как наручники становятся видимыми.
+- Помошник шерифа не может быть в игре без шерифа.
 
-### **Team: Impostors**
+## Lighter / Фонарик
 
-The Bomber is an Impostor who has the ability to be very explosive. They have the ability to plant bombs to spread grouping Crewmates and also kill them.\
-The Bomber also has the ability to perform a normal kill like all Impostors.\
-The plant time of the bomb can be different to the kill cooldown depending on the settings.\
-Crewmates can defuse a bomb depending on the settings.
+**Команда: Мирные**
 
-**NOTE:**
+- Их зрение выглядит как фонарик, который можно перемещать (известный из режима Hide'n'Seek).
 
-- The bomb won't kill a shielded player (Medic, First Kill Shield)
-- The bomb won't kill a Mini until it's grown up
-- The bomb can kill the bomber as well as their teammate(s)
-- The hearing range can be higher/lower than the actual destruction range, depending on the settings, and has a visual indicator
-- The visual indicator slowly fades into red until the bomb explodes and it does not show the explosion range (only hearing range)!
-- The bomb can be defused by standing on it and snipping the fuse (button)
+## Detective / Детектив
 
-### Game Options
+**Команда: Мирные**
 
-| Name                   | Description |
-| ---------------------- | :---------: |
-| Bomber Spawn Chance    |      -      |
-| Bomb Destruction Time  |      -      |
-| Bomb Destruction Range |      -      |
-| Bomb Hear Range        |      -      |
-| Bomb Defuse Duration   |      -      |
-| Bomb Cooldown          |      -      |
-| Bomb Is Active After   |
+- Видит следы, которые оставляют другие игроки.
+- Когда Детектив сообщает о трупе:
+  - он получает подсказки о личности убийцы. Тип информации, которую он получает, основан на времени, которое потребовалось, чтобы найти труп.
+- Когда игроки меняют свои цвета (из-за Морфлинга или Камуфляжа), все следы также меняют свои цвета (в том числе те, которые уже были на земле). Когда эффекты закончатся, все следы вернутся к исходному цвету.
+- Детектив не видит следов игроков, которые сидят в вентиляционных отверстиях
 
----
+## Time Master / Хозяин времени
 
-## Guesser
+**Команда: Мирные**
 
-### **Team: Crewmates or Impostors**
+- Хозяин времени имеет щит, который он может активировать. Щит остается активным в течение настраиваемого периода времени.
+- Если игрок пытается убить Хозяина Времени, в то время как щит активен, убийство не произойдет, и время перемотается назад
+- Перемотка влияет только на движение.
 
-The Guesser can be a Crewmate or an Impostor (depending on the settings).\
-The Guesser can shoot players during the meeting, by guessing its role. If the guess is wrong, the Guesser dies instead.\
-You can select how many players can be shot per game and if multiple players can be shot during a single meeting.\
-The guesses Impostor and Crewmate are only right, if the player is part of the corresponding team and has no special role.\
-You can only shoot during the voting time.\
-Depending on the options, the Guesser can't guess the shielded player and depending on the Medic options the Medic/shielded player might be notified (no one will die, independently of what the Guesser guessed).\
-\
-**NOTE:**
+## Medic / Медик
 
-- If a player gets shot, you'll get back your votes
-- Jester wins won't be triggered, if the Guesser shoots the Jester before the Jester gets voted out
+**Команда: Мирные**
 
-### Game Options
+- Может защитить (выделенный контуром вокруг игрока) одного игрока за игру, что делает игрока неубиваемым.
+- Защищенный игрок может быть изгнан на голосовании... и может быть Импостером.
+- В зависимости от настроек, защищенный игрок и/или Медик получит красную вспышку на своем экране, если кто-то попытается их убить.
+- Если Медик умрет, щит исчезнет.
+- Другая способность Медика показывает как давно умер игрок, когда сам Медик сообщает о трупе.
 
-| Name                                            | Description |
-| ----------------------------------------------- | :---------: |
-| Guesser Spawn Chance                            |      -      |
-| Chance That The Guesser Is An Impostor          |      -      |
-| Guesser Number Of Shots Per Game                |      -      |
-| Guesser Can Shoot Multiple Times Per Meeting    |      -      |
-| Guesses Visible In Ghost Chat                   |      -      |
-| Guesses Ignore The Medic Shield                 |      -      |
-| Evil Guesser Can Guess The Spy                  |      -      |
-| Both Guesser Spawn Rate                         |      -      |
-| Guesser Can't Guess Snitch When Tasks Completed |      -      |
+## Swapper / Сваппер
 
----
+**Команда: Мирные**
 
-## Jester
+- Во время собраний Сваппер может обменивать голоса, которые получают два игрока (т.е. все голоса, которые получил игрок A, будут отданы игроку B и наоборот).
+- Сваппер не может начать экстренные собрания и не может исправить свет и связь.
+- У Сваппера своё КД на обмен голосов, которое зависит от количества выполненных задач.
 
-### **Team: Neutral**
+## Seer / Провидец
 
-The Jester does not have any tasks. They win the game as a solo, if they get voted out during a meeting.
+**Команда: Мирные**
 
-### Game Options
+- У Провидца есть две способности (можно активировать одну из них или обе в настройках). Провидец видит души игроков, которые умерли раундом ранее, души медленно угасают.
+- Провидец видит синюю вспышку на своем экране, если игрок умирает где-то на карте.
 
-| Name                              |                      Description                      |
-| --------------------------------- | :---------------------------------------------------: |
-| Jester Spawn Chance               |                           -                           |
-| Jester Can Call Emergency Meeting | Option to disable the emergency button for the Jester |
+## Hacker / Хакер
 
----
+**Команда: Мирные**
 
-## Arsonist
+- Если Хакер активирует «Хакерский режим», он получает больше информации, чем другие, на столе администратора и датчике пульса в течение заданного периода времени.
+- В противном случае он видит ту же информацию, что и все остальные.
+- Хакер может видеть цвета (или типы цветов L светлый/D темный) игроков на столе администратора.
+- Хакер может видеть, как давно мертвые игроки мертвы на датчике пульса.
+- Хакер может получить доступ к своим мобильным гаджетам (стол администратора и датчике пульса/vitals & admin table).
+- Во время доступа к этим мобильным гаджетам Хакер не может перемещаться.
 
-### **Team: Neutral**
+## Tracker / Трекер
 
-The Arsonist does not have any tasks, they have to win the game as a solo.\
-The Arsonist can douse other players by pressing the douse button and remaining next to the player for a few seconds.\
-If the player that the Arsonist douses walks out of range, the cooldown will reset to 0.\
-After dousing everyone alive the Arsonist can ignite all the players which results in an Arsonist win.
+**Команда: Мирные**
 
-### Game Options
+- Может отслеживать других игроков во время раунда.
+- Как только он ставит маячок на кого-то, на этого игрока постоянно указывает стрелка.
+- Стрелка обновляется каждые несколько секунд (настраивается).
+- В зависимости от настроек, у Трекера есть и другая возможность:
+  - он может отслеживать все трупы на карте в течение установленного количества времени. Он будет продолжать отслеживать трупы, даже если они были удалены уборщиком или съедены Стервятником.
 
-| Name                    |             Description             |
-| ----------------------- | :---------------------------------: |
-| Arsonist Spawn Chance   |                  -                  |
-| Arsonist Countdown      |                  -                  |
-| Arsonist Douse Duration | The time it takes to douse a player |
+## Snitch / Снитч
 
----
+**Команда: Мирные**
 
-## Jackal
+- Может увидеть стрелки на Импостерах, когда все задачи Снитча выполнены.
+- Имена Импостеров на голосовании будут отображаться красным цветом.
+- Снитч может не знать, кто он такой, пока у него не останется одно задание (меняется в настройках).
+- Однако, когда у них осталась только одна задача, Импостеры получают стрелку, указывающую на Снитча.
 
-### **Team: Jackal**
+## Spy / Шпион
 
-The Jackal is part of an extra team, that tries to eliminate all the other players.\
-The Jackal has no tasks and can kill Impostors, Crewmates and Neutrals.\
-The Jackal (if allowed by the options) can select another player to be their Sidekick.
-Creating a Sidekick removes all tasks of the Sidekick and adds them to the team Jackal. The Sidekick loses their current role (except if they're a Lover, then they play in two teams).
-The "Create Sidekick Action" may only be used once per Jackal or once per game (depending on the options).
-The Jackal can also promote Impostors to be their Sidekick, but depending on the options the Impostor will either really turn into the Sidekick and leave the team Impostors or they will just look like the Sidekick to the Jackal and remain as they were.\
-Also if a Spy or Impostor gets sidekicked, they still will appear red to the Impostors.
+**Команда: Мирные**
 
-The team Jackal enables multiple new outcomes of the game, listing some examples here:
+- У Шпиона нет особых способностей.
+- Его ник отображается красным для импостеров.
 
-- The Impostors could be eliminated and then the crew plays against the team Jackal.
-- The Crew could be eliminated, then the Team Jackal fight against the Impostors (The Crew can still make a task win in this scenario)
+## Portalmaker / Создатель порталов
 
-The priority of the win conditions is the following:
+**Команда: Мирные**
 
-1. Crewmate Mini lose by vote
-2. Jester wins by vote
-3. Arsonist win
-4. Team Impostor wins by sabotage
-5. Team Crew wins by tasks (also possible if the whole Crew is dead)
-6. Lovers among the last three players win
-7. Team Jackal wins by outnumbering (When the team Jackal contains an equal or greater amount of players than the Crew and there are 0 Impostors left and team Jackal contains no Lover)
-8. Team Impostor wins by outnumbering (When the team Impostors contains an equal or greater amount of players than the Crew and there are 0 players of the team Jackal left and team Impostors contains no Lover)
-9. Team Crew wins by outnumbering (When there is no player of the team Jackal and the team Impostors left)
+- Может разместить два портала на карте.
+- Эти порталы соединены друг с другом.
+- Они будут видны после следующего собрания и могут быть использованы всеми.
+- Кроме того, Создатель порталов получает информацию о том, кто и когда использовал порталы (в чате во время каждого собрания, в зависимости от настроек)
 
-**NOTE:**
+## Security Guard / Охранник
 
-- The Jackal (and their Sidekick) may be killed by a Sheriff.
-- A Jackal cannot target the Mini, while it's growing up. After that they can kill it or select it as its Sidekick.
-- The Crew can still win, even if all of their members are dead, if they finish their tasks fast enough (That's why converting the last Crewmate with tasks left into a Sidekick results in a task win for the crew.)
+**Команда: Мирные**
 
-If both Impostors and Jackals are in the game, the game continues even if all Crewmates are dead. Crewmates may still win in this case by completing their tasks. Jackal and Impostor have to kill each other.
+- У Охранника есть определенное количество винтов, которые он может использовать либо для герметизации вентиляционных отверстий, либо для установки новых камер.
+- Для установки новой камеры и закрытия вентиляционных отверстий требуется настраиваемое количество винтов.
+- Новая камера будет видна после следующего собрания и доступна всем желающим.
+- Вентиляционные отверстия будут опечатаны после следующего собрания, игроки не могут войти или выйти из опечатанных вентиляционных отверстий, но они все еще могут «переехать под них».
+- Коробки Трикстера не могут быть закрыты.
+- Охранник не может разместить камеры на карте MiraHQ.
+- Оставшееся количество винтов можно увидеть над их специальной кнопкой.
+- На карте Skeld четыре камеры заменяются каждые 3 секунды (на следующие четыре камеры). Навигацию можно также выполнять вручную с помощью клавиш со стрелками.
+- Охранник может получить доступ к мобильным камерам после использования всех винтов.
+- При доступе к мобильным камерам Охранник не в состоянии передвигаться.
 
-### Game Options
+## Medium / Медиум
 
-| Name                                                 |                                                                                                                              Description                                                                                                                              |
-| ---------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| Jackal Spawn Chance                                  |                                                                                                                                   -                                                                                                                                   |
-| Jackal/Sidekick Kill Cooldown                        |                                                                                                                             Kill cooldown                                                                                                                             |
-| Jackal Create Sidekick Cooldown                      |                                                                                                               Cooldown before a Sidekick can be created                                                                                                               |
-| Jackal can use vents                                 |                                                                                                                                Yes/No                                                                                                                                 |
-| Jackal can create a Sidekick                         |                                                                                                                                Yes/No                                                                                                                                 |
-| Jackals promoted from Sidekick can create a Sidekick |                                                                                                           Yes/No (to prevent the Jackal team from growing)                                                                                                            |
-| Jackals can make an Impostor to their Sidekick       | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
-| Jackal and Sidekick have Impostor vision             |                                                                                                                                   -                                                                                                                                   |
+**Команда: Мирные**
 
----
+- Может попросить у душ погибших игроков информацию. Как и Провидец, медиум видит души умерших игроков (после следующего собрания) и сможет их допросить. Затем он получает случайную информацию о душе или убийце в чате. Души остаются только на один раунд, т.е. до следующего собрания.
 
-## Sidekick
+Вопросы:
 
-### **Team: Jackal**
+- Души предпочитают давать информацию, основываясь на роли.
 
-Gets assigned to a player during the game by the "Create Sidekick Action" of the Jackal and joins the Jackal in their quest to eliminate all other players.\
-Upon the death of the Jackal (depending on the options), they might get promoted to Jackal themself and potentially even assign a Sidekick of their own.\
-\
-**NOTE:**
+### Информация о роли:
 
-- A player that converts into a Sidekick loses their previous role and tasks (if they had one).
-- The Sidekick may be killed by a Sheriff.
-- The Sidekick cannot target the Mini, while it's growing up.
+- Sheriff suicide: "Yikes, that Sheriff shot backfired." / Самоубийство шерифа
+- Thief suicide: "I tried to steal the gun from their pocket, but they were just happy to see me." / Самоубийство вора
+- Active Lover dies: "I wanted to get out of this toxic relationship anyways." / Любовника убивают
+- Passiv Lover suicide: "The love of my life died, thus with a kiss I die." / Умирает из-за смерти своего любовника
+- Lawyer client kills Lawyer: "My client killed me. Do I still get paid?" / Адвокат умер из-за того, что выгнали его клиента
+- Teamkill Jackal/Sidekick: "First they sidekicked me, then they killed me... BUT WHY?" / Тимкил шакалов
+- Teamkill Impostor: "I guess they confused me for the Spy, is there even one?" / Тимкил импостеров
+- Submerged o2-Kill: "Do I really need that mask for breathing?" / Не успел надеть маску для дыхания на карте Submerged
+- Warlock self kill: "MAYBE I cursed the person next to me and killed myself. Oops." / Чернокнижник убил себя чужими руками
+- Vulture/Cleaner eats/cleans body: "Is my dead body some kind of art now or... aaand it's gone." / Самоубийство Стервятника или Шакала
 
-### Game Options
+### Другая информация:
 
-| Name                                             |                    Description                    |
-| ------------------------------------------------ | :-----------------------------------------------: |
-| Jackal/Sidekick Kill Cooldown                    | Uses the same kill cooldown setting as the Jackal |
-| Sidekick gets promoted to Jackal on Jackal death |                      Yes/No                       |
-| Sidekick can kill                                |                      Yes/No                       |
-| Sidekick can use vents                           |                      Yes/No                       |
+- "I'm not sure, but I guess a darker/lighter color killed me." / Я не уверен, но я думаю, что меня убил более темный/светлый цвет
+- "If I counted correctly, then I died x seconds before the meeting started." / Если я правильно посчитал, то я умер за x секунд до начала встречи
+- "If my role hasn't been saved, there's no (role) in the game anymore." / Если моя роль не была сохранена, в игре больше нет (роли)
+- "It seems like my killer was the (role)." / Похоже, моим убийцей был (роль)
 
----
+### Доп информация:
 
-## Vulture
+- When you asked, x killer(s) was/were still alive. / Когда вы спросили, x убийцы были/были еще живы
+- When you asked, x player(s) who can use vents was/were still alive. / Когда вы спросили, x игроков, которые могут использовать вентиляционные отверстия, были/были еще живы
+- When you asked, x player(s) who is/are neutral but cannot kill was/were still alive. / Когда вы спросили, x игроков, которые нейтральны, но не могут убить, были/были еще живы.
 
-### **Team: Neutral**
+## Trapper / Ловец
 
-The Vulture does not have any tasks, they have to win the game as a solo.\
-The Vulture is a neutral role that must eat a specified number of corpses (depending on the options) in order to win.\
-Depending on the options, when a player dies, the Vulture gets an arrow pointing to the corpse.\
-If there is a Vulture in the game, there can't be a Cleaner.
+**Команда: Мирные**
 
-**NOTE**
+- Может настроить ловушку, чтобы поймать игрока и получить информацию от него.
+- Ловушка поймает игрока на несколько секунд и раскроет в чате информацию о его Роли:
+  - он «Добрая/Злая Роль» или их «Имя».
+- Ловушка не видна до тех пор, пока не будет поймано определенное количество игрока.
+- Когда ловушка становится видимой, Ловец получает информацию в чате (в случайном порядке).
 
-- If the corpse is on a different floor on Submerged, the arrow will always point to the elevator
+# Модификаторы
 
-### Game Options
+Модификатор это **дополнение** ко всем ролям.
+Некоторые модификаторы могут быть в игре более одного раза.
 
-| Name                                    |                Description                |
-| --------------------------------------- | :---------------------------------------: |
-| Vulture Spawn Chance                    |                     -                     |
-| Vulture Countdown                       |                     -                     |
-| Number Of Corpses Needed To Be Eaten    | Corpes needed to be eaten to win the game |
-| Vulture Can Use Vents                   |                     -                     |
-| Show Arrows Pointing Towards The Corpes |                     -                     |
+## Bloody / кровавый
 
----
+- Если их убьют, Кровавый модификатор оставит след на несколько секунд на убийце. След будет иметь цвет убитого.
 
-## Lawyer
+## Anti Teleport / Антителепорт
 
-### **Team: Neutral**
+- Модификатор Антителепорта предотвращает телепортирование игрока к Столу собраний
+- Игрок начнет раунд, на тот месте, на котором закончился предыдущий.
 
-The Lawyer is a neutral role that has a client.\
-The client might be an Impostor or Jackal which is no Lover.\
-Depending on the options, the client can also be a Jester.\
-The Lawyer needs their client to win in order to win the game.\
-Their client doesn't know that it is their client.\
-If their client gets voted out, the Lawyer dies with the client.\
-If their client dies, the Lawyer changes their role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.\
-\
-How the Lawyer wins:
+## Tie Breaker / Тай брейкер
 
-- Lawyer dead/alive, client alive and client wins: The Lawyer wins together with the team of the client.
-- If their client is Jester and the Jester gets voted out, the Lawyer wins together with the Jester.
+- Если Голосование заканчивается ничьей, то игрок получает дополнительный голос, который никому не виден.
+- Все будут знать, был Тай брейкер вовлечен в голосование или нет.
 
-**NOTE:**
+## Bait / Приманка
 
-- If the client disconnects, the Lawyer will also turn into the Pursuer.
-- The Lawyer needs to figure out the role of their client depending on the options.
-- The tasks only count, if the Lawyer gets promoted to Pursuer.
-- If the Lawyer dies before their client, they will lose all their tasks and will get the overview immediately.
+- Приманка заставляет убийцу самостоятельно сообщать о теле (можно настроить задержку в опциях).
+- Может быть более одной Приманки.
+- Если Шериф получит модификатор Приманки и умрёт при попытке убить мирного, Шериф НЕ сообщит о себе.
 
-### Game Options
+## Lovers / любовники
 
-| Name                                         |        Description        |
-| -------------------------------------------- | :-----------------------: |
-| Lawyer Spawn Chance                          |             -             |
-| Chance That The Lawyer Is Prosecutor         |             -             |
-| Lawyer/Prosecutor Vision                     | Pursuer has normal vision |
-| Lawyer/Prosecutor Knows Target Role          |             -             |
-| Lawyer/Prosecutor Can Call Emergency Meeting |             -             |
-| Lawyer Target Can Be The Jester              |             -             |
+**Команда: Lovers (и второстепенная команда)**
 
----
+- Всегда есть два Любовника, которые связаны друг с другом.
+- Их основная цель — остаться в живых вместе до конца игры.
+- Если один Любовник умирает (и эта опция активирована), другой Любовник совершает самоубийство.
+- В зависимости от настроек, Любовники могут иметь вторую роль (это может быть роль Нейтрального, Мирного/ или роль Импостера)
+- Влюблённые побеждают, если они оба живы, когда игра заканчивается. Они также могут выиграть со своей оригинальной командой (например, мертвый Импостер Любовник может выиграть с Импостерами, Поджигатель Любовник может добиться победы Поджигателя).
 
-## Prosecutor
+## Sunglasses / Солнцезащитные очки
 
-### **Team: Neutral**
+- Солнцезащитные очки уменьшают зрение экипажа на небольшой процент. Процент настраивается в опциях.
+- Также зрение будет изменено отключением света.
+- Солнцезащитные очки влияют только на Мирных.
+- Если Шакал завербовал игрока с этим модификатором, то этот модификатор пропадает, и зрение восстанавливается.
 
-The Prosecutor is a neutral role that resembles the Lawyer. The Prosecutor has a client who is a Crewmate.\
-The Prosecutor needs their client to be voted out in order to win the game.\
-The Prosecutor's client doesn't know that they are their client.\
-If the client gets sidekicked, the Prosecutor changes their role and becomes the client's [Lawyer](#lawyer) and has to protect the
-client from now on.\
-If the Prosecutor's client dies, the Prosecutor changes their role and becomes the [Pursuer](#pursuer), which has a different goal to win the game.
+## Mini / Мини
 
-**NOTE:**
+- Персонаж Мини меньше и, следовательно, виден всем в игре.
+- Мини не может быть убит, пока ему не исполнится 18 лет, однако он может быть изгнан на голосовании.
 
-- The Prosecutor's role settings are shared with the Lawyer settings.
-- If the client disconnects, the Prosecutor will also turn into the Pursuer.
-- The Prosecutor needs to figure out the role of their client depending on the options.
-- The tasks only count, if the Prosecutor gets promoted to Pursuer.
-- If the Prosecutor dies before their client, they will lose all their tasks and will get the overview immediately.
+### Импостер/шакал Мини
 
-## Pursuer
+- Во время взросления КД убийства удваивается. Когда он полностью вырос, его КД составляет 2/3 от значения по умолчанию.
+- Может быть изгнан на голосовании.
 
-### **Team: Neutral**
+### Мирный Мини
 
-The Pursuer is still a neutral role, but has a different goal to win the game; they have to be alive when the game ends and the Crew wins.\
-In order to achieve this goal, the Pursuer has an ability called "Blank", where they can fill a killer's (this also includes the Sheriff) weapon with a blank. So, if the killer attempts to kill someone, the killer will miss their target, and their cooldowns will be triggered as usual.\
-If the killer fires the "Blank", shields (e.g. Medic shield or Time Master shield) will not be triggered.\
-The Pursuer has tasks (which can already be done while being a Lawyer/Prosecutor), that count towards the task win for the Crewmates. If the Pursuer dies, their tasks won't be counted anymore.
+- Если его выкинут с корабля до 18 лет, все проиграют. Подумайте дважды, прежде чем проголосовать за мини.
 
-### Game Options
+### Нейтральный Мини
 
-| Name                     | Description |
-| ------------------------ | :---------: |
-| Pursuer Blank Cooldown   |      -      |
-| Pursuer Number Of Blanks |      -      |
-
----
-
-## Thief
-
-### **Team: Neutral**
-
-The Thief has to kill another killer (Impostor, Jackal/Sidekick and if enabled Sheriff)
-in order to have a win condition.\
-If the Thief doesn't kill another killer they will lose the game.\
-If the Thief kills one of the other killers, the Thief overtakes their role (e.g. Ninja) and joins their team (in this case
-team Impostor). They then have the new Role's win condition (e.g. Impostor-Win).\
-If the Thief tries to kill any non-killing role (Crewmate or Neutral), they die similar to a misfiring Sheriff.\
-\
-**NOTE**
-
-- If the option "Thief Can Kill Sheriff" is On, the Thief has tasks which will ONLY begin to count, if they kill
-  the Sheriff. While the Thief hasn't fired, their tasks do not count towards the taskwin.
-- If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks.
-
-### Game Options
-
-| Name                      | Description |
-| ------------------------- | :---------: |
-| Thief Spawn Chance        |      -      |
-| Thief Countdown           |      -      |
-| Thief Can Kill Sheriff    |      -      |
-| Thief Has Impostor Vision |      -      |
-| Thief Can Use Vents       |      -      |
-
----
-
-## Mayor
-
-### **Team: Crewmates**
-
-The Mayor leads the Crewmates by having a vote that counts twice.\
-The Mayor can always use their meeting, even if the maximum number of meetings was reached.\
-The Mayor has a portable Meeting Button, depending on the options.\
-The Mayor can see the vote colors after completing a configurable amount of tasks, depending on the options.\
-The Mayor has the option to vote with only one vote instead of two (via a button in the meeting screen), depending on the settings.
-
-### Game Options
-
-| Name                                      |                   Description                    |
-| ----------------------------------------- | :----------------------------------------------: |
-| Mayor Spawn Chance                        |                        -                         |
-| Mayor Can See Vote Colors                 |                        -                         |
-| Completed Tasks Needed To See Vote Colors |                        -                         |
-| Mobile Emergency Button                   |                        -                         |
-| Mayor Can Choose Single Vote              | Off, On (Before Voting), On (Until Meeting Ends) |
-
----
-
-## Engineer
-
-### **Team: Crewmates**
-
-The Engineer (if alive) can fix a certain amount of sabotages per game from anywhere on the map.\
-The Engineer can use vents.\
-If the Engineer is inside a vent, depending on the options the members of the team Jackal/Impostors will see a blue outline around all vents on the map (in order to warn them).\
-Because of the vents the Engineer might not be able to start some tasks using the "Use" button, you can double-click on the tasks instead.
-
-**NOTE:**
-
-- The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
-
-### Game Options
-
-| Name                                      | Description |
-| ----------------------------------------- | :---------: |
-| Engineer Spawn Chance                     |      -      |
-| Number Of Sabotage Fixes                  |      -      |
-| Impostors See Vents Highlighted           |      -      |
-| Jackal and Sidekick See Vents Highlighted |      -      |
-
----
-
-## Sheriff
-
-### **Team: Crewmates**
-
-The Sheriff has the ability to kill Impostors or Neutral roles if enabled.\
-If they try to kill a Crewmate, they die instead.\
-\
-**NOTE:**
-
-- If the Sheriff shoots the person the Medic shielded, the Sheriff and the shielded person **both remain unharmed**.
-- If the Sheriff shoots a Mini Impostor while growing up, nothing happens. If it's fully grown, the Mini Impostor dies.
-
-### Game Options
-
-| Name                      |                Description                |
-| ------------------------- | :---------------------------------------: |
-| Sheriff Spawn Chance      |                     -                     |
-| Sheriff Cooldown          |                     -                     |
-| Sheriff Can Kill Neutrals |                     -                     |
-| Sheriff Has A Deputy      | Deputy can not be in game without Sheriff |
-
----
-
-## Deputy
-
-### **Team: Crewmates**
-
-The Deputy has the ability to handcuff player.\
-Handcuffs will be hidden until the handcuffed player try to use a disabled button/hotkey.\
-Handcuffs disable:
-
-- Kill
-- Abilities
-- Vent
-- Report\
-  \
-  **NOTE:**
-- Duration starts after the handcuffs become visible.
-- Deputy can not be in game without Sheriff.
-
-### Game Options
-
-| Name                                 |                    Description                    |
-| ------------------------------------ | :-----------------------------------------------: |
-| Deputy Number Of Handcuffs           |                         -                         |
-| Handcuff Cooldown                    |                         -                         |
-| Handcuff Duration                    |                         -                         |
-| Sheriff And Deputy Know Each Other   |                         -                         |
-| Deputy Gets Promoted To Sheriff      | "Off", "On (Immediately)" or "On (After Meeting)" |
-| Deputy Keeps Handcuffs When Promoted |                         -                         |
-
----
-
-## Lighter
-
-### **Team: Crewmates**
-
-The Lighter has a different vision than everyone else depending on the settings.\
-Their vision looks like a flashlight cone which can be moved around (known from the Hide'n'Seek mode).
-
-### Game Options
-
-| Name                 |                     Description                     |
-| -------------------- | :-------------------------------------------------: |
-| Lighter Spawn Chance |                          -                          |
-| Vision On Lights On  |  The vision the Lighter has when the lights are on  |
-| Vision On Lights Off | The vision the Lighter has when the lights are down |
-| Flashlight Width     |                          -                          |
-
----
-
-## Detective
-
-### **Team: Crewmates**
-
-The Detective can see footprints that other players leave behind.\
-The Detective's other feature shows when they report a corpse: they receive clues about the killer's identity. The type of information they get is based on the time it took them to find the corpse.
-
-**NOTE:**
-
-- When people change their colors (because of a morph or camouflage), all the footprints also change their colors (also the ones that were already on the ground). If the effects are over, all footprints switch back to the original color.
-- The Detective does not see footprints of players that sit in vents
-- More information about the [colors](#colors)
-
-### Game Options
-
-| Name                                              |                                                      Description                                                      |
-| ------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------: |
-| Detective Spawn Chance                            |                                                           -                                                           |
-| Anonymous Footprints                              | If set to true, all footprints will have the same color. Otherwise they will have the color of the respective player. |
-| Footprint Interval                                |                                          The interval between two footprints                                          |
-| Footprint Duration                                |                                     Sets how long the footprints remain visible.                                      |
-| Time Where Detective Reports Will Have Name       |       The amount of time that the Detective will have to report the body since death to get the killer's name.        |
-| Time Where Detective Reports Will Have Color Type |    The amount of time that the Detective will have to report the body since death to get the killer's color type.     |
-
----
-
-## Time Master
-
-### **Team: Crewmates**
-
-The Time Master has a time shield which they can activate. The time shield remains active for a configurable amount of time.\
-If a player tries to kill the Time Master while the time shield is active, the kill won't happen and the
-time will rewind for a set amount of time.\
-The kill cooldown of the killer won't be reset, so the Time Master
-has to make sure that the game won't result in the same situation.\
-The Time Master won't be affected by the rewind.
-
-**NOTE:**
-
-- Only the movement is affected by the rewind.
-- A Vampire bite will trigger the rewind. If the Time Master misses shielding the bite, they can still shield the kill which happens a few seconds later.
-- If the Time Master was bitten and has their shield active before when a meeting is called, they survive but the time won't be rewound.
-- If the Time Master has a Medic shield, they won't rewind.
-- The shield itself ends immediately when triggered. So the Time Master can be attacked again as soon as the rewind ends.
-
-### Game Options
-
-| Name                        |       Description       |
-| --------------------------- | :---------------------: |
-| Time Master Spawn Chance    |            -            |
-| Time Master Cooldown        |            -            |
-| Rewind Duration             | How much time to rewind |
-| Time Master Shield Duration |
-
----
-
-## Medic
-
-### **Team: Crewmates**
-
-The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
-The shielded player can still be voted out and might also be an Impostor.\
-If set in the options, the shielded player and/or the Medic will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.\
-If the Medic dies, the shield disappears with them.\
-The Sheriff will not die if they try to kill a shielded Crewmate and won't perform a kill if they try to kill a shielded Impostor.\
-Depending on the options, guesses from the Guesser will be blocked by the shield and the shielded player/medic might be notified.\
-The Medic's other feature shows when they report a corpse: they will see how long ago the player died.
-
-**NOTE:**
-
-- If the shielded player is a Lover and the other Lover dies, they nevertheless kill themselves.
-- If the Shifter has a shield or their target has a Shield, the shielded player switches.
-- Shields set after the next meeting, will be set before a possible shift is being performed.
-
-### Game Options
-
-| Name                                         |                         Description                          |                                                    Options                                                    |
-| -------------------------------------------- | :----------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
-| Medic Spawn Chance                           |                              -                               |                                                       -                                                       |
-| Show Shielded Player                         |            Sets who sees if a player has a shield            |                                    "Everyone", "Shielded + Medic", "Medic"                                    |
-| Shielded Player Sees Murder Attempt          | Whether a shielded player sees if someone tries to kill them |                                                  True/false                                                   |
-| Shield Will Be Activated                     |             Sets when the shield will be active              |                       "Instantly", "Instantly, Visible After Meeting", "After Meeting"                        |
-| Medic Sees Murder Attempt On Shielded Player |                              -                               | If anyone tries to harm the shielded player (Impostor, Sheriff, Guesser, ...), the Medic will see a red flash |
-
----
-
-## Swapper
-
-### **Team: Crewmates**
-
-During meetings the Swapper can exchange votes that two people get (i.e. all votes
-that player A got will be given to player B and vice versa).\
-Because of the Swapper's strength in meetings, they might not start emergency meetings and can't fix lights and comms.\
-The Swapper now has initial swap charges and can recharge those charges after completing a configurable amount of tasks.\
-\
-**NOTE:**
-
-- The remaining charges will be displayed in brackets next to the players role while not in a meeting
-- In a meeting the charges will appear next to the Confirm Swap button
-
-### Game Options
-
-| Name                                  |                      Description                       |
-| ------------------------------------- | :----------------------------------------------------: |
-| Swapper Spawn Chance                  |                           -                            |
-| Swapper can call emergency meeting    | Option to disable the emergency button for the Swapper |
-| Swapper can only swap others          |   Sets whether the Swapper can swap themself or not    |
-| Initial Swap Charges                  |                           -                            |
-| Number Of Tasks Needed For Recharging |                           -                            |
-
----
-
-## Seer
-
-### **Team: Crewmates**
-
-The Seer has two abilities (one can activate one of them or both in the options).\
-The Seer sees the souls of players that died a round earlier, the souls slowly fade away.\
-The Seer gets a blue flash on their screen, if a player dies somewhere on the map.
-
-### Game Options
-
-| Name                     |                              Description                               |
-| ------------------------ | :--------------------------------------------------------------------: |
-| Seer Spawn Chance        |                                   -                                    |
-| Seer Mode                |   Options: Show death flash and souls, show death flash, show souls    |
-| Seer Limit Soul Duration |          Toggle if souls should turn invisible after a while           |
-| Seer Soul Duration       | Sets how long it will take the souls to turn invisible after a meeting |
-
----
-
-## Hacker
-
-### **Team: Crewmates**
-
-If the Hacker activates the "Hacker mode", the Hacker gets more information than others from the admin table and vitals for a set duration.\
-Otherwise they see the same information as everyone else.\
-**Admin table:** The Hacker can see the colors (or color types) of the players on the table.\
-**Vitals**: The Hacker can see how long dead players have been dead for.\
-The Hacker can access his mobile gadgets (vitals & admin table), with a maximum of charges (uses) and a configurable amount of tasks needed to recharge.\
-While accessing those mobile gadgets, the Hacker is not able to move.
-
-**NOTE:**
-
-- If the Morphling morphs or the Camouflager camouflages, the colors on the admin table change accordingly
-- More information about the [colors](#colors)
-
-### Game Options
-
-| Name                                  |                                                   Description                                                   |
-| ------------------------------------- | :-------------------------------------------------------------------------------------------------------------: |
-| Hacker Spawn Chance                   |                                                        -                                                        |
-| Hacker Cooldown                       |                                                        -                                                        |
-| Hacker Duration                       |                                 Sets how long the "Hacker mode" remains active                                  |
-| Hacker Only Sees Color Type           | Sets if the Hacker sees the player colors on the admin table or only white/gray (for Lighter and darker colors) |
-| Max Mobile Gadget Charges             |                                                        -                                                        |
-| Number Of Tasks Needed For Recharging |                                         Number of tasks to get a charge                                         |
-| Can't Move During Cam Duration        |                                                        -                                                        |
-
----
-
-## Tracker
-
-### **Team: Crewmates**
-
-The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.\
-An arrow points to the last tracked position of the player.\
-The arrow updates its position every few seconds (configurable).\
-Depending on the options, the Tracker has another ability: They can track all corpses on the map for a set amount of time. They will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
-
-**NOTE**
-
-- If the tracked player is on a different floor on Submerged, the arrow will always point to the elevator
-
-### Game Options
-
-| Name                               |                 Description                  |
-| ---------------------------------- | :------------------------------------------: |
-| Tracker Spawn Chance               |                      -                       |
-| Tracker Update Interval            | Sets how often the position is being updated |
-| Tracker Reset Target After Meeting |                      -                       |
-| Tracker Can Track Corpses          |                      -                       |
-| Corpses Tracking Cooldown          |                      -                       |
-| Corpses Tracking Duration          |                      -                       |
-
----
-
-## Snitch
-
-### **Team: Crewmates**
-
-When the Snitch finishes all their tasks, they will get information in chat of the last location of all killers when the meeting starts.\
-When the Snitch only has a configurable amount of tasks left, it will be revealed that there is a Snitch in the game with a text on evil player's screens.
-
-**NOTE:**
-
-- If the Snitch dies, all killers will be informed that the Snitch is dead
-- Last location can be a room or open field
-
-### Game Options
-
-| Name                                         | Description |
-| -------------------------------------------- | :---------: |
-| Snitch Spawn Chance                          |      -      |
-| Task Count Where The Snitch Will Be Revealed |      -      |
-
----
-
-## Spy
-
-### **Team: Crewmates**
-
-The Spy is a Crewmate, which has no special abilities.\
-The Spy looks like an additional Impostor to the Impostors, they can't tell the difference.\
-There are two possibilities (depending on the set options):
-
-- The Impostors can't kill the Spy (because otherwise their kill button would reveal, who the Spy is)
-- The Impostors can kill the Spy but they can also kill their Impostor partner (if they mistake another Impostor for the Spy)
-  You can set whether the Sheriff can kill the Spy or not (in order to keep the lie alive).
-
-**NOTE:**
-
-- If the Spy gets sidekicked, it still will appear red to the Impostors.
-
-### Game Options
-
-| Name                                        |                                 Description                                  |
-| ------------------------------------------- | :--------------------------------------------------------------------------: |
-| Spy Spawn Chance                            |
-| Spy Can Die To Sheriff                      |
-| Impostors Can Kill Anyone If There Is A Spy |  This allows the Impostors to kill both the Spy and their Impostor partners  |
-| Spy Can Enter Vents                         | Allow the Spy to enter/exit vents (but not actually move to connected vents) |
-| Spy Has Impostor Vision                     |              Give the Spy the same vision as the Impostors have              |
-
----
-
-## Portalmaker
-
-### **Team: Crewmates**
-
-The Portalmaker is a Crewmate that can place two portals on the map.\
-These two portals are connected to each other.\
-Those portals will be visible after the next meeting and can be used by everyone.\
-Additionally to that, the Portalmaker gets information about who used the portals and when in the chat during each meeting, depending on the options.\
-The Portalmaker can teleport themself to their placed portals from anywhere if the setting is enabled.
-
-**NOTE:**
-
-- The extra button to use a portal will appear after the Portalmaker set their portals and a meeting/body report was called.
-- While one player uses a portal, it is blocked for any other player until the player got teleported.
-- All ghosts can still use the portals, but won't block any living player from using it and the Portalmaker won't get any information about it in chat.
-- If a morphed person uses a portal it will show the morphed name/color depending on the options.
-- If a camouflaged person uses a portal it will show "A comouflaged person used the portal."
-
-### Game Options
-
-| Name                                  | Description |
-| ------------------------------------- | :---------: |
-| Portalmaker Spawn Chance              |      -      |
-| Portalmaker Cooldown                  |      -      |
-| Use Portal Cooldown                   |      -      |
-| Portalmaker Log Only Shows Color Type |      -      |
-| Log Shows Time                        |      -      |
-| Can Port To Portal From Everywhere    |      -      |
-
----
-
-## Security Guard
-
-### **Team: Crewmates**
-
-The Security Guard is a Crewmate that has a certain number of screws that they can use for either sealing vents or for placing new cameras.\
-Placing a new camera and sealing vents takes a configurable amount of screws. The total number of screws that a Security Guard has can also be configured.\
-The new camera will be visible after the next meeting and accessible by everyone.\
-The vents will be sealed after the next meeting, players can't enter or exit sealed vents, but they can still "move to them" underground.
-
-**NOTE:**
-
-- Trickster boxes can't be sealed
-- The Security Guard can't place cameras on MiraHQ
-- The remaining number of screws can be seen above their special button.
-- On Skeld the four cameras will be replaced every 3 seconds (with the next four cameras). You can also navigate manually using the arrow keys
-- Security Guard can access mobile cameras after placing all screws
-- While accessing the mobile cameras, the Security Guard is not able to move
-
-### Game Options
-
-| Name                                  |                         Description                          |
-| ------------------------------------- | :----------------------------------------------------------: |
-| Security Guard Spawn Chance           |
-| Security Guard Cooldown               |
-| Security Guard Number Of Screws       | The number of screws that a Security Guard can use in a game |
-| Number Of Screws Per Cam              |       The number of screws it takes to place a camera        |
-| Number Of Screws Per Vent             |         The number of screws it takes to seal a vent         |
-| Security Guard Duration               |                              -                               |
-| Gadget Max Charges                    |                              -                               |
-| Number Of Tasks Needed For Recharging |                              -                               |
-| Can't Move During Cam Duration        |                              -                               |
-
----
-
-## Medium
-
-### **Team: Crewmates**
-
-The medium is a crewmate who can ask the souls of dead players for information. Like the Seer, the medium will see the souls of the players who have died (after the next meeting) and can question them. They then gets random information about the soul or the killer in the chat. The souls only stay for one round, i.e. until the next meeting. Depending on the options, the souls can only be questioned once and then disappear.
-\
-**Questions:**
-The souls will always prefer to answer with the role specific information first!
-
-**Role specific:**
-
-- Sheriff suicide: "Yikes, that Sheriff shot backfired."
-- Thief suicide: "I tried to steal the gun from their pocket, but they were just happy to see me."
-- Active Lover dies: "I wanted to get out of this toxic relationship anyways."
-- Passiv Lover suicide: "The love of my life died, thus with a kiss I die."
-- Lawyer client kills Lawyer: "My client killed me. Do I still get paid?"
-- Teamkill Jackal/Sidekick: "First they sidekicked me, then they killed me... BUT WHY?"
-- Teamkill Impostor: "I guess they confused me for the Spy, is there even one?"
-- Submerged o2-Kill: "Do I really need that mask for breathing?"
-- Warlock self kill: "MAYBE I cursed the person next to me and killed myself. Oops."
-- Vulture/Cleaner eats/cleans body: "Is my dead body some kind of art now or... aaand it's gone."
-
-**Else random:**
-
-- "I'm not sure, but I guess a darker/lighter color killed me."
-- "If I counted correctly, then I died x seconds before the meeting started."
-- "If my role hasn't been saved, there's no (role) in the game anymore."
-- "It seems like my killer was the (role)."
-
-**Chance That The Answer Contains Additional Information:**
-
-- When you asked, x killer(s) was/were still alive.
-- When you asked, x player(s) who can use vents was/were still alive.
-- When you asked, x player(s) who is/are neutral but cannot kill was/were still alive.
-
-### Game Options
-
-| Name                                                                  |                             Description                              |
-| --------------------------------------------------------------------- | :------------------------------------------------------------------: |
-| Medium Spawn Chance                                                   |                                  -                                   |
-| Medium Cooldown                                                       |                                  -                                   |
-| Medium Duration                                                       |                 The time it takes to question a soul                 |
-| Medium Each Soul Can Only Be Questioned Once                          | If set to true, souls can only be questioned once and then disappear |
-| Chance That The Answer Contains The Remaining Amount Of Killing Roles |                  Chance includes Sheriff and Thief                   |
-
----
-
-## Trapper
-
-### **Team: Crewmates**
-
-The Trapper is a crewmate which can set up traps to trap player and gain information from them.\
-The traps will stuck player for x-seconds (depends on the setting) and reveal information in chat
-about their "Role", if they are a "Good/Evil Role" or their "Name".\
-The trap is not visible until a configurable amount of player were trapped.\
-When the trap gets visible, the Trapper will gain the information in chat (in a random order).\
-If a trap is triggered (and the option is enabled), the map of the Trapper will open up and show which trap
-was triggered.\
-The traps have a maximum of charges (uses) and a configurable amount of tasks are needed to recharge.\
-\
-**NOTE:**
-
-- The Trapper can't be trapped in their own trap(s).
-
-### Game Options
-
-| Name                                  |           Description            |
-| ------------------------------------- | :------------------------------: |
-| Trapper Spawn Chance                  |                -                 |
-| Trapper Cooldown                      |                -                 |
-| Max Traps Charges                     |                -                 |
-| Number Of Tasks Needed For Recharging |                -                 |
-| Trap Needed Trigger To Reveal         |                -                 |
-| Show Anonymous Map                    |                -                 |
-| Trap Information Type                 | "Name", "Role", "Good/Evil Role" |
-| Trap Duration                         |                -                 |
-
----
-
-# Modifier
-
-A Modifier is an addition to your Impostor/Neutral/Crewmate role.
-Some Modifiers can be ingame more than once (Quantity option).
-
-## Bloody
-
-If killed, the Bloody Modifier will leave a trail for x-seconds on their killer. The trail will have the color of the killed person.\
-\
-**NOTE**
-
-- Impostor, Neutral or Crewmate roles can have this Modifier
-
-### Game Options
-
-| Name                | Description |
-| ------------------- | :---------: |
-| Bloody Spawn Chance |      -      |
-| Bloody Quantity     |      -      |
-| Trail duration      |      -      |
-
----
-
-## Anti Teleport
-
-The Anti Teleport Modifier prevents the player from getting teleported to the Meeting Table if a body gets reported or an Emergency Meeting is called.\
-The player will start the round where the previous one ended (Emergency Meeting Call/Body Report).\
-\
-**NOTE**
-
-- Impostor, Neutral or Crewmate roles can have this Modifier
-
-### Game Options
-
-| Name                       | Description |
-| -------------------------- | :---------: |
-| Anti Teleport Spawn Chance |      -      |
-| Anti Teleport Quantity     |      -      |
-
----
-
-## Tie Breaker
-
-If the Voting ends in a tie, the Tie Breaker takes place and the player with the Tie Breaker Modifier gets an extra vote thats not visible to anyone.\
-Everyone will know if the Tie Breaker was involved in the Meeting or not.\
-\
-**NOTE**
-
-- Impostor, Neutral or Crewmate roles can have this Modifier
-- There can only be on player with this Modifier
-
-### Game Options
-
-| Name                     | Description |
-| ------------------------ | :---------: |
-| Tie Breaker Spawn Chance |      -      |
-
----
-
-## Bait
-
-The Bait forces the killer to self report the body (you can configure a delay in the options).\
-There can be more than one Bait.
-
-**NOTE:**
-
-- If the Sheriff has the Bait Modifier and dies while trying to kill a Crewmate, the Sheriff will _NOT_ report themself.
-- Impostor, Neutral or Crewmate roles can have this Modifier
-
-### Game Options
-
-| Name                         | Description |
-| ---------------------------- | :---------: |
-| Bait Spawn Chance            |      -      |
-| Bait Quantity                |      -      |
-| Bait Report Delay Min        |      -      |
-| Bait Report Delay Max        |      -      |
-| Warn The Killer With A Flash |      -      |
-
----
-
-## Lovers
-
-There are always two Lovers which are linked together.\
-Their primary goal is it to stay alive together until the end of the game.\
-If one Lover dies (and the option is activated), the other Lover suicides.\
-You can specify the chance of one Lover being an Impostor.\
-The Lovers never know the role of their partner, they only see who their partner is.\
-The Lovers win, if they are both alive when the game ends. They can also win with their original team (e.g. a dead Impostor Lover can win with the Impostors, an Arsonist Lover can still achieve an Arsonist win).\
-If one of the Lovers is a killer (i.e. Jackal/Sidekick/Impostor), they can achieve a "Lovers solo win" where only the Lovers win.\
-If there is no killer among the Lovers (e.g. an Arsonist Lover + Crewmate Lover) and they are both alive when the game ends, they win together with the Crewmates.\
-If there's an Impostor/Jackal + Crewmate Lover in the game, the tasks of a Crewmate Lover won't be counted (for a task win) as long as they're alive.\
-If the Lover dies, their tasks will also be counted.\
-You can enable an exclusive chat only for Lovers.
-
-**NOTE:**
-In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are not in the same team, the game is not automatically over since the Lovers can still achieve a solo win. E.g. if there are the following roles Impostor + ImpLover + Lover + Crewmate left, the game will not end and the next kill will decide if the Impostors or Lovers win.
-
-### Game Options
-
-| Name                              |                       Description                        |
-| --------------------------------- | :------------------------------------------------------: |
-| Lovers Spawn Chance               |                            -                             |
-| Chance That One Lover Is Impostor |                            -                             |
-| Both Lovers Die                   | Whether the second Lover suicides, if the first one dies |
-| Enable Lover Chat                 |                            -                             |
-
----
-
-**NOTE:**
-
-- The Modifier **Lover** can't be guessed, you'll have to guess the primary role of one of the Lovers, to kill both of them.
-
-## Sunglasses
-
-The Sunglasses will lower the Crewmate's vision by a small percentage. The percentage is configurable in the options.\
-The vision will also be affected when lights out.
-
-**NOTE:**
-
-- Sunglasses only affects Crewmates.
-- If you have the Sunglasses Modifier and get sidekicked, you will lose the Modifier.
-
-### Game Options
-
-| Name                    | Description |
-| ----------------------- | :---------: |
-| Sunglasses Spawn Chance |      -      |
-| Sunglasses Quantity     |      -      |
-| Vision with sunglasses  |      -      |
-
----
-
-## Mini
-
-The Mini's character is smaller and hence visible to everyone in the game.\
-The Mini cannot be killed until it turns 18 years old, however it can be voted out.
-
-**Impostor/Jackal Mini:**
-
-- While growing up the kill cooldown is doubled. When it's fully grown up its kill cooldown is 2/3 of the default one.
-- If it gets thrown out of the ship, everything is fine.
-
-**Crewmate Mini:**
-
-- The Crewmate Mini aims to play out the strength its invincibility in the early game.
-- If it gets thrown out of the ship before it turns 18, everyone loses. So think twice before you vote out a Mini.
-
-**Neutral Mini:**
-
-- The cooldown is not effected, except for the Team Jackal/Sidekick.
-- If it gets thrown out of the ship, everything is fine except for the Jester.
-- If the Jester Mini gets voted out the game will end in a Jester win.
-
-**NOTE:**
-
-- If the Sheriff tries to kill the Mini before it's fully grown, nothing happens.
-- The Sheriff can kill the Impostor/Neutral Mini, but only if it's fully grown up.
-- If the Mini's primary role is guessed correctly, it dies like every other role and nothing further happens.
-
-### Game Options
-
-| Name                     |       Description        |
-| ------------------------ | :----------------------: |
-| Mini Spawn Chance        |            -             |
-| Mini                     | Mini Growing Up Duration |
-| Mini Grows Up In Meeting |            -             |
-
----
+- Может быть изгнан на голосовании.
+- Если его выбросят с корабля, все в порядке, если Мини не был Джокером.
+- Если Мини является джокером, то он победит, если его выгонят при голосовании.
+- Если шериф попытается убить Мини до того, как он полностью вырастет, ничего не случится.
+- Роль мини можно угадать, тем самым его можно убить, и игра не закончится.
 
 ## VIP
 
-An Impostor, Jackal or Crewmate can be affected by the VIP (Very Important Player) Modifier.\
-The VIP will show everyone when he dies with a flash similar to the Seer Flash.\
-If the option Show Team Color is On, then everyone will get a flash in the color of the team the player was part of.
+- VIP покажет всем вспышкой, похожей на вспышку Провидца, что он умер.
+- Если параметр "Показать цвет команды" включен, то все получат вспышку в цвет команды, частью которой был игрок.
+- Команды:
+  - Импостер = Красный
+  - Нейтральный = Синий
+  - Мирный = Белый
 
-Teams:
+## Invert / Инвертирование
 
-- Impostor = Red
-- Neutral = Blue
-- Crewmate = White
+- Инвертирует элементы управления (независимо от клавиатуры или мыши).
 
-### Game Options
+## Chameleon / Хамелеон
 
-| Name             | Description |
-| ---------------- | :---------: |
-| VIP Spawn Chance |      -      |
-| VIP Quantity     |      -      |
-| Show Team Color  |      -      |
+- Хамелеон становится (частично или полностью) невидимым при стоянии на месте в течение x-секунд (зависит от настроек).
+- Может использовать способности, будучи невидимым, но перемещение снова сделает его видимым.
 
----
+## Shifter / Шифтер
 
-## Invert
-
-The Invert Modifier inverts your controls (no matter if keyboard or mouse).\
-\
-**NOTE**
-
-- Impostor, Neutral or Crewmate roles can have this Modifier
-
-### Game Options
-
-| Name                | Description |
-| ------------------- | :---------: |
-| Invert Spawn Chance |      -      |
-| Invert Quantity     |      -      |
-
----
-
-## Chameleon
-
-The Chameleon becomes (partially or fully) invisible when standing still for x-seconds (depends on the settings).\
-\
-**NOTE**
-
-- You can use abilities while being invisible, only moving will make you visible again
-- Impostor, Neutral or Crewmate roles can have this Modifier
-
-### Game Options
-
-| Name                     | Description |
-| ------------------------ | :---------: |
-| Chameleon Spawn Chance   |      -      |
-| Chameleon Quantity       |      -      |
-| Time Until Fading Starts |      -      |
-| Fade Duration            |      -      |
-| Minimum Visibility       |      -      |
-
----
-
-## Shifter
-
-The Shifter is a Modifier that can shift with another player. If the other player is Crewmate as well, they will swap their roles.\
-Swapping roles with an Impostor or Neutral fails and the Shifter commits suicide after the next meeting (there won't be a body).\
-The Shift will always be performed at the end of the next meeting right before a player is exiled. The target needs to be chosen during the round.\
-Even if the Shifter or the target dies before the meeting, the Shift will still be performed.\
-\
-**NOTE:**
-
-- The Shifter shift will always be triggered before the Erase (hence either the new role of the Shifter will be erased or the Shifter gets the role of their target, depending on whom the Eraser erased)
-- One time use abilities (e.g. shielding a player or Engineer sabotage fix) can only used by one player in the game (i.e. the Shifter
-  can only use them, if the previous player did not use them before)
-- The Shifter button is located in the bottom left corner right next to the garlic button (if the Vampire is enabled)
-- Only a Crewmate role can have this Modifier
+- Может меняться ролями с другим игроком. Если другой игрок Мирный, они поменяются своими ролями.
+- Замена ролей на «Импостер» или «Нейтральный» завершается неудачей, и Шифтер совершит самоубийство после следующего собрания (тела не будет).
+- Смена всегда будет выполняться в конце следующего собрания. Но цель должна быть выбрана во время раунда.
 
 ### Game Options
 
@@ -2274,7 +1442,7 @@ Even if the Shifter or the target dies before the meeting, the Shift will still 
 
 ---
 
-# Gamemodes
+# Режимы игры
 
 ## Guesser Modifier
 
@@ -2365,3 +1533,7 @@ If you found any bugs, have an idea for a new role or any other request, join ou
 # Copyedit
 
 Thanks for fixing our typos [jacktose](https://github.com/jacktose) ✌️
+
+# Перевод
+
+Перевод ролей выполнен [Sonya Billowed](https://vk.com/billowed)
