@@ -1554,6 +1554,4 @@ If you found any bugs, have an idea for a new role or any other request, join ou
 
 Thanks for fixing our typos [jacktose](https://github.com/jacktose) ✌️
 
-# Перевод
-
 Перевод ролей выполнен [Sonya Billowed](https://vk.com/billowed)
