@@ -795,77 +795,41 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 
 ## Guesser Modifier
 
-The **Guesser-Gamemode** is an extension to the Classic-Gamemode and gives you a multitude of new options for Guessers.\
-The Guesser is now like an addition and can be applied to all players IF you want to. Settings are available to set the number of guessers for each team separately (Impostor, Neutral, Crewmate).\
-When playing this game mode, the Guessers can have another role (e.g. Medic Guesser). The same
-applies of course for Impostor and/or Neutral roles.\
-Players can additionally have a modifier, if enabled (e.g. Medic Guesser Mini).
+Режим **Guesser-Gamemode** является расширением Classic-Gamemode и дает вам множество новых возможностей для Guessers (угадывателей) \
+Guessers теперь является дополнением для всех игроков ЕСЛИ вы этого захотите. Доступны настройки лимистов количества угадывающих для каждой команды (Impostor, Neutral, Crewmate).\
+Когда вы играете в этом режиме, Guessers может иметь другую роль (например Medic Guesser). Аналогично и для других команд.
 
-### Game Options
-
-| Name                                            |                                Description                                |
-| ----------------------------------------------- | :-----------------------------------------------------------------------: |
-| Number of Crew Guessers                         |                                     -                                     |
-| Number of Neutral Guessers                      |                                     -                                     |
-| Number of Impostor Guessers                     |                                     -                                     |
-| Force Jackal Guesser                            | If set to "On", the first neutral role who will be Guesser is the Jackal. |
-| Guessers Can Have A Modifier                    |                                     -                                     |
-| Guesser Number Of Shots                         |                                     -                                     |
-| Guesser Can Shoot Multiple Times Per Meeting    |                                     -                                     |
-| Guesses Ignore The Medic Shield                 |                                     -                                     |
-| Evil Guesser Can Guess The Spy                  |                                     -                                     |
-| Guesser Can't Guess Snitch When Tasks Completed |                                     -                                     |
-
----
-
-**NOTE**
-
-- If a Crewmate Guesser gets sidekicked, they will remain a Guesser even if the host (maybe) has set up only 1 "Neutral role Guesser".
+Игроки могут иметь и дополгительные модификаторы (например Medic Guesser Mini).
 
 ## Hide 'n Seek
 
-The **Hide 'n Seek-Gamemode** is a standalone Gamemode where Hunter have to catch their prey ("Hunted" players).\
-The Hunter and Hunted player who are still alive are displayed to everyone in the bottom left corner (similar to the Arsonist display).\
-When the game starts, the Hunter's movement is disabled for x-seconds (depends on the settings).\
-There is a time-limit for each round, if the timer runs out and at least one Hunted is still alive, the Crew wins. The Hunted players can also win, if Taskwin is enabled and the Crew completes all tasks.\
-If the Hunters kill all players before one of these conditions is triggered, the Hunters win.\
+Режим **Hide 'n Seek-Gamemode** это отдельный игровой режим, в котором Охотник должен поймать остальных игроков (прятки).
 
-#### Hunter Abilities:
+- Охотник и преследуемые игроки, которые все еще живы, отображаются для всех в левом нижнем углу (аналогично отображению Поджигателя).
+- При запуске игры движение Охотника отключается на X секунд (зависит от настроек).
+- Для каждого раунда есть ограничение по времени, если таймер истекает и хотя бы один игрок все еще жив, мирные побеждают. Ещё игроки могут победить если включена настройка Taskwin и команда выполнит все задания.
+- Если Охотники убивают всех игроков до того, как сработает одно из этих условий, Охотники побеждают.
 
-- Enable arrows (arrows point to all Hunted players for x-seconds (depending on settings))
-- Mobile Admin table (like Hacker)
-- Lighter ability (gives the Hunter a biggier vision radius for x-seconds (depending on settings))
+#### Навыки охотников:
 
-#### Hunted Ability:
+- Включить стрелки (стрелки указывают на всех преследуемых игроков в течение X секунд (в зависимости от настроек))
+- Mobile Admin table (показывает где находятся игроки на карте, например как у Hacker)
+- Увеличение обзора (дает Охотнику больший радиус обзора на X секунд (в зависимости от настроек))
 
-- Timeshield (like Timemaster, depending on settings)
+Каждое действие охотника уменьшает таймер.
 
-Each Hunter action or finished Crew task will lower the timer by a configurable amount of time.\
-\
-**NOTE:**
+#### Навыки мирных:
 
-- We added a vent on Polus (Specimen), but only for this Gamemode. The vent is connected with Admin & Lab.
-- The Report button lights up, but cannot be pressed.
-- The tasks can be configured separately for this mode, without affecting your normal game settings.
-- Only the Hunter will be rewinded if they try to kill a player with an active timeshield.
+- Timeshield (как у Timemaster, можно настроить)
 
-### Game Options
+Каждое выполненное задание уменьшает таймер.
 
-| General                       | Description | Hunter                     | Description | Hunted                 | Description |
-| ----------------------------- | :---------: | -------------------------- | :---------: | ---------------------- | :---------: |
-| Map                           |      -      | Hunter Light Cooldown      |      -      | Hunted Shield Cooldown |      -      |
-| Number Of Hunters             |      -      | Hunter Light Duration      |      -      | Hunted Shield Duration |      -      |
-| Kill Cooldown                 |      -      | Hunter Light Vision        |      -      | Hunted Rewind Time     |      -      |
-| Hunter Vision                 |      -      | Hunter Light Punish in Sec |      -      | Hunted Shield Number   |      -      |
-| Hunted Vision                 |      -      | Hunter Admin Cooldown      |      -      |
-| Common Tasks                  |      -      | Hunter Admin Duration      |      -      |
-| Short Tasks                   |      -      | Hunter Admin Punish In Sec |      -      |
-| Long Tasks                    |      -      | Hunter Arrow Cooldown      |      -      |
-| Timer In Min                  |      -      | Hunter Arrow Duration      |      -      |
-| Task Win Is Possible          |      -      | Hunter Arrow Punish In Sec |      -      |
-| Finish Tasks Punish In Sec    |      -      |
-| Enable Sabotages              |      -      |
-| Time The Hunter Needs To Wait |      -      |
+**ОСОБЕННОСТИ:**
+
+- Мы добавили вентиляцию на Полус, но только для этого игрового режима. Вентиляция связана с Admin & Lab.
+- Кнопка Report загорается, но ее нельзя нажать.
+- Задания можно настроить отдельно для этого режима, не затрагивая ваши обычные игровые настройки.
+- Только Охотник будет перемотан, если попытается убить игрока с активным щитом таймастера.
 
 # Кастомные шляпы
 
