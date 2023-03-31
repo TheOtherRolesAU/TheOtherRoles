@@ -12,6 +12,7 @@ using UnityEngine;
 using TheOtherRoles.CustomGameModes;
 using static UnityEngine.GraphicsBuffer;
 using AmongUs.GameOptions;
+using Sentry.Internal.Extensions;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
@@ -479,8 +480,10 @@ namespace TheOtherRoles.Patches {
 
                 // Colorblind Text During the round
                 if (p.cosmetics.colorBlindText != null && p.cosmetics.showColorBlindText && p.cosmetics.colorBlindText.gameObject.active) {
-                    p.cosmetics.colorBlindText.transform.localPosition = new Vector3(0, -1f, -0.001f);
+                    p.cosmetics.colorBlindText.transform.localPosition = new Vector3(0, -1f, 0f);
                 }
+
+                p.cosmetics.nameText.transform.parent.SetLocalZ(-0.0001f);  // This moves both the name AND the colorblindtext behind objects (if the player is behind the object), like the rock on polus
 
                 if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
@@ -594,12 +597,17 @@ namespace TheOtherRoles.Patches {
 
         static void snitchUpdate() {
             if (Snitch.snitch == null) return;
-            bool snitchIsDead = Snitch.snitch.Data.IsDead;
+            if (!Snitch.needsUpdate) return;
 
+            bool snitchIsDead = Snitch.snitch.Data.IsDead;
             var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
+
+            if (playerTotal == 0) return;
+            PlayerControl local = CachedPlayer.LocalPlayer.PlayerControl;
+
             int numberOfTasks = playerTotal - playerCompleted;
 
-            if (Snitch.isRevealed && (CachedPlayer.LocalPlayer.PlayerControl.Data.Role.IsImpostor || Helpers.isNeutral(CachedPlayer.LocalPlayer.PlayerControl))) {
+            if (Snitch.isRevealed && ((Snitch.targets == Snitch.Targets.EvilPlayers && Helpers.isEvil(local)) || (Snitch.targets == Snitch.Targets.Killers && Helpers.isKiller(local)))) {
                 if (Snitch.text == null) {
                     Snitch.text = GameObject.Instantiate(FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText, FastDestroyableSingleton<HudManager>.Instance.transform);
                     Snitch.text.enableWordWrapping = false;
@@ -610,9 +618,12 @@ namespace TheOtherRoles.Patches {
                     Snitch.text.text = $"Snitch is alive: " + playerCompleted + "/" + playerTotal;
                     if (snitchIsDead) Snitch.text.text = $"Snitch is dead!";
                 }
-
             }
-            if (snitchIsDead) return;
+
+            if (snitchIsDead) {
+                if (MeetingHud.Instance == null) Snitch.needsUpdate = false;
+                return;
+            }
             if (numberOfTasks <= Snitch.taskCountForReveal) Snitch.isRevealed = true;
         }
 
@@ -1278,6 +1289,14 @@ namespace TheOtherRoles.Patches {
                     }
                 }
             }
+
+            // Snitch
+            if (Snitch.snitch != null && CachedPlayer.LocalPlayer.PlayerId == Snitch.snitch.PlayerId && MapBehaviourPatch.herePoints.Keys.Any(x => x.PlayerId == target.PlayerId)) {
+                foreach (var a in MapBehaviourPatch.herePoints.Where(x => x.Key.PlayerId == target.PlayerId)) {
+                    UnityEngine.Object.Destroy(a.Value);
+                    MapBehaviourPatch.herePoints.Remove(a.Key);
+                }
+            }
         }
     }
 
@@ -1386,6 +1405,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.IsFlashlightEnabled))]
     public static class IsFlashlightEnabledPatch {
         public static bool Prefix(ref bool __result) {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek)
+                return true;
             __result = false;
             if (!CachedPlayer.LocalPlayer.Data.IsDead && Lighter.lighter != null && Lighter.lighter.PlayerId == CachedPlayer.LocalPlayer.PlayerId) {
                 __result = true;

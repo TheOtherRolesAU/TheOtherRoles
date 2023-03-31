@@ -42,7 +42,8 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2023.2.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
+| 2023.03.28s| v4.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.1/TheOtherRoles.zip)
+| 2023.02.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
 | 2022.12.14s| v4.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.1/TheOtherRoles.zip)
 <details>
   <summary>Click to show older versions</summary>
@@ -120,6 +121,20 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 4.3.1**
+- Update to Among Us 2023.3.28
+- Added new options (Information mode - Chat/Map/Both, Roles - Evil Killing / Evil)  to the snitch and fixed bugs affecting the snitch
+- Changed the maximum amount per modifier to 15 (where applicable)
+- Changed the colorblind text and player name to be behind certain objects again (rock on Polus etc.)
+- Fixed a bug where a sidekicked bomber would not lose the bomber role
+- Fixed a bug where enabled vanilla roles would be assigned even if "block vanilla roles" was turned on
+- Fixed several Bugs in both Hide N Seek modes (should be playable again)
+- Fixed a bug where Trickster JackInTheBoxes could sometimes not be used if they were placed behind objects
+- Fixed a bug where the cosmetics of an invisible Ninja became visible when the camouflage ended
+- Fixed a bug where the mini would show a "jump" in age at the end of a meeting due to the time spent in cutscenes
+- Fixed a bug where the mayor would always have the mobile emergency button, no matter which setting was selected 
+
 
 **Version 4.3.0**
 - Updated to Among Us version 2023.2.28
@@ -1597,6 +1612,8 @@ When the Snitch only has a configurable amount of tasks left, it will be reveale
 |----------|:-------------:|
 | Snitch Spawn Chance | -
 | Task Count Where The Snitch Will Be Revealed | -
+| Information Mode  | Whether the snitch will get info on the map and/or in the chat 
+| Targets | Snitch Will See All Evil Players or Killing Evil Players
 -----------------------
 
 ## Spy

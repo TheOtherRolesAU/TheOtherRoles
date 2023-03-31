@@ -269,7 +269,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
     public static class ShouldAlwaysHorseAround {
         public static bool Prefix(ref bool __result) {
-            __result = false;
+            __result = EventUtility.isEnabled && !EventUtility.disableHorses;
             return false;
         }
     }

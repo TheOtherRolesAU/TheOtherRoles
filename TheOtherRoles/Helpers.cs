@@ -482,6 +482,20 @@ namespace TheOtherRoles {
             return false;
         }
 
+        public static bool isKiller(PlayerControl player) {
+            return player.Data.Role.IsImpostor || 
+                (isNeutral(player) && 
+                player != Jester.jester && 
+                player != Arsonist.arsonist && 
+                player != Vulture.vulture && 
+                player != Lawyer.lawyer && 
+                player != Pursuer.pursuer);
+
+        }
+
+        public static bool isEvil(PlayerControl player) {
+            return player.Data.Role.IsImpostor || isNeutral(player);
+        }
 
         public static bool zoomOutStatus = false;
         public static void toggleZoom(bool reset=false) {
@@ -493,8 +507,10 @@ namespace TheOtherRoles {
                 if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize = orthographicSize;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
             }
 
-            HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
-            HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
+            if (HudManagerStartPatch.zoomOutButton != null) {
+                HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
+                HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
+            }
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
         }
 

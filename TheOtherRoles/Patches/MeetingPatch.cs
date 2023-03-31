@@ -224,7 +224,12 @@ namespace TheOtherRoles.Patches {
                 }
 
                 // Mini
-                if (!Mini.isGrowingUpInMeeting) Mini.timeOfGrowthStart = Mini.timeOfGrowthStart.Add(DateTime.UtcNow.Subtract(Mini.timeOfMeetingStart));
+                if (!Mini.isGrowingUpInMeeting) Mini.timeOfGrowthStart = Mini.timeOfGrowthStart.Add(DateTime.UtcNow.Subtract(Mini.timeOfMeetingStart)).AddSeconds(10);
+
+                // Snitch
+                if (Snitch.snitch != null && !Snitch.needsUpdate && Snitch.snitch.Data.IsDead && Snitch.text != null) {
+                    UnityEngine.Object.Destroy(Snitch.text);
+                }
             }
         }
 
@@ -599,10 +604,14 @@ namespace TheOtherRoles.Patches {
         class StartMeetingPatch {
             public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)]GameData.PlayerInfo meetingTarget) {
                 RoomTracker roomTracker = FastDestroyableSingleton<HudManager>.Instance?.roomTracker;
+                byte roomId = Byte.MinValue;
+                if (roomTracker != null && roomTracker.LastRoom != null) {
+                    roomId = (byte)roomTracker.LastRoom?.RoomId;
+                }
                 if (Snitch.snitch != null && roomTracker != null) {
                     MessageWriter roomWriter = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareRoom, Hazel.SendOption.Reliable, -1);
                     roomWriter.Write(CachedPlayer.LocalPlayer.PlayerId);
-                    roomWriter.Write(roomTracker.LastRoom ? (byte)roomTracker.LastRoom.RoomId : Byte.MinValue);
+                    roomWriter.Write(roomId);
                     AmongUsClient.Instance.FinishRpcImmediately(roomWriter);
                 }
 
@@ -664,15 +673,16 @@ namespace TheOtherRoles.Patches {
                 // Add Snitch info
                 string output = "";
 
-                if (Snitch.snitch != null && (CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch || Helpers.shouldShowGhostInfo()) && !Snitch.snitch.Data.IsDead) {
+                if (Snitch.snitch != null && Snitch.mode != Snitch.Mode.Map && (CachedPlayer.LocalPlayer.PlayerControl == Snitch.snitch || Helpers.shouldShowGhostInfo()) && !Snitch.snitch.Data.IsDead) {
                     var (playerCompleted, playerTotal) = TasksHandler.taskInfo(Snitch.snitch.Data);
                     int numberOfTasks = playerTotal - playerCompleted;
                     if (numberOfTasks == 0) {
                         output = $"Bad alive roles in game: \n \n";
-                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.3f, new Action<float>((x) => {
+                        FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(0.4f, new Action<float>((x) => {
                             if (x == 1f) {
                                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                                    if (!Helpers.isNeutral(p) && !p.Data.Role.IsImpostor) continue;
+                                    if (Snitch.targets == Snitch.Targets.Killers && !Helpers.isKiller(p)) continue;
+                                    else if (Snitch.targets == Snitch.Targets.EvilPlayers && !Helpers.isEvil(p)) continue;
                                     if (!Snitch.playerRoomMap.ContainsKey(p.PlayerId)) continue;
                                     if (p.Data.IsDead) continue;
                                     var room = Snitch.playerRoomMap[p.PlayerId];
@@ -680,7 +690,7 @@ namespace TheOtherRoles.Patches {
                                     if (room != byte.MinValue) {
                                         roomName = DestroyableSingleton<TranslationController>.Instance.GetString((SystemTypes)room);
                                     }
-                                    output += "- " + RoleInfo.GetRolesString(p, false, false, true) + ", was last seen in " + roomName + "\n";
+                                    output += "- " + RoleInfo.GetRolesString(p, false, false, true) + ", was last seen " + roomName + "\n";
                                 }
                                 FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Snitch.snitch, $"{output}");
                             }

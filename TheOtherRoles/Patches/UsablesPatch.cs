@@ -12,13 +12,15 @@ using TheOtherRoles.Utilities;
 using TheOtherRoles.Objects;
 using TheOtherRoles.CustomGameModes;
 using Reactor.Utilities.Extensions;
+using AmongUs.GameOptions;
 
 namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse) {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
 
@@ -77,7 +79,7 @@ namespace TheOtherRoles.Patches {
                 Vector3 center = @object.Collider.bounds.center;
                 Vector3 position = __instance.transform.position;
                 num = Vector2.Distance(center, position);
-                canUse &= (num <= usableDistance && !PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false));
+                canUse &= (num <= usableDistance && (!PhysicsHelpers.AnythingBetween(@object.Collider, center, position, Constants.ShipOnlyMask, false) || __instance.name.StartsWith("JackInTheBoxVent_")));
             }
             __result = num;
             return false;
@@ -96,6 +98,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch {
         public static bool Prefix(Vent __instance) {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
             // Deputy handcuff disables the vents
             if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId)) {
                 Deputy.setHandcuffedKnows();
@@ -133,7 +136,7 @@ namespace TheOtherRoles.Patches {
         }
     }
 
-    [HarmonyPatch(typeof(Vent), nameof(Vent.MoveToVent))]
+    [HarmonyPatch(typeof(Vent), nameof(Vent.TryMoveToVent))]
     public static class MoveToVentPatch {
         public static bool Prefix(Vent otherVent) {
             return !Trapper.playersOnMap.Contains(CachedPlayer.LocalPlayer.PlayerControl);
@@ -636,7 +639,7 @@ namespace TheOtherRoles.Patches {
                 }
                 // Dead Bodies
                 foreach (DeadBody deadBody in GameObject.FindObjectsOfType<DeadBody>()) {
-                    SpriteRenderer component = deadBody.bodyRenderer;
+                    SpriteRenderer component = deadBody.bodyRenderers.FirstOrDefault();
                     component.material.SetColor("_BackColor", Palette.ShadowColors[11]);
                     component.material.SetColor("_BodyColor", Palette.PlayerColors[11]);
                 }
@@ -668,7 +671,7 @@ namespace TheOtherRoles.Patches {
                     // Dead Bodies
                     foreach (DeadBody deadBody in GameObject.FindObjectsOfType<DeadBody>()) {
                         var colorId = GameData.Instance.GetPlayerById(deadBody.ParentId).Object.Data.DefaultOutfit.ColorId;
-                        SpriteRenderer component = deadBody.bodyRenderer;
+                        SpriteRenderer component = deadBody.bodyRenderers.FirstOrDefault();
                         component.material.SetColor("_BackColor", Palette.ShadowColors[colorId]);
                         component.material.SetColor("_BodyColor", Palette.PlayerColors[colorId]);
                     }
@@ -687,7 +690,7 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(PlayerControl __instance, SpriteRenderer rend) {
             if (!nightVisionIsActive) return;
             foreach (DeadBody deadBody in GameObject.FindObjectsOfType<DeadBody>()) {
-                foreach (SpriteRenderer component in new SpriteRenderer[2] { deadBody.bodyRenderer, deadBody.bloodSplatter }) { 
+                foreach (SpriteRenderer component in new SpriteRenderer[2] { deadBody.bodyRenderers.FirstOrDefault(), deadBody.bloodSplatter }) { 
                     component.material.SetColor("_BackColor", Palette.ShadowColors[11]);
                     component.material.SetColor("_BodyColor", Palette.PlayerColors[11]);
                 }

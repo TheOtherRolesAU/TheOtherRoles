@@ -64,7 +64,7 @@ namespace TheOtherRoles
         private static CustomButton huntedShieldButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
-        public static PoolablePlayer morphTargetDisplay;
+        public static PoolablePlayer targetDisplay;
 
         public static TMPro.TMP_Text securityGuardButtonScrewsText;
         public static TMPro.TMP_Text securityGuardChargesText;
@@ -234,6 +234,30 @@ namespace TheOtherRoles
                     button.isHandcuffed = false;
                 }
             }
+        }
+
+        private static void setButtonTargetDisplay(PlayerControl target, CustomButton button = null, Vector3? offset=null) {
+            if (target == null || button == null) {
+                if (targetDisplay != null) {  // Reset the poolable player
+                    targetDisplay.gameObject.SetActive(false);
+                    GameObject.Destroy(targetDisplay.gameObject);
+                    targetDisplay = null;
+                }
+                return;
+            }
+            // Add poolable player to the button so that the target outfit is shown
+            button.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);  // Before the poolable player
+            targetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, button.actionButton.transform);
+            GameData.PlayerInfo data = target.Data;
+            target.SetPlayerMaterialColors(targetDisplay.cosmetics.currentBodySprite.BodySprite);
+            targetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
+            targetDisplay.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
+            targetDisplay.cosmetics.nameText.text = "";  // Hide the name!
+            targetDisplay.transform.localPosition = new Vector3(0f, 0.22f, -0.01f);
+            if (offset != null) targetDisplay.transform.localPosition += (Vector3)offset;
+            targetDisplay.transform.localScale = Vector3.one * 0.33f;
+            targetDisplay.setSemiTransparent(false);
+            targetDisplay.gameObject.SetActive(true);
         }
 
         public static void Postfix(HudManager __instance) {
@@ -470,7 +494,7 @@ namespace TheOtherRoles
                     RPCProcedure.setFutureShifted(Shifter.currentTarget.PlayerId);
                     SoundEffectsManager.play("shifterShift");
                 },
-                () => { return Shifter.shifter != null && Shifter.shifter == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { return Shifter.shifter != null && Shifter.shifter == CachedPlayer.LocalPlayer.PlayerControl && Shifter.futureShift == null && !CachedPlayer.LocalPlayer.Data.IsDead; },
                 () => { return Shifter.currentTarget && Shifter.futureShift == null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
                 () => { },
                 Shifter.getButtonSprite(),
@@ -499,18 +523,7 @@ namespace TheOtherRoles
                         SoundEffectsManager.play("morphlingSample");
 
                         // Add poolable player to the button so that the target outfit is shown
-                        morphlingButton.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);  // Before the poolable player
-                        morphTargetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, morphlingButton.actionButton.transform);
-                        GameData.PlayerInfo data = Morphling.sampledTarget.Data;
-                        Morphling.sampledTarget.SetPlayerMaterialColors(morphTargetDisplay.cosmetics.currentBodySprite.BodySprite);
-                        morphTargetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
-                        morphTargetDisplay.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
-                       // PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, morphTargetDisplay.PetSlot);
-                        morphTargetDisplay.cosmetics.nameText.text = "";  // Hide the name!
-                        morphTargetDisplay.transform.localPosition = new Vector3(0f, 0.22f, -0.01f);
-                        morphTargetDisplay.transform.localScale = Vector3.one * 0.33f;
-                        morphTargetDisplay.setSemiTransparent(false);
-                        morphTargetDisplay.gameObject.SetActive(true);
+                        setButtonTargetDisplay(Morphling.sampledTarget, morphlingButton);
                     }
                 },
                 () => { return Morphling.morphling != null && Morphling.morphling == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
@@ -521,11 +534,7 @@ namespace TheOtherRoles
                     morphlingButton.isEffectActive = false;
                     morphlingButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                     Morphling.sampledTarget = null;
-                    if (morphTargetDisplay != null) {  // Reset the poolable player
-                        morphTargetDisplay.gameObject.SetActive(false);
-                        GameObject.Destroy(morphTargetDisplay.gameObject);
-                        morphTargetDisplay = null;
-                    }
+                    setButtonTargetDisplay(null);
                 },
                 Morphling.getSampleSprite(),
                 CustomButton.ButtonPositions.upperRowLeft,
@@ -540,9 +549,7 @@ namespace TheOtherRoles
                         SoundEffectsManager.play("morphlingMorph");
 
                         // Reset the poolable player
-                        morphTargetDisplay.gameObject.SetActive(false);
-                        GameObject.Destroy(morphTargetDisplay.gameObject);
-                        morphTargetDisplay = null;
+                        setButtonTargetDisplay(null);
                     }
                 }
             );
@@ -1680,7 +1687,7 @@ namespace TheOtherRoles
                    AmongUsClient.Instance.FinishRpcImmediately(writer);
                    mayorMeetingButton.Timer = 1f;
                },
-               () => { return Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+               () => { return Mayor.mayor != null && Mayor.mayor == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead && Mayor.meetingButton; },
                () => {
                    mayorMeetingButton.actionButton.OverrideText("Emergency ("+ Mayor.remoteMeetingsLeft + ")");
                    bool sabotageActive = false;
@@ -1772,7 +1779,12 @@ namespace TheOtherRoles
                 () => {
                     defuseButton.HasEffect = true;
                 },
-                () => { return Bomber.bomb != null && Bomb.canDefuse && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => {
+                    if (shifterShiftButton.HasButton())
+                        defuseButton.PositionOffset = new Vector3(0f, 2f, 0f);
+                    else
+                        defuseButton.PositionOffset = new Vector3(0f, 1f, 0f);
+                    return Bomber.bomb != null && Bomb.canDefuse && !CachedPlayer.LocalPlayer.Data.IsDead; },
                 () => {
                     if (defuseButton.isEffectActive && !Bomb.canDefuse) {
                         defuseButton.Timer = 0f;
@@ -1785,7 +1797,7 @@ namespace TheOtherRoles
                     defuseButton.isEffectActive = false;
                 },
                 Bomb.getDefuseSprite(),
-                new Vector3(1f, 1f, 0),
+                new Vector3(0f, 1f, 0),
                 __instance,
                 null,
                 true,
@@ -1838,9 +1850,6 @@ namespace TheOtherRoles
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.uncheckedMurderPlayer(thief.PlayerId, target.PlayerId, byte.MaxValue);
                     }
-
-                    
-
                 },
                () => { return Thief.thief != null && CachedPlayer.LocalPlayer.PlayerControl == Thief.thief && !CachedPlayer.LocalPlayer.Data.IsDead; },
                () => { return Thief.currentTarget != null && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
@@ -1894,7 +1903,7 @@ namespace TheOtherRoles
                     hunterLighterButton.actionButton.graphic.color = Palette.EnabledColor;
                 },
                 Hunter.getLightSprite(),
-                CustomButton.ButtonPositions.upperRowCenter,
+                CustomButton.ButtonPositions.upperRowFarLeft,
                 __instance,
                 KeyCode.F,
                 true,

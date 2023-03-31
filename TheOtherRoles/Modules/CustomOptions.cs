@@ -12,6 +12,7 @@ using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using static TheOtherRoles.CustomOption;
 using Reactor.Utilities.Extensions;
+using AmongUs.GameOptions;
 
 namespace TheOtherRoles {
     public class CustomOption {
@@ -665,7 +666,7 @@ namespace TheOtherRoles {
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.CoSpawnPlayer))]
     public class AmongUsClientOnPlayerJoinedPatch {
         public static void Postfix() {
-            if (PlayerControl.LocalPlayer != null) {
+            if (PlayerControl.LocalPlayer != null && AmongUsClient.Instance.AmHost) {
                 CustomOption.ShareOptionSelections();
             }
         }
@@ -1042,7 +1043,9 @@ namespace TheOtherRoles {
         private static TMPro.TextMeshPro[] settingsTMPs = new TMPro.TextMeshPro[3];
         private static GameObject settingsBackground;
         public static void OpenSettings(HudManager __instance) {
-            if (__instance.FullScreen == null || MapBehaviour.Instance && MapBehaviour.Instance.IsOpen /*|| AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started*/) return;
+            if (__instance.FullScreen == null || MapBehaviour.Instance && MapBehaviour.Instance.IsOpen
+                /*|| AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started*/
+                || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
             settingsBackground = GameObject.Instantiate(__instance.FullScreen.gameObject, __instance.transform);
             settingsBackground.SetActive(true);
             var renderer = settingsBackground.GetComponent<SpriteRenderer>();
@@ -1084,7 +1087,7 @@ namespace TheOtherRoles {
                 toggleSettingsButton.OnClick.RemoveAllListeners();
                 toggleSettingsButton.OnClick.AddListener((Action)(() => ToggleSettings(__instance)));
             }
-            toggleSettingsButtonObject.SetActive(__instance.MapButton.gameObject.active && !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen));
+            toggleSettingsButtonObject.SetActive(__instance.MapButton.gameObject.active && !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) && GameOptionsManager.Instance.currentGameOptions.GameMode != GameModes.HideNSeek);
             toggleSettingsButtonObject.transform.localPosition = __instance.MapButton.transform.localPosition + new Vector3(0, -0.66f, -500f);
         }
     }
