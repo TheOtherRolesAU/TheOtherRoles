@@ -9,7 +9,7 @@ using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles
 {
-    class RoleInfo {
+    public class RoleInfo {
         public Color color;
         public string name;
         public string introDescription;
@@ -18,7 +18,7 @@ namespace TheOtherRoles
         public bool isNeutral;
         public bool isModifier;
 
-        RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false) {
+        public RoleInfo(string name, Color color, string introDescription, string shortDescription, RoleId roleId, bool isNeutral = false, bool isModifier = false) {
             this.color = color;
             this.name = name;
             this.introDescription = introDescription;
@@ -270,6 +270,52 @@ namespace TheOtherRoles
                         roleName = roleName + Helpers.cs(Arsonist.color, $" ({CachedPlayer.AllPlayers.Count(x => { return x.PlayerControl != Arsonist.arsonist && !x.Data.IsDead && !x.Data.Disconnected && !Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); })} left)");
                     if (p == Jackal.fakeSidekick)
                         roleName = Helpers.cs(Sidekick.color, $" (fake SK)") + roleName;
+                    // Death Reason on Ghosts
+                    if (p.Data.IsDead) {
+                        string deathReasonString = "";
+                        var deadPlayer = GameHistory.deadPlayers.FirstOrDefault(x => x.player.PlayerId == p.PlayerId);
+
+                        Color killerColor = new();
+                        if (deadPlayer != null && deadPlayer.killerIfExisting != null) {
+                            killerColor = RoleInfo.getRoleInfoForPlayer(deadPlayer.killerIfExisting, false).FirstOrDefault().color;
+                        }
+
+                        if (deadPlayer != null) {
+                            switch (deadPlayer.deathReason) {
+                                case DeadPlayer.CustomDeathReason.Disconnect:
+                                    deathReasonString = " - disconnected";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Exile:
+                                    deathReasonString = " - voted out";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Kill:
+                                    deathReasonString = $" - killed by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Guess:
+                                    if (deadPlayer.killerIfExisting.Data.PlayerName == p.Data.PlayerName)
+                                        deathReasonString = $" - failed guess";
+                                    else
+                                        deathReasonString = $" - guessed by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Shift:
+                                    deathReasonString = $" - {Helpers.cs(Color.yellow, "shifted")} {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.WitchExile:
+                                    deathReasonString = $" - {Helpers.cs(Witch.color, "witched")} by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.LoverSuicide:
+                                    deathReasonString = $" - {Helpers.cs(Lovers.color, "lover died")}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.LawyerSuicide:
+                                    deathReasonString = $" - {Helpers.cs(Lawyer.color, "bad Lawyer")}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Bomb:
+                                    deathReasonString = $" - bombed by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                            }
+                            roleName = roleName + deathReasonString;
+                        }
+                    }
                 }
             }
             return roleName;

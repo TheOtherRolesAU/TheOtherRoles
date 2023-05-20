@@ -52,10 +52,12 @@ namespace TheOtherRoles.Patches {
         internal class PlayerRoleInfo {
             public string PlayerName { get; set; }
             public List<RoleInfo> Roles {get;set;}
+            public string RoleNames { get; set; }
             public int TasksCompleted  {get;set;}
             public int TasksTotal  {get;set;}
             public bool IsGuesser {get; set;}
             public int? Kills {get; set;}
+            public bool IsAlive { get; set; }
         }
     }
 
@@ -82,7 +84,8 @@ namespace TheOtherRoles.Patches {
                 if (killCount == 0 && !(new List<RoleInfo>() { RoleInfo.sheriff, RoleInfo.jackal, RoleInfo.sidekick, RoleInfo.thief }.Contains(RoleInfo.getRoleInfoForPlayer(playerControl, false).FirstOrDefault()) || playerControl.Data.Role.IsImpostor)) {
                     killCount = null;
                     }
-                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted, IsGuesser = isGuesser, Kills = killCount });
+                string roleString = RoleInfo.GetRolesString(playerControl, true, true, false);
+                AdditionalTempData.playerRoles.Add(new AdditionalTempData.PlayerRoleInfo() { PlayerName = playerControl.Data.PlayerName, Roles = roles, RoleNames = roleString, TasksTotal = tasksTotal, TasksCompleted = tasksCompleted, IsGuesser = isGuesser, Kills = killCount, IsAlive = !playerControl.Data.IsDead });
             }
 
             // Remove Jester, Arsonist, Vulture, Jackal, former Jackals and Sidekick from winners (if they win, they'll be readded)
@@ -343,11 +346,12 @@ namespace TheOtherRoles.Patches {
                 }
                 roleSummaryText.AppendLine("Players and roles at the end of the game:");
                 foreach(var data in AdditionalTempData.playerRoles) {
-                    var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
-                    if (data.IsGuesser) roles += " (Guesser)";
+                    //var roles = string.Join(" ", data.Roles.Select(x => Helpers.cs(x.color, x.name)));
+                    string roles = data.RoleNames;
+                    //if (data.IsGuesser) roles += " (Guesser)";
                     var taskInfo = data.TasksTotal > 0 ? $" - <color=#FAD934FF>({data.TasksCompleted}/{data.TasksTotal})</color>" : "";
                     if (data.Kills != null) taskInfo += $" - <color=#FF0000FF>(Kills: {data.Kills})</color>";
-                    roleSummaryText.AppendLine($"{data.PlayerName} - {roles}{taskInfo}"); 
+                    roleSummaryText.AppendLine($"{Helpers.cs(data.IsAlive ? Color.white : new Color(.7f,.7f,.7f), data.PlayerName)} - {roles}{taskInfo}"); 
                 }
                 TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
                 roleSummaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;

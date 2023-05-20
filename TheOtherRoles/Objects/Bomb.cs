@@ -85,6 +85,15 @@ namespace TheOtherRoles.Objects {
                 var distance = Vector2.Distance(position, CachedPlayer.LocalPlayer.transform.position);  // every player only checks that for their own client (desynct with positions sucks)
                 if (distance < Bomber.destructionRange && !CachedPlayer.LocalPlayer.Data.IsDead) {
                     Helpers.checkMurderAttemptAndKill(Bomber.bomber, CachedPlayer.LocalPlayer.PlayerControl, false, false, true, true);
+                    
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                    writer.Write((byte)RPCProcedure.GhostInfoTypes.DeathReasonAndKiller);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                    writer.Write((byte)DeadPlayer.CustomDeathReason.Bomb);
+                    writer.Write(Bomber.bomber.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    GameHistory.overrideDeathReasonAndKiller(CachedPlayer.LocalPlayer, DeadPlayer.CustomDeathReason.Bomb, killer: Bomber.bomber);
                 }
                 SoundEffectsManager.playAtPosition("bombExplosion", position, range: Bomber.hearRange) ;
             }
@@ -99,6 +108,10 @@ namespace TheOtherRoles.Objects {
                 return;
             }
             Bomber.bomb.background.transform.Rotate(Vector3.forward * 50 * Time.fixedDeltaTime);
+
+            if (MeetingHud.Instance && Bomber.bomb != null) {
+                Bomber.clearBomb();
+            }
 
             if (Vector2.Distance(CachedPlayer.LocalPlayer.PlayerControl.GetTruePosition(), Bomber.bomb.bomb.transform.position) > 1f) canDefuse = false;
             else canDefuse = true;

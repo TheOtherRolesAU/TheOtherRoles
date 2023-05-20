@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BepInEx.Configuration;
 using System;
+using System.IO;
 using System.Linq;
 using HarmonyLib;
 using Hazel;
@@ -178,6 +179,74 @@ namespace TheOtherRoles {
                 ShareOptionSelections();// Share all selections
             }
         }
+
+        public static byte[] serializeOptions() {
+            using (MemoryStream memoryStream = new MemoryStream()) {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream)) {
+                    int lastId = -1;
+                    foreach (var option in CustomOption.options.OrderBy(x => x.id)) {
+                        if (option.id == 0) continue;
+                        bool consecutive = lastId + 1 == option.id;
+                        lastId = option.id;
+
+                        binaryWriter.Write((byte)(option.selection + (consecutive ? 128 : 0)));
+                        if (!consecutive) binaryWriter.Write((ushort)option.id);
+                    }
+                    binaryWriter.Flush();
+                    memoryStream.Position = 0L;
+                    return memoryStream.ToArray();
+                }
+            }
+        }
+
+        public static void deserializeOptions(byte[] inputValues) {
+            BinaryReader reader = new BinaryReader(new MemoryStream(inputValues));
+            int lastId = -1;
+            while (reader.BaseStream.Position < inputValues.Length) {
+                try {
+                    int selection = reader.ReadByte();
+                    int id = -1;
+                    bool consecutive = selection >= 128;
+                    if (consecutive) {
+                        selection -= 128;
+                        id = lastId + 1;
+                    } else {
+                        id = reader.ReadUInt16();
+                    }
+                    if (id == 0) continue;
+                    lastId = id;
+                    CustomOption option = CustomOption.options.First(option => option.id == id);
+                    option.updateSelection(selection);
+                } catch (Exception e) {
+                    TheOtherRolesPlugin.Logger.LogWarning($"{e}: while deserializing - tried to paste invalid settings!");
+                }
+            }
+        }
+
+        // Copy to or paste from clipboard (as string)
+        public static void copyToClipboard() {
+            GUIUtility.systemCopyBuffer = $"{TheOtherRolesPlugin.VersionString}!{Convert.ToBase64String(serializeOptions())}!{vanillaSettings.Value}";
+        }
+
+        public static bool pasteFromClipboard() {
+            string allSettings = GUIUtility.systemCopyBuffer;
+            try {
+                var settingsSplit = allSettings.Split("!");
+                string versionInfo = settingsSplit[0];
+                string torSettings = settingsSplit[1];
+                string vanillaSettingsSub = settingsSplit[2];
+                deserializeOptions(Convert.FromBase64String(torSettings));
+
+                vanillaSettings.Value = vanillaSettingsSub;
+                loadVanillaOptions();
+                return true;
+            } catch (Exception e) {
+                TheOtherRolesPlugin.Logger.LogWarning($"{e}: tried to paste invalid settings!");
+                SoundEffectsManager.Load();
+                SoundEffectsManager.play("fail");
+                return false;
+            }
+        }
     }
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
@@ -194,7 +263,42 @@ namespace TheOtherRoles {
                 case CustomGamemodes.HideNSeek:
                     createHideNSeekTabs(__instance);
                     break;
-            }            
+            }
+
+            // create copy to clipboard and paste from clipboard buttons.
+            var template = GameObject.Find("CloseButton");
+            var copyButton = GameObject.Instantiate(template, template.transform.parent);
+            copyButton.transform.localPosition += Vector3.down * 0.8f;
+            var copyButtonPassive = copyButton.GetComponent<PassiveButton>();
+            var copyButtonRenderer = copyButton.GetComponent<SpriteRenderer>();
+            copyButtonRenderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.CopyButton.png", 175f);
+            copyButtonPassive.OnClick.RemoveAllListeners();
+            copyButtonPassive.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            copyButtonPassive.OnClick.AddListener((System.Action)(() => {
+                copyToClipboard();
+                copyButtonRenderer.color = Color.green;
+                __instance.StartCoroutine(Effects.Lerp(1f, new System.Action<float>((p) => {
+                    if (p > 0.95)
+                        copyButtonRenderer.color = Color.white;
+                })));
+            }));
+            var pasteButton = GameObject.Instantiate(template, template.transform.parent);
+            pasteButton.transform.localPosition += Vector3.down * 1.6f;
+            var pasteButtonPassive = pasteButton.GetComponent<PassiveButton>();
+            var pasteButtonRenderer = pasteButton.GetComponent<SpriteRenderer>();
+            pasteButtonRenderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PasteButton.png", 175f);
+            pasteButtonPassive.OnClick.RemoveAllListeners();
+            pasteButtonPassive.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            pasteButtonPassive.OnClick.AddListener((System.Action)(() => {
+                pasteButtonRenderer.color = Color.yellow;
+                bool success = pasteFromClipboard();
+                pasteButtonRenderer.color = success ? Color.green : Color.red;
+                __instance.StartCoroutine(Effects.Lerp(1f, new System.Action<float>((p) => {
+                    if (p > 0.95)
+                        pasteButtonRenderer.color = Color.white;
+                })));
+            }));
+
         }
 
         private static void createClassicTabs(GameOptionsMenu __instance) {
@@ -794,8 +898,11 @@ namespace TheOtherRoles {
                         string optionValue = "";
                         if (CustomOptionHolder.crewmateRolesFill.getBool()) {
                             var crewCount = PlayerControl.AllPlayerControls.Count - GameOptionsManager.Instance.currentGameOptions.NumImpostors;
-                            min = crewCount - CustomOptionHolder.neutralRolesCountMax.getSelection();
-                            max = crewCount - CustomOptionHolder.neutralRolesCountMin.getSelection();
+                            int minNeutral = CustomOptionHolder.neutralRolesCountMin.getSelection();
+                            int maxNeutral = CustomOptionHolder.neutralRolesCountMax.getSelection();
+                            if (minNeutral > maxNeutral) minNeutral = maxNeutral;
+                            min = crewCount - maxNeutral;
+                            max = crewCount - minNeutral;
                             if (min < 0) min = 0;
                             if (max < 0) max = 0;
                             optionValue = "Fill: ";
@@ -814,6 +921,7 @@ namespace TheOtherRoles {
                         var optionName = CustomOptionHolder.cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Impostor Roles");
                         var min = CustomOptionHolder.impostorRolesCountMin.getSelection();
                         var max = CustomOptionHolder.impostorRolesCountMax.getSelection();
+                        if (max > GameOptionsManager.Instance.currentGameOptions.NumImpostors) max = GameOptionsManager.Instance.currentGameOptions.NumImpostors;
                         if (min > max) min = max;
                         var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
                         sb.AppendLine($"{optionName}: {optionValue}");

@@ -886,6 +886,8 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        
+
         public static void trapperUpdate() {
             if (Trapper.trapper == null || CachedPlayer.LocalPlayer.PlayerControl != Trapper.trapper || Trapper.trapper.Data.IsDead) return;
             var (playerCompleted, _) = TasksHandler.taskInfo(Trapper.trapper.Data);
@@ -956,7 +958,6 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
-
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
 
@@ -1161,7 +1162,7 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(PlayerControl __instance, [HarmonyArgument(0)]PlayerControl target)
         {
             // Collect dead player info
-            DeadPlayer deadPlayer = new DeadPlayer(target, DateTime.UtcNow, DeathReason.Kill, __instance);
+            DeadPlayer deadPlayer = new DeadPlayer(target, DateTime.UtcNow, DeadPlayer.CustomDeathReason.Kill, __instance);
             GameHistory.deadPlayers.Add(deadPlayer);
 
             // Reset killer to crewmate if resetToCrewmate
@@ -1180,6 +1181,7 @@ namespace TheOtherRoles.Patches {
                 PlayerControl otherLover = target == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
                 if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) {
                     otherLover.MurderPlayer(otherLover);
+                    GameHistory.overrideDeathReasonAndKiller(otherLover, DeadPlayer.CustomDeathReason.LoverSuicide);
                 }
             }
 
@@ -1208,7 +1210,7 @@ namespace TheOtherRoles.Patches {
 
             // Medium add body
             if (Medium.deadBodies != null) {
-                Medium.featureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
+                Medium.futureDeadBodies.Add(new Tuple<DeadPlayer, Vector3>(deadPlayer, target.transform.position));
             }
 
             // Set bountyHunter cooldown
@@ -1349,8 +1351,9 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(PlayerControl __instance)
         {
             // Collect dead player info
-            DeadPlayer deadPlayer = new DeadPlayer(__instance, DateTime.UtcNow, DeathReason.Exile, null);
+            DeadPlayer deadPlayer = new DeadPlayer(__instance, DateTime.UtcNow, DeadPlayer.CustomDeathReason.Exile, null);
             GameHistory.deadPlayers.Add(deadPlayer);
+
 
             // Remove fake tasks when player dies
             if (__instance.hasFakeTasks() || __instance == Lawyer.lawyer || __instance == Pursuer.pursuer || __instance == Thief.thief)
@@ -1359,10 +1362,12 @@ namespace TheOtherRoles.Patches {
             // Lover suicide trigger on exile
             if ((Lovers.lover1 != null && __instance == Lovers.lover1) || (Lovers.lover2 != null && __instance == Lovers.lover2)) {
                 PlayerControl otherLover = __instance == Lovers.lover1 ? Lovers.lover2 : Lovers.lover1;
-                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie)
+                if (otherLover != null && !otherLover.Data.IsDead && Lovers.bothDie) {
                     otherLover.Exiled();
-            }
-            
+                    GameHistory.overrideDeathReasonAndKiller(otherLover, DeadPlayer.CustomDeathReason.LoverSuicide);
+                }
+
+            }            
             // Sidekick promotion trigger on exile
             if (Sidekick.promotesToJackal && Sidekick.sidekick != null && !Sidekick.sidekick.Data.IsDead && __instance == Jackal.jackal && Jackal.jackal == CachedPlayer.LocalPlayer.PlayerControl) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SidekickPromotes, Hazel.SendOption.Reliable, -1);
@@ -1372,6 +1377,7 @@ namespace TheOtherRoles.Patches {
 
             // Pursuer promotion trigger on exile & suicide (the host sends the call such that everyone recieves the update before a possible game End)
             if (Lawyer.lawyer != null && __instance == Lawyer.target) {
+                PlayerControl lawyer = Lawyer.lawyer;
                 if (AmongUsClient.Instance.AmHost && ((Lawyer.target != Jester.jester && !Lawyer.isProsecutor) || Lawyer.targetWasGuessed)) {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -1381,6 +1387,15 @@ namespace TheOtherRoles.Patches {
                 if (!Lawyer.targetWasGuessed && !Lawyer.isProsecutor) {
                     if (Lawyer.lawyer != null) Lawyer.lawyer.Exiled();
                     if (Pursuer.pursuer != null) Pursuer.pursuer.Exiled();
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                    writer.Write((byte)RPCProcedure.GhostInfoTypes.DeathReasonAndKiller);
+                    writer.Write(lawyer.PlayerId);
+                    writer.Write((byte)DeadPlayer.CustomDeathReason.LawyerSuicide);
+                    writer.Write(lawyer.PlayerId);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    GameHistory.overrideDeathReasonAndKiller(lawyer, DeadPlayer.CustomDeathReason.LawyerSuicide, lawyer);  // TODO: only executed on host?!
                 }
             }
         }
@@ -1426,6 +1441,15 @@ namespace TheOtherRoles.Patches {
             __instance.lightSource.SetupLightingForGameplay(hasFlashlight, Lighter.flashlightWidth, __instance.TargetFlashlight.transform);
 
             return false;
+        }
+    }
+    
+    [HarmonyPatch(typeof(GameData), nameof(GameData.HandleDisconnect), new[] {typeof(PlayerControl), typeof(DisconnectReasons) })]
+    public static class GameDataHandleDisconnectPatch {
+        public static void Prefix(GameData __instance, PlayerControl player, DisconnectReasons reason) {
+            if (MeetingHud.Instance) {
+                MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, player.PlayerId);
+            }
         }
     }
 }

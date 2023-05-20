@@ -71,7 +71,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(AbilityButton), nameof(AbilityButton.Update))]
         public static void showOrHideAbilityButtonPostfix(AbilityButton __instance) {
-            if (CachedPlayer.LocalPlayer.Data.IsDead && CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool()) {
+            if (CachedPlayer.LocalPlayer.Data.IsDead && (CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool() || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek)) {
                 // player has haunt button.
                 var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
                 int numberOfLeftTasks = playerTotal - playerCompleted;
