@@ -639,7 +639,7 @@ namespace TheOtherRoles
                 if (p == Ninja.ninja && Ninja.isInvisble)
                     continue;
                 p.setDefaultLook();
-        }
+            }
         }
 
         public static void clearAndReload() {
@@ -1346,7 +1346,7 @@ namespace TheOtherRoles
         public static DeadPlayer soulTarget;
         public static Color color = new Color32(98, 120, 115, byte.MaxValue);
         public static List<Tuple<DeadPlayer, Vector3>> deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
-        public static List<Tuple<DeadPlayer, Vector3>> featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+        public static List<Tuple<DeadPlayer, Vector3>> futureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
         public static List<SpriteRenderer> souls = new List<SpriteRenderer>();
         public static DateTime meetingStartTime = DateTime.UtcNow;
 
@@ -1388,7 +1388,7 @@ namespace TheOtherRoles
             target = null;
             soulTarget = null;
             deadBodies = new List<Tuple<DeadPlayer, Vector3>>();
-            featureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
+            futureDeadBodies = new List<Tuple<DeadPlayer, Vector3>>();
             souls = new List<SpriteRenderer>();
             meetingStartTime = DateTime.UtcNow;
             cooldown = CustomOptionHolder.mediumCooldown.getFloat();
@@ -1651,6 +1651,7 @@ namespace TheOtherRoles
         public static bool hasImpostorVision;
         public static bool canUseVents;
         public static bool canKillSheriff;
+        public static bool canStealWithGuess;
 
         public static void clearAndReload() {
             thief = null;
@@ -1661,10 +1662,15 @@ namespace TheOtherRoles
             cooldown = CustomOptionHolder.thiefCooldown.getFloat();
             canUseVents = CustomOptionHolder.thiefCanUseVents.getBool();
             canKillSheriff = CustomOptionHolder.thiefCanKillSheriff.getBool();
+            canStealWithGuess = CustomOptionHolder.thiefCanStealWithGuess.getBool();
+        }
+
+        public static bool isFailedThiefKill(PlayerControl target, PlayerControl killer, RoleInfo targetRole) {
+            return killer == Thief.thief && !target.Data.Role.IsImpostor && !new List<RoleInfo> { RoleInfo.jackal, canKillSheriff ? RoleInfo.sheriff : null, RoleInfo.sidekick }.Contains(targetRole);
         }
     }
 
-    public static class Trapper {
+        public static class Trapper {
         public static PlayerControl trapper;
         public static Color color = new Color32(110, 57, 105, byte.MaxValue);
 

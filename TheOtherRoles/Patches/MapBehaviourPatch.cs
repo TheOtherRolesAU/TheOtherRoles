@@ -72,7 +72,7 @@ namespace TheOtherRoles.Patches {
                     }
                 }
 			}
-			HudManagerUpdate.CloseSettings();
-		}
+            HudManagerUpdate.CloseSettings();
+        }
 	}
 }

@@ -42,6 +42,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.03.28s| v4.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.2/TheOtherRoles.zip)
 | 2023.03.28s| v4.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.1/TheOtherRoles.zip)
 | 2023.02.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
 | 2022.12.14s| v4.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.1/TheOtherRoles.zip)
@@ -121,9 +122,21 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 4.3.2**
+- Added new option to Thief: Can Guess To Steal Role
+- Added new option to Guesser Mode: Force Thief Guesser
+- Added the death reason to the additional infos for ghosts.
+- Added the possibility to copy and paste the settings for the current preset to / from the clipboard (buttons)
+- Added a feature to the swapper: The swap resets if one of the target players is guessed or disconnects
+- Fixed the Security Guard Mobile Cams and the Hacker Vitals Panel when playing on LevelImposter maps (don't rename the panels for now, please)
+- Fixed several bugs in Vanilla Hide'n'Seek
+- Fixed an issue where Crewmate "Fill" did not work correcty if min neutrals was set bigger than max neutrals
+- Fixed a bug where the colorblind-text of the ninja remained visible when using the ninja-ability
+- Fixed a bug where the bomb could explode in a meeting due to desync and bad timing
+- Fixed a bug where the host Eraser could guess erased players
 
 **Version 4.3.1**
-- Update to Among Us 2023.3.28
 - Added new options (Information mode - Chat/Map/Both, Roles - Evil Killing / Evil)  to the snitch and fixed bugs affecting the snitch
 - Changed the maximum amount per modifier to 15 (where applicable)
 - Changed the colorblind text and player name to be behind certain objects again (rock on Polus etc.)
@@ -1339,7 +1352,9 @@ If the Thief tries to kill any non-killing role (Crewmate or Neutral), they die 
 **NOTE**
 - If the option "Thief Can Kill Sheriff" is On, the Thief has tasks which will ONLY begin to count, if they kill
 the Sheriff. While the Thief hasn't fired, their tasks do not count towards the taskwin.
-- If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks. 
+- If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks.
+- If the Thief kills the witch, already witched players stay witched (except for the Thief).
+- If the Thief can guess to steal the role, guessing the witch will either save all targets or none of the targets (depending on the setting for Witch: Voting The Witch Saves All The Targets)
 
 ### Game Options
 | Name | Description |
@@ -1349,6 +1364,7 @@ the Sheriff. While the Thief hasn't fired, their tasks do not count towards the 
 | Thief Can Kill Sheriff | -
 | Thief Has Impostor Vision | -
 | Thief Can Use Vents | -
+| Thief Can Guess To Steal Role | -
 -----------------------
 
 ## Mayor
@@ -1991,7 +2007,8 @@ Players can additionally have a modifier, if enabled (e.g. Medic Guesser Mini).
 | Number of Crew Guessers | -
 | Number of Neutral Guessers | -
 | Number of Impostor Guessers | -
-| Force Jackal Guesser | If set to "On", the first neutral role who will be Guesser is the Jackal. 
+| Force Jackal Guesser | If set to "On", the first neutral role who will be Guesser is the Jackal.
+| Force Thief Guesser | If set to "On", the first (or second if Force Jackal Guesser) neutral role who will be Guesser is the Thief.
 | Guessers Can Have A Modifier | -
 | Guesser Number Of Shots | -
 | Guesser Can Shoot Multiple Times Per Meeting | -
@@ -2044,7 +2061,7 @@ Each Hunter action or finished Crew task will lower the timer by a configurable 
 | Time The Hunter Needs To Wait | -
 
 # License
-TheOtherRolesAU/TheOtherRolesDev is licensed under the
+TheOtherRolesAU/TheOtherRoles is licensed under the
 
 [GNU General Public License v3.0](https://github.com/TheOtherRolesAU/TheOtherRoles/blob/main/LICENSE)
 

@@ -296,6 +296,46 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        public static void swapperCheckAndReturnSwap(MeetingHud __instance, byte dyingPlayerId) {
+            // someone was guessed or dced in the meeting, check if this affects the swapper.
+            if (Swapper.swapper == null || __instance.state == MeetingHud.VoteStates.Results) return;
+
+            // reset swap.
+            bool reset = false;
+            if (dyingPlayerId == Swapper.playerId1 || dyingPlayerId == Swapper.playerId2) {
+                reset = true;
+                Swapper.playerId1 = Swapper.playerId2 = byte.MaxValue;
+            }
+            
+
+            // Only for the swapper: Reset all the buttons and charges value to their original state.
+            if (CachedPlayer.LocalPlayer.PlayerControl != Swapper.swapper) return;
+
+
+            // check if dying player was a selected player (but not confirmed yet)
+            for (int i = 0; i < __instance.playerStates.Count; i++) {
+                reset = reset || selections[i] && __instance.playerStates[i].TargetPlayerId == dyingPlayerId;
+                if (reset) break;
+            }
+
+            if (!reset) return;
+
+
+            for (int i = 0; i < selections.Length; i++) {
+                selections[i] = false;
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == Swapper.swapper.PlayerId && Swapper.canOnlySwapOthers)) continue;
+                renderers[i].color = Color.red;
+                Swapper.charges++;
+                int copyI = i;
+                swapperButtonList[i].OnClick.RemoveAllListeners();
+                swapperButtonList[i].OnClick.AddListener((System.Action)(() => swapperOnClick(copyI, __instance)));
+            }
+            meetingExtraButtonText.text = $"Swaps: {Swapper.charges}";
+            meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
+
+        }
+
         static void mayorToggleVoteTwice(MeetingHud __instance) {
             __instance.playerStates[0].Cancel();  // This will stop the underlying buttons of the template from showing up
             if (__instance.state == MeetingHud.VoteStates.Results || Mayor.mayor.Data.IsDead) return;
@@ -667,6 +707,7 @@ namespace TheOtherRoles.Patches {
                             else message += p.Data.PlayerName + "\n";
                         }
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Trapper.trapper, $"{message}");
+
                     }
                 }
 
@@ -697,6 +738,7 @@ namespace TheOtherRoles.Patches {
                         })));
                     }
                 }
+
 
                 if (CachedPlayer.LocalPlayer.Data.IsDead && output != "") FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer, $"{output}");
 
