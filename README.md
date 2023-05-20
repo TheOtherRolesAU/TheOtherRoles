@@ -1353,6 +1353,7 @@ If the Thief tries to kill any non-killing role (Crewmate or Neutral), they die 
 - If the option "Thief Can Kill Sheriff" is On, the Thief has tasks which will ONLY begin to count, if they kill
 the Sheriff. While the Thief hasn't fired, their tasks do not count towards the taskwin.
 - If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks.
+
 - If the Thief kills the witch, already witched players stay witched (except for the Thief).
 - If the Thief can guess to steal the role, guessing the witch will either save all targets or none of the targets (depending on the setting for Witch: Voting The Witch Saves All The Targets)
 
