@@ -106,6 +106,7 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Invisible, CustomOptionHolder.invisibleSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.MrFreeze, CustomOptionHolder.mrFreezeSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.EvilHacker, CustomOptionHolder.evilHackerSpawnRate.getSelection());
+            impSettings.Add((byte)RoleId.EvilMimic, CustomOptionHolder.evilMimicSpawnRate.getSelection());
 
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
@@ -512,7 +513,7 @@ namespace TheOtherRoles.Patches {
             return playerId;
         }
 
-        private static byte setModifierToRandomPlayer(byte modifierId, List<PlayerControl> playerList, byte flag = 0) {
+        public static byte setModifierToRandomPlayer(byte modifierId, List<PlayerControl> playerList, byte flag = 0) {
             var index = rnd.Next(0, playerList.Count);
             byte playerId = playerList[index].PlayerId;
             playerList.RemoveAt(index);

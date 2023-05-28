@@ -183,7 +183,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void detectiveUpdateFootPrints() {
-            if (Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) return;
+            if ((Detective.detective == null || Detective.detective != CachedPlayer.LocalPlayer.PlayerControl) && (EvilMimic.evilMimic == null || EvilMimic.evilMimic != CachedPlayer.LocalPlayer.PlayerControl || EvilMimic.haveKilledDetective == false )) return;
 
             Detective.timer -= Time.fixedDeltaTime;
             if (Detective.timer <= 0f) {
@@ -492,7 +492,7 @@ namespace TheOtherRoles.Patches {
 
         public static void updatePlayerInfo() {
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {         
-                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
+                if ((Lawyer.lawyerKnowsRole && CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer && p == Lawyer.target) || (EvilMimic.evilMimic != null && EvilMimic.evilMimic == CachedPlayer.LocalPlayer.PlayerControl && EvilMimic.haveKilledSnitch) || p == CachedPlayer.LocalPlayer.PlayerControl || CachedPlayer.LocalPlayer.Data.IsDead) {
                     Transform playerInfoTransform = p.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo == null) {
@@ -537,8 +537,16 @@ namespace TheOtherRoles.Patches {
                         meetingInfoText = $"{roleNames} {taskInfo}".Trim();
                     }
                     else if (MapOptions.ghostsSeeRoles && MapOptions.ghostsSeeTasks) {
-                        playerInfoText = $"{roleText} {taskInfo}".Trim();
-                        meetingInfoText = playerInfoText;
+                        if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic)
+                        {
+                            playerInfoText = $"{taskInfo}".Trim();
+                            meetingInfoText = playerInfoText;
+                        } else
+                        {
+                            playerInfoText = $"{roleText} {taskInfo}".Trim();
+                            meetingInfoText = playerInfoText;
+                        }
+                        
                     }
                     else if (MapOptions.ghostsSeeTasks) {
                         playerInfoText = $"{taskInfo}".Trim();
@@ -636,6 +644,59 @@ namespace TheOtherRoles.Patches {
                             Snitch.localArrows[arrowIndex].Update(p.transform.position, (arrowForTeamJackal && Snitch.teamJackalUseDifferentArrowColor ? Jackal.color : Palette.ImpostorRed));
                         }
                         arrowIndex++;
+                    }
+                }
+            }
+        }
+
+        static void  EvilMimicUpdate()
+        {
+            // update evil mimic if he have killed tracker
+            if(EvilMimic.evilMimic != null && EvilMimic.evilMimic == CachedPlayer.LocalPlayer.PlayerControl && !EvilMimic.evilMimic.Data.IsDead)
+            {
+                // add arrows targeting crewamtes for evil mimic after killing tracker
+                if(EvilMimic.haveKilledTracker)
+                {
+                    foreach (Arrow arrow in EvilMimic.localTrackerArrows) arrow.arrow.SetActive(false);
+                    int arrowIndex = 0;
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                    {
+                        bool arrowForCrewmate = !p.Data.Role.IsImpostor;
+                        if (!p.Data.IsDead && arrowForCrewmate)
+                        {
+                            if (arrowIndex >= EvilMimic.localTrackerArrows.Count)
+                            {
+                                EvilMimic.localTrackerArrows.Add(new Arrow(Palette.CrewmateBlue));
+                            }
+                            if (arrowIndex < EvilMimic.localTrackerArrows.Count && EvilMimic.localTrackerArrows[arrowIndex] != null)
+                            {
+                                EvilMimic.localTrackerArrows[arrowIndex].arrow.SetActive(true);
+                                EvilMimic.localTrackerArrows[arrowIndex].Update(p.transform.position, Palette.CrewmateBlue);
+                            }
+                            arrowIndex++;
+                        }
+                    }
+                }
+                // add arrows targeting others imposter for evil mimic after killing snitch
+                if (EvilMimic.haveKilledSnitch)
+                {
+                    foreach (Arrow arrow in EvilMimic.localSnitchArrows) arrow.arrow.SetActive(false);
+                    int arrowIndex = 0;
+                    foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                    {
+                        if (!p.Data.IsDead && p.Data.Role.IsImpostor && CachedPlayer.LocalPlayer.PlayerControl != p)
+                        {
+                            if (arrowIndex >= EvilMimic.localSnitchArrows.Count)
+                            {
+                                EvilMimic.localSnitchArrows.Add(new Arrow(Palette.ImpostorRed));
+                            }
+                            if (arrowIndex < EvilMimic.localSnitchArrows.Count && EvilMimic.localSnitchArrows[arrowIndex] != null)
+                            {
+                                EvilMimic.localSnitchArrows[arrowIndex].arrow.SetActive(true);
+                                EvilMimic.localSnitchArrows[arrowIndex].Update(p.transform.position, Palette.ImpostorRed);
+                            }
+                            arrowIndex++;
+                        }
                     }
                 }
             }
@@ -1080,6 +1141,8 @@ namespace TheOtherRoles.Patches {
                 arsonistSetTarget();
                 // Snitch
                 snitchUpdate();
+                // EvilMimic
+                EvilMimicUpdate();
                 // BountyHunter
                 bountyHunterUpdate();
                 // Vulture
@@ -1259,6 +1322,19 @@ namespace TheOtherRoles.Patches {
                 Helpers.showFlash(new Color(42f / 255f, 187f / 255f, 245f / 255f));
             }
             if (Seer.deadBodyPositions != null) Seer.deadBodyPositions.Add(target.transform.position);
+
+            if(EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.evilMimic != target )
+            {
+                if(EvilMimic.haveKilledSeer && Seer.mode <= 1 )
+                {
+                    Helpers.showFlash(new Color(255f / 255f, 20f / 255f, 60f / 255f));
+                }
+                if(EvilMimic.haveKilledSheriff)
+                {
+                    EvilMimic.evilMimic.SetKillTimer(PlayerControl.GameOptions.KillCooldown - EvilMimic.sheriffKillingBonus);
+                }
+                
+            }
 
             // Tracker store body positions
             if (Tracker.deadBodyPositions != null) Tracker.deadBodyPositions.Add(target.transform.position);

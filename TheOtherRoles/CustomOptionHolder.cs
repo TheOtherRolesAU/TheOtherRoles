@@ -116,6 +116,9 @@ namespace TheOtherRoles {
         public static CustomOption evilHackerDuration;
         public static CustomOption evilHackerNoMove;
 
+        public static CustomOption evilMimicSpawnRate;
+        public static CustomOption evilMimicReducedCooldownKillingSheriff;
+
         public static CustomOption mayorSpawnRate;
         public static CustomOption mayorCanSeeVoteColors;
         public static CustomOption mayorTasksNeededToSeeVoteColors;
@@ -475,6 +478,9 @@ namespace TheOtherRoles {
             evilHackerCooldown = CustomOption.Create(561, Types.Impostor, "Evil Hacker Cooldown", 27.5f, 10f, 60f, 2.5f, evilHackerSpawnRate);
             evilHackerDuration = CustomOption.Create(562, Types.Impostor, "Evil Hacker Duration", 6f, 1f, 20f, 0.5f, evilHackerSpawnRate);
             evilHackerNoMove = CustomOption.Create(563, Types.Impostor, "Cant Move During Mobile Gadget Duration", true, evilHackerSpawnRate);
+
+            evilMimicSpawnRate = CustomOption.Create(570, Types.Impostor, cs(EvilMimic.color, "Evil Mimic"), rates, null, true);
+            evilMimicReducedCooldownKillingSheriff = CustomOption.Create(571, Types.Impostor, "Bonus Cooldown After Killing Sheriff", 2.5f, 0f, 30f, 1f, evilMimicSpawnRate);
 
             guesserSpawnRate = CustomOption.Create(310, Types.Neutral, cs(Guesser.color, "Guesser"), rates, null, true);
             guesserIsImpGuesserRate = CustomOption.Create(311, Types.Neutral, "Chance That The Guesser Is An Impostor", rates, guesserSpawnRate);

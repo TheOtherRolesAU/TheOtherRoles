@@ -52,6 +52,7 @@ namespace TheOtherRoles
         public static RoleInfo undertaker = new RoleInfo("Undertaker", Undertaker.color, "Kill everyone and leave no traces", "Drag up dead bodies to hide them", RoleId.Undertaker);
         public static RoleInfo ghostLord = new RoleInfo("Ghost Lord", GhostLord.color, "Kill everyone and turn into ghost", "Suprise Crewmates", RoleId.GhostLord);
         public static RoleInfo evilHacker = new RoleInfo("Evil Hacker", EvilHacker.color, "Hack systems to confuse golems", "confuse Crewmates", RoleId.EvilHacker);
+        public static RoleInfo evilMimic = new RoleInfo("Evil Mimic", EvilMimic.color, "kill golems and earn their abilities", "learn from Crewmates", RoleId.EvilMimic);
 
 
         public static RoleInfo detective = new RoleInfo("Detective", Detective.color, "Find the <color=#FF1919FF>Impostors</color> by examining footprints", "Examine footprints", RoleId.Detective);
@@ -121,6 +122,7 @@ namespace TheOtherRoles
             undertaker,
             mrFreeze,
             evilHacker,
+            evilMimic,
             goodGuesser,
             badGuesser,
             lover,
@@ -238,6 +240,7 @@ namespace TheOtherRoles
             if (p == GhostLord.ghostLord) infos.Add(ghostLord);
             if (p == Transporter.transporter) infos.Add(transporter);
             if (p == EvilHacker.evilHacker) infos.Add(evilHacker);
+            if (p == EvilMimic.evilMimic) infos.Add(evilMimic);
 
 
             // Default roles (just impostor, just crewmate, or hunter / hunted for hide n seek

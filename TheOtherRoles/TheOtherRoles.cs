@@ -66,6 +66,7 @@ namespace TheOtherRoles
             GhostLord.clearAndReload();
             MrFreeze.clearAndReload();
             EvilHacker.clearAndReload();
+            EvilMimic.clearAndReload();
 
             // Modifier
             Bait.clearAndReload();
@@ -1683,6 +1684,78 @@ namespace TheOtherRoles
             cantMove = CustomOptionHolder.evilHackerNoMove.getBool();
         }
     }
+
+    public static class EvilMimic
+    {
+        public static PlayerControl evilMimic;
+        public static Color color = Palette.ImpostorRed;
+
+        public static bool haveKilledLighter = false;
+        public static bool haveKilledHacker = false;
+        public static bool haveKilledSecurityGuard = false;
+        public static bool haveKilledSpy = false;
+        public static bool haveKilledSnitch = false;
+        public static bool haveKilledTracker = false;
+        public static bool haveKilledSeer = false;
+        public static bool haveKilledSwapper = false;
+        public static bool haveKilledMedic = false;
+        public static bool haveKilledTimeMaster = false;
+        public static bool haveKilledDetective = false;
+        public static bool haveKilledSheriff = false;
+        public static bool haveKilledEngineer = false;
+        public static bool haveKilledMayor = false;
+        public static bool havekilledMedium = false;
+        // tracker
+        public static List<Arrow> localTrackerArrows = new List<Arrow>();
+        // snitch
+        public static List<Arrow> localSnitchArrows = new List<Arrow>();
+        // sheriff
+        public static float sheriffKillingBonus = 5f;
+        // swapper
+        public static byte playerId1 = Byte.MaxValue;
+        public static byte playerId2 = Byte.MaxValue;
+
+
+        public static void clearAndReload()
+            {
+                evilMimic = null;
+                haveKilledLighter = false;
+                haveKilledHacker = false;
+                haveKilledSecurityGuard = false;
+                haveKilledSpy = false;
+                haveKilledSnitch = false;
+                haveKilledTracker = false;
+                haveKilledSeer = false;
+                haveKilledSwapper = false;
+                haveKilledMedic = false;
+                haveKilledTimeMaster = false;
+                haveKilledDetective = false;
+                haveKilledSheriff = false;
+                haveKilledEngineer = false;
+                haveKilledMayor = false;
+                havekilledMedium = false;
+            if (localTrackerArrows != null)
+                {
+                    foreach (Arrow arrow in localTrackerArrows)
+                        if (arrow?.arrow != null)
+                            UnityEngine.Object.Destroy(arrow.arrow);
+                }
+            localTrackerArrows = new List<Arrow>();
+            if (localSnitchArrows != null)
+            {
+                foreach (Arrow arrow in localSnitchArrows)
+                    if (arrow?.arrow != null)
+                        UnityEngine.Object.Destroy(arrow.arrow);
+            }
+            localSnitchArrows = new List<Arrow>();
+            sheriffKillingBonus = CustomOptionHolder.evilMimicReducedCooldownKillingSheriff.getFloat();
+            playerId1 = Byte.MaxValue;
+            playerId2 = Byte.MaxValue;
+
+    }
+    }
+
+
 
     public static class Transporter
     {

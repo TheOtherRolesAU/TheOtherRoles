@@ -23,7 +23,7 @@ namespace TheOtherRoles.Patches {
 
             bool roleCouldUse = @object.roleCanUseVents();
 
-            if (__instance.name.StartsWith("SealedVent_")) {
+            if (__instance.name.StartsWith("SealedVent_") && ( !CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && !EvilMimic.haveKilledSecurityGuard )) {
                 canUse = couldUse = false;
                 __result = num;
                 return false;
@@ -301,7 +301,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
         class VitalsMinigameStartPatch {
             static void Postfix(VitalsMinigame __instance) {
-                if (Hacker.hacker != null && CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker) {
+                if ((Hacker.hacker != null && CachedPlayer.LocalPlayer.PlayerControl == Hacker.hacker) || (EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && EvilMimic.haveKilledMedic) || (Medic.medic != null && CachedPlayer.LocalPlayer.PlayerControl == Medic.medic) ) {
                     hackerTexts = new List<TMPro.TextMeshPro>();
                     foreach (VitalsPanel panel in __instance.vitals) {
                         TMPro.TextMeshPro text = UnityEngine.Object.Instantiate(__instance.SabText, panel.transform);
@@ -329,7 +329,8 @@ namespace TheOtherRoles.Patches {
             static void Postfix(VitalsMinigame __instance) {
                 // Hacker show time since death
                 
-                if (Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0) {
+                if ((Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0) || (EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && EvilMimic.haveKilledMedic) || (Medic.medic != null && CachedPlayer.LocalPlayer.PlayerControl == Medic.medic))
+                {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
                         GameData.PlayerInfo player = vitalsPanel.PlayerInfo;
@@ -453,7 +454,7 @@ namespace TheOtherRoles.Patches {
             private static Material newMat;
             static void Postfix(CounterArea __instance) {
                 // Hacker display saved colors on the admin panel
-                bool showHackerInfo = Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0;
+                bool showHackerInfo = ((Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0) || (EvilMimic.evilMimic != null && EvilMimic.evilMimic  == CachedPlayer.LocalPlayer.PlayerControl && EvilMimic.haveKilledHacker));
                 if (players.ContainsKey(__instance.RoomType)) {
                     List<Color> colors = players[__instance.RoomType];
                     int i = -1;
