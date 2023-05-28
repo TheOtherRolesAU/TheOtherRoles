@@ -441,11 +441,10 @@ namespace TheOtherRoles {
                     //CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
                 }
                 else if (targetRole == RoleInfo.securityGuard)
-                {
-                    // pouvoir détruire les cams ? = à faire
+                {                    
+                   // peux utiliser les vents sealed 
                     EvilMimic.haveKilledSecurityGuard = true;
                     new CustomMessage("You have killed the security guard", 5f);
-
                 }
                 else if (targetRole == RoleInfo.spy)
                 {
@@ -478,7 +477,7 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.medic)
                 {
-                    // can't be killed by sherrif andd see kill taming on vitals
+                    // can't be killed by sherrif andd see kill timing on vitals
                     EvilMimic.haveKilledMedic = true;
                     new CustomMessage("You have killed the Medic", 5f);
 
@@ -489,8 +488,13 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.timeMaster)
                 {
+                    // rewind everyone
                     EvilMimic.haveKilledTimeMaster = true;
                     new CustomMessage("You have killed the time master", 5f);
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.TimeMasterRewindTime, Hazel.SendOption.Reliable, -1);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCProcedure.timeMasterRewindTime();
                 }
                 else if (targetRole == RoleInfo.detective)
                 {
@@ -506,6 +510,8 @@ namespace TheOtherRoles {
                 }
                 else if (targetRole == RoleInfo.engineer)
                 {
+                    // activer camo pendant sabotage ?
+                    // activer light pendant sabotage comm et activer comm pendant sabotage ligt ?
                     EvilMimic.haveKilledEngineer = true;
                     new CustomMessage("You have killed the engineer", 5f);
                 }
@@ -516,6 +522,12 @@ namespace TheOtherRoles {
                     List<PlayerControl> evilMimicList = new List<PlayerControl>();
                     evilMimicList.Add(EvilMimic.evilMimic);
                     Patches.RoleManagerSelectRolesPatch.setModifierToRandomPlayer((byte)RoleId.Tiebreaker, evilMimicList);
+                }
+                else if (targetRole == RoleInfo.medium)
+                {
+                    
+                    EvilMimic.havekilledMedium = true;
+                    new CustomMessage("You have killed the medium", 5f);
                 }
 
             }
