@@ -306,6 +306,44 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void evilSwapperOnClick(int i, MeetingHud __instance)
+        {
+            if (__instance.state == MeetingHud.VoteStates.Results) return;
+            if (__instance.playerStates[i].AmDead) return;
+
+            int selectedCount = selections.Where(b => b).Count();
+            SpriteRenderer renderer = renderers[i];
+
+            if (selectedCount == 0)
+            {
+                renderer.color = Color.yellow;
+                selections[i] = true;
+            }
+            else if (selectedCount == 1)
+            {
+                if (selections[i])
+                {
+                    renderer.color = Color.red;
+                    selections[i] = false;
+                }
+                else
+                {
+                    selections[i] = true;
+                    renderer.color = Color.yellow;
+                    meetingExtraButtonLabel.text = Helpers.cs(Color.yellow, "Confirm Swap");
+                }
+            }
+            else if (selectedCount == 2)
+            {
+                if (selections[i])
+                {
+                    renderer.color = Color.red;
+                    selections[i] = false;
+                    meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
+                }
+            }
+        }
+
         static void swapperConfirm(MeetingHud __instance) {
             __instance.playerStates[0].Cancel();  // This will stop the underlying buttons of the template from showing up
             if (__instance.state == MeetingHud.VoteStates.Results) return;
@@ -342,7 +380,7 @@ namespace TheOtherRoles.Patches {
 
         public static void swapperCheckAndReturnSwap(MeetingHud __instance, byte dyingPlayerId) {
             // someone was guessed or dced in the meeting, check if this affects the swapper.
-            if (Swapper.swapper == null || __instance.state == MeetingHud.VoteStates.Results) return;
+            if ( Swapper.swapper == null || __instance.state == MeetingHud.VoteStates.Results) return;
 
             // reset swap.
             bool reset = false;
@@ -376,6 +414,51 @@ namespace TheOtherRoles.Patches {
                 swapperButtonList[i].OnClick.AddListener((System.Action)(() => swapperOnClick(copyI, __instance)));
             }
             meetingExtraButtonText.text = $"Swaps: {Swapper.charges}";
+            meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
+
+        }
+
+        public static void evilSwapperCheckAndReturnSwap(MeetingHud __instance, byte dyingPlayerId)
+        {
+            
+            // someone was guessed or dced in the meeting, check if this affects the swapper.
+            if (EvilMimic.evilMimic == null || !EvilMimic.haveKilledSwapper || __instance.state == MeetingHud.VoteStates.Results) return;
+
+            // reset swap.
+            bool reset = false;
+            if (dyingPlayerId == EvilMimic.playerId1 || dyingPlayerId == EvilMimic.playerId2)
+            {
+                reset = true;
+                EvilMimic.playerId1 = EvilMimic.playerId2 = byte.MaxValue;
+            }
+
+
+            // Only for the swapper: Reset all the buttons and charges value to their original state.
+            if (CachedPlayer.LocalPlayer.PlayerControl != EvilMimic.evilMimic) return;
+
+
+            // check if dying player was a selected player (but not confirmed yet)
+            for (int i = 0; i < __instance.playerStates.Count; i++)
+            {
+                reset = reset || selections[i] && __instance.playerStates[i].TargetPlayerId == dyingPlayerId;
+                if (reset) break;
+            }
+
+            if (!reset) return;
+
+
+            for (int i = 0; i < selections.Length; i++)
+            {
+                selections[i] = false;
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.AmDead || (playerVoteArea.TargetPlayerId == EvilMimic.evilMimic.PlayerId)) continue;
+                renderers[i].color = Color.red;
+                Swapper.charges++;
+                int copyI = i;
+                swapperButtonList[i].OnClick.RemoveAllListeners();
+                swapperButtonList[i].OnClick.AddListener((System.Action)(() => evilSwapperOnClick(copyI, __instance)));
+            }
+            meetingExtraButtonText.text = $"Evil swap";
             meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
 
         }
@@ -539,6 +622,8 @@ namespace TheOtherRoles.Patches {
             // Add Swapper Buttons
             bool addSwapperButtons = Swapper.swapper != null && CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper && !Swapper.swapper.Data.IsDead;
             bool addMayorButton = Mayor.mayor != null && CachedPlayer.LocalPlayer.PlayerControl == Mayor.mayor && !Mayor.mayor.Data.IsDead && Mayor.mayorChooseSingleVote > 0;
+            bool addEvilMimicSwapperButtons = EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.haveKilledSwapper;
+
             if (addSwapperButtons) {
                 selections = new bool[__instance.playerStates.Length];
                 renderers = new SpriteRenderer[__instance.playerStates.Length];
@@ -571,8 +656,49 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
+            if (addEvilMimicSwapperButtons)
+            {
+                selections = new bool[__instance.playerStates.Length];
+                renderers = new SpriteRenderer[__instance.playerStates.Length];
+                swapperButtonList = new PassiveButton[__instance.playerStates.Length];
+
+                List<byte> imposters = new List<byte>();
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                {
+                    if (p.Data.Role.IsImpostor)
+                    {
+                        imposters.Add(p.Data.PlayerId);
+                    }
+                }
+
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == EvilMimic.evilMimic.PlayerId || imposters.Contains(playerVoteArea.TargetPlayerId)) continue;
+
+                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
+                    GameObject checkbox = UnityEngine.Object.Instantiate(template);
+                    checkbox.transform.SetParent(playerVoteArea.transform);
+                    checkbox.transform.position = template.transform.position;
+                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
+                    if (HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId)) checkbox.transform.localPosition = new Vector3(-0.5f, 0.03f, -1.3f);
+                    SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
+                    renderer.sprite = Swapper.getCheckSprite();
+                    renderer.color = Color.red;
+
+                    PassiveButton button = checkbox.GetComponent<PassiveButton>();
+                    swapperButtonList[i] = button;
+                    button.OnClick.RemoveAllListeners();
+                    int copiedIndex = i;
+                    button.OnClick.AddListener((System.Action)(() => evilSwapperOnClick(copiedIndex, __instance)));
+
+                    selections[i] = false;
+                    renderers[i] = renderer;
+                }
+            }
+
             // Add meeting extra button, i.e. Swapper Confirm Button or Mayor Toggle Double Vote Button. Swapper Button uses ExtraButtonText on the Left of the Button. (Future meeting buttons can easily be added here)
-            if (addSwapperButtons || addMayorButton) {
+            if (addSwapperButtons || addMayorButton || addEvilMimicSwapperButtons) {
                 Transform meetingUI = UnityEngine.Object.FindObjectsOfType<Transform>().FirstOrDefault(x => x.name == "PhoneUI");
 
                 var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
@@ -597,7 +723,7 @@ namespace TheOtherRoles.Patches {
                 meetingExtraButtonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 meetingExtraButtonLabel.alignment = TMPro.TextAlignmentOptions.Center;
                 meetingExtraButtonLabel.transform.localPosition = new Vector3(0, 0, meetingExtraButtonLabel.transform.localPosition.z);
-                if (addSwapperButtons) {
+                if (addSwapperButtons || addEvilMimicSwapperButtons) {
                     meetingExtraButtonLabel.transform.localScale *= 1.7f;
                     meetingExtraButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
                 } else if (addMayorButton) {
@@ -607,7 +733,7 @@ namespace TheOtherRoles.Patches {
                 PassiveButton passiveButton = meetingExtraButton.GetComponent<PassiveButton>();
                 passiveButton.OnClick.RemoveAllListeners();
                 if (!CachedPlayer.LocalPlayer.Data.IsDead) {
-                    if (addSwapperButtons)
+                    if (addSwapperButtons || addEvilMimicSwapperButtons)
                         passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
                     else if (addMayorButton)
                         passiveButton.OnClick.AddListener((Action)(() => mayorToggleVoteTwice(__instance)));
@@ -619,90 +745,6 @@ namespace TheOtherRoles.Patches {
                     }
                 })));
             }
-
-            // Add Swapper Buttons for Evil Mimic
-            if (EvilMimic.evilMimic != null && CachedPlayer.LocalPlayer.PlayerControl == EvilMimic.evilMimic && !EvilMimic.evilMimic.Data.IsDead && EvilMimic.haveKilledSwapper)
-            {
-                selections = new bool[__instance.playerStates.Length];
-                renderers = new SpriteRenderer[__instance.playerStates.Length];
-                swapperButtonList = new PassiveButton[__instance.playerStates.Length];
-                List<byte> imposters = new List<byte>();
-
-                foreach (PlayerControl p in CachedPlayer.AllPlayers)
-                {
-                    if(p.Data.Role.IsImpostor)
-                    {
-                        imposters.Add(p.Data.PlayerId);
-                    }
-                }
-
-                for (int i = 0; i < __instance.playerStates.Length; i++)
-                {
-                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.AmDead || playerVoteArea.TargetPlayerId == EvilMimic.evilMimic.PlayerId || imposters.Contains(playerVoteArea.TargetPlayerId)) continue;
-
-                    GameObject template = playerVoteArea.Buttons.transform.Find("CancelButton").gameObject;
-                    GameObject checkbox = UnityEngine.Object.Instantiate(template);
-                    checkbox.transform.SetParent(playerVoteArea.transform);
-                    checkbox.transform.position = template.transform.position;
-                    checkbox.transform.localPosition = new Vector3(-0.95f, 0.03f, -1.3f);
-                    if (HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId)) checkbox.transform.localPosition = new Vector3(-0.5f, 0.03f, -1.3f);
-                    SpriteRenderer renderer = checkbox.GetComponent<SpriteRenderer>();
-                    renderer.sprite = Swapper.getCheckSprite();
-                    renderer.color = Color.red;
-
-                    if (Swapper.charges <= 0) renderer.color = Color.gray;
-
-                    PassiveButton button = checkbox.GetComponent<PassiveButton>();
-                    swapperButtonList[i] = button;
-                    button.OnClick.RemoveAllListeners();
-                    int copiedIndex = i;
-                    button.OnClick.AddListener((System.Action)(() => swapperOnClick(copiedIndex, __instance)));
-
-                    selections[i] = false;
-                    renderers[i] = renderer;
-                }
-
-                // Add the "Confirm Swap" button and "Swaps: X" text next to it
-                Transform meetingUI = __instance.transform.FindChild("PhoneUI");
-                var buttonTemplate = __instance.playerStates[0].transform.FindChild("votePlayerBase");
-                var maskTemplate = __instance.playerStates[0].transform.FindChild("MaskArea");
-                var textTemplate = __instance.playerStates[0].NameText;
-                Transform confirmSwapButtonParent = (new GameObject()).transform;
-                confirmSwapButtonParent.SetParent(meetingUI);
-                Transform confirmSwapButton = UnityEngine.Object.Instantiate(buttonTemplate, confirmSwapButtonParent);
-
-                Transform infoTransform = __instance.playerStates[0].NameText.transform.parent.FindChild("Info");
-                TMPro.TextMeshPro meetingInfo = infoTransform != null ? infoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-//                swapperChargesText = UnityEngine.Object.Instantiate(__instance.playerStates[0].NameText, confirmSwapButtonParent);
- //               swapperChargesText.text = $"Swaps: {Swapper.charges}";
-   //            swapperChargesText.enableWordWrapping = false;
-  //              swapperChargesText.transform.localScale = Vector3.one * 1.7f;
-   //             swapperChargesText.transform.localPosition = new Vector3(-2.5f, 0f, 0f);
-
-                Transform confirmSwapButtonMask = UnityEngine.Object.Instantiate(maskTemplate, confirmSwapButtonParent);
-                swapperConfirmButtonLabel = UnityEngine.Object.Instantiate(textTemplate, confirmSwapButton);
-                confirmSwapButton.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
-                confirmSwapButtonParent.localPosition = new Vector3(0, -2.225f, -5);
-                confirmSwapButtonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
-                swapperConfirmButtonLabel.text = Helpers.cs(Color.red, "Confirm Swap");
-                swapperConfirmButtonLabel.alignment = TMPro.TextAlignmentOptions.Center;
-                swapperConfirmButtonLabel.transform.localPosition = new Vector3(0, 0, swapperConfirmButtonLabel.transform.localPosition.z);
-                swapperConfirmButtonLabel.transform.localScale *= 1.7f;
-
-                PassiveButton passiveButton = confirmSwapButton.GetComponent<PassiveButton>();
-                passiveButton.OnClick.RemoveAllListeners();
-                if (!CachedPlayer.LocalPlayer.Data.IsDead) passiveButton.OnClick.AddListener((Action)(() => swapperConfirm(__instance)));
-                confirmSwapButton.parent.gameObject.SetActive(false);
-                __instance.StartCoroutine(Effects.Lerp(7.27f, new Action<float>((p) => { // Button appears delayed, so that its visible in the voting screen only!
-                    if (p == 1f)
-                    {
-                        confirmSwapButton.parent.gameObject.SetActive(true);
-                    }
-                })));
-            }
-
-
 
             // Add overlay for spelled players
             if (Witch.witch != null && Witch.futureSpelled != null) {

@@ -31,7 +31,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.3.2";
+        public const string VersionString = "4.3.3";
         public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
@@ -90,8 +90,9 @@ namespace TheOtherRoles
         public override void Load() {
             Logger = Log;
             Instance = this;
-  
-            _ = Helpers.checkBeta(); // Exit if running an expired beta
+
+            // TODO à réparer
+          //  _ = Helpers.checkBeta(); // Exit if running an expired beta
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             GhostsSeeInformation = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);

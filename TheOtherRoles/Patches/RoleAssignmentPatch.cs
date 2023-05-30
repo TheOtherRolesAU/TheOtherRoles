@@ -551,7 +551,7 @@ namespace TheOtherRoles.Patches {
             return playerId;
         }
 
-        private static void assignModifiersToPlayers(List<RoleId> modifiers, List<PlayerControl> playerList, int modifierCount) {
+        public static void assignModifiersToPlayers(List<RoleId> modifiers, List<PlayerControl> playerList, int modifierCount) {
             modifiers = modifiers.OrderBy(x => rnd.Next()).ToList(); // randomize list
 
             while (modifierCount < modifiers.Count) {

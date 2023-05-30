@@ -672,8 +672,13 @@ namespace TheOtherRoles
 
             evilHackerAdminTableButton = new CustomButton(
                () => {
-                   if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
-                       FastDestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                       // TODO à vérifier                      
+                       if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
+                       {
+                           HudManager __instance = FastDestroyableSingleton<HudManager>.Instance;
+                           __instance.InitMap();
+                           MapBehaviour.Instance.ShowCountOverlay(allowedToMove: true, showLivePlayerPosition: true, includeDeadBodies: true);
+                       }
 
                    if (EvilHacker.cantMove) CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
                    CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
@@ -686,7 +691,7 @@ namespace TheOtherRoles
                    evilHackerAdminTableButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                },
                Hacker.getAdminSprite(),
-               new Vector3(-1.8f, -0.06f, 0),
+               CustomButton.ButtonPositions.upperRowLeft,
                __instance,
                KeyCode.Q,
                true,
@@ -696,7 +701,7 @@ namespace TheOtherRoles
                    if (MapBehaviour.Instance && MapBehaviour.Instance.isActiveAndEnabled) MapBehaviour.Instance.Close();
                    CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
                },
-               PlayerControl.GameOptions.MapId == 3,
+                GameOptionsManager.Instance.currentNormalGameOptions.MapId == 3,
                "EVIL ADMIN"
            );
 
@@ -2003,7 +2008,7 @@ namespace TheOtherRoles
                     mrFreezeButton.actionButton.cooldownTimerText.color = Palette.EnabledColor;
                 },
                 MrFreeze.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.F,
                 true,
@@ -2069,14 +2074,13 @@ namespace TheOtherRoles
                         return false;
                     }
 
-                },
-             //   () => { return ((__instance.ReportButton.renderer.color == Palette.EnabledColor && PlayerControl.LocalPlayer.CanMove) || Undertaker.deadBodyDraged != null); },
+                },          
                 () => {
                     Undertaker.deadBodyDraged = null;
                     Undertaker.isDraging = false;
                 },
                 Undertaker.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.F,
                 true,
@@ -2103,7 +2107,7 @@ namespace TheOtherRoles
                     ghostLordButton.Timer = ghostLordButton.MaxTimer;
                 },
                 GhostLord.getButtonSprite(),
-                new Vector3(-1.8f, -0.06f, 0),
+                CustomButton.ButtonPositions.upperRowLeft,
                 __instance,
                 KeyCode.F
             );

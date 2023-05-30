@@ -1372,7 +1372,8 @@ namespace TheOtherRoles.Patches {
                 }
                 if(EvilMimic.haveKilledSheriff)
                 {
-                    EvilMimic.evilMimic.SetKillTimer(PlayerControl.GameOptions.KillCooldown - EvilMimic.sheriffKillingBonus);
+                    // TODO à vérifier
+                    EvilMimic.evilMimic.SetKillTimer(GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown - EvilMimic.sheriffKillingBonus);
                 }
                 
             }
@@ -1621,6 +1622,7 @@ namespace TheOtherRoles.Patches {
         public static void Prefix(GameData __instance, PlayerControl player, DisconnectReasons reason) {
             if (MeetingHud.Instance) {
                 MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, player.PlayerId);
+                MeetingHudPatch.evilSwapperCheckAndReturnSwap(MeetingHud.Instance, player.PlayerId);                
             }
         }
     }

@@ -17,6 +17,7 @@ using Reactor.Utilities.Extensions;
 using AmongUs.GameOptions;
 using System.Diagnostics.Metrics;
 using TheOtherRoles.Objects;
+using TheOtherRoles.Patches;
 
 namespace TheOtherRoles {
 
@@ -459,9 +460,13 @@ namespace TheOtherRoles {
                     EvilMimic.haveKilledHacker = true;
                     new CustomMessage("Rest in peace hacker", 5f);
 
-                    //open admin map on kill
+                    //open admin map on kill TODO à vérifier                   
                     if (!MapBehaviour.Instance || !MapBehaviour.Instance.isActiveAndEnabled)
-                        FastDestroyableSingleton<HudManager>.Instance.ShowMap((System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                    {
+                        HudManager __instance = FastDestroyableSingleton<HudManager>.Instance;
+                        __instance.InitMap();
+                        MapBehaviour.Instance.ShowCountOverlay(allowedToMove: true, showLivePlayerPosition: true, includeDeadBodies: true);
+                    }
 
                     //CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
                     //CachedPlayer.LocalPlayer.NetTransform.Halt(); // Stop current movement 
@@ -547,7 +552,10 @@ namespace TheOtherRoles {
                     new CustomMessage("You have killed the mayor, you earn tiebreaker", 5f);
                     List<PlayerControl> evilMimicList = new List<PlayerControl>();
                     evilMimicList.Add(EvilMimic.evilMimic);
-                    Patches.RoleManagerSelectRolesPatch.setModifierToRandomPlayer((byte)RoleId.Tiebreaker, evilMimicList);
+                    // TODO à vérifier                    
+                    List<RoleId> ensuredModifiers = new List<RoleId>();
+                    ensuredModifiers.Add(RoleId.Tiebreaker);
+                    RoleManagerSelectRolesPatch.assignModifiersToPlayers(ensuredModifiers, evilMimicList, 0);
                 }
                 else if (targetRole == RoleInfo.medium)
                 {
@@ -642,7 +650,8 @@ namespace TheOtherRoles {
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
         }
 
-        public static async Task checkBeta() {
+      /*  public static async Task checkBeta() {
+            // TODO à réparer
             if (TheOtherRolesPlugin.betaDays > 0) {
                 TheOtherRolesPlugin.Logger.LogMessage($"Beta check");
                 var compileTime = new DateTime(Builtin.CompileTime, DateTimeKind.Utc);  // This may show as an error, but it is not, compilation will work!
@@ -667,7 +676,7 @@ namespace TheOtherRoles {
 
                 } else TheOtherRolesPlugin.Logger.LogMessage($"Beta will remain runnable for {TheOtherRolesPlugin.betaDays - (now - compileTime)?.TotalDays} days!");
             }
-        }
+        }*/
 
         public static bool hasImpVision(GameData.PlayerInfo player) {
             return player.Role.IsImpostor

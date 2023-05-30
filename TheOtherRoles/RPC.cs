@@ -1005,6 +1005,7 @@ namespace TheOtherRoles
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(dyingTarget.KillSfx, false, 0.8f);
             if (MeetingHud.Instance) {
                 MeetingHudPatch.swapperCheckAndReturnSwap(MeetingHud.Instance, dyingTargetId);
+                MeetingHudPatch.evilSwapperCheckAndReturnSwap(MeetingHud.Instance, dyingTargetId);                
                 foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates) {
                     if (pva.TargetPlayerId == dyingTargetId || pva.TargetPlayerId == partnerId) {
                         pva.SetDead(pva.DidReport, true);
@@ -1513,9 +1514,6 @@ namespace TheOtherRoles
                     byte guessedTarget = reader.ReadByte();
                     byte guessedRoleId = reader.ReadByte();
                     RPCProcedure.guesserShoot(killerId, dyingTarget, guessedTarget, guessedRoleId);
-                    break;
-                case (byte)CustomRPC.VultureWin:
-                    RPCProcedure.vultureWin();
                     break;
                 case (byte)CustomRPC.EvilMimicKillMedic:
                     RPCProcedure.EvilMimicKillMedic();
