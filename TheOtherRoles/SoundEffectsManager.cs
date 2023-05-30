@@ -40,11 +40,32 @@ namespace TheOtherRoles
 
         public static void play(string path, float volume=0.8f)
         {
-            if (!MapOptions.enableSoundEffects) return;
+            if (!TORMapOptions.enableSoundEffects) return;
             AudioClip clipToPlay = get(path);
             // if (false) clipToPlay = get("exampleClip"); for april fools?
             stop(path);
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(clipToPlay, false, volume);
+        }
+        public static void playAtPosition(string path, Vector2 position, float maxDuration = 15f, float range = 5f, bool loop = false) {
+            if (!TORMapOptions.enableSoundEffects || !Constants.ShouldPlaySfx()) return;
+            AudioClip clipToPlay = get(path);
+
+            AudioSource source = SoundManager.Instance.PlaySound(clipToPlay, false, 1f);
+            source.loop = loop;
+            HudManager.Instance.StartCoroutine(Effects.Lerp(maxDuration, new Action<float>((p) => {
+                if (source != null) {
+                    if (p == 1) {
+                        source.Stop();
+                    }
+                    float distance, volume;
+                    distance = Vector2.Distance(position, Players.CachedPlayer.LocalPlayer.PlayerControl.GetTruePosition());
+                    if (distance < range)
+                        volume = (1f - distance / range);
+                    else
+                        volume = 0f;
+                    source.volume = volume;
+                }
+            })));
         }
 
         public static void stop(string path) {

@@ -35,4 +35,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: TheOtherRoles.dll
-          path: TheOtherRoles/bin/Release/netstandard2.1/TheOtherRoles.dll
+          path: TheOtherRoles/bin/Release/net6.0/TheOtherRoles.dll
+

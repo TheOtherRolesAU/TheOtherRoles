@@ -1,3 +1,4 @@
+using Il2CppSystem.Runtime.ExceptionServices;
 using System;
 using System.Collections.Generic;
 using TheOtherRoles.Players;
@@ -7,8 +8,7 @@ using UnityEngine.UI;
 using static TheOtherRoles.TheOtherRoles;
 
 namespace TheOtherRoles.Objects {
-    public class CustomButton
-    {
+    public class CustomButton {
         public static List<CustomButton> buttons = new List<CustomButton>();
         public ActionButton actionButton;
         public GameObject actionButtonGameObject;
@@ -36,6 +36,16 @@ namespace TheOtherRoles.Objects {
         private string buttonText;
         public bool isHandcuffed = false;
         private static readonly int Desat = Shader.PropertyToID("_Desat");
+
+        public static class ButtonPositions {
+            public static readonly Vector3 lowerRowRight = new Vector3(-2f, -0.06f, 0);  // Not usable for imps beacuse of new button positions!
+            public static readonly Vector3 lowerRowCenter = new Vector3(-3f, -0.06f, 0);
+            public static readonly Vector3 lowerRowLeft = new Vector3(-4f, -0.06f, 0);
+            public static readonly Vector3 upperRowRight = new Vector3(0f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
+            public static readonly Vector3 upperRowCenter = new Vector3(-1f, 1f, 0f);  // Not usable for imps beacuse of new button positions!
+            public static readonly Vector3 upperRowLeft = new Vector3(-2f, 1f, 0f);
+            public static readonly Vector3 upperRowFarLeft = new Vector3(-3f, 1f, 0f);
+        }
 
         public CustomButton(Action OnClick, Func<bool> HasButton, Func<bool> CouldUse, Action OnMeetingEnds, Sprite Sprite, Vector3 PositionOffset, HudManager hudManager, KeyCode? hotkey, bool HasEffect, float EffectDuration, Action OnEffectEnds, bool mirror = false, string buttonText = "")
         {
@@ -158,7 +168,7 @@ namespace TheOtherRoles.Objects {
                 setActive(false);
                 return;
             }
-            setActive(hudManager.UseButton.isActiveAndEnabled);
+            setActive(hudManager.UseButton.isActiveAndEnabled || hudManager.PetButton.isActiveAndEnabled);
 
             if (DeputyTimer >= 0) { // This had to be reordered, so that the handcuffs do not stop the underlying timers from running
                 if (HasEffect && isEffectActive)
@@ -185,7 +195,12 @@ namespace TheOtherRoles.Objects {
             actionButtonLabelText.enabled = showButtonText; // Only show the text if it's a kill button
             if (hudManager.UseButton != null) {
                 Vector3 pos = hudManager.UseButton.transform.localPosition;
-                if (mirror) pos = new Vector3(-pos.x, pos.y, pos.z);
+                if (mirror) {
+                    float aspect = Camera.main.aspect;
+                    float safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
+                    float xpos = 0.05f - safeOrthographicSize * aspect * 1.70f;
+                    pos = new Vector3(xpos, pos.y, pos.z);
+                }
                 actionButton.transform.localPosition = pos + PositionOffset;
             }
             if (CouldUse()) {

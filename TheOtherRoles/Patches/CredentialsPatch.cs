@@ -72,8 +72,8 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
                     }
                 } else {
                     string gameModeText = $"";
-                    if (MapOptions.gameMode == CustomGamemodes.HideNSeek) gameModeText = $"Hide 'N Seek";
-                    else if (MapOptions.gameMode == CustomGamemodes.Guesser) gameModeText = $"Guesser";
+                    if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) gameModeText = $"Hide 'N Seek";
+                    else if (TORMapOptions.gameMode == CustomGamemodes.Guesser) gameModeText = $"Guesser";
                     if (gameModeText != "") gameModeText = Helpers.cs(Color.yellow, gameModeText) + "\n";
 
                     __instance.text.text = $"{fullCredentialsVersion}\n  {gameModeText + fullCredentials}\n {__instance.text.text}";
@@ -88,6 +88,7 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
             public static SpriteRenderer renderer;
             public static Sprite bannerSprite;
             public static Sprite horseBannerSprite;
+            public static Sprite banner2Sprite;
             private static PingTracker instance;
             static void Postfix(PingTracker __instance) {
                 var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
@@ -104,11 +105,13 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
 
                 instance = __instance;
                 loadSprites();
-                renderer.sprite = MapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
+                // renderer.sprite = TORMapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
+                renderer.sprite = EventUtility.isEnabled ? banner2Sprite : bannerSprite;
             }
 
             public static void loadSprites() {
                 if (bannerSprite == null) bannerSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
+                if (banner2Sprite == null) banner2Sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner2.png", 300f);
                 if (horseBannerSprite == null) horseBannerSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.bannerTheHorseRoles.png", 300f);
             }
 
@@ -119,7 +122,7 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
                     instance.StartCoroutine(Effects.Lerp(fadeDuration, new Action<float>((p) => {
                         renderer.color = new Color(1, 1, 1, 1 - p);
                         if (p == 1) {
-                            renderer.sprite = MapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
+                            renderer.sprite = TORMapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
                             instance.StartCoroutine(Effects.Lerp(fadeDuration, new Action<float>((p) => {
                                 renderer.color = new Color(1, 1, 1, p);
                             })));

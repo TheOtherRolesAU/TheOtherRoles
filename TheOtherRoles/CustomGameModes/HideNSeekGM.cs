@@ -36,7 +36,7 @@ namespace TheOtherRoles.CustomGameModes {
         }
 
         public static void clearAndReload() {
-            isHideNSeekGM = MapOptions.gameMode == CustomGamemodes.HideNSeek;
+            isHideNSeekGM = TORMapOptions.gameMode == CustomGamemodes.HideNSeek;
             if (timerText != null) UnityEngine.Object.Destroy(timerText);
             timerText = null;
             if (polusVent != null) UnityEngine.Object.Destroy(polusVent);
@@ -75,16 +75,23 @@ namespace TheOtherRoles.CustomGameModes {
         public static float ArrowCooldown = 30f;
         public static float ArrowDuration = 5f;
         public static float ArrowPunish = 5f;
-        private static Sprite buttonSprite;
+        private static Sprite buttonSpriteLight;
+        private static Sprite buttonSpriteArrow;
 
         public static bool isLightActive (byte playerId) {
             return lightActive.Contains(playerId);
         }
 
         public static Sprite getArrowSprite() {
-            if (buttonSprite) return buttonSprite;
-            buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HideNSeekArrowButton.png", 115f);
-            return buttonSprite;
+            if (buttonSpriteArrow) return buttonSpriteArrow;
+            buttonSpriteArrow = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.HideNSeekArrowButton.png", 115f);
+            return buttonSpriteArrow;
+        }
+
+        public static Sprite getLightSprite() {
+            if (buttonSpriteLight) return buttonSpriteLight;
+            buttonSpriteLight = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.LighterButton.png", 115f);
+            return buttonSpriteLight;
         }
 
         public static void clearAndReload() {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheOtherRoles{
-    static class MapOptions {
+    static class TORMapOptions {
         // Set values
         public static int maxNumberOfMeetings = 10;
         public static bool blockSkippingInEmergencyMeetings = false;
@@ -10,7 +10,7 @@ namespace TheOtherRoles{
         public static bool hidePlayerNames = false;
         public static bool ghostsSeeRoles = true;
         public static bool ghostsSeeModifier = true;
-        public static bool ghostsSeeTasks = true;
+        public static bool ghostsSeeInformation = true;
         public static bool ghostsSeeVotes = true;
         public static bool showRoleSummary = true;
         public static bool allowParallelMedBayScans = false;
@@ -46,13 +46,13 @@ namespace TheOtherRoles{
         public static void reloadPluginOptions() {
             ghostsSeeRoles = TheOtherRolesPlugin.GhostsSeeRoles.Value;
             ghostsSeeModifier = TheOtherRolesPlugin.GhostsSeeModifier.Value;
-            ghostsSeeTasks = TheOtherRolesPlugin.GhostsSeeTasks.Value;
+            ghostsSeeInformation = TheOtherRolesPlugin.GhostsSeeInformation.Value;
             ghostsSeeVotes = TheOtherRolesPlugin.GhostsSeeVotes.Value;
             showRoleSummary = TheOtherRolesPlugin.ShowRoleSummary.Value;
             showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value;
             enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value;
             enableHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
-            Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
+            //Patches.ShouldAlwaysHorseAround.isHorseMode = TheOtherRolesPlugin.EnableHorseMode.Value;
         }
     }
 }

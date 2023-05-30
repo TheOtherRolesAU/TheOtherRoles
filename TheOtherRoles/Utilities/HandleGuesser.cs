@@ -37,7 +37,7 @@ namespace TheOtherRoles.Utilities {
         public static void clearAndReload() {
             Guesser.clearAndReload();
             GuesserGM.clearAndReload();
-            isGuesserGm = MapOptions.gameMode == CustomGamemodes.Guesser;
+            isGuesserGm = TORMapOptions.gameMode == CustomGamemodes.Guesser;
             if (isGuesserGm) {
                 guesserCantGuessSnitch = CustomOptionHolder.guesserGamemodeCantGuessSnitchIfTaksDone.getBool();
                 hasMultipleShotsPerMeeting = CustomOptionHolder.guesserGamemodeHasMultipleShotsPerMeeting.getBool();

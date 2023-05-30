@@ -14,12 +14,18 @@ namespace TheOtherRoles.Patches {
     class IntroCutsceneOnDestroyPatch
     {
         public static PoolablePlayer playerPrefab;
+        public static Vector3 bottomLeft;
         public static void Prefix(IntroCutscene __instance) {
             // Generate and initialize player icons
             int playerCounter = 0;
             int hideNSeekCounter = 0;
             if (CachedPlayer.LocalPlayer != null && FastDestroyableSingleton<HudManager>.Instance != null) {
-                Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z);
+                float aspect = Camera.main.aspect;
+                float safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
+                float xpos = 1.75f - safeOrthographicSize * aspect * 1.70f;
+                float ypos = 0.15f - safeOrthographicSize * 1.7f;
+                bottomLeft = new Vector3(xpos / 2, ypos/2, -61f);
+
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
@@ -30,7 +36,7 @@ namespace TheOtherRoles.Patches {
                    // PlayerControl.SetPetImage(data.DefaultOutfit.PetId, data.DefaultOutfit.ColorId, player.PetSlot);
                     player.cosmetics.nameText.text = data.PlayerName;
                     player.SetFlipX(true);
-                    MapOptions.playerIcons[p.PlayerId] = player;
+                    TORMapOptions.playerIcons[p.PlayerId] = player;
                     player.gameObject.SetActive(false);
 
                     if (CachedPlayer.LocalPlayer.PlayerControl == Arsonist.arsonist && p != Arsonist.arsonist) {
@@ -52,7 +58,7 @@ namespace TheOtherRoles.Patches {
                         }
 
                     } else {   //  This can be done for all players not just for the bounty hunter as it was before. Allows the thief to have the correct position and scaling
-                        player.transform.localPosition = bottomLeft + new Vector3(-0.25f, 0f, 0);
+                        player.transform.localPosition = bottomLeft;
                         player.transform.localScale = Vector3.one * 0.4f;
                         player.gameObject.SetActive(false);
                     }
@@ -63,10 +69,10 @@ namespace TheOtherRoles.Patches {
             if (BountyHunter.bounty != null && CachedPlayer.LocalPlayer.PlayerControl == BountyHunter.bountyHunter) {
                 BountyHunter.bountyUpdateTimer = 0f;
                 if (FastDestroyableSingleton<HudManager>.Instance != null) {
-                    Vector3 bottomLeft = new Vector3(-FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.x, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.y, FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition.z) + new Vector3(-0.25f, 1f, 0);
                     BountyHunter.cooldownText = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText, FastDestroyableSingleton<HudManager>.Instance.transform);
                     BountyHunter.cooldownText.alignment = TMPro.TextAlignmentOptions.Center;
-                    BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -1f, -1f);
+                    BountyHunter.cooldownText.transform.localPosition = bottomLeft + new Vector3(0f, -0.35f, -62f);
+                    BountyHunter.cooldownText.transform.localScale = Vector3.one * 0.4f;
                     BountyHunter.cooldownText.gameObject.SetActive(true);
                 }
             }
@@ -75,8 +81,8 @@ namespace TheOtherRoles.Patches {
             SoundEffectsManager.Load();
 
             // First kill
-            if (AmongUsClient.Instance.AmHost && MapOptions.shieldFirstKill && MapOptions.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
-                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(MapOptions.firstKillName));
+            if (AmongUsClient.Instance.AmHost && TORMapOptions.shieldFirstKill && TORMapOptions.firstKillName != "" && !HideNSeek.isHideNSeekGM) {
+                PlayerControl target = PlayerControl.AllPlayerControls.ToArray().ToList().FirstOrDefault(x => x.Data.PlayerName.Equals(TORMapOptions.firstKillName));
                 if (target != null) {
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetFirstKill, Hazel.SendOption.Reliable, -1);
                     writer.Write(target.PlayerId);
@@ -84,7 +90,9 @@ namespace TheOtherRoles.Patches {
                     RPCProcedure.setFirstKill(target.PlayerId);
                 }
             }
-            MapOptions.firstKillName = "";
+            TORMapOptions.firstKillName = "";
+
+            EventUtility.gameStartsUpdate();
 
             if (HideNSeek.isHideNSeekGM) {
                 foreach (PlayerControl player in HideNSeek.getHunters()) {
@@ -98,9 +106,10 @@ namespace TheOtherRoles.Patches {
                             HideNSeek.isWaitingTimer = false;
                         }
                     })));
+                    player.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
                 }
 
-                if (HideNSeek.polusVent == null && PlayerControl.GameOptions.MapId == 2) {
+                if (HideNSeek.polusVent == null && GameOptionsManager.Instance.currentNormalGameOptions.MapId == 2) {
                     var list = GameObject.FindObjectsOfType<Vent>().ToList();
                     var adminVent = list.FirstOrDefault(x => x.gameObject.name == "AdminVent");
                     var bathroomVent = list.FirstOrDefault(x => x.gameObject.name == "BathroomVent");
@@ -121,13 +130,13 @@ namespace TheOtherRoles.Patches {
                     bathroomVent.Center = HideNSeek.polusVent;
                 }
 
-                ShipStatusPatch.originalNumCrewVisionOption = PlayerControl.GameOptions.CrewLightMod;
-                ShipStatusPatch.originalNumImpVisionOption = PlayerControl.GameOptions.ImpostorLightMod;
-                ShipStatusPatch.originalNumKillCooldownOption = PlayerControl.GameOptions.killCooldown;
+                ShipStatusPatch.originalNumCrewVisionOption = GameOptionsManager.Instance.currentNormalGameOptions.CrewLightMod;
+                ShipStatusPatch.originalNumImpVisionOption = GameOptionsManager.Instance.currentNormalGameOptions.ImpostorLightMod;
+                ShipStatusPatch.originalNumKillCooldownOption = GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
 
-                PlayerControl.GameOptions.ImpostorLightMod = CustomOptionHolder.hideNSeekHunterVision.getFloat();
-                PlayerControl.GameOptions.CrewLightMod = CustomOptionHolder.hideNSeekHuntedVision.getFloat();
-                PlayerControl.GameOptions.KillCooldown = CustomOptionHolder.hideNSeekKillCooldown.getFloat();
+                GameOptionsManager.Instance.currentNormalGameOptions.ImpostorLightMod = CustomOptionHolder.hideNSeekHunterVision.getFloat();
+                GameOptionsManager.Instance.currentNormalGameOptions.CrewLightMod = CustomOptionHolder.hideNSeekHuntedVision.getFloat();
+                GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown = CustomOptionHolder.hideNSeekKillCooldown.getFloat();
             }
         }
     }
@@ -186,11 +195,22 @@ namespace TheOtherRoles.Patches {
 
         [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
         class SetUpRoleTextPatch {
+            static int seed = 0;
             static public void SetRoleTexts(IntroCutscene __instance) {
                 // Don't override the intro of the vanilla roles
                 List<RoleInfo> infos = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl);
                 RoleInfo roleInfo = infos.Where(info => !info.isModifier).FirstOrDefault();
                 RoleInfo modifierInfo = infos.Where(info => info.isModifier).FirstOrDefault();
+
+                if (EventUtility.isEnabled) {
+                    var roleInfos = RoleInfo.allRoleInfos.Where(x => !x.isModifier).ToList();
+                    if (roleInfo.isNeutral) roleInfos.RemoveAll(x => !x.isNeutral);
+                    if (roleInfo.color == Palette.ImpostorRed) roleInfos.RemoveAll(x => x.color != Palette.ImpostorRed);
+                    if (!roleInfo.isNeutral && roleInfo.color != Palette.ImpostorRed) roleInfos.RemoveAll(x => x.color == Palette.ImpostorRed || x.isNeutral);
+                    var rnd = new System.Random(seed);
+                    roleInfo = roleInfos[rnd.Next(roleInfos.Count)];
+                }
+
                 __instance.RoleBlurbText.text = "";
                 if (roleInfo != null) {
                     __instance.RoleText.text = roleInfo.name;
@@ -233,6 +253,7 @@ namespace TheOtherRoles.Patches {
             }
             public static bool Prefix(IntroCutscene __instance) {
                 if (!CustomOptionHolder.activateRoles.getBool()) return true;
+                seed = rnd.Next(5000);
                 FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     SetRoleTexts(__instance);
                 })));
@@ -265,13 +286,8 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
     public static class ShouldAlwaysHorseAround {
-        public static bool isHorseMode;
         public static bool Prefix(ref bool __result) {
-            if (isHorseMode != MapOptions.enableHorseMode && LobbyBehaviour.Instance != null) __result = isHorseMode;
-            else {
-                __result = MapOptions.enableHorseMode;
-                isHorseMode = MapOptions.enableHorseMode;
-            }
+            __result = EventUtility.isEnabled && !EventUtility.disableHorses;
             return false;
         }
     }
