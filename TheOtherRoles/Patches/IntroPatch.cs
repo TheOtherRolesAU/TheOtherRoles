@@ -9,24 +9,28 @@ using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TheOtherRoles.CustomGameModes;
 
-namespace TheOtherRoles.Patches {
+namespace TheOtherRoles.Patches
+{
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     class IntroCutsceneOnDestroyPatch
     {
         public static PoolablePlayer playerPrefab;
         public static Vector3 bottomLeft;
-        public static void Prefix(IntroCutscene __instance) {
+        public static void Prefix(IntroCutscene __instance) 
+        {
             // Generate and initialize player icons
             int playerCounter = 0;
             int hideNSeekCounter = 0;
-            if (CachedPlayer.LocalPlayer != null && FastDestroyableSingleton<HudManager>.Instance != null) {
+            if (CachedPlayer.LocalPlayer != null && FastDestroyableSingleton<HudManager>.Instance != null)
+            {
                 float aspect = Camera.main.aspect;
                 float safeOrthographicSize = CameraSafeArea.GetSafeOrthographicSize(Camera.main);
                 float xpos = 1.75f - safeOrthographicSize * aspect * 1.70f;
                 float ypos = 0.15f - safeOrthographicSize * 1.7f;
                 bottomLeft = new Vector3(xpos / 2, ypos/2, -61f);
 
-                foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+                foreach (PlayerControl p in CachedPlayer.AllPlayers)
+                {
                     GameData.PlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
                     playerPrefab = __instance.PlayerPrefab;
