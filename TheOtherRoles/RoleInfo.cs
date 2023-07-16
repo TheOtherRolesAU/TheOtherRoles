@@ -270,6 +270,7 @@ namespace TheOtherRoles
                         roleName = roleName + Helpers.cs(Arsonist.color, $" ({CachedPlayer.AllPlayers.Count(x => { return x.PlayerControl != Arsonist.arsonist && !x.Data.IsDead && !x.Data.Disconnected && !Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); })} left)");
                     if (p == Jackal.fakeSidekick)
                         roleName = Helpers.cs(Sidekick.color, $" (fake SK)") + roleName;
+
                     // Death Reason on Ghosts
                     if (p.Data.IsDead) {
                         string deathReasonString = "";
@@ -311,6 +312,9 @@ namespace TheOtherRoles
                                     break;
                                 case DeadPlayer.CustomDeathReason.Bomb:
                                     deathReasonString = $" - bombed by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
+                                    break;
+                                case DeadPlayer.CustomDeathReason.Arson:
+                                    deathReasonString = $" - burnt by {Helpers.cs(killerColor, deadPlayer.killerIfExisting.Data.PlayerName)}";
                                     break;
                             }
                             roleName = roleName + deathReasonString;

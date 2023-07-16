@@ -685,7 +685,7 @@ namespace TheOtherRoles
         
         public static void erasePlayerRoles(byte playerId, bool ignoreModifier = true) {
             PlayerControl player = Helpers.playerById(playerId);
-            if (player == null) return;
+            if (player == null || !player.canBeErased()) return;
 
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();
@@ -903,7 +903,10 @@ namespace TheOtherRoles
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
             foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                if (p != Arsonist.arsonist) p.Exiled();
+                if (p != Arsonist.arsonist) {
+                    p.Exiled();
+                    overrideDeathReasonAndKiller(p, DeadPlayer.CustomDeathReason.Arson, Arsonist.arsonist);
+                }
             }
         }
 
@@ -1191,7 +1194,9 @@ namespace TheOtherRoles
         }
 
         public static void defuseBomb() {
-            SoundEffectsManager.playAtPosition("bombDefused", Bomber.bomb.bomb.transform.position, range: Bomber.hearRange);
+            try {
+                SoundEffectsManager.playAtPosition("bombDefused", Bomber.bomb.bomb.transform.position, range: Bomber.hearRange);
+            } catch { }
             Bomber.clearBomb();
             bomberButton.Timer = bomberButton.MaxTimer;
             bomberButton.isEffectActive = false;

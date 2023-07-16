@@ -295,6 +295,7 @@ namespace TheOtherRoles.Patches {
         }
 
         static void updateReportButton(HudManager __instance) {
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
             if (Deputy.handcuffedKnows.ContainsKey(CachedPlayer.LocalPlayer.PlayerId) && Deputy.handcuffedKnows[CachedPlayer.LocalPlayer.PlayerId] > 0 || MeetingHud.Instance) __instance.ReportButton.Hide();
             else if (!__instance.ReportButton.isActiveAndEnabled) __instance.ReportButton.Show();
         }
@@ -322,7 +323,7 @@ namespace TheOtherRoles.Patches {
 
         static void Postfix(HudManager __instance)
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
             
             EventUtility.Update();
 
@@ -347,6 +348,14 @@ namespace TheOtherRoles.Patches {
             updateUseButton(__instance);
             updateMapButton(__instance);
             if (!MeetingHud.Instance) __instance.AbilityButton?.Update();
+
+            // Fix dead player's pets being visible by just always updating whether the pet should be visible at all.
+            foreach (PlayerControl target in CachedPlayer.AllPlayers) {
+                var pet = target.GetPet();
+                if (pet != null) {
+                    pet.Visible = (PlayerControl.LocalPlayer.Data.IsDead && target.Data.IsDead || !target.Data.IsDead) && !target.inVent;
+                }
+            }
         }
     }
 }

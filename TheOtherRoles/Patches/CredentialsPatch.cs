@@ -4,6 +4,7 @@ using TheOtherRoles;
 using TheOtherRoles.CustomGameModes;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using TMPro;
 using UnityEngine;
 
 namespace TheOtherRoles.Patches {
@@ -22,23 +23,6 @@ Design by <color=#FCCE03FF>Bavari</color>";
 
         public static string contributorsCredentials =
 $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
-
-        [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
-        private static class VersionShowerPatch
-        {
-            static void Postfix(VersionShower __instance) {
-                var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
-                if (amongUsLogo == null) return;
-
-                var credentials = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
-                credentials.transform.position = new Vector3(0, 0, 0);
-                credentials.SetText($"v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n<size=30f%>\n</size>{mainMenuCredentials}\n<size=30%>\n</size>{contributorsCredentials}");
-                credentials.alignment = TMPro.TextAlignmentOptions.Center;
-                credentials.fontSize *= 0.75f;
-
-                credentials.transform.SetParent(amongUsLogo.transform);
-            }
-        }
 
         [HarmonyPatch(typeof(PingTracker), nameof(PingTracker.Update))]
         internal static class PingTrackerPatch
@@ -91,14 +75,10 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
             public static Sprite banner2Sprite;
             private static PingTracker instance;
             static void Postfix(PingTracker __instance) {
-                var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
-                if (amongUsLogo != null) {
-                    amongUsLogo.transform.localScale *= 0.6f;
-                    amongUsLogo.transform.position += Vector3.up * 0.25f;
-                }
-
                 var torLogo = new GameObject("bannerLogo_TOR");
-                torLogo.transform.position = Vector3.up;
+                torLogo.transform.SetParent(GameObject.Find("RightPanel").transform, false);
+                torLogo.transform.localPosition = new Vector3(-0.4f, 1f, 5f);
+
                 renderer = torLogo.AddComponent<SpriteRenderer>();
                 loadSprites();
                 renderer.sprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Banner.png", 300f);
@@ -107,6 +87,14 @@ $@"<size=60%> <color=#FCCE03FF>Special thanks to K3ndo & Smeggy</color></size>";
                 loadSprites();
                 // renderer.sprite = TORMapOptions.enableHorseMode ? horseBannerSprite : bannerSprite;
                 renderer.sprite = EventUtility.isEnabled ? banner2Sprite : bannerSprite;
+                var credentialObject = new GameObject("credentialsTOR");
+                var credentials = credentialObject.AddComponent<TextMeshPro>();
+                credentials.SetText($"v{TheOtherRolesPlugin.Version.ToString() + (TheOtherRolesPlugin.betaDays > 0 ? "-BETA" : "")}\n<size=30f%>\n</size>{mainMenuCredentials}\n<size=30%>\n</size>{contributorsCredentials}");
+                credentials.alignment = TMPro.TextAlignmentOptions.Center;
+                credentials.fontSize *= 0.05f;
+
+                credentials.transform.SetParent(torLogo.transform);
+                credentials.transform.localPosition = Vector3.down * 2;
             }
 
             public static void loadSprites() {

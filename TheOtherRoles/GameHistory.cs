@@ -15,7 +15,8 @@ namespace TheOtherRoles {
             LawyerSuicide,
             LoverSuicide, // not necessary
             WitchExile,
-            Bomb
+            Bomb,
+            Arson,
         };
 
         public PlayerControl player;

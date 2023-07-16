@@ -42,15 +42,16 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.07.12s| v4.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.3/TheOtherRoles.zip)
 | 2023.03.28s| v4.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.2/TheOtherRoles.zip)
-| 2023.03.28s| v4.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.1/TheOtherRoles.zip)
-| 2023.02.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
-| 2022.12.14s| v4.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.1/TheOtherRoles.zip)
 <details>
   <summary>Click to show older versions</summary>
   
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.03.28s| v4.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.1/TheOtherRoles.zip)
+| 2023.02.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
+| 2022.12.14s| v4.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.1/TheOtherRoles.zip)
 | 2022.10.25s| v4.2.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.0/TheOtherRoles.zip)
 | 2022.9.20s| v4.1.7| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.7/TheOtherRoles.zip)
 | 2022.6.21s| v4.1.6| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.1.6/TheOtherRoles.zip)
@@ -122,6 +123,15 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 4.3.3**
+- Updated to Among Us version 2023.07.12
+- Fixed an issue where the swap icon of a swapper guesser would be in front of the witch icon on a spelled player 
+- Fixed an issue where haunting was impossible in vanilla Hide'n'Seek
+- Fixed an issue where the settings for the Trapper would not appear in the in-game settings shower
+- Fixed a bug where the Arsonists win would show "killed by" on dead players in the summary screen
+- Fixed a bug where placing a garlic would convert a random player into a horse for the rest of the round
+- Changed the Eraser Guesser: Jackal and Sidekick are no longer guessable after being fake-"erased"
   
 **Version 4.3.2**
 - Added new option to Thief: Can Guess To Steal Role
@@ -777,6 +787,7 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 [Ottomated](https://twitter.com/ottomated_) - Idea for the Morphling, Snitch and Camouflager role came from **Ottomated**\
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies were inspired by the one from the **Crowded Mod Team**\
 [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**\
+[TheEpicRoles](https://github.com/LaicosVK/TheEpicRoles) - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by **LaicosVK** **DasMonschta** **Nova**\
 [Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris)
 
 # Settings
@@ -1352,8 +1363,7 @@ If the Thief tries to kill any non-killing role (Crewmate or Neutral), they die 
 **NOTE**
 - If the option "Thief Can Kill Sheriff" is On, the Thief has tasks which will ONLY begin to count, if they kill
 the Sheriff. While the Thief hasn't fired, their tasks do not count towards the taskwin.
-- If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks.
-
+- If the option "Thief Can Kill Sheriff" is Off, the Thief will not have tasks. 
 - If the Thief kills the witch, already witched players stay witched (except for the Thief).
 - If the Thief can guess to steal the role, guessing the witch will either save all targets or none of the targets (depending on the setting for Witch: Voting The Witch Saves All The Targets)
 
@@ -2008,8 +2018,8 @@ Players can additionally have a modifier, if enabled (e.g. Medic Guesser Mini).
 | Number of Crew Guessers | -
 | Number of Neutral Guessers | -
 | Number of Impostor Guessers | -
-| Force Jackal Guesser | If set to "On", the first neutral role who will be Guesser is the Jackal.
-| Force Thief Guesser | If set to "On", the first (or second if Force Jackal Guesser) neutral role who will be Guesser is the Thief.
+| Force Jackal Guesser | If set to "On", the first neutral role who will be Guesser is the Jackal. 
+| Force Thief Guesser | If set to "On", the first (or second if Force Jackal Guesser) neutral role who will be Guesser is the Thief. 
 | Guessers Can Have A Modifier | -
 | Guesser Number Of Shots | -
 | Guesser Can Shoot Multiple Times Per Meeting | -

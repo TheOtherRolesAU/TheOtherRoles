@@ -16,6 +16,10 @@ using AmongUs.Data.Legacy;
 using System.Reflection;
 using static Rewired.Controller;
 using static TheOtherRoles.Modules.CustomHatLoader;
+using Innersloth.Assets;
+using UnityEngine.AddressableAssets;
+using PowerTools;
+using System.Drawing;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -25,6 +29,7 @@ namespace TheOtherRoles.Modules {
         public static Material hatShader;
 
         public static Dictionary<string, HatExtension> CustomHatRegistry = new Dictionary<string, HatExtension>();
+        public static Dictionary<string, HatViewData> CustomHatViewDatas = new Dictionary<string, HatViewData>();
         public static HatExtension TestExt = null;
 
         public class HatExtension {
@@ -129,16 +134,19 @@ namespace TheOtherRoles.Modules {
                 Material tmpShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
                 hatShader = tmpShader;
             }
-
+            var viewdata = ScriptableObject.CreateInstance<HatViewData>();
             HatData hat = ScriptableObject.CreateInstance<HatData>();
-            hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
-            hat.hatViewData.viewData.MainImage = CreateHatSprite(ch.resource, fromDisk);
+
+            viewdata.MainImage = CreateHatSprite(ch.resource, fromDisk);
+            viewdata.FloorImage = viewdata.MainImage;
             if (ch.backresource != null) {
-                hat.hatViewData.viewData.BackImage = CreateHatSprite(ch.backresource, fromDisk);
+                viewdata.BackImage = CreateHatSprite(ch.backresource, fromDisk);
                 ch.behind = true; // Required to view backresource
             }
-            if (ch.climbresource != null)
-                hat.hatViewData.viewData.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
+            if (ch.climbresource != null) {
+                viewdata.ClimbImage = CreateHatSprite(ch.climbresource, fromDisk);
+                viewdata.LeftClimbImage = viewdata.ClimbImage;
+            }
             hat.name = ch.name;
             hat.displayOrder = 99;
             hat.ProductId = "hat_" + ch.name.Replace(' ', '_');
@@ -148,7 +156,7 @@ namespace TheOtherRoles.Modules {
             hat.Free = true;
 
             if (ch.adaptive && hatShader != null)
-                hat.hatViewData.viewData.AltShader = hatShader;
+                viewdata.AltShader = hatShader;
 
             HatExtension extend = new HatExtension();
             extend.author = ch.author != null ? ch.author : "Unknown";
@@ -156,7 +164,7 @@ namespace TheOtherRoles.Modules {
             extend.condition = ch.condition != null ? ch.condition : "none";
 
             if (ch.flipresource != null)
-                 extend.FlipImage = CreateHatSprite(ch.flipresource, fromDisk);
+                extend.FlipImage = CreateHatSprite(ch.flipresource, fromDisk);
             if (ch.backflipresource != null)
                  extend.BackFlipImage = CreateHatSprite(ch.backflipresource, fromDisk);
 
@@ -166,7 +174,11 @@ namespace TheOtherRoles.Modules {
             } else {
                 CustomHatRegistry.Add(hat.name, extend);
             }
+            CustomHatViewDatas.Add(hat.name, viewdata);
+            var assetRef = new AssetReference(viewdata.Pointer);
 
+            hat.ViewDataRef = assetRef;
+            hat.CreateAddressableAsset();
             return hat;
         }
 
@@ -191,7 +203,7 @@ namespace TheOtherRoles.Modules {
         private static class HatManagerPatch {
             private static List<HatData> allHatsList;
             static void Prefix(HatManager __instance) {
-                if (RUNNING) return;
+                if (RUNNING || LOADED) return;
                 RUNNING = true; // prevent simultanious execution
                 allHatsList = __instance.allHats.ToList();
 
@@ -202,11 +214,11 @@ namespace TheOtherRoles.Modules {
                         CustomHatLoader.hatdetails.RemoveAt(0);
                     }
                     __instance.allHats = allHatsList.ToArray();
+                    LOADED = true;  // this will only be set to true if loading is succesful.
                 } catch (System.Exception e) {
                     if (!LOADED)
-                        System.Console.WriteLine("Unable to add Custom Hats\n" + e);
+                        TheOtherRolesPlugin.Logger.LogMessage("Unable to add Custom Hats\n" + e);
                 }
-                LOADED = true;
             }
             static void Postfix(HatManager __instance) {
                 RUNNING = false;
@@ -216,24 +228,26 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
         private static class PlayerPhysicsHandleAnimationPatch {
             private static void Postfix(PlayerPhysics __instance) {
+                if (!CustomHatViewDatas.ContainsKey(__instance.myPlayer.cosmetics.hat.Hat.name)) return;
+                HatViewData viewData = CustomHatViewDatas[__instance.myPlayer.cosmetics.hat.Hat.name];
                 AnimationClip currentAnimation = __instance.Animations.Animator.GetCurrentAnimation();
                 if (currentAnimation == __instance.Animations.group.ClimbUpAnim || currentAnimation == __instance.Animations.group.ClimbDownAnim) return;
                 HatParent hp = __instance.myPlayer.cosmetics.hat;
-                if (hp.Hat == null) return;
+                if (hp == null || hp.Hat == null) return;
                 HatExtension extend = hp.Hat.getHatExtension();
                 if (extend == null) return;
                 if (extend.FlipImage != null) {
                     if (__instance.FlipX) {
                         hp.FrontLayer.sprite = extend.FlipImage;
                     } else {
-                        hp.FrontLayer.sprite = hp.hatView.MainImage;
+                        hp.FrontLayer.sprite = viewData.MainImage;
                     }
                 }
                 if (extend.BackFlipImage != null) {
                     if (__instance.FlipX) {
                         hp.BackLayer.sprite = extend.BackFlipImage;
                     } else {
-                        hp.BackLayer.sprite = hp.hatView.BackImage;
+                        hp.BackLayer.sprite = viewData.BackImage;
                     }
                 }
             }
@@ -262,27 +276,26 @@ namespace TheOtherRoles.Modules {
                 }     
             }
             
-            [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(HatData), typeof(HatViewData), typeof(int))]
+            [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(HatData), typeof(int))]
             private static class HatParentSetHatPatchExtra {
-                static bool Prefix(HatParent __instance, HatData hat, HatViewData hatViewData, int color)
+                static bool Prefix(HatParent __instance, HatData hat, int color)
                 {
                     if (!DestroyableSingleton<TutorialManager>.InstanceExists) return true;
                     
                     try 
                     {
                         __instance.Hat = hat;
-                        __instance.hatView = hatViewData;
-                        
+                        __instance.hatDataAsset = __instance.Hat.CreateAddressableAsset();
+
                         string filePath = Path.GetDirectoryName(Application.dataPath) + @"\TheOtherHats\Test";
                         if (!Directory.Exists(filePath)) return true;
                         DirectoryInfo d = new DirectoryInfo(filePath);
-                        string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Text files
+                        string[] filePaths = d.GetFiles("*.png").Select(x => x.FullName).ToArray(); // Getting Test files
                         List<CustomHat> hats = createCustomHatDetails(filePaths, true);
                         if (hats.Count > 0) 
                         {
                             __instance.Hat = CreateHatBehaviour(hats[0], true, true);
-                            __instance.hatView = __instance.Hat.hatViewData.viewData;
-
+                            __instance.hatDataAsset = __instance.Hat.CreateAddressableAsset();
                         }
                     } 
                     catch (System.Exception e) 
@@ -291,11 +304,179 @@ namespace TheOtherRoles.Modules {
                         return true;
                     }
                     
-                    
                     __instance.PopulateFromHatViewData();
                     __instance.SetMaterialColor(color);
                     return false;
                 }     
+            }
+        }
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(int))]
+        public class SetHatPatch {
+            public static bool Prefix(HatParent __instance, int color) {
+                if (!CustomHatRegistry.ContainsKey(__instance.Hat.name)) return true;
+                __instance.hatDataAsset = null;
+                __instance.PopulateFromHatViewData();
+                __instance.SetMaterialColor(color);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.UpdateMaterial))]
+        public class UpdateMaterialPatch {
+            public static bool Prefix(HatParent __instance) {
+                HatViewData asset;
+                try {
+                    HatViewData vanillaAsset = __instance.hatDataAsset.GetAsset();
+                    return true;
+                } catch { 
+                    try {
+                       asset = CustomHatViewDatas[__instance.Hat.name];
+                    } catch {
+                        return false;
+                    }
+                }
+                if (asset.AltShader) {
+                    __instance.FrontLayer.sharedMaterial = asset.AltShader;
+                    if (__instance.BackLayer) {
+                        __instance.BackLayer.sharedMaterial = asset.AltShader;
+                    }
+                } else {
+                    __instance.FrontLayer.sharedMaterial = DestroyableSingleton<HatManager>.Instance.DefaultShader;
+                    if (__instance.BackLayer) {
+                        __instance.BackLayer.sharedMaterial = DestroyableSingleton<HatManager>.Instance.DefaultShader;
+                    }
+                }
+                int colorId = __instance.matProperties.ColorId;
+                PlayerMaterial.SetColors(colorId, __instance.FrontLayer);
+                if (__instance.BackLayer) {
+                    PlayerMaterial.SetColors(colorId, __instance.BackLayer);
+                }
+                __instance.FrontLayer.material.SetInt(PlayerMaterial.MaskLayer, __instance.matProperties.MaskLayer);
+                if (__instance.BackLayer) {
+                    __instance.BackLayer.material.SetInt(PlayerMaterial.MaskLayer, __instance.matProperties.MaskLayer);
+                }
+                PlayerMaterial.MaskType maskType = __instance.matProperties.MaskType;
+                if (maskType == PlayerMaterial.MaskType.ScrollingUI) {
+                    if (__instance.FrontLayer) {
+                        __instance.FrontLayer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    }
+                    if (__instance.BackLayer) {
+                        __instance.BackLayer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                        return false;
+                    }
+                } else if (maskType == PlayerMaterial.MaskType.Exile) {
+                    if (__instance.FrontLayer) {
+                        __instance.FrontLayer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                    }
+                    if (__instance.BackLayer) {
+                        __instance.BackLayer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                        return false;
+                    }
+                } else {
+                    if (__instance.FrontLayer) {
+                        __instance.FrontLayer.maskInteraction = SpriteMaskInteraction.None;
+                    }
+                    if (__instance.BackLayer) {
+                        __instance.BackLayer.maskInteraction = SpriteMaskInteraction.None;
+                    }
+                }
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetFloorAnim))]
+        public class HatParentSetFloorAnimPatch {
+            public static bool Prefix(HatParent __instance) {
+                try {
+                    HatViewData vanillaAsset = __instance.hatDataAsset.GetAsset();
+                    return true;
+                } catch { }
+                HatViewData hatViewData = CustomHatViewDatas[__instance.Hat.name];
+                __instance.BackLayer.enabled = false;
+                __instance.FrontLayer.enabled = true;
+                __instance.FrontLayer.sprite = hatViewData.FloorImage;
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetIdleAnim))]
+        public class HatParentSetIdleAnimPatch {
+            public static bool Prefix(HatParent __instance, int colorId) {
+                if (!__instance.Hat) return false;
+                if (!CustomHatRegistry.ContainsKey(__instance.Hat.name))
+                    return true; 
+                HatViewData hatViewData = CustomHatViewDatas[__instance.Hat.name];
+                __instance.hatDataAsset = null;
+                __instance.PopulateFromHatViewData();
+                __instance.SetMaterialColor(colorId);
+                return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetClimbAnim))]
+        public class HatParentSetClimbAnimPatch {
+            public static bool Prefix(HatParent __instance) {
+                try {
+                    HatViewData vanillaAsset = __instance.hatDataAsset.GetAsset();
+                    return true;
+                } catch { }
+
+                HatViewData hatViewData = CustomHatViewDatas[__instance.Hat.name];
+                if (!__instance.options.ShowForClimb) {
+                    return false;
+                }
+                __instance.BackLayer.enabled = false;
+                __instance.FrontLayer.enabled = true;
+                __instance.FrontLayer.sprite = hatViewData.ClimbImage;
+                return false;
+            }
+        }
+
+
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.PopulateFromHatViewData))]
+        public class PopulateFromHatViewDataPatch {
+            public static bool Prefix(HatParent __instance) {
+                try {
+                    HatViewData vanillaAsset = __instance.hatDataAsset.GetAsset();
+                    return true;
+                } catch { 
+                    if (__instance.Hat && !CustomHatViewDatas.ContainsKey(__instance.Hat.name))
+                        return true;
+                    }
+                
+
+                HatViewData asset = CustomHatViewDatas[__instance.Hat.name];
+
+                if (!asset) {
+                    return true;
+                }
+                __instance.UpdateMaterial();
+
+                SpriteAnimNodeSync spriteAnimNodeSync = __instance.SpriteSyncNode ?? __instance.GetComponent<SpriteAnimNodeSync>();
+                if (spriteAnimNodeSync) {
+                    spriteAnimNodeSync.NodeId = (__instance.Hat.NoBounce ? 1 : 0);
+                }
+                if (__instance.Hat.InFront) {
+                    __instance.BackLayer.enabled = false;
+                    __instance.FrontLayer.enabled = true;
+                    __instance.FrontLayer.sprite = asset.MainImage;
+                } else if (asset.BackImage) {
+                    __instance.BackLayer.enabled = true;
+                    __instance.FrontLayer.enabled = true;
+                    __instance.BackLayer.sprite = asset.BackImage;
+                    __instance.FrontLayer.sprite = asset.MainImage;
+                } else {
+                    __instance.BackLayer.enabled = true;
+                    __instance.FrontLayer.enabled = false;
+                    __instance.FrontLayer.sprite = null;
+                    __instance.BackLayer.sprite = asset.MainImage;
+                }
+                if (__instance.options.Initialized && __instance.HideHat()) {
+                    __instance.FrontLayer.enabled = false;
+                    __instance.BackLayer.enabled = false;
+                }
+                return false;
             }
         }
 

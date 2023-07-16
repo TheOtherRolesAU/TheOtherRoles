@@ -15,6 +15,7 @@ using System.Net;
 using TheOtherRoles.CustomGameModes;
 using Reactor.Utilities.Extensions;
 using AmongUs.GameOptions;
+using Innersloth.Assets;
 
 namespace TheOtherRoles {
 
@@ -288,7 +289,10 @@ namespace TheOtherRoles {
             target.RawSetHat(hatId, colorId);
             target.RawSetName(hidePlayerName(CachedPlayer.LocalPlayer.PlayerControl, target) ? "" : playerName);
 
-            SkinViewData nextSkin = FastDestroyableSingleton<HatManager>.Instance.GetSkinById(skinId).viewData.viewData;
+
+            SkinViewData nextSkin = null;
+            try { nextSkin = ShipStatus.Instance.CosmeticsCache.GetSkin(skinId); } catch { return; };
+            
             PlayerPhysics playerPhysics = target.MyPhysics;
             AnimationClip clip = null;
             var spriteAnim = playerPhysics.myPlayer.cosmetics.skin.animator;
@@ -309,12 +313,7 @@ namespace TheOtherRoles {
             spriteAnim.m_animator.Play("a", 0, progress % 1);
             spriteAnim.m_animator.Update(0f);
 
-            if (target.cosmetics.currentPet) UnityEngine.Object.Destroy(target.cosmetics.currentPet.gameObject);
-            target.cosmetics.currentPet = UnityEngine.Object.Instantiate<PetBehaviour>(FastDestroyableSingleton<HatManager>.Instance.GetPetById(petId).viewData.viewData);
-            target.cosmetics.currentPet.transform.position = target.transform.position;
-            target.cosmetics.currentPet.Source = target;
-            target.cosmetics.currentPet.Visible = target.Visible;
-            target.SetPlayerMaterialColors(target.cosmetics.currentPet.rend);
+            target.RawSetPet(petId, colorId);
 
             if (enforceNightVisionUpdate) Patches.SurveillanceMinigamePatch.enforceNightVision(target);
             Chameleon.update();  // so that morphling and camo wont make the chameleons visible
@@ -514,7 +513,7 @@ namespace TheOtherRoles {
                 HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
                 HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
             }
-            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height); // This will move button positions to the correct position.
+            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen); // This will move button positions to the correct position.
         }
 
         public static async Task checkBeta() {

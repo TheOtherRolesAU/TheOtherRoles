@@ -836,7 +836,6 @@ namespace TheOtherRoles
 
             garlicButton = new CustomButton(
                 () => {
-                    Utilities.EventUtility.StartEvent(EventUtility.EventTypes.Animation);
                     Vampire.localPlacedGarlic = true;
                     var pos = CachedPlayer.LocalPlayer.transform.position;
                     byte[] buff = new byte[sizeof(float) * 2];
@@ -1262,6 +1261,7 @@ namespace TheOtherRoles
                     if (GameOptionsManager.Instance.currentNormalGameOptions.MapId != 1) {
                         if (SecurityGuard.minigame == null) {
                             byte mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
+                            UnityEngine.Object.FindObjectsOfType<SystemConsole>().ToList().ForEach(x => TheOtherRolesPlugin.Logger.LogMessage($"{x.name} {x.GetType()}, {x.MinigamePrefab.TaskType}"));
                             var e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("Surv_Panel") || x.name.Contains("Cam"));
                             if (mapId == 0 || mapId == 3) e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("SurvConsole"));
                             else if (mapId == 4) e = UnityEngine.Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(x => x.gameObject.name.Contains("task_cams"));

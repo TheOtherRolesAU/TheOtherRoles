@@ -1135,20 +1135,29 @@ namespace TheOtherRoles {
             int j = 0;
             for (int i = 0; i < blocks.Length; i++) {
                 curBlock = blocks[i];
-                if (Helpers.lineCount(curBlock) + Helpers.lineCount(curString) < 40) {
+                if (Helpers.lineCount(curBlock) + Helpers.lineCount(curString) < 43) {
                     curString += curBlock + "\n\n";
                 } else {
                     settingsTMPs[j].text = curString;
                     j++;
-                    
+
                     curString = "\n" + curBlock + "\n\n";
                     if (curString.Substring(0, 2) != "\n\n") curString = "\n" + curString;
                 }
             }
-            if (j < 3) settingsTMPs[j].text = curString;        
+            if (j < settingsTMPs.Length) settingsTMPs[j].text = curString;
+            int blockCount = 0;
+            foreach (var tmp in settingsTMPs) {
+                if (tmp.text != "")
+                    blockCount++;
+            }
+            for (int i = 0; i < blockCount; i++) {
+                TheOtherRolesPlugin.Logger.LogMessage(blockCount);
+                settingsTMPs[i].transform.localPosition = new Vector3(- blockCount * 1.2f + 2.7f * i, 2.2f, -500f);
+            }
         }
 
-        private static TMPro.TextMeshPro[] settingsTMPs = new TMPro.TextMeshPro[3];
+        private static TMPro.TextMeshPro[] settingsTMPs = new TMPro.TextMeshPro[4];
         private static GameObject settingsBackground;
         public static void OpenSettings(HudManager __instance) {
             if (__instance.FullScreen == null || MapBehaviour.Instance && MapBehaviour.Instance.IsOpen
@@ -1159,12 +1168,12 @@ namespace TheOtherRoles {
             var renderer = settingsBackground.GetComponent<SpriteRenderer>();
             renderer.color = new Color(0.2f, 0.2f, 0.2f, 0.9f);
             renderer.enabled = true;
-            for (int i = 0; i < 3; i++) {
+
+            for (int i = 0; i < settingsTMPs.Length; i++) {
                 settingsTMPs[i] = GameObject.Instantiate(__instance.KillButton.cooldownTimerText, __instance.transform);
                 settingsTMPs[i].alignment = TMPro.TextAlignmentOptions.TopLeft;
                 settingsTMPs[i].enableWordWrapping = false;
-                settingsTMPs[i].transform.localScale = Vector3.one * 0.25f;
-                settingsTMPs[i].transform.localPosition += new Vector3(-4f + 3f * i, 1.8f, -500f);
+                settingsTMPs[i].transform.localScale = Vector3.one * 0.25f; 
                 settingsTMPs[i].gameObject.SetActive(true);
             }
         }

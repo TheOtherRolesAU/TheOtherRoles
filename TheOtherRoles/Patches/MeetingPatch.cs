@@ -9,6 +9,7 @@ using System;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using UnityEngine;
+using Innersloth.Assets;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -424,7 +425,7 @@ namespace TheOtherRoles.Patches {
                 Transform button = UnityEngine.Object.Instantiate(buttonTemplate, buttonParent);
                 Transform buttonMask = UnityEngine.Object.Instantiate(maskTemplate, buttonParent);
                 TMPro.TextMeshPro label = UnityEngine.Object.Instantiate(textTemplate, button);
-                button.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+                button.GetComponent<SpriteRenderer>().sprite = ShipStatus.Instance.CosmeticsCache.GetNameplate("nameplate_NoPlate").Image;
                 buttons.Add(button);
                 int row = i/5, col = i%5;
                 buttonParent.localPosition = new Vector3(-3.47f + 1.75f * col, 1.5f - 0.45f * row, -5);
@@ -548,7 +549,8 @@ namespace TheOtherRoles.Patches {
 
                 Transform meetingExtraButtonMask = UnityEngine.Object.Instantiate(maskTemplate, meetingExtraButtonParent);
                 meetingExtraButtonLabel = UnityEngine.Object.Instantiate(textTemplate, meetingExtraButton);
-                meetingExtraButton.GetComponent<SpriteRenderer>().sprite = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById("nameplate_NoPlate")?.viewData?.viewData?.Image;
+                meetingExtraButton.GetComponent<SpriteRenderer>().sprite = ShipStatus.Instance.CosmeticsCache.GetNameplate("nameplate_NoPlate").Image;
+
                 meetingExtraButtonParent.localPosition = new Vector3(0, -2.225f, -5);
                 meetingExtraButtonParent.localScale = new Vector3(0.55f, 0.55f, 1f);
                 meetingExtraButtonLabel.alignment = TMPro.TextAlignmentOptions.Center;
@@ -575,7 +577,7 @@ namespace TheOtherRoles.Patches {
                     }
                 })));
             }
-            
+
             //Fix visor in Meetings 
             /**
             foreach (PlayerVoteArea pva in __instance.playerStates) {
@@ -583,6 +585,8 @@ namespace TheOtherRoles.Patches {
                     pva.PlayerIcon.VisorSlot.transform.position += new Vector3(0, 0, -1f);
                 }
             } */
+
+            bool isGuesser = HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId);
 
             // Add overlay for spelled players
             if (Witch.witch != null && Witch.futureSpelled != null) {
@@ -592,13 +596,13 @@ namespace TheOtherRoles.Patches {
                         rend.transform.SetParent(pva.transform);
                         rend.gameObject.layer = pva.Megaphone.gameObject.layer;
                         rend.transform.localPosition = new Vector3(-0.5f, -0.03f, -1f);
+                        if (CachedPlayer.LocalPlayer.PlayerControl == Swapper.swapper && isGuesser) rend.transform.localPosition = new Vector3(-0.725f, -0.15f, -1f);
                         rend.sprite = Witch.getSpelledOverlaySprite();
                     }
                 }
             }
 
             // Add Guesser Buttons
-            bool isGuesser = HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId);
             int remainingShots = HandleGuesser.remainingShots(CachedPlayer.LocalPlayer.PlayerId);
 
             if (isGuesser && !CachedPlayer.LocalPlayer.Data.IsDead && remainingShots > 0) {
@@ -707,7 +711,6 @@ namespace TheOtherRoles.Patches {
                             else message += p.Data.PlayerName + "\n";
                         }
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(Trapper.trapper, $"{message}");
-
                     }
                 }
 
@@ -738,7 +741,6 @@ namespace TheOtherRoles.Patches {
                         })));
                     }
                 }
-
 
                 if (CachedPlayer.LocalPlayer.Data.IsDead && output != "") FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(CachedPlayer.LocalPlayer, $"{output}");
 

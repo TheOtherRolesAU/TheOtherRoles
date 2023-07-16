@@ -886,8 +886,6 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        
-
         public static void trapperUpdate() {
             if (Trapper.trapper == null || CachedPlayer.LocalPlayer.PlayerControl != Trapper.trapper || Trapper.trapper.Data.IsDead) return;
             var (playerCompleted, _) = TasksHandler.taskInfo(Trapper.trapper.Data);
@@ -958,6 +956,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
         }
+
         public static void Postfix(PlayerControl __instance) {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
 

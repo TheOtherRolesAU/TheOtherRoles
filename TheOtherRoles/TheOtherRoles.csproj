@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Version>4.3.2</Version>
+        <Version>4.3.3</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
@@ -15,12 +15,12 @@
     </ItemGroup>
    
 	<ItemGroup>
-        <PackageReference Include="AmongUs.GameLibs.Steam" Version="2023.03.28" />
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.664" />
-        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.0.1" />
-        <PackageReference Include="Reactor" Version="2.1.0" />
+		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2023.7.11" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.670" />
+		<PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1" />
+        <PackageReference Include="Reactor" Version="2.2.0-ci.235" />
     </ItemGroup>
-
+   
     <Target Name="Date" BeforeTargets="BeforeBuild">  <!--Will make the compile time available s.t. we can let betas expire-->
     <WriteLinesToFile File="$(IntermediateOutputPath)gen.cs" Lines="static partial class Builtin { public static long CompileTime = $([System.DateTime]::UtcNow.Ticks) %3B }" Overwrite="true" />
     <ItemGroup>

@@ -12,7 +12,7 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
         private static class SendChatPatch {
             static bool Prefix(ChatController __instance) {
-                string text = __instance.TextArea.text;
+                string text = __instance.freeChatField.Text;
                 bool handled = false;
                 if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) {
                     if (text.ToLower().StartsWith("/kick ")) {
@@ -65,8 +65,8 @@ namespace TheOtherRoles.Modules {
                 }
 
                 if (handled) {
-                    __instance.TextArea.Clear();
-                    __instance.quickChatMenu.ResetGlyphs();
+                    __instance.freeChatField.Clear();
+                    __instance.quickChatMenu.Clear();
                 }
                 return !handled;
             }
