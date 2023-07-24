@@ -45,7 +45,7 @@ namespace TheOtherRoles.Patches
 
                     if (CustomOptionHolder.randomSpawnLocations.getBool() && PlayerControl.LocalPlayer != null)
                     {
-                        int mapID = PlayerControl.GameOptions.MapId;
+                        int mapID = GameOptionsManager.Instance.currentNormalGameOptions.MapID;
                         List<Vector3> skeldCoords = new List<Vector3>()
                         {
                             new Vector3(-1.1f, 5.8f, 0.0f),
