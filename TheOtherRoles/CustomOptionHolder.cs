@@ -731,7 +731,7 @@ namespace TheOtherRoles
             hidePlayerNames = CustomOption.Create(6, Types.General, "Hide Player Names", false);
             allowParallelMedBayScans = CustomOption.Create(7, Types.General, "Allow Parallel MedBay Scans", false);
             shieldFirstKill = CustomOption.Create(8, Types.General, "Shield Last Game First Kill", false);
-            randomSpawnLocations = CustomOption.Create(1970, Types.General, "Random Spawn Locations", false);
+            randomSpawnLocations = CustomOption.Create(1970, Types.General, "Random Spawn Locations", true);
             finishTasksBeforeHauntingOrZoomingOut = CustomOption.Create(9, Types.General, "Finish Tasks Before Haunting Or Zooming Out", true);
             camsNightVision = CustomOption.Create(11, Types.General, "Cams Switch To Night Vision If Lights Are Off", false, null, true);
             camsNoNightVisionIfImpVision = CustomOption.Create(12, Types.General, "Impostor Vision Ignores Night Vision Cams", false, camsNightVision, false);
