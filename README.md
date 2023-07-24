@@ -125,7 +125,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 | 2020.12.19s | v1.0 | [Download](https://github.com/Eisbison/TheOtherRoles/files/6097191/TheOtherRoles.zip)
 </details>
   
-  
+
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
