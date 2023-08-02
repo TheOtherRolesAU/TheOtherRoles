@@ -282,8 +282,7 @@ namespace TheOtherRoles.Patches {
             // --- Assign Main Roles if they won the lottery ---
             if (isSheriff && Sheriff.sheriff == null && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0 && sheriffFlag) { // Set Sheriff cause he won the lottery
                 byte sheriff = setRoleToRandomPlayer((byte)RoleId.Sheriff, data.crewmates);
-                var aSheriffToRemove = data.crewmates.ToList().Single(x => x.PlayerId == sheriff);
-                data.crewmates.ToList().Remove(aSheriffToRemove);
+                data.crewmates.ToList().RemoveAll(x => x.PlayerId == sheriff);
                 data.maxCrewmateRoles--;
             }
             if (!isGuesserGamemode) {
@@ -294,8 +293,7 @@ namespace TheOtherRoles.Patches {
                 }
                 else if (isEvilGuesser && isGuesser && Guesser.evilGuesser == null && data.impostors.Count > 0 && data.maxImpostorRoles > 0 && guesserFlag) { // Set Evil Guesser cause he won the lottery
                     byte evilGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                    var aEvilGuesserToRemove = data.crewmates.ToList().Single(x => x.PlayerId == evilGuesser);
-                    data.crewmates.ToList().Remove(aEvilGuesserToRemove);
+                    data.impostors.ToList().RemoveAll(x => x.PlayerId == evilGuesser);
                     data.maxImpostorRoles--;
                 }
             }
@@ -304,8 +302,7 @@ namespace TheOtherRoles.Patches {
             if (Sheriff.sheriff != null) { // Deputy
                 if (CustomOptionHolder.deputySpawnRate.getSelection() == 10 && data.crewmates.Count > 0 && data.maxCrewmateRoles > 0) { // Force Deputy
                     byte deputy = setRoleToRandomPlayer((byte)RoleId.Deputy, data.crewmates);
-                    var aDeputyToRemove = data.crewmates.ToList().Single(x => x.PlayerId == deputy);
-                    data.crewmates.ToList().Remove(aDeputyToRemove);
+                    data.crewmates.ToList().RemoveAll(x => x.PlayerId == deputy);
                     data.maxCrewmateRoles--;
                 } else if (CustomOptionHolder.deputySpawnRate.getSelection() < 10) // Dont force, add Deputy to the ticket system
                     data.crewSettings.Add((byte)RoleId.Deputy, CustomOptionHolder.deputySpawnRate.getSelection());
@@ -317,8 +314,7 @@ namespace TheOtherRoles.Patches {
                 if (!isEvilGuesser && Guesser.niceGuesser != null) { // Other Guesser (evil)
                     if (CustomOptionHolder.guesserSpawnBothRate.getSelection() == 10 && data.impostors.Count > 0 && data.maxImpostorRoles > 0) { // Force other guesser (evil)
                         byte bothGuesser = setRoleToRandomPlayer((byte)RoleId.EvilGuesser, data.impostors);
-                        var abothGuesserToRemove = data.crewmates.ToList().Single(x => x.PlayerId == bothGuesser);
-                        data.crewmates.ToList().Remove(abothGuesserToRemove);
+                        data.impostors.ToList().RemoveAll(x => x.PlayerId == bothGuesser);
                         data.maxImpostorRoles--;
                     }
                     else if (CustomOptionHolder.guesserSpawnBothRate.getSelection() < 10) // Dont force, add Guesser (evil) to the ticket system
@@ -362,8 +358,8 @@ namespace TheOtherRoles.Patches {
                 var index = rnd.Next(0, rolesToAssign[roleType].Count);
                 var roleId = rolesToAssign[roleType][index];
                 setRoleToRandomPlayer(roleId, players);
-                var aRoleTypeToRemove = rolesToAssign[roleType].Single(x => x == roleId);
-                rolesToAssign[roleType].Remove(aRoleTypeToRemove);
+                rolesToAssign[roleType].RemoveAll(x => x == roleId);
+
                 if (CustomOptionHolder.blockedRolePairings.ContainsKey(roleId)) {
                     foreach(var blockedRoleId in CustomOptionHolder.blockedRolePairings[roleId]) {
                         // Remove tickets of blocked roles from all pools
