@@ -28,7 +28,7 @@ namespace TheOtherRoles.Patches {
                 __result = Mathf.Clamp(GameOptionsManager.Instance.CurrentGameOptions.NumImpostors, 1, 3);
             } 
         }
-    } 
+    }
 
     [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.Validate))]
     class GameOptionsDataValidatePatch {

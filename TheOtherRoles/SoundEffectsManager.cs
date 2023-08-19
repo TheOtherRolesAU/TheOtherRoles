@@ -13,7 +13,7 @@ namespace TheOtherRoles
     public static class SoundEffectsManager
         
     {
-        private static Dictionary<string, AudioClip> soundEffects;
+        private static Dictionary<string, AudioClip> soundEffects = new();
 
         public static void Load()
         {
@@ -69,7 +69,9 @@ namespace TheOtherRoles
         }
 
         public static void stop(string path) {
-            if (Constants.ShouldPlaySfx()) SoundManager.Instance.StopSound(get(path));
+            var soundToStop = get(path);
+            if (soundToStop != null)
+                if (Constants.ShouldPlaySfx()) SoundManager.Instance.StopSound(soundToStop);
         }
 
         public static void stopAll() {

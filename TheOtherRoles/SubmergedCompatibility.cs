@@ -34,14 +34,6 @@ namespace TheOtherRoles
 
         public static bool IsSubmerged { get; private set; }
         
-        public static bool DisableO2MaskCheckForEmergency
-        {
-            set
-            {
-                if (!Loaded) return;
-                DisableO2MaskCheckField.SetValue(null, value);
-            }
-        }
         
         public static void SetupMap(ShipStatus map)
         {
@@ -59,17 +51,14 @@ namespace TheOtherRoles
         }
 
         private static Type SubmarineStatusType;
-        private static MethodInfo CalculateLightRadiusMethod;
-        
-        private static Type TaskIsEmergencyPatchType;
-        private static FieldInfo DisableO2MaskCheckField;
+        private static MethodInfo CalculateLightRadiusMethod;       
 
         private static MethodInfo RpcRequestChangeFloorMethod;
         private static Type FloorHandlerType;
         private static MethodInfo GetFloorHandlerMethod;
 
-        private static Type Vent_MoveToVent_PatchType;
-        private static FieldInfo InTransitionField;
+        private static Type VentPatchDataType;
+        private static PropertyInfo InTransitionField;
 
         private static Type CustomTaskTypesType;
         private static FieldInfo RetrieveOxigenMaskField;
@@ -132,25 +121,25 @@ namespace TheOtherRoles
             
             InjectedTypes = (Dictionary<string, Type>) AccessTools.PropertyGetter(Types.FirstOrDefault(t => t.Name == "ComponentExtensions"), "RegisteredTypes")
                 .Invoke(null, Array.Empty<object>());
-            
+
             SubmarineStatusType = Types.First(t => t.Name == "SubmarineStatus");
             CalculateLightRadiusMethod = AccessTools.Method(SubmarineStatusType, "CalculateLightRadius");
-            
-            TaskIsEmergencyPatchType = Types.First(t => t.Name == "PlayerTask_TaskIsEmergency_Patch");
-            DisableO2MaskCheckField = AccessTools.Field(TaskIsEmergencyPatchType, "DisableO2MaskCheck");
 
             FloorHandlerType = Types.First(t => t.Name == "FloorHandler");
             GetFloorHandlerMethod = AccessTools.Method(FloorHandlerType, "GetFloorHandler", new Type[] {typeof(PlayerControl)});
             RpcRequestChangeFloorMethod = AccessTools.Method(FloorHandlerType, "RpcRequestChangeFloor");
 
-            Vent_MoveToVent_PatchType = Types.First(t => t.Name == "Vent_MoveToVent_Patch");
-            InTransitionField = AccessTools.Field(Vent_MoveToVent_PatchType, "InTransition");
+            VentPatchDataType = Types.First(t => t.Name == "VentPatchData");
+
+            InTransitionField = AccessTools.Property(VentPatchDataType, "InTransition");
 
             CustomTaskTypesType = Types.First(t => t.Name == "CustomTaskTypes");
             RetrieveOxigenMaskField = AccessTools.Field(CustomTaskTypesType, "RetrieveOxygenMask");
-            RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskField.GetValue(null);
+            var RetrieveOxigenMaskTaskTypeField = AccessTools.Field(CustomTaskTypesType, "taskType");
+            object OxygenMaskCustomTaskType = RetrieveOxigenMaskField.GetValue(null);
+            RetrieveOxygenMask = (TaskTypes)RetrieveOxigenMaskTaskTypeField.GetValue(OxygenMaskCustomTaskType);
 
-            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem" && t.Namespace == "Submerged.Systems.CustomSystems.Oxygen");
+            SubmarineOxygenSystemType = Types.First(t => t.Name == "SubmarineOxygenSystem" && t.Namespace == "Submerged.Systems.Oxygen");
             SubmarineOxygenSystemInstanceField = AccessTools.PropertyGetter(SubmarineOxygenSystemType, "Instance");
             RepairDamageMethod = AccessTools.Method(SubmarineOxygenSystemType, "RepairDamage");
         }
