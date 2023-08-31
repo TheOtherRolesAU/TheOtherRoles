@@ -174,7 +174,7 @@ namespace TheOtherRoles.Modules {
             } else {
                 CustomHatRegistry.Add(hat.name, extend);
             }
-            CustomHatViewDatas.Add(hat.name, viewdata);
+            CustomHatViewDatas.TryAdd(hat.name, viewdata);
             var assetRef = new AssetReference(viewdata.Pointer);
 
             hat.ViewDataRef = assetRef;
@@ -256,6 +256,7 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch]
         private static class FreeplayHatTestingPatches
         {
+            [HarmonyPriority(Priority.High)]
             [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(int))]
             private static class HatParentSetHatPatchColor {
                 static void Prefix(HatParent __instance) {
@@ -295,7 +296,7 @@ namespace TheOtherRoles.Modules {
                         if (hats.Count > 0) 
                         {
                             __instance.Hat = CreateHatBehaviour(hats[0], true, true);
-                            __instance.hatDataAsset = __instance.Hat.CreateAddressableAsset();
+                            __instance.Hat.CreateAddressableAsset();
                         }
                     } 
                     catch (System.Exception e) 
@@ -314,7 +315,7 @@ namespace TheOtherRoles.Modules {
         [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetHat), typeof(int))]
         public class SetHatPatch {
             public static bool Prefix(HatParent __instance, int color) {
-                if (!CustomHatRegistry.ContainsKey(__instance.Hat.name)) return true;
+                if (!CustomHatViewDatas.ContainsKey(__instance.Hat.name)) return true;
                 __instance.hatDataAsset = null;
                 __instance.PopulateFromHatViewData();
                 __instance.SetMaterialColor(color);
@@ -385,6 +386,47 @@ namespace TheOtherRoles.Modules {
             }
         }
 
+        [HarmonyPatch(typeof(HatParent), nameof(HatParent.LateUpdate))]
+        public static class HatParentLateUpdatePatch {
+            public static bool Prefix(HatParent __instance) {
+                return false;
+                if (__instance.Parent) {
+                    HatViewData hatViewData;
+                    try {
+                        hatViewData = __instance.hatDataAsset.GetAsset();
+                        return true;
+                    } catch {
+                        try {
+                            hatViewData = CustomHatViewDatas[__instance.Hat.name];
+                        } catch {
+                            return false;
+                        }
+                    }
+                    if (__instance.Hat && hatViewData != null) {
+                        if (__instance.FrontLayer.sprite != hatViewData.ClimbImage && __instance.FrontLayer.sprite != hatViewData.FloorImage) {
+                            if ((__instance.Hat.InFront || hatViewData.BackImage) && hatViewData.LeftMainImage) {
+                                __instance.FrontLayer.sprite = (__instance.Parent.flipX ? hatViewData.LeftMainImage : hatViewData.MainImage);
+                            }
+                            if (hatViewData.BackImage && hatViewData.LeftBackImage) {
+                                __instance.BackLayer.sprite = (__instance.Parent.flipX ? hatViewData.LeftBackImage : hatViewData.BackImage);
+                                return false;
+                            }
+                            if (!hatViewData.BackImage && !__instance.Hat.InFront && hatViewData.LeftMainImage) {
+                                __instance.BackLayer.sprite = (__instance.Parent.flipX ? hatViewData.LeftMainImage : hatViewData.MainImage);
+                                return false;
+                            }
+                        } else if (__instance.FrontLayer.sprite == hatViewData.ClimbImage || __instance.FrontLayer.sprite == hatViewData.LeftClimbImage) {
+                            SpriteAnimNodeSync spriteAnimNodeSync = __instance.SpriteSyncNode ?? __instance.GetComponent<SpriteAnimNodeSync>();
+                            if (spriteAnimNodeSync) {
+                                spriteAnimNodeSync.NodeId = 0;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
         [HarmonyPatch(typeof(HatParent), nameof(HatParent.SetFloorAnim))]
         public class HatParentSetFloorAnimPatch {
             public static bool Prefix(HatParent __instance) {
@@ -404,7 +446,7 @@ namespace TheOtherRoles.Modules {
         public class HatParentSetIdleAnimPatch {
             public static bool Prefix(HatParent __instance, int colorId) {
                 if (!__instance.Hat) return false;
-                if (!CustomHatRegistry.ContainsKey(__instance.Hat.name))
+                if (!CustomHatViewDatas.ContainsKey(__instance.Hat.name))
                     return true; 
                 HatViewData hatViewData = CustomHatViewDatas[__instance.Hat.name];
                 __instance.hatDataAsset = null;
@@ -477,6 +519,18 @@ namespace TheOtherRoles.Modules {
                     __instance.BackLayer.enabled = false;
                 }
                 return false;
+            }
+        }
+
+        [HarmonyPatch(typeof(CosmeticsCache), nameof(CosmeticsCache.GetHat))]
+        public class CosmeticsCacheGetHatPatch {
+            public static bool Prefix(string id, ref HatViewData __result) {
+                TheOtherRolesPlugin.Logger.LogMessage($"trying to load hat {id} from cosmetics cache");
+                if (CustomHatViewDatas.ContainsKey(id)) {
+                    __result = CustomHatViewDatas[id];
+                    return false;
+                }
+                return true;
             }
         }
 

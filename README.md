@@ -48,6 +48,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.07.12s| v4.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.4/TheOtherRoles.zip)
 | 2023.07.12s| v4.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.3/TheOtherRoles.zip)
 | 2023.03.28s| v4.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.2/TheOtherRoles.zip)
 <details>
@@ -130,6 +131,13 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 <details>
   <summary>Click to show the Changelog</summary>
   
+**Version 4.3.4**
+- Updated BepInEx dependency to 671
+- Fixed compatibility to Submerged (not thouroughly tested)
+- Fixed a bug where the death reason of a guessed shifter was incorrectly displayed as "shifted xy"
+- Make it possible to disable the Mod-Updater (see [details](#gcerror) ), to circumvent a crash at startup with a GC-Error
+- Fixed the hats in freeplay partially
+
 **Version 4.3.3**
 - Updated to Among Us version 2023.07.12
 - Fixed an issue where the swap icon of a swapper guesser would be in front of the witch icon on a spelled player 
@@ -2076,6 +2084,10 @@ Each Hunter action or finished Crew task will lower the timer by a configurable 
 | Finish Tasks Punish In Sec | -
 | Enable Sabotages | -
 | Time The Hunter Needs To Wait | -
+
+## GCERROR
+If the error message "Fatal Error in GC - Collecting from unknown thread" stops you from playing the game, you can now disable the mod-updater, which causes this error.
+In order to do this, create a file called `noupdater.txt` in your modded Among Us folder.
 
 # License
 TheOtherRolesAU/TheOtherRoles is licensed under the

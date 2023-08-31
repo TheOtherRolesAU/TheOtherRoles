@@ -39,7 +39,7 @@ namespace TheOtherRoles.Modules
             public string TimeString;
             public JObject Request;
             public Version Version => Version.Parse(Tag);
-            
+
             public UpdateData(JObject data)
             {
                 Tag = data["tag_name"]?.ToString().TrimStart('v');
@@ -199,6 +199,9 @@ namespace TheOtherRoles.Modules
         [HideFromIl2Cpp]
         public static IEnumerator CoCheckUpdates()
         {
+            // Since running the update check task causes a crash for some users, allow the user to disable the updater by creating a file called noupdater.txt
+            // in their Among Us folder (root)
+            if (Il2CppSystem.IO.File.Exists(System.IO.Directory.GetCurrentDirectory() + "\\noupdater.txt")) yield break;
             var torUpdateCheck = Task.Run(() => Instance.GetGithubUpdate("Eisbison", "TheOtherRoles"));
             while (!torUpdateCheck.IsCompleted) yield return null;
             if (torUpdateCheck.Result != null && torUpdateCheck.Result.IsNewer(Version.Parse(TheOtherRolesPlugin.VersionString)))
@@ -212,7 +215,7 @@ namespace TheOtherRoles.Modules
                 if (submergedUpdateCheck.Result != null && (!SubmergedCompatibility.Loaded || submergedUpdateCheck.Result.IsNewer(SubmergedCompatibility.Version)))
                 {
                     Instance.SubmergedUpdate = submergedUpdateCheck.Result;
-                    if (Instance.SubmergedUpdate.Tag.Equals("2022.10.26")) Instance.SubmergedUpdate = null;
+                    if (Instance.SubmergedUpdate.Tag.Equals("2022.10.26") || IL2CPPChainloader.Instance.Plugins.TryGetValue("com.DigiWorm.LevelImposter", out PluginInfo _)) Instance.SubmergedUpdate = null;
                 }
             }
             Instance.OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
@@ -223,10 +226,8 @@ namespace TheOtherRoles.Modules
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "TheOtherRoles Updater");
-
             try {
                 var req = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/releases/latest", HttpCompletionOption.ResponseContentRead);
-
                 if (!req.IsSuccessStatusCode) return null;
 
                 var dataString = await req.Content.ReadAsStringAsync();

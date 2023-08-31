@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Version>4.3.3</Version>
+        <Version>4.3.4</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
@@ -16,9 +16,9 @@
    
 	<ItemGroup>
 		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2023.7.11" />
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.670" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.671" />
 		<PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1" />
-        <PackageReference Include="Reactor" Version="2.2.0-ci.235" />
+        <PackageReference Include="Reactor" Version="2.2.0" />
     </ItemGroup>
    
     <Target Name="Date" BeforeTargets="BeforeBuild">  <!--Will make the compile time available s.t. we can let betas expire-->
