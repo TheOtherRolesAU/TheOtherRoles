@@ -304,30 +304,30 @@
       },
       "Samboy063.Cpp2IL.Core": {
         "type": "Transitive",
-        "resolved": "2022.1.0-development.876",
-        "contentHash": "yomWiPcMGaQ2JmsP5C22taGSJ75IOGTDme1ysw5V4DLfIt1FBBpxC1XBom2RYG6MZ1SbI1yvEaYNCuAHLZ7+xw==",
+        "resolved": "2022.1.0-development.866",
+        "contentHash": "QPMuix/3jRngWBdNSLhAbm9BHYf95Ln1Ph1eCK/cDZdVibxFDFP3a6Yczyx1p7GbN7bRQwrhs2skPJSS/z3m2w==",
         "dependencies": {
           "AsmResolver.DotNet": "5.1.0",
           "Disarm": "2022.1.0-master.26",
           "Iced": "1.18.0",
-          "Samboy063.LibCpp2IL": "2022.1.0-development.876",
-          "StableNameDotNet": "0.1.0-development.876",
+          "Samboy063.LibCpp2IL": "2022.1.0-development.866",
+          "StableNameDotNet": "0.1.0-development.866",
           "js6pak.Gee.External.Capstone": "2.1.0"
         }
       },
       "Samboy063.LibCpp2IL": {
         "type": "Transitive",
-        "resolved": "2022.1.0-development.876",
-        "contentHash": "KrpK5sySZHMPdeatiCqv5Pw8F7oV4fTRfVBvzKVmRlnO7Ye6Lg6n6t/PQ7VjLH6FiF2kH3YPM2uIp4xMJhGXGg==",
+        "resolved": "2022.1.0-development.866",
+        "contentHash": "EcJSWTfQko8SQozozoUT+aQJVWC8wj8C0YUiPBF4rNRId19yTKp2IXcXnI747v+8/aal222QR6WHfoBK2WlVLg==",
         "dependencies": {
           "AssetRipper.VersionUtilities": "1.3.1",
-          "Samboy063.WasmDisassembler": "2022.1.0-development.876"
+          "Samboy063.WasmDisassembler": "2022.1.0-development.866"
         }
       },
       "Samboy063.WasmDisassembler": {
         "type": "Transitive",
-        "resolved": "2022.1.0-development.876",
-        "contentHash": "QDDrTjL/WoGP66Fc1HBtPXpmPn7F+0JYiV1xaZetkYtZ4UNMT7k6i2b6Ge4gq2xkK5NV0YpLyuQcVPeuy7u4XA=="
+        "resolved": "2022.1.0-development.866",
+        "contentHash": "2QK8F3eISkLcoW/Nt7wtxyQh31EXAqEMBVXXjEnuxyvXpBXxOIGpjmE3pWhGwxQwDCbe4zBsLF1zUiqq3/pXRA=="
       },
       "SemanticVersioning": {
         "type": "Transitive",
@@ -336,8 +336,8 @@
       },
       "StableNameDotNet": {
         "type": "Transitive",
-        "resolved": "0.1.0-development.876",
-        "contentHash": "e+yo57rKEJoQmTJ8scEbt6l/bqZvZu4hZUZMau/u1tyZI1I42JiXsjcH1+gE/nSQJlKPCykUrO/h+tUVm9I2nw=="
+        "resolved": "0.1.0-development.866",
+        "contentHash": "DJb8x4dV3ucDgM12sU28HxCdeqY/JudJbeJG6mgXWDJzpFZw2Jd7JF1pKFRNLzh/0gpo8bCGLQS9gOWZmBjdtg=="
       },
       "System.Collections": {
         "type": "Transitive",
