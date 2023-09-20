@@ -34,14 +34,13 @@ namespace TheOtherRoles.Objects {
             float colorDuration = CustomOptionHolder.ninjaTraceColorTime.getFloat();
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(colorDuration, new Action<float>((p) => {
                 Color c = Palette.PlayerColors[(int)Ninja.ninja.Data.DefaultOutfit.ColorId];
-                if (Helpers.isLighterColor(Ninja.ninja.Data.DefaultOutfit.ColorId)) c = Color.white;
+                if (Helpers.isLighterColor(Ninja.ninja)) c = Color.white;
                 else c = Palette.PlayerColors[6];
                 //if (Camouflager.camouflageTimer > 0) {
                 //    c = Palette.PlayerColors[6];
                 //}
 
-                Color g = Color.green; // Usual display color. could also be Palette.PlayerColors[6] for default grey like camo
-                // if this stays black (0,0,0), it can ofc be removed.
+                Color g = Color.green; // Usual display color.
 
                 Color combinedColor = Mathf.Clamp01(p) * g + Mathf.Clamp01(1 - p) * c;
 

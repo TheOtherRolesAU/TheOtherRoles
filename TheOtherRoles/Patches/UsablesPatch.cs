@@ -169,6 +169,10 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
     class KillButtonDoClickPatch {
         public static bool Prefix(KillButton __instance) {
+            if (PropHunt.isPropHuntGM) {
+                KillAnimationCoPerformKillPatch.hideNextAnimation = true;  // dont jump out of bounds!
+                return false;
+            }
             if (__instance.isActiveAndEnabled && __instance.currentTarget && !__instance.isCoolingDown && !CachedPlayer.LocalPlayer.Data.IsDead && CachedPlayer.LocalPlayer.PlayerControl.CanMove) {
                 // Deputy handcuff update.
                 if (Deputy.handcuffedPlayers.Contains(CachedPlayer.LocalPlayer.PlayerId)) {
@@ -416,19 +420,18 @@ namespace TheOtherRoles.Patches {
                                         if (playerInfo != null) {
                                             var color = Palette.PlayerColors[playerInfo.DefaultOutfit.ColorId];
                                             if (Hacker.onlyColorType)
-                                                color = Helpers.isLighterColor(playerInfo.DefaultOutfit.ColorId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                                color = Helpers.isD(playerInfo.PlayerId) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                             roomColors.Add(color);
                                         }
                                     }
-                                } else {
+                                } else if (!collider2D.isTrigger) {
                                     PlayerControl component = collider2D.GetComponent<PlayerControl>();
                                     if (component && component.Data != null && !component.Data.Disconnected && !component.Data.IsDead && (__instance.showLivePlayerPosition || !component.AmOwner) && hashSet.Add((int)component.PlayerId)) {
                                         num2++;
                                         if (component?.cosmetics?.currentBodySprite?.BodySprite?.material != null) {
                                             Color color = component.cosmetics.currentBodySprite.BodySprite.material.GetColor("_BodyColor");
                                             if (Hacker.onlyColorType) {
-                                                var id = Mathf.Max(0, Palette.PlayerColors.IndexOf(color));
-                                                color = Helpers.isLighterColor((byte)id) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
+                                                color = Helpers.isLighterColor(component) ? Palette.PlayerColors[7] : Palette.PlayerColors[6];
                                             }
                                             roomColors.Add(color);
                                         }
@@ -712,6 +715,7 @@ namespace TheOtherRoles.Patches {
         static bool Prefix(MapBehaviour __instance) {
             if (HideNSeek.isHideNSeekGM)
                 return HideNSeek.canSabotage;
+            if (PropHunt.isPropHuntGM) return false;
             return true;
         }
     }

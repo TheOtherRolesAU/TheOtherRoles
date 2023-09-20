@@ -17,7 +17,18 @@ namespace TheOtherRoles.Patches {
         public static bool Prefix(ref float __result, ShipStatus __instance, [HarmonyArgument(0)] GameData.PlayerInfo player) {
             if (!__instance.Systems.ContainsKey(SystemTypes.Electrical) || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
 
-            
+            // If Game Mode is PropHunt:
+            if (PropHunt.isPropHuntGM) {
+                if (!PropHunt.timerRunning) {
+                    float progress = (PropHunt.blackOutTimer > 0f && PropHunt.blackOutTimer < 1f) ? 1 - PropHunt.blackOutTimer : 0f;
+                    float minVision = __instance.MaxLightRadius * (PropHunt.propBecomesHunterWhenFound ? 0.25f : PropHunt.propVision);
+                    __result = Mathf.Lerp(minVision, __instance.MaxLightRadius * PropHunt.propVision, progress); // For future start animation
+                } else {
+                    __result = __instance.MaxLightRadius * (PlayerControl.LocalPlayer.Data.Role.IsImpostor ? PropHunt.hunterVision : PropHunt.propVision);
+                }
+                return false;
+            }
+
             if (!HideNSeek.isHideNSeekGM || (HideNSeek.isHideNSeekGM && !Hunter.lightActive.Contains(player.PlayerId))) {
                 // If player is a role which has Impostor vision
                 if (Helpers.hasImpVision(player)) {
@@ -37,6 +48,7 @@ namespace TheOtherRoles.Patches {
             else if (HideNSeek.isHideNSeekGM && Hunter.isLightActive(player.PlayerId)) {
                 float unlerped = Mathf.InverseLerp(__instance.MinLightRadius, __instance.MaxLightRadius, GetNeutralLightRadius(__instance, false));
                 __result = Mathf.Lerp(__instance.MaxLightRadius * Hunter.lightVision, __instance.MaxLightRadius * Hunter.lightVision, unlerped);
+                return false;
             }
 
             // If there is a Trickster with their ability active
@@ -107,6 +119,11 @@ namespace TheOtherRoles.Patches {
                 var commonTaskCount = __instance.CommonTasks.Count;
                 var normalTaskCount = __instance.NormalTasks.Count;
                 var longTaskCount = __instance.LongTasks.Count;
+
+                if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) {
+                    commonTaskCount = normalTaskCount = longTaskCount = 0;
+                }
+
 
                 if (GameOptionsManager.Instance.currentNormalGameOptions.NumCommonTasks > commonTaskCount) GameOptionsManager.Instance.currentNormalGameOptions.NumCommonTasks = commonTaskCount;
                 if (GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks > normalTaskCount) GameOptionsManager.Instance.currentNormalGameOptions.NumShortTasks = normalTaskCount;

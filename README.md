@@ -21,7 +21,7 @@ Even more roles are coming soon. :)
 | [Mafioso (Mafia)](#mafia) | [Engineer](#engineer) | [Arsonist](#arsonist) | [Anti Teleport](#anti-teleport) | [Guesser Modifier](#guesser-modifier) |
 | [Janitor (Mafia)](#mafia) | [Sheriff](#sheriff) | [Jackal](#jackal) | [Tie Breaker](#tie-breaker) | [Hide 'n' Seek](#hide-n-seek) |
 | [Morphling](#morphling) | [Deputy](#deputy) | [Sidekick](#sidekick) | [Bait](#bait) | [Vanilla Hide 'n' Seek](https://www.innersloth.com/new-game-mode-hide-n-seek-is-here-emergency-meeting-35/) |
-| [Camouflager](#camouflager) | [Lighter](#lighter) | [Vulture](#vulture) | [Lovers](#lovers) |
+| [Camouflager](#camouflager) | [Lighter](#lighter) | [Vulture](#vulture) | [Lovers](#lovers) | [PropHunt](#prophunt)|
 | [Vampire](#vampire) | [Detective](#detective) | [Lawyer](#lawyer) | [Sunglasses](#sunglasses) |
 | [Eraser](#eraser) | [Time Master](#time-master) | [Prosecutor](#prosecutor) | [Mini](#mini) |
 | [Trickster](#trickster) | [Medic](#medic) | [Pursuer](#pursuer) | [VIP](#vip) |
@@ -124,7 +124,11 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
-  
+
+**Version 4.4.0**
+- Added a new gamemode, PropHunt. Players can disguise as objects on the map
+- Changed Lighter and Darker colors: L/D are no longer random, but rather assigned in alternating order.
+
 **Version 4.3.4**
 - Updated BepInEx dependency to 671
 - Fixed compatibility to Submerged (not thouroughly tested)
@@ -796,7 +800,8 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 [Crowded-Mod](https://github.com/CrowdedMods/CrowdedMod) - Our implementation for 10+ player lobbies were inspired by the one from the **Crowded Mod Team**\
 [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - Idea for the Vulture role came from **Slushiegoose**\
 [TheEpicRoles](https://github.com/LaicosVK/TheEpicRoles) - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by **LaicosVK** **DasMonschta** **Nova**\
-[Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris)
+[Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris) \
+[dMiner53](https://github.com/ugackMiner53/PropHunt) - Idea and core code for the Prop Hunt game mode
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
@@ -885,6 +890,7 @@ Here are a few instructions, on how to create a custom hat:
 - **Submission:** If you got a hat design, you can submit it on our [Discord server](https://discord.gg/77RkMJHWsM). We'll look at all the hats and add all the good ones to the game.
 
 # Colors
+Note: Lighter and Darker colors are no longer based on the players color. Instead they are assigned alternatingly, s.t. they are always balanced in a lobby.
 ![TOR Colors](./Images/TOR_colors.jpg)
 
 # Roles
@@ -2070,14 +2076,54 @@ Each Hunter action or finished Crew task will lower the timer by a configurable 
 | Kill Cooldown | -                      | Hunter Light Vision | -                    | Hunted Rewind Time | -
 | Hunter Vision | -                      | Hunter Light Punish in Sec | -             | Hunted Shield Number | -
 | Hunted Vision | -                      | Hunter Admin Cooldown | -
-| Common Tasks | -                       | Hunter Admin Duration | -
-| Short Tasks | -                        | Hunter Admin Punish In Sec | -
-| Long Tasks | -                         | Hunter Arrow Cooldown | -
-| Timer In Min | -                       | Hunter Arrow Duration | -
+|  | -                       | Hunter Admin Duration | -
+|  | -                        | Hunter Admin Punish In Sec | -
+|  | -                         | Hunter Arrow Cooldown | -
+|  | -                       | Hunter Arrow Duration | -
 | Task Win Is Possible | -               | Hunter Arrow Punish In Sec | -
 | Finish Tasks Punish In Sec | -
 | Enable Sabotages | -
 | Time The Hunter Needs To Wait | -
+
+## PropHunt
+The **Prop-Gamemode** is a standalone Gamemode where Hunters have to find the disguised players ("Props").\
+The Hunters and Props who are still alive are displayed to everyone in the bottom left corner (similar to the Arsonist display).\
+When the game starts, the Hunter's movement is disabled for x-seconds (depends on the settings), and their screen is blacked out.\
+There is a time-limit for each round, if the timer runs out and at least one Prop is still alive, the remaining Props win.\
+If the Hunters kill all players before the timer runs out the Hunters win.\
+When a Prop dies, they will either join the Hunter team or die (setting).
+
+#### Shared Abilities:
+- Unstuck: By pressing this button, you can travel through walls for a short time. This is needed, because props sometimes get stuck in walls, due to their changed colliders. Don't use it to cheat!
+
+#### Hunter Abilities:
+- Reveal: A random players current prop is revealed to all players for x seconds (according to settings). The timer will be reduced by *punish* s.
+- Mobile Admin table (like Hacker) - Normal Admin table shares the cooldown
+- Find: Display the DangerMeter known from Vanilla HideNSeek for x seconds. The dangerlevel is rising the closer the Hunter gets to the neares prop.  
+#### Prop Abilities:
+- Invisibility: As a disguised Prop, become invisible for x seconds.
+- Speedboost: Move faster for x seconds.
+
+**NOTE:**
+- The Report button lights up, but cannot be pressed.
+- Hunters can vent
+- The Kill Button and Vent Button are permanently enabled, so that you cannot use them to check if there is a prop nearby
+- The Kill Button can always be pressed, but you can also miss if no Prop is nearby. The cooldown can be configured for hits and misses seperately.
+
+
+### Game Options
+| General | Description | Hunter | Description | Hunted | Description |
+|----------|:-------------:|----------|:-------------:|----------|:-------------:|
+| Map | -                     | Number of Hunters | -                  | Props Become Hunters When Found | -
+| Timer in Min | -            | Initial Blackout Duration | -          | Invisibility Enabled | -
+| Unstuck Cooldown | -        | Kill Cooldown After Miss | -           | Invisibility Cooldown | -
+| Unstuck Duration | -        | Kill Cooldown After Hit | -            | Invisibility Duration | -
+| Hunter Vision | -           | Reveal Prop Cooldown | -               | Speedboost Enabled | -
+| Prop Vision | -             | Reveal Prop Duration | -               | Speedboost Cooldown | -
+|  | -             | Reveal Time Punish | deducted from rem. timer | Speedboost Duration | - 
+|  | -                         |  Hunter Admin Cooldown | - | Speedboost Ratio | Factor with which speed is multiplied 
+|  | -                       | Find Cooldown | -
+|  | -               | Find Duration | -
 
 ## GCERROR
 If the error message "Fatal Error in GC - Collecting from unknown thread" stops you from playing the game, you can now disable the mod-updater, which causes this error.

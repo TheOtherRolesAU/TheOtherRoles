@@ -13,6 +13,7 @@ using TheOtherRoles.CustomGameModes;
 using static UnityEngine.GraphicsBuffer;
 using AmongUs.GameOptions;
 using Sentry.Internal.Extensions;
+using Reactor.Utilities.Extensions;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
@@ -618,7 +619,8 @@ namespace TheOtherRoles.Patches {
                     Snitch.text.text = $"Snitch is alive: " + playerCompleted + "/" + playerTotal;
                     if (snitchIsDead) Snitch.text.text = $"Snitch is dead!";
                 }
-            }
+            } else if (Snitch.text != null)
+                Snitch.text.Destroy();
 
             if (snitchIsDead) {
                 if (MeetingHud.Instance == null) Snitch.needsUpdate = false;
@@ -961,7 +963,7 @@ namespace TheOtherRoles.Patches {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return;
 
             // Mini and Morphling shrink
-            playerSizeUpdate(__instance);
+            if (!PropHunt.isPropHuntGM) playerSizeUpdate(__instance);
             
             // set position of colorblind text
             foreach (var pc in PlayerControl.AllPlayerControls) {
@@ -1065,6 +1067,7 @@ namespace TheOtherRoles.Patches {
 
                 // -- GAME MODE --
                 hunterUpdate();
+                PropHunt.update();
             } 
         }
     }
@@ -1085,7 +1088,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
     class PlayerControlCmdReportDeadBodyPatch {
         public static bool Prefix(PlayerControl __instance) {
-            if (HideNSeek.isHideNSeekGM) return false;
+            if (HideNSeek.isHideNSeekGM || PropHunt.isPropHuntGM) return false;
             Helpers.handleVampireBiteOnBodyReport();
             return true;
         }
@@ -1113,7 +1116,7 @@ namespace TheOtherRoles.Patches {
                         if (timeSinceDeath < Detective.reportNameDuration * 1000) {
                             msg =  $"Body Report: The killer appears to be {deadPlayer.killerIfExisting.Data.PlayerName}!";
                         } else if (timeSinceDeath < Detective.reportColorDuration * 1000) {
-                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting.Data.DefaultOutfit.ColorId) ? "lighter" : "darker";
+                            var typeOfColor = Helpers.isLighterColor(deadPlayer.killerIfExisting) ? "lighter" : "darker";
                             msg =  $"Body Report: The killer appears to be a {typeOfColor} color!";
                         } else {
                             msg = $"Body Report: The corpse is too old to gain information from!";

@@ -187,8 +187,10 @@ namespace TheOtherRoles.Patches {
                             break;
                         }
                     }
-                    if (continueStart && TORMapOptions.gameMode == CustomGamemodes.HideNSeek) {
-                        byte mapId = (byte) CustomOptionHolder.hideNSeekMap.getSelection();
+                    if ((continueStart && TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt) && GameOptionsManager.Instance.CurrentGameOptions.MapId != 6) {
+                        byte mapId = 0;
+                        if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) mapId = (byte)CustomOptionHolder.hideNSeekMap.getSelection();
+                        else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) mapId = (byte)CustomOptionHolder.propHuntMap.getSelection();
                         if (mapId >= 3) mapId++;
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(mapId);

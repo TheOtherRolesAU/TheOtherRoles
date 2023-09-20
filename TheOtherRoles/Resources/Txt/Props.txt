@@ -1,0 +1,92 @@
+liprop
+snowman
+Door
+nav_chair
+onsole
+comms-top
+SecurityLogger
+Table
+divertElevStand
+launch-pad-right
+barrier
+gun0001
+table
+bridge
+bigRock
+rockblock
+engine_railback
+medBayBedHort
+medBayBed
+lockersBench
+reactor_Border-Bottom (1)
+reactor_Border-Mid (1)
+reactor_Border-Top (1)
+cafShelf
+storage-boxes1
+storage-box2 (2)
+storage-top
+storage-mop
+weatherPanel
+BushesBottom
+PlanterFern
+PlanterBushTop
+admin-tablelower
+MapTable
+Admin
+Surv_Panel
+transformer0001 (1)
+transformer0001 (2)
+transformer0001 (3)
+panel_vitals
+projector
+EmergencyButton
+panel_map
+telescope
+storagebox
+rock3 (1)
+blockrock
+panel_cockpit_map
+task_records_right
+task_records_rightcen
+task_records_left_cen
+records_admin_map
+lounge_bathroomdoor (1)
+lounge_bathroomdoor (2)
+lounge_bathroomdoor (3)
+TopLeftVert
+LeftDoorBottom
+task_cams
+task_tapes_left
+panel_dummy
+vault_dummie (1)
+vault_dummie (2)
+vault_dummie (3)
+door_vault
+door_gap
+task_emergency
+LowerCentralVent
+LowerTank
+NormalPipesVent
+NormalElectricalVent
+Shelves
+NormalStorageVent
+NormalLobbyVent
+TankDeco
+PipeDeco
+NormalEnginesVent
+Main Turbine
+OpenEngineVent
+NormalSecurityVent
+NormalObservationVent
+NormalCafeteriaVent
+deco_labbench
+NormalMedicalVent
+UpperTank
+UpperCentralVent
+NormalCommsVent
+NormalUpperLobbyVent
+NormalMeetingVent
+console-mr-callmeeting
+deco-mr-table
+console-mr-fishfeed
+NormalAdminVent

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TheOtherRoles.Players;
 using System;
+using TheOtherRoles.CustomGameModes;
 
 namespace TheOtherRoles.Patches {
     [HarmonyPatch]
@@ -71,12 +72,12 @@ namespace TheOtherRoles.Patches {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(AbilityButton), nameof(AbilityButton.Update))]
         public static void showOrHideAbilityButtonPostfix(AbilityButton __instance) {
-            bool isHideNSeek = GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek;
-            if (CachedPlayer.LocalPlayer.Data.IsDead && (CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool() || isHideNSeek)) {
+            bool isGameMode = GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek || PropHunt.isPropHuntGM || HideNSeek.isHideNSeekGM;
+            if (CachedPlayer.LocalPlayer.Data.IsDead && (CustomOptionHolder.finishTasksBeforeHauntingOrZoomingOut.getBool() || isGameMode)) {
                 // player has haunt button.
                 var (playerCompleted, playerTotal) = TasksHandler.taskInfo(CachedPlayer.LocalPlayer.Data);
                 int numberOfLeftTasks = playerTotal - playerCompleted;
-                if (numberOfLeftTasks <= 0 || isHideNSeek)
+                if (numberOfLeftTasks <= 0 || isGameMode)
                     __instance.Show();
                 else
                     __instance.Hide();

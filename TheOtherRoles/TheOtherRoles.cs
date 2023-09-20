@@ -76,6 +76,7 @@ namespace TheOtherRoles
             // Gamemodes
             HandleGuesser.clearAndReload();
             HideNSeek.clearAndReload();
+            PropHunt.clearAndReload();
 
         }
 
@@ -1449,13 +1450,17 @@ namespace TheOtherRoles
                 }
             } else {
                 int randomNumber = rnd.Next(4);
-                string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting.Data.DefaultOutfit.ColorId) ? "lighter" : "darker";
+                string typeOfColor = Helpers.isLighterColor(Medium.target.killerIfExisting) ? "lighter" : "darker";
                 float timeSinceDeath = ((float)(Medium.meetingStartTime - Medium.target.timeOfDeath).TotalMilliseconds);
-                
-                if (randomNumber == 0) msg = "If my role hasn't been saved, there's no " + RoleInfo.GetRolesString(Medium.target.player, false) + " in the game anymore.";
-                else if (randomNumber == 1) msg = "I'm not sure, but I guess a " + typeOfColor + " color killed me.";
+                var roleString = RoleInfo.GetRolesString(Medium.target.player, false);
+                if (randomNumber == 0) {
+                    if (!roleString.Contains("Impostor") && !roleString.Contains("Crewmate"))
+                        msg = "If my role hasn't been saved, there's no " + roleString + " in the game anymore.";
+                    else
+                        msg = "I am a " + roleString + " without an other role."; 
+                } else if (randomNumber == 1) msg = "I'm not sure, but I guess a " + typeOfColor + " color killed me.";
                 else if (randomNumber == 2) msg = "If I counted correctly, I died " + Math.Round(timeSinceDeath / 1000) + "s before the next meeting started.";
-                else msg = "It seems like my killer was the " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, false, true) + ".";
+                else msg = "It seems like my killer is the " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, false, true) + ".";
             }
 
             if (rnd.NextDouble() < chanceAdditionalInfo) {

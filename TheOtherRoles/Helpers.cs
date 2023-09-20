@@ -28,22 +28,24 @@ namespace TheOtherRoles {
     public enum CustomGamemodes {
         Classic,
         Guesser,
-        HideNSeek
+        HideNSeek,
+        PropHunt
     }
     public static class Helpers
     {
 
         public static Dictionary<string, Sprite> CachedSprites = new();
 
-        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit) {
+        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit, bool cache=true) {
             try
             {
-                if (CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
+                if (cache && CachedSprites.TryGetValue(path + pixelsPerUnit, out var sprite)) return sprite;
                 Texture2D texture = loadTextureFromResources(path);
                 sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
-                sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+                if (cache) sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+                if (!cache) return sprite;
                 return CachedSprites[path + pixelsPerUnit] = sprite;
-            } catch {
+            } catch (Exception e) {
                 System.Console.WriteLine("Error loading sprite from path: " + path);
             }
             return null;
@@ -110,6 +112,14 @@ namespace TheOtherRoles {
             if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(exampleClip, false, 0.8f);
             */
         }
+
+        public static string readTextFromResources(string path) {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(path);
+            StreamReader textStreamReader = new StreamReader(stream);
+            return textStreamReader.ReadToEnd();
+        }
+
         public static PlayerControl playerById(byte id)
         {
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
@@ -187,9 +197,13 @@ namespace TheOtherRoles {
             
             return cs(roleInfo.color, $"{roleInfo.name}: {roleInfo.shortDescription}");
         }
-        
-        public static bool isLighterColor(int colorId) {
-            return CustomColors.lighterColors.Contains(colorId);
+
+        public static bool isD(byte playerId) {
+            return playerId % 2 == 0;
+        }
+
+        public static bool isLighterColor(PlayerControl target) {
+            return isD(target.PlayerId);
         }
 
         public static bool isCustomServer() {
@@ -223,8 +237,8 @@ namespace TheOtherRoles {
                 player.Data.Tasks.Clear();
         }
 
-        public static void setSemiTransparent(this PoolablePlayer player, bool value) {
-            float alpha = value ? 0.25f : 1f;
+        public static void setSemiTransparent(this PoolablePlayer player, bool value, float alpha=0.25f) {
+            alpha = value ? alpha : 1f;
             foreach (SpriteRenderer r in player.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 r.color = new Color(r.color.r, r.color.g, r.color.b, alpha);
             player.cosmetics.nameText.color = new Color(player.cosmetics.nameText.color.r, player.cosmetics.nameText.color.g, player.cosmetics.nameText.color.b, alpha);
@@ -377,8 +391,7 @@ namespace TheOtherRoles {
             if (AmongUsClient.Instance.IsGameOver) return MurderAttemptResult.SuppressKill;
             if (killer == null || killer.Data == null || (killer.Data.IsDead && !ignoreIfKillerIsDead) || killer.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow non Impostor kills compared to vanilla code
             if (target == null || target.Data == null || target.Data.IsDead || target.Data.Disconnected) return MurderAttemptResult.SuppressKill; // Allow killing players in vents compared to vanilla code
-
-            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return MurderAttemptResult.PerformKill;
+            if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek || PropHunt.isPropHuntGM) return MurderAttemptResult.PerformKill;
 
             // Handle first kill attempt
             if (TORMapOptions.shieldFirstKill && TORMapOptions.firstKillPlayer == target) return MurderAttemptResult.SuppressKill;
@@ -440,8 +453,8 @@ namespace TheOtherRoles {
         public static MurderAttemptResult checkMurderAttemptAndKill(PlayerControl killer, PlayerControl target, bool isMeetingStart = false, bool showAnimation = true, bool ignoreBlank = false, bool ignoreIfKillerIsDead = false)  {
             // The local player checks for the validity of the kill and performs it afterwards (different to vanilla, where the host performs all the checks)
             // The kill attempt will be shared using a custom RPC, hence combining modded and unmodded versions is impossible
-
             MurderAttemptResult murder = checkMuderAttempt(killer, target, isMeetingStart, ignoreBlank, ignoreIfKillerIsDead);
+
             if (murder == MurderAttemptResult.PerformKill) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.UncheckedMurderPlayer, Hazel.SendOption.Reliable, -1);
                 writer.Write(killer.PlayerId);

@@ -153,6 +153,11 @@ namespace TheOtherRoles
         SetGuesserGm,
         HuntedShield,
         HuntedRewindTime,
+        SetProp,
+        SetRevealed,
+        PropHuntStartTimer,
+        PropHuntSetInvis,
+        PropHuntSetSpeedboost,
 
         // Other functionality
         ShareTimer,
@@ -1126,6 +1131,42 @@ namespace TheOtherRoles
             CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
         }
 
+        public static void propHuntStartTimer(bool blackout = false) {
+            if (blackout) {
+                PropHunt.blackOutTimer = PropHunt.initialBlackoutTime;
+                PropHunt.transformLayers();
+            } else {
+                PropHunt.timerRunning = true;
+                PropHunt.blackOutTimer = 0f;
+            }            
+            PropHunt.startTime = DateTime.UtcNow;
+            foreach (var pc in PlayerControl.AllPlayerControls.ToArray().Where(x => x.Data.Role.IsImpostor)) {
+                pc.MyPhysics.SetBodyType(PlayerBodyTypes.Seeker);
+            }
+        }
+
+        public static void propHuntSetProp(byte playerId, string propName, float posX) {
+            PlayerControl player = Helpers.playerById(playerId);
+            var prop = PropHunt.FindPropByNameAndPos(propName, posX);
+            if (prop == null) return;
+            player.GetComponent<SpriteRenderer>().sprite = prop.GetComponent<SpriteRenderer>().sprite;
+            player.transform.localScale = prop.transform.lossyScale;
+            player.Visible = false;
+            PropHunt.currentObject[player.PlayerId] = new Tuple<string, float>(propName, posX);
+        }
+
+        public static void propHuntSetRevealed(byte playerId) {
+            SoundEffectsManager.play("morphlingMorph");
+            PropHunt.isCurrentlyRevealed.Add(playerId, PropHunt.revealDuration);
+            PropHunt.timer -= PropHunt.revealPunish;
+        }
+        public static void propHuntSetInvis(byte playerId) {
+            PropHunt.invisPlayers.Add(playerId, PropHunt.invisDuration);
+        }
+        public static void propHuntSetSpeedboost(byte playerId) {
+            PropHunt.speedboostActive.Add(playerId, PropHunt.speedboostDuration);
+        }
+
         public enum GhostInfoTypes {
             HandcuffNoticed,
             HandcuffOver,
@@ -1471,6 +1512,24 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.HuntedRewindTime:
                     byte rewindPlayer = reader.ReadByte();
                     RPCProcedure.huntedRewindTime(rewindPlayer);
+                    break;
+                case (byte)CustomRPC.PropHuntStartTimer:
+                    RPCProcedure.propHuntStartTimer(reader.ReadBoolean());
+                    break;
+                case (byte)CustomRPC.SetProp:
+                    byte targetPlayer = reader.ReadByte();
+                    string propName = reader.ReadString();
+                    float posX = reader.ReadSingle();
+                    RPCProcedure.propHuntSetProp(targetPlayer, propName, posX);
+                    break;
+                case (byte)CustomRPC.SetRevealed:
+                    RPCProcedure.propHuntSetRevealed(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.PropHuntSetInvis:
+                    RPCProcedure.propHuntSetInvis(reader.ReadByte());
+                    break;
+                case (byte)CustomRPC.PropHuntSetSpeedboost:
+                    RPCProcedure.propHuntSetSpeedboost(reader.ReadByte());
                     break;
                 case (byte)CustomRPC.ShareGhostInfo:
                     RPCProcedure.receiveGhostInfo(reader.ReadByte(), reader);

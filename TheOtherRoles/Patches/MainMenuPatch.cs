@@ -107,7 +107,8 @@ TownOfUs - Idea for the Swapper, Shifter, Arsonist and a similar Mayor role came
 Ottomated - Idea for the Morphling, Snitch and Camouflager role came from Ottomated
 Crowded-Mod - Our implementation for 10+ player lobbies was inspired by the one from the Crowded Mod Team
 Goose-Goose-Duck - Idea for the Vulture role came from Slushiegoose
-TheEpicRoles - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by LaicosVK DasMonschta Nova</size>";
+TheEpicRoles - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by LaicosVK DasMonschta Nova
+ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
                 creditsString += "</align>";
 
                 Assets.InnerNet.Announcement creditsAnnouncement = new() {
@@ -169,10 +170,22 @@ TheEpicRoles - Idea for the first kill shield (partly) and the tabbed option men
                     template.OnClick();
                 }));
 
+                var PropHuntButton = GameObject.Instantiate<Transform>(gameButton, gameButton.parent);
+                PropHuntButton.transform.localPosition += new Vector3(3.4f, -0.5f);
+                var PropHuntButtonText = PropHuntButton.GetComponentInChildren<TMPro.TextMeshPro>();
+                var PropHuntButtonPassiveButton = PropHuntButton.GetComponentInChildren<PassiveButton>();
+
+                PropHuntButtonPassiveButton.OnClick = new Button.ButtonClickedEvent();
+                PropHuntButtonPassiveButton.OnClick.AddListener((System.Action)(() => {
+                    TORMapOptions.gameMode = CustomGamemodes.PropHunt;
+                    template.OnClick();
+                }));
+
                 template.StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => {
                     guesserButtonText.SetText("TOR Guesser");
                     HideNSeekButtonText.SetText("TOR Hide N Seek");
-                 })));
+                    PropHuntButtonText.SetText("TOR Prop Hunt");
+                })));
             }));
         }
     }

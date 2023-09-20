@@ -38,13 +38,16 @@ namespace TheOtherRoles
         }
 
 
-        public static void play(string path, float volume=0.8f)
+        public static void play(string path, float volume=0.8f, bool loop = false)
         {
             if (!TORMapOptions.enableSoundEffects) return;
             AudioClip clipToPlay = get(path);
             // if (false) clipToPlay = get("exampleClip"); for april fools?
             stop(path);
-            if (Constants.ShouldPlaySfx()) SoundManager.Instance.PlaySound(clipToPlay, false, volume);
+            if (Constants.ShouldPlaySfx()) {
+                AudioSource source = SoundManager.Instance.PlaySound(clipToPlay, false, volume);
+                source.loop = loop;
+            }
         }
         public static void playAtPosition(string path, Vector2 position, float maxDuration = 15f, float range = 5f, bool loop = false) {
             if (!TORMapOptions.enableSoundEffects || !Constants.ShouldPlaySfx()) return;

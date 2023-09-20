@@ -48,7 +48,7 @@ namespace TheOtherRoles.Objects {
             firstPortal.animationFgRenderer.flipX = flip;
             secondPortal.animationFgRenderer.flipX = flip;
             if (Morphling.morphling != null && Morphling.morphTimer > 0) playerControl = Morphling.morphTarget;  // Will output info of morph-target instead
-            string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl.Data.DefaultOutfit.ColorId) ? "L" : "D") + ")" : playerControl.Data.PlayerName;
+            string playerNameDisplay = Portalmaker.logOnlyHasColors ? "A player (" + (Helpers.isLighterColor(playerControl) ? "L" : "D") + ")" : playerControl.Data.PlayerName;
 
             int colorId = playerControl.Data.DefaultOutfit.ColorId;
 
