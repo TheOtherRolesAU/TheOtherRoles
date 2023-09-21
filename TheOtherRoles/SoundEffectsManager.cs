@@ -42,9 +42,8 @@ namespace TheOtherRoles
         {
             if (!TORMapOptions.enableSoundEffects) return;
             AudioClip clipToPlay = get(path);
-            // if (false) clipToPlay = get("exampleClip"); for april fools?
             stop(path);
-            if (Constants.ShouldPlaySfx()) {
+            if (Constants.ShouldPlaySfx() && clipToPlay != null) {
                 AudioSource source = SoundManager.Instance.PlaySound(clipToPlay, false, volume);
                 source.loop = loop;
             }
