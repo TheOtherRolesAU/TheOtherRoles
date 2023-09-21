@@ -100,6 +100,7 @@ namespace TheOtherRoles {
                 int channels = 2;
                 int sampleRate = 48000;
                 AudioClip audioClip = AudioClip.Create(clipName, samples.Length / 2, channels, sampleRate, false);
+                audioClip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
                 audioClip.SetData(samples, 0);
                 return audioClip;
             } catch {

@@ -122,17 +122,9 @@ namespace TheOtherRoles.CustomGameModes {
             return Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.IntroAnimation.intro_{index + 1000}.png", 150f, cache: false);
         }
 
-        public static void update() {
-            
-            if (!isPropHuntGM) {
-                // Make sure the DangerMeter is not displayed in TOR HideNSeek, Classic or Guesser Game mode.
-                if (GameOptionsManager.Instance.currentGameOptions.GameMode != AmongUs.GameOptions.GameModes.HideNSeek) HudManager.Instance.DangerMeter?.gameObject.SetActive(false);
-                return;
-            }
-            if (timerRunning) timer = Math.Clamp(timer -= Time.deltaTime, 0, timer >= 0 ? timer : 0);
-            else if (blackOutTimer > 0f) blackOutTimer -= Time.deltaTime;
 
-            // Local player find prop Target:
+        public static void propTargetAndTimerDisplayUpdate() {
+            
             if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor) currentTarget = FindClosestDisguiseObject(PlayerControl.LocalPlayer.gameObject, 1f);
 
             if (timerText == null) {
@@ -157,18 +149,20 @@ namespace TheOtherRoles.CustomGameModes {
                     timerText.text = Helpers.cs(timerRunning ? Color.blue : Color.red, suffix);
                     timerText.outlineColor = Color.white;
                     timerText.outlineWidth = 0.1f;
-                    timerText.color = timerRunning ? Color.blue : Color.red;                    
+                    timerText.color = timerRunning ? Color.blue : Color.red;
                 }
             }
             if (HudManagerStartPatch.propDisguiseButton != null && HudManagerStartPatch.propDisguiseButton.Timer > HudManagerStartPatch.propDisguiseButton.MaxTimer) HudManagerStartPatch.propDisguiseButton.Timer = HudManagerStartPatch.propDisguiseButton.MaxTimer;
-            // poolable players update.
+        }
+        
+        public static void poolablePlayerUpdate() {
             if (poolablesBackground == null) {
                 poolablesBackground = new GameObject("poolablesBackground");
                 poolablesBackground.AddComponent<SpriteRenderer>();
                 if (poolablesBackgroundSprite == null) poolablesBackgroundSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.poolablesBackground.jpg", 200f);
             }
             poolablesBackground.transform.SetParent(HudManager.Instance.transform);
-            poolablesBackground.transform.localPosition = IntroCutsceneOnDestroyPatch.bottomLeft + new Vector3(-1.45f, -0.05f, 0)  + Vector3.right * PlayerControl.AllPlayerControls.Count * 0.2f;
+            poolablesBackground.transform.localPosition = IntroCutsceneOnDestroyPatch.bottomLeft + new Vector3(-1.45f, -0.05f, 0) + Vector3.right * PlayerControl.AllPlayerControls.Count * 0.2f;
             var backgroundSizeX = PlayerControl.AllPlayerControls.Count * 0.4f + 0.2f;
             poolablesBackground.GetComponent<SpriteRenderer>().sprite = poolablesBackgroundSprite;
             poolablesBackground.transform.localScale = new Vector3(poolablesBackground.transform.localScale.x * backgroundSizeX / poolablesBackground.GetComponent<SpriteRenderer>().bounds.size.x, poolablesBackground.transform.localScale.y, poolablesBackground.transform.localScale.z);
@@ -188,7 +182,7 @@ namespace TheOtherRoles.CustomGameModes {
                     // Display Prop
                     poolablePlayer.cosmetics.nameText.text = Helpers.cs(Palette.CrewmateBlue, pc.Data.PlayerName); ;
                     if (isCurrentlyRevealed.ContainsKey(pc.PlayerId)) {
-                        
+
                     }
                 }
                 // update currently revealed:
@@ -219,25 +213,18 @@ namespace TheOtherRoles.CustomGameModes {
                     }
                 }
             }
+        }
 
-            // speedboost
-            foreach (var key in speedboostActive.Keys) {
-                float speedboostTimer = speedboostActive[key] - Time.deltaTime;
-                speedboostActive[key] = speedboostTimer;
-                if (speedboostTimer < 0)
-                    speedboostActive.Remove(key);
-            }
-            // invisupdate
+        public static void invisUpdate() {
             foreach (var playerId in invisPlayers.Keys) {
                 var pc = Helpers.playerById(playerId);
                 if (pc == null || pc.Data.IsDead) continue;
                 float timeLeft = invisPlayers[playerId] - Time.deltaTime;
                 invisPlayers[playerId] = timeLeft;
                 if (timeLeft > 0) {
-                    pc.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.PlayerId == playerId ? 0.1f: 0f);
+                    pc.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, PlayerControl.LocalPlayer.Data.IsDead || PlayerControl.LocalPlayer.PlayerId == playerId ? 0.1f : 0f);
 
-                }
-                else {
+                } else {
                     pc.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
                     invisPlayers.Remove(playerId);
                 }
@@ -245,8 +232,18 @@ namespace TheOtherRoles.CustomGameModes {
                     revealRenderer[playerId].GetComponent<SpriteRenderer>().color = pc.GetComponent<SpriteRenderer>().color;
                 }
             }
+        }
 
-            // Update dangerMeter
+        public static void speedboostUpdate() {
+            foreach (var key in speedboostActive.Keys) {
+                float speedboostTimer = speedboostActive[key] - Time.deltaTime;
+                speedboostActive[key] = speedboostTimer;
+                if (speedboostTimer < 0)
+                    speedboostActive.Remove(key);
+            }
+        }
+
+        public static void dangerMeterUpdate() {
             if (HudManager.Instance.DangerMeter.gameObject.active) {
                 float dist = 55f;
                 float dist2 = 15f;
@@ -266,6 +263,28 @@ namespace TheOtherRoles.CustomGameModes {
                 HudManager.Instance.DangerMeter.SetDangerValue(dangerLevel1, dangerLevel2);
             }
             HudManager.Instance.DangerMeter?.gameObject.SetActive(!PlayerControl.LocalPlayer.Data.IsDead && (!PlayerControl.LocalPlayer.Data.Role.IsImpostor || HudManagerStartPatch.propHuntFindButton.isEffectActive));
+        }
+
+
+        public static void update() {            
+            if (!isPropHuntGM) {
+                // Make sure the DangerMeter is not displayed in TOR HideNSeek, Classic or Guesser Game mode.
+                if (GameOptionsManager.Instance.currentGameOptions.GameMode != AmongUs.GameOptions.GameModes.HideNSeek) HudManager.Instance.DangerMeter?.gameObject.SetActive(false);
+                return;
+            }
+            if (timerRunning) timer = Math.Clamp(timer -= Time.deltaTime, 0, timer >= 0 ? timer : 0);
+            else if (blackOutTimer > 0f) blackOutTimer -= Time.deltaTime;
+
+            // Local player find prop Target
+            propTargetAndTimerDisplayUpdate();
+
+            poolablePlayerUpdate();
+
+            speedboostUpdate();
+
+            invisUpdate();
+
+            dangerMeterUpdate();
         }
 
         public static void transformLayers() {  // A bit of a hacky way to make sure that props as well as propable objects are not visible in the dark, while keeping collisions enabled.
