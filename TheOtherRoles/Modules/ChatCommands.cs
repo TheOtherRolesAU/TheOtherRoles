@@ -64,6 +64,15 @@ namespace TheOtherRoles.Modules {
                     }
                 }
 
+                if (text.ToLower().StartsWith("/role")) {
+                    RoleInfo localRole = RoleInfo.getRoleInfoForPlayer(CachedPlayer.LocalPlayer.PlayerControl, false).FirstOrDefault();
+                    if (localRole != RoleInfo.impostor && localRole != RoleInfo.crewmate) {
+                        string info = RoleInfo.GetRoleDescription(localRole);
+                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, info);
+                        handled = true;
+                    }
+                }
+
                 if (handled) {
                     __instance.freeChatField.Clear();
                     __instance.quickChatMenu.Clear();

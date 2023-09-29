@@ -45,7 +45,7 @@ namespace TheOtherRoles {
                 if (cache) sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
                 if (!cache) return sprite;
                 return CachedSprites[path + pixelsPerUnit] = sprite;
-            } catch (Exception e) {
+            } catch {
                 System.Console.WriteLine("Error loading sprite from path: " + path);
             }
             return null;

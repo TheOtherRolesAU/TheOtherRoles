@@ -31,7 +31,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.4.1";
+        public const string VersionString = "4.4.2";
         public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
@@ -92,6 +92,7 @@ namespace TheOtherRoles
             Instance = this;
   
             _ = Helpers.checkBeta(); // Exit if running an expired beta
+            _ = Patches.CredentialsPatch.MOTD.loadMOTDs();
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
             GhostsSeeInformation = Config.Bind("Custom", "Ghosts See Remaining Tasks", true);
@@ -125,7 +126,7 @@ namespace TheOtherRoles
             SubmergedCompatibility.Initialize();
             AddComponent<ModUpdateBehaviour>();
             Modules.MainMenuPatch.addSceneChangeCallbacks();
-
+            _ = RoleInfo.loadReadme();
             TheOtherRolesPlugin.Logger.LogInfo("Loading TOR completed!");
         }
         public static Sprite GetModStamp() {

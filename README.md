@@ -42,6 +42,7 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.07.12s| v4.4.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.2/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.1/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.0/TheOtherRoles.zip)
 | 2023.07.12s| v4.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.4/TheOtherRoles.zip)
@@ -126,6 +127,10 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 4.4.2**
+- Added 10 new colors and adapted some existing ones (thanks to Avlona & Listoric for sorting our colors!)
+- Added a message of the day feature in the main menu. Look out for interesting news and lame jokes!
 
 **Version 4.4.1**
 - Fixed a bug where PropHunt buttons did not work for the Hunters after watching the intro cutscene.
@@ -896,6 +901,8 @@ Here are a few instructions, on how to create a custom hat:
 
 # Colors
 Note: Lighter and Darker colors are no longer based on the players color. Instead they are assigned alternatingly, s.t. they are always balanced in a lobby.
+
+A big thank you goes to Avlona & Listoric for sorting the colors in the best possible order (which is surprisingly hard to do)!
 ![TOR Colors](./Images/TOR_colors.jpg)
 
 # Roles
