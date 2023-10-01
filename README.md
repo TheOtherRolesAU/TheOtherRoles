@@ -826,7 +826,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can also see the name of the Spy and everyone can still see the age of the mini.
 - **Allow Parallel MedBay Scans:** Allows players to perform their MedBay scans at the same time.
 - **Shield Last Game First Kill** The first killed player of the previous round will be shielded for all players visible until the first meeting.
-- **Finish Tasks Before Haunting Or Zooming Out ** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
+- **Finish Tasks Before Haunting Or Zooming Out** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
 - **Admin Table Shows Dead Bodies**
 - **Cams Switch To Night Vision If Lights Are Off**  No colors and cosmetics can be seen on the cameras when the lights are off. Mini can be spottet!
 - **Impostor Vision Ignores Night Vision Cams**
