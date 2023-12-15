@@ -37,22 +37,24 @@ Even more roles are coming soon. :)
 |  | [Trapper](#trapper) |  |  |
 |  | [Nice Guesser](#guesser) |  |  |
 
-The [Role Assignment](#role-assignment) sections explains how the roles are being distributed among the players.
+The [Role Assignment](#role-assignment) section explains how the roles are being distributed among the players.
 
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.11.28s| v4.5.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.0/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.2/TheOtherRoles.zip)
-| 2023.07.12s| v4.4.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.1/TheOtherRoles.zip)
-| 2023.07.12s| v4.4.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.0/TheOtherRoles.zip)
-| 2023.07.12s| v4.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.4/TheOtherRoles.zip)
-| 2023.07.12s| v4.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.3/TheOtherRoles.zip)
-| 2023.03.28s| v4.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.2/TheOtherRoles.zip)
+
 <details>
   <summary>Click to show older versions</summary>
   
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.07.12s| v4.4.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.1/TheOtherRoles.zip)
+| 2023.07.12s| v4.4.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.0/TheOtherRoles.zip)
+| 2023.07.12s| v4.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.4/TheOtherRoles.zip)
+| 2023.07.12s| v4.3.3| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.3/TheOtherRoles.zip)
+| 2023.03.28s| v4.3.2| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.2/TheOtherRoles.zip)
 | 2023.03.28s| v4.3.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.1/TheOtherRoles.zip)
 | 2023.02.28s| v4.3.0| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.0/TheOtherRoles.zip)
 | 2022.12.14s| v4.2.1| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.2.1/TheOtherRoles.zip)
@@ -127,6 +129,18 @@ The [Role Assignment](#role-assignment) sections explains how the roles are bein
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 4.5.0**
+- Updated to Among Us version 2023.11.28 (with the new map, Fungle)
+- Added a new feature: Show Vents on Map (toggle in your local options)
+- Added a new kill distance: Very Short (thanks twix)
+- Added a feature to change the gamemode in the settings: `/gm <gamemode>` (host only)
+- Fixed a bug where Pet visibility was sometimes wron
+- Fixed the HatLoader - testing hats should work again (thanks EnoPM)
+- Changed the HatLoader - loading the hats does not require a restart of the mod anymore
+- Changed the ModUpdater (thanks EnoPM)
+- Changed the Vampire: Kills will be delayed a bit longer if the target is using a ladder, platform or zipline
+- Note: Compatibility with Submerged and LevelImposter is not tested yet.
 
 **Version 4.4.2**
 - Added 10 new colors and adapted some existing ones (thanks to Avlona & Listoric for sorting our colors!)
@@ -791,6 +805,26 @@ docker run -d -p 22023:22023/udp --env IMPOSTOR_AntiCheatEnabled=false --env IMP
 
 
 # Credits & Resources
+Team:
+Mallöris    K3ndo    Bavari    Gendelo
+
+Former Team Members:
+Eisbison (GOAT)    Thunderstorm584    EndOfFile
+
+Additional Devs:
+EnoPM    twix    NesTT
+
+Github Contributors:
+Alex2911    amsyarasyiq    MaximeGillot
+Psynomit    probablyadnf    JustASysAdmin
+
+[Discord](https://discord.gg/77RkMJHWsM]Discord) Moderators:</b>
+Draco Cordraconis    Streamblox (formerly)
+Thanks to all our discord helpers!
+
+Thanks to miniduikboot & GD for hosting modded servers (and so much more)
+
+
 [OxygenFilter](https://github.com/NuclearPowered/Reactor.OxygenFilter) - For all the versions between v2.3.0 and v2.6.1, we were using the OxygenFilter for automatic deobfuscation\
 [Reactor](https://github.com/NuclearPowered/Reactor) - The framework used for all versions before v2.0.0\
 [BepInEx](https://github.com/BepInEx) - Used to hook to game functions\
@@ -2030,6 +2064,9 @@ can only use them, if the previous player did not use them before)
 -----------------------
 
 # Gamemodes
+Gamemodes can be switched when creating a lobby or inside the lobby by using a command in the chat:
+`/gm <gamemode>`. Use the following gamemodes: `guess` or `gm`,`prophunt` or `ph`, `hidenseek` or `hns`. If `/gm` is used without argument or the argument can't be parsed, the lobby will switch to classic mode.
+
 
 ## Guesser Modifier
 The **Guesser-Gamemode** is an extension to the Classic-Gamemode and gives you a multitude of new options for Guessers.\

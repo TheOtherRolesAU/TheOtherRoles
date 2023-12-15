@@ -143,14 +143,10 @@ namespace TheOtherRoles.Modules {
                     
             /** Add Colors **/
             int id = 50000;
-            foreach (var c in Palette.PlayerColors) {
-                TheOtherRolesPlugin.Logger.LogMessage(c);
-            }
             foreach (CustomColor cc in colors) {
                 longlist.Add((StringNames)id);
                 CustomColors.ColorStrings[id++] = cc.longname;
                 colorlist.Add(cc.color);
-                TheOtherRolesPlugin.Logger.LogMessage(cc.color);
                 shadowlist.Add(cc.shadow);
                 if (cc.isLighterColor)
                     lighterColors.Add(colorlist.Count - 1);

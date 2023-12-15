@@ -580,6 +580,14 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        [HarmonyPatch(typeof(FungleSurveillanceMinigame), nameof(FungleSurveillanceMinigame.Update))]
+        class FungleSurveillanceMinigameUpdatePatch {
+            public static void Postfix(FungleSurveillanceMinigame __instance) {
+                nightVisionUpdate(FungleCamMinigame: __instance);
+            }
+        }
+
+
         [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.OnDestroy))]
         class SurveillanceMinigameDestroyPatch {
             public static void Prefix() {
@@ -594,10 +602,9 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-
-        private static void nightVisionUpdate(SurveillanceMinigame SkeldCamsMinigame = null, PlanetSurveillanceMinigame SwitchCamsMinigame = null) {
+        private static void nightVisionUpdate(SurveillanceMinigame SkeldCamsMinigame = null, PlanetSurveillanceMinigame SwitchCamsMinigame = null, FungleSurveillanceMinigame FungleCamMinigame = null) {
+            GameObject closeButton = null;
             if (nightVisionOverlays == null) {
-                GameObject closeButton = null;
                 List<MeshRenderer> viewPorts = new();
                 Transform viewablesTransform = null;
                 if (SkeldCamsMinigame != null) {
@@ -608,15 +615,31 @@ namespace TheOtherRoles.Patches {
                     closeButton = SwitchCamsMinigame.Viewables.transform.Find("CloseButton").gameObject;
                     viewPorts.Add(SwitchCamsMinigame.ViewPort);
                     viewablesTransform = SwitchCamsMinigame.Viewables.transform;
+                } else if (FungleCamMinigame != null) {
+                    closeButton = FungleCamMinigame.transform.Find("CloseButton").gameObject;
+                    viewPorts.Add(FungleCamMinigame.viewport);
+                    viewablesTransform = FungleCamMinigame.viewport.transform;
                 } else return;
 
                 nightVisionOverlays = new List<GameObject>();
 
                 foreach (var renderer in viewPorts) {
-                    GameObject overlayObject = GameObject.Instantiate(closeButton, viewablesTransform);
-                    overlayObject.transform.position = new Vector3(renderer.transform.position.x, renderer.transform.position.y, overlayObject.transform.position.z);
-                    overlayObject.transform.localScale = (SkeldCamsMinigame != null) ? new Vector3(0.91f, 0.612f, 1f) : new Vector3(2.124f, 1.356f, 1f);
-                    overlayObject.layer = closeButton.layer;
+                    GameObject overlayObject;
+                    float zPosition;
+                    if (FungleCamMinigame != null) {
+                        overlayObject = GameObject.Instantiate(closeButton, renderer.transform);
+                        overlayObject.layer = renderer.gameObject.layer;
+                        zPosition = - 0.5f;
+                        overlayObject.transform.localPosition = new Vector3(0, 0, zPosition);
+                    } else {
+                        overlayObject = GameObject.Instantiate(closeButton, viewablesTransform);
+                        zPosition = overlayObject.transform.position.z;
+                        overlayObject.layer = closeButton.layer;
+                        overlayObject.transform.position = new Vector3(renderer.transform.position.x, renderer.transform.position.y, zPosition);
+                    }
+                    Vector3 localScale = (SkeldCamsMinigame != null) ? new Vector3(0.91f, 0.612f, 1f) : new Vector3(2.124f, 1.356f, 1f);
+                    localScale = (FungleCamMinigame != null) ? new Vector3(10f, 10f, 1f) : localScale;
+                    overlayObject.transform.localScale = localScale;
                     var overlayRenderer = overlayObject.GetComponent<SpriteRenderer>();
                     overlayRenderer.sprite = overlaySprite;
                     overlayObject.SetActive(false);
@@ -625,8 +648,7 @@ namespace TheOtherRoles.Patches {
                 }
             }
 
-
-            isLightsOut = CachedPlayer.LocalPlayer.PlayerControl.myTasks.ToArray().Any(x => x.name.Contains("FixLightsTask"));
+            isLightsOut = CachedPlayer.LocalPlayer.PlayerControl.myTasks.ToArray().Any(x => x.name.Contains("FixLightsTask")) || Trickster.lightsOutTimer > 0;
             bool ignoreNightVision = CustomOptionHolder.camsNoNightVisionIfImpVision.getBool() && Helpers.hasImpVision(GameData.Instance.GetPlayerById(CachedPlayer.LocalPlayer.PlayerId)) || CachedPlayer.LocalPlayer.Data.IsDead;
             bool nightVisionEnabled = CustomOptionHolder.camsNightVision.getBool();
 
@@ -652,7 +674,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        private static void resetNightVision() {
+        public static void resetNightVision() {
             foreach (var go in nightVisionOverlays) {
                 go.Destroy();
             }
