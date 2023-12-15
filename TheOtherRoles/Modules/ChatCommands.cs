@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Linq;
 using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
+using Hazel;
 
 namespace TheOtherRoles.Modules {
     [HarmonyPatch]
@@ -35,6 +36,28 @@ namespace TheOtherRoles.Modules {
                                 handled = true;
                             }
                         }
+                    } else if (text.ToLower().StartsWith("/gm")) {
+                        string gm = text.Substring(4).ToLower();
+                        CustomGamemodes gameMode = CustomGamemodes.Classic;
+                        if (gm.StartsWith("prop") || gm.StartsWith("ph")) {
+                            gameMode = CustomGamemodes.PropHunt;
+                        } else if (gm.StartsWith("guess") || gm.StartsWith("gm")) {
+                            gameMode = CustomGamemodes.Guesser;
+                        } else if (gm.StartsWith("hide") || gm.StartsWith("hn")) {
+                            gameMode = CustomGamemodes.HideNSeek;
+                        }
+                        // else its classic!
+
+                        if (AmongUsClient.Instance.AmHost) {
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGamemode, Hazel.SendOption.Reliable, -1);
+                            writer.Write((byte)TORMapOptions.gameMode);
+                            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCProcedure.shareGamemode((byte)gameMode);
+                            RPCProcedure.shareGamemode((byte)TORMapOptions.gameMode);
+                        } else {
+                            __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Nice try, but you have to be the host to use this feature");
+                        }
+                        handled = true;
                     }
                 }
                 
