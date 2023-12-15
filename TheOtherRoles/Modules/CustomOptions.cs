@@ -893,6 +893,7 @@ namespace TheOtherRoles {
     public class AmongUsClientOnPlayerJoinedPatch {
         public static void Postfix() {
             if (PlayerControl.LocalPlayer != null && AmongUsClient.Instance.AmHost) {
+                GameManager.Instance.LogicOptions.SyncOptions();
                 CustomOption.ShareOptionSelections();
             }
         }
@@ -1126,6 +1127,89 @@ namespace TheOtherRoles {
         {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode == AmongUs.GameOptions.GameModes.HideNSeek) return; // Allow Vanilla Hide N Seek
             __result = buildAllOptions(vanillaSettings:__result);
+        }
+    }
+
+    [HarmonyPatch]
+    public class AddToKillDistanceSetting
+    {
+        [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.AreInvalid))]
+        [HarmonyPrefix]
+        
+        public static bool Prefix(GameOptionsData __instance, ref int maxExpectedPlayers)
+        {
+            //making the killdistances bound check higher since extra short is added
+            return __instance.MaxPlayers > maxExpectedPlayers || __instance.NumImpostors < 1
+                    || __instance.NumImpostors > 3 || __instance.KillDistance < 0
+                    || __instance.KillDistance >= GameOptionsData.KillDistances.Count
+                    || __instance.PlayerSpeedMod <= 0f || __instance.PlayerSpeedMod > 3f;
+        }
+
+        [HarmonyPatch(typeof(NormalGameOptionsV07), nameof(NormalGameOptionsV07.AreInvalid))]
+        [HarmonyPrefix]
+        
+        public static bool Prefix(NormalGameOptionsV07 __instance, ref int maxExpectedPlayers)
+        {
+            return __instance.MaxPlayers > maxExpectedPlayers || __instance.NumImpostors < 1
+                    || __instance.NumImpostors > 3 || __instance.KillDistance < 0
+                    || __instance.KillDistance >= GameOptionsData.KillDistances.Count
+                    || __instance.PlayerSpeedMod <= 0f || __instance.PlayerSpeedMod > 3f;
+        }
+
+        [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
+        [HarmonyPrefix]
+        
+        public static void Prefix(StringOption __instance)
+        {
+            //prevents indexoutofrange exception breaking the setting if long happens to be selected
+            //when host opens the laptop
+            if (__instance.Title == StringNames.GameKillDistance && __instance.Value == 3) {
+                __instance.Value = 1;
+                GameOptionsManager.Instance.currentNormalGameOptions.KillDistance = 1;
+                GameManager.Instance.LogicOptions.SyncOptions();
+            }
+        }
+
+        [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
+        [HarmonyPostfix]
+        
+        public static void Postfix(StringOption __instance)
+        {
+            if (__instance.Title == StringNames.GameKillDistance && __instance.Values.Count == 3) {
+                __instance.Values = new(
+                        new StringNames[] { (StringNames)49999, StringNames.SettingShort, StringNames.SettingMedium, StringNames.SettingLong });
+            }
+        }
+
+        [HarmonyPatch(typeof(IGameOptionsExtensions), nameof(IGameOptionsExtensions.AppendItem),
+            new Type[] { typeof(Il2CppSystem.Text.StringBuilder), typeof(StringNames), typeof(string) })]
+        [HarmonyPrefix]
+        
+        public static void Prefix(ref StringNames stringName, ref string value)
+        {
+            if (stringName == StringNames.GameKillDistance) {
+                var index = GameOptionsManager.Instance.currentNormalGameOptions.KillDistance;
+                value = GameOptionsData.KillDistanceStrings[index];
+            }
+        }
+
+        [HarmonyPatch(typeof(TranslationController), nameof(TranslationController.GetString),
+            new[] { typeof(StringNames), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
+        [HarmonyPriority(Priority.Last)]
+        
+        public static bool Prefix(ref string __result, ref StringNames id)
+        {
+            if ((int)id == 49999) {
+                __result = "Very Short";
+                return false;
+            }
+            return true;
+        }
+
+        public static void addKillDistance()
+        {
+            GameOptionsData.KillDistances = new(new float[] { 0.5f, 1f, 1.8f, 2.5f });
+            GameOptionsData.KillDistanceStrings = new(new string[] { "Very Short", "Short", "Medium", "Long" });
         }
     }
 

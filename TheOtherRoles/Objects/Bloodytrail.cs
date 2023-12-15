@@ -46,7 +46,7 @@ namespace TheOtherRoles.Objects {
 
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(10f, new Action<float>((p) => {
             Color c = color;
-            if (Camouflager.camouflageTimer > 0) c = Palette.PlayerColors[6];
+            if (Camouflager.camouflageTimer > 0 || Helpers.MushroomSabotageActive()) c = Palette.PlayerColors[6];
             if (spriteRenderer) spriteRenderer.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(1 - p));
 
             if (p == 1f && blood != null) {

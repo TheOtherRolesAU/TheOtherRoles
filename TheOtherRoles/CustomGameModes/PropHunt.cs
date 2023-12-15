@@ -122,6 +122,21 @@ namespace TheOtherRoles.CustomGameModes {
             return Helpers.loadSpriteFromResources($"TheOtherRoles.Resources.IntroAnimation.intro_{index + 1000}.png", 150f, cache: false);
         }
 
+        public static void updateWhitelistedObjects() {
+            TheOtherRolesPlugin.Logger.LogMessage($"updating whitelisted objects!");
+            string allNames = Helpers.readTextFromResources("TheOtherRoles.Resources.Txt.props.txt");
+            TheOtherRolesPlugin.Logger.LogMessage($"raed from res");
+            bool debug = false;
+            if (debug) {
+                allNames = Helpers.readTextFromFile(System.IO.Directory.GetCurrentDirectory() + "\\props.txt"); 
+            }
+            TheOtherRolesPlugin.Logger.LogMessage($"after debug");
+            whitelistedObjects = allNames.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
+            TheOtherRolesPlugin.Logger.LogMessage($"after split");
+            
+            TheOtherRolesPlugin.Logger.LogMessage($"Last element: {whitelistedObjects.Last()}");
+        }
+
 
         public static void propTargetAndTimerDisplayUpdate() {
             
@@ -344,9 +359,8 @@ namespace TheOtherRoles.CustomGameModes {
             try {
                 Collider2D bestCollider = null;
                 float bestDist = 9999;
-                if (whitelistedObjects == null || whitelistedObjects.Count == 0) {
-                    string allNames = Helpers.readTextFromResources("TheOtherRoles.Resources.Txt.Props.txt");
-                    whitelistedObjects = allNames.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (whitelistedObjects == null || whitelistedObjects.Count == 0 || verbose) {
+                    updateWhitelistedObjects();
                 }
                 foreach (Collider2D collider in Physics2D.OverlapCircleAll(origin.transform.position, radius)) {
                     if (verbose) {
@@ -444,7 +458,7 @@ namespace TheOtherRoles.CustomGameModes {
 
                 __instance.gameObject.AddComponent<SpriteRenderer>();
                 __instance.GetComponent<CircleCollider2D>().radius = 0.00001f;
-            }
+        }
 
 
         // Runs periodically, resets animation data for players

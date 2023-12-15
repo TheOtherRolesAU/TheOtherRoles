@@ -21,7 +21,6 @@ namespace TheOtherRoles.Modules {
         private static AnnouncementPopUp popUp;
 
         private static void Prefix(MainMenuManager __instance) {
-            CustomHatLoader.LaunchHatFetcher();
             var template = GameObject.Find("ExitGameButton");
             var template2 = GameObject.Find("CreditsButton");
             if (template == null || template2 == null) return;
@@ -78,18 +77,27 @@ namespace TheOtherRoles.Modules {
                 popUp = Object.Instantiate(popUpTemplate);
 
                 popUp.gameObject.SetActive(true);
-                string creditsString = @$"<align=""center""><b>Github Contributors:</b>
+                string creditsString = @$"<align=""center""><b>Team:</b>
+Mallöris    K3ndo    Bavari    Gendelo
+
+<b>Former Team Members:</b>
+Eisbison (GOAT)    Thunderstorm584    EndOfFile
+
+<b>Additional Devs:</b>
+EnoPM    twix    NesTT
+
+<b>Github Contributors:</b>
 Alex2911    amsyarasyiq    MaximeGillot
 Psynomit    probablyadnf    JustASysAdmin
 
-[https://discord.gg/77RkMJHWsM]Discord[] Moderators:
-Streamblox    Draco Cordraconis
+<b>[https://discord.gg/77RkMJHWsM]Discord[] Moderators:</b>
+Draco Cordraconis    Streamblox (formerly)
 Thanks to all our discord helpers!
 
-Thanks to miniduikboot & GD for hosting modded servers
+Thanks to miniduikboot & GD for hosting modded servers (and so much more)
 
 ";
-                creditsString += $@"<size=60%> Other Credits & Resources:
+                creditsString += $@"<size=60%> <b>Other Credits & Resources:</b>
 OxygenFilter - For the versions v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation
 Reactor - The framework used for all versions before v2.0.0, and again since 4.2.0
 BepInEx - Used to hook game functions
@@ -130,7 +138,7 @@ ugackMiner53 - Idea and core code for the Prop Hunt game mode</size>";
                         DataManager.Player.Announcements.SetAnnouncements(new Announcement[] { creditsAnnouncement });
                         popUp.CreateAnnouncementList();
                         popUp.UpdateAnnouncementText(creditsAnnouncement.Number);
-                        popUp.visibleAnnouncements[0].PassiveButton.OnClick.RemoveAllListeners();
+                        popUp.visibleAnnouncements._items[0].PassiveButton.OnClick.RemoveAllListeners();
                         DataManager.Player.Announcements.allAnnouncements = backup;
                     }
                 })));

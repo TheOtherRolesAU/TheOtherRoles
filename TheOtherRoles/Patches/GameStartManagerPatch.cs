@@ -50,6 +50,7 @@ namespace TheOtherRoles.Patches {
         
             public static void Prefix(GameStartManager __instance) {
                 if (!GameData.Instance ) return; // No instance
+                __instance.MinPlayers = 1;
                 update = GameData.Instance.PlayerCount != __instance.LastPlayerCount;
             }
 
@@ -187,7 +188,7 @@ namespace TheOtherRoles.Patches {
                             break;
                         }
                     }
-                    if ((continueStart && TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt) && GameOptionsManager.Instance.CurrentGameOptions.MapId != 6) {
+                    if (continueStart && (TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt) && GameOptionsManager.Instance.CurrentGameOptions.MapId != 6) {
                         byte mapId = 0;
                         if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) mapId = (byte)CustomOptionHolder.hideNSeekMap.getSelection();
                         else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) mapId = (byte)CustomOptionHolder.propHuntMap.getSelection();
@@ -210,6 +211,7 @@ namespace TheOtherRoles.Patches {
                         probabilities.Add(CustomOptionHolder.dynamicMapEnableMira.getSelection() / 10f);
                         probabilities.Add(CustomOptionHolder.dynamicMapEnablePolus.getSelection() / 10f);
                         probabilities.Add(CustomOptionHolder.dynamicMapEnableAirShip.getSelection() / 10f);
+                        probabilities.Add(CustomOptionHolder.dynamicMapEnableFungle.getSelection() / 10f);
                         probabilities.Add(CustomOptionHolder.dynamicMapEnableSubmerged.getSelection() / 10f);
 
                         // if any map is at 100%, remove all maps that are not!
