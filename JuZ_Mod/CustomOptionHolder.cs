@@ -9,6 +9,9 @@ namespace TheOtherRoles {
         public static string[] ratesModifier = new string[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Random Preset Skeld", "Random Preset Mira HQ", "Random Preset Polus", "Random Preset Airship", "Random Preset Submerged" };
 
+        public static CustomOption almanTowelCooldown;
+        public static CustomOption almanTowelDuration;
+
         public static CustomOption presetSelection;
         public static CustomOption activateRoles;
         public static CustomOption crewmateRolesCountMin;
@@ -408,6 +411,10 @@ namespace TheOtherRoles {
         public static void Load() {
 
             CustomOption.vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind("Preset0", "VanillaOptions", "");
+
+            // My Options
+            almanTowelCooldown = CustomOption.Create(1000000, Types.Impostor, cs(Alman.color, "Set Cooldown for Alman to place Towels"), 20f, 0f, 30f, 1f);
+            almanTowelDuration = CustomOption.Create(1000001, Types.Impostor, cs(Alman.color, "Set Towel Duration for Alman"), 30f, 5f, 60f, 1f);
 
             // Role Options
             presetSelection = CustomOption.Create(0, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);

@@ -18,6 +18,8 @@ namespace TheOtherRoles
     {
         private static bool initialized = false;
 
+        private static CustomButton almanTowelButton;
+
         private static CustomButton engineerRepairButton;
         private static CustomButton janitorCleanButton;
         public static CustomButton sheriffKillButton;
@@ -97,6 +99,8 @@ namespace TheOtherRoles
                     return;
                 }
             }
+            almanTowelButton.MaxTimer = Alman.towelCooldown;
+
             engineerRepairButton.MaxTimer = 0f;
             janitorCleanButton.MaxTimer = Janitor.cooldown;
             sheriffKillButton.MaxTimer = Sheriff.cooldown;
@@ -149,6 +153,8 @@ namespace TheOtherRoles
             propHuntSpeedboostButton.MaxTimer = PropHunt.speedboostCooldown;
             propHuntAdminButton.MaxTimer = PropHunt.adminCooldown;
             propHuntFindButton.MaxTimer = PropHunt.findCooldown;
+
+            almanTowelButton.EffectDuration = Alman.towelDuration;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -294,6 +300,20 @@ namespace TheOtherRoles
         public static void createButtonsPostfix(HudManager __instance) {
             // get map id, or raise error to wait...
             var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
+
+            // Alman Towel
+            almanTowelButton = new CustomButton(
+                () => {
+                    // Task sperren
+                },
+                () => { return Alman.alman != null && Alman.alman == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { return __instance.UseButton.graphic.color == Palette.EnabledColor && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
+                () => { almanTowelButton.Timer = almanTowelButton.MaxTimer;  },
+                Alman.getPlaceTowelSprite(),
+                CustomButton.ButtonPositions.upperRowRight,
+                __instance, 
+                KeyCode.F
+            );
 
             // Engineer Repair
             engineerRepairButton = new CustomButton(

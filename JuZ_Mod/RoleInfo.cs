@@ -30,6 +30,8 @@ namespace TheOtherRoles
             this.isModifier = isModifier;
         }
 
+        public static RoleInfo alman = new RoleInfo("Alman", Alman.color, "Place Towels in front of tasks to prevent them from being used", "Locks Tasks with his Towels", RoleId.Alman);
+
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
         public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);
@@ -98,6 +100,8 @@ namespace TheOtherRoles
 
 
         public static List<RoleInfo> allRoleInfos = new List<RoleInfo>() {
+            alman,
+            
             impostor,
             godfather,
             mafioso,
@@ -182,6 +186,8 @@ namespace TheOtherRoles
             int count = infos.Count;  // Save count after modifiers are added so that the role count can be checked
 
             // Special roles
+            if (p == Alman.alman) infos.Add(alman);
+
             if (p == Jester.jester) infos.Add(jester);
             if (p == Mayor.mayor) infos.Add(mayor);
             if (p == Portalmaker.portalmaker) infos.Add(portalmaker);

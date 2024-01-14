@@ -20,6 +20,8 @@ using Assets.CoreScripts;
 namespace TheOtherRoles
 {
     public enum RoleId {
+        Alman,
+        
         Jester,
         Mayor,
         Portalmaker,

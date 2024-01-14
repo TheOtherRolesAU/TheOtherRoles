@@ -19,6 +19,8 @@ namespace TheOtherRoles
         public static System.Random rnd = new System.Random((int)DateTime.Now.Ticks);
 
         public static void clearAndReloadRoles() {
+            Alman.clearAndReload();
+            
             Jester.clearAndReload();
             Mayor.clearAndReload();
             Portalmaker.clearAndReload();
@@ -79,6 +81,32 @@ namespace TheOtherRoles
             PropHunt.clearAndReload();
 
         }
+
+        public static class Alman
+        {
+            public static PlayerControl alman;
+            public static Color color = Palette.ImpostorRed;
+
+            public static Sprite placeTowelSprite;
+
+            public static float towelCooldown;
+            public static float towelDuration;
+
+            public static void clearAndReload()
+            {
+                alman = null;
+                towelCooldown = CustomOptionHolder.almanTowelCooldown.getFloat();
+                towelDuration = CustomOptionHolder.almanTowelDuration.getFloat();
+            }
+
+            public static Sprite getPlaceTowelSprite()
+            {
+                if (placeTowelSprite) return placeTowelSprite;
+                placeTowelSprite = Helpers.loadSpriteFromResources("JuZ_Mod.Resources.placeTowelButton.png", 115f);
+                return placeTowelSprite;
+            }
+        }
+
 
         public static class Jester {
             public static PlayerControl jester;
