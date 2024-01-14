@@ -18,6 +18,7 @@ namespace TheOtherRoles
     {
         private static bool initialized = false;
 
+        private static CustomButton uranium;
         private static CustomButton almanTowelButton;
 
         private static CustomButton engineerRepairButton;
@@ -99,6 +100,7 @@ namespace TheOtherRoles
                     return;
                 }
             }
+            uranium.MaxTimer = UraniumScientist.uraniumCooldown;
             almanTowelButton.MaxTimer = Alman.towelCooldown;
 
             engineerRepairButton.MaxTimer = 0f;
@@ -155,6 +157,7 @@ namespace TheOtherRoles
             propHuntFindButton.MaxTimer = PropHunt.findCooldown;
 
             almanTowelButton.EffectDuration = Alman.towelDuration;
+            uranium.EffectDuration = UraniumScientist.uraniumDuration;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -296,10 +299,25 @@ namespace TheOtherRoles
                 createButtonsPostfix(__instance);
             } catch { }
         }
-         
+
         public static void createButtonsPostfix(HudManager __instance) {
             // get map id, or raise error to wait...
             var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
+
+            // Give Uranium
+            uranium = new CustomButton(
+                () =>
+                {
+                    // Spieler zu List hinzuügen und prüfen, ob alle Spieler in der Liste sind
+                },
+                () => { return UraniumScientist.uraniumScientist != null && UraniumScientist.uraniumScientist == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
+                () => { return true; }, // check for a player, in kill radius, which has no uranium
+                () => { uranium.Timer = uranium.MaxTimer; },
+                UraniumScientist.getGiveUraniumSprite(),
+                CustomButton.ButtonPositions.upperRowRight,
+                __instance,
+                KeyCode.F
+            );
 
             // Alman Towel
             almanTowelButton = new CustomButton(
@@ -308,7 +326,7 @@ namespace TheOtherRoles
                 },
                 () => { return Alman.alman != null && Alman.alman == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
                 () => { return __instance.UseButton.graphic.color == Palette.EnabledColor && CachedPlayer.LocalPlayer.PlayerControl.CanMove; },
-                () => { almanTowelButton.Timer = almanTowelButton.MaxTimer;  },
+                () => { almanTowelButton.Timer = almanTowelButton.MaxTimer; },
                 Alman.getPlaceTowelSprite(),
                 CustomButton.ButtonPositions.upperRowRight,
                 __instance, 

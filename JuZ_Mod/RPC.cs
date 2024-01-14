@@ -20,6 +20,7 @@ using Assets.CoreScripts;
 namespace TheOtherRoles
 {
     public enum RoleId {
+        UraniumScientist,
         Alman,
         
         Jester,
@@ -696,6 +697,10 @@ namespace TheOtherRoles
         public static void erasePlayerRoles(byte playerId, bool ignoreModifier = true) {
             PlayerControl player = Helpers.playerById(playerId);
             if (player == null || !player.canBeErased()) return;
+
+            // My Roles
+            if (player == Alman.alman) Alman.clearAndReload();
+            if (player == UraniumScientist.uraniumScientist) UraniumScientist.clearAndReload();
 
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();

@@ -20,6 +20,7 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Alman.clearAndReload();
+            UraniumScientist.clearAndReload();
             
             Jester.clearAndReload();
             Mayor.clearAndReload();
@@ -80,6 +81,31 @@ namespace TheOtherRoles
             HideNSeek.clearAndReload();
             PropHunt.clearAndReload();
 
+        }
+
+        public static class UraniumScientist
+        {
+            public static PlayerControl uraniumScientist;
+            public static Color color = Palette.Blue;
+
+            public static Sprite giveUraniumSprite;
+
+            public static float uraniumCooldown;
+            public static float uraniumDuration;
+
+            public static void clearAndReload()
+            {
+                uraniumScientist = null;
+                uraniumCooldown = CustomOptionHolder.uraniumCooldown.getFloat();
+                uraniumDuration = CustomOptionHolder.uraniumDuration.getFloat();
+            }
+
+            public static Sprite getGiveUraniumSprite()
+            {
+                if (giveUraniumSprite) return giveUraniumSprite;
+                giveUraniumSprite = Helpers.loadSpriteFromResources("JuZ_Mod.Resources.GiveUranium.png", 115f);
+                return giveUraniumSprite;
+            }
         }
 
         public static class Alman
