@@ -20,7 +20,6 @@ using Assets.CoreScripts;
 namespace TheOtherRoles
 {
     public enum RoleId {
-        UraniumScientist,
         Alman,
         
         Jester,
@@ -700,7 +699,6 @@ namespace TheOtherRoles
 
             // My Roles
             if (player == Alman.alman) Alman.clearAndReload();
-            if (player == UraniumScientist.uraniumScientist) UraniumScientist.clearAndReload();
 
             // Crewmate roles
             if (player == Mayor.mayor) Mayor.clearAndReload();

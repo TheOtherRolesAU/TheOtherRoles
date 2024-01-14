@@ -30,7 +30,6 @@ namespace TheOtherRoles
             this.isModifier = isModifier;
         }
 
-        public static RoleInfo uraniumScientist = new RoleInfo("Uranium Scientist", UraniumScientist.color, "Give everyone some uranium", "Wins by giving everyone some uranium", RoleId.UraniumScientist);     // Button functionality Missing
         public static RoleInfo alman = new RoleInfo("Alman", Alman.color, "Place Towels in front of tasks to prevent them from being used", "Locks Tasks with his Towels", RoleId.Alman);                       // Button functionality missing
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
@@ -63,7 +62,7 @@ namespace TheOtherRoles
         public static RoleInfo sidekick = new RoleInfo("Sidekick", Sidekick.color, "Help your Jackal to kill everyone", "Help your Jackal to kill everyone", RoleId.Sidekick, true);
         public static RoleInfo spy = new RoleInfo("Spy", Spy.color, "Confuse the <color=#FF1919FF>Impostors</color>", "Confuse the Impostors", RoleId.Spy);
         public static RoleInfo securityGuard = new RoleInfo("Security Guard", SecurityGuard.color, "Seal vents and place cameras", "Seal vents and place cameras", RoleId.SecurityGuard);
-        public static RoleInfo arsonist = new RoleInfo("Arsonist", Arsonist.color, "Let them burn", "Let them burn", RoleId.Arsonist, true);
+        public static RoleInfo arsonist = new RoleInfo("Arsonist", Arsonist.color, "Let them burn", "Let them burn", RoleId.Arsonist, true);                                                                    // Sort of Done
         public static RoleInfo goodGuesser = new RoleInfo("Nice Guesser", Guesser.color, "Guess and shoot", "Guess and shoot", RoleId.NiceGuesser);
         public static RoleInfo badGuesser = new RoleInfo("Evil Guesser", Palette.ImpostorRed, "Guess and shoot", "Guess and shoot", RoleId.EvilGuesser);
         public static RoleInfo vulture = new RoleInfo("Vulture", Vulture.color, "Eat corpses to win", "Eat dead bodies", RoleId.Vulture, true);

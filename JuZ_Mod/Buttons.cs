@@ -100,7 +100,6 @@ namespace TheOtherRoles
                     return;
                 }
             }
-            uranium.MaxTimer = UraniumScientist.uraniumCooldown;
             almanTowelButton.MaxTimer = Alman.towelCooldown;
 
             engineerRepairButton.MaxTimer = 0f;
@@ -157,7 +156,6 @@ namespace TheOtherRoles
             propHuntFindButton.MaxTimer = PropHunt.findCooldown;
 
             almanTowelButton.EffectDuration = Alman.towelDuration;
-            uranium.EffectDuration = UraniumScientist.uraniumDuration;
 
             timeMasterShieldButton.EffectDuration = TimeMaster.shieldDuration;
             hackerButton.EffectDuration = Hacker.duration;
@@ -303,21 +301,6 @@ namespace TheOtherRoles
         public static void createButtonsPostfix(HudManager __instance) {
             // get map id, or raise error to wait...
             var mapId = GameOptionsManager.Instance.currentNormalGameOptions.MapId;
-
-            // Give Uranium
-            uranium = new CustomButton(
-                () =>
-                {
-                    // Spieler zu List hinzuügen und prüfen, ob alle Spieler in der Liste sind
-                },
-                () => { return UraniumScientist.uraniumScientist != null && UraniumScientist.uraniumScientist == CachedPlayer.LocalPlayer.PlayerControl && !CachedPlayer.LocalPlayer.Data.IsDead; },
-                () => { return true; }, // check for a player, in kill radius, which has no uranium
-                () => { uranium.Timer = uranium.MaxTimer; },
-                UraniumScientist.getGiveUraniumSprite(),
-                CustomButton.ButtonPositions.upperRowRight,
-                __instance,
-                KeyCode.F
-            );
 
             // Alman Towel
             almanTowelButton = new CustomButton(

@@ -11,9 +11,11 @@ namespace TheOtherRoles {
 
         public static CustomOption uraniumCooldown;
         public static CustomOption uraniumDuration;
+        public static CustomOption uraniumScientistSpawnRate;
 
         public static CustomOption almanTowelCooldown;
         public static CustomOption almanTowelDuration;
+        public static CustomOption almanSpawnRate;
 
         public static CustomOption presetSelection;
         public static CustomOption activateRoles;
@@ -416,9 +418,6 @@ namespace TheOtherRoles {
             CustomOption.vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind("Preset0", "VanillaOptions", "");
 
             // My Options
-            uraniumCooldown = CustomOption.Create(1000100, Types.Neutral, cs(Palette.ClearWhite, "Set cooldown for Uraium-Scientist between giving people his uranium"), 10f, 0f, 30f, 1f);
-            uraniumDuration = CustomOption.Create(1000101, Types.Neutral, cs(Palette.ClearWhite, "Set time it takes for the Uranium-Scientist to give someone his uranium"), 5f, 0f, 10f, 1f);
-
             almanTowelCooldown = CustomOption.Create(1000000, Types.Impostor, cs(Alman.color, "Set Cooldown for Alman to place Towels"), 20f, 0f, 30f, 1f);
             almanTowelDuration = CustomOption.Create(1000001, Types.Impostor, cs(Alman.color, "Set Towel Duration for Alman"), 30f, 5f, 60f, 1f);
 
