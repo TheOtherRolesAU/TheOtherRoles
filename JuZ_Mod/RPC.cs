@@ -241,6 +241,10 @@ namespace TheOtherRoles
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
                 if (player.PlayerId == playerId) {
                     switch((RoleId)roleId) {
+                    case RoleId.Alman:
+                        Alman.alman = player;
+                        break;
+                        
                     case RoleId.Jester:
                         Jester.jester = player;
                         break;
@@ -606,7 +610,7 @@ namespace TheOtherRoles
             Camouflager.camouflageTimer = Camouflager.duration;
             if (Helpers.MushroomSabotageActive()) return; // Dont overwrite the fungle "camo"
             foreach (PlayerControl player in CachedPlayer.AllPlayers)
-                player.setLook("", 6, "", "", "", "");
+                player.setLook("", 6, "", "", "", ""); // black
 
         }
 
