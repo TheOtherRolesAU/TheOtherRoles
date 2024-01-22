@@ -33,7 +33,7 @@ namespace TheOtherRoles
         public static RoleInfo alman = new RoleInfo("Alman", Alman.color, "Place Towels in front of tasks to prevent them from being used", "Locks Tasks with his Towels", RoleId.Alman);                       // Button functionality missing
 
         public static RoleInfo jester = new RoleInfo("Jester", Jester.color, "Get voted out", "Get voted out", RoleId.Jester, true);
-        public static RoleInfo mayor = new RoleInfo("Mayor", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);                                                                    // Done
+        public static RoleInfo mayor = new RoleInfo("Cheffi", Mayor.color, "Your vote counts twice", "Your vote counts twice", RoleId.Mayor);                                                                    // Done
         public static RoleInfo portalmaker = new RoleInfo("Portalmaker", Portalmaker.color, "You can create portals", "You can create portals", RoleId.Portalmaker);
         public static RoleInfo engineer = new RoleInfo("Engineer",  Engineer.color, "Maintain important systems on the ship", "Repair the ship", RoleId.Engineer);
         public static RoleInfo sheriff = new RoleInfo("Sheriff", Sheriff.color, "Shoot the <color=#FF1919FF>Impostors</color>", "Shoot the Impostors", RoleId.Sheriff);
