@@ -137,7 +137,7 @@ namespace TheOtherRoles
         public static class Crewmatratze
         {
             public static PlayerControl crewmatratze;
-            public static Color color = new Color32(58, 131, 62, byte.MaxValue);
+            public static Color color = new Color32(255, 150, 200, byte.MaxValue);
 
             public static void clearAndReload()
             {

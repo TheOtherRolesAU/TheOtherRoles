@@ -18,7 +18,6 @@ namespace TheOtherRoles
     {
         private static bool initialized = false;
 
-        private static CustomButton uranium;
         private static CustomButton almanTowelButton;
 
         private static CustomButton engineerRepairButton;
