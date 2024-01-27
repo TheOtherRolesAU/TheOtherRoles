@@ -20,6 +20,8 @@ namespace TheOtherRoles
 
         public static void clearAndReloadRoles() {
             Alman.clearAndReload();
+            Deutscher.clearAndReload();
+            Crewmatratze.clearAndReload();
             
             Jester.clearAndReload();
             Mayor.clearAndReload();
@@ -107,6 +109,52 @@ namespace TheOtherRoles
             }
         }
 
+        public static class Deutscher
+        {
+            public static PlayerControl deutscher;
+            public static Color color = new Color32(170, 124, 108, byte.MaxValue);
+
+            public static Sprite placeTowelSprite;
+
+            public static float towelCooldown;
+            public static float towelDuration;
+
+            public static void clearAndReload()
+            {
+                deutscher = null;
+                towelCooldown = CustomOptionHolder.almanTowelCooldown.getFloat();
+                towelDuration = CustomOptionHolder.almanTowelDuration.getFloat();
+            }
+
+            public static Sprite getPlaceTowelSprite()
+            {
+                if (placeTowelSprite) return placeTowelSprite;
+                placeTowelSprite = Helpers.loadSpriteFromResources("JuZ_Mod.Resources.placeTowelButton.png", 115f);
+                return placeTowelSprite;
+            }
+        }
+
+        public static class Crewmatratze
+        {
+            public static PlayerControl crewmatratze;
+            public static Color color = new Color32(58, 131, 62, byte.MaxValue);
+
+            public static void clearAndReload()
+            {
+                crewmatratze = null;
+            }
+        }
+
+        public static class Influencer
+        {
+            public static PlayerControl influencer;
+            public static Color color = new Color32();
+
+            public static void clearAndReload()
+            {
+                influencer = null;
+            }
+        }
 
         public static class Jester {
             public static PlayerControl jester;

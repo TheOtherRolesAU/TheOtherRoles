@@ -30,6 +30,7 @@ namespace TheOtherRoles {
             HideNSeekMain,
             HideNSeekRoles,
             PropHunt,
+            JuZ,
         }
 
         public static List<CustomOption> options = new List<CustomOption>();

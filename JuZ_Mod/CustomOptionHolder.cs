@@ -9,9 +9,8 @@ namespace TheOtherRoles {
         public static string[] ratesModifier = new string[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" };
         public static string[] presets = new string[]{"Preset 1", "Preset 2", "Random Preset Skeld", "Random Preset Mira HQ", "Random Preset Polus", "Random Preset Airship", "Random Preset Submerged" };
 
-        public static CustomOption uraniumCooldown;
-        public static CustomOption uraniumDuration;
-        public static CustomOption uraniumScientistSpawnRate;
+        public static CustomOption influencerSpawnRate;
+        public static CustomOption influencerSelfieDuration;
 
         public static CustomOption almanTowelCooldown;
         public static CustomOption almanTowelDuration;
@@ -418,8 +417,12 @@ namespace TheOtherRoles {
             CustomOption.vanillaSettings = TheOtherRolesPlugin.Instance.Config.Bind("Preset0", "VanillaOptions", "");
 
             // My Options
-            almanTowelCooldown = CustomOption.Create(1000000, Types.Impostor, cs(Alman.color, "Set Cooldown for Alman to place Towels"), 20f, 0f, 30f, 1f);
-            almanTowelDuration = CustomOption.Create(1000001, Types.Impostor, cs(Alman.color, "Set Towel Duration for Alman"), 30f, 5f, 60f, 1f);
+            influencerSpawnRate = CustomOption.Create(1000101, Types.JuZ, cs(Influencer.color, "Influencer Spawn Rate"), rates, null, true);
+            influencerSelfieDuration = CustomOption.Create(1000102, Types.JuZ, cs(Influencer.color, "Time the selfie takes"), 5f, 0f, 10f, 1f);
+
+            almanSpawnRate = CustomOption.Create(1000003, Types.JuZ, cs(Alman.color, "Alman Spawn Rate"), rates, null, true);
+            almanTowelCooldown = CustomOption.Create(1000000, Types.JuZ, cs(Alman.color, "Set Cooldown for Alman to place Towels"), 20f, 0f, 30f, 1f);
+            almanTowelDuration = CustomOption.Create(1000001, Types.JuZ, cs(Alman.color, "Set Towel Duration for Alman"), 30f, 5f, 60f, 1f);
 
             // Role Options
             presetSelection = CustomOption.Create(0, Types.General, cs(new Color(204f / 255f, 204f / 255f, 0, 1f), "Preset"), presets, null, true);

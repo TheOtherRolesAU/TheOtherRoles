@@ -96,6 +96,9 @@ Thanks to all our discord helpers!
 
 Thanks to miniduikboot & GD for hosting modded servers (and so much more)
 
+<b>JuZ Modifikation:</b>
+Niklas ´(Keimschleuder) [https://www.github.com/keimschleuder]GitHub[]
+
 ";
                 creditsString += $@"<size=60%> <b>Other Credits & Resources:</b>
 OxygenFilter - For the versions v2.3.0 to v2.6.1, we were using the OxygenFilter for automatic deobfuscation
