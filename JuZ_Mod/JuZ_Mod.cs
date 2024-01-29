@@ -22,6 +22,7 @@ namespace TheOtherRoles
             Alman.clearAndReload();
             Deutscher.clearAndReload();
             Crewmatratze.clearAndReload();
+            Influencer.clearAndReload();
             
             Jester.clearAndReload();
             Mayor.clearAndReload();
