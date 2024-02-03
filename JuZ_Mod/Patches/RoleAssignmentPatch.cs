@@ -121,6 +121,8 @@ namespace TheOtherRoles.Patches {
             impSettings.Add((byte)RoleId.Ninja, CustomOptionHolder.ninjaSpawnRate.getSelection());
             impSettings.Add((byte)RoleId.Bomber, CustomOptionHolder.bomberSpawnRate.getSelection());
 
+            impSettings.Add((byte)RoleId.Alman, CustomOptionHolder.almanSpawnRate.getSelection());
+
             neutralSettings.Add((byte)RoleId.Jester, CustomOptionHolder.jesterSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Arsonist, CustomOptionHolder.arsonistSpawnRate.getSelection());
             neutralSettings.Add((byte)RoleId.Jackal, CustomOptionHolder.jackalSpawnRate.getSelection());
@@ -131,6 +133,8 @@ namespace TheOtherRoles.Patches {
                 neutralSettings.Add((byte)RoleId.Prosecutor, CustomOptionHolder.lawyerSpawnRate.getSelection());
             else
                 neutralSettings.Add((byte)RoleId.Lawyer, CustomOptionHolder.lawyerSpawnRate.getSelection());
+
+            neutralSettings.Add((byte)RoleId.Deutscher, CustomOptionHolder.almanSpawnRate.getSelection());
 
             crewSettings.Add((byte)RoleId.Mayor, CustomOptionHolder.mayorSpawnRate.getSelection());
             crewSettings.Add((byte)RoleId.Portalmaker, CustomOptionHolder.portalmakerSpawnRate.getSelection());
@@ -151,6 +155,9 @@ namespace TheOtherRoles.Patches {
                 crewSettings.Add((byte)RoleId.Spy, CustomOptionHolder.spySpawnRate.getSelection());
             }
             crewSettings.Add((byte)RoleId.SecurityGuard, CustomOptionHolder.securityGuardSpawnRate.getSelection());
+
+            crewSettings.Add((byte)RoleId.Influencer, CustomOptionHolder.influencerSpawnRate.getSelection());
+            crewSettings.Add((byte)RoleId.Crewmatratze, CustomOptionHolder.crewmatratzeSpawnRate.getSelection());
 
             return new RoleAssignmentData {
                 crewmates = crewmates,
