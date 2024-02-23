@@ -123,12 +123,10 @@ namespace TheOtherRoles.CustomGameModes {
         }
 
         public static void updateWhitelistedObjects() {
-            TheOtherRolesPlugin.Logger.LogMessage($"updating whitelisted objects!");
-            string allNames = Helpers.readTextFromResources("TheOtherRoles.Resources.Txt.props.txt");
-            TheOtherRolesPlugin.Logger.LogMessage($"raed from res");
+            string allNames = Helpers.readTextFromResources("TheOtherRoles.Resources.Txt.Props.txt");
             bool debug = false;
             if (debug) {
-                allNames = Helpers.readTextFromFile(System.IO.Directory.GetCurrentDirectory() + "\\props.txt"); 
+                allNames = Helpers.readTextFromFile(System.IO.Directory.GetCurrentDirectory() + "\\Props.txt");
             }
             TheOtherRolesPlugin.Logger.LogMessage($"after debug");
             whitelistedObjects = allNames.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
