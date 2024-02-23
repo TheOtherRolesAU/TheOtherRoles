@@ -7,6 +7,11 @@ using TheOtherRoles.Utilities;
 using UnityEngine;
 
 namespace TheOtherRoles.Objects {
+    record TrapInfo {
+        public PlayerControl player;
+        public string roleWhenInTrap;
+    }
+    
     class Trap {
         public static List<Trap> traps = new List<Trap>();
         public static Dictionary<byte, Trap> trapPlayerIdMap = new Dictionary<byte, Trap>();
@@ -18,7 +23,7 @@ namespace TheOtherRoles.Objects {
         public bool triggerable = false;
         private int usedCount = 0;
         private int neededCount = Trapper.trapCountToReveal;
-        public List<PlayerControl> trappedPlayer = new List<PlayerControl>();
+        public List<TrapInfo> trappedPlayer = new List<TrapInfo>();
         private Arrow arrow = new Arrow(Color.blue);
 
         private static Sprite trapSprite;
@@ -95,11 +100,12 @@ namespace TheOtherRoles.Objects {
                 }
             })));
 
-            if (t.usedCount == t.neededCount) {
+            if (t.usedCount == t.neededCount)
+            {
                 t.revealed = true;
             }
-
-            t.trappedPlayer.Add(player);
+            
+            t.trappedPlayer.Add(new TrapInfo { player = player, roleWhenInTrap = RoleInfo.GetRolesString(player, false, false, true)});
             t.triggerable = true;
 
         }
@@ -115,7 +121,7 @@ namespace TheOtherRoles.Objects {
             Trap target = null;
             foreach (Trap trap in traps) {
                 if (trap.arrow.arrow.active) trap.arrow.Update();
-                if (trap.revealed || !trap.triggerable || trap.trappedPlayer.Contains(player.PlayerControl)) continue;
+                if (trap.revealed || !trap.triggerable || trap.trappedPlayer.Any(tp => tp.player == player.PlayerControl)) continue;
                 if (player.PlayerControl.inVent || !player.PlayerControl.CanMove) continue;
                 float distance = Vector2.Distance(trap.trap.transform.position, player.PlayerControl.GetTruePosition());
                 if (distance <= ud && distance < closestDistance) {

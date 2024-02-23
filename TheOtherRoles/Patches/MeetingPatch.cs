@@ -717,8 +717,10 @@ namespace TheOtherRoles.Patches {
                         if (!trap.revealed) continue;
                         string message = $"Trap {trap.instanceId}: \n";
                         trap.trappedPlayer = trap.trappedPlayer.OrderBy(x => rnd.Next()).ToList();
-                        foreach (PlayerControl p in trap.trappedPlayer) {
-                            if (Trapper.infoType == 0) message += RoleInfo.GetRolesString(p, false, false, true) + "\n";
+                        foreach (TrapInfo trapInfo in trap.trappedPlayer)
+                        {
+                            PlayerControl p = trapInfo.player;
+                            if (Trapper.infoType == 0) message += trapInfo.roleWhenInTrap + "\n";
                             else if (Trapper.infoType == 1) {
                                 if (Helpers.isNeutral(p) || p.Data.Role.IsImpostor) message += "Evil Role \n";
                                 else message += "Good Role \n";
