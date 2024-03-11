@@ -592,13 +592,6 @@ namespace TheOtherRoles.Patches {
                 })));
             }
 
-            //Fix visor in Meetings 
-            /**
-            foreach (PlayerVoteArea pva in __instance.playerStates) {
-                if(pva.PlayerIcon != null && pva.PlayerIcon.VisorSlot != null){
-                    pva.PlayerIcon.VisorSlot.transform.position += new Vector3(0, 0, -1f);
-                }
-            } */
 
             bool isGuesser = HandleGuesser.isGuesser(CachedPlayer.LocalPlayer.PlayerId);
 

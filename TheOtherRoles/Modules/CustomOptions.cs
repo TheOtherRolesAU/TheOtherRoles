@@ -104,7 +104,7 @@ namespace TheOtherRoles {
         }
 
         public static void saveVanillaOptions() {
-            vanillaSettings.Value = Convert.ToBase64String(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameManager.Instance.LogicOptions.currentGameOptions));
+            vanillaSettings.Value = Convert.ToBase64String(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameManager.Instance.LogicOptions.currentGameOptions, false));
         }
 
         public static void loadVanillaOptions() {

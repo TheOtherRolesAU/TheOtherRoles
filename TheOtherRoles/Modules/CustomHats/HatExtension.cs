@@ -9,4 +9,5 @@ public class HatExtension
     public string Condition { get; set; }
     public Sprite FlipImage { get; set; }
     public Sprite BackFlipImage { get; set; }
+    public bool Adaptive { get; set; }
 }

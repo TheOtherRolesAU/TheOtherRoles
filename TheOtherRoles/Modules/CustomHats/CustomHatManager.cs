@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using System.Reflection;
 
 namespace TheOtherRoles.Modules.CustomHats;
 
@@ -28,12 +30,11 @@ public static class CustomHatManager
     internal static string CustomSkinsDirectory => Path.Combine(Path.GetDirectoryName(Application.dataPath)!, ResourcesDirectory);
     internal static string HatsDirectory => CustomSkinsDirectory;
     
-    internal static readonly List<CustomHat> UnregisteredHats = new();
+    internal static List<CustomHat> UnregisteredHats = new();
     internal static readonly Dictionary<string, HatViewData> ViewDataCache = new();
     internal static readonly Dictionary<string, HatExtension> ExtensionCache = new();
     
     private static readonly HatsLoader Loader;
-    private static Material cachedShader;
     
     internal static HatExtension TestExtension { get; private set; }
 
@@ -71,8 +72,6 @@ public static class CustomHatManager
     
     internal static HatData CreateHatBehaviour(CustomHat ch, bool testOnly = false)
     {
-        if (cachedShader == null) cachedShader = DestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-
         var viewData = ViewDataCache[ch.Name] = ScriptableObject.CreateInstance<HatViewData>();
         var hat = ScriptableObject.CreateInstance<HatData>();
 
@@ -101,16 +100,11 @@ public static class CustomHatManager
         hat.ChipOffset = new Vector2(0f, 0.2f);
         hat.Free = true;
 
-        if (ch.Adaptive && cachedShader != null)
-        {
-            viewData.AltShader = cachedShader;
-        }
-        
-        var extend = new HatExtension
-        {
+        var extend = new HatExtension {
             Author = ch.Author ?? "Unknown",
             Package = ch.Package ?? "Misc.",
-            Condition = ch.Condition ?? "none"
+            Condition = ch.Condition ?? "none",
+            Adaptive = ch.Adaptive,
         };
 
         if (ch.FlipResource != null)
@@ -141,6 +135,8 @@ public static class CustomHatManager
     private static Sprite CreateHatSprite(string path)
     {
         var texture = Helpers.loadTextureFromDisk(Path.Combine(HatsDirectory, path));
+        if (texture == null)
+            texture = Helpers.loadTextureFromResources(path);
         if (texture == null) return null;
         var sprite = Sprite.Create(texture, 
             new Rect(0, 0, texture.width, texture.height),
@@ -279,5 +275,41 @@ public static class CustomHatManager
         }
 
         return toDownload;
+    }
+
+    public static List<CustomHat> loadHorseHats() {
+        List<CustomHat> hatdatas = new();
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        string[] resourceNames = assembly.GetManifestResourceNames();
+        List<string> hatFiles = new();
+        Dictionary<string, List<string>> hatFilesSorted = new Dictionary<string, List<string>>();
+        foreach (string resourceName in resourceNames) {
+            if (resourceName.Contains("TheOtherRoles.Resources.HorseHats.") && resourceName.Contains(".png")) {
+                hatFiles.Add(resourceName);
+            }
+        }
+
+        foreach (string s in hatFiles) {
+            string value = s.Substring(0, s.LastIndexOf("HorseSpecialHat") + 17);
+            if (value.Contains(".")) value.Remove(value.LastIndexOf("."));
+            if (!hatFilesSorted.ContainsKey(value)) hatFilesSorted.Add(value, new List<string>());
+            hatFilesSorted[value].Add(s);
+        }
+        int i = 0;
+        foreach (var item in hatFilesSorted) {
+            CustomHat info = new CustomHat();
+            info.Name = $"April Hat {i++:D2}";
+            info.Author = "A Fool";
+            info.Resource = item.Value.FirstOrDefault(x => !x.Contains("back"));
+            info.BackResource = item.Value.FirstOrDefault(x => x.Contains("back"));
+            info.Adaptive = info.Resource != null && info.Resource.Contains("adaptive");
+            info.FlipResource = item.Value.FirstOrDefault(x => x.Contains("flip"));
+            info.ClimbResource = item.Value.FirstOrDefault(x => x.Contains("climb"));
+            info.Package = "April Fools Hats";
+            if (info.Resource == null || info.Name == null) // required
+                continue;
+            hatdatas.Add(info);
+        }
+        return hatdatas;
     }
 }

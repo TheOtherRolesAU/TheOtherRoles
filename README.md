@@ -42,15 +42,16 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.3.5s| v4.5.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.2/TheOtherRoles.zip)
 | 2023.11.28s| v4.5.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.1/TheOtherRoles.zip)
-| 2023.11.28s| v4.5.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.0/TheOtherRoles.zip)
-| 2023.07.12s| v4.4.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.2/TheOtherRoles.zip)
 
 <details>
   <summary>Click to show older versions</summary>
   
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2023.11.28s| v4.5.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.0/TheOtherRoles.zip)
+| 2023.07.12s| v4.4.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.2/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.1/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.0/TheOtherRoles.zip)
 | 2023.07.12s| v4.3.4| [Download](https://github.com/Eisbison/TheOtherRoles/releases/download/v4.3.4/TheOtherRoles.zip)
@@ -130,6 +131,16 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+ **Version 4.5.2**
+- Updated to Among Us version 2024.3.5s (various small / "long" features and bugfixes)
+- Updated BepInEx dependency to 688
+- Added a new feature: Stop the game start (With an option to allow any player to stop it)
+- Added a new option (guesser mode): Sidekick is always guesser
+- Fixed the Arsonist Win - death reasons for already dead players are no longer replaced 
+- Changed the implementation of the Detective footprints - Improved performance can be expected
+- Changed the medic shield: Is now also displayed in meetings to players who can see it with brackets around the name
+
   
 **Version 4.5.1**
 - Fix a bug that lead to Props not being able to use the disguise button
@@ -853,6 +864,7 @@ Thanks to miniduikboot & GD for hosting modded servers (and so much more)
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
+- **Any Player Can Stop The Start:** If turned off, only the host can stop the game start. If on, all players can do it. Non-hosts stopping the start will send a chat message indicating who stopped it.
 - **Number of Crewmates:** The number of Crewmate roles can be set inside a lobby.
 - **Fill Crewmate Roles (Ignores Min/Max):** Everyone will get a role, even if the settings say there would be plain Crewmates (needs enough roles over 0%).
 - **Number of Neutrals:** The number of Neutral roles can be set inside a lobby.
@@ -1584,7 +1596,7 @@ The Time Master won't be affected by the rewind.
 
 ## Medic
 ### **Team: Crewmates**
-The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\
+The Medic can shield (highlighted by an outline around the player) one player per game, which makes the player unkillable.\ The shield is also shown in the meeting as brackets around the shielded player's name.
 The shielded player can still be voted out and might also be an Impostor.\
 If set in the options, the shielded player and/or the Medic will get a red flash on their screen if someone (Impostor, Sheriff, ...) tried to murder them.\
 If the Medic dies, the shield disappears with them.\
@@ -2086,7 +2098,8 @@ Players can additionally have a modifier, if enabled (e.g. Medic Guesser Mini).
 | Number of Neutral Guessers | -
 | Number of Impostor Guessers | -
 | Force Jackal Guesser | If set to "On", the first neutral role who will be Guesser is the Jackal. 
-| Force Thief Guesser | If set to "On", the first (or second if Force Jackal Guesser) neutral role who will be Guesser is the Thief. 
+| Sidekick Is Always Guesser | The converted sidekick will become a guesser | -
+| Force Thief Guesser | If set to "On", the first (or second if Force Jackal Guesser) neutral role who will be Guesser is the Thief.
 | Guessers Can Have A Modifier | -
 | Guesser Number Of Shots | -
 | Guesser Can Shoot Multiple Times Per Meeting | -

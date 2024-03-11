@@ -77,7 +77,6 @@ namespace TheOtherRoles
             HandleGuesser.clearAndReload();
             HideNSeek.clearAndReload();
             PropHunt.clearAndReload();
-
         }
 
         public static class Jester {
@@ -445,6 +444,20 @@ namespace TheOtherRoles
             if (buttonSprite) return buttonSprite;
             buttonSprite = Helpers.loadSpriteFromResources("TheOtherRoles.Resources.ShieldButton.png", 115f);
             return buttonSprite;
+        }
+
+        public static bool shieldVisible(PlayerControl target) {
+            bool hasVisibleShield = false;
+
+            bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
+            if (Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
+                hasVisibleShield = Medic.showShielded == 0 || Helpers.shouldShowGhostInfo() // Everyone or Ghost info
+                    || (Medic.showShielded == 1 && (CachedPlayer.LocalPlayer.PlayerControl == Medic.shielded || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic)) // Shielded + Medic
+                    || (Medic.showShielded == 2 && CachedPlayer.LocalPlayer.PlayerControl == Medic.medic); // Medic only
+                // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
+                hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic || Helpers.shouldShowGhostInfo());
+            }
+            return hasVisibleShield;            
         }
 
         public static void clearAndReload() {
@@ -1466,7 +1479,7 @@ namespace TheOtherRoles
                     if (!roleString.Contains("Impostor") && !roleString.Contains("Crewmate"))
                         msg = "If my role hasn't been saved, there's no " + roleString + " in the game anymore.";
                     else
-                        msg = "I am a " + roleString + " without an other role."; 
+                        msg = "I was a " + roleString + " without another role."; 
                 } else if (randomNumber == 1) msg = "I'm not sure, but I guess a " + typeOfColor + " color killed me.";
                 else if (randomNumber == 2) msg = "If I counted correctly, I died " + Math.Round(timeSinceDeath / 1000) + "s before the next meeting started.";
                 else msg = "It seems like my killer is the " + RoleInfo.GetRolesString(Medium.target.killerIfExisting, false, false, true) + ".";
