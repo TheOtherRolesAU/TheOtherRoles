@@ -27,7 +27,7 @@ namespace TheOtherRoles.Modules {
                             }
                         }
                     } else if (text.ToLower().StartsWith("/ban ")) {
-                        string playerName = text.Substring(6);
+                        string playerName = text.Substring(5);
                         PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                         if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan()) {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);
@@ -58,6 +58,10 @@ namespace TheOtherRoles.Modules {
                             __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Nice try, but you have to be the host to use this feature");
                         }
                         handled = true;
+                    }
+                    else if (text.ToLower().Equals("/owner"))
+                    {
+                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, AmongUsClient.Instance.GetHost().PlayerName + " is the host of this lobby.");
                     }
                 }
                 
