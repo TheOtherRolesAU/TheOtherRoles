@@ -27,7 +27,7 @@ namespace TheOtherRoles.Modules {
                             }
                         }
                     } else if (text.ToLower().StartsWith("/ban ")) {
-                        string playerName = text.Substring(6);
+                        string playerName = text.Substring(5);
                         PlayerControl target = CachedPlayer.AllPlayers.FirstOrDefault(x => x.Data.PlayerName.Equals(playerName));
                         if (target != null && AmongUsClient.Instance != null && AmongUsClient.Instance.CanBan()) {
                             var client = AmongUsClient.Instance.GetClient(target.OwnerId);

@@ -31,8 +31,8 @@ Even more roles are coming soon. :)
 | [Witch](#witch) | [Tracker](#tracker) |  |  |
 | [Ninja](#ninja) | [Snitch](#snitch) |  |  |
 | [Bomber](#bomber) | [Spy](#spy) |  |  |
-| [Evil Guesser](#guesser) | [Portalmaker](#portalmaker) |  |  |
-|  | [Security Guard](#security-guard) |  |  |
+| [Yo-Yo](#yoyo) | [Portalmaker](#portalmaker) |  |  |
+| [Evil Guesser](#guesser) | [Security Guard](#security-guard) |  |  |
 |  | [Medium](#medium) |  |  |
 |  | [Trapper](#trapper) |  |  |
 |  | [Nice Guesser](#guesser) |  |  |
@@ -42,6 +42,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.3.5s| v4.5.3| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.3/TheOtherRoles.zip)
 | 2024.3.5s| v4.5.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.2/TheOtherRoles.zip)
 | 2023.11.28s| v4.5.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.1/TheOtherRoles.zip)
 
@@ -131,6 +132,19 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 4.5.3**
+- Added a new role: Yo-Yo (Impostor) - Mark and blink to a position, then blink back to the start of the blink!
+- Added a new option to Jackal And Sidekick: Jackal / Sidekick can sabotage lights (cooldown syncs with Imp Sabotages)
+- Added a new option: Block Dead Impostor From Sabotaging
+- Added a new option to the Tracker: Tracking Type: Arrow, Proximity Meter, Both
+- Added a new feature: The host is always displayed to all players, in the meeting ui and ping  tracker text
+- Added a new feature: Ghosts see the icons of all players on their map
+- Fixed the chat command to ban a player from the lobby `/ban`
+- Fixed an issue where killing in PropHunt crashed the lobby
+- Fixed an issue with the very short kill distance in Vanilla HideNSeek
+- Changed trapper trap: is now visible with transparency to the trapper while inactive
+  
   
  **Version 4.5.2**
 - Updated to Among Us version 2024.3.5s (various small / "long" features and bugfixes)
@@ -1228,6 +1242,31 @@ Crewmates can defuse a bomb depending on the settings.
 | Bomb Is Active After |
 -----------------------
 
+## YoYo
+### **Team: Impostors**
+The Yo-Yo is an Impostor who has the ability mark a position and later blink (teleport) to this position.\
+After the initial blink, the Yo-Yo has a fixed amount of time (option) to do whatever they want, before automatically blinking back to the starting point of the first blink.\
+Each blink leaves behind a silhouette with configurable transparency. The silhouette is very hard to see.\
+The Yo-Yo may also have access to a mobile admin table, depending on the settings.
+
+**NOTE:**
+
+- The marked position for the first jump's target is displayed to the Yo-Yo and ghosts only.
+- The silhouette of the first blink stays (almost) until the Yo-Yo returns
+- The silhouette of the second blink (return) stays for 5 seconds
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Yo-Yo Spawn Chance | -
+| Blink Duration | -
+| Mark Location Cooldown | -
+| Marked Location Stays After Meeting | -
+| Has Admin Table | -
+| Admin Table Cooldown | -
+| Silhouette Visibility | -
+-----------------------
+
 ## Guesser
 ### **Team: Crewmates or Impostors**
 The Guesser can be a Crewmate or an Impostor (depending on the settings).\
@@ -1321,7 +1360,12 @@ If both Impostors and Jackals are in the game, the game continues even if all Cr
 | Jackal/Sidekick Kill Cooldown | Kill cooldown |
 | Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created |
 | Jackal can use vents | Yes/No |
+| Jackal can sabotage Lights | Yes/No |
 | Jackal can create a Sidekick | Yes/No |
+| Sidekick gets promoted to Jackal on Jackal Death | Yes/No |
+| Sidekick can kill | Yes/No |
+| Sidekick can Vent | Yes/No |
+| Jackal can sabotage Lights | Yes/No |
 | Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
 | Jackals can make an Impostor to their Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
 | Jackal and Sidekick have Impostor vision | - |
@@ -1685,6 +1729,7 @@ While accessing those mobile gadgets, the Hacker is not able to move.
 The Tracker can select one player to track. Depending on the options the Tracker can track a different person after each meeting or the Tracker tracks the same person for the whole game.\
 An arrow points to the last tracked position of the player.\
 The arrow updates its position every few seconds (configurable).\
+By an option, the arrow can be replaced or combined with the Proximity Tracker from Hide N Seek.\
 Depending on the options, the Tracker has another ability: They can track all corpses on the map for a set amount of time. They will keep tracking corpses, even if they were cleaned or eaten by the Vulture.
 
 **NOTE**
@@ -1699,6 +1744,7 @@ Depending on the options, the Tracker has another ability: They can track all co
 | Tracker Can Track Corpses | -
 | Corpses Tracking Cooldown | -
 | Corpses Tracking Duration | -
+| How Tracker Gets Target Location| -
 -----------------------
 
 ## Snitch

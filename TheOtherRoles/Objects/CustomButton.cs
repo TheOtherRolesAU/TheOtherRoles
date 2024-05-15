@@ -33,7 +33,7 @@ namespace TheOtherRoles.Objects {
         public HudManager hudManager;
         public bool mirror;
         public KeyCode? hotkey;
-        private string buttonText;
+        public string buttonText;
         public bool isHandcuffed = false;
         private static readonly int Desat = Shader.PropertyToID("_Desat");
 

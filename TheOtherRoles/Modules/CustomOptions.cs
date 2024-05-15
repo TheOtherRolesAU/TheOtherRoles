@@ -1188,7 +1188,13 @@ namespace TheOtherRoles {
         public static void Prefix(ref StringNames stringName, ref string value)
         {
             if (stringName == StringNames.GameKillDistance) {
-                var index = GameOptionsManager.Instance.currentNormalGameOptions.KillDistance;
+                int index;
+                if (GameOptionsManager.Instance.currentGameMode == GameModes.Normal) {
+                    index = GameOptionsManager.Instance.currentNormalGameOptions.KillDistance;
+                }
+                else {
+                    index = GameOptionsManager.Instance.currentHideNSeekGameOptions.KillDistance;
+                }
                 value = GameOptionsData.KillDistanceStrings[index];
             }
         }

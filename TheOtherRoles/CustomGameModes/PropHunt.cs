@@ -544,7 +544,7 @@ namespace TheOtherRoles.CustomGameModes {
         [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
         [HarmonyPostfix]
         public static void MurderPlayerPostfix(PlayerControl __instance, [HarmonyArgument(0)] PlayerControl target) {
-            if (!PropHunt.isPropHuntGM) return;
+            if (!PropHunt.isPropHuntGM || target != CachedPlayer.LocalPlayer.PlayerControl) return;
             try {
                 target.NetTransform.RpcSnapTo(__instance.transform.position);
             } catch { }

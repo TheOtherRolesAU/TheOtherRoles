@@ -113,9 +113,6 @@ namespace TheOtherRoles
                 Version = plugin.Metadata.Version.BaseVersion();
                 Assembly = Plugin!.GetType().Assembly;
             }
-
-            CredentialsPatch.PingTrackerPatch.modStamp = new GameObject();
-            Object.DontDestroyOnLoad(CredentialsPatch.PingTrackerPatch.modStamp);
             
             Types = AccessTools.GetTypesFromAssembly(Assembly);
             

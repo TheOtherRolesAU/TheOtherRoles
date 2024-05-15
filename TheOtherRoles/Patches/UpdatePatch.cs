@@ -324,6 +324,7 @@ namespace TheOtherRoles.Patches {
 
         static void updateSabotageButton(HudManager __instance) {
             if (MeetingHud.Instance || TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt) __instance.SabotageButton.Hide();
+            if (PlayerControl.LocalPlayer.Data.IsDead && CustomOptionHolder.deadImpsBlockSabotage.getBool()) __instance.SabotageButton.Hide();
         }
 
         static void updateMapButton(HudManager __instance) {
