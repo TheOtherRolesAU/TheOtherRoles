@@ -1309,13 +1309,14 @@ namespace TheOtherRoles
         public static Color color = Palette.ImpostorRed;
 
         public static Arrow arrow;
+        public static SpriteRenderer bountyHerePoint;
         public static float bountyDuration = 30f;
         public static bool showArrow = true;
         public static float bountyKillCooldown = 0f;
         public static float punishmentTime = 15f;
         public static float arrowUpdateIntervall = 10f;
 
-        public static float arrowUpdateTimer = 0f;
+        public static float locationUpdateTimer = 0f;
         public static float bountyUpdateTimer = 0f;
         public static PlayerControl bounty;
         public static TMPro.TextMeshPro cooldownText;
@@ -1324,8 +1325,11 @@ namespace TheOtherRoles
             arrow = new Arrow(color);
             bountyHunter = null;
             bounty = null;
-            arrowUpdateTimer = 0f;
+            locationUpdateTimer = 0f;
             bountyUpdateTimer = 0f;
+            
+            if (bountyHerePoint != null && bountyHerePoint.gameObject != null) UnityEngine.Object.Destroy(bountyHerePoint.gameObject);
+            bountyHerePoint = null;
             if (arrow != null && arrow.arrow != null) UnityEngine.Object.Destroy(arrow.arrow);
             arrow = null;
             if (cooldownText != null && cooldownText.gameObject != null) UnityEngine.Object.Destroy(cooldownText.gameObject);
@@ -1339,7 +1343,7 @@ namespace TheOtherRoles
             bountyKillCooldown = CustomOptionHolder.bountyHunterReducedCooldown.getFloat();
             punishmentTime = CustomOptionHolder.bountyHunterPunishmentTime.getFloat();
             showArrow = CustomOptionHolder.bountyHunterShowArrow.getBool();
-            arrowUpdateIntervall = CustomOptionHolder.bountyHunterArrowUpdateIntervall.getFloat();
+            arrowUpdateIntervall = CustomOptionHolder.bountyHunterLocUpdateIntervall.getFloat();
         }
     }
 
