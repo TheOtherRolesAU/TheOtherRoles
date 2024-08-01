@@ -357,7 +357,7 @@ namespace TheOtherRoles {
             if (Helpers.MushroomSabotageActive()) {
                 var instance = ShipStatus.Instance.CastFast<FungleShipStatus>().specialSabotage;
                 MushroomMixupSabotageSystem.CondensedOutfit condensedOutfit = instance.currentMixups[target.PlayerId];
-                GameData.PlayerOutfit playerOutfit = instance.ConvertToPlayerOutfit(condensedOutfit);
+                NetworkedPlayerInfo.PlayerOutfit playerOutfit = instance.ConvertToPlayerOutfit(condensedOutfit);
                 target.MixUpOutfit(playerOutfit);
             } else
                 target.setLook(target.Data.PlayerName, target.Data.DefaultOutfit.ColorId, target.Data.DefaultOutfit.HatId, target.Data.DefaultOutfit.VisorId, target.Data.DefaultOutfit.SkinId, target.Data.DefaultOutfit.PetId, enforceNightVisionUpdate);
@@ -450,7 +450,7 @@ namespace TheOtherRoles {
             return roleCouldUse;
         }
 
-        public static MurderAttemptResult checkMuderAttempt(PlayerControl killer, PlayerControl target, bool blockRewind = false, bool ignoreBlank = false, bool ignoreIfKillerIsDead = false) {
+        public static MurderAttemptResult checkMuderAttempt(PlayerControl killer, PlayerControl target, bool blockRewind = false, bool ignoreBlank = false, bool ignoreIfKillerIsDead = false, bool ignoreMedic = false) {
             var targetRole = RoleInfo.getRoleInfoForPlayer(target, false).FirstOrDefault();
 
             // Modified vanilla checks
@@ -474,7 +474,7 @@ namespace TheOtherRoles {
             }
 
             // Block impostor shielded kill
-            if (Medic.shielded != null && Medic.shielded == target) {
+            if (!ignoreMedic && Medic.shielded != null && Medic.shielded == target) {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(killer.NetId, (byte)CustomRPC.ShieldedMurderAttempt, Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCProcedure.shieldedMurderAttempt();
@@ -606,10 +606,15 @@ namespace TheOtherRoles {
                 if (cam != null && cam.gameObject.name == "UI Camera") cam.orthographicSize = orthographicSize;  // The UI is scaled too, else we cant click the buttons. Downside: map is super small.
             }
 
-            if (HudManagerStartPatch.zoomOutButton != null) {
-                HudManagerStartPatch.zoomOutButton.Sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.PlusButton.png", 75f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f);
-                HudManagerStartPatch.zoomOutButton.PositionOffset = zoomOutStatus ? new Vector3(0f, 3f, 0) : new Vector3(0.4f, 2.8f, 0);
+            var tzGO = GameObject.Find("TOGGLEZOOMBUTTON");
+            if (tzGO != null) {
+                var rend = tzGO.transform.Find("Inactive").GetComponent<SpriteRenderer>();
+                var rendActive = tzGO.transform.Find("Active").GetComponent<SpriteRenderer>();
+                rend.sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Plus_Button.png", 100f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Minus_Button.png", 100f);
+                rendActive.sprite = zoomOutStatus ? Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Plus_ButtonActive.png", 100f) : Helpers.loadSpriteFromResources("TheOtherRoles.Resources.Minus_ButtonActive.png", 100f);
+                tzGO.transform.localScale = new Vector3(1.2f, 1.2f, 1f) * (zoomOutStatus ? 4 : 1);
             }
+
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height, Screen.width, Screen.height, Screen.fullScreen); // This will move button positions to the correct position.
         }
 
@@ -654,7 +659,7 @@ namespace TheOtherRoles {
             }
         }
 
-        public static bool hasImpVision(GameData.PlayerInfo player) {
+        public static bool hasImpVision(NetworkedPlayerInfo player) {
             return player.Role.IsImpostor
                 || ((Jackal.jackal != null && Jackal.jackal.PlayerId == player.PlayerId || Jackal.formerJackals.Any(x => x.PlayerId == player.PlayerId)) && Jackal.hasImpostorVision)
                 || (Sidekick.sidekick != null && Sidekick.sidekick.PlayerId == player.PlayerId && Sidekick.hasImpostorVision)

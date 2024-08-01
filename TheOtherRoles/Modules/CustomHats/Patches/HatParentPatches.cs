@@ -219,7 +219,6 @@ internal static class HatParentPatches
         {
             spriteAnimNodeSync.NodeId = __instance.Hat.NoBounce ? 1 : 0;
         }
-
         if (__instance.Hat.InFront)
         {
             __instance.BackLayer.enabled = false;
@@ -240,8 +239,7 @@ internal static class HatParentPatches
             __instance.FrontLayer.sprite = null;
             __instance.BackLayer.sprite = asset.MainImage;
         }
-
-        if (!__instance.options.Initialized || !__instance.HideHat()) return false;
+        if (/*!__instance.options.Initialized ||*/ !__instance.HideHat()) return false;
         __instance.FrontLayer.enabled = false;
         __instance.BackLayer.enabled = false;
         return false;

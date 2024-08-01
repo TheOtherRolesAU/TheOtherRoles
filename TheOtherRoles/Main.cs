@@ -33,7 +33,7 @@ namespace TheOtherRoles
     public class TheOtherRolesPlugin : BasePlugin
     {
         public const string Id = "me.eisbison.theotherroles";
-        public const string VersionString = "4.5.3";
+        public const string VersionString = "4.6.0";
         public static uint betaDays = 0;  // amount of days for the build to be usable (0 for infinite!)
 
         public static Version Version = Version.Parse(VersionString);
@@ -54,6 +54,7 @@ namespace TheOtherRoles
         public static ConfigEntry<bool> EnableSoundEffects { get; set; }
         public static ConfigEntry<bool> EnableHorseMode { get; set; }
         public static ConfigEntry<bool> ShowVentsOnMap { get; set; }
+        public static ConfigEntry<bool> ShowChatNotifications { get; set; }
         public static ConfigEntry<string> Ip { get; set; }
         public static ConfigEntry<ushort> Port { get; set; }
         public static ConfigEntry<string> ShowPopUpVersion { get; set; }
@@ -108,11 +109,13 @@ namespace TheOtherRoles
             EnableHorseMode = Config.Bind("Custom", "Enable Horse Mode", false);
             ShowPopUpVersion = Config.Bind("Custom", "Show PopUp", "0");
             ShowVentsOnMap = Config.Bind("Custom", "Show vent positions on minimap", false);
-            
+            ShowChatNotifications = Config.Bind("Custom", "Show Chat Notifications", true);
+
             Ip = Config.Bind("Custom", "Custom Server IP", "127.0.0.1");
             Port = Config.Bind("Custom", "Custom Server Port", (ushort)22023);
             defaultRegions = ServerManager.DefaultRegions;
-
+            // Removes vanilla Servers
+            ServerManager.DefaultRegions = new Il2CppReferenceArray<IRegionInfo>(new IRegionInfo[0]);
             UpdateRegions();
 
             DebugMode = Config.Bind("Custom", "Enable Debug Mode", "false");
@@ -178,12 +181,12 @@ namespace TheOtherRoles
 
 
             // Spawn dummys
-            if (Input.GetKeyDown(KeyCode.F)) {
+            /*if (Input.GetKeyDown(KeyCode.F)) {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
                 var i = playerControl.PlayerId = (byte) GameData.Instance.GetAvailableId();
 
                 bots.Add(playerControl);
-                GameData.Instance.AddPlayer(playerControl);
+                GameData.Instance.AddPlayer(playerControl, new InnerNet.ClientData(0));
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
                 
                 playerControl.transform.position = CachedPlayer.LocalPlayer.transform.position;
@@ -191,8 +194,8 @@ namespace TheOtherRoles
                 playerControl.NetTransform.enabled = false;
                 playerControl.SetName(RandomString(10));
                 playerControl.SetColor((byte) random.Next(Palette.PlayerColors.Length));
-                GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
-            }
+                playerControl.Data.RpcSetTasks(new byte[0]);
+            }*/
 
             // Terminate round
             if(Input.GetKeyDown(KeyCode.L)) {

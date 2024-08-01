@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Version>4.5.3</Version>
+        <Version>4.6.0</Version>
         <Description>TheOtherRoles</Description>
         <Authors>Eisbison</Authors>
 		<LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <PlatformTarget>x86</PlatformTarget>
+        <PlatformTarget>AnyCPU</PlatformTarget>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,9 +17,9 @@
     </ItemGroup>
    
 	<ItemGroup>
-		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2024.3.5" />
+		<PackageReference Include="AmongUs.GameLibs.Steam" Version="2024.6.18" />
 		<PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.0-rc.1" />
-		<PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.688" />
+		<PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.692" />
         <PackageReference Include="Reactor" Version="2.2.0" />
     </ItemGroup>
    
@@ -32,5 +33,5 @@
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild" Condition="Exists('$(AmongUsLatest)/BepInEx/plugins/')">
         <Message Text="Second occurrence" />
         <Copy SourceFiles="$(ProjectDir)\bin\$(Configuration)\net6.0\TheOtherRoles.dll" DestinationFolder="$(AmongUsLatest)/BepInEx/plugins/" />
-    </Target>
+	</Target>
 </Project>

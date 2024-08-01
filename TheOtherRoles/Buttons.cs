@@ -277,7 +277,7 @@ namespace TheOtherRoles
             // Add poolable player to the button so that the target outfit is shown
             button.actionButton.cooldownTimerText.transform.localPosition = new Vector3(0, 0, -1f);  // Before the poolable player
             targetDisplay = UnityEngine.Object.Instantiate<PoolablePlayer>(Patches.IntroCutsceneOnDestroyPatch.playerPrefab, button.actionButton.transform);
-            GameData.PlayerInfo data = target.Data;
+            NetworkedPlayerInfo data = target.Data;
             target.SetPlayerMaterialColors(targetDisplay.cosmetics.currentBodySprite.BodySprite);
             targetDisplay.SetSkin(data.DefaultOutfit.SkinId, data.DefaultOutfit.ColorId);
             targetDisplay.SetHat(data.DefaultOutfit.HatId, data.DefaultOutfit.ColorId);
@@ -364,7 +364,7 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= CachedPlayer.LocalPlayer.PlayerControl.MaxReportDistance && CachedPlayer.LocalPlayer.PlayerControl.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                    NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
@@ -1177,7 +1177,7 @@ namespace TheOtherRoles
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= CachedPlayer.LocalPlayer.PlayerControl.MaxReportDistance && CachedPlayer.LocalPlayer.PlayerControl.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false))
                                 {
-                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                    NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
                                     
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
@@ -1448,7 +1448,7 @@ namespace TheOtherRoles
                                 Vector2 truePosition = CachedPlayer.LocalPlayer.PlayerControl.GetTruePosition();
                                 Vector2 truePosition2 = component.TruePosition;
                                 if (Vector2.Distance(truePosition2, truePosition) <= CachedPlayer.LocalPlayer.PlayerControl.MaxReportDistance && CachedPlayer.LocalPlayer.PlayerControl.CanMove && !PhysicsHelpers.AnythingBetween(truePosition, truePosition2, Constants.ShipAndObjectsMask, false)) {
-                                    GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+                                    NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
 
                                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.CleanBody, Hazel.SendOption.Reliable, -1);
                                     writer.Write(playerInfo.PlayerId);
@@ -1796,7 +1796,7 @@ namespace TheOtherRoles
             // Bomber button
             bomberButton = new CustomButton(
                 () => {
-                    if (Helpers.checkMuderAttempt(Bomber.bomber, Bomber.bomber) != MurderAttemptResult.BlankKill) {
+                    if (Helpers.checkMuderAttempt(Bomber.bomber, Bomber.bomber, ignoreMedic: true) != MurderAttemptResult.BlankKill) {
                         var pos = CachedPlayer.LocalPlayer.transform.position;
                         byte[] buff = new byte[sizeof(float) * 2];
                         Buffer.BlockCopy(BitConverter.GetBytes(pos.x), 0, buff, 0 * sizeof(float), sizeof(float));
@@ -1931,7 +1931,6 @@ namespace TheOtherRoles
                     Buffer.BlockCopy(BitConverter.GetBytes(pos.y), 0, buff, 1 * sizeof(float), sizeof(float));
                     
                     if (Yoyo.markedLocation == null) {
-                        TheOtherRolesPlugin.Logger.LogMessage($"marked location is null in button press");
                         MessageWriter writer = AmongUsClient.Instance.StartRpc(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.YoyoMarkLocation, Hazel.SendOption.Reliable);
                         writer.WriteBytesAndSize(buff);
                         writer.EndMessage();
@@ -1942,9 +1941,7 @@ namespace TheOtherRoles
                         yoyoButton.HasEffect = false;
                         yoyoButton.buttonText = "Blink";
                     } else {
-                        TheOtherRolesPlugin.Logger.LogMessage("in else for some reason");
                         // Jump to location
-                        TheOtherRolesPlugin.Logger.LogMessage($"trying to blink!");
                         var exit = (Vector3)Yoyo.markedLocation;
                         if (SubmergedCompatibility.IsSubmerged) {
                             SubmergedCompatibility.ChangeFloor(exit.y > -7);
@@ -2061,7 +2058,7 @@ namespace TheOtherRoles
                 },
                 () => { return true; },
                 () => { return; },
-                Helpers.loadSpriteFromResources("TheOtherRoles.Resources.MinusButton.png", 150f),  // Invisible button!
+                null,  // Invisible button!
                 new Vector3(0.4f, 2.8f, 0),
                 __instance,
                 KeyCode.KeypadPlus

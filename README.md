@@ -42,15 +42,16 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.6.18s| v4.6.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.6.0/TheOtherRoles.zip)
 | 2024.3.5s| v4.5.3| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.3/TheOtherRoles.zip)
-| 2024.3.5s| v4.5.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.2/TheOtherRoles.zip)
-| 2023.11.28s| v4.5.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.1/TheOtherRoles.zip)
 
 <details>
   <summary>Click to show older versions</summary>
   
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.3.5s| v4.5.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.2/TheOtherRoles.zip)
+| 2023.11.28s| v4.5.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.1/TheOtherRoles.zip)
 | 2023.11.28s| v4.5.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.0/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.2/TheOtherRoles.zip)
 | 2023.07.12s| v4.4.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.4.1/TheOtherRoles.zip)
@@ -132,6 +133,20 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+  
+** Version 4.6.0**
+- Updated to Among Us version 2024.6.18 (Vanilla Update with new UI elements and many Server Side Changes)
+- Added a completely new UI for the Mod's Options, using the new Vanilla Design.
+- Added a button to switch gamemodes in the lobby
+- Added an option to enable the Chat-Notification in game (in Mod Options)
+- Fixed a bug where the shielding the bomber would show a murder attempt on the bomber, when they plant a bomb (sorry Vlesk)
+- Fixed a bug in PropHunt, where the background of the Prop-Display was visible in the cameras
+- Fixed a bug where guessing a player would sometimes not return the votes to the voters
+- Fixed a bug where the Lawyer would not properly die when guessing the client
+- Removed: Disabled Vanilla Servers for now, as the mod is incompatible with them in its / their current state. Thanks to Miniduikboat for making custom servers great again!
+- Experimental: Advanded users can try to install the mod on the Windows Store Version of Among Us. No Support Provided!
+
   
 **Version 4.5.3**
 - Added a new role: Yo-Yo (Impostor) - Mark and blink to a position, then blink back to the start of the blink!

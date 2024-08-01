@@ -22,6 +22,7 @@ namespace TheOtherRoles.Patches
             new("Show Lighter / Darker", () => TORMapOptions.showLighterDarker = TheOtherRolesPlugin.ShowLighterDarker.Value = !TheOtherRolesPlugin.ShowLighterDarker.Value, TheOtherRolesPlugin.ShowLighterDarker.Value),
             new("Enable Sound Effects", () => TORMapOptions.enableSoundEffects = TheOtherRolesPlugin.EnableSoundEffects.Value = !TheOtherRolesPlugin.EnableSoundEffects.Value, TheOtherRolesPlugin.EnableSoundEffects.Value),
             new("Show Vents On Map", () => TORMapOptions.ShowVentsOnMap = TheOtherRolesPlugin.ShowVentsOnMap.Value = !TheOtherRolesPlugin.ShowVentsOnMap.Value, TheOtherRolesPlugin.ShowVentsOnMap.Value),
+            new("Show Chat Notifications", () => TORMapOptions.ShowChatNotifications = TheOtherRolesPlugin.ShowChatNotifications.Value = !TheOtherRolesPlugin.ShowChatNotifications.Value, TheOtherRolesPlugin.ShowChatNotifications.Value),
         };
         
         private static GameObject popUp;

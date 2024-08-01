@@ -13,8 +13,8 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     [HarmonyPriority(Priority.First)]
     class ExileControllerBeginPatch {
-        public static GameData.PlayerInfo lastExiled;
-        public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref GameData.PlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
+        public static NetworkedPlayerInfo lastExiled;
+        public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref NetworkedPlayerInfo exiled, [HarmonyArgument(1)]bool tie) {
             lastExiled = exiled;
 
             // Medic shield
@@ -158,7 +158,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        static void WrapUpPostfix(GameData.PlayerInfo exiled) {
+        static void WrapUpPostfix(NetworkedPlayerInfo exiled) {
             // Prosecutor win condition
             if (exiled != null && Lawyer.lawyer != null && Lawyer.target != null && Lawyer.isProsecutor && Lawyer.target.PlayerId == exiled.PlayerId && !Lawyer.lawyer.Data.IsDead)
                 Lawyer.triggerProsecutorWin = true;

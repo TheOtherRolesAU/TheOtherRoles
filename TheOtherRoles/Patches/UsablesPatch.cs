@@ -19,7 +19,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
-        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse) {
+        public static bool Prefix(Vent __instance, ref float __result, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] ref bool canUse, [HarmonyArgument(2)] ref bool couldUse) {
             if (GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return true;
             float num = float.MaxValue;
             PlayerControl @object = pc.Object;
@@ -271,7 +271,7 @@ namespace TheOtherRoles.Patches {
 
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
     public static class ConsoleCanUsePatch {
-        public static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] GameData.PlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
+        public static bool Prefix(ref float __result, Console __instance, [HarmonyArgument(0)] NetworkedPlayerInfo pc, [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse) {
             canUse = couldUse = false;
             if (Swapper.swapper != null && Swapper.swapper == CachedPlayer.LocalPlayer.PlayerControl)
                 return !__instance.TaskTypes.Any(x => x == TaskTypes.FixLights || x == TaskTypes.FixComms);
@@ -340,7 +340,7 @@ namespace TheOtherRoles.Patches {
                 if (Hacker.hacker != null && Hacker.hacker == CachedPlayer.LocalPlayer.PlayerControl && Hacker.hackerTimer > 0) {
                     for (int k = 0; k < __instance.vitals.Length; k++) {
                         VitalsPanel vitalsPanel = __instance.vitals[k];
-                        GameData.PlayerInfo player = vitalsPanel.PlayerInfo;
+                        NetworkedPlayerInfo player = vitalsPanel.PlayerInfo;
 
                         // Hacker update
                         if (vitalsPanel.IsDead) {
@@ -416,7 +416,7 @@ namespace TheOtherRoles.Patches {
                                     num2++;
                                     DeadBody bodyComponent = collider2D.GetComponent<DeadBody>();
                                     if (bodyComponent) {
-                                        GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(bodyComponent.ParentId);
+                                        NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(bodyComponent.ParentId);
                                         if (playerInfo != null) {
                                             var color = Palette.PlayerColors[playerInfo.DefaultOutfit.ColorId];
                                             if (Hacker.onlyColorType)

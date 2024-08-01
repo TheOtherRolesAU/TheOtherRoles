@@ -36,6 +36,7 @@ namespace TheOtherRoles.Patches {
     {
         private static TextBoxTMP ipField;
         private static TextBoxTMP portField;
+        private static GameObject serverWarning;
 
         public static void Postfix(RegionMenu __instance) {
             if (!__instance.TryCast<RegionMenu>()) return;
@@ -141,6 +142,20 @@ namespace TheOtherRoles.Patches {
                     TheOtherRolesPlugin.UpdateRegions();
                 }
             }
+
+            if (serverWarning == null) {
+                var tmplt = __instance.ButtonPool.activeChildren[^1] ;
+                serverWarning = GameObject.Instantiate(tmplt.transform.GetChild(0).gameObject, tmplt.transform);
+                var comp = serverWarning.GetComponent<TMPro.TextMeshPro>();
+                comp.fontSizeMin = 2;
+                comp.fontSizeMax = 2;
+                serverWarning.transform.localPosition = new Vector3(0f, -3f, -10f);
+                __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
+                    comp.text = Helpers.cs(Color.red, "Vanilla Servers Are Currently Not Compatible With TOR");
+                })));
+                serverWarning.SetActive(true);
+            }
+
         }
     }
 

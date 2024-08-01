@@ -10,14 +10,15 @@ using Object = UnityEngine.Object;
 
 namespace TheOtherRoles.Modules.CustomHats.Patches;
 
-[HarmonyPatch(typeof(HatsTab))]
+[HarmonyPatch]
 internal static class HatsTabPatches
 {
     private static TextMeshPro textTemplate;
-    
-    [HarmonyPatch(nameof(HatsTab.OnEnable))]
-    [HarmonyPostfix]
-    private static void OnEnablePostfix(HatsTab __instance)
+
+
+    [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
+    [HarmonyPrefix]
+    private static bool OnEnablePrefix(HatsTab __instance)
     {
         for (var i = 0; i < __instance.scroller.Inner.childCount; i++)
         {
@@ -66,6 +67,7 @@ internal static class HatsTabPatches
         }
         
         __instance.scroller.ContentYBounds.max = -(yOffset + 4.1f);
+        return false;
     }
 
     private static float CreateHatPackage(List<Tuple<HatData, HatExtension>> hats, string packageName, float yStart,
@@ -106,7 +108,7 @@ internal static class HatsTabPatches
                 colorChip.Button.OnClick.AddListener((Action)(() => hatsTab.SelectHat(hat)));
             }
             colorChip.Button.ClickMask = hatsTab.scroller.Hitbox;
-            colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
+            colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.SimpleUI);
             hatsTab.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
             var background = colorChip.transform.FindChild("Background");
             var foreground = colorChip.transform.FindChild("ForeGround");

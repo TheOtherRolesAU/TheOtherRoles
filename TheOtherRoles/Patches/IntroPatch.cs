@@ -27,7 +27,7 @@ namespace TheOtherRoles.Patches {
                 bottomLeft = new Vector3(xpos / 2, ypos/2, -61f);
 
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
-                    GameData.PlayerInfo data = p.Data;
+                    NetworkedPlayerInfo data = p.Data;
                     PoolablePlayer player = UnityEngine.Object.Instantiate<PoolablePlayer>(__instance.PlayerPrefab, FastDestroyableSingleton<HudManager>.Instance.transform);
                     playerPrefab = __instance.PlayerPrefab;
                     p.SetPlayerMaterialColors(player.cosmetics.currentBodySprite.BodySprite);
@@ -241,7 +241,6 @@ namespace TheOtherRoles.Patches {
                 }
             }
             public static bool Prefix(IntroCutscene __instance) {
-                if (!CustomOptionHolder.activateRoles.getBool()) return true;
                 seed = rnd.Next(5000);
                 FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(Effects.Lerp(1f, new Action<float>((p) => {
                     SetRoleTexts(__instance);
