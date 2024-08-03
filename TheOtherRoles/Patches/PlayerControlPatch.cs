@@ -657,13 +657,13 @@ namespace TheOtherRoles.Patches {
                 return;
             }
 
-            BountyHunter.arrowUpdateTimer -= Time.fixedDeltaTime;
+            BountyHunter.locationUpdateTimer -= Time.fixedDeltaTime;
             BountyHunter.bountyUpdateTimer -= Time.fixedDeltaTime;
 
             if (BountyHunter.bounty == null || BountyHunter.bountyUpdateTimer <= 0f) {
                 // Set new bounty
                 BountyHunter.bounty = null;
-                BountyHunter.arrowUpdateTimer = 0f; // Force arrow to update
+                BountyHunter.locationUpdateTimer = 0f; // Force arrow and bounty pointer to update
                 BountyHunter.bountyUpdateTimer = BountyHunter.bountyDuration;
                 var possibleTargets = new List<PlayerControl>();
                 foreach (PlayerControl p in CachedPlayer.AllPlayers) {
@@ -700,9 +700,9 @@ namespace TheOtherRoles.Patches {
             // Update Arrow
             if (BountyHunter.showArrow && BountyHunter.bounty != null) {
                 if (BountyHunter.arrow == null) BountyHunter.arrow = new Arrow(Color.red);
-                if (BountyHunter.arrowUpdateTimer <= 0f) {
+                if (BountyHunter.locationUpdateTimer <= 0f) {
                     BountyHunter.arrow.Update(BountyHunter.bounty.transform.position);
-                    BountyHunter.arrowUpdateTimer = BountyHunter.arrowUpdateIntervall;
+                    BountyHunter.locationUpdateTimer = BountyHunter.arrowUpdateIntervall;
                 }
                 BountyHunter.arrow.Update();
             }

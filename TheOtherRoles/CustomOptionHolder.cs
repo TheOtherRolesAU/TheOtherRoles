@@ -80,7 +80,8 @@ namespace TheOtherRoles {
         public static CustomOption bountyHunterReducedCooldown;
         public static CustomOption bountyHunterPunishmentTime;
         public static CustomOption bountyHunterShowArrow;
-        public static CustomOption bountyHunterArrowUpdateIntervall;
+        public static CustomOption bountyHunterShowBountyOnMap;
+        public static CustomOption bountyHunterLocUpdateIntervall;
 
         public static CustomOption witchSpawnRate;
         public static CustomOption witchCooldown;
@@ -478,7 +479,8 @@ namespace TheOtherRoles {
             bountyHunterReducedCooldown = CustomOption.Create(322, Types.Impostor, "Cooldown After Killing Bounty", 2.5f, 0f, 30f, 2.5f, bountyHunterSpawnRate);
             bountyHunterPunishmentTime = CustomOption.Create(323, Types.Impostor, "Additional Cooldown After Killing Others", 20f, 0f, 60f, 2.5f, bountyHunterSpawnRate);
             bountyHunterShowArrow = CustomOption.Create(324, Types.Impostor, "Show Arrow Pointing Towards The Bounty", true, bountyHunterSpawnRate);
-            bountyHunterArrowUpdateIntervall = CustomOption.Create(325, Types.Impostor, "Arrow Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
+            bountyHunterShowBountyOnMap = CustomOption.Create(325, Types.Impostor, "Show Bounty On Map", true, bountyHunterSpawnRate);
+            bountyHunterLocUpdateIntervall = CustomOption.Create(326, Types.Impostor, "Arrow/BountyPointer Update Intervall", 15f, 2.5f, 60f, 2.5f, bountyHunterShowArrow);
 
             witchSpawnRate = CustomOption.Create(370, Types.Impostor, cs(Witch.color, "Witch"), rates, null, true);
             witchCooldown = CustomOption.Create(371, Types.Impostor, "Witch Spell Casting Cooldown", 30f, 10f, 120f, 5f, witchSpawnRate);

@@ -39,6 +39,34 @@ namespace TheOtherRoles.Patches {
 			}
 
 			__instance.HerePoint.transform.SetLocalZ(-2.1f);
+		
+			if (BountyHunter.bountyHunter != null && CachedPlayer.LocalPlayer.PlayerId == BountyHunter.bountyHunter.PlayerId && CustomOptionHolder.bountyHunterShowBountyOnMap.getBool() && BountyHunter.locationUpdateTimer <= 0f) {
+				
+				bool disable = MeetingHud.Instance != null || BountyHunter.bounty == null;
+
+				if (BountyHunter.bountyHunter.Data.IsDead || disable) { 
+					BountyHunter.bountyHerePoint.enabled = false;
+					BountyHunter.bountyHerePoint.gameObject?.Destroy();
+					BountyHunter.bountyHerePoint = null;
+					return;
+				}
+				
+				if (BountyHunter.bountyHerePoint == null) {
+					var herePoint = UnityEngine.Object.Instantiate(__instance.HerePoint, __instance.HerePoint.transform.parent, true);
+					
+					BountyHunter.bounty.SetPlayerMaterialColors(herePoint);
+
+					BountyHunter.bountyHerePoint = herePoint;
+				}
+
+				Vector3 v = BountyHunter.bounty.transform.position;
+				v /= MapUtilities.CachedShipStatus.MapScale;
+				v.x *= Mathf.Sign(MapUtilities.CachedShipStatus.transform.localScale.x);
+				v.z = -2.1f;
+				BountyHunter.bountyHerePoint.transform.localPosition = v;
+				BountyHunter.bountyHerePoint.enabled = true;
+			}
+
 			if (Trapper.trapper != null && CachedPlayer.LocalPlayer.PlayerId == Trapper.trapper.PlayerId) {
 				foreach (PlayerControl player in Trapper.playersOnMap) {
 					if (herePoints.ContainsKey(player)) continue;
