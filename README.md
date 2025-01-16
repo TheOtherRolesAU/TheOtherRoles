@@ -929,13 +929,6 @@ You can configure:
 
 Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
 Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
-
-| Map | Common Tasks | Short Tasks | Long Tasks |
-|----------|:-------------:|:-------------:|:-------------:|
-| Skeld / Dleks | 2 | 19 | 8
-| Mira HQ | 2 | 13 | 11
-| Polus | 4 | 14 | 15
-| Airship | 2 | 23 | 15
 -----------------------
 
 ### Random Maps
@@ -1019,7 +1012,8 @@ The Janitor is an Impostor who cannot kill, but they can hide dead bodies instea
 
 ## Morphling
 ### **Team: Impostors**
-The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.\
+The Morphling is an Impostor which can additionally scan the appearance of a player.\
+After an arbitrary time they can take on that appearance for a set duration which can be changed in the options.\
 \
 **NOTE:**
 - They shrink to the size of the Mini when they copy its look.
@@ -1319,6 +1313,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 |----------|:-------------:|
 | Jester Spawn Chance | -
 | Jester Can Call Emergency Meeting | Option to disable the emergency button for the Jester
+|Jester Has Impostor Vision | -
 -----------------------
 
 ## Arsonist
@@ -1332,7 +1327,7 @@ After dousing everyone alive the Arsonist can ignite all the players which resul
 | Name | Description |
 |----------|:-------------:|
 | Arsonist Spawn Chance | -
-| Arsonist Countdown | -
+| Arsonist Cooldown | -
 | Arsonist Douse Duration | The time it takes to douse a player
 -----------------------
 
@@ -1351,8 +1346,8 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (The Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Crewmate Mini lose by vote
-2. Jester wins by vote
+1. Jester wins by vote (even as Mini)
+2. Crewmate Mini lose by vote
 3. Arsonist win
 4. Team Impostor wins by sabotage
 5. Team Crew wins by tasks (also possible if the whole Crew is dead)
@@ -1371,19 +1366,19 @@ If both Impostors and Jackals are in the game, the game continues even if all Cr
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Jackal Spawn Chance | - |
-| Jackal/Sidekick Kill Cooldown | Kill cooldown |
-| Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created |
-| Jackal can use vents | Yes/No |
-| Jackal can sabotage Lights | Yes/No |
-| Jackal can create a Sidekick | Yes/No |
-| Sidekick gets promoted to Jackal on Jackal Death | Yes/No |
-| Sidekick can kill | Yes/No |
-| Sidekick can Vent | Yes/No |
-| Jackal can sabotage Lights | Yes/No |
-| Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
-| Jackals can make an Impostor to their Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
-| Jackal and Sidekick have Impostor vision | - |
+| Jackal Spawn Chance | -
+| Jackal/Sidekick Kill Cooldown | Kill Cooldown
+| Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created
+| Jackal Can Use Vents | Yes/No
+| Jackal Can Sabotage Lights | Yes/No
+| Jackal Can Create A Sidekick | Yes/No
+| Sidekick Gets Promoted To Jackal On Jackal Death | Yes/No
+| Sidekick Can Kill | Yes/No
+| Sidekick Can Vent | Yes/No
+| Sidekick Can Sabotage Lights | Yes/No
+| Jackals Promoted From Sidekick Can Create A Sidekick | Yes/No (to prevent the Jackal team from growing)
+| Jackals Can Make An Impostor To His Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.)
+| Jackal And Sidekick Have Impostor Vision | -
 -----------------------
 
 ## Sidekick
@@ -1400,9 +1395,9 @@ Upon the death of the Jackal (depending on the options), they might get promoted
 | Name | Description
 |----------|:-------------:|
 | Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
-| Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
-| Sidekick can kill | Yes/No |
-| Sidekick can use vents | Yes/No |
+| Sidekick Gets Promoted To Jackal On Jackal Death |  Yes/No |
+| Sidekick Can Kill | Yes/No |
+| Sidekick Can Use Vents | Yes/No |
 -----------------------
 
 ## Vulture
@@ -1536,7 +1531,6 @@ The Mayor has the option to vote with only one vote instead of two (via a button
 The Engineer (if alive) can fix a certain amount of sabotages per game from anywhere on the map.\
 The Engineer can use vents.\
 If the Engineer is inside a vent, depending on the options the members of the team Jackal/Impostors will see a blue outline around all vents on the map (in order to warn them).\
-Because of the vents the Engineer might not be able to start some tasks using the "Use" button, you can double-click on the tasks instead.
 
 **NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
@@ -1547,7 +1541,7 @@ Because of the vents the Engineer might not be able to start some tasks using th
 | Engineer Spawn Chance | -
 | Number Of Sabotage Fixes| -
 | Impostors See Vents Highlighted | -
-| Jackal and Sidekick See Vents Highlighted | -
+| Jackal And Sidekick See Vents Highlighted | -
 -----------------------
 
 ## Sheriff
@@ -1693,8 +1687,8 @@ The Swapper now has initial swap charges and can recharge those charges after co
 | Name | Description
 |----------|:-------------:|
 | Swapper Spawn Chance | -
-| Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
-| Swapper can only swap others | Sets whether the Swapper can swap themself or not
+| Swapper Can Call Emergency Meeting | Option to disable the emergency button for the Swapper
+| Swapper Can Only Swap Others | Sets whether the Swapper can swap themself or not
 | Initial Swap Charges | -
 | Number Of Tasks Needed For Recharging | -
 -----------------------
@@ -1940,7 +1934,7 @@ If killed, the Bloody Modifier will leave a trail for x-seconds on their killer.
 |----------|:-------------:|
 | Bloody Spawn Chance | -
 | Bloody Quantity | -
-| Trail duration | -
+| Trail Duration | -
 -----------------------
 
 ## Anti Teleport
@@ -2035,7 +2029,7 @@ The vision will also be affected when lights out.
 |----------|:-------------:|
 | Sunglasses Spawn Chance | -
 | Sunglasses Quantity | -
-| Vision with sunglasses | -
+| Vision With Sunglasses | -
 -----------------------
 
 ## Mini
@@ -2250,7 +2244,7 @@ When a Prop dies, they will either join the Hunter team or die (setting).
 | Unstuck Duration | -        | Kill Cooldown After Hit | -            | Invisibility Duration | -
 | Hunter Vision | -           | Reveal Prop Cooldown | -               | Speedboost Enabled | -
 | Prop Vision | -             | Reveal Prop Duration | -               | Speedboost Cooldown | -
-|  | -             | Reveal Time Punish | deducted from rem. timer | Speedboost Duration | - 
+|  | -             | Reveal Time Punish | Deducted from rem. timer | Speedboost Duration | - 
 |  | -                         |  Hunter Admin Cooldown | - | Speedboost Ratio | Factor with which speed is multiplied 
 |  | -                       | Find Cooldown | -
 |  | -               | Find Duration | -
