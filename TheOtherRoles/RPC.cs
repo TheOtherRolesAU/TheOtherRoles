@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
-using TheOtherRoles.Players;
+
 using TheOtherRoles.Utilities;
 using TheOtherRoles.CustomGameModes;
 using AmongUs.Data;
@@ -77,6 +77,7 @@ namespace TheOtherRoles
         Vip,
         Invert,
         Chameleon,
+        Armored,
         Shifter
     }
 
@@ -152,6 +153,7 @@ namespace TheOtherRoles
         ShareRoom,
         YoyoMarkLocation,
         YoyoBlink,
+        BreakArmor,
 
         // Gamemode
         SetGuesserGm,
@@ -207,7 +209,7 @@ namespace TheOtherRoles
 
         public static void forceEnd() {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) return;
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 if (!player.Data.Role.IsImpostor)
                 {
@@ -251,7 +253,7 @@ namespace TheOtherRoles
         }
 
         public static void setRole(byte roleId, byte playerId) {
-            foreach (PlayerControl player in CachedPlayer.AllPlayers) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == playerId) {
                     switch ((RoleId)roleId) {
                     case RoleId.Jester:
@@ -433,6 +435,9 @@ namespace TheOtherRoles
                 case RoleId.Chameleon:
                     Chameleon.chameleon.Add(player);
                     break;
+                case RoleId.Armored:
+                    Armored.armored = player;
+                    break;
                 case RoleId.Shifter:
                     Shifter.shifter = player;
                     break;
@@ -533,7 +538,7 @@ namespace TheOtherRoles
         public static void timeMasterRewindTime() {
             TimeMaster.shieldActive = false; // Shield is no longer active when rewinding
             SoundEffectsManager.stop("timemasterShield");  // Shield sound stopped when rewinding
-            if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == CachedPlayer.LocalPlayer.PlayerControl) {
+            if(TimeMaster.timeMaster != null && TimeMaster.timeMaster == PlayerControl.LocalPlayer) {
                 resetTimeMasterButton();
             }
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
@@ -543,7 +548,7 @@ namespace TheOtherRoles
                 if (p == 1f) FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = false;
             })));
 
-            if (TimeMaster.timeMaster == null || CachedPlayer.LocalPlayer.PlayerControl == TimeMaster.timeMaster) return; // Time Master himself does not rewind
+            if (TimeMaster.timeMaster == null || PlayerControl.LocalPlayer == TimeMaster.timeMaster) return; // Time Master himself does not rewind
 
             TimeMaster.isRewinding = true;
 
@@ -551,7 +556,7 @@ namespace TheOtherRoles
                 MapBehaviour.Instance.Close();
             if (Minigame.Instance)
                 Minigame.Instance.ForceClose();
-            CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
+            PlayerControl.LocalPlayer.moveable = false;
         }
 
         public static void timeMasterShield() {
@@ -570,9 +575,9 @@ namespace TheOtherRoles
         public static void shieldedMurderAttempt() {
             if (Medic.shielded == null || Medic.medic == null) return;
             
-            bool isShieldedAndShow = Medic.shielded == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToShielded;
+            bool isShieldedAndShow = Medic.shielded == PlayerControl.LocalPlayer && Medic.showAttemptToShielded;
             isShieldedAndShow = isShieldedAndShow && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting);  // Dont show attempt, if shield is not shown yet
-            bool isMedicAndShow = Medic.medic == CachedPlayer.LocalPlayer.PlayerControl && Medic.showAttemptToMedic;
+            bool isMedicAndShow = Medic.medic == PlayerControl.LocalPlayer && Medic.showAttemptToMedic;
 
             if (isShieldedAndShow || isMedicAndShow || Helpers.shouldShowGhostInfo()) Helpers.showFlash(Palette.ImpostorRed, duration: 0.5f, "Failed Murder Attempt on Shielded Player");
         }
@@ -590,7 +595,7 @@ namespace TheOtherRoles
                 oldShifter.Exiled();
                 GameHistory.overrideDeathReasonAndKiller(oldShifter, DeadPlayer.CustomDeathReason.Shift, player);
                 if (oldShifter == Lawyer.target && AmongUsClient.Instance.AmHost && Lawyer.lawyer != null) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.LawyerPromotesToPursuer, Hazel.SendOption.Reliable, -1);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.lawyerPromotesToPursuer();
                 }
@@ -600,7 +605,7 @@ namespace TheOtherRoles
             Shifter.shiftRole(oldShifter, player);
 
             // Set cooldowns to max for both players
-            if (CachedPlayer.LocalPlayer.PlayerControl == oldShifter || CachedPlayer.LocalPlayer.PlayerControl == player)
+            if (PlayerControl.LocalPlayer == oldShifter || PlayerControl.LocalPlayer == player)
                 CustomButton.ResetAllCooldowns();
         }
 
@@ -626,7 +631,7 @@ namespace TheOtherRoles
 
             Camouflager.camouflageTimer = Camouflager.duration;
             if (Helpers.MushroomSabotageActive()) return; // Dont overwrite the fungle "camo"
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 player.setLook("", 6, "", "", "", "");
 
         }
@@ -638,7 +643,7 @@ namespace TheOtherRoles
             }
 
             if (Vampire.vampire == null) return;
-            foreach (PlayerControl player in CachedPlayer.AllPlayers) {
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls) {
                 if (player.PlayerId == targetId && !player.Data.IsDead) {
                         Vampire.bitten = player;
                 }
@@ -654,7 +659,7 @@ namespace TheOtherRoles
 
         public static void trackerUsedTracker(byte targetId) {
             Tracker.usedTracker = true;
-            foreach (PlayerControl player in CachedPlayer.AllPlayers)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
                 if (player.PlayerId == targetId)
                     Tracker.tracked = player;
         }
@@ -694,11 +699,11 @@ namespace TheOtherRoles
                 }
                 erasePlayerRoles(player.PlayerId, true);
                 Sidekick.sidekick = player;
-                if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId) CachedPlayer.LocalPlayer.PlayerControl.moveable = true;
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) PlayerControl.LocalPlayer.moveable = true;
                 if (wasSpy || wasImpostor) Sidekick.wasTeamRed = true;
                 Sidekick.wasSpy = wasSpy;
                 Sidekick.wasImpostor = wasImpostor;
-                if (player == CachedPlayer.LocalPlayer.PlayerControl) SoundEffectsManager.play("jackalSidekick");
+                if (player == PlayerControl.LocalPlayer) SoundEffectsManager.play("jackalSidekick");
                 if (HandleGuesser.isGuesserGm && CustomOptionHolder.guesserGamemodeSidekickIsAlwaysGuesser.getBool() && !HandleGuesser.isGuesser(targetId))
                     setGuesserGm(targetId);
             }
@@ -788,6 +793,7 @@ namespace TheOtherRoles
                 if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Chameleon.chameleon.Any(x => x.PlayerId == player.PlayerId)) Chameleon.chameleon.RemoveAll(x => x.PlayerId == player.PlayerId);
+                if (player == Armored.armored) Armored.clearAndReload();
             }
         }
 
@@ -823,7 +829,7 @@ namespace TheOtherRoles
             position.x = BitConverter.ToSingle(buff, 0 * sizeof(float));
             position.y = BitConverter.ToSingle(buff, 1 * sizeof(float));
             new NinjaTrace(position, Ninja.traceTime);
-            if (CachedPlayer.LocalPlayer.PlayerControl != Ninja.ninja)
+            if (PlayerControl.LocalPlayer != Ninja.ninja)
                 Ninja.ninjaMarked = null;
         }
 
@@ -844,7 +850,7 @@ namespace TheOtherRoles
 
             target.setLook("", 6, "", "", "", "");
             Color color = Color.clear;
-            bool canSee = CachedPlayer.LocalPlayer.Data.Role.IsImpostor || CachedPlayer.LocalPlayer.Data.IsDead;
+            bool canSee = PlayerControl.LocalPlayer.Data.Role.IsImpostor || PlayerControl.LocalPlayer.Data.IsDead;
             if (canSee) color.a = 0.1f;
             target.cosmetics.currentBodySprite.BodySprite.color = color;
             target.cosmetics.colorBlindText.gameObject.SetActive(false);
@@ -874,7 +880,7 @@ namespace TheOtherRoles
         public static void lightsOut() {
             Trickster.lightsOutTimer = Trickster.lightsOutDuration;
             // If the local player is impostor indicate lights out
-            if(Helpers.hasImpVision(GameData.Instance.GetPlayerById(CachedPlayer.LocalPlayer.PlayerId))) {
+            if(Helpers.hasImpVision(GameData.Instance.GetPlayerById(PlayerControl.LocalPlayer.PlayerId))) {
                 new CustomMessage("Lights are out", Trickster.lightsOutDuration);
             }
         }
@@ -906,7 +912,7 @@ namespace TheOtherRoles
             }
 
 
-            if (CachedPlayer.LocalPlayer.PlayerControl == SecurityGuard.securityGuard) {
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
                 camera.gameObject.SetActive(true);
                 camera.gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0.5f);
             } else {
@@ -920,7 +926,7 @@ namespace TheOtherRoles
             if (vent == null) return;
 
             SecurityGuard.remainingScrews -= SecurityGuard.ventPrice;
-            if (CachedPlayer.LocalPlayer.PlayerControl == SecurityGuard.securityGuard) {
+            if (PlayerControl.LocalPlayer == SecurityGuard.securityGuard) {
                 PowerTools.SpriteAnim animator = vent.GetComponent<PowerTools.SpriteAnim>(); 
                 
                 vent.EnterVentAnim = vent.ExitVentAnim = null;
@@ -944,7 +950,7 @@ namespace TheOtherRoles
 
         public static void arsonistWin() {
             Arsonist.triggerArsonistWin = true;
-            foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p != Arsonist.arsonist && !p.Data.IsDead) {
                     p.Exiled();
                     overrideDeathReasonAndKiller(p, DeadPlayer.CustomDeathReason.Arson, Arsonist.arsonist);
@@ -963,7 +969,7 @@ namespace TheOtherRoles
 
             Pursuer.pursuer = player;
 
-            if (player.PlayerId == CachedPlayer.LocalPlayer.PlayerId && client != null) {
+            if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId && client != null) {
                     Transform playerInfoTransform = client.cosmetics.nameText.transform.parent.FindChild("Info");
                     TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                     if (playerInfo != null) playerInfo.text = "";
@@ -988,7 +994,7 @@ namespace TheOtherRoles
             bool lawyerDiedAdditionally = false;
             if (Lawyer.lawyer != null && !Lawyer.isProsecutor && Lawyer.lawyer.PlayerId == killerId && Lawyer.target != null && Lawyer.target.PlayerId == dyingTargetId) {
                 // Lawyer guessed client.
-                if (CachedPlayer.LocalPlayer.PlayerControl == Lawyer.lawyer) {
+                if (PlayerControl.LocalPlayer == Lawyer.lawyer) {
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(Lawyer.lawyer.Data, Lawyer.lawyer.Data);
                     if (MeetingHudPatch.guesserUI != null) MeetingHudPatch.guesserUIExitButton.OnClick.Invoke();
                 }
@@ -1023,10 +1029,10 @@ namespace TheOtherRoles
                     MeetingHud.Instance.CheckForEndVoting();
             }
             if (FastDestroyableSingleton<HudManager>.Instance != null && guesser != null)
-                if (CachedPlayer.LocalPlayer.PlayerControl == dyingTarget) {
+                if (PlayerControl.LocalPlayer == dyingTarget) {
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(guesser.Data, dyingTarget.Data);
                     if (MeetingHudPatch.guesserUI != null) MeetingHudPatch.guesserUIExitButton.OnClick.Invoke();
-                } else if (dyingLoverPartner != null && CachedPlayer.LocalPlayer.PlayerControl == dyingLoverPartner) {
+                } else if (dyingLoverPartner != null && PlayerControl.LocalPlayer == dyingLoverPartner) {
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(dyingLoverPartner.Data, dyingLoverPartner.Data);
                     if (MeetingHudPatch.guesserUI != null) MeetingHudPatch.guesserUIExitButton.OnClick.Invoke();
                 }
@@ -1047,7 +1053,7 @@ namespace TheOtherRoles
 
 
             PlayerControl guessedTarget = Helpers.playerById(guessedTargetId);
-            if (CachedPlayer.LocalPlayer.Data.IsDead && guessedTarget != null && guesser != null) {
+            if (PlayerControl.LocalPlayer.Data.IsDead && guessedTarget != null && guesser != null) {
                 RoleInfo roleInfo = RoleInfo.allRoleInfos.FirstOrDefault(x => (byte)x.roleId == guessedRoleId);
                 string msg = $"{guesser.Data.PlayerName} guessed the role {roleInfo?.name ?? ""} for {guessedTarget.Data.PlayerName}!";
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
@@ -1165,7 +1171,7 @@ namespace TheOtherRoles
         public static void huntedRewindTime(byte playerId) {
             Hunted.timeshieldActive.Remove(playerId); // Shield is no longer active when rewinding
             SoundEffectsManager.stop("timemasterShield");  // Shield sound stopped when rewinding
-            if (playerId == CachedPlayer.LocalPlayer.PlayerControl.PlayerId) {
+            if (playerId == PlayerControl.LocalPlayer.PlayerId) {
                 resetHuntedRewindButton();
             }
             FastDestroyableSingleton<HudManager>.Instance.FullScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
@@ -1175,7 +1181,7 @@ namespace TheOtherRoles
                 if (p == 1f) FastDestroyableSingleton<HudManager>.Instance.FullScreen.enabled = false;
             })));
 
-            if (!CachedPlayer.LocalPlayer.Data.Role.IsImpostor) return; // only rewind hunter
+            if (!PlayerControl.LocalPlayer.Data.Role.IsImpostor) return; // only rewind hunter
 
             TimeMaster.isRewinding = true;
 
@@ -1183,7 +1189,7 @@ namespace TheOtherRoles
                 MapBehaviour.Instance.Close();
             if (Minigame.Instance)
                 Minigame.Instance.ForceClose();
-            CachedPlayer.LocalPlayer.PlayerControl.moveable = false;
+            PlayerControl.LocalPlayer.moveable = false;
         }
 
         public static void propHuntStartTimer(bool blackout = false) {
@@ -1339,6 +1345,14 @@ namespace TheOtherRoles
             }
             if (Chameleon.chameleon.Any(x => x.PlayerId == Yoyo.yoyo.PlayerId)) // Make the Yoyo visible if chameleon!
                 Chameleon.lastMoved[Yoyo.yoyo.PlayerId] = Time.time;            
+        }
+
+        public static void breakArmor() {
+            if (Armored.armored == null || Armored.isBrokenArmor) return;
+            Armored.isBrokenArmor = true;
+            if (PlayerControl.LocalPlayer.Data.IsDead) {
+                Armored.armored.ShowFailedMurder();
+            }
         }
     }
 
@@ -1595,6 +1609,9 @@ namespace TheOtherRoles
                     break;
                 case (byte)CustomRPC.YoyoBlink:
                     RPCProcedure.yoyoBlink(reader.ReadByte() == byte.MaxValue, reader.ReadBytesAndSize());
+                    break;
+                case (byte)CustomRPC.BreakArmor:
+                    RPCProcedure.breakArmor();
                     break;
 
                 // Game mode

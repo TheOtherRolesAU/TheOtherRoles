@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TheOtherRoles;
 using TheOtherRoles.CustomGameModes;
-using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using Hazel;
 using System;
-using TheOtherRoles.Players;
+
 using TheOtherRoles.Utilities;
 using System.Linq;
 using Reactor.Utilities.Extensions;
@@ -21,7 +21,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
         public class AmongUsClientOnPlayerJoinedPatch {
             public static void Postfix(AmongUsClient __instance) {
-                if (CachedPlayer.LocalPlayer != null) {
+                if (PlayerControl.LocalPlayer != null) {
                     Helpers.shareGameVersion();
                 }
                 GameStartManagerUpdatePatch.sendGamemode = true;
@@ -59,7 +59,7 @@ namespace TheOtherRoles.Patches {
             }
 
             public static void Postfix(GameStartManager __instance) {
-                // Send version as soon as CachedPlayer.LocalPlayer.PlayerControl exists
+                // Send version as soon as PlayerControl.LocalPlayer exists
                 if (PlayerControl.LocalPlayer != null && !versionSent) {
                     versionSent = true;
                     Helpers.shareGameVersion();
@@ -109,7 +109,7 @@ namespace TheOtherRoles.Patches {
                         copiedStartButton?.Destroy();
                     // Make starting info available to clients:
                     if (startingTimer <= 0 && __instance.startState == GameStartManager.StartingStates.Countdown) {
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.SetGameStarting, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.SetGameStarting, Hazel.SendOption.Reliable, -1);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.setGameStarting();
                         // Activate Stop-Button
@@ -180,7 +180,7 @@ namespace TheOtherRoles.Patches {
                         PassiveButton startButtonPassiveButton = copiedStartButton.GetComponent<PassiveButton>();
 
                         void StopStartFunc() {
-                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.StopStart, Hazel.SendOption.Reliable, AmongUsClient.Instance.HostId);
+                            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.StopStart, Hazel.SendOption.Reliable, AmongUsClient.Instance.HostId);
                             writer.Write(PlayerControl.LocalPlayer.PlayerId);
                             AmongUsClient.Instance.FinishRpcImmediately(writer);
                             copiedStartButton.Destroy();
@@ -209,8 +209,8 @@ namespace TheOtherRoles.Patches {
 
                 if (!AmongUsClient.Instance) return;
 
-                if (AmongUsClient.Instance.AmHost && sendGamemode && CachedPlayer.LocalPlayer != null) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGamemode, Hazel.SendOption.Reliable, -1);
+                if (AmongUsClient.Instance.AmHost && sendGamemode && PlayerControl.LocalPlayer != null) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareGamemode, Hazel.SendOption.Reliable, -1);
                     writer.Write((byte) TORMapOptions.gameMode);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     RPCProcedure.shareGamemode((byte) TORMapOptions.gameMode);
@@ -249,7 +249,7 @@ namespace TheOtherRoles.Patches {
                         if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek) mapId = (byte)CustomOptionHolder.hideNSeekMap.getSelection();
                         else if (TORMapOptions.gameMode == CustomGamemodes.PropHunt) mapId = (byte)CustomOptionHolder.propHuntMap.getSelection();
                         if (mapId >= 3) mapId++;
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(mapId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.dynamicMapOption(mapId);
@@ -300,7 +300,7 @@ namespace TheOtherRoles.Patches {
                         }
                         if (chosenMapId >= 3) chosenMapId++;  // Skip dlekS
                                                               
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.DynamicMapOption, Hazel.SendOption.Reliable, -1);
                         writer.Write(chosenMapId);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         RPCProcedure.dynamicMapOption(chosenMapId);

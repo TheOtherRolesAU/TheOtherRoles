@@ -8,6 +8,7 @@ namespace TheOtherRoles.CustomGameModes {
 
         public PlayerControl guesser = null;
         public int shots = Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeNumberOfShots.getFloat());
+        public int tasksToUnlock = Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeCrewGuesserNumberOfTasks.getFloat());
         public GuesserGM(PlayerControl player) {
             guesser = player;
             guessers.Add(this);
@@ -26,6 +27,7 @@ namespace TheOtherRoles.CustomGameModes {
             if (g == null) return;
             g.guesser = null;
             g.shots = Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeNumberOfShots.getFloat());
+            g.tasksToUnlock = Mathf.RoundToInt(CustomOptionHolder.guesserGamemodeCrewGuesserNumberOfTasks.getFloat());
 
             guessers.Remove(g);
         }

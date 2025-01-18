@@ -23,7 +23,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ZiplineBehaviour), nameof(ZiplineBehaviour.Use), new Type[] {typeof(PlayerControl), typeof(bool)})]
         public static void prefix3(ZiplineBehaviour __instance, PlayerControl player, bool fromTop) {
-            AntiTeleport.position = Players.CachedPlayer.LocalPlayer.transform.position;
+            AntiTeleport.position = PlayerControl.LocalPlayer.transform.position;
         }
 
         [HarmonyPostfix]
@@ -36,11 +36,11 @@ namespace TheOtherRoles.Patches {
                 if (hand != null) {
                     if (Camouflager.camouflageTimer <= 0 && !Helpers.MushroomSabotageActive()) {
                         if (player == Morphling.morphling && Morphling.morphTimer > 0) {
-                            hand.SetPlayerColor(Morphling.morphTarget.CurrentOutfit, PlayerMaterial.MaskType.None);
+                            hand.SetPlayerColor(Morphling.morphTarget.CurrentOutfit, PlayerMaterial.MaskType.None, 1f);
                             // Also set hat color, cause the line destroys it...
                             player.RawSetHat(Morphling.morphTarget.Data.DefaultOutfit.HatId, Morphling.morphTarget.Data.DefaultOutfit.ColorId);
                         } else {
-                            hand.SetPlayerColor(player.CurrentOutfit, PlayerMaterial.MaskType.None);
+                            hand.SetPlayerColor(player.CurrentOutfit, PlayerMaterial.MaskType.None, 1f);
                         }
                     } else {
                         PlayerMaterial.SetColors(6, hand.handRenderer);
@@ -53,7 +53,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.ClimbLadder))]
         public static void prefix() {
-            AntiTeleport.position = Players.CachedPlayer.LocalPlayer.transform.position;
+            AntiTeleport.position = PlayerControl.LocalPlayer.transform.position;
         }
 
         [HarmonyPostfix]
@@ -71,7 +71,7 @@ namespace TheOtherRoles.Patches {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(MovingPlatformBehaviour), nameof(MovingPlatformBehaviour.UsePlatform))]
         public static void prefix2() {
-            AntiTeleport.position = Players.CachedPlayer.LocalPlayer.transform.position;
+            AntiTeleport.position = PlayerControl.LocalPlayer.transform.position;
         }
     }
 }

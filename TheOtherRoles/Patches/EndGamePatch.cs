@@ -6,9 +6,10 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.Text;
-using TheOtherRoles.Players;
+
 using TheOtherRoles.Utilities;
 using TheOtherRoles.CustomGameModes;
+using LibCpp2IL.Elf;
 
 namespace TheOtherRoles.Patches {
     enum CustomGameOverReason {
@@ -63,8 +64,8 @@ namespace TheOtherRoles.Patches {
 
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
-    public class OnGameEndPatch {
-        private static GameOverReason gameOverReason;
+    public static class OnGameEndPatch {
+        public static GameOverReason gameOverReason = GameOverReason.HumansByTask;
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)]ref EndGameResult endGameResult) {
             gameOverReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10) endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -76,7 +77,7 @@ namespace TheOtherRoles.Patches {
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)]ref EndGameResult endGameResult) {
             AdditionalTempData.clear();
 
-            foreach(var playerControl in CachedPlayer.AllPlayers) {
+            foreach(var playerControl in PlayerControl.AllPlayerControls) {
                 var roles = RoleInfo.getRoleInfoForPlayer(playerControl);
                 var (tasksCompleted, tasksTotal) = TasksHandler.taskInfo(playerControl.Data);
                 bool isGuesser = HandleGuesser.isGuesserGm && HandleGuesser.isGuesser(playerControl.PlayerId);
@@ -123,7 +124,7 @@ namespace TheOtherRoles.Patches {
                 CachedPlayerData wpd = new CachedPlayerData(Mini.mini.Data);
                 wpd.IsYou = false; // If "no one is the Mini", it will display the Mini, but also show defeat to everyone
                 EndGameResult.CachedWinners.Add(wpd);
-                AdditionalTempData.winCondition = WinCondition.MiniLose;  
+                AdditionalTempData.winCondition = WinCondition.MiniLose;
             }
 
             // Jester win
@@ -164,7 +165,7 @@ namespace TheOtherRoles.Patches {
                 if (!Lovers.existingWithKiller()) {
                     AdditionalTempData.winCondition = WinCondition.LoversTeamWin;
                     EndGameResult.CachedWinners = new Il2CppSystem.Collections.Generic.List<CachedPlayerData>();
-                    foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+                    foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                         if (p == null) continue;
                         if (p == Lovers.lover1 || p == Lovers.lover2)
                             EndGameResult.CachedWinners.Add(new CachedPlayerData(p.Data));
@@ -182,24 +183,24 @@ namespace TheOtherRoles.Patches {
                     EndGameResult.CachedWinners.Add(new CachedPlayerData(Lovers.lover2.Data));
                 }
             }
-            
+
             // Jackal win condition (should be implemented using a proper GameOverReason in the future)
             else if (teamJackalWin) {
                 // Jackal wins if nobody except jackal is alive
                 AdditionalTempData.winCondition = WinCondition.JackalWin;
                 EndGameResult.CachedWinners = new Il2CppSystem.Collections.Generic.List<CachedPlayerData>();
                 CachedPlayerData wpd = new CachedPlayerData(Jackal.jackal.Data);
-                wpd.IsImpostor = false; 
+                wpd.IsImpostor = false;
                 EndGameResult.CachedWinners.Add(wpd);
                 // If there is a sidekick. The sidekick also wins
                 if (Sidekick.sidekick != null) {
                     CachedPlayerData wpdSidekick = new CachedPlayerData(Sidekick.sidekick.Data);
-                    wpdSidekick.IsImpostor = false; 
+                    wpdSidekick.IsImpostor = false;
                     EndGameResult.CachedWinners.Add(wpdSidekick);
                 }
-                foreach(var player in Jackal.formerJackals) {
+                foreach (var player in Jackal.formerJackals) {
                     CachedPlayerData wpdFormerJackal = new CachedPlayerData(player.Data);
-                    wpdFormerJackal.IsImpostor = false; 
+                    wpdFormerJackal.IsImpostor = false;
                     EndGameResult.CachedWinners.Add(wpdFormerJackal);
                 }
             }
@@ -292,36 +293,60 @@ namespace TheOtherRoles.Patches {
             if (AdditionalTempData.winCondition == WinCondition.JesterWin) {
                 textRenderer.text = "Jester Wins";
                 textRenderer.color = Jester.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.ArsonistWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.ArsonistWin) {
                 textRenderer.text = "Arsonist Wins";
                 textRenderer.color = Arsonist.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.VultureWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.VultureWin) {
                 textRenderer.text = "Vulture Wins";
                 textRenderer.color = Vulture.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.ProsecutorWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.ProsecutorWin) {
                 textRenderer.text = "Prosecutor Wins";
                 textRenderer.color = Lawyer.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.LoversTeamWin) {
                 textRenderer.text = "Lovers And Crewmates Win";
                 textRenderer.color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
-            } 
-            else if (AdditionalTempData.winCondition == WinCondition.LoversSoloWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.LoversSoloWin) {
                 textRenderer.text = "Lovers Win";
                 textRenderer.color = Lovers.color;
                 __instance.BackgroundBar.material.SetColor("_Color", Lovers.color);
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
+            } else if (AdditionalTempData.winCondition == WinCondition.JackalWin) {
                 textRenderer.text = "Team Jackal Wins";
                 textRenderer.color = Jackal.color;
-            }
-            else if (AdditionalTempData.winCondition == WinCondition.MiniLose) {
+            } else if (AdditionalTempData.winCondition == WinCondition.MiniLose) {
                 textRenderer.text = "Mini died";
                 textRenderer.color = Mini.color;
+            } else if (AdditionalTempData.winCondition == WinCondition.Default) {
+                switch (OnGameEndPatch.gameOverReason) {
+                    case GameOverReason.ImpostorDisconnect:
+                        textRenderer.text = "Last Crewmate Disconnected";
+                        textRenderer.color = Color.red;
+                        break;
+                    case GameOverReason.ImpostorByKill:
+                        textRenderer.text = "Impostors Win - By Kill";
+                        textRenderer.color = Color.red;
+                        break;
+                    case GameOverReason.ImpostorBySabotage:
+                        textRenderer.text = "Impostors Win - By Sabotage";
+                        textRenderer.color = Color.red;
+                        break;
+                    case GameOverReason.ImpostorByVote:
+                        textRenderer.text = "Impostors Win - By Vote, Guess or DC";
+                        textRenderer.color = Color.red;
+                        break;
+                    case GameOverReason.HumansByTask:
+                        textRenderer.text = "Crew Wins - Taskwin";
+                        textRenderer.color = Color.white;
+                        break;
+                    case GameOverReason.HumansDisconnect:
+                        textRenderer.text = "Crew Wins - No Evil Killers Left";
+                        textRenderer.color = Color.white;
+                        break;
+                    case GameOverReason.HumansByVote:
+                        textRenderer.text = "Crew Wins - No Evil Killers Left";
+                        textRenderer.color = Color.white;
+                        break;
+                }
             }
 
             foreach (WinCondition cond in AdditionalTempData.additionalWinConditions) {

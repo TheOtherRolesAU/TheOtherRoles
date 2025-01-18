@@ -145,13 +145,14 @@ namespace TheOtherRoles.Patches {
 
             if (serverWarning == null) {
                 var tmplt = __instance.ButtonPool.activeChildren[^1] ;
-                serverWarning = GameObject.Instantiate(tmplt.transform.GetChild(0).gameObject, tmplt.transform);
-                var comp = serverWarning.GetComponent<TMPro.TextMeshPro>();
-                comp.fontSizeMin = 2;
-                comp.fontSizeMax = 2;
-                serverWarning.transform.localPosition = new Vector3(0f, -3f, -10f);
+                serverWarning = new GameObject("serverWarning");  // GameObject.Instantiate(tmplt.transform.GetChild(0).gameObject, tmplt.transform);
+                var comp = serverWarning.AddComponent<TMPro.TextMeshPro>();  // serverWarning.GetComponent<TMPro.TextMeshPro>();
+                //serverWarning.transform.SetParent(tmplt.transform, true);
+                comp.fontSize = 0.2f;
+                serverWarning.transform.position = new Vector3(5f, 1f, -200f);
                 __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
                     comp.text = Helpers.cs(Color.red, "Vanilla Servers Are Currently Not Compatible With TOR");
+                    serverWarning.transform.position = new Vector3(0f, 1f, -200f);
                 })));
                 serverWarning.SetActive(true);
             }

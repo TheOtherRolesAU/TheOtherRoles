@@ -4,7 +4,7 @@ using AmongUs.GameOptions;
 using HarmonyLib;
 using Hazel;
 using InnerNet;
-using TheOtherRoles.Players;
+
 using TheOtherRoles.Utilities;
 
 namespace TheOtherRoles.Modules {
@@ -21,16 +21,16 @@ namespace TheOtherRoles.Modules {
                             if (AmongUsClient.Instance.AmHost && AmongUsClient.Instance.CanBan()) { // checking both just cause
                                 handled = true;
                                 if (!Int32.TryParse(text.Substring(6), out LobbyLimit)) {
-                                    __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, "Invalid Size\nUsage: /size {amount}");
+                                    __instance.AddChat(PlayerControl.LocalPlayer, "Invalid Size\nUsage: /size {amount}");
                                 } else {
                                     LobbyLimit = Math.Clamp(LobbyLimit, 4, 15);
                                     if (LobbyLimit != GameOptionsManager.Instance.currentNormalGameOptions.MaxPlayers) {
                                         GameOptionsManager.Instance.currentNormalGameOptions.MaxPlayers = LobbyLimit;
                                         FastDestroyableSingleton<GameStartManager>.Instance.LastPlayerCount = LobbyLimit;
-                                        CachedPlayer.LocalPlayer.PlayerControl.RpcSyncSettings(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameOptionsManager.Instance.currentGameOptions, false));  // TODO Maybe simpler?? 
-                                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"Lobby Size changed to {LobbyLimit} players");
+                                        PlayerControl.LocalPlayer.RpcSyncSettings(GameOptionsManager.Instance.gameOptionsFactory.ToBytes(GameOptionsManager.Instance.currentGameOptions, false));  // TODO Maybe simpler?? 
+                                        __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size changed to {LobbyLimit} players");
                                     } else {
-                                        __instance.AddChat(CachedPlayer.LocalPlayer.PlayerControl, $"Lobby Size is already {LobbyLimit}");
+                                        __instance.AddChat(PlayerControl.LocalPlayer, $"Lobby Size is already {LobbyLimit}");
                                     }
                                 }
                             }

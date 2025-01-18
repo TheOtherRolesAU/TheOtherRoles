@@ -28,7 +28,7 @@ Even more roles are coming soon. :)
 | [Cleaner](#cleaner) | [Swapper](#swapper) | [Thief](#thief) | [Invert](#invert) |
 | [Warlock](#warlock) | [Seer](#seer) |  | [Chameleon](#chameleon) |
 | [Bounty Hunter](#bounty-hunter) | [Hacker](#hacker) |  | [Shifter](#shifter)
-| [Witch](#witch) | [Tracker](#tracker) |  |  |
+| [Witch](#witch) | [Tracker](#tracker) |  | [Armored](#armored) |
 | [Ninja](#ninja) | [Snitch](#snitch) |  |  |
 | [Bomber](#bomber) | [Spy](#spy) |  |  |
 | [Yo-Yo](#yoyo) | [Portalmaker](#portalmaker) |  |  |
@@ -42,14 +42,16 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
-| 2024.6.18s| v4.6.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.6.0/TheOtherRoles.zip)
-| 2024.3.5s| v4.5.3| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.3/TheOtherRoles.zip)
+| 2024.11.26| v4.7.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.7.0/TheOtherRoles.zip)
+| 2024.6.18| v4.6.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.6.0/TheOtherRoles.zip)
+
 
 <details>
   <summary>Click to show older versions</summary>
   
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.3.5s| v4.5.3| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.3/TheOtherRoles.zip)
 | 2024.3.5s| v4.5.2| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.2/TheOtherRoles.zip)
 | 2023.11.28s| v4.5.1| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.1/TheOtherRoles.zip)
 | 2023.11.28s| v4.5.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.5.0/TheOtherRoles.zip)
@@ -133,9 +135,21 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+
+**Version 4.7.0**
+- Updated to Among Us version 2024.11.26 (Vanilla Updates)
+- Added a new modifier, Armored. The first time the armored would die by an ordinary kill, they are protected by their Armor. (NesTT17 & Gendelo, idea by zFinnyX) 
+- Added the possibility to use the shift keys to (re-)join a lobby, if you just left a lobby or you have a lobby code copied to the clipboard. (twix & Gendelo)
+- Added a setting to Guesser Mode: "Number Of Tasks Needed To Unlock Shooting For Crew Guesser" (NesTT17, idea by DracoL1ch & multiple other players)
+- Fixed a bug with the Tracker's Proximity Meter - it now disappears after the meeting if the target is dead and no new target can be tracked.
+- Fixed a bug with the "Fill Crewmates" option, where selecting a range for min/max neutral roles would often lead to players being plain crewmates without a role
+- Fixed a bug where a passive lover death of a role that can suicide would sometimes give the medium incorrect info.
+- Fixed a bug where the zoom out button would be shown to ghosts during meetings.
+- Changed the way options are shown in the menu: Disabling an option (e.g. a role or modifier spawn chance) will now hide its depending sub-options again (like pre 4.6.0 with the old menu)
+- Change: Significantly decreased the size of our mod by using compression. (Thanks to miniduikboat for giving us a gentle push)
+
   
-  
-** Version 4.6.0**
+**Version 4.6.0**
 - Updated to Among Us version 2024.6.18 (Vanilla Update with new UI elements and many Server Side Changes)
 - Added a completely new UI for the Mod's Options, using the new Vanilla Design.
 - Added a button to switch gamemodes in the lobby
@@ -145,7 +159,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Fixed a bug where guessing a player would sometimes not return the votes to the voters
 - Fixed a bug where the Lawyer would not properly die when guessing the client
 - Removed: Disabled Vanilla Servers for now, as the mod is incompatible with them in its / their current state. Thanks to Miniduikboat for making custom servers great again!
-- Experimental: Advanded users can try to install the mod on the Windows Store Version of Among Us. No Support Provided!
+- Experimental: Advanced users can try to install the mod on the Windows Store Version of Among Us. No Support Provided!
 
   
 **Version 4.5.3**
@@ -929,13 +943,6 @@ You can configure:
 
 Please note, that if the configured option exceeds the available number of tasks of a map, the tasks will be limited to that number of tasks. \
 Example: If you configure 4 common tasks on Airship crewmates will only receive 2 common tasks, as airship doesn't offer more than 2 common tasks.
-
-| Map | Common Tasks | Short Tasks | Long Tasks |
-|----------|:-------------:|:-------------:|:-------------:|
-| Skeld / Dleks | 2 | 19 | 8
-| Mira HQ | 2 | 13 | 11
-| Polus | 4 | 14 | 15
-| Airship | 2 | 23 | 15
 -----------------------
 
 ### Random Maps
@@ -1019,7 +1026,8 @@ The Janitor is an Impostor who cannot kill, but they can hide dead bodies instea
 
 ## Morphling
 ### **Team: Impostors**
-The Morphling is an Impostor which can additionally scan the appearance of a player. After an arbitrary time they can take on that appearance for 10s.\
+The Morphling is an Impostor which can additionally scan the appearance of a player.\
+After an arbitrary time they can take on that appearance for a set duration which can be changed in the options.\
 \
 **NOTE:**
 - They shrink to the size of the Mini when they copy its look.
@@ -1319,6 +1327,7 @@ The Jester does not have any tasks. They win the game as a solo, if they get vot
 |----------|:-------------:|
 | Jester Spawn Chance | -
 | Jester Can Call Emergency Meeting | Option to disable the emergency button for the Jester
+|Jester Has Impostor Vision | -
 -----------------------
 
 ## Arsonist
@@ -1332,7 +1341,7 @@ After dousing everyone alive the Arsonist can ignite all the players which resul
 | Name | Description |
 |----------|:-------------:|
 | Arsonist Spawn Chance | -
-| Arsonist Countdown | -
+| Arsonist Cooldown | -
 | Arsonist Douse Duration | The time it takes to douse a player
 -----------------------
 
@@ -1351,8 +1360,8 @@ The team Jackal enables multiple new outcomes of the game, listing some examples
 - The Crew could be eliminated, then the Team Jackal fight against the Impostors (The Crew can still make a task win in this scenario)
 
 The priority of the win conditions is the following:
-1. Crewmate Mini lose by vote
-2. Jester wins by vote
+1. Jester wins by vote (even as Mini)
+2. Crewmate Mini lose by vote
 3. Arsonist win
 4. Team Impostor wins by sabotage
 5. Team Crew wins by tasks (also possible if the whole Crew is dead)
@@ -1371,19 +1380,19 @@ If both Impostors and Jackals are in the game, the game continues even if all Cr
 ### Game Options
 | Name | Description
 |----------|:-------------:|
-| Jackal Spawn Chance | - |
-| Jackal/Sidekick Kill Cooldown | Kill cooldown |
-| Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created |
-| Jackal can use vents | Yes/No |
-| Jackal can sabotage Lights | Yes/No |
-| Jackal can create a Sidekick | Yes/No |
-| Sidekick gets promoted to Jackal on Jackal Death | Yes/No |
-| Sidekick can kill | Yes/No |
-| Sidekick can Vent | Yes/No |
-| Jackal can sabotage Lights | Yes/No |
-| Jackals promoted from Sidekick can create a Sidekick | Yes/No (to prevent the Jackal team from growing) |
-| Jackals can make an Impostor to their Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.) |
-| Jackal and Sidekick have Impostor vision | - |
+| Jackal Spawn Chance | -
+| Jackal/Sidekick Kill Cooldown | Kill Cooldown
+| Jackal Create Sidekick Cooldown | Cooldown before a Sidekick can be created
+| Jackal Can Use Vents | Yes/No
+| Jackal Can Sabotage Lights | Yes/No
+| Jackal Can Create A Sidekick | Yes/No
+| Sidekick Gets Promoted To Jackal On Jackal Death | Yes/No
+| Sidekick Can Kill | Yes/No
+| Sidekick Can Vent | Yes/No
+| Sidekick Can Sabotage Lights | Yes/No
+| Jackals Promoted From Sidekick Can Create A Sidekick | Yes/No (to prevent the Jackal team from growing)
+| Jackals Can Make An Impostor To His Sidekick | Yes/No (to prevent a Jackal from turning an Impostor into a Sidekick, if they use the ability on an Impostor they see the Impostor as Sidekick, but the Impostor isn't converted to Sidekick. If this option is set to "No" Jackal and Sidekick can kill each other.)
+| Jackal And Sidekick Have Impostor Vision | -
 -----------------------
 
 ## Sidekick
@@ -1400,9 +1409,9 @@ Upon the death of the Jackal (depending on the options), they might get promoted
 | Name | Description
 |----------|:-------------:|
 | Jackal/Sidekick Kill Cooldown | Uses the same kill cooldown setting as the Jackal |
-| Sidekick gets promoted to Jackal on Jackal death |  Yes/No |
-| Sidekick can kill | Yes/No |
-| Sidekick can use vents | Yes/No |
+| Sidekick Gets Promoted To Jackal On Jackal Death |  Yes/No |
+| Sidekick Can Kill | Yes/No |
+| Sidekick Can Use Vents | Yes/No |
 -----------------------
 
 ## Vulture
@@ -1536,7 +1545,6 @@ The Mayor has the option to vote with only one vote instead of two (via a button
 The Engineer (if alive) can fix a certain amount of sabotages per game from anywhere on the map.\
 The Engineer can use vents.\
 If the Engineer is inside a vent, depending on the options the members of the team Jackal/Impostors will see a blue outline around all vents on the map (in order to warn them).\
-Because of the vents the Engineer might not be able to start some tasks using the "Use" button, you can double-click on the tasks instead.
 
 **NOTE:**
 - The kill button of Impostors activates if they stand next to a vent where the Engineer is. They can also kill them there. No other action (e.g. Morphling sample, Shifter shift, ...) can affect players inside vents.
@@ -1547,7 +1555,7 @@ Because of the vents the Engineer might not be able to start some tasks using th
 | Engineer Spawn Chance | -
 | Number Of Sabotage Fixes| -
 | Impostors See Vents Highlighted | -
-| Jackal and Sidekick See Vents Highlighted | -
+| Jackal And Sidekick See Vents Highlighted | -
 -----------------------
 
 ## Sheriff
@@ -1693,8 +1701,8 @@ The Swapper now has initial swap charges and can recharge those charges after co
 | Name | Description
 |----------|:-------------:|
 | Swapper Spawn Chance | -
-| Swapper can call emergency meeting | Option to disable the emergency button for the Swapper
-| Swapper can only swap others | Sets whether the Swapper can swap themself or not
+| Swapper Can Call Emergency Meeting | Option to disable the emergency button for the Swapper
+| Swapper Can Only Swap Others | Sets whether the Swapper can swap themself or not
 | Initial Swap Charges | -
 | Number Of Tasks Needed For Recharging | -
 -----------------------
@@ -1940,7 +1948,7 @@ If killed, the Bloody Modifier will leave a trail for x-seconds on their killer.
 |----------|:-------------:|
 | Bloody Spawn Chance | -
 | Bloody Quantity | -
-| Trail duration | -
+| Trail Duration | -
 -----------------------
 
 ## Anti Teleport
@@ -2035,7 +2043,7 @@ The vision will also be affected when lights out.
 |----------|:-------------:|
 | Sunglasses Spawn Chance | -
 | Sunglasses Quantity | -
-| Vision with sunglasses | -
+| Vision With Sunglasses | -
 -----------------------
 
 ## Mini
@@ -2140,6 +2148,22 @@ can only use them, if the previous player did not use them before)
 | Shifter Spawn Chance | -
 -----------------------
 
+## Armored
+
+The Armored is a Modifier that protects the player from the first shot that would have killed them. There can only be one Armored player per round.
+\
+**NOTE:**
+- Armored is only active during the round and does not protect from guesses or votes. 
+- Armored is applied after all other shields or protections, so that the Armor only breaks if the player would have otherwise died.
+- If a killer tries to kill the Armored, they will see the Armor break with a nice animation.
+- The Armored player has no indicator whatsoever if the Armor is still active, unless they break it (Warlock, Sheriff, Thief)
+
+### Game Options
+| Name | Description
+|----------|:-------------:|
+| Armored Spawn Chance | -
+-----------------------
+
 # Gamemodes
 Gamemodes can be switched when creating a lobby or inside the lobby by using a command in the chat:
 `/gm <gamemode>`. Use the following gamemodes: `guess` or `gm`,`prophunt` or `ph`, `hidenseek` or `hns`. If `/gm` is used without argument or the argument can't be parsed, the lobby will switch to classic mode.
@@ -2164,6 +2188,7 @@ Players can additionally have a modifier, if enabled (e.g. Medic Guesser Mini).
 | Guessers Can Have A Modifier | -
 | Guesser Number Of Shots | -
 | Guesser Can Shoot Multiple Times Per Meeting | -
+| Number Of Tasks Needed To Unlock Shooting For Crew Guesser | - 
 | Guesses Ignore The Medic Shield | -
 | Evil Guesser Can Guess The Spy | -
 | Guesser Can't Guess Snitch When Tasks Completed | -
@@ -2250,7 +2275,7 @@ When a Prop dies, they will either join the Hunter team or die (setting).
 | Unstuck Duration | -        | Kill Cooldown After Hit | -            | Invisibility Duration | -
 | Hunter Vision | -           | Reveal Prop Cooldown | -               | Speedboost Enabled | -
 | Prop Vision | -             | Reveal Prop Duration | -               | Speedboost Cooldown | -
-|  | -             | Reveal Time Punish | deducted from rem. timer | Speedboost Duration | - 
+|  | -             | Reveal Time Punish | Deducted from rem. timer | Speedboost Duration | - 
 |  | -                         |  Hunter Admin Cooldown | - | Speedboost Ratio | Factor with which speed is multiplied 
 |  | -                       | Find Cooldown | -
 |  | -               | Find Duration | -

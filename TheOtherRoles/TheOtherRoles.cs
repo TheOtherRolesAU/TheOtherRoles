@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TheOtherRoles.Objects;
-using TheOtherRoles.Players;
+
 using TheOtherRoles.Utilities;
 using TheOtherRoles.CustomGameModes;
 using static TheOtherRoles.TheOtherRoles;
@@ -74,6 +74,7 @@ namespace TheOtherRoles
             Vip.clearAndReload();
             Invert.clearAndReload();
             Chameleon.clearAndReload();
+            Armored.clearAndReload();
 
             // Gamemodes
             HandleGuesser.clearAndReload();
@@ -318,11 +319,11 @@ namespace TheOtherRoles
             public static void setHandcuffedKnows(bool active = true, byte playerId = Byte.MaxValue)
             {
                 if (playerId == Byte.MaxValue)
-                    playerId = CachedPlayer.LocalPlayer.PlayerId;
+                    playerId = PlayerControl.LocalPlayer.PlayerId;
 
-                if (active && playerId == CachedPlayer.LocalPlayer.PlayerId) {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
-                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                if (active && playerId == PlayerControl.LocalPlayer.PlayerId) {
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write((byte)RPCProcedure.GhostInfoTypes.HandcuffNoticed);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                 }
@@ -332,7 +333,7 @@ namespace TheOtherRoles
                     handcuffedPlayers.RemoveAll(x => x == playerId);
                }
 
-                if (playerId == CachedPlayer.LocalPlayer.PlayerId) {
+                if (playerId == PlayerControl.LocalPlayer.PlayerId) {
                     HudManagerStartPatch.setAllButtonsHandcuffedStatus(active);
                     SoundEffectsManager.play("deputyHandcuff");
 		}
@@ -454,10 +455,10 @@ namespace TheOtherRoles
             bool isMorphedMorphling = target == Morphling.morphling && Morphling.morphTarget != null && Morphling.morphTimer > 0f;
             if (Medic.shielded != null && ((target == Medic.shielded && !isMorphedMorphling) || (isMorphedMorphling && Morphling.morphTarget == Medic.shielded))) {
                 hasVisibleShield = Medic.showShielded == 0 || Helpers.shouldShowGhostInfo() // Everyone or Ghost info
-                    || (Medic.showShielded == 1 && (CachedPlayer.LocalPlayer.PlayerControl == Medic.shielded || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic)) // Shielded + Medic
-                    || (Medic.showShielded == 2 && CachedPlayer.LocalPlayer.PlayerControl == Medic.medic); // Medic only
+                    || (Medic.showShielded == 1 && (PlayerControl.LocalPlayer == Medic.shielded || PlayerControl.LocalPlayer == Medic.medic)) // Shielded + Medic
+                    || (Medic.showShielded == 2 && PlayerControl.LocalPlayer == Medic.medic); // Medic only
                 // Make shield invisible till after the next meeting if the option is set (the medic can already see the shield)
-                hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || CachedPlayer.LocalPlayer.PlayerControl == Medic.medic || Helpers.shouldShowGhostInfo());
+                hasVisibleShield = hasVisibleShield && (Medic.meetingAfterShielding || !Medic.showShieldAfterMeeting || PlayerControl.LocalPlayer == Medic.medic || Helpers.shouldShowGhostInfo());
             }
             return hasVisibleShield;            
         }
@@ -651,7 +652,7 @@ namespace TheOtherRoles
 
         public static void resetCamouflage() {
             camouflageTimer = 0f;
-            foreach (PlayerControl p in CachedPlayer.AllPlayers) {
+            foreach (PlayerControl p in PlayerControl.AllPlayerControls) {
                 if (p == Ninja.ninja && Ninja.isInvisble)
                     continue;
                 p.setDefaultLook();
@@ -1250,7 +1251,7 @@ namespace TheOtherRoles
         }
 
         public static bool dousedEveryoneAlive() {
-            return CachedPlayer.AllPlayers.All(x => { return x.PlayerControl == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
+            return PlayerControl.AllPlayerControls.ToArray().All(x => { return x == Arsonist.arsonist || x.Data.IsDead || x.Data.Disconnected || Arsonist.dousedPlayers.Any(y => y.PlayerId == x.PlayerId); });
         }
 
         public static void clearAndReload() {
@@ -1435,17 +1436,17 @@ namespace TheOtherRoles
             chanceAdditionalInfo = CustomOptionHolder.mediumChanceAdditionalInfo.getSelection() / 10f;
         }
 
-        public static string getInfo(PlayerControl target, PlayerControl killer) {
+        public static string getInfo(PlayerControl target, PlayerControl killer, DeadPlayer.CustomDeathReason deathReason) {
             string msg = "";
 
             List<SpecialMediumInfo> infos = new List<SpecialMediumInfo>();
             // collect fitting death info types.
             // suicides:
             if (killer == target) {
-                if (target == Sheriff.sheriff || target == Sheriff.formerSheriff) infos.Add(SpecialMediumInfo.SheriffSuicide);
+                if ((target == Sheriff.sheriff || target == Sheriff.formerSheriff) && deathReason != DeadPlayer.CustomDeathReason.LoverSuicide) infos.Add(SpecialMediumInfo.SheriffSuicide);
                 if (target == Lovers.lover1 || target == Lovers.lover2) infos.Add(SpecialMediumInfo.PassiveLoverSuicide);
-                if (target == Thief.thief) infos.Add(SpecialMediumInfo.ThiefSuicide);
-                if (target == Warlock.warlock) infos.Add(SpecialMediumInfo.WarlockSuicide);
+                if (target == Thief.thief && deathReason != DeadPlayer.CustomDeathReason.LoverSuicide) infos.Add(SpecialMediumInfo.ThiefSuicide);
+                if (target == Warlock.warlock && deathReason != DeadPlayer.CustomDeathReason.LoverSuicide) infos.Add(SpecialMediumInfo.WarlockSuicide);
             } else {
                 if (target == Lovers.lover1 || target == Lovers.lover2) infos.Add(SpecialMediumInfo.ActiveLoverDies);
                 if (target.Data.Role.IsImpostor && killer.Data.Role.IsImpostor && Thief.formerThief != killer) infos.Add(SpecialMediumInfo.ImpostorTeamkill);
@@ -1891,8 +1892,8 @@ namespace TheOtherRoles
 
         public static void setPosition() {
             if (position == Vector3.zero) return;  // Check if this has been set, otherwise first spawn on submerged will fail
-            if (antiTeleport.FindAll(x => x.PlayerId == CachedPlayer.LocalPlayer.PlayerId).Count > 0) {
-                CachedPlayer.LocalPlayer.NetTransform.RpcSnapTo(position);
+            if (antiTeleport.FindAll(x => x.PlayerId == PlayerControl.LocalPlayer.PlayerId).Count > 0) {
+                PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(position);
                 if (SubmergedCompatibility.IsSubmerged) {
                     SubmergedCompatibility.ChangeFloor(position.y > -7);
                 }
@@ -2031,6 +2032,17 @@ namespace TheOtherRoles
                 } catch { }
             }
                 
+        }
+    }
+
+    public static class Armored {
+        public static PlayerControl armored;
+        
+        public static bool isBrokenArmor = false;
+
+        public static void clearAndReload() {
+            armored = null;
+            isBrokenArmor = false;
         }
     }
 

@@ -2,7 +2,6 @@ using Hazel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheOtherRoles.Players;
 using TheOtherRoles.Utilities;
 using UnityEngine;
 
@@ -51,7 +50,7 @@ namespace TheOtherRoles.Objects {
 
             bomb.SetActive(false);
             background.SetActive(false);
-            if (CachedPlayer.LocalPlayer.PlayerControl == Bomber.bomber) {
+            if (PlayerControl.LocalPlayer == Bomber.bomber) {
                 bomb.SetActive(true);
             }
             Bomber.bomb = this;
@@ -82,18 +81,18 @@ namespace TheOtherRoles.Objects {
             if (b == null) return;
             if (Bomber.bomber != null) {
                 var position = b.bomb.transform.position;
-                var distance = Vector2.Distance(position, CachedPlayer.LocalPlayer.transform.position);  // every player only checks that for their own client (desynct with positions sucks)
-                if (distance < Bomber.destructionRange && !CachedPlayer.LocalPlayer.Data.IsDead) {
-                    Helpers.checkMurderAttemptAndKill(Bomber.bomber, CachedPlayer.LocalPlayer.PlayerControl, false, false, true, true);
+                var distance = Vector2.Distance(position, PlayerControl.LocalPlayer.transform.position);  // every player only checks that for their own client (desynct with positions sucks)
+                if (distance < Bomber.destructionRange && !PlayerControl.LocalPlayer.Data.IsDead) {
+                    Helpers.checkMurderAttemptAndKill(Bomber.bomber, PlayerControl.LocalPlayer, false, false, true, true);
                     
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(CachedPlayer.LocalPlayer.PlayerControl.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
-                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ShareGhostInfo, Hazel.SendOption.Reliable, -1);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write((byte)RPCProcedure.GhostInfoTypes.DeathReasonAndKiller);
-                    writer.Write(CachedPlayer.LocalPlayer.PlayerId);
+                    writer.Write(PlayerControl.LocalPlayer.PlayerId);
                     writer.Write((byte)DeadPlayer.CustomDeathReason.Bomb);
                     writer.Write(Bomber.bomber.PlayerId);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    GameHistory.overrideDeathReasonAndKiller(CachedPlayer.LocalPlayer, DeadPlayer.CustomDeathReason.Bomb, killer: Bomber.bomber);
+                    GameHistory.overrideDeathReasonAndKiller(PlayerControl.LocalPlayer, DeadPlayer.CustomDeathReason.Bomb, killer: Bomber.bomber);
                 }
                 SoundEffectsManager.playAtPosition("bombExplosion", position, range: Bomber.hearRange) ;
             }
@@ -113,7 +112,7 @@ namespace TheOtherRoles.Objects {
                 Bomber.clearBomb();
             }
 
-            if (Vector2.Distance(CachedPlayer.LocalPlayer.PlayerControl.GetTruePosition(), Bomber.bomb.bomb.transform.position) > 1f) canDefuse = false;
+            if (Vector2.Distance(PlayerControl.LocalPlayer.GetTruePosition(), Bomber.bomb.bomb.transform.position) > 1f) canDefuse = false;
             else canDefuse = true;
         }
 

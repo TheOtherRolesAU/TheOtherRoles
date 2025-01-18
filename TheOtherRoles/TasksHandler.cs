@@ -9,7 +9,7 @@ namespace TheOtherRoles {
         public static Tuple<int, int> taskInfo(NetworkedPlayerInfo playerInfo) {
             int TotalTasks = 0;
             int CompletedTasks = 0;
-            if (!playerInfo.Disconnected && playerInfo.Tasks != null &&
+            if (playerInfo != null && !playerInfo.Disconnected && playerInfo.Tasks != null &&
                 playerInfo.Object &&
                 playerInfo.Role && playerInfo.Role.TasksCountTowardProgress &&
                 !playerInfo.Object.hasFakeTasks() && !playerInfo.Role.IsImpostor

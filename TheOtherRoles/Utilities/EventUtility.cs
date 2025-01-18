@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using TheOtherRoles;
 using TheOtherRoles.Patches;
-using TheOtherRoles.Players;
+
 using static TheOtherRoles.TheOtherRoles;
 using System.Linq;
 using InnerNet;

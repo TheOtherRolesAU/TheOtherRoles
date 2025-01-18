@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using System.Linq;
+using Reactor.Utilities.Extensions;
 
 namespace TheOtherRoles
 {
@@ -20,19 +21,30 @@ namespace TheOtherRoles
             soundEffects = new Dictionary<string, AudioClip>();
             Assembly assembly = Assembly.GetExecutingAssembly();
             string[] resourceNames = assembly.GetManifestResourceNames();
+
+            /* Old way of loading .raw files. Left here for reference -Gendelo
             foreach (string resourceName in resourceNames)
             {
-                if (resourceName.Contains("TheOtherRoles.Resources.SoundEffects.") && resourceName.Contains(".raw"))
+                if (resourceName.Contains("TheOtherRoles.Resources.SoundEffects.") && (resourceName.Contains(".raw") || resourceName.Contains(".ogg")))
                 {
                     soundEffects.Add(resourceName, Helpers.loadAudioClipFromResources(resourceName));
                 }
+            }*/
+
+            var resourceBundle = assembly.GetManifestResourceStream("TheOtherRoles.Resources.SoundEffects.toraudio");
+            var assetBundle = AssetBundle.LoadFromMemory(resourceBundle.ReadFully());
+            foreach (var f in assetBundle.GetAllAssetNames()) {
+                soundEffects.Add(f, assetBundle.LoadAsset<AudioClip>(f).DontUnload());
             }
+            assetBundle.Unload(false);
+
         }
 
         public static AudioClip get(string path)
         {
             // Convenience: As as SoundEffects are stored in the same folder, allow using just the name as well
-            if (!path.Contains(".")) path = "TheOtherRoles.Resources.SoundEffects." + path + ".raw";
+            //if (!path.Contains(".")) path = "TheOtherRoles.Resources.SoundEffects." + path + ".raw";
+            path = "assets/audio/" + path.ToLower() + ".ogg";
             AudioClip returnValue;
             return soundEffects.TryGetValue(path, out returnValue) ? returnValue : null;
         }
@@ -60,7 +72,7 @@ namespace TheOtherRoles
                         source.Stop();
                     }
                     float distance, volume;
-                    distance = Vector2.Distance(position, Players.CachedPlayer.LocalPlayer.PlayerControl.GetTruePosition());
+                    distance = Vector2.Distance(position, PlayerControl.LocalPlayer.GetTruePosition());
                     if (distance < range)
                         volume = (1f - distance / range);
                     else
