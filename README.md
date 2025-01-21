@@ -921,7 +921,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Shield Last Game First Kill** The first killed player of the previous round will be shielded for all players visible until the first meeting.
 - **Finish Tasks Before Haunting Or Zooming Out** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
 - **Admin Table Shows Dead Bodies**
-- **Cams Switch To Night Vision If Lights Are Off**  No colors and cosmetics can be seen on the cameras when the lights are off. Mini can be spottet!
+- **Cams Switch To Night Vision If Lights Are Off**  No colors and cosmetics can be seen on the cameras when the lights are off. Mini can be spotted!
 - **Impostor Vision Ignores Night Vision Cams**
 - **Play On A Random Map** If enabled it allows you to set percentages for each current map, except ehT dlekS. 
 - **Ghosts Can See Roles.**
