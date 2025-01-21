@@ -919,7 +919,7 @@ The mod adds a few new settings to Among Us (in addition to the role settings):
 - **Hide Player Names:** Hides the names of all players that have role which is unknown to you. Team Lovers/Impostors/Jackal still see the names of their teammates. Impostors can also see the name of the Spy and everyone can still see the age of the mini.
 - **Allow Parallel MedBay Scans:** Allows players to perform their MedBay scans at the same time.
 - **Shield Last Game First Kill** The first killed player of the previous round will be shielded for all players visible until the first meeting.
-- **Finish Tasks Before Haunting Or Zooming Out ** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
+- **Finish Tasks Before Haunting Or Zooming Out** The zoom out function as well as haunting will be hidden for the player until all their tasks are finished
 - **Admin Table Shows Dead Bodies**
 - **Cams Switch To Night Vision If Lights Are Off**  No colors and cosmetics can be seen on the cameras when the lights are off. Mini can be spottet!
 - **Impostor Vision Ignores Night Vision Cams**
@@ -1048,7 +1048,7 @@ After an arbitrary time they can take on that appearance for a set duration whic
 ## Camouflager
 ### **Team: Impostors**
 The Camouflager is an Impostor which can additionally activate a camouflage mode.\
-The camouflage mode lasts for 10s and while it is active, all player names/pets/hats\
+The camouflage mode lasts for x-seconds (configurable) and while it is active, all player names/pets/hats\
 are hidden and all players have the same color.\
 \
 **NOTE:**
@@ -1683,7 +1683,7 @@ The Medic's other feature shows when they report a corpse: they will see how lon
 | Show Shielded Player | Sets who sees if a player has a shield | "Everyone", "Shielded + Medic", "Medic"
 | Shielded Player Sees Murder Attempt| Whether a shielded player sees if someone tries to kill them | True/false |
 | Shield Will Be Activated | Sets when the shield will be active | "Instantly", "Instantly, Visible After Meeting", "After Meeting"
-| Medic Sees Murder Attempt On Shielded Player | - | If anyone tries to harm the shielded player (Impostor, Sheriff, Guesser, ...), the Medic will see a red flash
+| Medic Sees Murder Attempt On Shielded Player | If anyone tries to harm the shielded player (Impostor, Sheriff, Guesser, ...), the Medic will see a red flash | |
 -----------------------
 
 ## Swapper
@@ -2027,7 +2027,7 @@ In a 2 Crewmates vs 2 Impostors (or 2 members of team Jackal) and the Lovers are
 -----------------------
 
 **NOTE:**
-- The Modifier **Lover** can't be guessed, you'll have to guess the primary role of one of the Lovers, to kill both of them.
+- As in a kill, if your Lover gets guessed, you will die with them.
 
 ## Sunglasses
 
