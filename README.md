@@ -1113,7 +1113,7 @@ Depending on the options they can also erase them (Impostors will lose their spe
 ## Trickster
 ### **Team: Impostors**
 The Trickster is an Impostor that can place 3 jack-in-the-boxes that are invisible at first to other players.\
-If the Trickster has placed all of their boxes they will be converted into a vent network usable only by the Trickster themself, but the boxes are revealed to the others.\
+If the Trickster has placed all of their boxes they will be converted into a vent network after the next Meeting, usable only by the Trickster themself, but the boxes are also revealed to the others.\
 If the boxes are converted to a vent network, the Trickster gains a new ability "Lights out" to limit the visibility of Non-Impostors, that cannot be fixed by other players. Lights are automatically restored after a while.\
 \
 **NOTE:**
