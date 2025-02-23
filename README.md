@@ -42,6 +42,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Releases
 | Among Us - Version| Mod Version | Link |
 |----------|-------------|-----------------|
+| 2024.11.26| v4.8.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.8.0/TheOtherRoles.zip)
 | 2024.11.26| v4.7.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.7.0/TheOtherRoles.zip)
 | 2024.6.18| v4.6.0| [Download](https://github.com/TheOtherRolesAU/TheOtherRoles/releases/download/v4.6.0/TheOtherRoles.zip)
 
@@ -135,6 +136,18 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 # Changelog
 <details>
   <summary>Click to show the Changelog</summary>
+  
+**Version 4.8.0**
+- Added an optional Role Draft mode, where players can select their role out of some roles that are shown to them.
+- Added a new option to allow the medic to shift the medic shield as well - no more invincible medics.
+- Added partial key rebinding - all kill buttons will now use the vanilla kill button shortcut, same for vent and each roles first ability.
+- Fixed the way options view panel to match vanilla changes
+- Fixed options not showing/hiding sub-options when switching Presets
+- Fixed a bug where voting the witch would not save the target
+- Fixed a some bugs with the trapper, bomber and portal
+- Fixed a bug in PropHunt where you players could not transform into props
+- Fixed the summary button for the last game appearing outside the lobby sometimes
+- Changed the positioning of the ping tracker in meetings
 
 **Version 4.7.0**
 - Updated to Among Us version 2024.11.26 (Vanilla Updates)
@@ -904,6 +917,7 @@ Thanks to miniduikboot & GD for hosting modded servers (and so much more)
 [TheEpicRoles](https://github.com/LaicosVK/TheEpicRoles) - Idea for the first kill shield (partly) and the tabbed option menu (fully + some code), by **LaicosVK** **DasMonschta** **Nova**\
 [Ninja](#ninja), [Thief](#thief), [Lawyer](#lawyer) / [Pursuer](#pursuer), [Deputy](#deputy), [Portalmaker](#portalmaker), [Guesser Modifier](#guesser-modifier) - Idea: [K3ndo](https://github.com/K3ndoo) ; Developed by [Gendelo](https://github.com/gendelo3) & [Mallöris](https://github.com/Mallaris) \
 [ugackMiner53](https://github.com/ugackMiner53/PropHunt) - Idea and core code for the Prop Hunt game mode
+Role Draft Music: [Unreal Superhero 3 by Kenët & Rez](https://www.youtube.com/watch?v=9STiQ8cCIo0)
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):

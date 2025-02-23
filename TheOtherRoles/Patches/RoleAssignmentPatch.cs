@@ -9,8 +9,10 @@ using AmongUs.GameOptions;
 using TheOtherRoles.Utilities;
 using static TheOtherRoles.TheOtherRoles;
 using TheOtherRoles.CustomGameModes;
+using TheOtherRoles.Modules;
 
-namespace TheOtherRoles.Patches {
+namespace TheOtherRoles.Patches
+{
     [HarmonyPatch(typeof(RoleOptionsCollectionV08), nameof(RoleOptionsCollectionV08.GetNumPerGame))]
     class RoleOptionsDataGetNumPerGamePatch{
         public static void Postfix(ref int __result) {
@@ -51,7 +53,8 @@ namespace TheOtherRoles.Patches {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ResetVaribles, Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCProcedure.resetVariables();
-            if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek) return; // Don't assign Roles in Hide N Seek
+            if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek || TORMapOptions.gameMode == CustomGamemodes.PropHunt || GameOptionsManager.Instance.currentGameOptions.GameMode == GameModes.HideNSeek
+                || RoleDraft.isEnabled) return; // Don't assign Roles in Hide N Seek
             assignRoles();
         }
 
@@ -383,7 +386,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        private static void assignRoleTargets(RoleAssignmentData data) {
+        public static void assignRoleTargets(RoleAssignmentData data) {
             // Set Lawyer or Prosecutor Target
             if (Lawyer.lawyer != null) {
                 var possibleTargets = new List<PlayerControl>();
@@ -413,7 +416,7 @@ namespace TheOtherRoles.Patches {
             }
         }
 
-        private static void assignModifiers() {
+        public static void assignModifiers() {
             var modifierMin = CustomOptionHolder.modifiersCountMin.getSelection();
             var modifierMax = CustomOptionHolder.modifiersCountMax.getSelection();
             if (modifierMin > modifierMax) modifierMin = modifierMax;
@@ -485,7 +488,7 @@ namespace TheOtherRoles.Patches {
             assignModifiersToPlayers(chanceModifierToAssign, players, modifierCount); // Assign chance modifier
         }
 
-        private static void assignGuesserGamemode() {
+        public static void assignGuesserGamemode() {
             List<PlayerControl> impPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             List<PlayerControl> neutralPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
             List<PlayerControl> crewPlayer = PlayerControl.AllPlayerControls.ToArray().ToList().OrderBy(x => Guid.NewGuid()).ToList();
@@ -596,7 +599,13 @@ namespace TheOtherRoles.Patches {
                 case RoleId.Tiebreaker:
                     selection = CustomOptionHolder.modifierTieBreaker.getSelection(); break;
                 case RoleId.Mini:
-                    selection = CustomOptionHolder.modifierMini.getSelection(); break;
+                    selection = CustomOptionHolder.modifierMini.getSelection();
+                    if (EventUtility.isEnabled) {
+                        selection = 10;
+                        if (CustomOptionHolder.modifierMini.getSelection() == 0 && CustomOptionHolder.eventReallyNoMini.getBool())
+                            selection = 0;
+                    }
+                    break;
                 case RoleId.Bait:
                     selection = CustomOptionHolder.modifierBait.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierBaitQuantity.getQuantity();

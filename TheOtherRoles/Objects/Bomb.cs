@@ -94,7 +94,11 @@ namespace TheOtherRoles.Objects {
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     GameHistory.overrideDeathReasonAndKiller(PlayerControl.LocalPlayer, DeadPlayer.CustomDeathReason.Bomb, killer: Bomber.bomber);
                 }
-                SoundEffectsManager.playAtPosition("bombExplosion", position, range: Bomber.hearRange) ;
+                try {
+                    SoundEffectsManager.playAtPosition("bombExplosion", position, maxDuration: 1.6f, range: Bomber.hearRange);
+                } catch (Exception e) {
+                    TheOtherRolesPlugin.Logger.LogWarning($"Exception in Sound Effect for Bomb explosion: {e}");
+                }
             }
             Bomber.clearBomb();
             canDefuse = false;

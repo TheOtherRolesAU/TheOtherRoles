@@ -40,3 +40,5 @@
 |portalUse | | [Static electronic noise - Xbox 360](https://freesound.org/people/scenes/sounds/431654/ ) + [Teleport Slurp](https://freesound.org/people/GameAudio/sounds/220163/  ) | CC0 1.0 both |
 |fail | | [twitch: SmeggyTV: Mein Auge](https://www.twitch.tv/smeggytv/clip/KindQuaintEndiveDancingBanana-Zoc-bXUnqNCoqQD5 )  | License granted for use in TOR |
 |trapperTrap | | [Karabiner_Click_04.wav](https://freesound.org/people/Rudmer_Rotteveel/sounds/457454/ ) &  [Steel Spring Bear Trap](https://freesound.org/people/fractionalist/sounds/644245/ )| CC0 1.0 both |
+|select | | [Game Menu Select Sound 2](https://freesound.org/people/digimistic/sounds/705174/) | CC0 1.0 |
+|draft| [Unreal Superhero 3 by Kenët & Rez](https://www.youtube.com/watch?v=9STiQ8cCIo0) | License granted for use in TOR | 

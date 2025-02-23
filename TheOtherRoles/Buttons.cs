@@ -72,6 +72,7 @@ namespace TheOtherRoles
         private static CustomButton propHuntSpeedboostButton;
         public static CustomButton propHuntAdminButton;
         public static CustomButton propHuntFindButton;
+        public static CustomButton eventKickButton;
 
         public static Dictionary<byte, List<CustomButton>> deputyHandcuffedButtons = null;
         public static PoolablePlayer targetDisplay;
@@ -658,7 +659,7 @@ namespace TheOtherRoles
                Hacker.getAdminSprite(),
                CustomButton.ButtonPositions.lowerRowRight,
                __instance,
-               KeyCode.Q,
+               KeyCode.G,
                true,
                0f,
                () => { 
@@ -719,7 +720,7 @@ namespace TheOtherRoles
                Hacker.getVitalsSprite(),
                CustomButton.ButtonPositions.lowerRowCenter,
                __instance,
-               KeyCode.Q,
+               KeyCode.H,
                true,
                0f,
                () => {
@@ -773,7 +774,7 @@ namespace TheOtherRoles
                 Tracker.getTrackCorpsesButtonSprite(),
                 CustomButton.ButtonPositions.lowerRowCenter,
                 __instance,
-                KeyCode.Q,
+                KeyCode.G,
                 true,
                 Tracker.corpsesTrackingDuration,
                 () => {
@@ -964,7 +965,7 @@ namespace TheOtherRoles
                 Portalmaker.getUsePortalButtonSprite(),
                 new Vector3(0.9f, -0.06f, 0),
                 __instance,
-                KeyCode.H,
+                KeyCode.J,
                 mirror: true
             );
 
@@ -1004,7 +1005,7 @@ namespace TheOtherRoles
                 Portalmaker.getUsePortalButtonSprite(),
                 new Vector3(0.9f, 1f, 0),
                 __instance,
-                KeyCode.J,
+                KeyCode.G,
                 mirror: true
             );
 
@@ -1360,7 +1361,7 @@ namespace TheOtherRoles
                 SecurityGuard.getCamSprite(),
                 CustomButton.ButtonPositions.lowerRowRight,
                 __instance,
-                KeyCode.Q,
+                KeyCode.G,
                 true,
                 0f,
                 () => {
@@ -2388,6 +2389,26 @@ namespace TheOtherRoles
                     propHuntFindButton.isEffectActive = false;
                 },
                 buttonText: "FIND"
+                );
+
+            eventKickButton = new CustomButton(
+                () => {
+                    EventUtility.kickTarget();
+                },
+                () => { return EventUtility.isEnabled && Mini.mini != null && !Mini.mini.Data.IsDead && PlayerControl.LocalPlayer != Mini.mini; },
+                () => { return EventUtility.currentTarget != null; },
+                () => { },
+                EventUtility.getKickButtonSprite(),
+                CustomButton.ButtonPositions.highRowRight,
+                __instance,
+                KeyCode.K,
+                true,
+                3f,
+                () => {
+                    // onEffectEnds
+                    eventKickButton.Timer = 69;
+                },
+                buttonText: "KICK"
                 );
 
             // Set the default (or settings from the previous game) timers / durations when spawning the buttons

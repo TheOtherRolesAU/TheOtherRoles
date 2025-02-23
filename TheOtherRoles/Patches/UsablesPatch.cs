@@ -104,12 +104,12 @@ namespace TheOtherRoles.Patches {
                 Deputy.setHandcuffedKnows();
                 return false;
             }
-            if (Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer)) return false;
+            if (Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer.PlayerId)) return false;
 
             bool canUse;
             bool couldUse;
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
-            bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy && !Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer);
+            bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy && !Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer.PlayerId);
             if (!canUse) return false; // No need to execute the native method as using is disallowed anyways
 
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
@@ -139,7 +139,7 @@ namespace TheOtherRoles.Patches {
     [HarmonyPatch(typeof(Vent), nameof(Vent.TryMoveToVent))]
     public static class MoveToVentPatch {
         public static bool Prefix(Vent otherVent) {
-            return !Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer);
+            return !Trapper.playersOnMap.Contains(PlayerControl.LocalPlayer.PlayerId);
         }
     }
 

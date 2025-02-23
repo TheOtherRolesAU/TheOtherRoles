@@ -10,7 +10,7 @@ using TheOtherRoles.Utilities;
 using UnityEngine;
 
 namespace TheOtherRoles.Patches {
-    [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.BeginForGameplay))]
     [HarmonyPriority(Priority.First)]
     class ExileControllerBeginPatch {
         public static void Prefix(ExileController __instance, [HarmonyArgument(0)]ref NetworkedPlayerInfo exiled) {
@@ -57,7 +57,7 @@ namespace TheOtherRoles.Patches {
             if (Witch.witch != null && Witch.futureSpelled != null && AmongUsClient.Instance.AmHost) {
                 bool exiledIsWitch = exiled != null && exiled.PlayerId == Witch.witch.PlayerId;
                 bool witchDiesWithExiledLover = exiled != null && Lovers.existing() && Lovers.bothDie && (Lovers.lover1.PlayerId == Witch.witch.PlayerId || Lovers.lover2.PlayerId == Witch.witch.PlayerId) && (exiled.PlayerId == Lovers.lover1.PlayerId || exiled.PlayerId == Lovers.lover2.PlayerId);
-
+                
                 if ((witchDiesWithExiledLover || exiledIsWitch) && Witch.witchVoteSavesTargets) Witch.futureSpelled = new List<PlayerControl>();
                 foreach (PlayerControl target in Witch.futureSpelled) {
                     if (target != null && !target.Data.IsDead && Helpers.checkMuderAttempt(Witch.witch, target, true) == MurderAttemptResult.PerformKill){

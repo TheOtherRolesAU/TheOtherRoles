@@ -204,7 +204,6 @@ namespace TheOtherRoles.Modules {
                         str = ColorUtility.ToHtmlStringRGB(c);
                         
                         color = c.r + c.g + c.b  > 180 ? Palette.Black : Palette.White;
-                        TheOtherRolesPlugin.Logger.LogMessage($"{c.r}, {c.g}, {c.b}");
                     }
                     __instance.playerColorText.text = __instance.player.ColorBlindName;
                     __instance.playerNameText.text = "<color=#" + str + ">" + (string.IsNullOrEmpty(sender.Data.PlayerName) ? "..." : sender.Data.PlayerName);

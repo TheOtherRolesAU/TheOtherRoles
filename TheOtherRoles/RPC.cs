@@ -17,6 +17,7 @@ using AmongUs.Data;
 using AmongUs.GameOptions;
 using Assets.CoreScripts;
 using Reactor.Utilities.Extensions;
+using TheOtherRoles.Modules;
 namespace TheOtherRoles
 {
     public enum RoleId {
@@ -164,10 +165,13 @@ namespace TheOtherRoles
         PropHuntStartTimer,
         PropHuntSetInvis,
         PropHuntSetSpeedboost,
+        DraftModePickOrder,
+        DraftModePick,
 
         // Other functionality
         ShareTimer,
         ShareGhostInfo,
+        EventKick,
     }
 
     public static class RPCProcedure {
@@ -186,12 +190,14 @@ namespace TheOtherRoles
             clearAndReloadRoles();
             clearGameHistory();
             setCustomButtonCooldowns();
+            CustomButton.ReloadHotkeys();
             reloadPluginOptions();
             Helpers.toggleZoom(reset : true);
             GameStartManagerPatch.GameStartManagerUpdatePatch.startingTimer = 0;
             SurveillanceMinigamePatch.nightVisionOverlays = null;
             EventUtility.clearAndReload();
             MapBehaviourPatch.clearAndReload();
+            HudManagerUpdate.CloseSummary();
         }
 
     public static void HandleShareOptions(byte numberOfOptions, MessageReader reader) {            
@@ -231,7 +237,10 @@ namespace TheOtherRoles
         }
 
         public static void stopStart(byte playerId) {
-            if (AmongUsClient.Instance.AmHost && CustomOptionHolder.anyPlayerCanStopStart.getBool()) {
+            if (!CustomOptionHolder.anyPlayerCanStopStart.getBool())
+                return;
+            SoundManager.Instance.StopSound(GameStartManager.Instance.gameStartSound);
+            if (AmongUsClient.Instance.AmHost) {
                 GameStartManager.Instance.ResetStartState();
                 PlayerControl.LocalPlayer.RpcSendChat($"{Helpers.playerById(playerId).Data.PlayerName} stopped the game start!");
             }
@@ -1649,6 +1658,12 @@ namespace TheOtherRoles
                 case (byte)CustomRPC.PropHuntSetSpeedboost:
                     RPCProcedure.propHuntSetSpeedboost(reader.ReadByte());
                     break;
+                case (byte)CustomRPC.DraftModePickOrder:
+                    RoleDraft.receivePickOrder(reader.ReadByte(), reader);
+                    break;
+                case (byte)CustomRPC.DraftModePick:
+                    RoleDraft.receivePick(reader.ReadByte(), reader.ReadByte());
+                    break;
                 case (byte)CustomRPC.ShareGhostInfo:
                     RPCProcedure.receiveGhostInfo(reader.ReadByte(), reader);
                     break;
@@ -1658,6 +1673,11 @@ namespace TheOtherRoles
                     byte roomPlayer = reader.ReadByte();
                     byte roomId = reader.ReadByte();
                     RPCProcedure.shareRoom(roomPlayer, roomId);
+                    break;
+                case (byte)CustomRPC.EventKick:
+                    byte kickSource = reader.ReadByte();
+                    byte kickTarget = reader.ReadByte();
+                    EventUtility.handleKick(Helpers.playerById(kickSource), Helpers.playerById(kickTarget), reader.ReadSingle());
                     break;
             }
         }

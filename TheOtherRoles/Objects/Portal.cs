@@ -108,7 +108,7 @@ namespace TheOtherRoles.Objects {
             else if (secondPortal == null) {
                 secondPortal = this;
             }
-            var lastRoom = FastDestroyableSingleton<HudManager>.Instance?.roomTracker.LastRoom.RoomId;
+            var lastRoom = FastDestroyableSingleton<HudManager>.Instance?.roomTracker?.LastRoom?.RoomId;
             this.room = lastRoom != null ? DestroyableSingleton<TranslationController>.Instance.GetString((SystemTypes)lastRoom) : "Open Field";
         }
 

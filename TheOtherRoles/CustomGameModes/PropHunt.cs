@@ -13,8 +13,6 @@ using TheOtherRoles.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Video;
-using static TheOtherRoles.Snitch;
-using static UnityEngine.GraphicsBuffer;
 
 namespace TheOtherRoles.CustomGameModes {
     [HarmonyPatch]
@@ -78,7 +76,6 @@ namespace TheOtherRoles.CustomGameModes {
         public static float dangerMeterActive = 0f;
 
         private static List<GameObject> duplicatedCollider = new();
-        private static GameObject introObject;
 
         public static void clearAndReload() {
             remainingShots.Clear();
@@ -368,7 +365,7 @@ namespace TheOtherRoles.CustomGameModes {
                     }
                     bool whiteListed = false;
                     foreach (var whiteListedWord in whitelistedObjects) {
-                        if (collider.gameObject.name.Contains(whiteListedWord)) whiteListed = true;
+                        if ((bool)(collider.gameObject?.name?.Contains(whiteListedWord))) whiteListed = true;
                     }
                     if (collider.GetComponent<Console>() != null || whiteListed) {
                         float dist = Vector2.Distance(origin.transform.position, collider.transform.position);
@@ -379,7 +376,9 @@ namespace TheOtherRoles.CustomGameModes {
                     }
                 }
                 return bestCollider.gameObject;
-            } catch { return null; }
+            } catch (Exception e) {
+                TheOtherRolesPlugin.Logger.LogError($"Error in find closest disguise object: {e}");
+                return null; }
         }
 
         public static GameObject FindPropByNameAndPos(string propName, float posX) {
@@ -450,7 +449,6 @@ namespace TheOtherRoles.CustomGameModes {
                     HudManager.Instance.FullScreen.enabled = false;
                     videoPlayer.Destroy();
                     assetBundle.Unload(false);
-                    introObject.Destroy();
                 } else {
                     HudManager.Instance.FullScreen.enabled = true;
                     HudManager.Instance.FullScreen.gameObject.SetActive(true);
@@ -523,14 +521,15 @@ namespace TheOtherRoles.CustomGameModes {
         [HarmonyPostfix]
         public static void MapSetPostfix() {  // Make sure the map in the settings is in sync with the map from li
             if (TORMapOptions.gameMode != CustomGamemodes.PropHunt && TORMapOptions.gameMode != CustomGamemodes.HideNSeek || AmongUsClient.Instance.IsGameStarted) return;
-            int map = GameOptionsManager.Instance.currentGameOptions.MapId;
+            int? map = GameOptionsManager.Instance?.currentGameOptions?.MapId;
+            if (map == null) return;
             if (map > 3) map--;
             if (TORMapOptions.gameMode == CustomGamemodes.HideNSeek)
                 if (CustomOptionHolder.hideNSeekMap.selection != map)
-                    CustomOptionHolder.hideNSeekMap.updateSelection(map);
+                    CustomOptionHolder.hideNSeekMap.updateSelection((int)map);
             if (TORMapOptions.gameMode == CustomGamemodes.PropHunt)
                 if (CustomOptionHolder.propHuntMap.selection != map)
-                    CustomOptionHolder.propHuntMap.updateSelection(map);
+                    CustomOptionHolder.propHuntMap.updateSelection((int)map);
         }
 
 
