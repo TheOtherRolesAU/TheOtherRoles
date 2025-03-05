@@ -921,7 +921,7 @@ Role Draft Music: [Unreal Superhero 3 by Kenët & Rez](https://www.youtube.com/w
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
-- **Enable Role Draft:** see [Role Draft](#roledraft)
+- **Enable Role Draft:** see [Role Draft](#role)
 - **Any Player Can Stop The Start:** If turned off, only the host can stop the game start. If on, all players can do it. Non-hosts stopping the start will send a chat message indicating who stopped it.
 - **Number of Crewmates:** The number of Crewmate roles can be set inside a lobby.
 - **Fill Crewmate Roles (Ignores Min/Max):** Everyone will get a role, even if the settings say there would be plain Crewmates (needs enough roles over 0%).
