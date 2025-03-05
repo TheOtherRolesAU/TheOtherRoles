@@ -921,6 +921,7 @@ Role Draft Music: [Unreal Superhero 3 by Kenët & Rez](https://www.youtube.com/w
 
 # Settings
 The mod adds a few new settings to Among Us (in addition to the role settings):
+- **Enable Role Draft:** see [Role Draft](#roledraft)
 - **Any Player Can Stop The Start:** If turned off, only the host can stop the game start. If on, all players can do it. Non-hosts stopping the start will send a chat message indicating who stopped it.
 - **Number of Crewmates:** The number of Crewmate roles can be set inside a lobby.
 - **Fill Crewmate Roles (Ignores Min/Max):** Everyone will get a role, even if the settings say there would be plain Crewmates (needs enough roles over 0%).
@@ -1018,7 +1019,21 @@ The count you set will only be reached, if there are enough Crewmates/Impostors 
 **Example:**\
 Settings: 2 special Crewmate roles, Snitch: 100%, Hacker: 10%, Tracker: 30%\
 Result: Snitch is assigned, then one role out of the pool [Hacker, Tracker, Tracker, Tracker] is being selected\
-Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome .
+Note: Changing the settings to Hacker: 20%, Tracker: 60% would statistically result in the same outcome.
+
+## Role Draft
+
+If the Role Draft is enabled, at the beginning of the game, all players will be allowed to select a role in random order, one after the other. The Role Draft respects the Min/Max Settings for roles for each faction and tries to enforce spawning roles which are set to 100%.
+If not enough roles are available, some players will be able to select Crewmate/Impostor (plain roles). The role draft screen has options to show the picked roles on the left side of the screen. If a player fails to pick a role after a set amount of time, a random available role (including also the roles that are not displayed) will be assigned instead. 
+
+### Game Options
+| Name | Description |
+|----------|:-------------:|
+| Max Amount of Roles To Choose From | If possible, the game will show this amount of roles to choose from to each player
+| Time For Selection | Time until a random role will be selected and assigned
+| Show Picked Roles | If off, the picks will be shown  
+| Hide Impostor Roles | If the roles are shown, hide the impostor roles
+| Hide Neutral Roles | If the roles are shown, hide all neutral roles
 
 
 ## Mafia
