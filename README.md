@@ -206,7 +206,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Added a new feature: Show Vents on Map (toggle in your local options)
 - Added a new kill distance: Very Short (thanks twix)
 - Added a feature to change the gamemode in the settings: `/gm <gamemode>` (host only)
-- Fixed a bug where Pet visibility was sometimes wron
+- Fixed a bug where Pet visibility was sometimes wrong
 - Fixed the HatLoader - testing hats should work again (thanks EnoPM)
 - Changed the HatLoader - loading the hats does not require a restart of the mod anymore
 - Changed the ModUpdater (thanks EnoPM)
@@ -226,7 +226,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 
 **Version 4.3.4**
 - Updated BepInEx dependency to 671
-- Fixed compatibility to Submerged (not thouroughly tested)
+- Fixed compatibility to Submerged (not thoroughly tested)
 - Fixed a bug where the death reason of a guessed shifter was incorrectly displayed as "shifted xy"
 - Make it possible to disable the Mod-Updater (see [details](#gcerror) ), to circumvent a crash at startup with a GC-Error
 - Fixed the hats in freeplay partially
@@ -248,7 +248,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Added a feature to the swapper: The swap resets if one of the target players is guessed or disconnects
 - Fixed the Security Guard Mobile Cams and the Hacker Vitals Panel when playing on LevelImposter maps (don't rename the panels for now, please)
 - Fixed several bugs in Vanilla Hide'n'Seek
-- Fixed an issue where Crewmate "Fill" did not work correcty if min neutrals was set bigger than max neutrals
+- Fixed an issue where Crewmate "Fill" did not work correctly if min neutrals was set bigger than max neutrals
 - Fixed a bug where the colorblind-text of the ninja remained visible when using the ninja-ability
 - Fixed a bug where the bomb could explode in a meeting due to desync and bad timing
 - Fixed a bug where the host Eraser could guess erased players
@@ -325,7 +325,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Updated to Among Us version 2022.8.24
 
 **Version 4.1.6**  
-- Added Sound Effects: Most buttons / role funcionalities now have a sound!
+- Added Sound Effects: Most buttons / role functionalities now have a sound!
 - Added a mod option: Enable Sound Effects  
 - Added an option: Hide After Death Modifiers: Modifiers which will have an effect after your death will be hidden while the player is alive so they cant be claimed / called
 - Added lobby timer sync, so that each player can see when the lobby will close on Vanilla Servers
@@ -428,7 +428,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Removed dlekS (for now) :c 
 
 **Version 3.4.4**
-- Fixed a bug where games were not finished properly on offical servers (special thanks to miniduikboot & 6pak)
+- Fixed a bug where games were not finished properly on official servers (special thanks to miniduikboot & 6pak)
   
 **Version 3.4.3**
 - Fixed a bug where "Guesser Is Impostor Chance" crashed the role system
@@ -514,14 +514,14 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 
 **Version 3.2.1**
 - Hotfix for 3.2.0
-- Bug fix: The Warlock is again able to kill with the curse abilty
+- Bug fix: The Warlock is again able to kill with the curse ability
 
 **Version 3.2.0**
 - **New Role:** [Witch](#witch) created by [Alex2911](https://github.com/Alex2911)
 - **New Role:** [Lawyer](#lawyer)
-- Bug fix: Choosing an Impostor as a Sidekick won't resulted in an Impostor/Sidekick mix anymore.
+- Bug fix: Choosing an Impostor as a Sidekick won't result in an Impostor/Sidekick mix anymore.
 - Bug fix: The Guesser info now shows the right information, when the Guesser guesses the wrong role and kills himself.
-- Bug fix: Hats are being displayed in alphabetic order. Hats demo in freeplay is working again. Fixed a bug where hats would not load when accessed from the main menu.
+- Bug fix: Hats are being displayed in alphabetical order. Hats demo in freeplay is working again. Fixed a bug where hats would not load when accessed from the main menu.
 - Bug fix: The Detective now shows the name of the players in any case.
 
 **Hotfix 3.1.2**
@@ -534,7 +534,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - Bug fix: Re-added some venting rules that were lost (Spy can't move between vents, only Trickster can use boxes, ...)
 
 **Version 3.1.0**
-- Hopefully temporary fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
+- Hopefully temporarily fixing the issue of being kicked by Innersloth servers for regular kills, until Innersloth fixes it on their side.
 - **NOTE:** Do not combine modded and unmodded versions of the game (even if you don't activate anything). Because of the kicking fix, your kills won't be performed for players that do not share the exact same modded version. Due to this you now can't start a game as the host, if not everyone in the lobby has the same version of the mod. Additionally you'll be kicked out of a lobby after 10 seconds, if the host doesn't have the mod installed (or the same mod version).
 - **Tracker:** The Tracker has been reworked by [Alex2911](https://github.com/Alex2911). The Tracker now has an additional optional ability that tracks all corpses on the map for a few seconds.
 - Add new option: Allow Parallel MedBay Scans
@@ -549,7 +549,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 **Version 3.0.0**
 - Updated to Among Us version v2021.11.9.5s
 - **Note:** We wanted to update as fast as possible, that's why you can't use both the Innersloth and mod roles at the same time. We'll make that possible in the future, but there are various things that need to be modified (e.g. Shifter, Guesser, ...) to make that work, so that'll take a little longer. Also, be aware that this version might contain more bugs than usual because Innersloth changed a lot of things and we might have missed some of them.
-- Ability buttons are now bind to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
+- Ability buttons are now bound to the Q key (if it's a killing ability) or to the F key (otherwise). We'll make the binds adaptable in the future.
 - For now we removed the option "Jester Can Sabotage"
 - The Sheriff now always dies, when they try to kill a not fully grown Mini
 
@@ -559,7 +559,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 
 **Version 2.9.1**
 - Fixed a bug where [Camouflager](#camouflager) & [Morphling](#morphling) caused performance issues
-- Fixed a bug where [Medium](#medium) did not exlude the Evil [Mini](#mini)
+- Fixed a bug where [Medium](#medium) did not exclude the Evil [Mini](#mini)
 - [Vulture](#vulture) "Number Of Corpses Needed To Be Eaten" max value extended to 10
 - Added Vulture Option: "Show Arrows Pointing Towards The Corpes"
 - Removed Medium Question: "What is your name?" (name of the soul is added after each question)
@@ -570,7 +570,7 @@ The [Role Assignment](#role-assignment) section explains how the roles are being
 - **New Role:** [Vulture](#vulture)
 - Added Jackal Option: "Jackal Can See If Engineer Is In A Vent"
 - Added Guesser Option: "Guesser Can Shoot Multiple Times Per Meeting"
-- Fixed a bug that occured when the Shifter shifted the Bait
+- Fixed a bug that occurred when the Shifter shifted the Bait
 
 **Hotfix 2.8.1**
 - Fixed a game breaking bug where killing the Bait resulted in a ban of the Bait
@@ -1106,7 +1106,7 @@ If a victim is near a garlic, the "Bite Button" turns into the default "Kill But
 - The cooldown is the same as the default kill cooldown (+ the kill delay if the Vampire bites the target).
 - If there is a Vampire in the game, there can't be a Warlock.
 - If the Vampire bites a player and the Thief kills the Vampire, the bite will still be performed, but the new Vampire will be displayed in the kill animation.
-- If the Vampire bites a player and gets killed before the bite is performed, the biten player will survive.
+- If the Vampire bites a player and gets killed before the bite is performed, the bitten player will survive.
 
 ### Game Options
 | Name | Description |
@@ -1211,7 +1211,7 @@ Depending on the options, there'll be an arrow pointing towards the current targ
 | Duration After Which Bounty Changes | -
 | Cooldown After Killing Bounty | -
 | Additional Cooldown After Killing Others | Time will be added to the normal impostor cooldown if the Bounty Hunter kills a not-bounty player
-| Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visiable for the Bounty Hunter)
+| Show Arrow Pointing Towards The Bounty | If set to true an arrow will appear (only visible for the Bounty Hunter)
 | Bounty Hunter Arrow Update Interval | Sets how often the position is being updated
 -----------------------
 
@@ -1849,7 +1849,7 @@ The Portalmaker can teleport themself to their placed portals from anywhere if t
 
 **NOTE:**
 - The extra button to use a portal will appear after the Portalmaker set their portals and a meeting/body report was called.
-- While one player uses a portal, it is blocked for any other player until the player got teleported.
+- While one player uses a portal, it is blocked for any other player until the player gets teleported.
 - All ghosts can still use the portals, but won't block any living player from using it and the Portalmaker won't get any information about it in chat.
 - If a morphed person uses a portal it will show the morphed name/color depending on the options.
 - If a camouflaged person uses a portal it will show "A comouflaged person used the portal."
@@ -2064,7 +2064,7 @@ The Sunglasses will lower the Crewmate's vision by a small percentage. The perce
 The vision will also be affected when lights out.
 
 **NOTE:**
-- Sunglasses only affects Crewmates.
+- Sunglasses only effect Crewmates.
 - If you have the Sunglasses Modifier and get sidekicked, you will lose the Modifier.
 
 ### Game Options
@@ -2236,7 +2236,7 @@ If the Hunters kill all players before one of these conditions is triggered, the
 #### Hunter Abilities:
 - Enable arrows (arrows point to all Hunted players for x-seconds (depending on settings))
 - Mobile Admin table (like Hacker)
-- Lighter ability (gives the Hunter a biggier vision radius for x-seconds (depending on settings))
+- Lighter ability (gives the Hunter a bigger vision radius for x-seconds (depending on settings))
 
 #### Hunted Ability:
 - Timeshield (like Timemaster, depending on settings)
@@ -2280,7 +2280,7 @@ When a Prop dies, they will either join the Hunter team or die (setting).
 #### Hunter Abilities:
 - Reveal: A random players current prop is revealed to all players for x seconds (according to settings). The timer will be reduced by *punish* s.
 - Mobile Admin table (like Hacker) - Normal Admin table shares the cooldown
-- Find: Display the DangerMeter known from Vanilla HideNSeek for x seconds. The dangerlevel is rising the closer the Hunter gets to the neares prop.  
+- Find: Display the DangerMeter known from Vanilla HideNSeek for x seconds. The dangerlevel is rising the closer the Hunter gets to the nearest prop.  
 #### Prop Abilities:
 - Invisibility: As a disguised Prop, become invisible for x seconds.
 - Speedboost: Move faster for x seconds.
@@ -2290,9 +2290,9 @@ When a Prop dies, they will either join the Hunter team or die (setting).
 - The Report button lights up, but cannot be pressed.
 - Hunters can vent
 - The Kill Button and Vent Button are permanently enabled, so that you cannot use them to check if there is a prop nearby
-- The Kill Button can always be pressed, but you can also miss if no Prop is nearby. The cooldown can be configured for hits and misses seperately.
+- The Kill Button can always be pressed, but you can also miss if no Prop is nearby. The cooldown can be configured for hits and misses separately.
 - Usable prop objects are: All task consoles as well as many objects (rocks, snowpeople, barriers, beds, tables, ...)
-- Any object on **LevelImposter** maps, that contains `liprop` in its name and has a `SpriteRenderer` (+ Sprite) will be usable as a prop too!
+- Any object on **LevelImposter** maps, that contain `liprop` in its name and has a `SpriteRenderer` (+ Sprite) will be usable as a prop too!
 
 
 ### Game Options
