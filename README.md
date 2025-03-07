@@ -1,3 +1,4 @@
+**EN** | [RU](./README_RU.md)
 ![eisbison banner](./Images/TOR_logo.png)
 <p align="center"><a href="https://github.com/Eisbison/TheOtherRoles/releases/"><img src="https://badgen.net/github/release/eisbison/theotherroles"></a></p>
 
